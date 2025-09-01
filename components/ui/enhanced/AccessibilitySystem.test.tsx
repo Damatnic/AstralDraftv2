@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import AccessibilitySystem from &apos;./AccessibilitySystem&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AccessibilitySystem from './AccessibilitySystem';
 
-describe(&apos;AccessibilitySystem&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('AccessibilitySystem', () => {
+  it('renders without crashing', () => {
     render(<AccessibilitySystem />);
-    expect(screen.getByTestId(&apos;accessibilitysystem&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('accessibilitysystem')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<AccessibilitySystem />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<AccessibilitySystem />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

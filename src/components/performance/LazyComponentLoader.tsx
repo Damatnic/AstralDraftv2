@@ -3,46 +3,37 @@
  * Implements smart lazy loading with performance monitoring and error boundaries
  */
 
-import React, { Suspense, lazy, ComponentType, useEffect, useState, useRef } from &apos;react&apos;;
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { Suspense, lazy, ComponentType, useEffect, useState, useRef } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 
 interface LazyLoaderProps {
-}
   componentPath: string;
   fallback?: React.ComponentType;
   errorFallback?: React.ComponentType<{ error: Error; retry: () => void }>;
   loadingMessage?: string;
   preload?: boolean;
-  priority?: &apos;high&apos; | &apos;normal&apos; | &apos;low&apos;;
+  priority?: 'high' | 'normal' | 'low';
   threshold?: number; // For intersection observer
   children?: React.ReactNode;
-}
 
 interface ComponentCache {
-}
   [key: string]: {
-}
     component: ComponentType<any>;
     loadTime: number;
     error?: Error;
   };
-}
 
 interface LoadingStats {
-}
   totalLoads: number;
   successfulLoads: number;
   failedLoads: number;
   averageLoadTime: number;
-}
 
 class LazyComponentManager {
-}
   private static instance: LazyComponentManager;
   private componentCache: ComponentCache = {};
   private loadingPromises: Map<string, Promise<ComponentType<any>>> = new Map();
   private loadingStats: LoadingStats = {
-}
     totalLoads: 0,
     successfulLoads: 0,
     failedLoads: 0,
@@ -51,35 +42,26 @@ class LazyComponentManager {
   private observer: IntersectionObserver | null = null;
 
   static getInstance(): LazyComponentManager {
-}
     if (!LazyComponentManager.instance) {
-}
       LazyComponentManager.instance = new LazyComponentManager();
     }
     return LazyComponentManager.instance;
   }
 
   constructor() {
-}
     this.setupIntersectionObserver();
     this.preloadCriticalComponents();
   }
 
   private setupIntersectionObserver() {
-}
-    if (typeof window !== &apos;undefined&apos; && &apos;IntersectionObserver&apos; in window) {
-}
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       this.observer = new IntersectionObserver(
         (entries: any) => {
-}
           entries.forEach((entry: any) => {
-}
             if (entry.isIntersecting) {
-}
               const element = entry.target as HTMLElement;
               const componentPath = element.dataset.lazyComponent;
               if (componentPath) {
-}
                 this.loadComponent(componentPath);
                 this.observer?.unobserve(element);
               }
@@ -87,8 +69,7 @@ class LazyComponentManager {
           });
         },
         {
-}
-          rootMargin: &apos;100px&apos;,
+          rootMargin: '100px',
           threshold: 0.1
         }
       );
@@ -96,22 +77,18 @@ class LazyComponentManager {
   }
 
   private async preloadCriticalComponents() {
-}
     // Preload components that are likely to be needed soon
     const criticalComponents = [
-      &apos;views/LeagueDashboard&apos;,
-      &apos;components/ui/ModernNavigation&apos;,
-      &apos;components/ui/ErrorBoundary&apos;
+      'views/LeagueDashboard',
+      'components/ui/ModernNavigation',
+      'components/ui/ErrorBoundary'
     ];
 
     // Use requestIdleCallback to avoid blocking main thread
-    if (&apos;requestIdleCallback&apos; in window) {
-}
+    if ('requestIdleCallback' in window) {
       window.requestIdleCallback(() => {
-}
         criticalComponents.forEach((path: any) => {
-}
-          this.loadComponent(path, &apos;low&apos;);
+          this.loadComponent(path, 'low');
         });
       });
     }
@@ -119,19 +96,16 @@ class LazyComponentManager {
 
   async loadComponent(
     componentPath: string, 
-    priority: &apos;high&apos; | &apos;normal&apos; | &apos;low&apos; = &apos;normal&apos;
+    priority: 'high' | 'normal' | 'low' = 'normal'
   ): Promise<ComponentType<any>> {
-}
     // Check cache first
     const cached = this.componentCache[componentPath];
     if (cached && !cached.error) {
-}
       return cached.component;
     }
 
     // Check if already loading
     if (this.loadingPromises.has(componentPath)) {
-}
       return this.loadingPromises.get(componentPath)!;
     }
 
@@ -140,12 +114,10 @@ class LazyComponentManager {
 
     const loadPromise = this.performComponentLoad(componentPath, priority)
       .then((component: any) => {
-}
         const loadTime = performance.now() - startTime;
         
         // Update cache
         this.componentCache[componentPath] = {
-}
           component,
 //           loadTime
         };
@@ -155,29 +127,26 @@ class LazyComponentManager {
         this.updateAverageLoadTime(loadTime);
 
         // Report performance metric
-        this.reportLoadMetric(componentPath, loadTime, &apos;success&apos;);
+        this.reportLoadMetric(componentPath, loadTime, 'success');
 
         return component;
       })
       .catch((error: any) => {
-}
         const loadTime = performance.now() - startTime;
         
         // Cache error for retry logic
         this.componentCache[componentPath] = {
-}
           component: this.createErrorComponent(error),
           loadTime,
 //           error
         };
 
         this.loadingStats.failedLoads++;
-        this.reportLoadMetric(componentPath, loadTime, &apos;error&apos;, error);
+        this.reportLoadMetric(componentPath, loadTime, 'error', error);
 
         throw error;
       })
       .finally(() => {
-}
         this.loadingPromises.delete(componentPath);
       });
 
@@ -187,35 +156,28 @@ class LazyComponentManager {
 
   private async performComponentLoad(
     componentPath: string, 
-    priority: &apos;high&apos; | &apos;normal&apos; | &apos;low&apos;
+    priority: 'high' | 'normal' | 'low'
   ): Promise<ComponentType<any>> {
-}
     // Implement priority-based loading
-    if (priority === &apos;low&apos; && this.shouldDeferLoad()) {
-}
+    if (priority === 'low' && this.shouldDeferLoad()) {
       await this.waitForIdleTime();
     }
 
     try {
-}
       // Dynamic import with proper error handling
       const module = await import(`../../${componentPath}`);
       
       // Handle different export patterns
       return module.default || module[this.getComponentNameFromPath(componentPath)] || module;
     } catch (importError) {
-}
       // Retry with different path variations
       const alternativePaths = this.getAlternativePaths(componentPath);
       
       for (const altPath of alternativePaths) {
-}
         try {
-}
           const module = await import(`../../${altPath}`);
           return module.default || module[this.getComponentNameFromPath(altPath)] || module;
         } catch {
-}
           continue;
         }
       }
@@ -225,21 +187,16 @@ class LazyComponentManager {
   }
 
   private shouldDeferLoad(): boolean {
-}
     // Defer loading if user is on slow connection or battery is low
-    if (&apos;connection&apos; in navigator) {
-}
+    if ('connection' in navigator) {
       const connection = (navigator as any).connection;
-      if (connection.effectiveType === &apos;2g&apos; || connection.effectiveType === &apos;slow-2g&apos;) {
-}
+      if (connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g') {
         return true;
       }
     }
 
-    if (&apos;getBattery&apos; in navigator) {
-}
+    if ('getBattery' in navigator) {
       navigator.getBattery().then((battery: any) => {
-}
         return battery.level < 0.2 && !battery.charging;
       });
     }
@@ -248,32 +205,26 @@ class LazyComponentManager {
   }
 
   private waitForIdleTime(): Promise<void> {
-}
     return new Promise((resolve: any) => {
-}
-      if (&apos;requestIdleCallback&apos; in window) {
-}
+      if ('requestIdleCallback' in window) {
         window.requestIdleCallback(() => resolve(), { timeout: 2000 });
       } else {
-}
         setTimeout(resolve, 100);
       }
     });
   }
 
   private getComponentNameFromPath(path: string): string {
-}
-    const parts = path.split(&apos;/&apos;);
+    const parts = path.split('/');
     const fileName = parts[parts.length - 1];
-    return fileName.replace(/\.(tsx?|jsx?)$/, &apos;&apos;);
+    return fileName.replace(/\.(tsx?|jsx?)$/, '');
   }
 
   private getAlternativePaths(path: string): string[] {
-}
     const alternatives = [];
     
     // Try with different extensions
-    const basePath = path.replace(/\.(tsx?|jsx?)$/, &apos;&apos;);
+    const basePath = path.replace(/\.(tsx?|jsx?)$/, '');
     alternatives.push(
       `${basePath}.tsx`,
       `${basePath}.ts`,
@@ -289,7 +240,6 @@ class LazyComponentManager {
   }
 
   private updateAverageLoadTime(newLoadTime: number) {
-}
     const { averageLoadTime, successfulLoads } = this.loadingStats;
     this.loadingStats.averageLoadTime = 
       (averageLoadTime * (successfulLoads - 1) + newLoadTime) / successfulLoads;
@@ -298,16 +248,13 @@ class LazyComponentManager {
   private reportLoadMetric(
     componentPath: string, 
     loadTime: number, 
-    status: &apos;success&apos; | &apos;error&apos;,
+    status: 'success' | 'error',
     error?: Error
   ) {
-}
     // Send to performance monitoring service
-    if (typeof window !== &apos;undefined&apos; && (window as any).gtag) {
-}
-      (window as any).gtag(&apos;event&apos;, &apos;component_load&apos;, {
-}
-        event_category: &apos;performance&apos;,
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'component_load', {
+        event_category: 'performance',
         component_path: componentPath,
         load_time: Math.round(loadTime),
 //         status
@@ -316,17 +263,15 @@ class LazyComponentManager {
 
     // Log for development
     if (import.meta.env.DEV) {
-}
-      const statusIcon = status === &apos;success&apos; ? &apos;✅&apos; : &apos;❌&apos;;
+      const statusIcon = status === 'success' ? '✅' : '❌';
       console.log(
         `${statusIcon} Component Load: ${componentPath} (${loadTime.toFixed(2)}ms)`,
-        error ? error : &apos;&apos;
+        error ? error : ''
       );
     }
   }
 
   private createErrorComponent(error: Error): ComponentType<any> {
-}
     return () => (
       <div className="flex flex-col items-center justify-center p-8 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
         <div className="text-red-600 dark:text-red-400 text-4xl mb-4">⚠️</div>
@@ -347,43 +292,34 @@ class LazyComponentManager {
   }
 
   observeElement(element: HTMLElement, componentPath: string) {
-}
     if (this.observer) {
-}
       element.dataset.lazyComponent = componentPath;
       this.observer.observe(element);
     }
   }
 
   getStats(): LoadingStats {
-}
     return { ...this.loadingStats };
   }
 
   clearCache() {
-}
     this.componentCache = {};
     this.loadingPromises.clear();
   }
 
-  preloadComponent(componentPath: string, priority: &apos;high&apos; | &apos;normal&apos; | &apos;low&apos; = &apos;normal&apos;) {
-}
+  preloadComponent(componentPath: string, priority: 'high' | 'normal' | 'low' = 'normal') {
     return this.loadComponent(componentPath, priority);
   }
-}
 
 // Enhanced Loading Component
-const SmartLoader: React.FC<{ message?: string; size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; }> = ({ 
-}
-  message = &apos;Loading...&apos;, 
-  size = &apos;md&apos; 
+const SmartLoader: React.FC<{ message?: string; size?: 'sm' | 'md' | 'lg' }> = ({ 
+  message = 'Loading...', 
+  size = 'md' 
 }: any) => {
-}
   const sizeClasses = {
-}
-    sm: &apos;w-6 h-6&apos;,
-    md: &apos;w-8 h-8&apos;,
-    lg: &apos;w-12 h-12&apos;
+    sm: 'w-6 h-6',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12'
   };
 
   return (
@@ -416,7 +352,6 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
       Try Again
     </button>
     {import.meta.env.DEV && (
-}
       <details className="mt-4 text-xs">
         <summary className="cursor-pointer text-gray-500">Error Details</summary>
         <pre className="mt-2 p-2 bg-gray-800 text-gray-200 rounded overflow-auto max-w-md">
@@ -429,17 +364,15 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
 
 // Main Lazy Component Loader
 export const LazyComponentLoader: React.FC<LazyLoaderProps> = ({
-}
   componentPath,
   fallback: CustomFallback,
   errorFallback: CustomErrorFallback,
-  loadingMessage = &apos;Loading component...&apos;,
+  loadingMessage = 'Loading component...',
   preload = false,
-  priority = &apos;normal&apos;,
+  priority = 'normal',
   threshold = 0.1,
 //   children
 }) => {
-}
   const [retryCount, setRetryCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const manager = LazyComponentManager.getInstance();
@@ -449,24 +382,19 @@ export const LazyComponentLoader: React.FC<LazyLoaderProps> = ({
 
   // Preload if requested
   useEffect(() => {
-}
     if (preload) {
-}
       manager.preloadComponent(componentPath, priority);
     }
   }, [componentPath, preload, priority]);
 
   // Set up intersection observer for on-demand loading
   useEffect(() => {
-}
     if (!preload && containerRef.current) {
-}
       manager.observeElement(containerRef.current, componentPath);
     }
   }, [componentPath, preload]);
 
   const handleRetry = () => {
-}
     setRetryCount(prev => prev + 1);
   };
 
@@ -491,29 +419,24 @@ export const LazyComponentLoader: React.FC<LazyLoaderProps> = ({
 
 // Hook for component preloading
 export const useLazyPreload = () => {
-}
   const manager = LazyComponentManager.getInstance();
 
   const preloadComponent = (
     componentPath: string, 
-    priority: &apos;high&apos; | &apos;normal&apos; | &apos;low&apos; = &apos;normal&apos;
+    priority: 'high' | 'normal' | 'low' = 'normal'
   ) => {
-}
     return manager.preloadComponent(componentPath, priority);
   };
 
   const getLoadingStats = () => {
-}
     return manager.getStats();
   };
 
   const clearCache = () => {
-}
     manager.clearCache();
   };
 
   return {
-}
     preloadComponent,
     getLoadingStats,
 //     clearCache
@@ -525,7 +448,6 @@ export const withLazyLoading = <P extends object>(
   componentPath: string,
   options: Partial<LazyLoaderProps> = {}
 ) => {
-}
   return (props: P) => (
     <LazyComponentLoader componentPath={componentPath} {...options}>
       <div {...props} />
@@ -535,14 +457,12 @@ export const withLazyLoading = <P extends object>(
 
 // Route-based lazy loading wrapper
 export const LazyRoute: React.FC<{
-}
   path: string;
   component: string;
   preload?: boolean;
-  priority?: &apos;high&apos; | &apos;normal&apos; | &apos;low&apos;;
+  priority?: 'high' | 'normal' | 'low';
   fallback?: React.ComponentType;
 }> = ({ component, preload, priority, fallback }: any) => {
-}
   return (
     <LazyComponentLoader>
       componentPath={`views/${component}`}

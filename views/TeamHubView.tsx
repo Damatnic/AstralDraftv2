@@ -1,47 +1,46 @@
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import VisualRoster from &apos;../components/team/VisualRoster&apos;;
-import type { League, Team, TradeSuggestion } from &apos;../types&apos;;
-import { TradeCenterWidget } from &apos;../components/team/TradeCenterWidget&apos;;
-import { LeagueTeamsList } from &apos;../components/team/LeagueTeamsList&apos;;
-import { DailyBriefingWidget } from &apos;../components/team/DailyBriefingWidget&apos;;
-import CurrentMatchupWidget from &apos;../components/team/CurrentMatchupWidget&apos;;
-import TeamChemistryWidget from &apos;../components/team/TeamChemistryWidget&apos;;
-import SeasonOutlookWidget from &apos;../components/team/SeasonOutlookWidget&apos;;
-import { AnimatePresence } from &apos;framer-motion&apos;;
-import EditHeaderModal from &apos;../components/team/EditHeaderModal&apos;;
-import { ImageIcon } from &apos;../components/icons/ImageIcon&apos;;
-import TrophyCaseWidget from &apos;../components/team/TrophyCaseWidget&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import InjuryReportWidget from &apos;../components/team/InjuryReportWidget&apos;;
-import AiCoManagerWidget from &apos;../components/team/AiCoManagerWidget&apos;;
-import ChampionshipOddsWidget from &apos;../components/team/ChampionshipOddsWidget&apos;;
-import EditTeamBrandingModal from &apos;../components/modals/EditTeamBrandingModal&apos;;
-import { MusicIcon } from &apos;../components/icons/MusicIcon&apos;;
-import FuturePicksWidget from &apos;../components/team/FuturePicksWidget&apos;;
-import { TvIcon } from &apos;../components/icons/TvIcon&apos;;
-import { Share2Icon } from &apos;../components/icons/Share2Icon&apos;;
-import ShareTeamCardModal from &apos;../components/modals/ShareTeamCardModal&apos;;
-import { MascotWidget } from &apos;../components/team/MascotWidget&apos;;
-import TradeWhispererWidget from &apos;../components/team/TradeWhispererWidget&apos;;
-import { AwardIcon } from &apos;../components/icons/AwardIcon&apos;;
-import AssignAwardsModal from &apos;../components/modals/AssignAwardsModal&apos;;
-import { UsersIcon } from &apos;../components/icons/UsersIcon&apos;;
-import ProposeTradeModal from &apos;../components/team/ProposeTradeModal&apos;;
-import { useResponsiveBreakpoint } from &apos;../utils/mobileOptimizationUtils&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { Widget } from '../components/ui/Widget';
+import VisualRoster from '../components/team/VisualRoster';
+import type { League, Team, TradeSuggestion } from '../types';
+import { TradeCenterWidget } from '../components/team/TradeCenterWidget';
+import { LeagueTeamsList } from '../components/team/LeagueTeamsList';
+import { DailyBriefingWidget } from '../components/team/DailyBriefingWidget';
+import CurrentMatchupWidget from '../components/team/CurrentMatchupWidget';
+import TeamChemistryWidget from '../components/team/TeamChemistryWidget';
+import SeasonOutlookWidget from '../components/team/SeasonOutlookWidget';
+import { AnimatePresence } from 'framer-motion';
+import EditHeaderModal from '../components/team/EditHeaderModal';
+import { ImageIcon } from '../components/icons/ImageIcon';
+import TrophyCaseWidget from '../components/team/TrophyCaseWidget';
+import { useLeague } from '../hooks/useLeague';
+import InjuryReportWidget from '../components/team/InjuryReportWidget';
+import AiCoManagerWidget from '../components/team/AiCoManagerWidget';
+import ChampionshipOddsWidget from '../components/team/ChampionshipOddsWidget';
+import EditTeamBrandingModal from '../components/modals/EditTeamBrandingModal';
+import { MusicIcon } from '../components/icons/MusicIcon';
+import FuturePicksWidget from '../components/team/FuturePicksWidget';
+import { TvIcon } from '../components/icons/TvIcon';
+import { Share2Icon } from '../components/icons/Share2Icon';
+import ShareTeamCardModal from '../components/modals/ShareTeamCardModal';
+import { MascotWidget } from '../components/team/MascotWidget';
+import TradeWhispererWidget from '../components/team/TradeWhispererWidget';
+import { AwardIcon } from '../components/icons/AwardIcon';
+import AssignAwardsModal from '../components/modals/AssignAwardsModal';
+import { UsersIcon } from '../components/icons/UsersIcon';
+import ProposeTradeModal from '../components/team/ProposeTradeModal';
+import { useResponsiveBreakpoint } from '../utils/mobileOptimizationUtils';
 
 const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }: any) => {
-}
     const { isMobile } = useResponsiveBreakpoint();
-    const isWaiversActive = league.status === &apos;DRAFT_COMPLETE&apos; || league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos;;
-    const isSeasonStarted = league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos; || league.status === &apos;COMPLETE&apos;;
-    const isDraftComplete = league.status !== &apos;PRE_DRAFT&apos; && league.status !== &apos;DRAFTING&apos;;
-    const isPlayoffs = league.status === &apos;PLAYOFFS&apos; || league.status === &apos;COMPLETE&apos;;
-    const isInSeason = league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos;;
-    const isSeasonComplete = league.status === &apos;COMPLETE&apos;;
+    const isWaiversActive = league.status === 'DRAFT_COMPLETE' || league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
+    const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE';
+    const isDraftComplete = league.status !== 'PRE_DRAFT' && league.status !== 'DRAFTING';
+    const isPlayoffs = league.status === 'PLAYOFFS' || league.status === 'COMPLETE';
+    const isInSeason = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
+    const isSeasonComplete = league.status === 'COMPLETE';
     const isKeeperLeague = (league.settings.keeperCount || 0) > 0;
-    const isPreDraft = league.status === &apos;PRE_DRAFT&apos;;
-    const isFullAiEnabled = league.settings.aiAssistanceLevel === &apos;FULL&apos;;
+    const isPreDraft = league.status === 'PRE_DRAFT';
+    const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
 
     const [isEditHeaderModalOpen, setIsEditHeaderModalOpen] = React.useState(false);
     const [isBrandingModalOpen, setIsBrandingModalOpen] = React.useState(false);
@@ -55,17 +54,13 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
     const headerStyle = team.headerImage ? { backgroundImage: `url(${team.headerImage})` } : {};
     
     const playThemeSong = () => {
-}
         if (audioRef.current) {
-}
 
     };
     
     const handleProposeFromWhisperer = (suggestion: TradeSuggestion) => {
-}
         const opponent = league.teams.find((t: any) => t.id === suggestion.toTeamId);
         if (opponent) {
-}
             setTradeSuggestion(suggestion);
             setTradeOpponent(opponent);
             setIsProposeTradeModalOpen(true);
@@ -83,106 +78,96 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                         {team.name}
                     </h1>
                      {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">&quot;{team.motto}&quot;</p>}
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">TEAM HUB • WEEK {league.currentWeek > 16 ? &apos;Post-Season&apos; : league.currentWeek}</p>
+                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">TEAM HUB • WEEK {league.currentWeek > 16 ? 'Post-Season' : league.currentWeek}</p>
                 </div>
                  <button onClick={() => setIsEditHeaderModalOpen(true)}
-                    <ImageIcon /> {!isMobile && &apos;Edit Header&apos;}
+                    <ImageIcon /> {!isMobile && 'Edit Header'}
                 </button>
-                <div className={`${isMobile ? &apos;grid grid-cols-2 sm:grid-cols-3 gap-2&apos; : &apos;flex gap-2 flex-wrap justify-end&apos;}`}>
+                <div className={`${isMobile ? 'grid grid-cols-2 sm:grid-cols-3 gap-2' : 'flex gap-2 flex-wrap justify-end'}`}>
                     {isKeeperLeague && isPreDraft && (
-}
-                         <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;KEEPER_SELECTION&apos; }) 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'KEEPER_SELECTION' }) 
                                  className="px-4 py-2 bg-yellow-500/80 text-white rounded-lg text-sm hover:bg-yellow-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
-                            <UsersIcon /> {!isMobile && &apos;Select Keepers&apos;}
+                            <UsersIcon /> {!isMobile && 'Select Keepers'}
                         </button>
                     )}
                     <button onClick={() => setIsBrandingModalOpen(true)}
                     </button>
                     <button onClick={() => setIsShareModalOpen(true)}
-                        <Share2Icon /> {!isMobile && &apos;Share Team Card&apos;}
+                        <Share2Icon /> {!isMobile && 'Share Team Card'}
                     </button>
                      {team.themeSongUrl && 
-}
                         <button onClick={playThemeSong}
-                            <MusicIcon /> {!isMobile && &apos;Play Anthem&apos;}
+                            <MusicIcon /> {!isMobile && 'Play Anthem'}
                         </button>
 
                      {isInSeason && (
-}
-                        <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;GAMEDAY_HOST&apos; }) 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'GAMEDAY_HOST' }) 
                                 className="px-4 py-2 bg-red-500/80 text-white rounded-lg text-sm hover:bg-red-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
-                           <TvIcon /> {!isMobile && &apos;Gameday Host&apos;}
+                           <TvIcon /> {!isMobile && 'Gameday Host'}
                         </button>
                      )}
                      {isSeasonComplete && (
-}
                          <button onClick={() => setIsAwardsModalOpen(true)}
-                            <AwardIcon /> {!isMobile && &apos;Assign Season Awards&apos;}
+                            <AwardIcon /> {!isMobile && 'Assign Season Awards'}
                         </button>
                      )}
-                     {league.status === &apos;COMPLETE&apos; && (
-}
-                         <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;SEASON_STORY&apos; }) 
+                     {league.status === 'COMPLETE' && (
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'SEASON_STORY' }) 
                                  className="px-4 py-2 bg-purple-500/80 text-white rounded-lg text-sm hover:bg-purple-500 backdrop-blur-sm min-h-[44px]">
-                            {isMobile ? &apos;Story&apos; : &apos;View My Season Story&apos;}
+                            {isMobile ? 'Story' : 'View My Season Story'}
                         </button>
                      )}
                      {isWaiversActive && (
-}
-                         <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;WAIVER_WIRE&apos; }) 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' }) 
                                  className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
-                            {isMobile ? &apos;Waivers&apos; : &apos;Waiver Wire&apos;}
+                            {isMobile ? 'Waivers' : 'Waiver Wire'}
                         </button>
                     )}
                     {isSeasonStarted && (
-}
-                        <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;WEEKLY_REPORT&apos; }) 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' }) 
                                 className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
-                            {isMobile ? &apos;Report&apos; : &apos;Weekly Report&apos;}
+                            {isMobile ? 'Report' : 'Weekly Report'}
                         </button>
                     )}
                      {isSeasonStarted && (
-}
-                        <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;PERFORMANCE_TRENDS&apos; }) 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PERFORMANCE_TRENDS' }) 
                                 className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
 //                             Performance
                         </button>
                      )}
                     {isSeasonStarted && (
-}
-                        <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;POWER_RANKINGS&apos; }) 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'POWER_RANKINGS' }) 
                                 className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
-                            {isMobile ? &apos;Rankings&apos; : &apos;Power Rankings&apos;}
+                            {isMobile ? 'Rankings' : 'Power Rankings'}
                         </button>
                     )}
                     {isPlayoffs && (
-}
-                         <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;PLAYOFF_BRACKET&apos; }) 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYOFF_BRACKET' }) 
                                  className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
-                            {isMobile ? &apos;Playoffs&apos; : &apos;Playoff Bracket&apos;}
+                            {isMobile ? 'Playoffs' : 'Playoff Bracket'}
                         </button>
                     )}
-                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ANALYTICS_HUB&apos; }) 
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }) 
                             className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
 //                         Analytics
                     </button>
-                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_STANDINGS&apos; }) 
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }) 
                             className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
 //                         Standings
                     </button>
-                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) 
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) 
                             className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
 //                         Dashboard
                     </button>
                 </div>
             </header>
-            <main className={`flex-grow grid ${isMobile ? &apos;grid-cols-1 gap-4&apos; : &apos;grid-cols-1 lg:grid-cols-5&apos;} gap-6`}>
-                <div className={isMobile ? &apos;&apos; : &apos;lg:col-span-3&apos;}>
+            <main className={`flex-grow grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 lg:grid-cols-5'} gap-6`}>
+                <div className={isMobile ? '' : 'lg:col-span-3'}>
                     <Widget title="My Roster">
                         <VisualRoster team={team} />
                     </Widget>
                 </div>
-                <div className={`${isMobile ? &apos;space-y-4&apos; : &apos;lg:col-span-2 space-y-6&apos;}`}>
+                <div className={`${isMobile ? 'space-y-4' : 'lg:col-span-2 space-y-6'}`}>
                     {isInSeason && <CurrentMatchupWidget myTeam={team} league={league} dispatch={dispatch} />}
                     {isFullAiEnabled && <TradeWhispererWidget onPropose={handleProposeFromWhisperer} />}
                     {isFullAiEnabled && isInSeason && <ChampionshipOddsWidget team={team} league={league} dispatch={dispatch} />}
@@ -200,7 +185,6 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
             </main>
             <AnimatePresence>
                 {isEditHeaderModalOpen && (
-}
                     <EditHeaderModal>
                         leagueId={league.id}
                         teamId={team.id}
@@ -210,7 +194,6 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     />
                 )}
                  {isBrandingModalOpen && (
-}
                     <EditTeamBrandingModal>
                         team={team}
                         leagueId={league.id}
@@ -219,14 +202,12 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     />
                 )}
                  {isShareModalOpen && (
-}
                     <ShareTeamCardModal>
                         team={team}
                         onClose={() => setIsShareModalOpen(false)}
                     />
                 )}
                 {isAwardsModalOpen && (
-}
                     <AssignAwardsModal>
                         team={team}
                         league={league}
@@ -235,7 +216,6 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     />
                 )}
                 {isProposeTradeModalOpen && tradeOpponent && (
-}
                     <ProposeTradeModal>
                         myTeam={team}
                         otherTeam={tradeOpponent}
@@ -252,17 +232,15 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
 };
 
 export const TeamHubView: React.FC = () => {
-}
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
 
     return (
         <div className="w-full h-full">
             {(!myTeam || !league) ? (
-}
                 <div className="w-full h-full flex items-center justify-center">
                     <p>Team or League not found.</p>
-                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="btn btn-primary ml-4">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="btn btn-primary ml-4">
                         Back to Dashboard
                     </button>
                 </div>

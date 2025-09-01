@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ModalManager from &apos;./ModalManager&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ModalManager from './ModalManager';
 
-describe(&apos;ModalManager&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ModalManager', () => {
+  it('renders without crashing', () => {
     render(<ModalManager />);
-    expect(screen.getByTestId(&apos;modalmanager&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('modalmanager')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ModalManager />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ModalManager />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

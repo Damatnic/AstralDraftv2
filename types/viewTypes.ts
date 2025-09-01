@@ -1,29 +1,27 @@
 // View Types for Astral Draft
 export type AnalyticsViewType = 
-  | &apos;overview&apos;
-  | &apos;performance&apos;
-  | &apos;trends&apos;
-  | &apos;comparisons&apos;
-  | &apos;projections&apos;
-  | &apos;advanced&apos;;
+  | 'overview'
+  | 'performance'
+  | 'trends'
+  | 'comparisons'
+  | 'projections'
+  | 'advanced';
 
 export type DashboardViewType =
-  | &apos;main&apos;
-  | &apos;team&apos;
-  | &apos;league&apos;
-  | &apos;player&apos;
-  | &apos;draft&apos;;
+  | 'main'
+  | 'team'
+  | 'league'
+  | 'player'
+  | 'draft';
 
 export type ReportViewType =
-  | &apos;weekly&apos;
-  | &apos;season&apos;
-  | &apos;custom&apos;
-  | &apos;export&apos;;
+  | 'weekly'
+  | 'season'
+  | 'custom'
+  | 'export';
 
 export interface ViewTypeConfig {
-}
   id: string;
   label: string;
   description?: string;
   icon?: string;
-}

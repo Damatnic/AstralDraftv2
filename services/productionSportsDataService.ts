@@ -4,14 +4,14 @@
  * Supports ESPN API, The Odds API, and other real-time sports data sources
  */
 
-import axios from &apos;axios&apos;;
+import axios from 'axios';
 
 // API Configuration - ESPN API DISABLED
-// const ESPN_API_BASE = &apos;https://site.api.espn.com/apis/site/v2/sports/football/nfl&apos;; // DISABLED TO PREVENT 404 ERRORS
-const ODDS_API_BASE = &apos;https://api.the-odds-api.com/v4/sports/americanfootball_nfl&apos;;
+// const ESPN_API_BASE = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl'; // DISABLED TO PREVENT 404 ERRORS
+const ODDS_API_BASE = 'https://api.the-odds-api.com/v4/sports/americanfootball_nfl';
 
 // API Keys from environment variables
-const ODDS_API_KEY = import.meta.env.VITE_ODDS_API_KEY || &apos;&apos;;
+const ODDS_API_KEY = import.meta.env.VITE_ODDS_API_KEY || '';
 
 // Rate limiting and caching
 const cache = new Map<string, { data: unknown; expires: number }>();
@@ -19,7 +19,6 @@ const rateLimits = new Map<string, { count: number; resetTime: number }>();
 
 // Cache TTL (Time To Live) in milliseconds
 const CACHE_TTL = {
-}
   games: 5 * 60 * 1000,        // 5 minutes for live games
   predictions: 10 * 60 * 1000,  // 10 minutes for predictions
   players: 60 * 60 * 1000,     // 1 hour for player data
@@ -29,12 +28,11 @@ const CACHE_TTL = {
 
 // Data interfaces
 export interface NFLGame {
-}
   id: string;
   date: string;
   week: number;
   season: number;
-  status: &apos;scheduled&apos; | &apos;live&apos; | &apos;completed&apos;;
+  status: 'scheduled' | 'live' | 'completed';
   homeTeam: NFLTeam;
   awayTeam: NFLTeam;
   homeScore?: number;
@@ -42,38 +40,31 @@ export interface NFLGame {
   venue: string;
   weather?: WeatherConditions;
   odds?: GameOdds;
-}
 
 export interface NFLTeam {
-}
   id: string;
   name: string;
   abbreviation: string;
   location: string;
   logo: string;
   record: {
-}
     wins: number;
     losses: number;
     ties: number;
   };
   stats?: TeamStats;
-}
 
 export interface NFLPlayer {
-}
   id: string;
   name: string;
   position: string;
   team: string;
   jerseyNumber: number;
   stats: PlayerStats;
-  injuryStatus?: &apos;healthy&apos; | &apos;questionable&apos; | &apos;doubtful&apos; | &apos;out&apos;;
+  injuryStatus?: 'healthy' | 'questionable' | 'doubtful' | 'out';
   fantasyProjection?: number;
-}
 
 export interface PlayerStats {
-}
   passingYards?: number;
   passingTouchdowns?: number;
   rushingYards?: number;
@@ -83,10 +74,8 @@ export interface PlayerStats {
   receptions?: number;
   fantasyPoints?: number;
   gamesPlayed?: number;
-}
 
 export interface TeamStats {
-}
   pointsPerGame: number;
   pointsAllowed: number;
   yardsPerGame: number;
@@ -94,77 +83,60 @@ export interface TeamStats {
   turnoverDifferential: number;
   redZoneEfficiency: number;
   thirdDownConversion: number;
-}
 
 export interface GameOdds {
-}
   spread: number;
   total: number;
   moneylineHome: number;
   moneylineAway: number;
   lastUpdated: string;
-}
 
 export interface WeatherConditions {
-}
   temperature: number;
   conditions: string;
   windSpeed: number;
   precipitation: number;
   humidity: number;
-}
 
 export interface RealPrediction {
-}
   id: string;
   week: number;
   season: number;
   gameId: string;
-  type: &apos;spread&apos; | &apos;total&apos; | &apos;moneyline&apos; | &apos;player_prop&apos;;
+  type: 'spread' | 'total' | 'moneyline' | 'player_prop';
   question: string;
   options: PredictionOption[];
   deadline: string;
-  status: &apos;open&apos; | &apos;closed&apos; | &apos;resolved&apos;;
+  status: 'open' | 'closed' | 'resolved';
   resolution?: {
-}
     result: number;
     actualValue?: number;
     resolvedAt: string;
   };
-}
 
 export interface PredictionOption {
-}
   id: number;
   text: string;
   odds: number;
   probability: number;
-}
 
 class ProductionSportsDataService {
-}
   private apiRequestCount = 0;
   private lastResetTime = Date.now();
   private cacheCleanupTimer: NodeJS.Timeout | null = null;
 
   constructor() {
-}
-    if (process.env.NODE_ENV !== &apos;test&apos;) {
-}
+    if (process.env.NODE_ENV !== 'test') {
       this.initializeCache();
     }
   }
 
   private initializeCache(): void {
-}
     // Clean up expired cache entries every 5 minutes
     this.cacheCleanupTimer = setInterval(() => {
-}
       const now = Date.now();
       for (const [key, entry] of cache.entries()) {
-}
         if (now > entry.expires) {
-}
           cache.delete(key);
         }
       }
@@ -172,21 +144,17 @@ class ProductionSportsDataService {
   }
 
   public cleanup(): void {
-}
     if (this.cacheCleanupTimer) {
-}
       clearInterval(this.cacheCleanupTimer);
       this.cacheCleanupTimer = null;
     }
   }
 
   private checkRateLimit(api: string, limit: number = 100): boolean {
-}
     const now = Date.now();
     const key = `${api}_rate_limit`;
     
     if (!rateLimits.has(key)) {
-}
       rateLimits.set(key, { count: 1, resetTime: now + 60000 });
       return true;
     }
@@ -194,14 +162,12 @@ class ProductionSportsDataService {
     const record = rateLimits.get(key)!;
     
     if (now > record.resetTime) {
-}
       record.count = 1;
       record.resetTime = now + 60000;
       return true;
     }
 
     if (record.count >= limit) {
-}
       console.warn(`Rate limit exceeded for ${api} API`);
       return false;
     }
@@ -215,12 +181,10 @@ class ProductionSportsDataService {
     fetcher: () => Promise<T>,
     ttl: number = CACHE_TTL.games
   ): Promise<T> {
-}
     const cached = cache.get(cacheKey);
     const now = Date.now();
 
     if (cached && now < cached.expires) {
-}
       return cached.data;
     }
 
@@ -230,25 +194,20 @@ class ProductionSportsDataService {
   }
 
   private async makeAPIRequest(url: string, headers: Record<string, string> = {}): Promise<unknown> {
-}
     try {
-}
       this.apiRequestCount++;
       
       // ESPN API disabled - redirecting to SportsData.io
-      if (url.includes(&apos;site.api.espn.com&apos;)) {
-}
-        console.log(&apos;Redirecting ESPN API call to SportsData.io&apos;);
+      if (url.includes('site.api.espn.com')) {
+        console.log('Redirecting ESPN API call to SportsData.io');
         return this.getSportsDataIOEquivalent(url);
       }
       
       const response = await axios.get(url, {
-}
         headers: {
-}
-          &apos;Accept&apos;: &apos;application/json&apos;,
-          &apos;X-App-Name&apos;: &apos;AstralDraft&apos;,
-          &apos;X-App-Version&apos;: &apos;1.0&apos;,
+          'Accept': 'application/json',
+          'X-App-Name': 'AstralDraft',
+          'X-App-Version': '1.0',
           ...headers
         },
         timeout: 10000 // 10 second timeout
@@ -256,11 +215,8 @@ class ProductionSportsDataService {
 
       return response.data;
     } catch (error) {
-}
       if (axios.isAxiosError(error)) {
-}
         console.error(`API Request failed for ${url}:`, {
-}
           status: error.response?.status,
           statusText: error.response?.statusText,
           data: error.response?.data
@@ -273,78 +229,62 @@ class ProductionSportsDataService {
 
 
   private async getSportsDataIOEquivalent(endpoint: string): Promise<unknown> {
-}
     // Map ESPN methods to SportsData.io equivalents
-    const SPORTSDATA_API_KEY = import.meta.env.VITE_SPORTS_DATA_API_KEY || &apos;&apos;;
+    const SPORTSDATA_API_KEY = import.meta.env.VITE_SPORTS_DATA_API_KEY || '';
     
-    if (endpoint === &apos;getCurrentWeekGames&apos; || endpoint === &apos;getLiveScores&apos;) {
-}
+    if (endpoint === 'getCurrentWeekGames' || endpoint === 'getLiveScores') {
       // ESPN scoreboard -> SportsData.io scores
       const sportsDataUrl = `https://api.sportsdata.io/v3/nfl/scores/json/ScoresByWeek/2024/1?key=${SPORTSDATA_API_KEY}`;
       
       // Skip API call if no key configured - return mock data instead
       if (!SPORTSDATA_API_KEY) {
-}
-        console.log(&apos;Using mock NFL data - API key not configured&apos;);
+        console.log('Using mock NFL data - API key not configured');
         return {
-}
           events: [
             {
-}
-              id: &apos;401547439&apos;,
-              name: &apos;Buffalo Bills at Miami Dolphins&apos;, 
-              shortName: &apos;BUF @ MIA&apos;,
+              id: '401547439',
+              name: 'Buffalo Bills at Miami Dolphins', 
+              shortName: 'BUF @ MIA',
               date: new Date().toISOString(),
               competitions: [{
-}
                 competitors: [
                   {
-}
-                    team: { displayName: &apos;Buffalo Bills&apos;, abbreviation: &apos;BUF&apos; },
-                    score: &apos;27&apos;
+                    team: { displayName: 'Buffalo Bills', abbreviation: 'BUF' },
+                    score: '27'
                   },
                   {
-}
-                    team: { displayName: &apos;Miami Dolphins&apos;, abbreviation: &apos;MIA&apos; },
-                    score: &apos;21&apos;
+                    team: { displayName: 'Miami Dolphins', abbreviation: 'MIA' },
+                    score: '21'
                   }
                 ],
                 status: {
-}
                   type: {
-}
                     completed: false, 
-                    description: &apos;In Progress - 4th Quarter&apos; 
+                    description: 'In Progress - 4th Quarter' 
                   } 
                 }
               }]
             },
             {
-}
-              id: &apos;401547440&apos;,
-              name: &apos;Kansas City Chiefs at Las Vegas Raiders&apos;,
-              shortName: &apos;KC @ LV&apos;,
+              id: '401547440',
+              name: 'Kansas City Chiefs at Las Vegas Raiders',
+              shortName: 'KC @ LV',
               date: new Date(Date.now() + 3600000).toISOString(),
               competitions: [{
-}
                 competitors: [
                   {
-}
-                    team: { displayName: &apos;Kansas City Chiefs&apos;, abbreviation: &apos;KC&apos; },
-                    score: &apos;14&apos;
+                    team: { displayName: 'Kansas City Chiefs', abbreviation: 'KC' },
+                    score: '14'
                   },
                   {
-}
-                    team: { displayName: &apos;Las Vegas Raiders&apos;, abbreviation: &apos;LV&apos; },
-                    score: &apos;10&apos;
+                    team: { displayName: 'Las Vegas Raiders', abbreviation: 'LV' },
+                    score: '10'
                   }
                 ],
                 status: {
-}
                   type: {
-}
                     completed: false, 
-                    description: &apos;2nd Quarter&apos; 
+                    description: '2nd Quarter' 
                   } 
                 }
               }]
@@ -354,85 +294,67 @@ class ProductionSportsDataService {
       }
 
       try {
-}
         const response = await axios.get(sportsDataUrl, {
-}
           headers: {
-}
-            &apos;Accept&apos;: &apos;application/json&apos;,
-            &apos;X-App-Name&apos;: &apos;AstralDraft&apos;,
-            &apos;X-App-Version&apos;: &apos;1.0&apos;,
+            'Accept': 'application/json',
+            'X-App-Name': 'AstralDraft',
+            'X-App-Version': '1.0',
           },
           timeout: 10000
         });
         
         // Transform SportsData.io format to ESPN-like format
         return {
-}
           events: response.data.map((game: any) => ({
-}
             id: game.ScoreID?.toString() || game.GameKey,
             name: `${game.AwayTeam} at ${game.HomeTeam}`,
             shortName: `${game.AwayTeam} @ ${game.HomeTeam}`,
             date: game.DateTime,
             competitions: [{
-}
               competitors: [
                 {
-}
                   team: { displayName: game.AwayTeam, abbreviation: game.AwayTeam },
-                  score: game.AwayScore?.toString() || &apos;0&apos;
+                  score: game.AwayScore?.toString() || '0'
                 },
                 {
-}
                   team: { displayName: game.HomeTeam, abbreviation: game.HomeTeam },
-                  score: game.HomeScore?.toString() || &apos;0&apos;
+                  score: game.HomeScore?.toString() || '0'
                 }
               ],
               status: {
-}
                 type: {
-}
                   completed: game.IsGameOver || false, 
-                  description: game.Status || &apos;Scheduled&apos; 
+                  description: game.Status || 'Scheduled' 
                 } 
               }
             }]
           }))
         };
       } catch (error) {
-}
-        console.log(&apos;SportsData.io API unavailable, using mock data&apos;);
+        console.log('SportsData.io API unavailable, using mock data');
         // Return mock data on error
         return {
-}
           events: [
             {
-}
-              id: &apos;401547441&apos;,
-              name: &apos;Green Bay Packers at Chicago Bears&apos;,
-              shortName: &apos;GB @ CHI&apos;,
+              id: '401547441',
+              name: 'Green Bay Packers at Chicago Bears',
+              shortName: 'GB @ CHI',
               date: new Date().toISOString(),
               competitions: [{
-}
                 competitors: [
                   {
-}
-                    team: { displayName: &apos;Green Bay Packers&apos;, abbreviation: &apos;GB&apos; },
-                    score: &apos;17&apos;
+                    team: { displayName: 'Green Bay Packers', abbreviation: 'GB' },
+                    score: '17'
                   },
                   {
-}
-                    team: { displayName: &apos;Chicago Bears&apos;, abbreviation: &apos;CHI&apos; },
-                    score: &apos;14&apos;
+                    team: { displayName: 'Chicago Bears', abbreviation: 'CHI' },
+                    score: '14'
                   }
                 ],
                 status: {
-}
                   type: {
-}
                     completed: false, 
-                    description: &apos;3rd Quarter&apos; 
+                    description: '3rd Quarter' 
                   } 
                 }
               }]
@@ -443,8 +365,7 @@ class ProductionSportsDataService {
     }
     
     // Handle other endpoints
-    if (endpoint === &apos;getPlayerDetails&apos;) {
-}
+    if (endpoint === 'getPlayerDetails') {
       // Return mock player data for now
       return null;
     }
@@ -458,35 +379,29 @@ class ProductionSportsDataService {
    * Fetch current NFL games for a specific week
    */
   async getCurrentWeekGames(week: number = 1, season: number = 2024): Promise<NFLGame[]> {
-}
     try {
-}
       // ESPN API disabled - return SportsData.io data instead
-      console.log(&apos;ℹ️ ESPN API disabled, using SportsData.io for game data&apos;);
-      const result = await this.getSportsDataIOEquivalent(&apos;getCurrentWeekGames&apos;);
+      console.log('ℹ️ ESPN API disabled, using SportsData.io for game data');
+      const result = await this.getSportsDataIOEquivalent('getCurrentWeekGames');
       
       // Ensure we always return an array
-      if (!result || typeof result !== &apos;object&apos;) {
-}
+      if (!result || typeof result !== 'object') {
         return [];
       }
       
       // Parse ESPN-like response structure if present
-      if (&apos;events&apos; in result && Array.isArray(result.events)) {
-}
+      if ('events' in result && Array.isArray(result.events)) {
         return this.parseESPNGamesToNFLGames(result.events);
       }
       
       // If already an array of games, return it
       if (Array.isArray(result)) {
-}
         return result;
       }
       
       return [];
     } catch (error) {
-}
-      console.error(&apos;Error fetching current week games:&apos;, error);
+      console.error('Error fetching current week games:', error);
       return [];
     }
   }
@@ -495,35 +410,29 @@ class ProductionSportsDataService {
    * Fetch live game scores and updates
    */
   async getLiveScores(): Promise<NFLGame[]> {
-}
     try {
-}
       // ESPN API disabled - return SportsData.io data instead
-      console.log(&apos;ℹ️ ESPN API disabled, using SportsData.io for live scores&apos;);
-      const result = await this.getSportsDataIOEquivalent(&apos;getLiveScores&apos;);
+      console.log('ℹ️ ESPN API disabled, using SportsData.io for live scores');
+      const result = await this.getSportsDataIOEquivalent('getLiveScores');
       
       // Ensure we always return an array
-      if (!result || typeof result !== &apos;object&apos;) {
-}
+      if (!result || typeof result !== 'object') {
         return [];
       }
       
       // Parse ESPN-like response structure if present
-      if (&apos;events&apos; in result && Array.isArray(result.events)) {
-}
+      if ('events' in result && Array.isArray(result.events)) {
         return this.parseESPNGamesToNFLGames(result.events);
       }
       
       // If already an array of games, return it
       if (Array.isArray(result)) {
-}
         return result;
       }
       
       return [];
     } catch (error) {
-}
-      console.error(&apos;Error fetching live scores:&apos;, error);
+      console.error('Error fetching live scores:', error);
       return [];
     }
   }
@@ -532,10 +441,9 @@ class ProductionSportsDataService {
    * Fetch detailed player information and stats
    */
   async getPlayerDetails(playerId: string): Promise<NFLPlayer | null> {
-}
     // ESPN API disabled - return SportsData.io data instead
-    console.log(&apos;ℹ️ ESPN API disabled, using SportsData.io for player details&apos;);
-    const result = await this.getSportsDataIOEquivalent(&apos;getPlayerDetails&apos;);
+    console.log('ℹ️ ESPN API disabled, using SportsData.io for player details');
+    const result = await this.getSportsDataIOEquivalent('getPlayerDetails');
     return result as NFLPlayer | null;
   }
 
@@ -543,41 +451,34 @@ class ProductionSportsDataService {
    * Fetch player updates for real-time monitoring
    */
   async getPlayerUpdates(): Promise<NFLPlayer[]> {
-}
     return this.getCachedOrFetch(
-      &apos;all_players_updates&apos;,
+      'all_players_updates',
       async () => {
-}
         try {
-}
           // In production, this would fetch from multiple sources
           // For now, return mock data with realistic structure
           const mockPlayers: NFLPlayer[] = [
             {
-}
-              id: &apos;patrick_mahomes_1&apos;,
-              name: &apos;Patrick Mahomes&apos;,
-              position: &apos;QB&apos;,
-              team: &apos;KC&apos;,
+              id: 'patrick_mahomes_1',
+              name: 'Patrick Mahomes',
+              position: 'QB',
+              team: 'KC',
               jerseyNumber: 15,
               stats: {
-}
                 passingYards: 284,
                 passingTouchdowns: 2,
                 fantasyPoints: 22.36,
                 gamesPlayed: 1
               },
-              injuryStatus: &apos;healthy&apos;
+              injuryStatus: 'healthy'
             },
             {
-}
-              id: &apos;josh_allen_1&apos;,
-              name: &apos;Josh Allen&apos;,
-              position: &apos;QB&apos;,
-              team: &apos;BUF&apos;,
+              id: 'josh_allen_1',
+              name: 'Josh Allen',
+              position: 'QB',
+              team: 'BUF',
               jerseyNumber: 17,
               stats: {
-}
                 passingYards: 297,
                 passingTouchdowns: 3,
                 rushingYards: 39,
@@ -585,17 +486,15 @@ class ProductionSportsDataService {
                 fantasyPoints: 28.88,
                 gamesPlayed: 1
               },
-              injuryStatus: &apos;healthy&apos;
+              injuryStatus: 'healthy'
             },
             {
-}
-              id: &apos;christian_mccaffrey_1&apos;,
-              name: &apos;Christian McCaffrey&apos;,
-              position: &apos;RB&apos;,
-              team: &apos;SF&apos;,
+              id: 'christian_mccaffrey_1',
+              name: 'Christian McCaffrey',
+              position: 'RB',
+              team: 'SF',
               jerseyNumber: 23,
               stats: {
-}
                 rushingYards: 147,
                 rushingTouchdowns: 2,
                 receivingYards: 35,
@@ -603,14 +502,13 @@ class ProductionSportsDataService {
                 fantasyPoints: 24.2,
                 gamesPlayed: 1
               },
-              injuryStatus: &apos;healthy&apos;
+              injuryStatus: 'healthy'
             }
           ];
           
           return mockPlayers;
         } catch (error) {
-}
-          console.error(&apos;Failed to fetch player updates:&apos;, error);
+          console.error('Failed to fetch player updates:', error);
           return [];
         }
       },
@@ -622,35 +520,29 @@ class ProductionSportsDataService {
    * Fetch betting odds for games
    */
   async getGameOdds(gameDate?: string): Promise<GameOdds[]> {
-}
     if (!ODDS_API_KEY) {
-}
-      console.warn(&apos;Odds API key not configured, using mock odds&apos;);
+      console.warn('Odds API key not configured, using mock odds');
       return [];
     }
 
     return this.getCachedOrFetch(
-      `odds_${gameDate || &apos;current&apos;}`,
+      `odds_${gameDate || 'current'}`,
       async () => {
-}
-        if (!this.checkRateLimit(&apos;odds&apos;, 50)) {
-}
-          throw new Error(&apos;Odds API rate limit exceeded&apos;);
+        if (!this.checkRateLimit('odds', 50)) {
+          throw new Error('Odds API rate limit exceeded');
         }
 
         const url = `${ODDS_API_BASE}/odds`;
         const params = new URLSearchParams({
-}
           apiKey: ODDS_API_KEY,
-          regions: &apos;us&apos;,
-          markets: &apos;h2h,spreads,totals&apos;,
-          oddsFormat: &apos;american&apos;,
-          dateFormat: &apos;iso&apos;
+          regions: 'us',
+          markets: 'h2h,spreads,totals',
+          oddsFormat: 'american',
+          dateFormat: 'iso'
         });
 
         if (gameDate) {
-}
-          params.append(&apos;commenceTimeFrom&apos;, gameDate);
+          params.append('commenceTimeFrom', gameDate);
         }
 
         const data = await this.makeAPIRequest(`${url}?${params}`);
@@ -664,17 +556,13 @@ class ProductionSportsDataService {
    * Generate real predictions based on live data
    */
   async generateRealPredictions(week: number, season: number = 2024): Promise<RealPrediction[]> {
-}
     try {
-}
       const games = await this.getCurrentWeekGames(week, season);
       const predictions: RealPrediction[] = [];
 
       for (const game of games) {
-}
         // Only create predictions for future games
         if (new Date(game.date) > new Date()) {
-}
           // Create spread prediction
           const spreadPrediction = await this.createSpreadPrediction(game);
           if (spreadPrediction) predictions.push(spreadPrediction);
@@ -691,8 +579,7 @@ class ProductionSportsDataService {
 
       return predictions;
     } catch (error) {
-}
-      console.error(&apos;Failed to generate real predictions:&apos;, error);
+      console.error('Failed to generate real predictions:', error);
       return [];
     }
   }
@@ -701,24 +588,18 @@ class ProductionSportsDataService {
    * Resolve completed predictions
    */
   async resolvePredictions(predictionIds: string[]): Promise<{ id: string; result: number; actualValue?: number }[]> {
-}
     const results = [];
 
     for (const predictionId of predictionIds) {
-}
       try {
-}
         // In a real implementation, this would fetch the prediction from database
         // and check the actual game result to resolve it
         const prediction = await this.getPredictionById(predictionId);
         if (prediction && prediction.gameId) {
-}
           const game = await this.getGameById(prediction.gameId);
-          if (game && game.status === &apos;completed&apos;) {
-}
+          if (game && game.status === 'completed') {
             const result = this.calculatePredictionResult(prediction, game);
             results.push({
-}
               id: predictionId,
               result: result.winningOption,
               actualValue: result.actualValue
@@ -726,7 +607,6 @@ class ProductionSportsDataService {
           }
         }
       } catch (error) {
-}
         console.error(`Failed to resolve prediction ${predictionId}:`, error);
       }
     }
@@ -738,24 +618,21 @@ class ProductionSportsDataService {
    * Get API status and usage statistics
    */
   getAPIStatus(): { 
-}
     isConnected: boolean; 
     requestCount: number; 
     cacheSize: number; 
     lastUpdate: string;
     services: { name: string; status: string; hasKey: boolean }[];
   } {
-}
     return {
-}
       isConnected: true,
       requestCount: this.apiRequestCount,
       cacheSize: cache.size,
       lastUpdate: new Date().toISOString(),
       services: [
-        { name: &apos;ESPN API&apos;, status: &apos;connected&apos;, hasKey: true },
-        { name: &apos;The Odds API&apos;, status: ODDS_API_KEY ? &apos;connected&apos; : &apos;no_key&apos;, hasKey: !!ODDS_API_KEY },
-        { name: &apos;NFL API&apos;, status: &apos;planned&apos;, hasKey: false }
+        { name: 'ESPN API', status: 'connected', hasKey: true },
+        { name: 'The Odds API', status: ODDS_API_KEY ? 'connected' : 'no_key', hasKey: !!ODDS_API_KEY },
+        { name: 'NFL API', status: 'planned', hasKey: false }
       ]
     };
   }
@@ -763,40 +640,31 @@ class ProductionSportsDataService {
   // Private helper methods
 
   private parseESPNGamesToNFLGames(events: any[]): NFLGame[] {
-}
     try {
-}
       if (!Array.isArray(events)) {
-}
         return [];
       }
       
       return events.map((event: any) => {
-}
         try {
-}
           return this.parseESPNGame(event);
         } catch (error) {
-}
-          console.warn(&apos;Failed to parse individual game:&apos;, error);
+          console.warn('Failed to parse individual game:', error);
           return null;
         }
       }).filter((game): game is NFLGame => game !== null);
     } catch (error) {
-}
-      console.error(&apos;Failed to parse ESPN games:&apos;, error);
+      console.error('Failed to parse ESPN games:', error);
       return [];
     }
   }
 
   private parseESPNGame(event: any): NFLGame {
-}
     const competition = event.competitions[0];
-    const homeTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === &apos;home&apos;);
-    const awayTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === &apos;away&apos;);
+    const homeTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === 'home');
+    const awayTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === 'away');
 
     return {
-}
       id: event.id,
       date: event.date,
       week: event.week?.number || 1,
@@ -806,44 +674,38 @@ class ProductionSportsDataService {
       awayTeam: this.parseTeam(awayTeam.team),
       homeScore: parseInt(homeTeam.score) || undefined,
       awayScore: parseInt(awayTeam.score) || undefined,
-      venue: competition.venue?.fullName || &apos;&apos;,
+      venue: competition.venue?.fullName || '',
       weather: this.parseWeather(competition.weather)
     };
   }
 
   private parseTeam(team: any): NFLTeam {
-}
     return {
-}
       id: team.id,
       name: team.displayName,
       abbreviation: team.abbreviation,
       location: team.location,
       logo: team.logo,
       record: {
-}
-        wins: parseInt(team.record?.items?.[0]?.stats?.find((s: any) => s.name === &apos;wins&apos;)?.value) || 0,
-        losses: parseInt(team.record?.items?.[0]?.stats?.find((s: any) => s.name === &apos;losses&apos;)?.value) || 0,
-        ties: parseInt(team.record?.items?.[0]?.stats?.find((s: any) => s.name === &apos;ties&apos;)?.value) || 0
+        wins: parseInt(team.record?.items?.[0]?.stats?.find((s: any) => s.name === 'wins')?.value) || 0,
+        losses: parseInt(team.record?.items?.[0]?.stats?.find((s: any) => s.name === 'losses')?.value) || 0,
+        ties: parseInt(team.record?.items?.[0]?.stats?.find((s: any) => s.name === 'ties')?.value) || 0
       }
     };
   }
 
-  private parseGameStatus(status: string): &apos;scheduled&apos; | &apos;live&apos; | &apos;completed&apos; {
-}
-    if (status.includes(&apos;FINAL&apos;) || status.includes(&apos;END&apos;)) return &apos;completed&apos;;
-    if (status.includes(&apos;PROGRESS&apos;) || status.includes(&apos;HALFTIME&apos;)) return &apos;live&apos;;
-    return &apos;scheduled&apos;;
+  private parseGameStatus(status: string): 'scheduled' | 'live' | 'completed' {
+    if (status.includes('FINAL') || status.includes('END')) return 'completed';
+    if (status.includes('PROGRESS') || status.includes('HALFTIME')) return 'live';
+    return 'scheduled';
   }
 
   private parseWeather(weather: any): WeatherConditions | undefined {
-}
     if (!weather) return undefined;
 
     return {
-}
       temperature: weather.temperature || 70,
-      conditions: weather.conditionId || &apos;clear&apos;,
+      conditions: weather.conditionId || 'clear',
       windSpeed: weather.wind?.speed || 0,
       precipitation: weather.precipitation || 0,
       humidity: weather.humidity || 50
@@ -851,13 +713,11 @@ class ProductionSportsDataService {
   }
 
   private parseESPNPlayer(data: any): NFLPlayer {
-}
     return {
-}
       id: data.id,
       name: data.fullName || data.displayName,
-      position: data.position?.abbreviation || &apos;UNKNOWN&apos;,
-      team: data.team?.abbreviation || &apos;FA&apos;,
+      position: data.position?.abbreviation || 'UNKNOWN',
+      team: data.team?.abbreviation || 'FA',
       jerseyNumber: data.jersey || 0,
       stats: this.parsePlayerStats(data.statistics),
       injuryStatus: this.parseInjuryStatus(data.injuries)
@@ -865,9 +725,7 @@ class ProductionSportsDataService {
   }
 
   private parsePlayerStats(statistics: any[]): PlayerStats {
-}
     if (!statistics || !statistics.length) {
-}
       return {};
     }
 
@@ -875,78 +733,68 @@ class ProductionSportsDataService {
     const statMap: Record<string, number> = {};
     
     stats.forEach((stat: any) => {
-}
       statMap[stat.shortDisplayName] = parseFloat(stat.value) || 0;
     });
 
     return {
-}
-      passingYards: statMap[&apos;YDS&apos;] || statMap[&apos;PASS YDS&apos;],
-      passingTouchdowns: statMap[&apos;TD&apos;] || statMap[&apos;PASS TD&apos;],
-      rushingYards: statMap[&apos;RUSH YDS&apos;],
-      rushingTouchdowns: statMap[&apos;RUSH TD&apos;],
-      receivingYards: statMap[&apos;REC YDS&apos;],
-      receivingTouchdowns: statMap[&apos;REC TD&apos;],
-      receptions: statMap[&apos;REC&apos;],
-      fantasyPoints: statMap[&apos;FPTS&apos;],
-      gamesPlayed: statMap[&apos;GP&apos;]
+      passingYards: statMap['YDS'] || statMap['PASS YDS'],
+      passingTouchdowns: statMap['TD'] || statMap['PASS TD'],
+      rushingYards: statMap['RUSH YDS'],
+      rushingTouchdowns: statMap['RUSH TD'],
+      receivingYards: statMap['REC YDS'],
+      receivingTouchdowns: statMap['REC TD'],
+      receptions: statMap['REC'],
+      fantasyPoints: statMap['FPTS'],
+      gamesPlayed: statMap['GP']
     };
   }
 
-  private parseInjuryStatus(injuries: any[]): &apos;healthy&apos; | &apos;questionable&apos; | &apos;doubtful&apos; | &apos;out&apos; {
-}
-    if (!injuries || !injuries.length) return &apos;healthy&apos;;
+  private parseInjuryStatus(injuries: any[]): 'healthy' | 'questionable' | 'doubtful' | 'out' {
+    if (!injuries || !injuries.length) return 'healthy';
     
-    const status = injuries[0]?.status?.toLowerCase() || &apos;healthy&apos;;
-    if (status.includes(&apos;out&apos;)) return &apos;out&apos;;
-    if (status.includes(&apos;doubtful&apos;)) return &apos;doubtful&apos;;
-    if (status.includes(&apos;questionable&apos;)) return &apos;questionable&apos;;
-    return &apos;healthy&apos;;
+    const status = injuries[0]?.status?.toLowerCase() || 'healthy';
+    if (status.includes('out')) return 'out';
+    if (status.includes('doubtful')) return 'doubtful';
+    if (status.includes('questionable')) return 'questionable';
+    return 'healthy';
   }
 
   private parseOddsData(game: any): GameOdds {
-}
-    const h2h = game.bookmakers?.[0]?.markets?.find((m: any) => m.key === &apos;h2h&apos;);
-    const spreads = game.bookmakers?.[0]?.markets?.find((m: any) => m.key === &apos;spreads&apos;);
-    const totals = game.bookmakers?.[0]?.markets?.find((m: any) => m.key === &apos;totals&apos;);
+    const h2h = game.bookmakers?.[0]?.markets?.find((m: any) => m.key === 'h2h');
+    const spreads = game.bookmakers?.[0]?.markets?.find((m: any) => m.key === 'spreads');
+    const totals = game.bookmakers?.[0]?.markets?.find((m: any) => m.key === 'totals');
 
     return {
-}
       spread: parseFloat(spreads?.outcomes?.[0]?.point) || 0,
       total: parseFloat(totals?.outcomes?.[0]?.point) || 0,
-      moneylineHome: h2h?.outcomes?.find((o: any) => o.name === &apos;home&apos;)?.price || 0,
-      moneylineAway: h2h?.outcomes?.find((o: any) => o.name === &apos;away&apos;)?.price || 0,
+      moneylineHome: h2h?.outcomes?.find((o: any) => o.name === 'home')?.price || 0,
+      moneylineAway: h2h?.outcomes?.find((o: any) => o.name === 'away')?.price || 0,
       lastUpdated: game.commence_time || new Date().toISOString()
     };
   }
 
   private async createSpreadPrediction(game: NFLGame): Promise<RealPrediction | null> {
-}
     try {
-}
       const odds = await this.getGameOdds();
-      const gameOdds = odds.find((o: any) => o.lastUpdated.includes(game.date.split(&apos;T&apos;)[0]));
+      const gameOdds = odds.find((o: any) => o.lastUpdated.includes(game.date.split('T')[0]));
       
       if (!gameOdds) return null;
 
       return {
-}
         id: `spread_${game.id}`,
         week: game.week,
         season: game.season,
         gameId: game.id,
-        type: &apos;spread&apos;,
+        type: 'spread',
         question: `Who will cover the spread? ${game.awayTeam.name} vs ${game.homeTeam.name}`,
         options: [
           {
-}
             id: 0,
             text: `${game.awayTeam.name} (+${Math.abs(gameOdds.spread)})`,
             odds: gameOdds.moneylineAway,
             probability: this.calculateProbabilityFromOdds(gameOdds.moneylineAway)
           },
           {
-}
             id: 1,
             text: `${game.homeTeam.name} (${gameOdds.spread})`,
             odds: gameOdds.moneylineHome,
@@ -954,42 +802,36 @@ class ProductionSportsDataService {
           }
         ],
         deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(), // 15 min before game
-        status: &apos;open&apos;
+        status: 'open'
       };
     } catch (error) {
-}
-      console.error(&apos;Failed to create spread prediction:&apos;, error);
+      console.error('Failed to create spread prediction:', error);
       return null;
     }
   }
 
   private async createTotalPrediction(game: NFLGame): Promise<RealPrediction | null> {
-}
     try {
-}
       const odds = await this.getGameOdds();
-      const gameOdds = odds.find((o: any) => o.lastUpdated.includes(game.date.split(&apos;T&apos;)[0]));
+      const gameOdds = odds.find((o: any) => o.lastUpdated.includes(game.date.split('T')[0]));
       
       if (!gameOdds) return null;
 
       return {
-}
         id: `total_${game.id}`,
         week: game.week,
         season: game.season,
         gameId: game.id,
-        type: &apos;total&apos;,
+        type: 'total',
         question: `Will the total points be over or under ${gameOdds.total}?`,
         options: [
           {
-}
             id: 0,
             text: `Over ${gameOdds.total}`,
             odds: -110,
             probability: 0.52
           },
           {
-}
             id: 1,
             text: `Under ${gameOdds.total}`,
             odds: -110,
@@ -997,52 +839,43 @@ class ProductionSportsDataService {
           }
         ],
         deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(),
-        status: &apos;open&apos;
+        status: 'open'
       };
     } catch (error) {
-}
-      console.error(&apos;Failed to create total prediction:&apos;, error);
+      console.error('Failed to create total prediction:', error);
       return null;
     }
   }
 
   private async createPlayerPropPredictions(_game: NFLGame): Promise<RealPrediction[]> {
-}
     // This would create player prop predictions based on player stats and projections
     // For now, returning empty array - can be expanded based on available data
     return [];
   }
 
   private calculateProbabilityFromOdds(americanOdds: number): number {
-}
     if (americanOdds > 0) {
-}
       return 100 / (americanOdds + 100);
     } else {
-}
       return Math.abs(americanOdds) / (Math.abs(americanOdds) + 100);
     }
   }
 
   private async getPredictionById(_predictionId: string): Promise<RealPrediction | null> {
-}
     // This would fetch from database - mock implementation for now
     return null;
   }
 
   private async getGameById(_gameId: string): Promise<NFLGame | null> {
-}
     // This would fetch specific game data - mock implementation for now
     return null;
   }
 
   private calculatePredictionResult(_prediction: RealPrediction, _game: NFLGame): { winningOption: number; actualValue?: number } {
-}
     // This would calculate the actual result based on game outcome
     // Mock implementation for now
     return { winningOption: 0 };
   }
-}
 
 // Export singleton instance
 export const productionSportsDataService = new ProductionSportsDataService();

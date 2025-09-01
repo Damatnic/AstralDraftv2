@@ -4,15 +4,14 @@
  * Supports contracts, rookie drafts, multi-year tracking, and taxi squads
  */
 
-import { Player, Team, League, DraftPick } from &apos;../../types&apos;;
-import { fantasyDataService } from &apos;./FantasyDataService&apos;;
-import { logger } from &apos;../loggingService&apos;;
+import { Player, Team, League, DraftPick } from '../../types';
+import { fantasyDataService } from './FantasyDataService';
+import { logger } from '../loggingService';
 
 /**
  * Contract structure for dynasty leagues
  */
 export interface PlayerContract {
-}
   playerId: string;
   teamId: string;
   yearsRemaining: number;
@@ -22,43 +21,36 @@ export interface PlayerContract {
   canRestructure: boolean;
   signedDate: Date;
   expiryYear: number;
-  contractType: &apos;rookie&apos; | &apos;veteran&apos; | &apos;franchise&apos; | &apos;transition&apos;;
-}
+  contractType: 'rookie' | 'veteran' | 'franchise' | 'transition';
 
 /**
  * Keeper settings for leagues
  */
 export interface KeeperSettings {
-}
   maxKeepers: number;
   keeperCostIncrease: number; // Percentage or round penalty
   keeperDeadline: Date;
   allowTradingKeeperRights: boolean;
-  keeperCostType: &apos;auction&apos; | &apos;draft-round&apos; | &apos;fixed&apos;;
+  keeperCostType: 'auction' | 'draft-round' | 'fixed';
   minYearsOnRoster: number; // Minimum years before keeper eligible
-}
 
 /**
  * Dynasty league settings
  */
 export interface DynastySettings {
-}
   salaryCap: number;
   contractYearLimits: {
-}
     rookie: number;
     veteran: number;
     max: number;
   };
   taxiSquadSize: number;
-  taxiSquadEligibility: &apos;rookies-only&apos; | &apos;second-year&apos; | &apos;custom&apos;;
+  taxiSquadEligibility: 'rookies-only' | 'second-year' | 'custom';
   tradableDraftPicks: {
-}
     enabled: boolean;
     maxYearsOut: number;
   };
   rookieDraft: {
-}
     enabled: boolean;
     rounds: number;
     timePerPick: number;
@@ -66,28 +58,24 @@ export interface DynastySettings {
   };
   franchiseTagsPerTeam: number;
   injuredReserveSlots: number;
-}
 
 /**
  * Rookie draft configuration
  */
 export interface RookieDraft {
-}
   id: string;
   leagueId: string;
   year: number;
-  status: &apos;scheduled&apos; | &apos;in-progress&apos; | &apos;completed&apos;;
+  status: 'scheduled' | 'in-progress' | 'completed';
   draftOrder: string[]; // Team IDs in order
   picks: RookieDraftPick[];
   startTime: Date;
   currentPick?: number;
-}
 
 /**
  * Rookie draft pick
  */
 export interface RookieDraftPick {
-}
   pickNumber: number;
   round: number;
   originalTeam: string;
@@ -96,31 +84,26 @@ export interface RookieDraftPick {
   timestamp?: Date;
   traded: boolean;
   compensatory?: boolean;
-}
 
 /**
  * Taxi squad member
  */
 export interface TaxiSquadMember {
-}
   playerId: string;
   teamId: string;
   eligibleUntil: Date;
   activationDeadline?: Date;
   yearOnTaxi: number;
-}
 
 /**
  * Multi-year team history
  */
 export interface TeamDynastyHistory {
-}
   teamId: string;
   seasons: {
-}
     year: number;
     record: { wins: number; losses: number; ties?: number };
-    playoffResult?: &apos;missed&apos; | &apos;wildcard&apos; | &apos;division&apos; | &apos;conference&apos; | &apos;champion&apos;;
+    playoffResult?: 'missed' | 'wildcard' | 'division' | 'conference' | 'champion';
     roster: Player[];
     trades: number;
     draftGrade: string;
@@ -130,16 +113,13 @@ export interface TeamDynastyHistory {
   playoffAppearances: number;
   bestFinish: number;
   worstFinish: number;
-}
 
 /**
  * Trade involving draft picks
  */
 export interface DraftPickTrade {
-}
   tradeId: string;
   picks: {
-}
     year: number;
     round: number;
     originalOwner: string;
@@ -147,13 +127,11 @@ export interface DraftPickTrade {
   }[];
   players: Player[];
   faabAmount?: number;
-}
 
 /**
  * DYNASTY LEAGUE SERVICE CLASS
  */
 export class DynastyLeagueService {
-}
   private contracts: Map<string, PlayerContract[]>;
   private keeperSelections: Map<string, Set<string>>;
   private taxiSquads: Map<string, TaxiSquadMember[]>;
@@ -161,7 +139,6 @@ export class DynastyLeagueService {
   private teamHistories: Map<string, TeamDynastyHistory>;
 
   constructor() {
-}
     this.contracts = new Map();
     this.keeperSelections = new Map();
     this.taxiSquads = new Map();
@@ -179,29 +156,24 @@ export class DynastyLeagueService {
   async signPlayerContract(
     playerId: string,
     teamId: string,
-    contract: Omit<PlayerContract, &apos;playerId&apos; | &apos;teamId&apos; | &apos;signedDate&apos;>
+    contract: Omit<PlayerContract, 'playerId' | 'teamId' | 'signedDate'>
   ): Promise<PlayerContract> {
-}
     try {
-}
       const player = await fantasyDataService.getPlayerDetails(playerId);
       const leagueSettings = await this.getDynastySettings(teamId);
 
       // Validate contract terms
       if (contract.yearsRemaining > leagueSettings.contractYearLimits.max) {
-}
         throw new Error(`Contract exceeds maximum years (${leagueSettings.contractYearLimits.max})`);
       }
 
       // Check salary cap
       const teamSalary = await this.getTeamSalary(teamId);
       if (teamSalary + contract.salary > leagueSettings.salaryCap) {
-}
-        throw new Error(&apos;Contract would exceed salary cap&apos;);
+        throw new Error('Contract would exceed salary cap');
       }
 
       const newContract: PlayerContract = {
-}
         playerId,
         teamId,
         ...contract,
@@ -213,11 +185,10 @@ export class DynastyLeagueService {
       teamContracts.push(newContract);
       this.contracts.set(teamId, teamContracts);
 
-      logger.info(&apos;Player contract signed&apos;, { playerId, teamId, contract });
+      logger.info('Player contract signed', { playerId, teamId, contract });
       return newContract;
     } catch (error) {
-}
-      logger.error(&apos;Failed to sign player contract&apos;, error);
+      logger.error('Failed to sign player contract', error);
       throw error;
     }
   }
@@ -230,23 +201,19 @@ export class DynastyLeagueService {
     teamId: string,
     newTerms: Partial<PlayerContract>
   ): Promise<PlayerContract> {
-}
     const teamContracts = this.contracts.get(teamId) || [];
     const contractIndex = teamContracts.findIndex(c => c.playerId === playerId);
 
     if (contractIndex === -1) {
-}
-      throw new Error(&apos;Contract not found&apos;);
+      throw new Error('Contract not found');
     }
 
     const existingContract = teamContracts[contractIndex];
     if (!existingContract.canRestructure) {
-}
-      throw new Error(&apos;Contract cannot be restructured&apos;);
+      throw new Error('Contract cannot be restructured');
     }
 
     const updatedContract: PlayerContract = {
-}
       ...existingContract,
       ...newTerms,
       canRestructure: false // Can only restructure once
@@ -255,7 +222,7 @@ export class DynastyLeagueService {
     teamContracts[contractIndex] = updatedContract;
     this.contracts.set(teamId, teamContracts);
 
-    logger.info(&apos;Contract restructured&apos;, { playerId, teamId, newTerms });
+    logger.info('Contract restructured', { playerId, teamId, newTerms });
     return updatedContract;
   }
 
@@ -267,29 +234,26 @@ export class DynastyLeagueService {
     teamId: string,
     leagueId: string
   ): Promise<PlayerContract> {
-}
     const settings = await this.getDynastySettings(leagueId);
     const teamContracts = this.contracts.get(teamId) || [];
     
     // Check franchise tag limit
-    const currentTags = teamContracts.filter((c: any) => c.contractType === &apos;franchise&apos;).length;
+    const currentTags = teamContracts.filter((c: any) => c.contractType === 'franchise').length;
     if (currentTags >= settings.franchiseTagsPerTeam) {
-}
-      throw new Error(&apos;Franchise tag limit reached&apos;);
+      throw new Error('Franchise tag limit reached');
     }
 
     // Calculate franchise tag salary (top 5 average at position)
     const salary = await this.calculateFranchiseTagSalary(playerId, leagueId);
 
     return this.signPlayerContract(playerId, teamId, {
-}
       yearsRemaining: 1,
       salary,
       deadCapIfCut: 0,
       canFranchiseTag: false,
       canRestructure: false,
       expiryYear: new Date().getFullYear() + 1,
-      contractType: &apos;franchise&apos;
+      contractType: 'franchise'
     });
   }
 
@@ -297,20 +261,17 @@ export class DynastyLeagueService {
    * Cut a player and handle dead cap
    */
   async cutPlayer(playerId: string, teamId: string): Promise<void> {
-}
     const teamContracts = this.contracts.get(teamId) || [];
     const contractIndex = teamContracts.findIndex(c => c.playerId === playerId);
 
     if (contractIndex === -1) {
-}
-      throw new Error(&apos;Player not under contract&apos;);
+      throw new Error('Player not under contract');
     }
 
     const contract = teamContracts[contractIndex];
     
     // Apply dead cap penalty
     if (contract.deadCapIfCut > 0) {
-}
       await this.applyDeadCap(teamId, contract.deadCapIfCut, contract.yearsRemaining);
     }
 
@@ -318,7 +279,7 @@ export class DynastyLeagueService {
     teamContracts.splice(contractIndex, 1);
     this.contracts.set(teamId, teamContracts);
 
-    logger.info(&apos;Player cut&apos;, { playerId, teamId, deadCap: contract.deadCapIfCut });
+    logger.info('Player cut', { playerId, teamId, deadCap: contract.deadCapIfCut });
   }
 
   // ===============================
@@ -333,20 +294,16 @@ export class DynastyLeagueService {
     playerIds: string[],
     leagueId: string
   ): Promise<void> {
-}
     const settings = await this.getKeeperSettings(leagueId);
     
     if (playerIds.length > settings.maxKeepers) {
-}
       throw new Error(`Cannot keep more than ${settings.maxKeepers} players`);
     }
 
     // Validate keeper eligibility
     for (const playerId of playerIds) {
-}
       const eligible = await this.isKeeperEligible(playerId, teamId, settings);
       if (!eligible) {
-}
         throw new Error(`Player ${playerId} is not keeper eligible`);
       }
     }
@@ -354,7 +311,7 @@ export class DynastyLeagueService {
     // Store keeper selections
     this.keeperSelections.set(teamId, new Set(playerIds));
     
-    logger.info(&apos;Keepers selected&apos;, { teamId, playerIds });
+    logger.info('Keepers selected', { teamId, playerIds });
   }
 
   /**
@@ -365,11 +322,9 @@ export class DynastyLeagueService {
     teamId: string,
     settings: KeeperSettings
   ): Promise<boolean> {
-}
     // Check years on roster
     const rosterHistory = await this.getPlayerRosterHistory(playerId, teamId);
     if (rosterHistory.yearsOnTeam < settings.minYearsOnRoster) {
-}
       return false;
     }
 
@@ -386,22 +341,20 @@ export class DynastyLeagueService {
     teamId: string,
     leagueId: string
   ): Promise<number | string> {
-}
     const settings = await this.getKeeperSettings(leagueId);
     
     switch (settings.keeperCostType) {
-}
-      case &apos;auction&apos;:
+      case 'auction':
         // Increase auction value by percentage
         const currentValue = await this.getPlayerAuctionValue(playerId);
         return currentValue * (1 + settings.keeperCostIncrease / 100);
         
-      case &apos;draft-round&apos;:
+      case 'draft-round':
         // Move up draft rounds as penalty
         const draftedRound = await this.getPlayerDraftRound(playerId, teamId);
         return Math.max(1, draftedRound - settings.keeperCostIncrease);
         
-      case &apos;fixed&apos;:
+      case 'fixed':
         // Fixed cost per keeper
         return settings.keeperCostIncrease;
         
@@ -421,12 +374,10 @@ export class DynastyLeagueService {
     leagueId: string,
     year: number
   ): Promise<RookieDraft> {
-}
     const settings = await this.getDynastySettings(leagueId);
     
     if (!settings.rookieDraft.enabled) {
-}
-      throw new Error(&apos;Rookie draft not enabled for this league&apos;);
+      throw new Error('Rookie draft not enabled for this league');
     }
 
     // Determine draft order (worst to first for dynasty)
@@ -438,15 +389,12 @@ export class DynastyLeagueService {
     // Create draft picks
     const picks: RookieDraftPick[] = [];
     for (let round = 1; round <= settings.rookieDraft.rounds; round++) {
-}
       for (let i = 0; i < draftOrder.length; i++) {
-}
         const teamId = settings.rookieDraft.linearOrder 
           ? draftOrder[i] 
           : (round % 2 === 1 ? draftOrder[i] : draftOrder[draftOrder.length - 1 - i]);
         
         picks.push({
-}
           pickNumber: (round - 1) * draftOrder.length + i + 1,
           round,
           originalTeam: teamId,
@@ -457,17 +405,16 @@ export class DynastyLeagueService {
     }
 
     const draft: RookieDraft = {
-}
       id: `${leagueId}_${year}_rookie`,
       leagueId,
       year,
-      status: &apos;scheduled&apos;,
+      status: 'scheduled',
       draftOrder,
       picks,
       startTime: new Date() // Would be set to actual draft date
     };
 
-    logger.info(&apos;Rookie draft initialized&apos;, { leagueId, year });
+    logger.info('Rookie draft initialized', { leagueId, year });
     return draft;
   }
 
@@ -479,17 +426,15 @@ export class DynastyLeagueService {
     pickNumber: number,
     playerId: string
   ): Promise<RookieDraftPick> {
-}
     // This would update the draft state and assign the rookie to the team
-    logger.info(&apos;Rookie pick made&apos;, { draftId, pickNumber, playerId });
+    logger.info('Rookie pick made', { draftId, pickNumber, playerId });
     
     // Return updated pick
     return {
-}
       pickNumber,
       round: Math.ceil(pickNumber / 10), // Assuming 10 teams
-      originalTeam: &apos;team1&apos;,
-      currentOwner: &apos;team1&apos;,
+      originalTeam: 'team1',
+      currentOwner: 'team1',
       player: await fantasyDataService.getPlayerDetails(playerId),
       timestamp: new Date(),
       traded: false
@@ -508,24 +453,20 @@ export class DynastyLeagueService {
     teamId: string,
     leagueId: string
   ): Promise<TaxiSquadMember> {
-}
     const settings = await this.getDynastySettings(leagueId);
     const teamTaxi = this.taxiSquads.get(teamId) || [];
     
     if (teamTaxi.length >= settings.taxiSquadSize) {
-}
-      throw new Error(&apos;Taxi squad is full&apos;);
+      throw new Error('Taxi squad is full');
     }
 
     // Validate eligibility
     const eligible = await this.isTaxiEligible(playerId, settings);
     if (!eligible) {
-}
-      throw new Error(&apos;Player not eligible for taxi squad&apos;);
+      throw new Error('Player not eligible for taxi squad');
     }
 
     const taxiMember: TaxiSquadMember = {
-}
       playerId,
       teamId,
       eligibleUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
@@ -535,7 +476,7 @@ export class DynastyLeagueService {
     teamTaxi.push(taxiMember);
     this.taxiSquads.set(teamId, teamTaxi);
 
-    logger.info(&apos;Player added to taxi squad&apos;, { playerId, teamId });
+    logger.info('Player added to taxi squad', { playerId, teamId });
     return taxiMember;
   }
 
@@ -546,13 +487,11 @@ export class DynastyLeagueService {
     playerId: string,
     teamId: string
   ): Promise<void> {
-}
     const teamTaxi = this.taxiSquads.get(teamId) || [];
     const memberIndex = teamTaxi.findIndex(m => m.playerId === playerId);
     
     if (memberIndex === -1) {
-}
-      throw new Error(&apos;Player not on taxi squad&apos;);
+      throw new Error('Player not on taxi squad');
     }
 
     // Remove from taxi squad
@@ -560,7 +499,7 @@ export class DynastyLeagueService {
     this.taxiSquads.set(teamId, teamTaxi);
 
     // Add to active roster (would integrate with roster management)
-    logger.info(&apos;Player promoted from taxi squad&apos;, { playerId, teamId });
+    logger.info('Player promoted from taxi squad', { playerId, teamId });
   }
 
   // ===============================
@@ -572,7 +511,6 @@ export class DynastyLeagueService {
    */
   async tradeDraftPicks(
     trade: {
-}
       teamA: string;
       teamB: string;
       teamAPicks: { year: number; round: number }[];
@@ -581,13 +519,11 @@ export class DynastyLeagueService {
       teamBPlayers?: string[];
     }
   ): Promise<DraftPickTrade> {
-}
     // Validate picks exist and are tradeable
     // Update pick ownership
     // Record trade
 
     const tradeRecord: DraftPickTrade = {
-}
       tradeId: `trade_${Date.now()}`,
       picks: [
         ...trade.teamAPicks.map((p: any) => ({ ...p, originalOwner: trade.teamA })),
@@ -597,7 +533,7 @@ export class DynastyLeagueService {
       faabAmount: 0
     };
 
-    logger.info(&apos;Draft picks traded&apos;, trade);
+    logger.info('Draft picks traded', trade);
     return tradeRecord;
   }
 
@@ -609,15 +545,12 @@ export class DynastyLeagueService {
    * Get team dynasty history
    */
   async getTeamDynastyHistory(teamId: string): Promise<TeamDynastyHistory> {
-}
     if (this.teamHistories.has(teamId)) {
-}
       return this.teamHistories.get(teamId)!;
     }
 
     // Build history from stored data
     const history: TeamDynastyHistory = {
-}
       teamId,
       seasons: [], // Would fetch from database
       allTimeRecord: { wins: 0, losses: 0, ties: 0 },
@@ -639,9 +572,8 @@ export class DynastyLeagueService {
     year: number,
     results: any
   ): Promise<void> {
-}
     // Store season results for historical tracking
-    logger.info(&apos;Season results recorded&apos;, { leagueId, year });
+    logger.info('Season results recorded', { leagueId, year });
   }
 
   // ===============================
@@ -649,31 +581,25 @@ export class DynastyLeagueService {
   // ===============================
 
   private async getDynastySettings(leagueId: string): Promise<DynastySettings> {
-}
     if (this.dynastySettings.has(leagueId)) {
-}
       return this.dynastySettings.get(leagueId)!;
     }
 
     // Default settings
     const settings: DynastySettings = {
-}
       salaryCap: 200000000, // $200M
       contractYearLimits: {
-}
         rookie: 4,
         veteran: 5,
         max: 7
       },
       taxiSquadSize: 4,
-      taxiSquadEligibility: &apos;rookies-only&apos;,
+      taxiSquadEligibility: 'rookies-only',
       tradableDraftPicks: {
-}
         enabled: true,
         maxYearsOut: 3
       },
       rookieDraft: {
-}
         enabled: true,
         rounds: 5,
         timePerPick: 120,
@@ -688,21 +614,18 @@ export class DynastyLeagueService {
   }
 
   private async getKeeperSettings(leagueId: string): Promise<KeeperSettings> {
-}
     // Would fetch from database
     return {
-}
       maxKeepers: 3,
       keeperCostIncrease: 2, // 2 round penalty
-      keeperDeadline: new Date(&apos;2025-08-15&apos;),
+      keeperDeadline: new Date('2025-08-15'),
       allowTradingKeeperRights: true,
-      keeperCostType: &apos;draft-round&apos;,
+      keeperCostType: 'draft-round',
       minYearsOnRoster: 1
     };
   }
 
   private async getTeamSalary(teamId: string): Promise<number> {
-}
     const contracts = this.contracts.get(teamId) || [];
     return contracts.reduce((total, c) => total + c.salary, 0);
   }
@@ -711,7 +634,6 @@ export class DynastyLeagueService {
     playerId: string,
     leagueId: string
   ): Promise<number> {
-}
     // Would calculate based on top 5 salaries at position
     return 25000000; // $25M placeholder
   }
@@ -721,22 +643,19 @@ export class DynastyLeagueService {
     amount: number,
     years: number
   ): Promise<void> {
-}
     // Would track dead cap over multiple years
-    logger.info(&apos;Dead cap applied&apos;, { teamId, amount, years });
+    logger.info('Dead cap applied', { teamId, amount, years });
   }
 
   private async getPlayerRosterHistory(
     playerId: string,
     teamId: string
   ): Promise<{ yearsOnTeam: number }> {
-}
     // Would query historical roster data
     return { yearsOnTeam: 2 };
   }
 
   private async getPlayerAuctionValue(playerId: string): Promise<number> {
-}
     // Would fetch from auction values
     return 25;
   }
@@ -745,7 +664,6 @@ export class DynastyLeagueService {
     playerId: string,
     teamId: string
   ): Promise<number> {
-}
     // Would fetch from draft history
     return 5;
   }
@@ -754,19 +672,16 @@ export class DynastyLeagueService {
     playerId: string,
     settings: DynastySettings
   ): Promise<boolean> {
-}
     // Check player eligibility based on settings
     const player = await fantasyDataService.getPlayerDetails(playerId);
     
-    if (settings.taxiSquadEligibility === &apos;rookies-only&apos;) {
-}
+    if (settings.taxiSquadEligibility === 'rookies-only') {
       // Check if player is a rookie
       return true; // Placeholder
     }
     
     return true;
   }
-}
 
 // Export singleton instance
 export const dynastyLeagueService = new DynastyLeagueService();

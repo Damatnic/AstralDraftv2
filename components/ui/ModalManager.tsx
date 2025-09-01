@@ -3,33 +3,30 @@
  * Handles all application modals in one place
  */
 
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
-import { useModal } from &apos;../../contexts/ModalContext&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
+import { useModal } from '../../contexts/ModalContext';
+import { useAppState } from '../../contexts/AppContext';
 
 // Import all modal components
-import SettingsModal from &apos;../modals/SettingsModal&apos;;
-import ProfileModal from &apos;../modals/ProfileModal&apos;;
-import AnalyticsModal from &apos;../modals/AnalyticsModal&apos;;
-import HelpSupportModal from &apos;../modals/HelpSupportModal&apos;;
-import ProposeTradeModal from &apos;../modals/ProposeTradeModal&apos;;
-import AssignAwardsModal from &apos;../modals/AssignAwardsModal&apos;;
-import EditTeamBrandingModal from &apos;../modals/EditTeamBrandingModal&apos;;
-import ShareTeamCardModal from &apos;../modals/ShareTeamCardModal&apos;;
-import ChecklistReportModal from &apos;../modals/ChecklistReportModal&apos;;
+import SettingsModal from '../modals/SettingsModal';
+import ProfileModal from '../modals/ProfileModal';
+import AnalyticsModal from '../modals/AnalyticsModal';
+import HelpSupportModal from '../modals/HelpSupportModal';
+import ProposeTradeModal from '../modals/ProposeTradeModal';
+import AssignAwardsModal from '../modals/AssignAwardsModal';
+import EditTeamBrandingModal from '../modals/EditTeamBrandingModal';
+import ShareTeamCardModal from '../modals/ShareTeamCardModal';
+import ChecklistReportModal from '../modals/ChecklistReportModal';
 
 export const ModalManager: React.FC = () => {
-}
   const { activeModal, closeModal, modalData } = useModal();
   const { state } = useAppState();
 
   if (!activeModal) return null;
 
   const renderModal = () => {
-}
     switch (activeModal) {
-}
-      case &apos;settings&apos;:
+      case 'settings':
         return (
           <SettingsModal>
             isOpen={true} 
@@ -37,7 +34,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;profile&apos;:
+      case 'profile':
         return (
           <ProfileModal>
             isOpen={true} 
@@ -46,7 +43,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;analytics&apos;:
+      case 'analytics':
         return (
           <AnalyticsModal>
             isOpen={true} 
@@ -54,7 +51,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;help&apos;:
+      case 'help':
         return (
           <HelpSupportModal>
             isOpen={true} 
@@ -62,7 +59,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;trade&apos;:
+      case 'trade':
         return (
           <ProposeTradeModal>
             isOpen={true} 
@@ -71,7 +68,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;assign-awards&apos;:
+      case 'assign-awards':
         return (
           <AssignAwardsModal>
             isOpen={true} 
@@ -80,7 +77,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;edit-branding&apos;:
+      case 'edit-branding':
         return (
           <EditTeamBrandingModal>
             isOpen={true} 
@@ -89,7 +86,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;share-team&apos;:
+      case 'share-team':
         return (
           <ShareTeamCardModal>
             isOpen={true} 
@@ -98,7 +95,7 @@ export const ModalManager: React.FC = () => {
           />
         );
       
-      case &apos;checklist-report&apos;:
+      case 'checklist-report':
         return (
           <ChecklistReportModal>
             isOpen={true} 

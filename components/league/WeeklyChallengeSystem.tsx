@@ -2,31 +2,28 @@
  * Weekly Challenge System - Create engaging weekly competitions and mini-games
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Trophy, Target, Zap, Star, Gift, Calendar, Clock, Users, Flame, Crown } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Trophy, Target, Zap, Star, Gift, Calendar, Clock, Users, Flame, Crown } from 'lucide-react';
 
 interface Challenge {
-}
   id: string;
   title: string;
   description: string;
-  type: &apos;prediction&apos; | &apos;performance&apos; | &apos;lineup&apos; | &apos;knowledge&apos; | &apos;social&apos;;
-  difficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos; | &apos;legendary&apos;;
+  type: 'prediction' | 'performance' | 'lineup' | 'knowledge' | 'social';
+  difficulty: 'easy' | 'medium' | 'hard' | 'legendary';
   points: number;
   deadline: Date;
   participants: number;
   maxParticipants?: number;
-  status: &apos;active&apos; | &apos;completed&apos; | &apos;upcoming&apos;;
+  status: 'active' | 'completed' | 'upcoming';
   prize?: string;
   criteria: any;
   leaderboard?: ChallengeEntry[];
 
-}
 
 interface ChallengeEntry {
-}
 
   userId: string;
   userName: string;
@@ -37,27 +34,22 @@ interface ChallengeEntry {
   submittedAt: Date;
 
     } catch (error) {
-}
         console.error(error);
     }interface WeeklyChallengeSystemProps {
-}
   leagueId: string;
   userId: string;
   userName: string;
   week: number;
   onChallengeComplete?: (challengeId: string, score: number) => void;
 
-}
 
 const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
-}
   leagueId,
   userId,
   userName,
   week,
 //   onChallengeComplete
 }: any) => {
-}
   const [activeChallenges, setActiveChallenges] = useState<Challenge[]>([]);
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
   const [userEntries, setUserEntries] = useState<{[key: string]: any}>({});
@@ -65,102 +57,95 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
   // Generate weekly challenges
   const generateWeeklyChallenges = (): Challenge[] => {
-}
     const challenges: Challenge[] = [
       // Performance Challenges
       {
-}
-        id: &apos;highest_scorer&apos;,
-        title: &apos;Weekly High Scorer&apos;,
-        description: &apos;Score the most points this week to claim victory!&apos;,
-        type: &apos;performance&apos;,
-        difficulty: &apos;easy&apos;,
+        id: 'highest_scorer',
+        title: 'Weekly High Scorer',
+        description: 'Score the most points this week to claim victory!',
+        type: 'performance',
+        difficulty: 'easy',
         points: 50,
         deadline: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
         participants: Math.floor(Math.random() * 10) + 1,
         maxParticipants: 10,
-        status: &apos;active&apos;,
-        prize: &apos;🏆 High Scorer Badge + 50 League Points&apos;,
-        criteria: { metric: &apos;total_points&apos;, target: &apos;highest&apos; }
+        status: 'active',
+        prize: '🏆 High Scorer Badge + 50 League Points',
+        criteria: { metric: 'total_points', target: 'highest' }
       },
       
       // Prediction Challenges
       {
-}
-        id: &apos;prediction_master&apos;,
-        title: &apos;Score Prediction Challenge&apos;,
-        description: &apos;Predict your exact score within 5 points!&apos;,
-        type: &apos;prediction&apos;,
-        difficulty: &apos;medium&apos;,
+        id: 'prediction_master',
+        title: 'Score Prediction Challenge',
+        description: 'Predict your exact score within 5 points!',
+        type: 'prediction',
+        difficulty: 'medium',
         points: 75,
         deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
         participants: Math.floor(Math.random() * 8) + 1,
-        status: &apos;active&apos;,
-        prize: &apos;🔮 Oracle Badge + Waiver Priority&apos;,
-        criteria: { type: &apos;exact_score&apos;, tolerance: 5 }
+        status: 'active',
+        prize: '🔮 Oracle Badge + Waiver Priority',
+        criteria: { type: 'exact_score', tolerance: 5 }
       },
 
       // Lineup Challenges
       {
-}
-        id: &apos;budget_lineup&apos;,
-        title: &apos;Budget Lineup Challenge&apos;,
-        description: &apos;Create the highest-scoring lineup using only players under $5M salary&apos;,
-        type: &apos;lineup&apos;,
-        difficulty: &apos;hard&apos;,
+        id: 'budget_lineup',
+        title: 'Budget Lineup Challenge',
+        description: 'Create the highest-scoring lineup using only players under $5M salary',
+        type: 'lineup',
+        difficulty: 'hard',
         points: 100,
         deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         participants: Math.floor(Math.random() * 6) + 1,
-        status: &apos;active&apos;,
-        prize: &apos;💰 Budget Master Badge + Trade Priority&apos;,
-        criteria: { salary_cap: 5000000, positions: [&apos;QB&apos;, &apos;RB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DEF&apos;] }
+        status: 'active',
+        prize: '💰 Budget Master Badge + Trade Priority',
+        criteria: { salary_cap: 5000000, positions: ['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'K', 'DEF'] }
       },
 
       // Knowledge Challenges
       {
-}
-        id: &apos;trivia_tuesday&apos;,
-        title: &apos;Fantasy Football Trivia&apos;,
-        description: &apos;Test your NFL knowledge with 10 challenging questions&apos;,
-        type: &apos;knowledge&apos;,
-        difficulty: &apos;medium&apos;,
+        id: 'trivia_tuesday',
+        title: 'Fantasy Football Trivia',
+        description: 'Test your NFL knowledge with 10 challenging questions',
+        type: 'knowledge',
+        difficulty: 'medium',
         points: 60,
         deadline: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
         participants: Math.floor(Math.random() * 9) + 1,
-        status: &apos;active&apos;,
-        prize: &apos;🧠 Trivia Master Badge&apos;,
+        status: 'active',
+        prize: '🧠 Trivia Master Badge',
         criteria: { questions: 10, passing_score: 7 }
       },
 
       // Social Challenges
       {
-}
-        id: &apos;trash_talk_champion&apos;,
-        title: &apos;Trash Talk Champion&apos;,
-        description: &apos;Send the most creative trash talk messages this week&apos;,
-        type: &apos;social&apos;,
-        difficulty: &apos;easy&apos;,
+        id: 'trash_talk_champion',
+        title: 'Trash Talk Champion',
+        description: 'Send the most creative trash talk messages this week',
+        type: 'social',
+        difficulty: 'easy',
         points: 25,
         deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         participants: Math.floor(Math.random() * 10) + 1,
-        status: &apos;active&apos;,
-        prize: &apos;🗣️ Trash Talk Crown&apos;,
+        status: 'active',
+        prize: '🗣️ Trash Talk Crown',
         criteria: { min_messages: 5, quality_threshold: 3 }
       },
 
       // Special Weekly Challenges
       {
-}
-        id: &apos;underdog_special&apos;,
-        title: &apos;Underdog Victory&apos;,
-        description: &apos;Win your matchup despite being projected to lose by 15+ points&apos;,
-        type: &apos;performance&apos;,
-        difficulty: &apos;legendary&apos;,
+        id: 'underdog_special',
+        title: 'Underdog Victory',
+        description: 'Win your matchup despite being projected to lose by 15+ points',
+        type: 'performance',
+        difficulty: 'legendary',
         points: 200,
         deadline: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
         participants: Math.floor(Math.random() * 3) + 1,
-        status: &apos;active&apos;,
-        prize: &apos;🦸 Underdog Hero Badge + Championship Bonus Points&apos;,
+        status: 'active',
+        prize: '🦸 Underdog Hero Badge + Championship Bonus Points',
         criteria: { projection_deficit: 15, must_win: true }
 
     ];
@@ -170,38 +155,31 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
   const [challenges] = useState<Challenge[]>(generateWeeklyChallenges());
 
-  const getDifficultyColor = (difficulty: Challenge[&apos;difficulty&apos;]) => {
-}
+  const getDifficultyColor = (difficulty: Challenge['difficulty']) => {
     switch (difficulty) {
-}
-      case &apos;easy&apos;: return &apos;text-green-400 bg-green-500/20&apos;;
-      case &apos;medium&apos;: return &apos;text-yellow-400 bg-yellow-500/20&apos;;
-      case &apos;hard&apos;: return &apos;text-red-400 bg-red-500/20&apos;;
-      case &apos;legendary&apos;: return &apos;text-purple-400 bg-purple-500/20&apos;;
+      case 'easy': return 'text-green-400 bg-green-500/20';
+      case 'medium': return 'text-yellow-400 bg-yellow-500/20';
+      case 'hard': return 'text-red-400 bg-red-500/20';
+      case 'legendary': return 'text-purple-400 bg-purple-500/20';
 
   };
 
-  const getTypeIcon = (type: Challenge[&apos;type&apos;]) => {
-}
+  const getTypeIcon = (type: Challenge['type']) => {
     switch (type) {
-}
-      case &apos;performance&apos;: return <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;prediction&apos;: return <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;lineup&apos;: return <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;knowledge&apos;: return <Star className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;social&apos;: return <Flame className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'performance': return <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'prediction': return <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'lineup': return <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'knowledge': return <Star className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'social': return <Flame className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
   const handleJoinChallenge = (challengeId: string) => {
-}
     const challenge = challenges.find((c: any) => c.id === challengeId);
     if (challenge && !userEntries[challengeId]) {
-}
       setSelectedChallenge(challenge);
       // In real implementation, this would create an entry
       setUserEntries(prev => ({
-}
         ...prev,
         [challengeId]: { joined: true, entry: null }
       }));
@@ -209,9 +187,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   };
 
   const handleSubmitEntry = (challengeId: string, entry: any) => {
-}
     setUserEntries(prev => ({
-}
       ...prev,
       [challengeId]: { joined: true, entry, submitted: true }
     }));
@@ -223,7 +199,6 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   };
 
   const formatTimeRemaining = (deadline: Date) => {
-}
     const now = new Date();
     const diff = deadline.getTime() - now.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -231,11 +206,10 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
     
     if (days > 0) return `${days}d ${hours}h`;
     if (hours > 0) return `${hours}h`;
-    return &apos;Ending soon&apos;;
+    return 'Ending soon';
   };
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -258,7 +232,6 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
         <div className="text-right sm:px-4 md:px-6 lg:px-8">
           <div className="text-2xl font-bold text-gold-400 sm:px-4 md:px-6 lg:px-8">
             {Object.values(userEntries).reduce((total, entry) => 
-}
               total + (entry.submitted ? Math.floor(Math.random() * 100) : 0), 0
             )}
           </div>
@@ -268,8 +241,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
       {/* Active Challenges Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {challenges.filter((c: any) => c.status === &apos;active&apos;).map((challenge: any) => (
-}
+        {challenges.filter((c: any) => c.status === 'active').map((challenge: any) => (
           <motion.div
             key={challenge.id}
             initial={{ opacity: 0, y: 20 }}
@@ -292,7 +264,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
               <div className="flex items-center gap-4 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                   <Users className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
-                  <span>{challenge.participants}/{challenge.maxParticipants || &apos;∞&apos;}</span>
+                  <span>{challenge.participants}/{challenge.maxParticipants || '∞'}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                   <Clock className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
@@ -305,7 +277,6 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
             </div>
 
             {challenge.prize && (
-}
               <div className="mb-4 p-2 bg-gold-500/10 border border-gold-500/30 rounded text-xs sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-1 text-gold-400 sm:px-4 md:px-6 lg:px-8">
                   <Gift className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
@@ -317,7 +288,6 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
               {!userEntries[challenge.id]?.joined ? (
-}
                 <button
                   onClick={() => handleJoinChallenge(challenge.id)}
                 >
@@ -345,10 +315,9 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
             {/* Leaderboard */}
             <AnimatePresence>
               {showLeaderboard === challenge.id && (
-}
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: &apos;auto&apos;, opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   className="mt-4 pt-4 border-t border-gray-600 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -358,11 +327,10 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                       <div key={i} className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                           <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
-}
-                            i === 0 ? &apos;bg-gold-400 text-black&apos; :
-                            i === 1 ? &apos;bg-gray-400 text-black&apos; :
-                            i === 2 ? &apos;bg-amber-600 text-white&apos; :
-                            &apos;bg-dark-600 text-gray-300&apos;
+                            i === 0 ? 'bg-gold-400 text-black' :
+                            i === 1 ? 'bg-gray-400 text-black' :
+                            i === 2 ? 'bg-amber-600 text-white' :
+                            'bg-dark-600 text-gray-300'
                           }`}>
                             {i + 1}
                           </span>
@@ -382,7 +350,6 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
       {/* Challenge Submission Modal */}
       <AnimatePresence>
         {selectedChallenge && (
-}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -405,8 +372,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
               </div>
 
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
-                {selectedChallenge.type === &apos;prediction&apos; && (
-}
+                {selectedChallenge.type === 'prediction' && (
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                       Predict your score this week:
@@ -419,16 +385,14 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                   </div>
                 )}
 
-                {selectedChallenge.type === &apos;knowledge&apos; && (
-}
+                {selectedChallenge.type === 'knowledge' && (
                   <div>
                     <p className="text-sm text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Answer the trivia questions:</p>
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                       <div>
                         <p className="text-sm text-white mb-2 sm:px-4 md:px-6 lg:px-8">1. Which team won Super Bowl LVI?</p>
                         <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                          {[&apos;Los Angeles Rams&apos;, &apos;Cincinnati Bengals&apos;, &apos;Kansas City Chiefs&apos;, &apos;Tampa Bay Buccaneers&apos;].map((option: any) => (
-}
+                          {['Los Angeles Rams', 'Cincinnati Bengals', 'Kansas City Chiefs', 'Tampa Bay Buccaneers'].map((option: any) => (
                             <label key={option} className="flex items-center gap-2 text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
                               <input type="radio" name="q1" value={option} />
                               {option}
@@ -440,8 +404,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                   </div>
                 )}
 
-                {selectedChallenge.type === &apos;lineup&apos; && (
-}
+                {selectedChallenge.type === 'lineup' && (
                   <div>
                     <p className="text-sm text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Build your budget lineup:</p>
                     <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
@@ -450,8 +413,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                         <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">$5,000,000</span>
                       </div>
                       <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                        {[&apos;QB&apos;, &apos;RB1&apos;, &apos;RB2&apos;, &apos;WR1&apos;, &apos;WR2&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DEF&apos;].map((pos: any) => (
-}
+                        {['QB', 'RB1', 'RB2', 'WR1', 'WR2', 'TE', 'K', 'DEF'].map((pos: any) => (
                           <div key={pos} className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <span className="w-10 text-gray-400 sm:px-4 md:px-6 lg:px-8">{pos}:</span>
                             <input
@@ -487,7 +449,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
       {/* Week Summary */}
       <div className="mt-6 p-4 bg-dark-700 rounded-lg border border-gray-600 sm:px-4 md:px-6 lg:px-8">
-        <h3 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">This Week&apos;s Champions</h3>
+        <h3 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">This Week's Champions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div className="text-center sm:px-4 md:px-6 lg:px-8">
             <div className="text-gold-400 text-lg sm:px-4 md:px-6 lg:px-8">👑</div>

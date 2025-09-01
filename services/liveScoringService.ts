@@ -4,41 +4,35 @@
  * Updates scores, standings, and matchups in real-time
  */
 
-import { enhancedWebSocketService } from &apos;./enhancedWebSocketService&apos;;
-import { EventEmitter } from &apos;events&apos;;
+import { enhancedWebSocketService } from './enhancedWebSocketService';
+import { EventEmitter } from 'events';
 
 // Types and Interfaces
 export interface GameStatus {
-}
   gameId: string;
   week: number;
   homeTeam: string;
   awayTeam: string;
   homeScore: number;
   awayScore: number;
-  quarter: &apos;PRE&apos; | &apos;1&apos; | &apos;2&apos; | &apos;HALF&apos; | &apos;3&apos; | &apos;4&apos; | &apos;OT&apos; | &apos;FINAL&apos;;
+  quarter: 'PRE' | '1' | '2' | 'HALF' | '3' | '4' | 'OT' | 'FINAL';
   timeRemaining: string;
   possession?: string;
   redZone?: boolean;
   lastPlay?: string;
   weather?: {
-}
     temperature: number;
     wind: number;
     precipitation: string;
   };
-}
 
 export interface PlayerGameStats {
-}
   playerId: string;
   gameId: string;
   team: string;
   opponent: string;
   stats: {
-}
     passing?: {
-}
       attempts: number;
       completions: number;
       yards: number;
@@ -47,14 +41,12 @@ export interface PlayerGameStats {
       sacks: number;
     };
     rushing?: {
-}
       attempts: number;
       yards: number;
       touchdowns: number;
       fumbles: number;
     };
     receiving?: {
-}
       targets: number;
       receptions: number;
       yards: number;
@@ -62,14 +54,12 @@ export interface PlayerGameStats {
       drops: number;
     };
     kicking?: {
-}
       fieldGoalsMade: number;
       fieldGoalsAttempted: number;
       extraPointsMade: number;
       extraPointsAttempted: number;
     };
     defense?: {
-}
       tackles: number;
       sacks: number;
       interceptions: number;
@@ -78,35 +68,29 @@ export interface PlayerGameStats {
     };
   };
   fantasyPoints: {
-}
     standard: number;
     ppr: number;
     halfPpr: number;
     custom?: number;
   };
   projectedPoints?: {
-}
     standard: number;
     ppr: number;
     halfPpr: number;
   };
   percentComplete: number; // 0-100 based on game progress
-}
 
 export interface LiveMatchup {
-}
   matchupId: string;
   week: number;
   team1: TeamScore;
   team2: TeamScore;
   projectedWinner?: string;
   winProbability?: {
-}
     team1: number;
     team2: number;
   };
   highestScorer?: {
-}
     playerId: string;
     playerName: string;
     points: number;
@@ -114,10 +98,8 @@ export interface LiveMatchup {
   };
   closeScore: boolean; // Within 10 points
   blowout: boolean; // > 30 point difference
-}
 
 export interface TeamScore {
-}
   teamId: string;
   teamName: string;
   managerId: string;
@@ -130,27 +112,23 @@ export interface TeamScore {
   playersYetToPlay: number;
   playersInProgress: number;
   playersComplete: number;
-}
 
 export interface LineupSlot {
-}
   slotId: string;
   position: string;
   playerId?: string;
   playerName?: string;
   playerTeam?: string;
   opponent?: string;
-  gameStatus?: &apos;NOT_STARTED&apos; | &apos;IN_PROGRESS&apos; | &apos;COMPLETE&apos;;
+  gameStatus?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETE';
   points: number;
   projectedPoints: number;
   isStarter: boolean;
   isFlex: boolean;
   isEmpty: boolean;
   gameTime?: string;
-}
 
 export interface ScoringSettings {
-}
   passingYards: number; // points per yard
   passingTouchdowns: number;
   passingInterceptions: number;
@@ -162,17 +140,15 @@ export interface ScoringSettings {
   fumbles: number;
   twoPointConversions: number;
   fieldGoalsMade: {
-}
-    &apos;0-39&apos;: number;
-    &apos;40-49&apos;: number;
-    &apos;50+&apos;: number;
+    '0-39': number;
+    '40-49': number;
+    '50+': number;
   };
   extraPoints: number;
   defensiveTouchdowns: number;
   defensiveSacks: number;
   defensiveInterceptions: number;
   bonuses?: {
-}
     passing300Yards?: number;
     passing400Yards?: number;
     rushing100Yards?: number;
@@ -180,17 +156,13 @@ export interface ScoringSettings {
     receiving100Yards?: number;
     receiving200Yards?: number;
   };
-}
 
 export interface LeagueStandings {
-}
   standings: StandingEntry[];
   lastUpdated: number;
   week: number;
-}
 
 export interface StandingEntry {
-}
   rank: number;
   teamId: string;
   teamName: string;
@@ -204,34 +176,27 @@ export interface StandingEntry {
   lastWeekRank?: number;
   rankChange?: number;
   playoffPosition?: number;
-  clinched?: &apos;PLAYOFFS&apos; | &apos;BYE&apos; | &apos;DIVISION&apos; | &apos;ELIMINATED&apos;;
-}
+  clinched?: 'PLAYOFFS' | 'BYE' | 'DIVISION' | 'ELIMINATED';
 
 export interface LiveUpdate {
-}
-  type: &apos;touchdown&apos; | &apos;fieldGoal&apos; | &apos;bigPlay&apos; | &apos;turnover&apos; | &apos;injury&apos; | &apos;statCorrection&apos;;
+  type: 'touchdown' | 'fieldGoal' | 'bigPlay' | 'turnover' | 'injury' | 'statCorrection';
   playerId?: string;
   playerName?: string;
   team?: string;
   description: string;
   fantasyImpact?: {
-}
     points: number;
     affectedTeams: string[];
   };
   timestamp: number;
   gameId?: string;
   highlight?: boolean;
-}
 
 export interface PlayByPlay {
-}
   gameId: string;
   plays: Play[];
-}
 
 export interface Play {
-}
   id: string;
   quarter: string;
   time: string;
@@ -239,21 +204,18 @@ export interface Play {
   distance?: number;
   fieldPosition?: number;
   description: string;
-  type: &apos;pass&apos; | &apos;run&apos; | &apos;kick&apos; | &apos;punt&apos; | &apos;penalty&apos; | &apos;timeout&apos; | &apos;other&apos;;
+  type: 'pass' | 'run' | 'kick' | 'punt' | 'penalty' | 'timeout' | 'other';
   involvedPlayers: Array<{
-}
     playerId: string;
-    role: &apos;passer&apos; | &apos;receiver&apos; | &apos;rusher&apos; | &apos;kicker&apos; | &apos;defender&apos; | &apos;other&apos;;
+    role: 'passer' | 'receiver' | 'rusher' | 'kicker' | 'defender' | 'other';
     stats?: any;
   }>;
-  result: &apos;gain&apos; | &apos;loss&apos; | &apos;touchdown&apos; | &apos;fieldGoal&apos; | &apos;turnover&apos; | &apos;incomplete&apos;;
+  result: 'gain' | 'loss' | 'touchdown' | 'fieldGoal' | 'turnover' | 'incomplete';
   yards?: number;
   points?: number;
-}
 
 // Main Live Scoring Service
 export class LiveScoringService extends EventEmitter {
-}
   private ws: typeof enhancedWebSocketService;
   private currentWeek: number = 1;
   private leagueId?: string;
@@ -269,7 +231,6 @@ export class LiveScoringService extends EventEmitter {
   private statCache: Map<string, any> = new Map();
 
   constructor() {
-}
     super();
     this.ws = enhancedWebSocketService;
     this.setupEventHandlers();
@@ -277,7 +238,6 @@ export class LiveScoringService extends EventEmitter {
 
   // Initialize Live Scoring
   async initialize(leagueId: string, week: number): Promise<void> {
-}
     this.leagueId = leagueId;
     this.currentWeek = week;
 
@@ -286,7 +246,6 @@ export class LiveScoringService extends EventEmitter {
 
     // Connect to WebSocket if needed
     if (!this.ws.isConnected()) {
-}
       await this.ws.connect();
     }
 
@@ -299,8 +258,7 @@ export class LiveScoringService extends EventEmitter {
     // Start monitoring
     this.startMonitoring();
 
-    this.emit(&apos;initialized&apos;, {
-}
+    this.emit('initialized', {
       leagueId,
       week,
       games: Array.from(this.activeGames.values()),
@@ -310,41 +268,35 @@ export class LiveScoringService extends EventEmitter {
 
   // Start Live Monitoring
   startMonitoring(): void {
-}
     if (this.isMonitoring) return;
 
     this.isMonitoring = true;
 
     // Set up regular polling for updates
     this.updateInterval = setInterval(() => {
-}
       this.fetchLiveUpdates();
     }, 10000); // Every 10 seconds
 
     // Fetch immediate update
     this.fetchLiveUpdates();
 
-    console.log(&apos;📊 Live scoring monitoring started&apos;);
+    console.log('📊 Live scoring monitoring started');
   }
 
   // Stop Monitoring
   stopMonitoring(): void {
-}
     if (this.updateInterval) {
-}
       clearInterval(this.updateInterval);
       this.updateInterval = undefined;
     }
 
     this.isMonitoring = false;
-    console.log(&apos;🛑 Live scoring monitoring stopped&apos;);
+    console.log('🛑 Live scoring monitoring stopped');
   }
 
   // Fetch Live Updates
   private async fetchLiveUpdates(): Promise<void> {
-}
     try {
-}
       // Fetch game updates
       const games = await this.fetchGameUpdates();
       
@@ -369,48 +321,41 @@ export class LiveScoringService extends EventEmitter {
       
       this.lastUpdateTime = Date.now();
       
-      this.emit(&apos;update:complete&apos;, {
-}
+      this.emit('update:complete', {
         timestamp: this.lastUpdateTime,
         gamesUpdated: games.length,
         playersUpdated: stats.length
       });
 
     } catch (error) {
-}
-      console.error(&apos;Failed to fetch live updates:&apos;, error);
-      this.emit(&apos;update:error&apos;, error);
+      console.error('Failed to fetch live updates:', error);
+      this.emit('update:error', error);
     }
   }
 
   // Fetch Game Updates
   private async fetchGameUpdates(): Promise<GameStatus[]> {
-}
     const response = await fetch(`/api/games/live?week=${this.currentWeek}`);
     return response.json();
   }
 
   // Fetch Player Stats
   private async fetchPlayerStats(): Promise<PlayerGameStats[]> {
-}
     const response = await fetch(`/api/stats/live?week=${this.currentWeek}&leagueId=${this.leagueId}`);
     return response.json();
   }
 
   // Process Game Updates
   private processGameUpdates(games: GameStatus[]): void {
-}
     for (const game of games) {
-}
       const existing = this.activeGames.get(game.gameId);
       
       // Check for significant changes
       if (this.hasGameChanged(existing, game)) {
-}
         this.activeGames.set(game.gameId, game);
         
         // Emit game update
-        this.emit(&apos;game:update&apos;, game);
+        this.emit('game:update', game);
         
         // Check for special events
         this.checkGameEvents(existing, game);
@@ -420,38 +365,31 @@ export class LiveScoringService extends EventEmitter {
 
   // Process Stat Updates
   private processStatUpdates(stats: PlayerGameStats[]): void {
-}
     for (const stat of stats) {
-}
       const key = `${stat.playerId}-${stat.gameId}`;
       const existing = this.playerStats.get(key);
       
       if (this.hasStatChanged(existing, stat)) {
-}
         const pointsDiff = existing ? 
           stat.fantasyPoints.ppr - existing.fantasyPoints.ppr : 0;
         
         this.playerStats.set(key, stat);
         
         // Emit stat update
-        this.emit(&apos;stat:update&apos;, {
-}
+        this.emit('stat:update', {
           ...stat,
           pointsChange: pointsDiff
         });
         
         // Check for significant plays
         if (Math.abs(pointsDiff) > 5) {
-}
           this.addLiveUpdate({
-}
-            type: pointsDiff > 0 ? &apos;bigPlay&apos; : &apos;statCorrection&apos;,
+            type: pointsDiff > 0 ? 'bigPlay' : 'statCorrection',
             playerId: stat.playerId,
             playerName: stat.playerId, // Would need player name lookup
             team: stat.team,
-            description: `${pointsDiff > 0 ? &apos;+&apos; : &apos;&apos;}${pointsDiff.toFixed(1)} points`,
+            description: `${pointsDiff > 0 ? '+' : ''}${pointsDiff.toFixed(1)} points`,
             fantasyImpact: {
-}
               points: pointsDiff,
               affectedTeams: this.getAffectedTeams(stat.playerId)
             },
@@ -466,18 +404,15 @@ export class LiveScoringService extends EventEmitter {
 
   // Calculate Fantasy Points
   private calculateFantasyPoints(): void {
-}
     if (!this.scoringSettings) return;
 
     this.playerStats.forEach((stats, key) => {
-}
       const points = this.calculatePlayerPoints(stats);
       stats.fantasyPoints = points;
     });
   }
 
   private calculatePlayerPoints(stats: PlayerGameStats): typeof stats.fantasyPoints {
-}
     const s = this.scoringSettings!;
     let standard = 0;
     let ppr = 0;
@@ -485,7 +420,6 @@ export class LiveScoringService extends EventEmitter {
 
     // Passing stats
     if (stats.stats.passing) {
-}
       const passingStats = stats.stats.passing;
       const passingPoints = 
         (passingStats.yards * s.passingYards) +
@@ -498,14 +432,11 @@ export class LiveScoringService extends EventEmitter {
       
       // Bonuses
       if (s.bonuses) {
-}
         if (passingStats.yards >= 400 && s.bonuses.passing400Yards) {
-}
           standard += s.bonuses.passing400Yards;
           ppr += s.bonuses.passing400Yards;
           halfPpr += s.bonuses.passing400Yards;
         } else if (passingStats.yards >= 300 && s.bonuses.passing300Yards) {
-}
           standard += s.bonuses.passing300Yards;
           ppr += s.bonuses.passing300Yards;
           halfPpr += s.bonuses.passing300Yards;
@@ -515,7 +446,6 @@ export class LiveScoringService extends EventEmitter {
 
     // Rushing stats
     if (stats.stats.rushing) {
-}
       const rushingStats = stats.stats.rushing;
       const rushingPoints = 
         (rushingStats.yards * s.rushingYards) +
@@ -528,14 +458,11 @@ export class LiveScoringService extends EventEmitter {
       
       // Bonuses
       if (s.bonuses) {
-}
         if (rushingStats.yards >= 200 && s.bonuses.rushing200Yards) {
-}
           standard += s.bonuses.rushing200Yards;
           ppr += s.bonuses.rushing200Yards;
           halfPpr += s.bonuses.rushing200Yards;
         } else if (rushingStats.yards >= 100 && s.bonuses.rushing100Yards) {
-}
           standard += s.bonuses.rushing100Yards;
           ppr += s.bonuses.rushing100Yards;
           halfPpr += s.bonuses.rushing100Yards;
@@ -545,7 +472,6 @@ export class LiveScoringService extends EventEmitter {
 
     // Receiving stats
     if (stats.stats.receiving) {
-}
       const rec = stats.stats.receiving;
       const receivingYardPoints = 
         (rec.yards * s.receivingYards) +
@@ -557,14 +483,11 @@ export class LiveScoringService extends EventEmitter {
       
       // Bonuses
       if (s.bonuses) {
-}
         if (rec.yards >= 200 && s.bonuses.receiving200Yards) {
-}
           standard += s.bonuses.receiving200Yards;
           ppr += s.bonuses.receiving200Yards;
           halfPpr += s.bonuses.receiving200Yards;
         } else if (rec.yards >= 100 && s.bonuses.receiving100Yards) {
-}
           standard += s.bonuses.receiving100Yards;
           ppr += s.bonuses.receiving100Yards;
           halfPpr += s.bonuses.receiving100Yards;
@@ -574,12 +497,11 @@ export class LiveScoringService extends EventEmitter {
 
     // Kicking stats
     if (stats.stats.kicking) {
-}
       const k = stats.stats.kicking;
       let kickingPoints = k.extraPointsMade * s.extraPoints;
       
       // Field goals (simplified - would need distance data)
-      kickingPoints += k.fieldGoalsMade * s.fieldGoalsMade[&apos;0-39&apos;];
+      kickingPoints += k.fieldGoalsMade * s.fieldGoalsMade['0-39'];
       
       standard += kickingPoints;
       ppr += kickingPoints;
@@ -587,7 +509,6 @@ export class LiveScoringService extends EventEmitter {
     }
 
     return {
-}
       standard: Math.round(standard * 10) / 10,
       ppr: Math.round(ppr * 10) / 10,
       halfPpr: Math.round(halfPpr * 10) / 10
@@ -596,9 +517,7 @@ export class LiveScoringService extends EventEmitter {
 
   // Update Matchups
   private updateMatchups(): void {
-}
     this.matchups.forEach((matchup, id) => {
-}
       // Update team scores
       this.updateTeamScore(matchup.team1);
       this.updateTeamScore(matchup.team2);
@@ -629,9 +548,7 @@ export class LiveScoringService extends EventEmitter {
       );
       
       if (highest) {
-}
         matchup.highestScorer = {
-}
           playerId: highest.playerId!,
           playerName: highest.playerName!,
           points: highest.points,
@@ -640,12 +557,11 @@ export class LiveScoringService extends EventEmitter {
         };
       }
       
-      this.emit(&apos;matchup:update&apos;, matchup);
+      this.emit('matchup:update', matchup);
     });
   }
 
   private updateTeamScore(team: TeamScore): void {
-}
     team.totalPoints = 0;
     team.projectedPoints = 0;
     team.pointsFromStarters = 0;
@@ -656,35 +572,27 @@ export class LiveScoringService extends EventEmitter {
 
     // Update lineup scores
     [...team.lineup, ...team.benchPlayers].forEach((slot: any) => {
-}
       if (!slot.isEmpty && slot.playerId) {
-}
         const stats = this.getPlayerStats(slot.playerId);
         
         if (stats) {
-}
           slot.points = stats.fantasyPoints.ppr; // Use league scoring
           slot.projectedPoints = stats.projectedPoints?.ppr || 0;
           
           if (slot.isStarter) {
-}
             team.pointsFromStarters += slot.points;
             team.totalPoints += slot.points;
             team.projectedPoints += slot.projectedPoints;
           } else {
-}
             team.pointsFromBench += slot.points;
           }
           
           // Update game status counts
-          if (slot.gameStatus === &apos;NOT_STARTED&apos;) {
-}
+          if (slot.gameStatus === 'NOT_STARTED') {
             team.playersYetToPlay++;
-          } else if (slot.gameStatus === &apos;IN_PROGRESS&apos;) {
-}
+          } else if (slot.gameStatus === 'IN_PROGRESS') {
             team.playersInProgress++;
-          } else if (slot.gameStatus === &apos;COMPLETE&apos;) {
-}
+          } else if (slot.gameStatus === 'COMPLETE') {
             team.playersComplete++;
           }
         }
@@ -693,7 +601,6 @@ export class LiveScoringService extends EventEmitter {
   }
 
   private calculateWinProbability(matchup: LiveMatchup): typeof matchup.winProbability {
-}
     const team1Current = matchup.team1.totalPoints;
     const team1Projected = matchup.team1.projectedPoints;
     const team2Current = matchup.team2.totalPoints;
@@ -704,14 +611,12 @@ export class LiveScoringService extends EventEmitter {
     const team2Total = team2Current + team2Projected;
     
     if (team1Total + team2Total === 0) {
-}
       return { team1: 50, team2: 50 };
     }
     
     const team1Prob = (team1Total / (team1Total + team2Total)) * 100;
     
     return {
-}
       team1: Math.round(team1Prob),
       team2: Math.round(100 - team1Prob)
     };
@@ -719,20 +624,15 @@ export class LiveScoringService extends EventEmitter {
 
   // Update Standings
   private async updateStandings(): Promise<void> {
-}
     try {
-}
       const response = await fetch(`/api/leagues/${this.leagueId}/standings`);
       const standings: LeagueStandings = await response.json();
       
       // Check for changes
       if (this.standings) {
-}
         standings.standings.forEach((entry: any) => {
-}
           const prev = this.standings!.standings.find((s: any) => s.teamId === entry.teamId);
           if (prev) {
-}
             entry.lastWeekRank = prev.rank;
             entry.rankChange = prev.rank - entry.rank;
           }
@@ -740,24 +640,20 @@ export class LiveScoringService extends EventEmitter {
       }
       
       this.standings = standings;
-      this.emit(&apos;standings:update&apos;, standings);
+      this.emit('standings:update', standings);
       
     } catch (error) {
-}
-      console.error(&apos;Failed to update standings:&apos;, error);
+      console.error('Failed to update standings:', error);
     }
   }
 
   // Check for Game Events
   private checkGameEvents(oldGame: GameStatus | undefined, newGame: GameStatus): void {
-}
     if (!oldGame) return;
 
     // Quarter changes
     if (oldGame.quarter !== newGame.quarter) {
-}
-      this.emit(&apos;game:quarter&apos;, {
-}
+      this.emit('game:quarter', {
         gameId: newGame.gameId,
         quarter: newGame.quarter,
         game: newGame
@@ -766,7 +662,6 @@ export class LiveScoringService extends EventEmitter {
 
     // Score changes
     if (oldGame.homeScore !== newGame.homeScore || oldGame.awayScore !== newGame.awayScore) {
-}
       const scoringTeam = oldGame.homeScore !== newGame.homeScore ? 
         newGame.homeTeam : newGame.awayTeam;
       
@@ -775,8 +670,7 @@ export class LiveScoringService extends EventEmitter {
         (newGame.awayScore - oldGame.awayScore)
       );
       
-      this.emit(&apos;game:score&apos;, {
-}
+      this.emit('game:score', {
         gameId: newGame.gameId,
         team: scoringTeam,
         points,
@@ -785,10 +679,8 @@ export class LiveScoringService extends EventEmitter {
     }
 
     // Game completion
-    if (oldGame.quarter !== &apos;FINAL&apos; && newGame.quarter === &apos;FINAL&apos;) {
-}
-      this.emit(&apos;game:final&apos;, {
-}
+    if (oldGame.quarter !== 'FINAL' && newGame.quarter === 'FINAL') {
+      this.emit('game:final', {
         gameId: newGame.gameId,
         game: newGame
       });
@@ -799,9 +691,7 @@ export class LiveScoringService extends EventEmitter {
 
     // Red zone
     if (!oldGame.redZone && newGame.redZone) {
-}
-      this.emit(&apos;game:redzone&apos;, {
-}
+      this.emit('game:redzone', {
         gameId: newGame.gameId,
         team: newGame.possession,
         game: newGame
@@ -811,52 +701,43 @@ export class LiveScoringService extends EventEmitter {
 
   // Add Live Update to Queue
   private addLiveUpdate(update: LiveUpdate): void {
-}
     this.updateQueue.push(update);
     
     // Keep queue size manageable
     if (this.updateQueue.length > 100) {
-}
       this.updateQueue.shift();
     }
     
     // Emit immediately for high-priority updates
-    if (update.highlight || update.type === &apos;touchdown&apos; || update.type === &apos;injury&apos;) {
-}
-      this.emit(&apos;live:update&apos;, update);
+    if (update.highlight || update.type === 'touchdown' || update.type === 'injury') {
+      this.emit('live:update', update);
     }
   }
 
   // Process Update Queue
   private processUpdateQueue(): void {
-}
     while (this.updateQueue.length > 0) {
-}
       const update = this.updateQueue.shift()!;
-      this.emit(&apos;live:update:processed&apos;, update);
+      this.emit('live:update:processed', update);
     }
   }
 
   // Subscribe to Player
   subscribeToPlayer(playerId: string): void {
-}
     this.ws.subscribeToPlayer(playerId);
     
     // Set up player-specific handlers
     this.ws.on(`player:${playerId}:stats`, (data: any) => {
-}
       this.handlePlayerStatUpdate(playerId, data);
     });
     
     this.ws.on(`player:${playerId}:injury`, (data: any) => {
-}
       this.handlePlayerInjury(playerId, data);
     });
   }
 
   // Unsubscribe from Player
   unsubscribeFromPlayer(playerId: string): void {
-}
     this.ws.unsubscribeFromPlayer(playerId);
     this.ws.off(`player:${playerId}:stats`);
     this.ws.off(`player:${playerId}:injury`);
@@ -864,60 +745,49 @@ export class LiveScoringService extends EventEmitter {
 
   // WebSocket Event Handlers
   private setupEventHandlers(): void {
-}
-    this.ws.on(&apos;scoring:update&apos;, (update: any) => {
-}
+    this.ws.on('scoring:update', (update: any) => {
       this.handleScoringUpdate(update);
     });
 
-    this.ws.on(&apos;scoring:final&apos;, (data: any) => {
-}
+    this.ws.on('scoring:final', (data: any) => {
       this.handleScoringFinal(data);
     });
 
-    this.ws.on(&apos;player:stats&apos;, (data: any) => {
-}
+    this.ws.on('player:stats', (data: any) => {
       this.handlePlayerStatUpdate(data.playerId, data);
     });
 
-    this.ws.on(&apos;player:injury&apos;, (data: any) => {
-}
+    this.ws.on('player:injury', (data: any) => {
       this.handlePlayerInjury(data.playerId, data);
     });
   }
 
   private handleScoringUpdate(update: any): void {
-}
     // Process real-time scoring update
-    this.emit(&apos;realtime:scoring&apos;, update);
+    this.emit('realtime:scoring', update);
   }
 
   private handleScoringFinal(data: any): void {
-}
     // Process final scoring
-    this.emit(&apos;realtime:final&apos;, data);
+    this.emit('realtime:final', data);
   }
 
   private handlePlayerStatUpdate(playerId: string, data: any): void {
-}
     // Update player stats in cache
     const key = `${playerId}-${data.gameId}`;
     const existing = this.playerStats.get(key);
     
     if (existing) {
-}
       Object.assign(existing, data);
       this.playerStats.set(key, existing);
     }
     
-    this.emit(&apos;player:stat:update&apos;, { playerId, ...data });
+    this.emit('player:stat:update', { playerId, ...data });
   }
 
   private handlePlayerInjury(playerId: string, data: any): void {
-}
     this.addLiveUpdate({
-}
-      type: &apos;injury&apos;,
+      type: 'injury',
       playerId,
       playerName: data.playerName,
       team: data.team,
@@ -926,18 +796,16 @@ export class LiveScoringService extends EventEmitter {
       highlight: true
     });
     
-    this.emit(&apos;player:injury:update&apos;, { playerId, ...data });
+    this.emit('player:injury:update', { playerId, ...data });
   }
 
   // Helper Methods
   private async loadScoringSettings(): Promise<void> {
-}
     const response = await fetch(`/api/leagues/${this.leagueId}/scoring`);
     this.scoringSettings = await response.json();
   }
 
   private async loadInitialData(): Promise<void> {
-}
     // Load games
     const games = await this.fetchGameUpdates();
     games.forEach((game: any) => this.activeGames.set(game.gameId, game));
@@ -952,7 +820,6 @@ export class LiveScoringService extends EventEmitter {
     // Load initial stats
     const stats = await this.fetchPlayerStats();
     stats.forEach((stat: any) => {
-}
       const key = `${stat.playerId}-${stat.gameId}`;
       this.playerStats.set(key, stat);
     });
@@ -962,29 +829,24 @@ export class LiveScoringService extends EventEmitter {
   }
 
   private async fetchFinalStats(gameId: string): Promise<void> {
-}
     try {
-}
       const response = await fetch(`/api/games/${gameId}/final-stats`);
       const stats = await response.json();
       
       // Update player stats with final values
       stats.forEach((stat: PlayerGameStats) => {
-}
         const key = `${stat.playerId}-${gameId}`;
         this.playerStats.set(key, stat);
       });
       
-      this.emit(&apos;game:stats:final&apos;, { gameId, stats });
+      this.emit('game:stats:final', { gameId, stats });
       
     } catch (error) {
-}
-      console.error(&apos;Failed to fetch final stats:&apos;, error);
+      console.error('Failed to fetch final stats:', error);
     }
   }
 
   private hasGameChanged(oldGame: GameStatus | undefined, newGame: GameStatus): boolean {
-}
     if (!oldGame) return true;
     
     return (
@@ -997,7 +859,6 @@ export class LiveScoringService extends EventEmitter {
   }
 
   private hasStatChanged(oldStat: PlayerGameStats | undefined, newStat: PlayerGameStats): boolean {
-}
     if (!oldStat) return true;
     
     return (
@@ -1007,12 +868,9 @@ export class LiveScoringService extends EventEmitter {
   }
 
   private getPlayerStats(playerId: string): PlayerGameStats | undefined {
-}
     // Find stats for current week
     for (const [key, stats] of this.playerStats) {
-}
       if (stats.playerId === playerId) {
-}
         return stats;
       }
     }
@@ -1020,11 +878,9 @@ export class LiveScoringService extends EventEmitter {
   }
 
   private getAffectedTeams(playerId: string): string[] {
-}
     const teams: string[] = [];
     
     this.matchups.forEach((matchup: any) => {
-}
       const inTeam1 = matchup.team1.lineup.some((s: any) => s.playerId === playerId);
       const inTeam2 = matchup.team2.lineup.some((s: any) => s.playerId === playerId);
       
@@ -1037,58 +893,47 @@ export class LiveScoringService extends EventEmitter {
 
   // Public API
   getGameStatus(gameId: string): GameStatus | undefined {
-}
     return this.activeGames.get(gameId);
   }
 
   getAllGames(): GameStatus[] {
-}
     return Array.from(this.activeGames.values());
   }
 
   getPlayerGameStats(playerId: string, gameId: string): PlayerGameStats | undefined {
-}
     return this.playerStats.get(`${playerId}-${gameId}`);
   }
 
   getMatchup(matchupId: string): LiveMatchup | undefined {
-}
     return this.matchups.get(matchupId);
   }
 
   getAllMatchups(): LiveMatchup[] {
-}
     return Array.from(this.matchups.values());
   }
 
   getStandings(): LeagueStandings | undefined {
-}
     return this.standings;
   }
 
   getLiveUpdates(): LiveUpdate[] {
-}
     return [...this.updateQueue];
   }
 
   getScoringSettings(): ScoringSettings | undefined {
-}
     return this.scoringSettings;
   }
 
   isActive(): boolean {
-}
     return this.isMonitoring;
   }
 
   getLastUpdateTime(): number {
-}
     return this.lastUpdateTime;
   }
 
   // Cleanup
   destroy(): void {
-}
     this.stopMonitoring();
     this.activeGames.clear();
     this.playerStats.clear();
@@ -1097,7 +942,6 @@ export class LiveScoringService extends EventEmitter {
     this.updateQueue = [];
     this.removeAllListeners();
   }
-}
 
 // Singleton instance
 export const liveScoringService = new LiveScoringService();

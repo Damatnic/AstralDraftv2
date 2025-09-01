@@ -1,36 +1,28 @@
-import { useState, useEffect } from &apos;react&apos;;
+import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query: string): boolean {
-}
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
-}
     const media = window.matchMedia(query);
     
     if (media.matches !== matches) {
-}
       setMatches(media.matches);
     }
     
     const listener = () => setMatches(media.matches);
     
-    if (typeof media.addEventListener === &apos;function&apos;) {
-}
-      media.addEventListener(&apos;change&apos;, listener);
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', listener);
     } else {
-}
       // Fallback for older browsers
       media.addListener(listener);
     }
     
     return () => {
-}
-      if (typeof media.removeEventListener === &apos;function&apos;) {
-}
-        media.removeEventListener(&apos;change&apos;, listener);
+      if (typeof media.removeEventListener === 'function') {
+        media.removeEventListener('change', listener);
       } else {
-}
         // Fallback for older browsers
         media.removeListener(listener);
       }
@@ -38,4 +30,3 @@ export function useMediaQuery(query: string): boolean {
   }, [matches, query]);
 
   return matches;
-}

@@ -4,16 +4,14 @@
  * Provides insights into early/mid/late season performance patterns
  */
 
-import { productionSportsDataService } from &apos;./productionSportsDataService&apos;;
+import { productionSportsDataService } from './productionSportsDataService';
 
 export interface SeasonalTrendData {
-}
   playerId: string;
   playerName: string;
   position: string;
   season: number;
   trends: {
-}
     earlySeason: SeasonalMetrics;    // Weeks 1-6
     midSeason: SeasonalMetrics;      // Weeks 7-12
     lateSeason: SeasonalMetrics;     // Weeks 13-18
@@ -21,10 +19,8 @@ export interface SeasonalTrendData {
   };
   patterns: SeasonalPattern[];
   analysis: SeasonalAnalysis;
-}
 
 export interface SeasonalMetrics {
-}
   weeks: number[];
   averageFantasyPoints: number;
   averageTargets?: number;
@@ -38,35 +34,28 @@ export interface SeasonalMetrics {
   touchesPerGame?: number;
   redZoneTargets?: number;
   snapSharePercentage?: number;
-}
 
 export interface SeasonalPattern {
-}
-  type: &apos;improving&apos; | &apos;declining&apos; | &apos;consistent&apos; | &apos;volatile&apos; | &apos;injury_prone&apos;;
+  type: 'improving' | 'declining' | 'consistent' | 'volatile' | 'injury_prone';
   description: string;
   confidence: number;              // 0-1
   supportingWeeks: number[];
-  severity: &apos;low&apos; | &apos;moderate&apos; | &apos;high&apos;;
+  severity: 'low' | 'moderate' | 'high';
   fantasyImpact: string;
-}
 
 export interface SeasonalAnalysis {
-}
-  overallTrend: &apos;positive&apos; | &apos;negative&apos; | &apos;stable&apos;;
-  bestPeriod: &apos;early&apos; | &apos;mid&apos; | &apos;late&apos; | &apos;playoffs&apos;;
-  worstPeriod: &apos;early&apos; | &apos;mid&apos; | &apos;late&apos; | &apos;playoffs&apos;;
+  overallTrend: 'positive' | 'negative' | 'stable';
+  bestPeriod: 'early' | 'mid' | 'late' | 'playoffs';
+  worstPeriod: 'early' | 'mid' | 'late' | 'playoffs';
   volatility: number;              // Coefficient of variation
   projectedTrend: {
-}
-    direction: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+    direction: 'up' | 'down' | 'stable';
     confidence: number;
     reasoning: string[];
   };
   recommendations: string[];
-}
 
 export interface WeeklyPlayerData {
-}
   week: number;
   opponent: string;
   fantasyPoints: number;
@@ -76,18 +65,15 @@ export interface WeeklyPlayerData {
   touchdowns: number;
   touches?: number;
   snapShare?: number;
-  gameScript: &apos;positive&apos; | &apos;neutral&apos; | &apos;negative&apos;;
+  gameScript: 'positive' | 'neutral' | 'negative';
   homeGame: boolean;
-  weather?: &apos;dome&apos; | &apos;good&apos; | &apos;poor&apos;;
-}
+  weather?: 'dome' | 'good' | 'poor';
 
 class SeasonalTrendsAnalysisService {
-}
   private readonly cache = new Map<string, SeasonalTrendData>();
   private readonly historicalData = new Map<string, WeeklyPlayerData[]>();
 
   constructor() {
-}
     this.initializeMockData();
   }
 
@@ -98,24 +84,19 @@ class SeasonalTrendsAnalysisService {
     playerId: string, 
     seasons: number[] = [2023, 2024]
   ): Promise<SeasonalTrendData> {
-}
-    const cacheKey = `${playerId}_${seasons.join(&apos;_&apos;)}`;
+    const cacheKey = `${playerId}_${seasons.join('_')}`;
     
     if (this.cache.has(cacheKey)) {
-}
       const cachedData = this.cache.get(cacheKey);
       if (cachedData) {
-}
         return cachedData;
       }
     }
 
     try {
-}
       // Get player information
       const player = await productionSportsDataService.getPlayerDetails(playerId);
       if (!player) {
-}
         throw new Error(`Player ${playerId} not found`);
       }
 
@@ -132,7 +113,6 @@ class SeasonalTrendsAnalysisService {
       const analysis = this.analyzeSeasonalTrends(trends, patterns);
 
       const seasonalTrendData: SeasonalTrendData = {
-}
         playerId,
         playerName: player.name,
         position: player.position,
@@ -146,20 +126,18 @@ class SeasonalTrendsAnalysisService {
       return seasonalTrendData;
 
     } catch (error) {
-}
       console.error(`Error generating seasonal trends for player ${playerId}:`, error);
-      return this.generateMockSeasonalData(playerId, &apos;Unknown Player&apos;, &apos;UNKNOWN&apos;);
+      return this.generateMockSeasonalData(playerId, 'Unknown Player', 'UNKNOWN');
     }
   }
 
   /**
-   * Get multiple players&apos; seasonal trends for comparison
+   * Get multiple players' seasonal trends for comparison
    */
   async getMultiplePlayerTrends(
     playerIds: string[], 
     seasons: number[] = [2024]
   ): Promise<SeasonalTrendData[]> {
-}
     const promises = playerIds.map((playerId: any) => 
       this.generateSeasonalTrends(playerId, seasons)
     );
@@ -171,7 +149,6 @@ class SeasonalTrendsAnalysisService {
    * Calculate seasonal trend values for ML models (0-1 normalized)
    */
   async calculateSeasonalTrendValues(playerId: string): Promise<number[]> {
-}
     const trends = await this.generateSeasonalTrends(playerId);
     
     // Calculate trend values as ratios between periods
@@ -189,20 +166,17 @@ class SeasonalTrendsAnalysisService {
   }
 
   /**
-   * Get player&apos;s weekly performance data
+   * Get player's weekly performance data
    */
   private async getPlayerWeeklyData(
     playerId: string, 
     seasons: number[]
   ): Promise<WeeklyPlayerData[]> {
-}
     // Check cache first
-    const cacheKey = `${playerId}_weekly_${seasons.join(&apos;_&apos;)}`;
+    const cacheKey = `${playerId}_weekly_${seasons.join('_')}`;
     if (this.historicalData.has(cacheKey)) {
-}
       const cachedData = this.historicalData.get(cacheKey);
       if (cachedData) {
-}
         return cachedData;
       }
     }
@@ -218,15 +192,13 @@ class SeasonalTrendsAnalysisService {
   /**
    * Calculate seasonal metrics from weekly data
    */
-  private calculateSeasonalMetrics(weeklyData: WeeklyPlayerData[]): SeasonalTrendData[&apos;trends&apos;] {
-}
+  private calculateSeasonalMetrics(weeklyData: WeeklyPlayerData[]): SeasonalTrendData['trends'] {
     const earlyWeeks = weeklyData.filter((w: any) => w.week >= 1 && w.week <= 6);
     const midWeeks = weeklyData.filter((w: any) => w.week >= 7 && w.week <= 12);
     const lateWeeks = weeklyData.filter((w: any) => w.week >= 13 && w.week <= 18);
     const playoffWeeks = weeklyData.filter((w: any) => w.week >= 19 && w.week <= 22);
 
     return {
-}
       earlySeason: this.calculatePeriodMetrics(earlyWeeks),
       midSeason: this.calculatePeriodMetrics(midWeeks),
       lateSeason: this.calculatePeriodMetrics(lateWeeks),
@@ -238,11 +210,8 @@ class SeasonalTrendsAnalysisService {
    * Calculate metrics for a specific period
    */
   private calculatePeriodMetrics(periodData: WeeklyPlayerData[]): SeasonalMetrics {
-}
     if (periodData.length === 0) {
-}
       return {
-}
         weeks: [],
         averageFantasyPoints: 0,
         averageYards: 0,
@@ -269,7 +238,6 @@ class SeasonalTrendsAnalysisService {
     const consistencyScore = Math.max(0, 100 - (coefficientOfVariation * 100));
 
     return {
-}
       weeks: periodData.map((w: any) => w.week),
       averageFantasyPoints: parseFloat(avgPoints.toFixed(1)),
       averageTargets: periodData.filter((w: any) => w.targets).length > 0 
@@ -293,22 +261,20 @@ class SeasonalTrendsAnalysisService {
   /**
    * Helper function to determine severity based on change percent
    */
-  private getSeverityLevel(changePercent: number): &apos;low&apos; | &apos;moderate&apos; | &apos;high&apos; {
-}
+  private getSeverityLevel(changePercent: number): 'low' | 'moderate' | 'high' {
     const absChange = Math.abs(changePercent);
-    if (absChange > 30) return &apos;high&apos;;
-    if (absChange > 20) return &apos;moderate&apos;;
-    return &apos;low&apos;;
+    if (absChange > 30) return 'high';
+    if (absChange > 20) return 'moderate';
+    return 'low';
   }
 
   /**
    * Helper function to determine trend direction
    */
-  private getTrendDirection(overallTrend: string): &apos;up&apos; | &apos;down&apos; | &apos;stable&apos; {
-}
-    if (overallTrend === &apos;positive&apos;) return &apos;up&apos;;
-    if (overallTrend === &apos;negative&apos;) return &apos;down&apos;;
-    return &apos;stable&apos;;
+  private getTrendDirection(overallTrend: string): 'up' | 'down' | 'stable' {
+    if (overallTrend === 'positive') return 'up';
+    if (overallTrend === 'negative') return 'down';
+    return 'stable';
   }
 
   /**
@@ -316,9 +282,8 @@ class SeasonalTrendsAnalysisService {
    */
   private detectSeasonalPatterns(
     weeklyData: WeeklyPlayerData[], 
-    trends: SeasonalTrendData[&apos;trends&apos;]
+    trends: SeasonalTrendData['trends']
   ): SeasonalPattern[] {
-}
     const patterns: SeasonalPattern[] = [];
 
     // Improvement/Decline pattern
@@ -326,30 +291,25 @@ class SeasonalTrendsAnalysisService {
     const lateAvg = trends.lateSeason.averageFantasyPoints;
     
     if (earlyAvg > 0) {
-}
       const changePercent = ((lateAvg - earlyAvg) / earlyAvg) * 100;
       
       if (changePercent > 15) {
-}
         patterns.push({
-}
-          type: &apos;improving&apos;,
+          type: 'improving',
           description: `Strong improvement from early season (${earlyAvg.toFixed(1)}) to late season (${lateAvg.toFixed(1)}) - ${changePercent.toFixed(1)}% increase`,
           confidence: Math.min(0.9, Math.abs(changePercent) / 20),
           supportingWeeks: [...trends.earlySeason.weeks, ...trends.lateSeason.weeks],
           severity: this.getSeverityLevel(changePercent),
-          fantasyImpact: &apos;Positive trend suggests higher value in playoffs and following season&apos;
+          fantasyImpact: 'Positive trend suggests higher value in playoffs and following season'
         });
       } else if (changePercent < -15) {
-}
         patterns.push({
-}
-          type: &apos;declining&apos;,
+          type: 'declining',
           description: `Notable decline from early season (${earlyAvg.toFixed(1)}) to late season (${lateAvg.toFixed(1)}) - ${Math.abs(changePercent).toFixed(1)}% decrease`,
           confidence: Math.min(0.9, Math.abs(changePercent) / 20),
           supportingWeeks: [...trends.earlySeason.weeks, ...trends.lateSeason.weeks],
           severity: this.getSeverityLevel(changePercent),
-          fantasyImpact: &apos;Declining trend suggests potential injury or usage concerns&apos;
+          fantasyImpact: 'Declining trend suggests potential injury or usage concerns'
         });
       }
     }
@@ -358,26 +318,22 @@ class SeasonalTrendsAnalysisService {
     const avgConsistency = (trends.earlySeason.consistencyScore + trends.midSeason.consistencyScore + trends.lateSeason.consistencyScore) / 3;
     
     if (avgConsistency > 75) {
-}
       patterns.push({
-}
-        type: &apos;consistent&apos;,
+        type: 'consistent',
         description: `High consistency across all periods (${avgConsistency.toFixed(1)}% average)`,
         confidence: 0.8,
         supportingWeeks: weeklyData.map((w: any) => w.week),
-        severity: &apos;low&apos;,
-        fantasyImpact: &apos;Reliable floor makes player suitable for consistent lineup usage&apos;
+        severity: 'low',
+        fantasyImpact: 'Reliable floor makes player suitable for consistent lineup usage'
       });
     } else if (avgConsistency < 40) {
-}
       patterns.push({
-}
-        type: &apos;volatile&apos;,
+        type: 'volatile',
         description: `High volatility across all periods (${avgConsistency.toFixed(1)}% consistency)`,
         confidence: 0.8,
         supportingWeeks: weeklyData.map((w: any) => w.week),
-        severity: &apos;high&apos;,
-        fantasyImpact: &apos;Boom/bust player with high ceiling but low floor&apos;
+        severity: 'high',
+        fantasyImpact: 'Boom/bust player with high ceiling but low floor'
       });
     }
 
@@ -388,36 +344,32 @@ class SeasonalTrendsAnalysisService {
    * Analyze seasonal trends and provide insights
    */
   private analyzeSeasonalTrends(
-    trends: SeasonalTrendData[&apos;trends&apos;],
+    trends: SeasonalTrendData['trends'],
     patterns: SeasonalPattern[]
   ): SeasonalAnalysis {
-}
     const periods = [
-      { name: &apos;early&apos;, metrics: trends.earlySeason },
-      { name: &apos;mid&apos;, metrics: trends.midSeason },
-      { name: &apos;late&apos;, metrics: trends.lateSeason },
-      { name: &apos;playoffs&apos;, metrics: trends.playoffs }
+      { name: 'early', metrics: trends.earlySeason },
+      { name: 'mid', metrics: trends.midSeason },
+      { name: 'late', metrics: trends.lateSeason },
+      { name: 'playoffs', metrics: trends.playoffs }
     ];
 
     // Find best and worst periods
     const periodsWithData = periods.filter((p: any) => p.metrics.gamesPlayed > 0);
     
     if (periodsWithData.length === 0) {
-}
       // Return default analysis if no data
       return {
-}
-        overallTrend: &apos;stable&apos;,
-        bestPeriod: &apos;early&apos;,
-        worstPeriod: &apos;early&apos;,
+        overallTrend: 'stable',
+        bestPeriod: 'early',
+        worstPeriod: 'early',
         volatility: 0,
         projectedTrend: {
-}
-          direction: &apos;stable&apos;,
+          direction: 'stable',
           confidence: 0,
-          reasoning: [&apos;No historical data available&apos;]
+          reasoning: ['No historical data available']
         },
-        recommendations: [&apos;Insufficient data for analysis&apos;]
+        recommendations: ['Insufficient data for analysis']
       };
     }
 
@@ -432,13 +384,12 @@ class SeasonalTrendsAnalysisService {
     // Calculate overall trend
     const earlyAvg = trends.earlySeason.averageFantasyPoints;
     const lateAvg = trends.lateSeason.averageFantasyPoints;
-    let overallTrend: &apos;positive&apos; | &apos;negative&apos; | &apos;stable&apos; = &apos;stable&apos;;
+    let overallTrend: 'positive' | 'negative' | 'stable' = 'stable';
     
     if (earlyAvg > 0) {
-}
       const changePercent = ((lateAvg - earlyAvg) / earlyAvg) * 100;
-      if (changePercent > 10) overallTrend = &apos;positive&apos;;
-      else if (changePercent < -10) overallTrend = &apos;negative&apos;;
+      if (changePercent > 10) overallTrend = 'positive';
+      else if (changePercent < -10) overallTrend = 'negative';
     }
 
     // Calculate volatility
@@ -450,32 +401,26 @@ class SeasonalTrendsAnalysisService {
     // Generate recommendations
     const recommendations: string[] = [];
     
-    if (overallTrend === &apos;positive&apos;) {
-}
-      recommendations.push(&apos;Consider acquiring for playoffs due to improving trend&apos;);
-    } else if (overallTrend === &apos;negative&apos;) {
-}
-      recommendations.push(&apos;Monitor for potential sell opportunities&apos;);
+    if (overallTrend === 'positive') {
+      recommendations.push('Consider acquiring for playoffs due to improving trend');
+    } else if (overallTrend === 'negative') {
+      recommendations.push('Monitor for potential sell opportunities');
     }
     
     if (volatility > 0.3) {
-}
-      recommendations.push(&apos;High volatility makes player better for DFS than season-long&apos;);
+      recommendations.push('High volatility makes player better for DFS than season-long');
     }
     
-    if (bestPeriod.name === &apos;late&apos; || bestPeriod.name === &apos;playoffs&apos;) {
-}
-      recommendations.push(&apos;Strong playoff performer - premium trade target&apos;);
+    if (bestPeriod.name === 'late' || bestPeriod.name === 'playoffs') {
+      recommendations.push('Strong playoff performer - premium trade target');
     }
 
     return {
-}
       overallTrend,
       bestPeriod: bestPeriod.name as any,
       worstPeriod: worstPeriod.name as any,
       volatility: parseFloat(volatility.toFixed(3)),
       projectedTrend: {
-}
         direction: this.getTrendDirection(overallTrend),
         confidence: Math.min(0.9, periodsWithData.length / 4),
         reasoning: this.generateTrendReasoning(patterns, overallTrend)
@@ -488,31 +433,27 @@ class SeasonalTrendsAnalysisService {
    * Generate reasoning for trend projections
    */
   private generateTrendReasoning(patterns: SeasonalPattern[], trend: string): string[] {
-}
     const reasoning: string[] = [];
     
     patterns.forEach((pattern: any) => {
-}
       switch (pattern.type) {
-}
-        case &apos;improving&apos;:
-          reasoning.push(&apos;Showed improvement throughout season&apos;);
+        case 'improving':
+          reasoning.push('Showed improvement throughout season');
           break;
-        case &apos;declining&apos;:
-          reasoning.push(&apos;Performance declined as season progressed&apos;);
+        case 'declining':
+          reasoning.push('Performance declined as season progressed');
           break;
-        case &apos;consistent&apos;:
-          reasoning.push(&apos;Maintained consistent performance&apos;);
+        case 'consistent':
+          reasoning.push('Maintained consistent performance');
           break;
-        case &apos;volatile&apos;:
-          reasoning.push(&apos;High variance in weekly performance&apos;);
+        case 'volatile':
+          reasoning.push('High variance in weekly performance');
           break;
       }
     });
 
     if (reasoning.length === 0) {
-}
-      reasoning.push(&apos;Limited historical data available&apos;);
+      reasoning.push('Limited historical data available');
     }
 
     return reasoning;
@@ -522,17 +463,14 @@ class SeasonalTrendsAnalysisService {
    * Generate mock weekly data for testing
    */
   private generateMockWeeklyData(playerId: string, seasons: number[]): WeeklyPlayerData[] {
-}
     const data: WeeklyPlayerData[] = [];
     
     seasons.forEach((_, seasonIndex) => {
-}
       // Simulate different performance patterns
       const basePoints = 12 + Math.random() * 8; // Base performance 12-20 points
       const seasonTrend = (Math.random() - 0.5) * 0.5; // -25% to +25% season trend
       
       for (let week = 1; week <= 18; week++) {
-}
         // Apply seasonal trend
         const weekFactor = 1 + (seasonTrend * (week - 1) / 17);
         const expectedPoints = basePoints * weekFactor;
@@ -546,9 +484,8 @@ class SeasonalTrendsAnalysisService {
         const touchdowns = Math.max(0, Math.floor(actualPoints / 8) + (Math.random() > 0.7 ? 1 : 0));
         
         data.push({
-}
           week,
-          opponent: [&apos;LAR&apos;, &apos;SF&apos;, &apos;SEA&apos;, &apos;ARI&apos;, &apos;DAL&apos;, &apos;NYG&apos;, &apos;PHI&apos;, &apos;WAS&apos;][Math.floor(Math.random() * 8)],
+          opponent: ['LAR', 'SF', 'SEA', 'ARI', 'DAL', 'NYG', 'PHI', 'WAS'][Math.floor(Math.random() * 8)],
           fantasyPoints: parseFloat(actualPoints.toFixed(1)),
           targets: Math.floor(5 + Math.random() * 8),
           receptions: Math.floor(3 + Math.random() * 6),
@@ -556,9 +493,9 @@ class SeasonalTrendsAnalysisService {
           touchdowns: parseFloat(touchdowns.toFixed(2)),
           touches: Math.floor(actualPoints / 2 + Math.random() * 5),
           snapShare: parseFloat((0.6 + Math.random() * 0.3).toFixed(2)),
-          gameScript: [&apos;positive&apos;, &apos;neutral&apos;, &apos;negative&apos;][Math.floor(Math.random() * 3)] as any,
+          gameScript: ['positive', 'neutral', 'negative'][Math.floor(Math.random() * 3)] as any,
           homeGame: Math.random() > 0.5,
-          weather: [&apos;dome&apos;, &apos;good&apos;, &apos;poor&apos;][Math.floor(Math.random() * 3)] as any
+          weather: ['dome', 'good', 'poor'][Math.floor(Math.random() * 3)] as any
         });
       }
     });
@@ -567,21 +504,19 @@ class SeasonalTrendsAnalysisService {
   }
 
   /**
-   * Generate mock seasonal data when real data isn&apos;t available
+   * Generate mock seasonal data when real data isn't available
    */
   private generateMockSeasonalData(
     playerId: string, 
     playerName: string, 
     position: string
   ): SeasonalTrendData {
-}
     const weeklyData = this.generateMockWeeklyData(playerId, [2024]);
     const trends = this.calculateSeasonalMetrics(weeklyData);
     const patterns = this.detectSeasonalPatterns(weeklyData, trends);
     const analysis = this.analyzeSeasonalTrends(trends, patterns);
 
     return {
-}
       playerId,
       playerName,
       position,
@@ -596,11 +531,9 @@ class SeasonalTrendsAnalysisService {
    * Initialize with some mock data for testing
    */
   private initializeMockData(): void {
-}
     // This can be expanded with more realistic mock data
-    console.log(&apos;Seasonal Trends Analysis Service initialized&apos;);
+    console.log('Seasonal Trends Analysis Service initialized');
   }
-}
 
 // Export singleton instance
 export const seasonalTrendsAnalysisService = new SeasonalTrendsAnalysisService();

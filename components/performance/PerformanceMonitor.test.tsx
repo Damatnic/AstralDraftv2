@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import PerformanceMonitor from &apos;./PerformanceMonitor&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PerformanceMonitor from './PerformanceMonitor';
 
-describe(&apos;PerformanceMonitor&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('PerformanceMonitor', () => {
+  it('renders without crashing', () => {
     render(<PerformanceMonitor />);
-    expect(screen.getByTestId(&apos;performancemonitor&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('performancemonitor')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<PerformanceMonitor />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<PerformanceMonitor />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

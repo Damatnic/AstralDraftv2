@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import NotificationDemo from &apos;./NotificationDemo&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import NotificationDemo from './NotificationDemo';
 
-describe(&apos;NotificationDemo&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('NotificationDemo', () => {
+  it('renders without crashing', () => {
     render(<NotificationDemo />);
-    expect(screen.getByTestId(&apos;notificationdemo&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('notificationdemo')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<NotificationDemo />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<NotificationDemo />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

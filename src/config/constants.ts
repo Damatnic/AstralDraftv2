@@ -4,7 +4,6 @@
  */
 
 export const PERFORMANCE_CONSTANTS = {
-}
   // Performance monitoring thresholds
   IDLE_CALLBACK_TIMEOUT: 5000,
   RENDER_TIMEOUT: 100,
@@ -30,62 +29,59 @@ export const PERFORMANCE_CONSTANTS = {
 } as const;
 
 export const ERROR_CONSTANTS = {
-}
   // Error severity levels
   SEVERITY: {
-}
-    LOW: &apos;low&apos;,
-    MEDIUM: &apos;medium&apos;, 
-    HIGH: &apos;high&apos;,
-    CRITICAL: &apos;critical&apos;
+    LOW: 'low',
+    MEDIUM: 'medium', 
+    HIGH: 'high',
+    CRITICAL: 'critical'
   },
   
   // Error categories
   CATEGORIES: {
-}
-    NETWORK: &apos;network&apos;,
-    RUNTIME: &apos;runtime&apos;,
-    VALIDATION: &apos;validation&apos;,
-    AUTHENTICATION: &apos;auth&apos;,
-    PERMISSION: &apos;permission&apos;,
-    SYSTEM: &apos;system&apos;
+    NETWORK: 'network',
+    RUNTIME: 'runtime',
+    VALIDATION: 'validation',
+    AUTHENTICATION: 'auth',
+    PERMISSION: 'permission',
+    SYSTEM: 'system'
   },
   
   // Browser extension error patterns to suppress
   EXTENSION_ERROR_PATTERNS: [
-    &apos;extension&apos;,
-    &apos;chrome-extension://&apos;,
-    &apos;moz-extension://&apos;,
-    &apos;safari-extension://&apos;,
-    &apos;safari-web-extension://&apos;,
-    &apos;message port closed&apos;,
-    &apos;Extension context invalidated&apos;,
-    &apos;Could not establish connection&apos;,
-    &apos;Receiving end does not exist&apos;,
-    &apos;runtime.lastError&apos;,
-    &apos;Tab no longer exists&apos;,
-    &apos;No tab with id&apos;,
-    &apos;The message port closed before a response was received&apos;,
-    &apos;Extension host has crashed&apos;,
-    &apos;Extension was disabled&apos;,
-    &apos;chrome.runtime.lastError&apos;,
-    &apos;Unchecked runtime.lastError&apos;,
-    &apos;WebExtension context&apos;,
-    &apos;Extension unloaded&apos;,
-    &apos;lastError&apos;
+    'extension',
+    'chrome-extension://',
+    'moz-extension://',
+    'safari-extension://',
+    'safari-web-extension://',
+    'message port closed',
+    'Extension context invalidated',
+    'Could not establish connection',
+    'Receiving end does not exist',
+    'runtime.lastError',
+    'Tab no longer exists',
+    'No tab with id',
+    'The message port closed before a response was received',
+    'Extension host has crashed',
+    'Extension was disabled',
+    'chrome.runtime.lastError',
+    'Unchecked runtime.lastError',
+    'WebExtension context',
+    'Extension unloaded',
+    'lastError'
   ],
   
   // API error patterns to handle gracefully
   API_ERROR_PATTERNS: [
-    &apos;401 (Unauthorized)&apos;,
-    &apos;403 (Forbidden)&apos;,
-    &apos;404 (Not Found)&apos;,
-    &apos;500 (Internal Server Error)&apos;,
-    &apos;502 (Bad Gateway)&apos;,
-    &apos;503 (Service Unavailable)&apos;,
-    &apos;Network Error&apos;,
-    &apos;CORS error&apos;,
-    &apos;api.sportsdata.io&apos;
+    '401 (Unauthorized)',
+    '403 (Forbidden)',
+    '404 (Not Found)',
+    '500 (Internal Server Error)',
+    '502 (Bad Gateway)',
+    '503 (Service Unavailable)',
+    'Network Error',
+    'CORS error',
+    'api.sportsdata.io'
   ],
   
   // Maximum error counts before suppression
@@ -94,7 +90,6 @@ export const ERROR_CONSTANTS = {
 } as const;
 
 export const WEBSOCKET_CONSTANTS = {
-}
   // Connection settings
   CONNECTION_TIMEOUT: 10000,
   RECONNECT_ATTEMPTS: 5,
@@ -108,28 +103,25 @@ export const WEBSOCKET_CONSTANTS = {
   
   // Connection states
   STATES: {
-}
-    CONNECTING: &apos;connecting&apos;,
-    CONNECTED: &apos;connected&apos;,
-    DISCONNECTED: &apos;disconnected&apos;,
-    RECONNECTING: &apos;reconnecting&apos;,
-    FAILED: &apos;failed&apos;
+    CONNECTING: 'connecting',
+    CONNECTED: 'connected',
+    DISCONNECTED: 'disconnected',
+    RECONNECTING: 'reconnecting',
+    FAILED: 'failed'
   },
   
   // Event types
   EVENTS: {
-}
-    CONNECT: &apos;connect&apos;,
-    DISCONNECT: &apos;disconnect&apos;,
-    ERROR: &apos;error&apos;,
-    MESSAGE: &apos;message&apos;,
-    RECONNECT: &apos;reconnect&apos;,
-    HEARTBEAT: &apos;heartbeat&apos;
+    CONNECT: 'connect',
+    DISCONNECT: 'disconnect',
+    ERROR: 'error',
+    MESSAGE: 'message',
+    RECONNECT: 'reconnect',
+    HEARTBEAT: 'heartbeat'
   }
 } as const;
 
 export const CACHE_CONSTANTS = {
-}
   // Cache durations (in milliseconds)
   SHORT_CACHE: 5 * 60 * 1000,        // 5 minutes
   MEDIUM_CACHE: 30 * 60 * 1000,      // 30 minutes
@@ -138,12 +130,11 @@ export const CACHE_CONSTANTS = {
   
   // Cache keys
   KEYS: {
-}
-    USER_PREFERENCES: &apos;user_preferences&apos;,
-    LEAGUE_DATA: &apos;league_data&apos;,
-    PLAYER_STATS: &apos;player_stats&apos;,
-    DRAFT_DATA: &apos;draft_data&apos;,
-    SETTINGS: &apos;app_settings&apos;
+    USER_PREFERENCES: 'user_preferences',
+    LEAGUE_DATA: 'league_data',
+    PLAYER_STATS: 'player_stats',
+    DRAFT_DATA: 'draft_data',
+    SETTINGS: 'app_settings'
   },
   
   // Storage limits
@@ -152,7 +143,6 @@ export const CACHE_CONSTANTS = {
 } as const;
 
 export const SECURITY_CONSTANTS = {
-}
   // Authentication
   TOKEN_EXPIRY: 24 * 60 * 60 * 1000, // 24 hours
   REFRESH_THRESHOLD: 5 * 60 * 1000,  // 5 minutes before expiry
@@ -163,11 +153,11 @@ export const SECURITY_CONSTANTS = {
   MAX_INPUT_LENGTH: 1000,
   MAX_FILE_SIZE: 10 * 1024 * 1024,   // 10MB
   ALLOWED_FILE_TYPES: [
-    &apos;image/jpeg&apos;,
-    &apos;image/png&apos;,
-    &apos;image/gif&apos;,
-    &apos;image/webp&apos;,
-    &apos;application/pdf&apos;
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'application/pdf'
   ],
   
   // Rate limiting
@@ -177,20 +167,17 @@ export const SECURITY_CONSTANTS = {
 } as const;
 
 export const UI_CONSTANTS = {
-}
   // Breakpoints (matches Tailwind CSS)
   BREAKPOINTS: {
-}
     SM: 640,
     MD: 768,
     LG: 1024,
     XL: 1280,
-    &apos;2XL&apos;: 1536
+    '2XL': 1536
   },
   
   // Animation timings
   ANIMATIONS: {
-}
     FAST: 150,
     NORMAL: 300,
     SLOW: 500,
@@ -199,7 +186,6 @@ export const UI_CONSTANTS = {
   
   // Z-index layers
   Z_INDEX: {
-}
     DROPDOWN: 1000,
     STICKY: 1020,
     FIXED: 1030,
@@ -213,16 +199,13 @@ export const UI_CONSTANTS = {
   
   // Component sizes
   SIZES: {
-}
     AVATAR: {
-}
       SM: 32,
       MD: 48,
       LG: 64,
       XL: 96
     },
     BUTTON_HEIGHT: {
-}
       SM: 32,
       MD: 40,
       LG: 48
@@ -231,23 +214,21 @@ export const UI_CONSTANTS = {
 } as const;
 
 export const API_CONSTANTS = {
-}
   // Endpoints
-  BASE_URL: process.env.NODE_ENV === &apos;production&apos; 
-    ? &apos;https://astral-draft.netlify.app/api&apos;
-    : &apos;http://localhost:3001/api&apos;,
+  BASE_URL: process.env.NODE_ENV === 'production' 
+    ? 'https://astral-draft.netlify.app/api'
+    : 'http://localhost:3001/api',
     
   ENDPOINTS: {
-}
-    AUTH: &apos;/auth&apos;,
-    USERS: &apos;/users&apos;,
-    LEAGUES: &apos;/leagues&apos;,
-    TEAMS: &apos;/teams&apos;,
-    PLAYERS: &apos;/players&apos;,
-    DRAFTS: &apos;/drafts&apos;,
-    TRADES: &apos;/trades&apos;,
-    WAIVERS: &apos;/waivers&apos;,
-    ANALYTICS: &apos;/analytics&apos;
+    AUTH: '/auth',
+    USERS: '/users',
+    LEAGUES: '/leagues',
+    TEAMS: '/teams',
+    PLAYERS: '/players',
+    DRAFTS: '/drafts',
+    TRADES: '/trades',
+    WAIVERS: '/waivers',
+    ANALYTICS: '/analytics'
   },
   
   // Request settings
@@ -262,7 +243,6 @@ export const API_CONSTANTS = {
 } as const;
 
 export default {
-}
   PERFORMANCE_CONSTANTS,
   ERROR_CONSTANTS,
   WEBSOCKET_CONSTANTS,

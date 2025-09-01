@@ -3,65 +3,60 @@
  * Integrates the 10 provided player names with Oracle ML services for advanced league creation
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { generateTeamBranding, generateAiTeamProfile } from &apos;../../services/geminiService&apos;;
-import type { LeagueSettings, User, CreateLeaguePayload, AiProfileData } from &apos;../../types&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Modal } from '../ui/Modal';
+import { SparklesIcon } from '../icons/SparklesIcon';
+import { Avatar } from '../ui/Avatar';
+import { generateTeamBranding, generateAiTeamProfile } from '../../services/geminiService';
+import type { LeagueSettings, User, CreateLeaguePayload, AiProfileData } from '../../types';
 
 // The 10 provided player names
 const PLAYER_NAMES = [
-  &apos;Jack&apos;,
-  &apos;Jon&apos;, 
-  &apos;Hartley&apos;,
-  &apos;Jarvey&apos;,
-  &apos;Cason&apos;,
-  &apos;Larry&apos;,
-  &apos;Renee&apos;,
-  &apos;Kaity&apos;,
-  &apos;Nick&apos;,
-  &apos;Brittany&apos;
+  'Jack',
+  'Jon', 
+  'Hartley',
+  'Jarvey',
+  'Cason',
+  'Larry',
+  'Renee',
+  'Kaity',
+  'Nick',
+  'Brittany'
 ] as const;
 
 interface PlayerSetup {
-}
   name: string;
   teamName: string;
   avatar: string;
   isUser: boolean;
   aiProfile?: AiProfileData;
 
-}
 
 interface EnhancedCreateLeagueModalProps {
-}
   onClose: () => void;
   user: User;
   dispatch: React.Dispatch<any>;}
 
 const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({ 
-}
   onClose, 
   user, 
 //   dispatch 
 }: any) => {
-}
   // League Configuration
-  const [leagueName, setLeagueName] = useState(&apos;Astral Draft Championship&apos;);
+  const [leagueName, setLeagueName] = useState('Astral Draft Championship');
   const [selectedPlayerCount, setSelectedPlayerCount] = useState(10);
-  const [draftFormat, setDraftFormat] = useState<LeagueSettings[&apos;draftFormat&apos;]>(&apos;SNAKE&apos;);
-  const [scoring, setScoring] = useState<LeagueSettings[&apos;scoring&apos;]>(&apos;PPR&apos;);
-  const [aiAssistanceLevel, setAiAssistanceLevel] = useState<LeagueSettings[&apos;aiAssistanceLevel&apos;]>(&apos;FULL&apos;);
+  const [draftFormat, setDraftFormat] = useState<LeagueSettings['draftFormat']>('SNAKE');
+  const [scoring, setScoring] = useState<LeagueSettings['scoring']>('PPR');
+  const [aiAssistanceLevel, setAiAssistanceLevel] = useState<LeagueSettings['aiAssistanceLevel']>('FULL');
 
   // Player Setup
   const [players, setPlayers] = useState<PlayerSetup[]>([]);
-  const [selectedUserPlayer, setSelectedUserPlayer] = useState<string>(&apos;&apos;);
+  const [selectedUserPlayer, setSelectedUserPlayer] = useState<string>('');
   
   // UI State
-  const [currentStep, setCurrentStep] = useState<&apos;config&apos; | &apos;players&apos; | &apos;review&apos;>(&apos;config&apos;);
+  const [currentStep, setCurrentStep] = useState<'config' | 'players' | 'review'>('config');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [generateProgress, setGenerateProgress] = useState(0);
@@ -75,12 +70,10 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 
   // Initialize players based on selected count
   useEffect(() => {
-}
     const availableNames = PLAYER_NAMES.slice(0, selectedPlayerCount);
     const initialPlayers: PlayerSetup[] = availableNames.map((name, index) => ({
-}
       name,
-      teamName: `${name}&apos;s Team`,
+      teamName: `${name}'s Team`,
       avatar: `🎯`, // Default avatar
       isUser: index === 0, // First player is user by default
       aiProfile: undefined
@@ -91,26 +84,21 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   }, [selectedPlayerCount]);
 
   const handleGenerateAllTeamBranding = async () => {
-}
     setIsGenerating(true);
     setGenerateProgress(0);
     
     try {
-}
       const updates = [...players];
       const totalPlayers = players.length;
       
       for (let i = 0; i < players.length; i++) {
-}
         const player = players[i];
         setGenerateProgress(((i + 1) / totalPlayers) * 100);
         
         // Generate team branding for each player
         const branding = await generateTeamBranding(player.name);
         if (branding) {
-}
           updates[i] = {
-}
             ...player,
             teamName: branding.teamName,
             avatar: branding.avatar
@@ -118,10 +106,8 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 
         // Generate AI profile for non-user players
         if (!player.isUser) {
-}
           const aiProfile = await generateAiTeamProfile(leagueName);
           if (aiProfile) {
-}
             updates[i].aiProfile = aiProfile;
 
 
@@ -129,50 +115,41 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         setPlayers([...updates]);
 
       dispatch({ 
-}
-        type: &apos;ADD_NOTIFICATION&apos;, 
+        type: 'ADD_NOTIFICATION', 
         payload: {
-}
-          message: &apos;Successfully generated team branding and AI profiles!&apos;, 
-          type: &apos;SYSTEM&apos; 
+          message: 'Successfully generated team branding and AI profiles!', 
+          type: 'SYSTEM' 
 
       });
     });
     } finally {
-}
       setIsGenerating(false);
       setGenerateProgress(0);
 
   };
 
   const handleUserPlayerChange = (playerName: string) => {
-}
     setSelectedUserPlayer(playerName);
     setPlayers(prev => prev.map((p: any) => ({
-}
       ...p,
       isUser: p.name === playerName
     })));
   };
 
   const handleCustomizePlayer = (index: number, updates: Partial<PlayerSetup>) => {
-}
     setPlayers(prev => prev.map((p, i) => 
       i === index ? { ...p, ...updates } : p
     ));
   };
 
   const handleSubmit = async () => {
-}
     setIsSubmitting(true);
     
     try {
-}
       // Find user player
       const userPlayer = players.find((p: any) => p.isUser);
       if (!userPlayer) {
-}
-        throw new Error(&apos;No user player selected&apos;);
+        throw new Error('No user player selected');
 
       // Prepare AI profiles for non-user players
       const aiProfiles = players
@@ -182,9 +159,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 
       // Create enhanced league payload with Oracle ML integration
       const newLeague: CreateLeaguePayload & {
-}
         oracleConfig: {
-}
           predictions: boolean;
           advancedAnalytics: boolean;
           injuryTracking: boolean;
@@ -193,27 +168,24 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         };
         playerSetup: PlayerSetup[];
       } = {
-}
         id: `league_${Date.now()}`,
         name: leagueName,
         settings: {
-}
           draftFormat,
           teamCount: selectedPlayerCount,
           scoring,
           rosterSize: 16,
           tradeDeadline: 10,
-          playoffFormat: &apos;4_TEAM&apos;,
-          waiverRule: &apos;FAAB&apos;,
+          playoffFormat: '4_TEAM',
+          waiverRule: 'FAAB',
           aiAssistanceLevel,
         },
-        status: &apos;PRE_DRAFT&apos; as const,
+        status: 'PRE_DRAFT' as const,
         commissionerId: user.id,
         userTeamName: userPlayer.teamName,
         userTeamAvatar: userPlayer.avatar,
         aiProfiles,
         oracleConfig: {
-}
           predictions: oraclePredictions,
           advancedAnalytics,
           injuryTracking,
@@ -223,21 +195,18 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         playerSetup: players
       };
 
-      dispatch({ type: &apos;CREATE_ENHANCED_LEAGUE&apos;, payload: newLeague });
+      dispatch({ type: 'CREATE_ENHANCED_LEAGUE', payload: newLeague });
       dispatch({ 
-}
-        type: &apos;ADD_NOTIFICATION&apos;, 
+        type: 'ADD_NOTIFICATION', 
         payload: {
-}
           message: `Enhanced league "${leagueName}" created with Oracle ML integration!`, 
-          type: &apos;SYSTEM&apos; 
+          type: 'SYSTEM' 
 
       });
       
       onClose();
     });
     } finally {
-}
       setIsSubmitting(false);
 
   };
@@ -286,24 +255,22 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                 <button
                   type="button"
-                  onClick={() => setDraftFormat(&apos;SNAKE&apos;)}
+                  onClick={() => setDraftFormat('SNAKE')}
                   className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${
-}
-                    draftFormat === &apos;SNAKE&apos; 
-                      ? &apos;bg-cyan-400 text-black&apos; 
-                      : &apos;bg-black/10 hover:bg-black/20&apos;
+                    draftFormat === 'SNAKE' 
+                      ? 'bg-cyan-400 text-black' 
+                      : 'bg-black/10 hover:bg-black/20'
                   }`}
                 >
 //                   Snake
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDraftFormat(&apos;AUCTION&apos;)}
+                  onClick={() => setDraftFormat('AUCTION')}
                   className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${
-}
-                    draftFormat === &apos;AUCTION&apos; 
-                      ? &apos;bg-cyan-400 text-black&apos; 
-                      : &apos;bg-black/10 hover:bg-black/20&apos;
+                    draftFormat === 'AUCTION' 
+                      ? 'bg-cyan-400 text-black' 
+                      : 'bg-black/10 hover:bg-black/20'
                   }`}
                 >
 //                   Auction
@@ -318,7 +285,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               <select
                 id="scoring-select"
                 value={scoring}
-                onChange={(e: any) => setScoring(e.target.value as LeagueSettings[&apos;scoring&apos;])}
+                onChange={(e: any) => setScoring(e.target.value as LeagueSettings['scoring'])}
               >
                 <option value="PPR">PPR</option>
                 <option value="Half-PPR">Half-PPR</option>
@@ -392,24 +359,22 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
               <button
                 type="button"
-                onClick={() => setAiAssistanceLevel(&apos;FULL&apos;)}
+                onClick={() => setAiAssistanceLevel('FULL')}
                 className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${
-}
-                  aiAssistanceLevel === &apos;FULL&apos; 
-                    ? &apos;bg-cyan-400 text-black&apos; 
-                    : &apos;bg-black/10 hover:bg-black/20&apos;
+                  aiAssistanceLevel === 'FULL' 
+                    ? 'bg-cyan-400 text-black' 
+                    : 'bg-black/10 hover:bg-black/20'
                 }`}
               >
 //                 Full
               </button>
               <button
                 type="button"
-                onClick={() => setAiAssistanceLevel(&apos;BASIC&apos;)}
+                onClick={() => setAiAssistanceLevel('BASIC')}
                 className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${
-}
-                  aiAssistanceLevel === &apos;BASIC&apos; 
-                    ? &apos;bg-cyan-400 text-black&apos; 
-                    : &apos;bg-black/10 hover:bg-black/20&apos;
+                  aiAssistanceLevel === 'BASIC' 
+                    ? 'bg-cyan-400 text-black' 
+                    : 'bg-black/10 hover:bg-black/20'
                 }`}
               >
 //                 Basic
@@ -432,7 +397,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-sm rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
         >
           {isGenerating ? (
-}
             <>
               <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
               <span>Generating... {Math.round(generateProgress)}%</span>
@@ -456,7 +420,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           aria-label="Select which player you are"
         >
           {players.map((player: any) => (
-}
             <option key={player.name} value={player.name}>
               {player.name}
             </option>
@@ -466,15 +429,13 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {players.map((player, index) => (
-}
           <motion.div
             key={player.name}
 //             layout
             className={`p-4 rounded-lg border transition-all ${
-}
               player.isUser 
-                ? &apos;bg-green-900/20 border-green-500/50&apos; 
-                : &apos;bg-black/10 border-[var(--panel-border)]&apos;
+                ? 'bg-green-900/20 border-green-500/50' 
+                : 'bg-black/10 border-[var(--panel-border)]'
             }`}
           >
             <div className="flex items-center gap-3 mb-3 sm:px-4 md:px-6 lg:px-8">
@@ -482,7 +443,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               <div className="flex-grow sm:px-4 md:px-6 lg:px-8">
                 <div className="font-bold text-sm sm:px-4 md:px-6 lg:px-8">{player.name}</div>
                 {player.isUser && (
-}
                   <div className="text-xs text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">You</div>
                 )}
               </div>
@@ -498,7 +458,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               />
               
               {player.aiProfile && (
-}
                 <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                   <div>Persona: {player.aiProfile.persona}</div>
                   <div>Name: {player.aiProfile.name}</div>
@@ -531,20 +490,20 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           <div className="p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
             <h4 className="font-bold mb-2 text-purple-300 sm:px-4 md:px-6 lg:px-8">Oracle ML Features</h4>
             <div className="space-y-1 text-sm sm:px-4 md:px-6 lg:px-8">
-              <div className={`${oraclePredictions ? &apos;text-green-400&apos; : &apos;text-gray-500&apos;}`}>
-                {oraclePredictions ? &apos;✓&apos; : &apos;✗&apos;} Oracle Predictions & Challenges
+              <div className={`${oraclePredictions ? 'text-green-400' : 'text-gray-500'}`}>
+                {oraclePredictions ? '✓' : '✗'} Oracle Predictions & Challenges
               </div>
-              <div className={`${advancedAnalytics ? &apos;text-green-400&apos; : &apos;text-gray-500&apos;}`}>
-                {advancedAnalytics ? &apos;✓&apos; : &apos;✗&apos;} Advanced Analytics
+              <div className={`${advancedAnalytics ? 'text-green-400' : 'text-gray-500'}`}>
+                {advancedAnalytics ? '✓' : '✗'} Advanced Analytics
               </div>
-              <div className={`${injuryTracking ? &apos;text-green-400&apos; : &apos;text-gray-500&apos;}`}>
-                {injuryTracking ? &apos;✓&apos; : &apos;✗&apos;} Injury Tracking
+              <div className={`${injuryTracking ? 'text-green-400' : 'text-gray-500'}`}>
+                {injuryTracking ? '✓' : '✗'} Injury Tracking
               </div>
-              <div className={`${tradeAnalysis ? &apos;text-green-400&apos; : &apos;text-gray-500&apos;}`}>
-                {tradeAnalysis ? &apos;✓&apos; : &apos;✗&apos;} Trade Analysis
+              <div className={`${tradeAnalysis ? 'text-green-400' : 'text-gray-500'}`}>
+                {tradeAnalysis ? '✓' : '✗'} Trade Analysis
               </div>
-              <div className={`${waiverAnalysis ? &apos;text-green-400&apos; : &apos;text-gray-500&apos;}`}>
-                {waiverAnalysis ? &apos;✓&apos; : &apos;✗&apos;} Waiver Intelligence
+              <div className={`${waiverAnalysis ? 'text-green-400' : 'text-gray-500'}`}>
+                {waiverAnalysis ? '✓' : '✗'} Waiver Intelligence
               </div>
             </div>
           </div>
@@ -555,10 +514,9 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
             <h4 className="font-bold mb-2 sm:px-4 md:px-6 lg:px-8">Player Roster</h4>
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               {players.map((player: any) => (
-}
                 <div key={player.name} className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
                   <Avatar avatar={player.avatar} className="w-6 h-6 text-sm rounded sm:px-4 md:px-6 lg:px-8" />
-                  <span className={player.isUser ? &apos;text-green-400 font-bold&apos; : &apos;text-gray-300&apos;}>
+                  <span className={player.isUser ? 'text-green-400 font-bold' : 'text-gray-300'}>
                     {player.name}
                   </span>
                   <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">- {player.teamName}</span>
@@ -587,25 +545,21 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               Create Enhanced League
             </h2>
             <p className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
-              {currentStep === &apos;config&apos; && &apos;Step 1 of 3&apos;}
-              {currentStep === &apos;players&apos; && &apos;Step 2 of 3&apos;}
-              {currentStep === &apos;review&apos; && &apos;Step 3 of 3&apos;}
+              {currentStep === 'config' && 'Step 1 of 3'}
+              {currentStep === 'players' && 'Step 2 of 3'}
+              {currentStep === 'review' && 'Step 3 of 3'}
             </p>
           </div>
           
           <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-            {[&apos;config&apos;, &apos;players&apos;, &apos;review&apos;].map((step, index) => {
-}
-              let bgColor = &apos;bg-gray-800&apos;;
+            {['config', 'players', 'review'].map((step, index) => {
+              let bgColor = 'bg-gray-800';
               if (currentStep === step) {
-}
-                bgColor = &apos;bg-cyan-400&apos;;
-              } else if ([&apos;config&apos;, &apos;players&apos;].indexOf(currentStep) > index) {
-}
-                bgColor = &apos;bg-gray-600&apos;;
+                bgColor = 'bg-cyan-400';
+              } else if (['config', 'players'].indexOf(currentStep) > index) {
+                bgColor = 'bg-gray-600';
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -625,8 +579,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 
         <main className="p-6 sm:px-4 md:px-6 lg:px-8">
           <AnimatePresence mode="wait">
-            {currentStep === &apos;config&apos; && (
-}
+            {currentStep === 'config' && (
               <motion.div
                 key="config"
                 initial={{ opacity: 0, x: -20 }}
@@ -637,8 +590,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               </motion.div>
             )}
             
-            {currentStep === &apos;players&apos; && (
-}
+            {currentStep === 'players' && (
               <motion.div
                 key="players"
                 initial={{ opacity: 0, x: -20 }}
@@ -649,8 +601,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               </motion.div>
             )}
             
-            {currentStep === &apos;review&apos; && (
-}
+            {currentStep === 'review' && (
               <motion.div
                 key="review"
                 initial={{ opacity: 0, x: -20 }}
@@ -665,14 +616,12 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 
         <footer className="p-6 flex justify-between border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
           <div>
-            {currentStep !== &apos;config&apos; && (
-}
+            {currentStep !== 'config' && (
               <button
                 type="button"
                 onClick={() => {
-}
-                  if (currentStep === &apos;players&apos;) setCurrentStep(&apos;config&apos;);
-                  if (currentStep === &apos;review&apos;) setCurrentStep(&apos;players&apos;);
+                  if (currentStep === 'players') setCurrentStep('config');
+                  if (currentStep === 'review') setCurrentStep('players');
                 }}
                 className="px-4 py-2 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8"
               >
@@ -690,27 +639,25 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
 //               Cancel
             </button>
             
-            {currentStep === &apos;review&apos; ? (
-}
+            {currentStep === 'review' ? (
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="px-6 py-2 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-bold rounded-lg shadow-md hover:from-green-600 hover:to-cyan-600 transition-colors disabled:opacity-60 disabled:cursor-wait sm:px-4 md:px-6 lg:px-8"
               >
-                {isSubmitting ? &apos;Creating League...&apos; : &apos;Create League&apos;}
+                {isSubmitting ? 'Creating League...' : 'Create League'}
               </button>
             ) : (
               <button
                 type="button"
                 onClick={() => {
-}
-                  if (currentStep === &apos;config&apos;) setCurrentStep(&apos;players&apos;);
-                  if (currentStep === &apos;players&apos;) setCurrentStep(&apos;review&apos;);
+                  if (currentStep === 'config') setCurrentStep('players');
+                  if (currentStep === 'players') setCurrentStep('review');
                 }}
                 className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold rounded-lg shadow-md hover:from-purple-600 hover:to-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8"
               >
-                {currentStep === &apos;config&apos; ? &apos;Configure Players&apos; : &apos;Review & Create&apos;}
+                {currentStep === 'config' ? 'Configure Players' : 'Review & Create'}
               </button>
             )}
           </div>

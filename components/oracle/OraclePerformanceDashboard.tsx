@@ -3,16 +3,14 @@
  * Showcases UI performance optimizations for real-time Oracle interactions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useState, useEffect, useCallback, useMemo, memo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-}
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     LineChart, Line, Area, AreaChart
-} from &apos;recharts&apos;;
+} from 'recharts';
 import { 
-}
     Activity, 
     Zap, 
     Clock, 
@@ -21,43 +19,38 @@ import {
     Settings,
     RefreshCw,
 //     CheckCircle
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
-}
     useOraclePerformanceMonitoring,
     useThrottledOracleUpdates,
     useOptimizedUserInput,
 //     useBatchedAnalyticsUpdates
-} from &apos;../../hooks/useOraclePerformanceOptimization&apos;;
-import oraclePerformanceOptimizationService from &apos;../../services/oraclePerformanceOptimizationService&apos;;
+} from '../../hooks/useOraclePerformanceOptimization';
+import oraclePerformanceOptimizationService from '../../services/oraclePerformanceOptimizationService';
 
 // Memoized performance metric card
 const PerformanceMetricCard = memo(({ 
-}
     title, 
     value, 
     unit, 
     trend, 
     icon: Icon,
-    color = &apos;blue&apos; 
+    color = 'blue' 
 }: {
-}
     title: string;
     value: number;
     unit: string;
-    trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+    trend?: 'up' | 'down' | 'stable';
     icon: React.ComponentType<any>;
     color?: string;
 }) => {
-}
     const colorClasses = {
-}
-        blue: &apos;text-blue-600 bg-blue-100&apos;,
-        green: &apos;text-green-600 bg-green-100&apos;,
-        orange: &apos;text-orange-600 bg-orange-100&apos;,
-        purple: &apos;text-purple-600 bg-purple-100&apos;
+        blue: 'text-blue-600 bg-blue-100',
+        green: 'text-green-600 bg-green-100',
+        orange: 'text-orange-600 bg-orange-100',
+        purple: 'text-purple-600 bg-purple-100'
     };
 
     return (
@@ -67,14 +60,12 @@ const PerformanceMetricCard = memo(({
                     <Icon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                 </div>
                 {trend && (
-}
                     <div className={`text-xs px-2 py-1 rounded ${
-}
-                        trend === &apos;up&apos; ? &apos;bg-green-100 text-green-600&apos; :
-                        trend === &apos;down&apos; ? &apos;bg-red-100 text-red-600&apos; :
-                        &apos;bg-gray-100 text-gray-600&apos;
+                        trend === 'up' ? 'bg-green-100 text-green-600' :
+                        trend === 'down' ? 'bg-red-100 text-red-600' :
+                        'bg-gray-100 text-gray-600'
                     }`}>
-                        {trend === &apos;up&apos; ? &apos;↑&apos; : trend === &apos;down&apos; ? &apos;↓&apos; : &apos;→&apos;}
+                        {trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→'}
                     </div>
                 )}
             </div>
@@ -88,11 +79,9 @@ const PerformanceMetricCard = memo(({
 
 // Memoized real-time updates list
 const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
-}
     updates: any[];
     maxVisible?: number;
 }) => {
-}
     const visibleUpdates = useMemo(() => 
         updates.slice(-maxVisible).reverse(), 
         [updates, maxVisible]
@@ -102,7 +91,6 @@ const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
         <div className="space-y-2 max-h-40 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence>
                 {visibleUpdates.map((update, index) => (
-}
                     <motion.div
                         key={`${update.id}-${index}`}
                         initial={{ opacity: 0, x: -20 }}
@@ -126,14 +114,11 @@ const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
 
 // Memoized performance chart
 const PerformanceChart = memo(({ data, height = 200 }: {
-}
     data: any[];
     height?: number;
 }) => {
-}
     const chartData = useMemo(() => 
         data.map((item, index) => ({
-}
             time: index,
             renderTime: item.renderTime || 0,
             cacheHitRate: item.cacheHitRate || 0,
@@ -170,27 +155,22 @@ const PerformanceChart = memo(({ data, height = 200 }: {
 
 // Debounced settings panel
 const SettingsPanel = memo(({ 
-}
     onConfigUpdate,
 //     currentConfig 
 }: {
-}
     onConfigUpdate: (config: any) => void;
     currentConfig: any;
 }) => {
-}
     const { value: debounceMs, setValue: setDebounceMs } = useOptimizedUserInput(
-        currentConfig.userInputDebounceMs?.toString() || &apos;300&apos;
+        currentConfig.userInputDebounceMs?.toString() || '300'
     );
     
     const { value: throttleMs, setValue: setThrottleMs } = useOptimizedUserInput(
-        currentConfig.realTimeUpdateThrottleMs?.toString() || &apos;100&apos;
+        currentConfig.realTimeUpdateThrottleMs?.toString() || '100'
     );
 
     const handleSave = useCallback(() => {
-}
         onConfigUpdate({
-}
             userInputDebounceMs: parseInt(debounceMs) || 300,
             realTimeUpdateThrottleMs: parseInt(throttleMs) || 100
         });
@@ -236,11 +216,9 @@ const SettingsPanel = memo(({
 
 // Main dashboard component
 const OraclePerformanceDashboard: React.FC<{
-}
     className?: string;
-}> = ({ className = &apos;&apos; }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+}> = ({ className = '' }: any) => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Performance monitoring
     const { metrics, startRenderMeasurement, endRenderMeasurement } = useOraclePerformanceMonitoring();
@@ -252,41 +230,35 @@ const OraclePerformanceDashboard: React.FC<{
     const { batchedUpdates, addAnalyticsUpdate } = useBatchedAnalyticsUpdates();
     
     // Local state
-    const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;performance&apos; | &apos;settings&apos;>(&apos;overview&apos;);
+    const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'settings'>('overview');
     const [showSettings, setShowSettings] = useState(false);
     const [performanceHistory, setPerformanceHistory] = useState<any[]>([]);
     const [isOptimizing, setIsOptimizing] = useState(false);
 
     // Performance measurement
     useEffect(() => {
-}
         startRenderMeasurement();
         return () => {
-}
             endRenderMeasurement();
         };
     });
 
     // Simulate real-time updates
     useEffect(() => {
-}
         const interval = setInterval(() => {
-}
-            const updateTypes = [&apos;PREDICTION_UPDATE&apos;, &apos;USER_JOINED&apos;, &apos;CONSENSUS_CHANGE&apos;];
+            const updateTypes = ['PREDICTION_UPDATE', 'USER_JOINED', 'CONSENSUS_CHANGE'];
             const randomType = updateTypes[Math.floor(Math.random() * updateTypes.length)];
             
             addUpdate({
-}
                 id: `update-${Date.now()}`,
                 type: randomType,
-                message: `Simulated ${randomType.toLowerCase().replace(&apos;_&apos;, &apos; &apos;)}`,
+                message: `Simulated ${randomType.toLowerCase().replace('_', ' ')}`,
                 timestamp: new Date().toISOString()
             });
             
             // Add analytics update
             addAnalyticsUpdate({
-}
-                type: &apos;performance_metric&apos;,
+                type: 'performance_metric',
                 value: Math.random() * 100,
                 timestamp: new Date().toISOString()
             });
@@ -297,13 +269,10 @@ const OraclePerformanceDashboard: React.FC<{
 
     // Track performance history
     useEffect(() => {
-}
     const interval = setInterval(() => {
-}
             setPerformanceHistory(prev => [
                 ...prev.slice(-19), // Keep last 20 entries
                 {
-}
                     timestamp: Date.now(),
                     renderTime: metrics.averageRenderTime,
                     cacheHitRate: metrics.cacheHitRate,
@@ -319,34 +288,28 @@ const OraclePerformanceDashboard: React.FC<{
     // Handle performance optimization
     const handleOptimization = useCallback(async () 
 } {
-}
         setIsOptimizing(true);
         try {
-}
             await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate optimization
             oraclePerformanceOptimizationService.optimizePerformance();
             addUpdate({
-}
                 id: `optimization-${Date.now()}`,
-                type: &apos;SYSTEM_OPTIMIZATION&apos;,
-                message: &apos;Performance optimization completed&apos;,
+                type: 'SYSTEM_OPTIMIZATION',
+                message: 'Performance optimization completed',
                 timestamp: new Date().toISOString()
             });
         } finally {
-}
             setIsOptimizing(false);
 
     }, [addUpdate]);
 
     // Handle configuration updates
     const handleConfigUpdate = useCallback((newConfig: any) => {
-}
         oraclePerformanceOptimizationService.updateConfig(newConfig);
         addUpdate({
-}
             id: `config-${Date.now()}`,
-            type: &apos;CONFIG_UPDATE&apos;,
-            message: &apos;Performance configuration updated&apos;,
+            type: 'CONFIG_UPDATE',
+            message: 'Performance configuration updated',
             timestamp: new Date().toISOString()
         });
     }, [addUpdate]);
@@ -361,7 +324,7 @@ const OraclePerformanceDashboard: React.FC<{
                     unit="ms"
                     icon={Clock}
                     color="blue"
-                    trend={metrics.averageRenderTime < 16 ? &apos;up&apos; : &apos;stable&apos;}
+                    trend={metrics.averageRenderTime < 16 ? 'up' : 'stable'}
                 />
                 <PerformanceMetricCard>
                     title="Cache Hit Rate"
@@ -402,7 +365,6 @@ const OraclePerformanceDashboard: React.FC<{
                     className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                  aria-label="Action button">
                     {isOptimizing ? (
-}
                         <>
                             <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent sm:px-4 md:px-6 lg:px-8"></div>
                             <span>Optimizing...</span>
@@ -440,9 +402,8 @@ const OraclePerformanceDashboard: React.FC<{
                         <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
                             <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                 Last batch: {batchedUpdates.length > 0 ? 
-}
                                     new Date(batchedUpdates[batchedUpdates.length - 1]?.timestamp || Date.now()).toLocaleTimeString() :
-                                    &apos;No updates&apos;
+                                    'No updates'
 
                             </div>
                         </div>
@@ -474,7 +435,6 @@ const OraclePerformanceDashboard: React.FC<{
     );
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -497,12 +457,12 @@ const OraclePerformanceDashboard: React.FC<{
                 
                 <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={() => setActiveTab(&apos;overview&apos;)}`}
+                        onClick={() => setActiveTab('overview')}`}
                     >
 //                         Overview
                     </button>
                     <button
-                        onClick={() => setActiveTab(&apos;performance&apos;)}`}
+                        onClick={() => setActiveTab('performance')}`}
                     >
 //                         Performance
                     </button>
@@ -512,10 +472,9 @@ const OraclePerformanceDashboard: React.FC<{
             {/* Settings panel */}
             <AnimatePresence>
                 {showSettings && (
-}
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: &apos;auto&apos; }}
+                        animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         className="mb-6 sm:px-4 md:px-6 lg:px-8"
                     >
@@ -538,7 +497,7 @@ const OraclePerformanceDashboard: React.FC<{
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.2 }}
                 >
-                    {activeTab === &apos;overview&apos; ? renderOverviewTab() : renderPerformanceTab()}
+                    {activeTab === 'overview' ? renderOverviewTab() : renderPerformanceTab()}
                 </motion.div>
             </AnimatePresence>
         </div>

@@ -1,54 +1,49 @@
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import { LeagueCard } from &apos;../components/ui/LeagueCard&apos;;
-import CreateLeagueModal from &apos;../components/core/CreateLeagueModal&apos;;
-import EnhancedCreateLeagueModal from &apos;../components/core/EnhancedCreateLeagueModal&apos;;
-import { AnimatePresence } from &apos;framer-motion&apos;;
-import NewsTicker from &apos;../components/ui/NewsTicker&apos;;
-import { NewspaperIcon } from &apos;../components/icons/NewspaperIcon&apos;;
-import { RobotIcon } from &apos;../components/icons/RobotIcon&apos;;
-import MockDraftModal from &apos;../components/core/MockDraftModal&apos;;
-import { BrainCircuitIcon } from &apos;../components/icons/BrainCircuitIcon&apos;;
-import { SparklesIcon } from &apos;../components/icons/SparklesIcon&apos;;
-import { ZapIcon } from &apos;../components/icons/ZapIcon&apos;;
-import useSound from &apos;../hooks/useSound&apos;;
-import WatchlistWidget from &apos;../components/team/WatchlistWidget&apos;;
-import PowerBalanceChart from &apos;../components/dashboard/PowerBalanceChart&apos;;
-import CustomizeDashboardModal from &apos;../components/dashboard/CustomizeDashboardModal&apos;;
-import WhatsNextWidget from &apos;../components/dashboard/WhatsNextWidget&apos;;
-import PerformanceMetricsWidget from &apos;../components/dashboard/PerformanceMetricsWidget&apos;;
-import { ErrorBoundary } from &apos;../components/ui/ErrorBoundary&apos;;
-import ActivityFeedWidget from &apos;../components/dashboard/ActivityFeedWidget&apos;;
-import { LayoutIcon } from &apos;../components/icons/LayoutIcon&apos;;
-import OnTheHotSeatWidget from &apos;../components/dashboard/OnTheHotSeatWidget&apos;;
-import { GlobeIcon } from &apos;../components/icons/GlobeIcon&apos;;
-import CurrentWeekMatchupsWidget from &apos;../components/dashboard/CurrentWeekMatchupsWidget&apos;;
-import GameWeekStatusWidget from &apos;../components/dashboard/GameWeekStatusWidget&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { Widget } from '../components/ui/Widget';
+import { LeagueCard } from '../components/ui/LeagueCard';
+import CreateLeagueModal from '../components/core/CreateLeagueModal';
+import EnhancedCreateLeagueModal from '../components/core/EnhancedCreateLeagueModal';
+import { AnimatePresence } from 'framer-motion';
+import NewsTicker from '../components/ui/NewsTicker';
+import { NewspaperIcon } from '../components/icons/NewspaperIcon';
+import { RobotIcon } from '../components/icons/RobotIcon';
+import MockDraftModal from '../components/core/MockDraftModal';
+import { BrainCircuitIcon } from '../components/icons/BrainCircuitIcon';
+import { SparklesIcon } from '../components/icons/SparklesIcon';
+import { ZapIcon } from '../components/icons/ZapIcon';
+import useSound from '../hooks/useSound';
+import WatchlistWidget from '../components/team/WatchlistWidget';
+import PowerBalanceChart from '../components/dashboard/PowerBalanceChart';
+import CustomizeDashboardModal from '../components/dashboard/CustomizeDashboardModal';
+import WhatsNextWidget from '../components/dashboard/WhatsNextWidget';
+import PerformanceMetricsWidget from '../components/dashboard/PerformanceMetricsWidget';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
+import ActivityFeedWidget from '../components/dashboard/ActivityFeedWidget';
+import { LayoutIcon } from '../components/icons/LayoutIcon';
+import OnTheHotSeatWidget from '../components/dashboard/OnTheHotSeatWidget';
+import { GlobeIcon } from '../components/icons/GlobeIcon';
+import CurrentWeekMatchupsWidget from '../components/dashboard/CurrentWeekMatchupsWidget';
+import GameWeekStatusWidget from '../components/dashboard/GameWeekStatusWidget';
 
 interface DashboardViewProps {
-}
   // No props currently needed, but interface ready for future expansion
 
-}
 
 const DashboardView: React.FC<DashboardViewProps> = () => {
-}
     const { state, dispatch } = useAppState();
     const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
     const [isEnhancedCreateModalOpen, setIsEnhancedCreateModalOpen] = React.useState(false);
     const [isMockModalOpen, setIsMockModalOpen] = React.useState(false);
     const [isCustomizeModalOpen, setIsCustomizeModalOpen] = React.useState(false);
     
-    const playHoverSound = useSound(&apos;hover&apos;, 0.1);
+    const playHoverSound = useSound('hover', 0.1);
 
     const handleJoinLeague = (leagueId: string) => {
-}
-        dispatch({ type: &apos;SET_ACTIVE_LEAGUE&apos;, payload: leagueId });
-        dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; });
+        dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: leagueId });
+        dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' });
     };
         
     const widgetComponents: { [key: string]: React.ReactNode } = {
-}
         whatsNext: (
             <WhatsNextWidget />
         ),
@@ -62,16 +57,15 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
             <Widget title="My Leagues" className="sm:col-span-1 lg:col-span-2">
                 <div className="space-y-3 sm:space-y-4 p-2">
                     {state.leagues.filter((l: any) => !l.isMock && l.members.some((m: any) => m.id === state.user?.id)).length > 0 ? state.leagues.filter((l: any) => !l.isMock && l.members.some((m: any) => m.id === state.user?.id)).map((league: any) => (
-}
                         <LeagueCard key={league.id} league={league} onJoin={() => handleJoinLeague(league.id)} />
                     )) : (
                         <div className="p-3 sm:p-4 text-center text-secondary">
-                            <p className="mb-4 text-sm sm:text-base">You haven&apos;t joined any leagues yet.</p>
+                            <p className="mb-4 text-sm sm:text-base">You haven't joined any leagues yet.</p>
                             <div className="flex flex-col gap-3 justify-center">
                                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                     <button 
                                         onMouseEnter={() => playHoverSound()}
-                                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;CREATE_LEAGUE&apos; })
+                                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'CREATE_LEAGUE' })
                                         className="btn btn-success text-sm"
                                     >
                                         Create League (Wizard)
@@ -86,7 +80,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                                 </div>
                                 <button 
                                     onMouseEnter={() => playHoverSound()}
-                                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;OPEN_LEAGUES&apos; })
+                                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'OPEN_LEAGUES' })
                                     className="btn btn-secondary flex items-center justify-center gap-2 text-sm"
                                 >
                                     <GlobeIcon />
@@ -128,7 +122,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                     <p className="text-xs sm:text-sm text-secondary">Have a question? Need advice on a trade, or want to analyze your team? Ask Astral, your personal fantasy expert.</p>
                      <button 
                         onMouseEnter={() => playHoverSound()}
-                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ASSISTANT&apos; })
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ASSISTANT' })
                         className="btn btn-primary flex items-center justify-center gap-2 text-sm"
                     >
                         <SparklesIcon />
@@ -143,7 +137,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                     <p className="text-sm text-secondary">Track your Oracle prediction accuracy over time and discover insights from your performance history.</p>
                     <button 
                         onMouseEnter={() => playHoverSound()}
-                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;HISTORICAL_ANALYTICS&apos; })
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' })
                         className="btn btn-primary flex items-center justify-center gap-2"
                     >
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -175,7 +169,6 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
             <div className="max-w-7xl mx-auto p-4">
                 <main className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                     {state.dashboardLayout.map((widgetId: any) => {
-}
                         const widget = widgetComponents[widgetId];
                         if (!widget) return null;
                         return <React.Fragment key={widgetId}>{widget}</React.Fragment>;
@@ -185,7 +178,6 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                 <AnimatePresence>
                     {isCreateModalOpen && state.user && <CreateLeagueModal onClose={() => setIsCreateModalOpen(false)} user={state.user} dispatch={dispatch} />}
                     {isEnhancedCreateModalOpen && (
-}
                         <EnhancedCreateLeagueModal>
                             onClose={() => setIsEnhancedCreateModalOpen(false)}
                             user={state.user!}

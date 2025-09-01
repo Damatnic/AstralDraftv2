@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import SeasonalTrendsChart from &apos;./SeasonalTrendsChart&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SeasonalTrendsChart from './SeasonalTrendsChart';
 
-describe(&apos;SeasonalTrendsChart&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('SeasonalTrendsChart', () => {
+  it('renders without crashing', () => {
     render(<SeasonalTrendsChart />);
-    expect(screen.getByTestId(&apos;seasonaltrendschart&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('seasonaltrendschart')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<SeasonalTrendsChart />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<SeasonalTrendsChart />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

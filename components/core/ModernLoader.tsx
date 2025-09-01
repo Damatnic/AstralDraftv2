@@ -3,24 +3,21 @@
  * Beautiful loading states for the app
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { StarIcon } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { StarIcon } from 'lucide-react';
 
 // Full Page Loader
-export const FullPageLoader: React.FC<{ message?: string }> = ({ message = &apos;Loading...&apos; }: any) => {
-}
+export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Loading...' }: any) => {
   return (
     <div className="fixed inset-0 bg-[var(--bg-primary)] flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
         <motion.div
           animate={{
-}
             rotate: 360,
           }}
           transition={{
-}
             duration: 2,
             repeat: Infinity,
             ease: "linear"
@@ -39,16 +36,13 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = &apos
         
         <div className="mt-4 flex justify-center gap-1 sm:px-4 md:px-6 lg:px-8">
           {[0, 1, 2].map((i: any) => (
-}
             <motion.div
               key={i}
               animate={{
-}
                 scale: [1, 1.2, 1],
                 opacity: [0.5, 1, 0.5],
               }}
               transition={{
-}
                 duration: 1.5,
                 repeat: Infinity,
                 delay: i * 0.2,
@@ -63,17 +57,14 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = &apos
 };
 
 // Inline Spinner
-export const Spinner: React.FC<{ size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;; className?: string }> = ({
-}
-  size = &apos;md&apos;,
-  className = &apos;&apos;
+export const Spinner: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: string }> = ({
+  size = 'md',
+  className = ''
 }: any) => {
-}
   const sizes = {
-}
-    sm: &apos;w-4 h-4&apos;,
-    md: &apos;w-6 h-6&apos;,
-    lg: &apos;w-8 h-8&apos;
+    sm: 'w-4 h-4',
+    md: 'w-6 h-6',
+    lg: 'w-8 h-8'
   };
 
   return (
@@ -104,40 +95,34 @@ export const Spinner: React.FC<{ size?: &apos;sm&apos; | &apos;md&apos; | &apos;
 
 // Skeleton Loader
 interface SkeletonProps {
-}
   className?: string;
-  variant?: &apos;text&apos; | &apos;circular&apos; | &apos;rectangular&apos;;
+  variant?: 'text' | 'circular' | 'rectangular';
   width?: string | number;
   height?: string | number;
-  animation?: &apos;pulse&apos; | &apos;wave&apos;;
+  animation?: 'pulse' | 'wave';
 
-}
 
 export const Skeleton: React.FC<SkeletonProps> = ({
-}
-  className = &apos;&apos;,
-  variant = &apos;text&apos;,
+  className = '',
+  variant = 'text',
   width,
   height,
-  animation = &apos;pulse&apos;
+  animation = 'pulse'
 }: any) => {
-}
   const variantClasses = {
-}
-    text: &apos;h-4 rounded&apos;,
-    circular: &apos;rounded-full&apos;,
-    rectangular: &apos;rounded-lg&apos;
+    text: 'h-4 rounded',
+    circular: 'rounded-full',
+    rectangular: 'rounded-lg'
   };
 
   const animationClasses = {
-}
-    pulse: &apos;animate-pulse&apos;,
-    wave: &apos;skeleton&apos;
+    pulse: 'animate-pulse',
+    wave: 'skeleton'
   };
 
   const style: React.CSSProperties = {};
-  if (width) style.width = typeof width === &apos;number&apos; ? `${width}px` : width;
-  if (height) style.height = typeof height === &apos;number&apos; ? `${height}px` : height;
+  if (width) style.width = typeof width === 'number' ? `${width}px` : width;
+  if (height) style.height = typeof height === 'number' ? `${height}px` : height;
 
   return (
     <div
@@ -149,7 +134,6 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 
 // Card Skeleton
 export const CardSkeleton: React.FC = () => {
-}
   return (
     <div className="bg-[var(--surface-primary)] rounded-xl p-6 border border-[var(--border-primary)] sm:px-4 md:px-6 lg:px-8">
       <div className="flex items-center gap-4 mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -168,7 +152,6 @@ export const CardSkeleton: React.FC = () => {
 
 // List Skeleton
 export const ListSkeleton: React.FC<{ count?: number }> = ({ count = 3 }: any) => {
-}
   return (
     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
       {Array.from({ length: count }).map((_, i) => (
@@ -187,53 +170,45 @@ export const ListSkeleton: React.FC<{ count?: number }> = ({ count = 3 }: any) =
 
 // Progress Bar
 interface ProgressBarProps {
-}
   value: number;
   max?: number;
   label?: string;
   showPercentage?: boolean;
-  color?: &apos;primary&apos; | &apos;success&apos; | &apos;warning&apos; | &apos;danger&apos;;
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  color?: 'primary' | 'success' | 'warning' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
   animated?: boolean;
 
-}
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
-}
   value,
   max = 100,
   label,
   showPercentage = false,
-  color = &apos;primary&apos;,
-  size = &apos;md&apos;,
+  color = 'primary',
+  size = 'md',
   animated = true
 }: any) => {
-}
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
   
   const colors = {
-}
-    primary: &apos;from-[var(--primary)] to-[var(--secondary)]&apos;,
-    success: &apos;from-green-400 to-green-600&apos;,
-    warning: &apos;from-yellow-400 to-yellow-600&apos;,
-    danger: &apos;from-red-400 to-red-600&apos;
+    primary: 'from-[var(--primary)] to-[var(--secondary)]',
+    success: 'from-green-400 to-green-600',
+    warning: 'from-yellow-400 to-yellow-600',
+    danger: 'from-red-400 to-red-600'
   };
 
   const sizes = {
-}
-    sm: &apos;h-1&apos;,
-    md: &apos;h-2&apos;,
-    lg: &apos;h-3&apos;
+    sm: 'h-1',
+    md: 'h-2',
+    lg: 'h-3'
   };
 
   return (
     <div className="w-full sm:px-4 md:px-6 lg:px-8">
       {(label || showPercentage) && (
-}
         <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
           {label && <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{label}</span>}
           {showPercentage && (
-}
             <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">{Math.round(percentage)}%</span>
           )}
         </div>
@@ -242,7 +217,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
-          transition={{ duration: animated ? 0.5 : 0, ease: &apos;easeOut&apos; }}
+          transition={{ duration: animated ? 0.5 : 0, ease: 'easeOut' }}
           className={`h-full bg-gradient-to-r ${colors[color]} rounded-full`}
         />
       </div>
@@ -252,37 +227,32 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
 // Loading Button
 interface LoadingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-}
   loading?: boolean;
   loadingText?: string;
-  variant?: &apos;primary&apos; | &apos;secondary&apos; | &apos;glass&apos;;
+  variant?: 'primary' | 'secondary' | 'glass';
 
 export const LoadingButton: React.FC<LoadingButtonProps> = ({
-}
   loading = false,
-  loadingText = &apos;Loading...&apos;,
-  variant = &apos;primary&apos;,
+  loadingText = 'Loading...',
+  variant = 'primary',
   children,
   disabled,
-  className = &apos;&apos;,
+  className = '',
   ...props
 }: any) => {
-}
   const variants = {
-}
-    primary: &apos;btn btn-primary&apos;,
-    secondary: &apos;btn btn-secondary&apos;,
-    glass: &apos;btn btn-glass&apos;
+    primary: 'btn btn-primary',
+    secondary: 'btn btn-secondary',
+    glass: 'btn btn-glass'
   };
 
   return (
     <button
-      className={`${variants[variant]} ${className} ${loading || disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;&apos;}`}
+      className={`${variants[variant]} ${className} ${loading || disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       disabled={loading || disabled}
       {...props}
      aria-label="Action button">
       {loading ? (
-}
         <div className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
           <Spinner size="sm" />
           <span>{loadingText}</span>
@@ -295,7 +265,6 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
 };
 
 export default {
-}
   FullPageLoader,
   Spinner,
   Skeleton,

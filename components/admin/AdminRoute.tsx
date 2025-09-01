@@ -3,46 +3,37 @@
  * Protected route for admin dashboard access with authentication
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useState, useEffect } from &apos;react&apos;;
-import { adminService, AdminUser } from &apos;../../services/adminService&apos;;
-import AdminDashboard from &apos;./AdminDashboard&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
+import { adminService, AdminUser } from '../../services/adminService';
+import AdminDashboard from './AdminDashboard';
 
 interface AdminLoginProps {
-}
   onLogin: (admin: AdminUser) => void;
 
-}
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-  const [credentials, setCredentials] = useState({ username: &apos;&apos;, password: &apos;&apos; });
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(&apos;&apos;);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-}
     e.preventDefault();
     setLoading(true);
-    setError(&apos;&apos;);
+    setError('');
 
     try {
-}
 
       const admin = await adminService.authenticateAdmin(credentials.username, credentials.password);
       if (admin) {
-}
         onLogin(admin);
       } else {
-}
-        setError(&apos;Invalid credentials. Please try again.&apos;);
+        setError('Invalid credentials. Please try again.');
       }
     } catch (error) {
-}
-      setError(&apos;Authentication failed. Please try again.&apos;);
+      setError('Authentication failed. Please try again.');
     } finally {
-}
       setLoading(false);
     }
   };
@@ -87,7 +78,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
           </div>
 
           {error && (
-}
             <div className="bg-red-50 border border-red-200 rounded-md p-4 sm:px-4 md:px-6 lg:px-8">
               <div className="flex sm:px-4 md:px-6 lg:px-8">
                 <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
@@ -104,13 +94,12 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
             type="submit"
             disabled={loading}
             className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-}
 //               loading
-                ? &apos;bg-gray-400 cursor-not-allowed&apos;
-                : &apos;bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500&apos;
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
             }`}
            aria-label="Action button">
-            {loading ? &apos;Signing in...&apos; : &apos;Sign In&apos;}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
@@ -125,43 +114,35 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
 };
 
 const AdminRoute: React.FC = () => {
-}
   const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-}
     // Check if admin is already logged in (in a real app, this would check tokens/sessions)
-    const savedAdmin = localStorage.getItem(&apos;astral_admin&apos;);
+    const savedAdmin = localStorage.getItem('astral_admin');
     if (savedAdmin) {
-}
       try {
-}
 
         const admin = JSON.parse(savedAdmin);
         setCurrentAdmin(admin);
       } catch (error) {
-}
-        localStorage.removeItem(&apos;astral_admin&apos;);
+        localStorage.removeItem('astral_admin');
       }
     }
     setLoading(false);
   }, []);
 
   const handleLogin = (admin: AdminUser) => {
-}
     setCurrentAdmin(admin);
-    localStorage.setItem(&apos;astral_admin&apos;, JSON.stringify(admin));
+    localStorage.setItem('astral_admin', JSON.stringify(admin));
   };
 
   const handleLogout = () => {
-}
     setCurrentAdmin(null);
-    localStorage.removeItem(&apos;astral_admin&apos;);
+    localStorage.removeItem('astral_admin');
   };
 
   if (loading) {
-}
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
         <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -172,7 +153,6 @@ const AdminRoute: React.FC = () => {
   }
 
   if (!currentAdmin) {
-}
     return <AdminLogin onLogin={handleLogin} />;
   }
 

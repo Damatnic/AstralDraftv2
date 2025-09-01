@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import WeeklyRecap from &apos;./WeeklyRecap&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import WeeklyRecap from './WeeklyRecap';
 
-describe(&apos;WeeklyRecap&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('WeeklyRecap', () => {
+  it('renders without crashing', () => {
     render(<WeeklyRecap />);
-    expect(screen.getByTestId(&apos;weeklyrecap&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('weeklyrecap')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<WeeklyRecap />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<WeeklyRecap />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

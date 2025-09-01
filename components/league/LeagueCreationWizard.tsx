@@ -4,17 +4,16 @@
  * Implements T2.1 League Management System requirements
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { ChevronLeftIcon } from &apos;../icons/ChevronLeftIcon&apos;;
-import { ChevronRightIcon } from &apos;../icons/ChevronRightIcon&apos;;
-import { CheckIcon } from &apos;../icons/CheckIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { Widget } from '../ui/Widget';
+import { ChevronLeftIcon } from '../icons/ChevronLeftIcon';
+import { ChevronRightIcon } from '../icons/ChevronRightIcon';
+import { CheckIcon } from '../icons/CheckIcon';
 
 interface WizardSettings {
-}
     // Basic Info
     name: string;
     teamCount: number;
@@ -23,17 +22,15 @@ interface WizardSettings {
     description: string;
     
     // Scoring Settings
-    scoringType: &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos; | &apos;custom&apos;;
+    scoringType: 'standard' | 'ppr' | 'half_ppr' | 'custom';
     
     // Draft Settings
-    draftType: &apos;snake&apos; | &apos;auction&apos;;
+    draftType: 'snake' | 'auction';
     draftDate: string;
     draftTime: string;
 
-}
 
 interface LeagueCreationStep {
-}
     id: string;
     title: string;
     description: string;
@@ -41,16 +38,13 @@ interface LeagueCreationStep {
     validation: (data: WizardSettings) => string | null;
 
 interface StepProps {
-}
     settings: WizardSettings;
     updateSettings: (updates: Partial<WizardSettings>) => void;
     errors: Record<string, string>;
 
 // Step 1: Basic Information
-}
 
 const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
-}
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
@@ -77,7 +71,6 @@ const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }
                     className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:px-4 md:px-6 lg:px-8"
                 >
                     {[8, 10, 12, 14, 16].map((count: any) => (
-}
                         <option key={count} value={count}>{count} Teams</option>
                     ))}
                 </select>
@@ -115,9 +108,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }
 
 // Step 2: Scoring Settings
 const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
-}
     const scoringPresets = {
-}
         standard: { description: "Standard scoring (no points for receptions)" },
         ppr: { description: "Point Per Reception (1 point per catch)" },
         half_ppr: { description: "Half Point Per Reception (0.5 points per catch)" },
@@ -125,9 +116,7 @@ const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: 
     };
 
     const handlePresetChange = (preset: keyof typeof scoringPresets) => {
-}
         updateSettings({
-}
             scoringType: preset
         });
     };
@@ -140,23 +129,20 @@ const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: 
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {Object.entries(scoringPresets).map(([key, preset]) => (
-}
                         <div
                             key={key}
                             onClick={() = role="button" tabIndex={0}> handlePresetChange(key as keyof typeof scoringPresets)}
                             className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-}
                                 settings.scoringType === key
-                                    ? &apos;border-blue-500 bg-blue-50 dark:bg-blue-900/20&apos;
-                                    : &apos;border-[var(--panel-border)] hover:border-blue-300&apos;
+                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                    : 'border-[var(--panel-border)] hover:border-blue-300'
                             }`}
                         >
                             <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                 <h3 className="font-semibold text-[var(--text-primary)] capitalize sm:px-4 md:px-6 lg:px-8">
-                                    {key.replace(&apos;_&apos;, &apos; &apos;)}
+                                    {key.replace('_', ' ')}
                                 </h3>
                                 {settings.scoringType === key && (
-}
                                     <CheckIcon className="w-5 h-5 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
@@ -172,7 +158,6 @@ const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: 
 
 // Step 3: Draft Settings
 const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
-}
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
@@ -181,24 +166,21 @@ const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: an
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {[
-}
-                        { key: &apos;snake&apos;, name: &apos;Snake Draft&apos;, description: &apos;Order reverses each round&apos; },
-                        { key: &apos;auction&apos;, name: &apos;Auction Draft&apos;, description: &apos;Bid on players with budget&apos; }
+                        { key: 'snake', name: 'Snake Draft', description: 'Order reverses each round' },
+                        { key: 'auction', name: 'Auction Draft', description: 'Bid on players with budget' }
                     ].map((type: any) => (
                         <div
                             key={type.key}
                             onClick={() = role="button" tabIndex={0}> updateSettings({ draftType: type.key as any })}
                             className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-}
                                 settings.draftType === type.key
-                                    ? &apos;border-blue-500 bg-blue-50 dark:bg-blue-900/20&apos;
-                                    : &apos;border-[var(--panel-border)] hover:border-blue-300&apos;
+                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                    : 'border-[var(--panel-border)] hover:border-blue-300'
                             }`}
                         >
                             <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                 <h3 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{type.name}</h3>
                                 {settings.draftType === type.key && (
-}
                                     <CheckIcon className="w-5 h-5 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
@@ -241,7 +223,6 @@ const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: an
 
 // Step 4: Review & Create
 const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
-}
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div className="bg-[var(--panel-bg)] p-6 rounded-lg border border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
@@ -253,14 +234,14 @@ const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
                         <ul className="space-y-1 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             <li>Name: {settings.name}</li>
                             <li>Teams: {settings.teamCount}</li>
-                            <li>Type: {settings.isPublic ? &apos;Public&apos; : &apos;Private&apos;}</li>
+                            <li>Type: {settings.isPublic ? 'Public' : 'Private'}</li>
                         </ul>
                     </div>
                     
                     <div>
                         <h4 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Scoring</h4>
                         <ul className="space-y-1 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
-                            <li>Type: {settings.scoringType.replace(&apos;_&apos;, &apos; &apos;).toUpperCase()}</li>
+                            <li>Type: {settings.scoringType.replace('_', ' ').toUpperCase()}</li>
                         </ul>
                     </div>
                     
@@ -279,83 +260,72 @@ const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
 };
 
 const LeagueCreationWizard: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const [currentStep, setCurrentStep] = React.useState(0);
     const [errors, setErrors] = React.useState<Record<string, string>>({});
     const [isCreating, setIsCreating] = React.useState(false);
 
     const [settings, setSettings] = React.useState<WizardSettings>({
-}
-        name: &apos;&apos;,
+        name: '',
         teamCount: 12,
-        commissionerId: state.user?.id || &apos;guest&apos;,
+        commissionerId: state.user?.id || 'guest',
         isPublic: false,
-        description: &apos;&apos;,
-        scoringType: &apos;ppr&apos;,
-        draftType: &apos;snake&apos;,
-        draftDate: new Date().toISOString().split(&apos;T&apos;)[0],
-        draftTime: &apos;19:00&apos;
+        description: '',
+        scoringType: 'ppr',
+        draftType: 'snake',
+        draftDate: new Date().toISOString().split('T')[0],
+        draftTime: '19:00'
     });
 
     const steps: LeagueCreationStep[] = [
         {
-}
-            id: &apos;basic&apos;,
-            title: &apos;Basic Information&apos;,
-            description: &apos;Set up your league name and basic settings&apos;,
+            id: 'basic',
+            title: 'Basic Information',
+            description: 'Set up your league name and basic settings',
             component: BasicInfoStep,
             validation: (data: any) => {
-}
-                if (!data.name.trim()) return &apos;League name is required&apos;;
-                if (data.teamCount < 4 || data.teamCount > 20) return &apos;Team count must be between 4 and 20&apos;;
+                if (!data.name.trim()) return 'League name is required';
+                if (data.teamCount < 4 || data.teamCount > 20) return 'Team count must be between 4 and 20';
                 return null;
 
         },
         {
-}
-            id: &apos;scoring&apos;,
-            title: &apos;Scoring Settings&apos;,
-            description: &apos;Configure how points are awarded&apos;,
+            id: 'scoring',
+            title: 'Scoring Settings',
+            description: 'Configure how points are awarded',
             component: ScoringStep,
             validation: () => null
         },
         {
-}
-            id: &apos;draft&apos;,
-            title: &apos;Draft Settings&apos;,
-            description: &apos;Set up your draft format and schedule&apos;,
+            id: 'draft',
+            title: 'Draft Settings',
+            description: 'Set up your draft format and schedule',
             component: DraftStep,
             validation: (data: any) => {
-}
-                if (!data.draftDate) return &apos;Draft date is required&apos;;
-                if (!data.draftTime) return &apos;Draft time is required&apos;;
+                if (!data.draftDate) return 'Draft date is required';
+                if (!data.draftTime) return 'Draft time is required';
                 return null;
 
         },
         {
-}
-            id: &apos;review&apos;,
-            title: &apos;Review & Create&apos;,
-            description: &apos;Review your settings and create the league&apos;,
+            id: 'review',
+            title: 'Review & Create',
+            description: 'Review your settings and create the league',
             component: ReviewStep,
             validation: () => null
 
     ];
 
     const updateSettings = (updates: Partial<WizardSettings>) => {
-}
         setSettings(prev => ({ ...prev, ...updates }));
         setErrors({});
     };
 
     const validateCurrentStep = () => {
-}
         const currentStepData = steps[currentStep];
         const error = currentStepData.validation(settings);
         
         if (error) {
-}
             setErrors({ [currentStepData.id]: error });
             return false;
 
@@ -364,75 +334,64 @@ const LeagueCreationWizard: React.FC = () => {
     };
 
     const handleNext = () => {
-}
         if (validateCurrentStep()) {
-}
             setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
 
     };
 
     const handlePrev = () => {
-}
         setCurrentStep(prev => Math.max(prev - 1, 0));
     };
 
     const handleCreateLeague = async () => {
-}
         if (!validateCurrentStep()) return;
         
         setIsCreating(true);
         
         try {
-}
             // Map wizard settings to proper LeagueSettings format
-            const getDraftFormat = (): &apos;SNAKE&apos; | &apos;AUCTION&apos; => {
-}
-                if (settings.draftType === &apos;snake&apos;) return &apos;SNAKE&apos;;
-                if (settings.draftType === &apos;auction&apos;) return &apos;AUCTION&apos;;
-                return &apos;SNAKE&apos;; // Default fallback
+            const getDraftFormat = (): 'SNAKE' | 'AUCTION' => {
+                if (settings.draftType === 'snake') return 'SNAKE';
+                if (settings.draftType === 'auction') return 'AUCTION';
+                return 'SNAKE'; // Default fallback
             };
 
-            const getScoring = (): &apos;PPR&apos; | &apos;Standard&apos; | &apos;Half-PPR&apos; => {
-}
-                if (settings.scoringType === &apos;ppr&apos;) return &apos;PPR&apos;;
-                if (settings.scoringType === &apos;half_ppr&apos;) return &apos;Half-PPR&apos;;
-                return &apos;Standard&apos;;
+            const getScoring = (): 'PPR' | 'Standard' | 'Half-PPR' => {
+                if (settings.scoringType === 'ppr') return 'PPR';
+                if (settings.scoringType === 'half_ppr') return 'Half-PPR';
+                return 'Standard';
             };
 
             // Create the league payload that matches CreateLeaguePayload interface
             const createPayload = {
-}
                 id: Date.now().toString(),
                 name: settings.name,
                 settings: {
-}
                     draftFormat: getDraftFormat(),
                     teamCount: settings.teamCount,
                     rosterSize: 16, // Default value
                     scoring: getScoring(),
                     tradeDeadline: 10, // Default week 10
-                    playoffFormat: &apos;6_TEAM&apos; as const,
-                    waiverRule: &apos;FAAB&apos; as const,
-                    aiAssistanceLevel: &apos;FULL&apos; as const
+                    playoffFormat: '6_TEAM' as const,
+                    waiverRule: 'FAAB' as const,
+                    aiAssistanceLevel: 'FULL' as const
                 },
-                status: &apos;PRE_DRAFT&apos; as const,
-                commissionerId: state.user?.id || &apos;guest&apos;,
-                userTeamName: `${state.user?.name || &apos;Guest&apos;}&apos;s Team`,
-                userTeamAvatar: state.user?.avatar || &apos;/default-avatar&apos;,
+                status: 'PRE_DRAFT' as const,
+                commissionerId: state.user?.id || 'guest',
+                userTeamName: `${state.user?.name || 'Guest'}'s Team`,
+                userTeamAvatar: state.user?.avatar || '/default-avatar',
                 aiProfiles: []
             };
 
-            dispatch({ type: &apos;CREATE_LEAGUE&apos;, payload: createPayload });
-            dispatch({ type: &apos;SET_ACTIVE_LEAGUE&apos;, payload: createPayload.id });
-            dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; });
-            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: {
-}
+            dispatch({ type: 'CREATE_LEAGUE', payload: createPayload });
+            dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: createPayload.id });
+            dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' });
+            dispatch({ type: 'ADD_NOTIFICATION', payload: {
                 message: `League "${settings.name}" created successfully!`,
-                type: &apos;SYSTEM&apos;
+                type: 'SYSTEM'
             }});
         });
         } finally {
-}
             setIsCreating(false);
 
     };
@@ -452,7 +411,7 @@ const LeagueCreationWizard: React.FC = () => {
                         </p>
                     </div>
                     <button
-                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }}
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
                         className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20 mobile-touch-target sm:px-4 md:px-6 lg:px-8"
                     >
 //                         Cancel
@@ -470,13 +429,11 @@ const LeagueCreationWizard: React.FC = () => {
                 {/* Step Indicator */}
                 <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
                     {steps.map((step, index) => (
-}
                         <div key={step.id} className="flex flex-col items-center sm:px-4 md:px-6 lg:px-8">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-}
                                 index <= currentStep
-                                    ? &apos;bg-blue-600 text-white&apos;
-                                    : &apos;bg-gray-300 text-gray-600 dark:bg-gray-600 dark:text-gray-300&apos;
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-300 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
                             }`}>
                                 {index < currentStep ? <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> : index + 1}
                             </div>
@@ -525,13 +482,12 @@ const LeagueCreationWizard: React.FC = () => {
                 </button>
 
                 {currentStep === steps.length - 1 ? (
-}
                     <button
                         onClick={handleCreateLeague}
                         disabled={isCreating}
                         className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
-                        {isCreating ? &apos;Creating...&apos; : &apos;Create League&apos;}
+                        {isCreating ? 'Creating...' : 'Create League'}
                     </button>
                 ) : (
                     <button

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MFASetup from &apos;./MFASetup&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MFASetup from './MFASetup';
 
-describe(&apos;MFASetup&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MFASetup', () => {
+  it('renders without crashing', () => {
     render(<MFASetup />);
-    expect(screen.getByTestId(&apos;mfasetup&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('mfasetup')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MFASetup />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MFASetup />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

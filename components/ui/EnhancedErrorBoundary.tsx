@@ -1,41 +1,31 @@
 
 interface ErrorBoundaryState {
-}
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
 
-}
 
 interface ErrorBoundaryProps {
-}
   children: React.ReactNode;
   fallback?: React.ComponentType<{ error?: Error }>;
 
 class EnhancedErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-}
   constructor(props: ErrorBoundaryProps) {
-}
     super(props);
     this.state = { hasError: false };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-}
     return { hasError: true, error };
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-}
     this.setState({ errorInfo });
     
     // Log error to monitoring service
-    console.error(&apos;Error Boundary caught an error:&apos;, error, errorInfo);
+    console.error('Error Boundary caught an error:', error, errorInfo);
 
   render() {
-}
     if (this.state.hasError) {
-}
       if (this.props.fallback) {
-}
         return <this.props.fallback error={this.state.error} />;
 
       return (

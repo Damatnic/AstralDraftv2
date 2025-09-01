@@ -3,11 +3,10 @@
  * Beautiful navigation for all screen sizes
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-}
   HomeIcon,
   UsersIcon,
   TrophyIcon,
@@ -29,70 +28,60 @@ import {
   NewspaperIcon,
   GiftIcon,
 //   LogOutIcon
-} from &apos;lucide-react&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { netlifyAuth } from &apos;../../services/netlifyAuthService&apos;;
-import { View } from &apos;../../types&apos;;
+} from 'lucide-react';
+import { useAppState } from '../../contexts/AppContext';
+import { netlifyAuth } from '../../services/netlifyAuthService';
+import { View } from '../../types';
 
 interface NavItem {
-}
   label: string;
   icon: React.ReactNode;
   view: View;
   badge?: number;
   color?: string;
 
-}
 
 interface MobileResponsiveNavProps {
-}
   currentView: View;
   onViewChange: (view: View) => void;}
 
 const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, onViewChange }: any) => {
-}
   const { state, dispatch } = useAppState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(&apos;&apos;);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const primaryNavItems: NavItem[] = [
-    { label: &apos;Dashboard&apos;, icon: <HomeIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;DASHBOARD&apos;, color: &apos;text-blue-500&apos; },
-    { label: &apos;My Team&apos;, icon: <ShieldIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;TEAM_HUB&apos;, color: &apos;text-green-500&apos; },
-    { label: &apos;Matchup&apos;, icon: <PlayIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;MATCHUP&apos;, badge: 1, color: &apos;text-red-500&apos; },
-    { label: &apos;Leagues&apos;, icon: <UsersIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;LEAGUE_HUB&apos;, color: &apos;text-purple-500&apos; },
+    { label: 'Dashboard', icon: <HomeIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'DASHBOARD', color: 'text-blue-500' },
+    { label: 'My Team', icon: <ShieldIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'TEAM_HUB', color: 'text-green-500' },
+    { label: 'Matchup', icon: <PlayIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'MATCHUP', badge: 1, color: 'text-red-500' },
+    { label: 'Leagues', icon: <UsersIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'LEAGUE_HUB', color: 'text-purple-500' },
   ];
 
   const secondaryNavItems: NavItem[] = [
-    { label: &apos;Analytics&apos;, icon: <ChartBarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;ANALYTICS_HUB&apos; },
-    { label: &apos;Standings&apos;, icon: <TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;LEAGUE_STANDINGS&apos; },
-    { label: &apos;Waiver Wire&apos;, icon: <ClipboardListIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;WAIVER_WIRE&apos; },
-    { label: &apos;Draft Room&apos;, icon: <ZapIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;DRAFT_ROOM&apos; },
-    { label: &apos;Power Rankings&apos;, icon: <TrendingUpIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;POWER_RANKINGS&apos; },
-    { label: &apos;News&apos;, icon: <NewspaperIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: &apos;WEEKLY_REPORT&apos; },
+    { label: 'Analytics', icon: <ChartBarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'ANALYTICS_HUB' },
+    { label: 'Standings', icon: <TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'LEAGUE_STANDINGS' },
+    { label: 'Waiver Wire', icon: <ClipboardListIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'WAIVER_WIRE' },
+    { label: 'Draft Room', icon: <ZapIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'DRAFT_ROOM' },
+    { label: 'Power Rankings', icon: <TrendingUpIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'POWER_RANKINGS' },
+    { label: 'News', icon: <NewspaperIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />, view: 'WEEKLY_REPORT' },
   ];
 
   const handleLogout = async () => {
-}
     try {
-}
 
     await netlifyAuth.logout();
-    dispatch({ type: &apos;LOGOUT&apos; 
-}
+    dispatch({ type: 'LOGOUT' 
     } catch (error) {
-}
-      console.error(&apos;Error in handleLogout:&apos;, error);
+      console.error('Error in handleLogout:', error);
 
     } catch (error) {
-}
         console.error(error);
     });
   };
 
   // Close menu when view changes
   useEffect(() => {
-}
     setMobileMenuOpen(false);
   }, [currentView]);
 
@@ -102,7 +91,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
       <div className="glass border-t border-[var(--border-primary)] sm:px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-4 h-16 sm:px-4 md:px-6 lg:px-8">
           {primaryNavItems.map((item: any) => (
-}
             <button
               key={item.view}
               onClick={() => onViewChange(item.view)}`}
@@ -110,7 +98,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
               {item.icon}
               <span className="text-xs sm:px-4 md:px-6 lg:px-8">{item.label}</span>
               {item.badge && (
-}
                 <span className="absolute top-2 right-1/3 w-2 h-2 bg-red-500 rounded-full sm:px-4 md:px-6 lg:px-8" />
               )}
             </button>
@@ -124,7 +111,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
   const SideMenu: React.FC = () => (
     <AnimatePresence>
       {mobileMenuOpen && (
-}
         <>
           {/* Backdrop */}
           <motion.div
@@ -140,7 +126,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
             initial={{ x: -280 }}
             animate={{ x: 0 }}
             exit={{ x: -280 }}
-            transition={{ type: &apos;spring&apos;, damping: 20 }}
+            transition={{ type: 'spring', damping: 20 }}
             className="fixed top-0 left-0 bottom-0 w-72 bg-[var(--bg-primary)] border-r border-[var(--border-primary)] z-50 lg:hidden overflow-y-auto"
           >
             {/* Header */}
@@ -162,11 +148,11 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
               {/* User Info */}
               <div className="flex items-center gap-3 p-3 bg-[var(--surface-secondary)] rounded-lg sm:px-4 md:px-6 lg:px-8">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-white font-bold sm:px-4 md:px-6 lg:px-8">
-                  {state.user?.name?.charAt(0) || &apos;U&apos;}
+                  {state.user?.name?.charAt(0) || 'U'}
                 </div>
                 <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
-                  <p className="font-medium sm:px-4 md:px-6 lg:px-8">{state.user?.name || &apos;User&apos;}</p>
-                  <p className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{state.user?.email || &apos;No email&apos;}</p>
+                  <p className="font-medium sm:px-4 md:px-6 lg:px-8">{state.user?.name || 'User'}</p>
+                  <p className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{state.user?.email || 'No email'}</p>
                 </div>
               </div>
             </div>
@@ -178,7 +164,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
                   Main Menu
                 </p>
                 {[...primaryNavItems, ...secondaryNavItems].map((item: any) => (
-}
                   <button
                     key={item.view}
                     onClick={() => onViewChange(item.view)}`}
@@ -186,7 +171,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
                     {item.icon}
                     <span className="flex-1 text-left sm:px-4 md:px-6 lg:px-8">{item.label}</span>
                     {item.badge && (
-}
                       <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                         {item.badge}
                       </span>
@@ -201,7 +185,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
 //                   Settings
                 </p>
                 <button
-                  onClick={() => onViewChange(&apos;PROFILE&apos;)}
+                  onClick={() => onViewChange('PROFILE')}
                 >
                   <UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                   <span>Profile</span>
@@ -235,17 +219,15 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
 //             Main
           </p>
           {primaryNavItems.map((item: any) => (
-}
             <button
               key={item.view}
               onClick={() => onViewChange(item.view)}`}
             >
-              <div className={currentView === item.view ? item.color : &apos;&apos;}>
+              <div className={currentView === item.view ? item.color : ''}>
                 {item.icon}
               </div>
               <span className="flex-1 text-left sm:px-4 md:px-6 lg:px-8">{item.label}</span>
               {item.badge && (
-}
                 <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8">
                   {item.badge}
                 </span>
@@ -260,7 +242,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
 //             League
           </p>
           {secondaryNavItems.map((item: any) => (
-}
             <button
               key={item.view}
               onClick={() => onViewChange(item.view)}`}
@@ -315,10 +296,9 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
       {/* Search Bar */}
       <AnimatePresence>
         {searchOpen && (
-}
           <motion.div
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: &apos;auto&apos;, opacity: 1 }}
+            animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             className="border-t border-[var(--border-primary)] overflow-hidden sm:px-4 md:px-6 lg:px-8"
           >
@@ -338,7 +318,6 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
   );
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>

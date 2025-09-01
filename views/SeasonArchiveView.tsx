@@ -1,11 +1,10 @@
-import React, { useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../contexts/AppContext';
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import ErrorDisplay from '../components/core/ErrorDisplay';
 import { 
-}
     ArchiveIcon, 
     TrophyIcon, 
     CalendarIcon,
@@ -15,45 +14,38 @@ import {
     ChevronUpIcon,
     StarIcon,
 //     MedalIcon
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 interface SeasonRecord {
-}
     year: number;
     champion: {
-}
         teamName: string;
         owner: string;
         record: string;
         points: number;
     };
     runnerUp: {
-}
         teamName: string;
         owner: string;
         record: string;
         points: number;
     };
     thirdPlace: {
-}
         teamName: string;
         owner: string;
     };
     regularSeasonChamp: {
-}
         teamName: string;
         owner: string;
         record: string;
     };
     highestScorer: {
-}
         teamName: string;
         owner: string;
         points: number;
         week: number;
     };
     biggestBlowout: {
-}
         winner: string;
         loser: string;
         score: string;
@@ -61,54 +53,45 @@ interface SeasonRecord {
     };
 
 const SeasonArchiveView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [expandedYear, setExpandedYear] = useState<number | null>(null);
 
     if (!league) {
-}
-        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
+        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
 
     // Mock historical data - in production this would come from the database
     const seasonHistory: SeasonRecord[] = [
         {
-}
             year: 2024,
             champion: {
-}
                 teamName: "Thunder Bolts",
                 owner: "Nick Damato",
                 record: "12-2",
                 points: 1856.4
             },
             runnerUp: {
-}
                 teamName: "Storm Chasers",
                 owner: "Jon Kornbeck",
                 record: "10-4",
                 points: 1798.2
             },
             thirdPlace: {
-}
                 teamName: "Lightning Strikes",
                 owner: "Cason Minor"
             },
             regularSeasonChamp: {
-}
                 teamName: "Thunder Bolts",
                 owner: "Nick Damato",
                 record: "12-2"
             },
             highestScorer: {
-}
                 teamName: "Gridiron Giants",
                 owner: "Brittany Bergrum",
                 points: 186.5,
                 week: 8
             },
             biggestBlowout: {
-}
                 winner: "Thunder Bolts",
                 loser: "End Zone Elite",
                 score: "165.3 - 78.9",
@@ -116,42 +99,35 @@ const SeasonArchiveView: React.FC = () => {
 
         },
         {
-}
             year: 2023,
             champion: {
-}
                 teamName: "Field Generals",
                 owner: "Jack McCaigue",
                 record: "11-3",
                 points: 1789.3
             },
             runnerUp: {
-}
                 teamName: "Red Zone Raiders",
                 owner: "Larry McCaigue",
                 record: "9-5",
                 points: 1745.8
             },
             thirdPlace: {
-}
                 teamName: "Victory Vipers",
                 owner: "David Jarvey"
             },
             regularSeasonChamp: {
-}
                 teamName: "Field Generals",
                 owner: "Jack McCaigue",
                 record: "11-3"
             },
             highestScorer: {
-}
                 teamName: "Touchdown Titans",
                 owner: "Kaity Lorbiecki",
                 points: 192.8,
                 week: 14
             },
             biggestBlowout: {
-}
                 winner: "Field Generals",
                 loser: "Blitz Brigade",
                 score: "178.4 - 82.1",
@@ -171,7 +147,7 @@ const SeasonArchiveView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} History</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; }) 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) 
                     className="glass-button"
                 >
                     Back to League Hub
@@ -212,7 +188,6 @@ const SeasonArchiveView: React.FC = () => {
                 {/* Season Records */}
                 <div className="space-y-4">
                     {seasonHistory.map((season, index) => (
-}
                         <motion.div
                             key={season.year}
                             initial={{ opacity: 0, x: -20 }}
@@ -233,7 +208,6 @@ const SeasonArchiveView: React.FC = () => {
                                     </div>
                                 </div>
                                 {expandedYear === season.year ? (
-}
                                     <ChevronUpIcon className="w-5 h-5 text-white" />
                                 ) : (
                                     <ChevronDownIcon className="w-5 h-5 text-white" />
@@ -243,10 +217,9 @@ const SeasonArchiveView: React.FC = () => {
                             {/* Expanded Season Details */}
                             <AnimatePresence>
                                 {expandedYear === season.year && (
-}
                                     <motion.div
                                         initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: &apos;auto&apos;, opacity: 1 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
                                         className="border-t border-white/10"
                                     >
@@ -324,7 +297,6 @@ const SeasonArchiveView: React.FC = () => {
 
                 {/* No History Message */}
                 {seasonHistory.length === 0 && (
-}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}

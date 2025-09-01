@@ -4,11 +4,10 @@
  * prediction types, confidence levels, and getting started guide
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 
 interface TutorialStep {
-}
     id: string;
     title: string;
     content: string;
@@ -17,26 +16,21 @@ interface TutorialStep {
     visual?: string;
     practiceChallenge?: PracticeChallenge;
 
-}
 
 interface QuizQuestion {
-}
     question: string;
     options: string[];
     correctAnswer: number;
     explanation: string;
 
 interface PracticeChallenge {
-}
-    type: &apos;prediction&apos; | &apos;confidence&apos; | &apos;reasoning&apos;;
+    type: 'prediction' | 'confidence' | 'reasoning';
     scenario: string;
     options?: string[];
     expectedAnswer?: string | number;
 
-}
 
 interface UserProgress {
-}
     currentStep: number;
     completedSteps: Set<number>;
     quizResults: Record<number, boolean>;
@@ -45,11 +39,9 @@ interface UserProgress {
     lastAccessed: string;}
 
 const OracleBeginnerTutorial: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const [currentStep, setCurrentStep] = useState(0);
     const [userProgress, setUserProgress] = useState<UserProgress>({
-}
         currentStep: 0,
         completedSteps: new Set(),
         quizResults: {},
@@ -59,15 +51,14 @@ const OracleBeginnerTutorial: React.FC = () => {
     });
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
     const [showResult, setShowResult] = useState(false);
-    const [practiceInput, setPracticeInput] = useState(&apos;&apos;);
+    const [practiceInput, setPracticeInput] = useState('');
     const [tutorialComplete, setTutorialComplete] = useState(false);
 
     // Tutorial steps with comprehensive beginner content
     const tutorialSteps: TutorialStep[] = [
         {
-}
-            id: &apos;welcome&apos;,
-            title: &apos;🔮 Welcome to Beat The Oracle&apos;,
+            id: 'welcome',
+            title: '🔮 Welcome to Beat The Oracle',
             content: `
                 <div class="tutorial-welcome">
                     <h3>Welcome to the Ultimate Fantasy Football Challenge!</h3>
@@ -75,7 +66,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                     
                     <div class="feature-highlights">
                         <div class="feature">
-                            <h4>🎯 What You&apos;ll Learn</h4>
+                            <h4>🎯 What You'll Learn</h4>
                             <ul>
                                 <li>Oracle prediction basics</li>
                                 <li>Fantasy football fundamentals</li>
@@ -86,7 +77,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                         </div>
                         
                         <div class="feature">
-                            <h4>🏆 What You&apos;ll Gain</h4>
+                            <h4>🏆 What You'll Gain</h4>
                             <ul>
                                 <li>Better fantasy decisions</li>
                                 <li>Understanding of AI predictions</li>
@@ -101,12 +92,11 @@ const OracleBeginnerTutorial: React.FC = () => {
                     <p><strong>Difficulty:</strong> Beginner (No prior experience needed)</p>
                 </div>
             `,
-            visual: &apos;🎮&apos;
+            visual: '🎮'
         },
         {
-}
-            id: &apos;oracle-intro&apos;,
-            title: &apos;🤖 What is The Oracle?&apos;,
+            id: 'oracle-intro',
+            title: '🤖 What is The Oracle?',
             content: `
                 <div class="oracle-explanation">
                     <h3>Meet Your AI Opponent</h3>
@@ -115,7 +105,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                     <div class="oracle-features">
                         <div class="feature-card">
                             <h4>🧠 AI Brain Power</h4>
-                            <p>Uses Google&apos;s Gemini AI to analyze complex patterns and data relationships that humans might miss.</p>
+                            <p>Uses Google's Gemini AI to analyze complex patterns and data relationships that humans might miss.</p>
                         </div>
                         
                         <div class="feature-card">
@@ -145,10 +135,9 @@ const OracleBeginnerTutorial: React.FC = () => {
                     </div>
                 </div>
             `,
-            visual: &apos;🔮&apos;,
+            visual: '🔮',
             quiz: {
-}
-                question: "What makes The Oracle&apos;s predictions so powerful?",
+                question: "What makes The Oracle's predictions so powerful?",
                 options: [
                     "It only uses historical data",
                     "It combines AI, live data, and machine learning",
@@ -156,17 +145,16 @@ const OracleBeginnerTutorial: React.FC = () => {
                     "It uses simple statistical averages"
                 ],
                 correctAnswer: 1,
-                explanation: "The Oracle&apos;s strength comes from combining AI analysis, real-time data feeds, and continuous machine learning to create comprehensive predictions."
+                explanation: "The Oracle's strength comes from combining AI analysis, real-time data feeds, and continuous machine learning to create comprehensive predictions."
 
         },
         {
-}
-            id: &apos;fantasy-basics&apos;,
-            title: &apos;🏈 Fantasy Football Fundamentals&apos;,
+            id: 'fantasy-basics',
+            title: '🏈 Fantasy Football Fundamentals',
             content: `
                 <div class="fantasy-basics">
                     <h3>Fantasy Football Quick Refresher</h3>
-                    <p>Before diving into Oracle predictions, let&apos;s review the key concepts that drive fantasy football:</p>
+                    <p>Before diving into Oracle predictions, let's review the key concepts that drive fantasy football:</p>
                     
                     <div class="positions-guide">
                         <h4>📍 Key Positions & Scoring</h4>
@@ -228,24 +216,22 @@ const OracleBeginnerTutorial: React.FC = () => {
                     </div>
                 </div>
             `,
-            visual: &apos;🏆&apos;,
+            visual: '🏆',
             quiz: {
-}
                 question: "Which factor is most important for consistent fantasy performance?",
                 options: [
                     "Talent level only",
                     "Volume and opportunity",
                     "Team record",
-                    "Previous week&apos;s performance"
+                    "Previous week's performance"
                 ],
                 correctAnswer: 1,
                 explanation: "Volume and opportunity are crucial because even talented players need touches and targets to produce fantasy points consistently."
 
         },
         {
-}
-            id: &apos;prediction-types&apos;,
-            title: &apos;🎯 Oracle Prediction Categories&apos;,
+            id: 'prediction-types',
+            title: '🎯 Oracle Prediction Categories',
             content: `
                 <div class="prediction-types">
                     <h3>Understanding Oracle Challenge Types</h3>
@@ -301,23 +287,21 @@ const OracleBeginnerTutorial: React.FC = () => {
                     </div>
                 </div>
             `,
-            visual: &apos;🎲&apos;,
+            visual: '🎲',
             practiceChallenge: {
-}
-                type: &apos;prediction&apos;,
-                scenario: &apos;You see a Player Performance prediction with these options: (A) Christian McCaffrey - clear weather, soft matchup (B) Josh Jacobs - windy conditions, tough defense (C) Derrick Henry - normal weather, average matchup. The Oracle chooses McCaffrey with 75% confidence. What factors likely influenced this choice?&apos;,
-                options: [&apos;Weather only&apos;, &apos;Matchup difficulty only&apos;, &apos;Combination of weather, matchup, and player volume&apos;, &apos;Team record&apos;],
+                type: 'prediction',
+                scenario: 'You see a Player Performance prediction with these options: (A) Christian McCaffrey - clear weather, soft matchup (B) Josh Jacobs - windy conditions, tough defense (C) Derrick Henry - normal weather, average matchup. The Oracle chooses McCaffrey with 75% confidence. What factors likely influenced this choice?',
+                options: ['Weather only', 'Matchup difficulty only', 'Combination of weather, matchup, and player volume', 'Team record'],
                 expectedAnswer: 2
 
         },
         {
-}
-            id: &apos;confidence-levels&apos;,
-            title: &apos;📊 Understanding Confidence Levels&apos;,
+            id: 'confidence-levels',
+            title: '📊 Understanding Confidence Levels',
             content: `
                 <div class="confidence-guide">
                     <h3>Decoding Oracle Confidence</h3>
-                    <p>The Oracle&apos;s confidence level tells you how certain it is about its prediction. This is crucial for your strategy!</p>
+                    <p>The Oracle's confidence level tells you how certain it is about its prediction. This is crucial for your strategy!</p>
                     
                     <div class="confidence-scale">
                         <h4>🎯 Confidence Scale Breakdown</h4>
@@ -360,7 +344,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                         <h4>💡 Strategic Insights</h4>
                         <div class="strategy-tips">
                             <div class="tip">
-                                <strong>High Confidence Challenges:</strong> Oracle is very sure, so consider if you have unique insights or if there&apos;s a contrarian play worth the risk
+                                <strong>High Confidence Challenges:</strong> Oracle is very sure, so consider if you have unique insights or if there's a contrarian play worth the risk
                             </div>
                             <div class="tip">
                                 <strong>Low Confidence Opportunities:</strong> These are your best chances to beat Oracle using human intuition and game knowledge
@@ -372,9 +356,8 @@ const OracleBeginnerTutorial: React.FC = () => {
                     </div>
                 </div>
             `,
-            visual: &apos;📈&apos;,
+            visual: '📈',
             quiz: {
-}
                 question: "When is the best time to disagree with The Oracle?",
                 options: [
                     "When confidence is 90%+",
@@ -387,13 +370,12 @@ const OracleBeginnerTutorial: React.FC = () => {
 
         },
         {
-}
-            id: &apos;reading-predictions&apos;,
-            title: &apos;🔍 How to Read Oracle Predictions&apos;,
+            id: 'reading-predictions',
+            title: '🔍 How to Read Oracle Predictions',
             content: `
                 <div class="reading-guide">
                     <h3>Analyzing Oracle Predictions Like a Pro</h3>
-                    <p>Let&apos;s break down how to read and analyze Oracle predictions to make better decisions:</p>
+                    <p>Let's break down how to read and analyze Oracle predictions to make better decisions:</p>
                     
                     <div class="prediction-anatomy">
                         <h4>🔬 Anatomy of a Prediction</h4>
@@ -438,7 +420,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                             <div class="breakdown-sections">
                                 <div class="section">
                                     <h5>1. Probabilities & Rankings</h5>
-                                    <p>The percentages show Oracle&apos;s confidence in each option. Higher percentages indicate stronger data support.</p>
+                                    <p>The percentages show Oracle's confidence in each option. Higher percentages indicate stronger data support.</p>
                                     <p><strong>Key insight:</strong> A close race (like 28% vs 25%) suggests uncertainty - opportunity for you!</p>
                                 </div>
                                 
@@ -446,17 +428,17 @@ const OracleBeginnerTutorial: React.FC = () => {
                                     <h5>2. Supporting Data Points</h5>
                                     <p>These show the key factors Oracle considered:</p>
                                     <ul>
-                                        <li><strong>Projected pts:</strong> Oracle&apos;s point projection</li>
-                                        <li><strong>Recent avg:</strong> Player&apos;s recent performance trend</li>
+                                        <li><strong>Projected pts:</strong> Oracle's point projection</li>
+                                        <li><strong>Recent avg:</strong> Player's recent performance trend</li>
                                         <li><strong>Matchup rating:</strong> How favorable the opponent is (1-10 scale)</li>
                                         <li><strong>PER:</strong> Player Efficiency Rating (advanced metric)</li>
-                                        <li><strong>Target Share:</strong> % of team&apos;s targets for receivers</li>
+                                        <li><strong>Target Share:</strong> % of team's targets for receivers</li>
                                     </ul>
                                 </div>
                                 
                                 <div class="section">
-                                    <h5>3. Oracle&apos;s Reasoning</h5>
-                                    <p>This explains the "why" behind the choice, revealing Oracle&apos;s logic and any factors it weighted heavily.</p>
+                                    <h5>3. Oracle's Reasoning</h5>
+                                    <p>This explains the "why" behind the choice, revealing Oracle's logic and any factors it weighted heavily.</p>
                                     <p><strong>Look for:</strong> What factors does Oracle emphasize? Are there factors it might be missing?</p>
                                 </div>
                                 
@@ -470,18 +452,16 @@ const OracleBeginnerTutorial: React.FC = () => {
                     </div>
                 </div>
             `,
-            visual: &apos;📋&apos;,
+            visual: '📋',
             practiceChallenge: {
-}
-                type: &apos;reasoning&apos;,
-                scenario: &apos;Looking at the sample prediction above, Oracle chose McCaffrey with 78% confidence. The reasoning mentions "favorable matchup" and "clear weather." If you wanted to disagree, what factors might you consider that Oracle could be underweighting?&apos;,
-                expectedAnswer: &apos;Recent injury concerns, rest vs workload, game script if team falls behind, or red zone usage trends&apos;
+                type: 'reasoning',
+                scenario: 'Looking at the sample prediction above, Oracle chose McCaffrey with 78% confidence. The reasoning mentions "favorable matchup" and "clear weather." If you wanted to disagree, what factors might you consider that Oracle could be underweighting?',
+                expectedAnswer: 'Recent injury concerns, rest vs workload, game script if team falls behind, or red zone usage trends'
 
         },
         {
-}
-            id: &apos;beating-oracle&apos;,
-            title: &apos;🎯 Strategies to Beat The Oracle&apos;,
+            id: 'beating-oracle',
+            title: '🎯 Strategies to Beat The Oracle',
             content: `
                 <div class="beating-strategies">
                     <h3>How to Outsmart the AI</h3>
@@ -502,7 +482,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                                     <h5>📰 Breaking News</h5>
                                     <p><strong>What you know:</strong> Very recent developments, social media hints</p>
                                     <p><strong>Example:</strong> Late injury reports, practice squad promotions</p>
-                                    <p><strong>Edge:</strong> You might have more recent information than Oracle&apos;s data</p>
+                                    <p><strong>Edge:</strong> You might have more recent information than Oracle's data</p>
                                 </div>
                                 
                                 <div class="advantage">
@@ -555,7 +535,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                                 
                                 <div class="strategy">
                                     <h5>5. Injury Impact Timing</h5>
-                                    <p>Consider how quickly replacements adapt vs Oracle&apos;s assumptions</p>
+                                    <p>Consider how quickly replacements adapt vs Oracle's assumptions</p>
                                     <div class="strategy-example">
                                         <strong>Example:</strong> Oracle downgrades offense for injured star<br>
                                         <strong>Your edge:</strong> You know the backup has been practicing with first team for weeks
@@ -573,23 +553,22 @@ const OracleBeginnerTutorial: React.FC = () => {
                                 </div>
                                 <div class="avoid">
                                     <h5>📊 Pure Statistical Advantages</h5>
-                                    <p>Don&apos;t fight clear statistical edges like target share, red zone touches, or pace of play advantages</p>
+                                    <p>Don't fight clear statistical edges like target share, red zone touches, or pace of play advantages</p>
                                 </div>
                                 <div class="avoid">
                                     <h5>🤒 Obvious Injury Impacts</h5>
-                                    <p>When Oracle accounts for clear injury downgrades, it&apos;s usually using accurate medical probability data</p>
+                                    <p>When Oracle accounts for clear injury downgrades, it's usually using accurate medical probability data</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             `,
-            visual: &apos;🏆&apos;,
+            visual: '🏆',
             quiz: {
-}
-                question: "What&apos;s the best strategy for beating The Oracle?",
+                question: "What's the best strategy for beating The Oracle?",
                 options: [
-                    "Always pick the opposite of Oracle&apos;s choice",
+                    "Always pick the opposite of Oracle's choice",
                     "Only challenge high confidence predictions",
                     "Target low confidence predictions with specific insights",
                     "Never disagree with AI predictions"
@@ -599,13 +578,12 @@ const OracleBeginnerTutorial: React.FC = () => {
 
         },
         {
-}
-            id: &apos;getting-started&apos;,
-            title: &apos;🚀 Getting Started with Oracle Challenges&apos;,
+            id: 'getting-started',
+            title: '🚀 Getting Started with Oracle Challenges',
             content: `
                 <div class="getting-started">
                     <h3>Ready to Challenge The Oracle?</h3>
-                    <p>You now have the foundation to compete! Here&apos;s your step-by-step action plan:</p>
+                    <p>You now have the foundation to compete! Here's your step-by-step action plan:</p>
                     
                     <div class="action-plan">
                         <div class="step">
@@ -629,7 +607,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                         
                         <div class="step">
                             <h4>Step 3: Look for Low Confidence Opportunities</h4>
-                            <p>When Oracle confidence is 60-70%, that&apos;s your prime opportunity</p>
+                            <p>When Oracle confidence is 60-70%, that's your prime opportunity</p>
                             <div class="tips">
                                 <p><strong>Red flags for Oracle:</strong> Recent player news, coaching changes, unique weather</p>
                                 <p><strong>Your advantage:</strong> Real-time insights, intuition, contrarian thinking</p>
@@ -638,10 +616,10 @@ const OracleBeginnerTutorial: React.FC = () => {
                         
                         <div class="step">
                             <h4>Step 4: Track Your Performance</h4>
-                            <p>Use the analytics dashboard to see where you&apos;re beating Oracle</p>
+                            <p>Use the analytics dashboard to see where you're beating Oracle</p>
                             <div class="tips">
                                 <p><strong>Learn from wins:</strong> What insights gave you an edge?</p>
-                                <p><strong>Learn from losses:</strong> Where was Oracle&apos;s data advantage too strong?</p>
+                                <p><strong>Learn from losses:</strong> Where was Oracle's data advantage too strong?</p>
                             </div>
                         </div>
                         
@@ -667,12 +645,12 @@ const OracleBeginnerTutorial: React.FC = () => {
                             <div class="milestone">
                                 <h5>🏆 Intermediate Success</h5>
                                 <p>Beat Oracle on 2 out of 5 predictions (40% success rate)</p>
-                                <p><em>You&apos;re developing real expertise!</em></p>
+                                <p><em>You're developing real expertise!</em></p>
                             </div>
                             <div class="milestone">
                                 <h5>🌟 Expert Success</h5>
                                 <p>Beat Oracle on 1 out of 2 predictions (50% success rate)</p>
-                                <p><em>You&apos;re matching AI performance - exceptional!</em></p>
+                                <p><em>You're matching AI performance - exceptional!</em></p>
                             </div>
                         </div>
                     </div>
@@ -689,22 +667,18 @@ const OracleBeginnerTutorial: React.FC = () => {
                     </div>
                 </div>
             `,
-            visual: &apos;🎊&apos;
+            visual: '🎊'
 
     ];
 
     // Load saved progress on component mount
     useEffect(() => {
-}
-        const savedProgress = localStorage.getItem(&apos;oracle-beginner-tutorial-progress&apos;);
+        const savedProgress = localStorage.getItem('oracle-beginner-tutorial-progress');
         if (savedProgress) {
-}
             try {
-}
 
                 const progress = JSON.parse(savedProgress);
                 setUserProgress(prev => ({
-}
                     ...prev,
                     ...progress,
                     completedSteps: new Set(progress.completedSteps || []),
@@ -713,27 +687,23 @@ const OracleBeginnerTutorial: React.FC = () => {
                 setCurrentStep(progress.currentStep || 0);
 
     } catch (error) {
-}
 
 
     }, []);
 
     // Save progress whenever it changes
     useEffect(() => {
-}
         const progressToSave = {
-}
             ...userProgress,
             completedSteps: Array.from(userProgress.completedSteps),
             currentStep,
             lastAccessed: new Date().toISOString()
         };
-        localStorage.setItem(&apos;oracle-beginner-tutorial-progress&apos;, JSON.stringify(progressToSave));
+        localStorage.setItem('oracle-beginner-tutorial-progress', JSON.stringify(progressToSave));
     }, [userProgress, currentStep]);
 
     // Handle quiz submission
     const handleQuizSubmit = () => {
-}
         if (selectedAnswer === null) return;
         
         const currentQuiz = tutorialSteps[currentStep].quiz;
@@ -742,10 +712,8 @@ const OracleBeginnerTutorial: React.FC = () => {
         const isCorrect = selectedAnswer === currentQuiz.correctAnswer;
         
         setUserProgress(prev => ({
-}
             ...prev,
             quizResults: {
-}
                 ...prev.quizResults,
                 [currentStep]: isCorrect
 
@@ -756,11 +724,10 @@ const OracleBeginnerTutorial: React.FC = () => {
 
     // Handle practice challenge submission
     const handlePracticeSubmit = () => {
-}
         if (!practiceInput.trim()) return;
         
         // Simple scoring based on input length and relevance keywords
-        const relevantKeywords = [&apos;matchup&apos;, &apos;weather&apos;, &apos;injury&apos;, &apos;volume&apos;, &apos;target&apos;, &apos;chemistry&apos;, &apos;coaching&apos;, &apos;trend&apos;];
+        const relevantKeywords = ['matchup', 'weather', 'injury', 'volume', 'target', 'chemistry', 'coaching', 'trend'];
         const score = Math.min(100, 
             (practiceInput.length / 10) + 
             (relevantKeywords.filter((keyword: any) => 
@@ -769,10 +736,8 @@ const OracleBeginnerTutorial: React.FC = () => {
         );
         
         setUserProgress(prev => ({
-}
             ...prev,
             practiceScores: {
-}
                 ...prev.practiceScores,
                 [currentStep]: score
 
@@ -783,24 +748,20 @@ const OracleBeginnerTutorial: React.FC = () => {
 
     // Navigate to next step
     const nextStep = () => {
-}
         const newCompletedSteps = new Set(userProgress.completedSteps);
         newCompletedSteps.add(currentStep);
         
         setUserProgress(prev => ({
-}
             ...prev,
             completedSteps: newCompletedSteps
         }));
         
         if (currentStep < tutorialSteps.length - 1) {
-}
             setCurrentStep(currentStep + 1);
             setSelectedAnswer(null);
             setShowResult(false);
-            setPracticeInput(&apos;&apos;);
+            setPracticeInput('');
         } else {
-}
             // Tutorial complete
             setTutorialComplete(true);
             recordTutorialCompletion();
@@ -809,21 +770,17 @@ const OracleBeginnerTutorial: React.FC = () => {
 
     // Navigate to previous step
     const prevStep = () => {
-}
         if (currentStep > 0) {
-}
             setCurrentStep(currentStep - 1);
             setSelectedAnswer(null);
             setShowResult(false);
-            setPracticeInput(&apos;&apos;);
+            setPracticeInput('');
 
     };
 
     // Record tutorial completion
     const recordTutorialCompletion = () => {
-}
         const completionData = {
-}
             completedAt: new Date().toISOString(),
             timeSpent: new Date().getTime() - new Date(userProgress.startTime).getTime(),
             quizAccuracy: Object.values(userProgress.quizResults).filter(Boolean).length / Object.keys(userProgress.quizResults).length,
@@ -833,17 +790,15 @@ const OracleBeginnerTutorial: React.FC = () => {
         
         // Record in education service
         try {
-}
 
             // Record tutorial completion in localStorage for education service
-            localStorage.setItem(&apos;oracle-tutorial-oracle-introduction-completion&apos;, JSON.stringify({
-}
+            localStorage.setItem('oracle-tutorial-oracle-introduction-completion', JSON.stringify({
                 completed: true,
                 completedAt: completionData.completedAt,
                 quizScore: completionData.quizAccuracy * 100,
                 timeSpent: completionData.timeSpent
             }));
-        localStorage.setItem(&apos;oracle-beginner-tutorial-completion&apos;, JSON.stringify(completionData));
+        localStorage.setItem('oracle-beginner-tutorial-completion', JSON.stringify(completionData));
     
     `${progressPercentage}%` }}
                         ></div>
@@ -855,13 +810,12 @@ const OracleBeginnerTutorial: React.FC = () => {
                 
                 <div className="step-indicator sm:px-4 md:px-6 lg:px-8">
                     {tutorialSteps.map((step, index) => (
-}
                         <div 
                             key={step.id}
-                            className={`step-dot ${index <= currentStep ? &apos;completed&apos; : &apos;&apos;} ${index === currentStep ? &apos;current&apos; : &apos;&apos;}`}
+                            className={`step-dot ${index <= currentStep ? 'completed' : ''} ${index === currentStep ? 'current' : ''}`}
                             title={step.title}
                         >
-                            {userProgress.completedSteps.has(index) ? &apos;✓&apos; : index + 1}
+                            {userProgress.completedSteps.has(index) ? '✓' : index + 1}
                         </div>
                     ))}
                 </div>
@@ -874,25 +828,22 @@ const OracleBeginnerTutorial: React.FC = () => {
                 </div>
                 
                 <div className="step-content sm:px-4 md:px-6 lg:px-8">
-                  {currentTutorialStep.content.split(&apos;\n&apos;).map((line: string, index: number) => (
-}
+                  {currentTutorialStep.content.split('\n').map((line: string, index: number) => (
                     <p key={index} className="mb-2">{line}</p>
                   ))}
                 </div>
                 
                 {/* Quiz Section */}
                 {currentTutorialStep.quiz && (
-}
                     <div className="quiz-section sm:px-4 md:px-6 lg:px-8">
                         <h4>🧠 Knowledge Check</h4>
                         <div className="quiz-question sm:px-4 md:px-6 lg:px-8">
                             <p><strong>{currentTutorialStep.quiz.question}</strong></p>
                             <div className="quiz-options sm:px-4 md:px-6 lg:px-8">
                                 {currentTutorialStep.quiz.options.map((option, index) => (
-}
                                     <button
                                         key={`quiz-option-${currentStep}-${index}`}
-                                        className={`quiz-option ${selectedAnswer === index ? &apos;selected&apos; : &apos;&apos;}`}
+                                        className={`quiz-option ${selectedAnswer === index ? 'selected' : ''}`}
                                         onClick={() => setSelectedAnswer(index)}
                                     >
                                         {option}
@@ -901,7 +852,6 @@ const OracleBeginnerTutorial: React.FC = () => {
                             </div>
                             
                             {!showResult && selectedAnswer !== null && (
-}
                                 <button 
                                     className="submit-quiz-button sm:px-4 md:px-6 lg:px-8"
                                     onClick={handleQuizSubmit}
@@ -911,10 +861,9 @@ const OracleBeginnerTutorial: React.FC = () => {
                             )}
                             
                             {showResult && currentTutorialStep.quiz && (
-}
-                                <div className={`quiz-result ${selectedAnswer === currentTutorialStep.quiz.correctAnswer ? &apos;correct&apos; : &apos;incorrect&apos;}`}>
+                                <div className={`quiz-result ${selectedAnswer === currentTutorialStep.quiz.correctAnswer ? 'correct' : 'incorrect'}`}>
                                     <div className="result-header sm:px-4 md:px-6 lg:px-8">
-                                        {selectedAnswer === currentTutorialStep.quiz.correctAnswer ? &apos;✅ Correct!&apos; : &apos;❌ Incorrect&apos;}
+                                        {selectedAnswer === currentTutorialStep.quiz.correctAnswer ? '✅ Correct!' : '❌ Incorrect'}
                                     </div>
                                     <div className="result-explanation sm:px-4 md:px-6 lg:px-8">
                                         <strong>Explanation:</strong> {currentTutorialStep.quiz.explanation}
@@ -927,20 +876,17 @@ const OracleBeginnerTutorial: React.FC = () => {
                 
                 {/* Practice Challenge Section */}
                 {currentTutorialStep.practiceChallenge && (
-}
                     <div className="practice-section sm:px-4 md:px-6 lg:px-8">
                         <h4>💪 Practice Challenge</h4>
                         <div className="practice-scenario sm:px-4 md:px-6 lg:px-8">
                             <p><strong>Scenario:</strong> {currentTutorialStep.practiceChallenge.scenario}</p>
                             
-                            {currentTutorialStep.practiceChallenge.type === &apos;prediction&apos; && currentTutorialStep.practiceChallenge.options && (
-}
+                            {currentTutorialStep.practiceChallenge.type === 'prediction' && currentTutorialStep.practiceChallenge.options && (
                                 <div className="practice-options sm:px-4 md:px-6 lg:px-8">
                                     {currentTutorialStep.practiceChallenge.options.map((option, index) => (
-}
                                         <button
                                             key={`practice-option-${currentStep}-${index}`}
-                                            className={`practice-option ${selectedAnswer === index ? &apos;selected&apos; : &apos;&apos;}`}
+                                            className={`practice-option ${selectedAnswer === index ? 'selected' : ''}`}
                                             onClick={() => setSelectedAnswer(index)}
                                         >
                                             {option}
@@ -949,8 +895,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                                 </div>
                             )}
                             
-                            {currentTutorialStep.practiceChallenge.type === &apos;reasoning&apos; && (
-}
+                            {currentTutorialStep.practiceChallenge.type === 'reasoning' && (
                                 <div className="practice-input sm:px-4 md:px-6 lg:px-8">
                                     <textarea
                                         value={practiceInput}
@@ -962,13 +907,11 @@ const OracleBeginnerTutorial: React.FC = () => {
                             )}
                             
                             {!showResult && (
-}
                                 <button 
                                     className="submit-practice-button sm:px-4 md:px-6 lg:px-8"
-                                    onClick={currentTutorialStep.practiceChallenge.type === &apos;prediction&apos; ? handleQuizSubmit : handlePracticeSubmit}
+                                    onClick={currentTutorialStep.practiceChallenge.type === 'prediction' ? handleQuizSubmit : handlePracticeSubmit}
                                     disabled={
-}
-                                        currentTutorialStep.practiceChallenge.type === &apos;prediction&apos; 
+                                        currentTutorialStep.practiceChallenge.type === 'prediction' 
                                             ? selectedAnswer === null 
                                             : !practiceInput.trim()
 
@@ -978,20 +921,18 @@ const OracleBeginnerTutorial: React.FC = () => {
                             )}
                             
                             {showResult && (
-}
                                 <div className="practice-result sm:px-4 md:px-6 lg:px-8">
-                                    {currentTutorialStep.practiceChallenge.type === &apos;prediction&apos; ? (
-}
-                                        <div className={`result ${selectedAnswer === currentTutorialStep.practiceChallenge.expectedAnswer ? &apos;correct&apos; : &apos;incorrect&apos;}`}>
-                                            {selectedAnswer === currentTutorialStep.practiceChallenge.expectedAnswer ? &apos;🎯 Great thinking!&apos; : &apos;📚 Good attempt!&apos;}
-                                            <p>The key insight is understanding how multiple factors combine to influence Oracle&apos;s confidence.</p>
+                                    {currentTutorialStep.practiceChallenge.type === 'prediction' ? (
+                                        <div className={`result ${selectedAnswer === currentTutorialStep.practiceChallenge.expectedAnswer ? 'correct' : 'incorrect'}`}>
+                                            {selectedAnswer === currentTutorialStep.practiceChallenge.expectedAnswer ? '🎯 Great thinking!' : '📚 Good attempt!'}
+                                            <p>The key insight is understanding how multiple factors combine to influence Oracle's confidence.</p>
                                         </div>
                                     ) : (
                                         <div className="reasoning-feedback sm:px-4 md:px-6 lg:px-8">
                                             <div className="score sm:px-4 md:px-6 lg:px-8">
                                                 Score: {userProgress.practiceScores[currentStep] || 0}/100
                                             </div>
-                                            <p>Excellent reasoning! You&apos;re thinking like a fantasy expert. Key factors to consider: {currentTutorialStep.practiceChallenge.expectedAnswer}</p>
+                                            <p>Excellent reasoning! You're thinking like a fantasy expert. Key factors to consider: {currentTutorialStep.practiceChallenge.expectedAnswer}</p>
                                         </div>
                                     )}
                                 </div>
@@ -1014,12 +955,11 @@ const OracleBeginnerTutorial: React.FC = () => {
                     className="nav-button next-button sm:px-4 md:px-6 lg:px-8"
                     onClick={nextStep}
                     disabled={
-}
                         (currentTutorialStep.quiz && !showResult) ||
                         (currentTutorialStep.practiceChallenge && !showResult)
 
                  aria-label="Action button">
-                    {currentStep === tutorialSteps.length - 1 ? &apos;Complete Tutorial&apos; : &apos;Next →&apos;}
+                    {currentStep === tutorialSteps.length - 1 ? 'Complete Tutorial' : 'Next →'}
                 </button>
             </div>
         </div>

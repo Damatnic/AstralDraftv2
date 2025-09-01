@@ -2,13 +2,12 @@
  * AI-Powered Weekly Power Rankings - Intelligent league analysis and predictions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { TrendingUp, TrendingDown, Minus, Crown, Target, Brain, BarChart3, Zap, AlertTriangle } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { TrendingUp, TrendingDown, Minus, Crown, Target, Brain, BarChart3, Zap, AlertTriangle } from 'lucide-react';
 
 interface TeamRanking {
-}
   teamId: string;
   teamName: string;
   ownerName: string;
@@ -22,65 +21,54 @@ interface TeamRanking {
   projectedRecord: { wins: number; losses: number };
   playoffOdds: number;
   championshipOdds: number;
-  trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+  trend: 'up' | 'down' | 'stable';
   trendStrength: number; // 1-5
   keyStats: {
-}
     avgPointsFor: number;
     avgPointsAgainst: number;
     consistencyScore: number;
     luckFactor: number;
   };
   analysis: {
-}
     strengths: string[];
     weaknesses: string[];
     recommendation: string;
-    outlook: &apos;hot&apos; | &apos;warming&apos; | &apos;cooling&apos; | &apos;cold&apos;;
+    outlook: 'hot' | 'warming' | 'cooling' | 'cold';
   };
   nextWeekMatchup: {
-}
     opponent: string;
-    difficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;;
+    difficulty: 'easy' | 'medium' | 'hard';
     winProbability: number;
   };
 
 interface WeeklyPowerRankingsProps {
-}
   leagueId: string;
   week: number;
   teams: TeamRanking[];
   onTeamClick?: (teamId: string) => void;
 
-}
 
 const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
-}
   week,
   teams = [],
 //   onTeamClick
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<&apos;compact&apos; | &apos;detailed&apos;>(&apos;compact&apos;);
-  const [sortBy, setSortBy] = useState<&apos;powerScore&apos; | &apos;record&apos; | &apos;pointsFor&apos; | &apos;playoffOdds&apos;>(&apos;powerScore&apos;);
+  const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('compact');
+  const [sortBy, setSortBy] = useState<'powerScore' | 'record' | 'pointsFor' | 'playoffOdds'>('powerScore');
 
   // Generate real team rankings based on actual league data
   const generateRealRankings = (): TeamRanking[] => {
-}
     try {
-}
       // Use actual league teams from the context
       const leagueTeams = teams || [];
       
       if (leagueTeams.length === 0) {
-}
         return [];
 
       // Calculate real rankings based on actual team performance
       const rankings = leagueTeams.map((team, index) => {
-}
         // Use real team data
         const teamRecord = team.record || { wins: 0, losses: 0 };
         const teamStats = team.stats || { pointsFor: 0, pointsAgainst: 0 };
@@ -100,13 +88,12 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
         // Determine trend based on recent performance
         const previousRank = team.previousRank || index + 1;
         const currentRank = index + 1;
-        const trend = currentRank < previousRank ? &apos;up&apos; : currentRank > previousRank ? &apos;down&apos; : &apos;stable&apos;;
+        const trend = currentRank < previousRank ? 'up' : currentRank > previousRank ? 'down' : 'stable';
         
         return {
-}
           teamId: team.id,
           teamName: team.name,
-          ownerName: team.owner?.name || team.owner?.displayName || &apos;Unknown Owner&apos;,
+          ownerName: team.owner?.name || team.owner?.displayName || 'Unknown Owner',
           currentRank,
           previousRank,
           record: teamRecord,
@@ -115,7 +102,6 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
           powerScore,
           strengthOfSchedule: team.strengthOfSchedule || 0.50,
           projectedRecord: {
-}
             wins: Math.round(teamRecord.wins + (14 - week) * winPercentage),
             losses: Math.round(teamRecord.losses + (14 - week) * (1 - winPercentage))
           },
@@ -124,25 +110,22 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
           trend,
           trendStrength: Math.abs(currentRank - previousRank) + 1,
           keyStats: {
-}
             avgPointsFor: Math.round(avgPointsFor * 100) / 100,
             avgPointsAgainst: Math.round(avgPointsAgainst * 100) / 100,
             consistencyScore: team.consistency || 75,
             luckFactor: team.luckFactor || 0
           },
           analysis: {
-}
-            strengths: team.strengths || [&apos;Solid roster construction&apos;, &apos;Active management&apos;],
-            weaknesses: team.weaknesses || [&apos;Room for improvement&apos;],
-            recommendation: currentRank <= playoffSpots / 2 ? &apos;Stay the course, make minor tweaks&apos; : 
-                           currentRank <= playoffSpots ? &apos;Active on waiver wire, consider trades&apos; : 
-                           &apos;Major roster overhaul needed&apos;,
-            outlook: currentRank <= 2 ? &apos;hot&apos; : currentRank <= 5 ? &apos;warming&apos; : currentRank <= 8 ? &apos;cooling&apos; : &apos;cold&apos;
+            strengths: team.strengths || ['Solid roster construction', 'Active management'],
+            weaknesses: team.weaknesses || ['Room for improvement'],
+            recommendation: currentRank <= playoffSpots / 2 ? 'Stay the course, make minor tweaks' : 
+                           currentRank <= playoffSpots ? 'Active on waiver wire, consider trades' : 
+                           'Major roster overhaul needed',
+            outlook: currentRank <= 2 ? 'hot' : currentRank <= 5 ? 'warming' : currentRank <= 8 ? 'cooling' : 'cold'
           },
           nextWeekMatchup: {
-}
-            opponent: team.nextOpponent?.name || &apos;TBD&apos;,
-            difficulty: &apos;medium&apos; as const,
+            opponent: team.nextOpponent?.name || 'TBD',
+            difficulty: 'medium' as const,
             winProbability: Math.round((winPercentage * 70 + 15) * 100) / 100
 
         };
@@ -154,8 +137,7 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
         .map((team, index) => ({ ...team, currentRank: index + 1 }));
     
     } catch (error) {
-}
-      console.error(&apos;Error generating power rankings:&apos;, error);
+      console.error('Error generating power rankings:', error);
       return [];
 
   };
@@ -164,50 +146,42 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
   
   // Load real rankings when component mounts or teams change
   useEffect(() => {
-}
     const realRankings = generateRealRankings();
     setRankings(realRankings);
   }, [teams, week]);
 
-  const getTrendIcon = (trend: TeamRanking[&apos;trend&apos;], strength: number) => {
-}
-    const iconClass = `w-5 h-5 ${strength > 2 ? &apos;animate-pulse&apos; : &apos;&apos;}`;
+  const getTrendIcon = (trend: TeamRanking['trend'], strength: number) => {
+    const iconClass = `w-5 h-5 ${strength > 2 ? 'animate-pulse' : ''}`;
     
     switch (trend) {
-}
-      case &apos;up&apos;:
+      case 'up':
         return <TrendingUp className={`${iconClass} text-green-400`} />;
-      case &apos;down&apos;:
+      case 'down':
         return <TrendingDown className={`${iconClass} text-red-400`} />;
       default:
         return <Minus className={`${iconClass} text-gray-400`} />;
 
   };
 
-  const getOutlookColor = (outlook: TeamRanking[&apos;analysis&apos;][&apos;outlook&apos;]) => {
-}
+  const getOutlookColor = (outlook: TeamRanking['analysis']['outlook']) => {
     switch (outlook) {
-}
-      case &apos;hot&apos;: return &apos;text-red-400 bg-red-500/20&apos;;
-      case &apos;warming&apos;: return &apos;text-orange-400 bg-orange-500/20&apos;;
-      case &apos;cooling&apos;: return &apos;text-blue-400 bg-blue-500/20&apos;;
-      case &apos;cold&apos;: return &apos;text-gray-400 bg-gray-500/20&apos;;
+      case 'hot': return 'text-red-400 bg-red-500/20';
+      case 'warming': return 'text-orange-400 bg-orange-500/20';
+      case 'cooling': return 'text-blue-400 bg-blue-500/20';
+      case 'cold': return 'text-gray-400 bg-gray-500/20';
 
   };
 
   const getDifficultyColor = (difficulty: string) => {
-}
     switch (difficulty) {
-}
-      case &apos;easy&apos;: return &apos;text-green-400&apos;;
-      case &apos;medium&apos;: return &apos;text-yellow-400&apos;;
-      case &apos;hard&apos;: return &apos;text-red-400&apos;;
-      default: return &apos;text-gray-400&apos;;
+      case 'easy': return 'text-green-400';
+      case 'medium': return 'text-yellow-400';
+      case 'hard': return 'text-red-400';
+      default: return 'text-gray-400';
 
   };
 
   const generateWeeklyInsight = () => {
-}
     const insights = [
       "The playoff race is heating up with 6 teams within striking distance of the top 4 spots.",
       "This week showed significant parity with the top 8 teams all scoring within 30 points of each other.",
@@ -242,9 +216,9 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
           </select>
           
           <button
-            onClick={() => setViewMode(viewMode === &apos;compact&apos; ? &apos;detailed&apos; : &apos;compact&apos;)}
+            onClick={() => setViewMode(viewMode === 'compact' ? 'detailed' : 'compact')}
           >
-            {viewMode === &apos;compact&apos; ? &apos;Detailed&apos; : &apos;Compact&apos;}
+            {viewMode === 'compact' ? 'Detailed' : 'Compact'}
           </button>
         </div>
       </div>
@@ -261,7 +235,6 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
       {/* Rankings List */}
       <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
         {rankings.map((team, index) => (
-}
           <motion.div
             key={team.teamId}
 //             layout
@@ -269,11 +242,9 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
             className={`p-4 bg-dark-700 rounded-lg border border-gray-600 hover:border-primary-500/50 transition-all cursor-pointer ${
-}
-              selectedTeam === team.teamId ? &apos;border-primary-500 bg-primary-500/5&apos; : &apos;&apos;
+              selectedTeam === team.teamId ? 'border-primary-500 bg-primary-500/5' : ''
             }`}
             onClick={() => {
-}
               setSelectedTeam(selectedTeam === team.teamId ? null : team.teamId);
               onTeamClick?.(team.teamId);
             }}
@@ -282,11 +253,10 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
               {/* Rank and Trend */}
               <div className="flex items-center gap-2 min-w-[60px] sm:px-4 md:px-6 lg:px-8">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-}
-                  index === 0 ? &apos;bg-yellow-500 text-black&apos; :
-                  index === 1 ? &apos;bg-gray-400 text-black&apos; :
-                  index === 2 ? &apos;bg-amber-600 text-white&apos; :
-                  &apos;bg-dark-600 text-white&apos;
+                  index === 0 ? 'bg-yellow-500 text-black' :
+                  index === 1 ? 'bg-gray-400 text-black' :
+                  index === 2 ? 'bg-amber-600 text-white' :
+                  'bg-dark-600 text-white'
                 }`}>
                   {index === 0 && <Crown className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />}
                   {index !== 0 && team.currentRank}
@@ -319,11 +289,10 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
 
             {/* Detailed View */}
             <AnimatePresence>
-              {selectedTeam === team.teamId && viewMode === &apos;detailed&apos; && (
-}
+              {selectedTeam === team.teamId && viewMode === 'detailed' && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: &apos;auto&apos;, opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   className="mt-4 pt-4 border-t border-gray-600 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -346,8 +315,8 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
                         </div>
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Luck Factor:</span>
-                          <span className={team.keyStats.luckFactor > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;}>
-                            {team.keyStats.luckFactor > 0 ? &apos;+&apos; : &apos;&apos;}{team.keyStats.luckFactor.toFixed(1)}
+                          <span className={team.keyStats.luckFactor > 0 ? 'text-green-400' : 'text-red-400'}>
+                            {team.keyStats.luckFactor > 0 ? '+' : ''}{team.keyStats.luckFactor.toFixed(1)}
                           </span>
                         </div>
                       </div>
@@ -361,7 +330,6 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
                           <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">Strengths:</span>
                           <ul className="text-gray-300 ml-2 sm:px-4 md:px-6 lg:px-8">
                             {team.analysis.strengths.map((strength: any) => (
-}
                               <li key={strength}>• {strength}</li>
                             ))}
                           </ul>
@@ -370,7 +338,6 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
                           <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">Weaknesses:</span>
                           <ul className="text-gray-300 ml-2 sm:px-4 md:px-6 lg:px-8">
                             {team.analysis.weaknesses.map((weakness: any) => (
-}
                               <li key={weakness}>• {weakness}</li>
                             ))}
                           </ul>
@@ -428,25 +395,25 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Current Playoff Teams:</span>
             <div className="text-green-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(0, 4).map((team: any) => team.teamName.split(&apos; &apos;)[0]).join(&apos;, &apos;)}
+              {rankings.slice(0, 4).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">On the Bubble:</span>
             <div className="text-yellow-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(4, 6).map((team: any) => team.teamName.split(&apos; &apos;)[0]).join(&apos;, &apos;)}
+              {rankings.slice(4, 6).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Long Shots:</span>
             <div className="text-orange-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(6, 8).map((team: any) => team.teamName.split(&apos; &apos;)[0]).join(&apos;, &apos;)}
+              {rankings.slice(6, 8).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Eliminated:</span>
             <div className="text-red-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(8).map((team: any) => team.teamName.split(&apos; &apos;)[0]).join(&apos;, &apos;)}
+              {rankings.slice(8).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
         </div>

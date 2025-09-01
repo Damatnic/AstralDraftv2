@@ -1,27 +1,24 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import type { Team, DraftPick, Player } from &apos;../../types&apos;;
-import TeamColumn from &apos;./TeamColumn&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import type { Team, DraftPick, Player } from '../../types';
+import TeamColumn from './TeamColumn';
+import { useAppState } from '../../contexts/AppContext';
 
 interface DraftBoardProps {
-}
   teams: Team[];
   draftPicks: DraftPick[];
   currentPick?: number; // Optional for auction
   onPlayerSelect: (player: Player) => void;
-  draftFormat: &apos;SNAKE&apos; | &apos;AUCTION&apos;;
+  draftFormat: 'SNAKE' | 'AUCTION';
   teamOnClockId?: number;
 
-}
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }: any) => {
-}
   const { state } = useAppState();
   const myTeamId = teams.find((t: any) => t.owner.id === state.user?.id)?.id;
-  const rounds = draftFormat === &apos;SNAKE&apos; ? 16 : teams[0]?.roster.length || 16;
+  const rounds = draftFormat === 'SNAKE' ? 16 : teams[0]?.roster.length || 16;
   
   return (
     <div 
@@ -33,8 +30,7 @@ const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick,
       <div className="flex-grow flex overflow-x-auto p-1 sm:p-2">
         <div className="flex gap-0.5 sm:gap-1">
           {/* Round Numbers Column - Hide on very small screens */}
-          {draftFormat === &apos;SNAKE&apos; && (
-}
+          {draftFormat === 'SNAKE' && (
             <div className="hidden sm:flex flex-shrink-0 w-6 sm:w-8 flex-col">
                 <div className="h-10 sm:h-12 flex-shrink-0"></div>
                 {Array.from({ length: rounds }).map((_, i) => (
@@ -45,7 +41,6 @@ const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick,
             </div>
           )}
           {teams.map((team: any) => (
-}
             <TeamColumn>
               key={team.id}
               team={team}

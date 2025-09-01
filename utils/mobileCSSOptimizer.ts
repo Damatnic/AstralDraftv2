@@ -2,40 +2,36 @@
 // Identifies and helps eliminate unused CSS classes for better bundle size
 
 interface CSSUsageAnalysis {
-}
   usedClasses: string[];
   unusedClasses: string[];
   mobileSpecificClasses: string[];
   criticalClasses: string[];
-}
 
 /**
  * Analyzes CSS class usage across mobile-optimized components
  * Helps identify opportunities for CSS purging and optimization
  */
 export class MobileCSSOptimizer {
-}
-  private static mobileBreakpoints = [&apos;sm:&apos;, &apos;md:&apos;, &apos;lg:&apos;, &apos;xl:&apos;, &apos;2xl:&apos;];
+  private static mobileBreakpoints = ['sm:', 'md:', 'lg:', 'xl:', '2xl:'];
   private static criticalMobileClasses = [
-    &apos;min-h-[44px]&apos;, // Touch targets
-    &apos;grid-cols-1&apos;, &apos;sm:grid-cols-2&apos;, &apos;lg:grid-cols-3&apos;, // Responsive grids
-    &apos;text-sm&apos;, &apos;sm:text-base&apos;, &apos;lg:text-lg&apos;, // Typography
-    &apos;p-4&apos;, &apos;sm:p-6&apos;, &apos;lg:p-8&apos;, // Responsive padding
-    &apos;w-full&apos;, &apos;sm:w-auto&apos;, // Width utilities
-    &apos;flex-col&apos;, &apos;sm:flex-row&apos;, // Flex direction
-    &apos;gap-2&apos;, &apos;gap-4&apos;, &apos;gap-6&apos;, // Spacing
-    &apos;justify-center&apos;, &apos;sm:justify-between&apos;, // Justification
+    'min-h-[44px]', // Touch targets
+    'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', // Responsive grids
+    'text-sm', 'sm:text-base', 'lg:text-lg', // Typography
+    'p-4', 'sm:p-6', 'lg:p-8', // Responsive padding
+    'w-full', 'sm:w-auto', // Width utilities
+    'flex-col', 'sm:flex-row', // Flex direction
+    'gap-2', 'gap-4', 'gap-6', // Spacing
+    'justify-center', 'sm:justify-between', // Justification
   ];
 
   /**
    * Scans component files for CSS class usage
    */
   static analyzeComponentCSSUsage(componentContent: string): CSSUsageAnalysis {
-}
     const classMatches = componentContent.match(/className="([^"]+)"/g) || [];
     const allClasses = classMatches
-      .map((match: any) => match.replace(/className="|"/g, &apos;&apos;))
-      .flatMap(classes => classes.split(&apos; &apos;))
+      .map((match: any) => match.replace(/className="|"/g, ''))
+      .flatMap(classes => classes.split(' '))
       .filter(Boolean);
 
     const uniqueClasses = [...new Set(allClasses)];
@@ -49,7 +45,6 @@ export class MobileCSSOptimizer {
     );
 
     return {
-}
       usedClasses: uniqueClasses,
       unusedClasses: [], // Would need full CSS bundle analysis
       mobileSpecificClasses,
@@ -61,7 +56,6 @@ export class MobileCSSOptimizer {
    * Generates critical CSS for mobile-first loading
    */
   static generateCriticalMobileCSS(): string {
-}
     return `
 /* Critical Mobile CSS - Inline for Performance */
 .min-h-\\[44px\\] { min-height: 44px; }
@@ -75,14 +69,12 @@ export class MobileCSSOptimizer {
 
 /* Mobile breakpoint optimizations */
 @media (min-width: 640px) {
-}
   .sm\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sm\\:text-base { font-size: 1rem; line-height: 1.5rem; }
   .sm\\:p-6 { padding: 1.5rem; }
   .sm\\:w-auto { width: auto; }
   .sm\\:flex-row { flex-direction: row; }
   .sm\\:justify-between { justify-content: space-between; }
-}
 `;
   }
 
@@ -93,12 +85,9 @@ export class MobileCSSOptimizer {
     importFn: () => Promise<{ default: React.ComponentType<T> }>,
     fallback?: React.ComponentType
   ) {
-}
     return React.lazy(async () => {
-}
       // Only load on mobile if needed
       if (window.innerWidth > 768) {
-}
         return importFn();
       }
       
@@ -112,28 +101,22 @@ export class MobileCSSOptimizer {
    * Performance monitoring utilities for mobile optimization
    */
   static measureMobilePerformance() {
-}
-    if (typeof window === &apos;undefined&apos;) return;
+    if (typeof window === 'undefined') return;
 
     const observer = new PerformanceObserver((list: any) => {
-}
       const entries = list.getEntries();
       entries.forEach((entry: any) => {
-}
-        if (entry.entryType === &apos;measure&apos; && entry.name.includes(&apos;mobile&apos;)) {
-}
+        if (entry.entryType === 'measure' && entry.name.includes('mobile')) {
           console.log(`Mobile Performance: ${entry.name} took ${entry.duration}ms`);
         }
       });
     });
 
-    observer.observe({ entryTypes: [&apos;measure&apos;] });
+    observer.observe({ entryTypes: ['measure'] });
     
     return {
-}
       markStart: (name: string) => performance.mark(`${name}-start`),
       markEnd: (name: string) => {
-}
         performance.mark(`${name}-end`);
         performance.measure(
           `mobile-${name}`,
@@ -148,40 +131,33 @@ export class MobileCSSOptimizer {
    * Bundle size optimization recommendations
    */
   static getBundleOptimizationRecommendations(): {
-}
     description: string;
-    impact: &apos;high&apos; | &apos;medium&apos; | &apos;low&apos;;
+    impact: 'high' | 'medium' | 'low';
     implementation: string;
   }[] {
-}
     return [
       {
-}
-        description: &apos;Remove unused Tailwind CSS classes&apos;,
-        impact: &apos;medium&apos;,
-        implementation: &apos;Configure PurgeCSS or Tailwind purge options&apos;
+        description: 'Remove unused Tailwind CSS classes',
+        impact: 'medium',
+        implementation: 'Configure PurgeCSS or Tailwind purge options'
       },
       {
-}
-        description: &apos;Implement code splitting for mobile-specific features&apos;,
-        impact: &apos;high&apos;,
-        implementation: &apos;Use React.lazy() for mobile modals and complex components&apos;
+        description: 'Implement code splitting for mobile-specific features',
+        impact: 'high',
+        implementation: 'Use React.lazy() for mobile modals and complex components'
       },
       {
-}
-        description: &apos;Inline critical mobile CSS&apos;,
-        impact: &apos;low&apos;,
-        implementation: &apos;Extract and inline critical CSS for mobile breakpoints&apos;
+        description: 'Inline critical mobile CSS',
+        impact: 'low',
+        implementation: 'Extract and inline critical CSS for mobile breakpoints'
       },
       {
-}
-        description: &apos;Tree-shake unused mobile utilities&apos;,
-        impact: &apos;low&apos;,
-        implementation: &apos;Ensure mobile optimization utilities are properly tree-shaken&apos;
+        description: 'Tree-shake unused mobile utilities',
+        impact: 'low',
+        implementation: 'Ensure mobile optimization utilities are properly tree-shaken'
       }
     ];
   }
-}
 
 // React import for lazy loading
 

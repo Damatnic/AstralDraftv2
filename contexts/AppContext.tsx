@@ -1,46 +1,45 @@
-import React, { FC, ReactNode } from &apos;react&apos;;
-import type { League, User, View, AppState, ChatMessage, DraftEvent, Player, Team, DraftPick, Notification, AuctionState, TradeOffer, WaiverClaim, CreateLeaguePayload, PlayerPosition, WatchlistInsight, Persona, CustomRanking, LeaguePoll, Announcement, Badge, TopRivalry, LeagueInvitation, DraftPickAsset, DraftCommentaryItem, RecapVideoScene, SideBet, SmartFaabAdvice, GamedayEvent, PlayerAwardType, PlayerAward, NewspaperContent, LeagueSettings } from &apos;../types&apos;;
-import { players } from &apos;../data/players&apos;;
-import { LEAGUE_MEMBERS } from &apos;../data/leagueData&apos;;
-import { LEAGUE_WITH_PLAYERS } from &apos;../data/leagueWithPlayers&apos;;
-import { sportsIOPlayerService } from &apos;../services/sportsIOPlayerService&apos;;
+import React, { FC, ReactNode } from 'react';
+import type { League, User, View, AppState, ChatMessage, DraftEvent, Player, Team, DraftPick, Notification, AuctionState, TradeOffer, WaiverClaim, CreateLeaguePayload, PlayerPosition, WatchlistInsight, Persona, CustomRanking, LeaguePoll, Announcement, Badge, TopRivalry, LeagueInvitation, DraftPickAsset, DraftCommentaryItem, RecapVideoScene, SideBet, SmartFaabAdvice, GamedayEvent, PlayerAwardType, PlayerAward, NewspaperContent, LeagueSettings } from '../types';
+import { players } from '../data/players';
+import { LEAGUE_MEMBERS } from '../data/leagueData';
+import { LEAGUE_WITH_PLAYERS } from '../data/leagueWithPlayers';
+import { sportsIOPlayerService } from '../services/sportsIOPlayerService';
 
 type Action =
-    | { type: &apos;SET_LOADING&apos;, payload: boolean }
-    | { type: &apos;LOGOUT&apos; }
-    | { type: &apos;TOGGLE_THEME&apos; }
-    | { type: &apos;TOGGLE_SOUND&apos; }
-    | { type: &apos;UNLOCK_AUDIO&apos; }
-    | { type: &apos;SET_VIEW&apos;; payload: View }
-    | { type: &apos;SET_ACTIVE_LEAGUE&apos;; payload: string | null }
-    | { type: &apos;LOGIN&apos;; payload: User }
-    | { type: &apos;SET_USER&apos;; payload: User | null }
-    | { type: &apos;SET_LEAGUES&apos;; payload: League[] }
-    | { type: &apos;SELECT_LEAGUE&apos;; payload: string }
-    | { type: &apos;ADD_NOTIFICATION&apos;; payload: { message: string, type: Notification[&apos;type&apos;] } }
-    | { type: &apos;REMOVE_NOTIFICATION&apos;; payload: number }
-    | { type: &apos;SET_PLAYER_DETAIL&apos;, payload: { player: Player | null, initialTab?: string }}
-    | { type: &apos;TOGGLE_MOBILE_NAV&apos; }
-    | { type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: boolean }
-    | { type: &apos;UPDATE_TEAM_NAME&apos;; payload: { teamId: number, name: string } }
-    | { type: &apos;ADD_PLAYER_TO_ROSTER&apos;; payload: { teamId: number, player: Player } }
-    | { type: &apos;REMOVE_PLAYER_FROM_ROSTER&apos;; payload: { teamId: number, playerId: number } }
-    | { type: &apos;SET_LINEUP&apos;; payload: { teamId: number, starters: number[], bench: number[] } }
-    | { type: &apos;SET_SEASON_REVIEW_YEAR&apos;; payload: number }
-    | { type: &apos;EDIT_MATCHUPS&apos;; payload: { leagueId: string } }
-    | { type: &apos;SET_WEEKLY_RECAP_SCRIPT&apos;; payload: { key: string, value: unknown } }
-    | { type: &apos;UPDATE_LEAGUE_PLAYERS&apos;; payload: { leagueId: string, players: Player[] } };
+    | { type: 'SET_LOADING', payload: boolean }
+    | { type: 'LOGOUT' }
+    | { type: 'TOGGLE_THEME' }
+    | { type: 'TOGGLE_SOUND' }
+    | { type: 'UNLOCK_AUDIO' }
+    | { type: 'SET_VIEW'; payload: View }
+    | { type: 'SET_ACTIVE_LEAGUE'; payload: string | null }
+    | { type: 'LOGIN'; payload: User }
+    | { type: 'SET_USER'; payload: User | null }
+    | { type: 'SET_LEAGUES'; payload: League[] }
+    | { type: 'SELECT_LEAGUE'; payload: string }
+    | { type: 'ADD_NOTIFICATION'; payload: { message: string, type: Notification['type'] } }
+    | { type: 'REMOVE_NOTIFICATION'; payload: number }
+    | { type: 'SET_PLAYER_DETAIL', payload: { player: Player | null, initialTab?: string }}
+    | { type: 'TOGGLE_MOBILE_NAV' }
+    | { type: 'SET_COMMAND_PALETTE_OPEN', payload: boolean }
+    | { type: 'UPDATE_TEAM_NAME'; payload: { teamId: number, name: string } }
+    | { type: 'ADD_PLAYER_TO_ROSTER'; payload: { teamId: number, player: Player } }
+    | { type: 'REMOVE_PLAYER_FROM_ROSTER'; payload: { teamId: number, playerId: number } }
+    | { type: 'SET_LINEUP'; payload: { teamId: number, starters: number[], bench: number[] } }
+    | { type: 'SET_SEASON_REVIEW_YEAR'; payload: number }
+    | { type: 'EDIT_MATCHUPS'; payload: { leagueId: string } }
+    | { type: 'SET_WEEKLY_RECAP_SCRIPT'; payload: { key: string, value: unknown } }
+    | { type: 'UPDATE_LEAGUE_PLAYERS'; payload: { leagueId: string, players: Player[] } };
     
 const AppContext = React.createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
 
 // Initialize with the main league data including NFL players
 const initialState: AppState = {
-}
-    theme: &apos;dark&apos;,
+    theme: 'dark',
     isLoading: false,
     user: null, // Start with no user to show login
     leagues: [LEAGUE_WITH_PLAYERS], // Initialize with our main league including NFL players
-    currentView: &apos;DASHBOARD&apos;,
+    currentView: 'DASHBOARD',
     activeLeagueId: LEAGUE_WITH_PLAYERS.id,
     playerNotes: {},
     playerNicknames: {},
@@ -52,7 +51,7 @@ const initialState: AppState = {
     gamedayEvents: {},
     teamSlogans: {},
     playerQueues: {},
-    dashboardLayout: [&apos;whatsNext&apos;, &apos;currentWeekMatchups&apos;, &apos;gameWeekStatus&apos;, &apos;leagues&apos;, &apos;standings&apos;, &apos;roster&apos;, &apos;activity&apos;, &apos;performance&apos;],
+    dashboardLayout: ['whatsNext', 'currentWeekMatchups', 'gameWeekStatus', 'leagues', 'standings', 'roster', 'activity', 'performance'],
     notifications: [],
     isDraftPaused: false,
     soundEnabled: true,
@@ -64,8 +63,8 @@ const initialState: AppState = {
     watchlistInsights: [],
     activeManagerId: null,
     activePlayerDetail: null,
-    activePlayerDetailInitialTab: &apos;overview&apos;,
-    notificationPermission: &apos;default&apos;,
+    activePlayerDetailInitialTab: 'overview',
+    notificationPermission: 'default',
     customRankings: {},
     leaguePolls: {},
     leagueAnnouncements: {},
@@ -79,18 +78,15 @@ const initialState: AppState = {
     playerAvatars: {},
     reduceMotion: false,
     highContrast: false,
-    textSize: &apos;sm&apos;,
+    textSize: 'sm',
 };
 
 const appReducer = (state: AppState, action: Action): AppState => {
-}
     switch (action.type) {
-}
-        case &apos;SET_LOADING&apos;:
+        case 'SET_LOADING':
             return { ...state, isLoading: action.payload };
             
-        case &apos;LOGIN&apos;: {
-}
+        case 'LOGIN': {
             const user = action.payload;
             // Check if user is part of the league
             const isLeagueMember = LEAGUE_MEMBERS.some((member: User) => 
@@ -98,71 +94,64 @@ const appReducer = (state: AppState, action: Action): AppState => {
             );
             
             if (isLeagueMember) {
-}
                 // Find the corresponding league member
                 const leagueMember = LEAGUE_MEMBERS.find((member: any) => 
                     member.name === user.name || member.id === user.id
                 );
                 
                 return {
-}
                     ...state,
                     user: leagueMember || user,
-                    currentView: &apos;DASHBOARD&apos;,
+                    currentView: 'DASHBOARD',
                     isLoading: false,
                 };
             }
 
             return {
-}
                 ...state,
                 user,
-                currentView: &apos;DASHBOARD&apos;,
+                currentView: 'DASHBOARD',
                 isLoading: false,
             };
         }
 
-        case &apos;LOGOUT&apos;:
+        case 'LOGOUT':
             return {
-}
                 ...initialState,
                 isLoading: false,
             };
             
-        case &apos;TOGGLE_THEME&apos;: {
-}
-            const newTheme = state.theme === &apos;dark&apos; ? &apos;light&apos; : &apos;dark&apos;;
+        case 'TOGGLE_THEME': {
+            const newTheme = state.theme === 'dark' ? 'light' : 'dark';
             document.documentElement.className = newTheme;
             return { ...state, theme: newTheme };
         }
 
-        case &apos;TOGGLE_SOUND&apos;:
+        case 'TOGGLE_SOUND':
             return { ...state, soundEnabled: !state.soundEnabled };
             
-        case &apos;UNLOCK_AUDIO&apos;:
+        case 'UNLOCK_AUDIO':
             return { ...state, isAudioUnlocked: true };
             
-        case &apos;SET_VIEW&apos;:
+        case 'SET_VIEW':
             return { ...state, currentView: action.payload };
             
-        case &apos;SET_ACTIVE_LEAGUE&apos;:
+        case 'SET_ACTIVE_LEAGUE':
             return { ...state, activeLeagueId: action.payload };
             
-        case &apos;SET_USER&apos;:
+        case 'SET_USER':
             return { ...state, user: action.payload };
             
-        case &apos;SET_LEAGUES&apos;:
+        case 'SET_LEAGUES':
             return { ...state, leagues: action.payload };
             
-        case &apos;SELECT_LEAGUE&apos;:
+        case 'SELECT_LEAGUE':
             return { ...state, activeLeagueId: action.payload };
             
-        case &apos;ADD_NOTIFICATION&apos;:
+        case 'ADD_NOTIFICATION':
             return {
-}
                 ...state,
                 notifications: [...state.notifications, {
-}
                     id: Date.now(),
                     message: action.payload.message,
                     type: action.payload.type,
@@ -170,35 +159,30 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 }]
             };
             
-        case &apos;REMOVE_NOTIFICATION&apos;:
+        case 'REMOVE_NOTIFICATION':
             return {
-}
                 ...state,
                 notifications: state.notifications.filter((n: any) => n.id !== action.payload)
             };
             
-        case &apos;SET_PLAYER_DETAIL&apos;:
+        case 'SET_PLAYER_DETAIL':
             return {
-}
                 ...state,
                 activePlayerDetail: action.payload.player,
-                activePlayerDetailInitialTab: action.payload.initialTab || &apos;overview&apos;
+                activePlayerDetailInitialTab: action.payload.initialTab || 'overview'
             };
             
-        case &apos;TOGGLE_MOBILE_NAV&apos;:
+        case 'TOGGLE_MOBILE_NAV':
             return { ...state, isMobileNavOpen: !state.isMobileNavOpen };
             
-        case &apos;SET_COMMAND_PALETTE_OPEN&apos;:
+        case 'SET_COMMAND_PALETTE_OPEN':
             return { ...state, isCommandPaletteOpen: action.payload };
             
-        case &apos;UPDATE_TEAM_NAME&apos;: {
-}
+        case 'UPDATE_TEAM_NAME': {
             const { teamId, name } = action.payload;
             return {
-}
                 ...state,
                 leagues: state.leagues.map((league: any) => ({
-}
                     ...league,
                     teams: league.teams.map((team: any) => 
                         team.id === teamId ? { ...team, name } : team
@@ -207,14 +191,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
             };
         }
 
-        case &apos;ADD_PLAYER_TO_ROSTER&apos;: {
-}
+        case 'ADD_PLAYER_TO_ROSTER': {
             const { teamId, player } = action.payload;
             return {
-}
                 ...state,
                 leagues: state.leagues.map((league: any) => ({
-}
                     ...league,
                     teams: league.teams.map((team: any) => 
                         team.id === teamId 
@@ -225,14 +206,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
             };
         }
 
-        case &apos;REMOVE_PLAYER_FROM_ROSTER&apos;: {
-}
+        case 'REMOVE_PLAYER_FROM_ROSTER': {
             const { teamId, playerId } = action.payload;
             return {
-}
                 ...state,
                 leagues: state.leagues.map((league: any) => ({
-}
                     ...league,
                     teams: league.teams.map((team: any) => 
                         team.id === teamId 
@@ -243,50 +221,40 @@ const appReducer = (state: AppState, action: Action): AppState => {
             };
         }
 
-        case &apos;SET_LINEUP&apos;: {
-}
+        case 'SET_LINEUP': {
             const { teamId, starters, bench } = action.payload;
             // Implementation for setting lineup
             return state;
         }
 
-        case &apos;SET_SEASON_REVIEW_YEAR&apos;: {
-}
+        case 'SET_SEASON_REVIEW_YEAR': {
             return {
-}
                 ...state,
                 seasonReviewYear: action.payload
             };
         }
 
-        case &apos;EDIT_MATCHUPS&apos;: {
-}
+        case 'EDIT_MATCHUPS': {
             return {
-}
                 ...state,
                 editingMatchups: true,
                 activeLeagueId: action.payload.leagueId
             };
         }
 
-        case &apos;SET_WEEKLY_RECAP_SCRIPT&apos;: {
-}
+        case 'SET_WEEKLY_RECAP_SCRIPT': {
             return {
-}
                 ...state,
                 weeklyRecapScript: {
-}
                     ...state.weeklyRecapScript,
                     [action.payload.key]: action.payload.value
                 }
             };
         }
 
-        case &apos;UPDATE_LEAGUE_PLAYERS&apos;: {
-}
+        case 'UPDATE_LEAGUE_PLAYERS': {
             const { leagueId, players } = action.payload;
             return {
-}
                 ...state,
                 leagues: state.leagues.map((league: any) =>
                     league.id === leagueId
@@ -302,40 +270,30 @@ const appReducer = (state: AppState, action: Action): AppState => {
 };
 
 interface AppProviderProps {
-}
   children: ReactNode;
-}
 
 export const AppProvider: FC<AppProviderProps> = ({ children }: any) => {
-}
   const [state, dispatch] = React.useReducer(appReducer, initialState);
 
   // Load saved user session on mount
   React.useEffect(() => {
-}
-    const savedUser = localStorage.getItem(&apos;astral_draft_user&apos;);
+    const savedUser = localStorage.getItem('astral_draft_user');
     if (savedUser) {
-}
       try {
-}
         const user = JSON.parse(savedUser);
-        dispatch({ type: &apos;LOGIN&apos;, payload: user });
+        dispatch({ type: 'LOGIN', payload: user });
       } catch (error) {
-}
-        console.error(&apos;Error parsing saved user:&apos;, error);
+        console.error('Error parsing saved user:', error);
       }
     }
   }, []);
 
   // Save user session when it changes
   React.useEffect(() => {
-}
     if (state.user) {
-}
-      localStorage.setItem(&apos;astral_draft_user&apos;, JSON.stringify(state.user));
+      localStorage.setItem('astral_draft_user', JSON.stringify(state.user));
     } else {
-}
-      localStorage.removeItem(&apos;astral_draft_user&apos;);
+      localStorage.removeItem('astral_draft_user');
     }
   }, [state.user]);
 
@@ -349,11 +307,9 @@ export const AppProvider: FC<AppProviderProps> = ({ children }: any) => {
 };
 
 export const useAppState = () => {
-}
   const context = React.useContext(AppContext);
   if (context === undefined) {
-}
-    throw new Error(&apos;useAppState must be used within an AppProvider&apos;);
+    throw new Error('useAppState must be used within an AppProvider');
   }
   return context;
 };

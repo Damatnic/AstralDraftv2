@@ -4,32 +4,28 @@
  */
 
 // Fix circular dependency by lazy loading LEAGUE_MEMBERS
-import SecurePasswordGenerator from &apos;../utils/securePasswordGenerator&apos;;
+import SecurePasswordGenerator from '../utils/securePasswordGenerator';
 
 // Lazy load to avoid circular dependency issues
 let LEAGUE_MEMBERS: any[] | null = null;
 const getLeagueMembers = () => {
-}
     if (!LEAGUE_MEMBERS) {
-}
         try {
-}
-            const module = require(&apos;../data/leagueData&apos;);
+            const module = require('../data/leagueData');
             LEAGUE_MEMBERS = module.LEAGUE_MEMBERS || [];
         } catch (e) {
-}
             // Fallback data if import fails
             LEAGUE_MEMBERS = [
-                { id: &apos;user_1&apos;, name: &apos;Nick Damato&apos;, email: &apos;nick@example.com&apos;, avatar: &apos;👑&apos; },
-                { id: &apos;user_2&apos;, name: &apos;Jon Kornbeck&apos;, email: &apos;jon@example.com&apos;, avatar: &apos;⚡&apos; },
-                { id: &apos;user_3&apos;, name: &apos;Cason Minor&apos;, email: &apos;cason@example.com&apos;, avatar: &apos;🔥&apos; },
-                { id: &apos;user_4&apos;, name: &apos;Brittany Bergrum&apos;, email: &apos;brittany@example.com&apos;, avatar: &apos;💪&apos; },
-                { id: &apos;user_5&apos;, name: &apos;Renee McCaigue&apos;, email: &apos;renee@example.com&apos;, avatar: &apos;🎯&apos; },
-                { id: &apos;user_6&apos;, name: &apos;Jack McCaigue&apos;, email: &apos;jack@example.com&apos;, avatar: &apos;🚀&apos; },
-                { id: &apos;user_7&apos;, name: &apos;Larry McCaigue&apos;, email: &apos;larry@example.com&apos;, avatar: &apos;⭐&apos; },
-                { id: &apos;user_8&apos;, name: &apos;Kaity Lorbiecki&apos;, email: &apos;kaity@example.com&apos;, avatar: &apos;💎&apos; },
-                { id: &apos;user_9&apos;, name: &apos;David Jarvey&apos;, email: &apos;david@example.com&apos;, avatar: &apos;🏆&apos; },
-                { id: &apos;user_10&apos;, name: &apos;Nick Hartley&apos;, email: &apos;nickh@example.com&apos;, avatar: &apos;🎮&apos; }
+                { id: 'user_1', name: 'Nick Damato', email: 'nick@example.com', avatar: '👑' },
+                { id: 'user_2', name: 'Jon Kornbeck', email: 'jon@example.com', avatar: '⚡' },
+                { id: 'user_3', name: 'Cason Minor', email: 'cason@example.com', avatar: '🔥' },
+                { id: 'user_4', name: 'Brittany Bergrum', email: 'brittany@example.com', avatar: '💪' },
+                { id: 'user_5', name: 'Renee McCaigue', email: 'renee@example.com', avatar: '🎯' },
+                { id: 'user_6', name: 'Jack McCaigue', email: 'jack@example.com', avatar: '🚀' },
+                { id: 'user_7', name: 'Larry McCaigue', email: 'larry@example.com', avatar: '⭐' },
+                { id: 'user_8', name: 'Kaity Lorbiecki', email: 'kaity@example.com', avatar: '💎' },
+                { id: 'user_9', name: 'David Jarvey', email: 'david@example.com', avatar: '🏆' },
+                { id: 'user_10', name: 'Nick Hartley', email: 'nickh@example.com', avatar: '🎮' }
             ];
         }
     }
@@ -37,7 +33,6 @@ const getLeagueMembers = () => {
 };
 
 export interface SimpleUser {
-}
     id: string;
     username: string;
     displayName: string;
@@ -45,221 +40,193 @@ export interface SimpleUser {
     email?: string;
     isAdmin: boolean;
     customization: {
-}
         backgroundColor: string;
         textColor: string;
         emoji: string;
     };
     createdAt: string;
     lastLogin?: string;
-}
 
 export interface AuthSession {
-}
     user: SimpleUser;
     sessionId: string;
     expiresAt: string;
-}
 
 class SimpleAuthService {
-}
-    private static readonly STORAGE_KEY = &apos;astral_draft_users&apos;;
-    private static readonly SESSION_KEY = &apos;astral_draft_session&apos;;
+    private static readonly STORAGE_KEY = 'astral_draft_users';
+    private static readonly SESSION_KEY = 'astral_draft_session';
     private static readonly SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
     // Map player IDs to league member IDs
     private static readonly PLAYER_MAPPING = {
-}
-        &apos;player1&apos;: &apos;user_1&apos;,  // Nick Damato
-        &apos;player2&apos;: &apos;user_2&apos;,  // Jon Kornbeck
-        &apos;player3&apos;: &apos;user_3&apos;,  // Cason Minor
-        &apos;player4&apos;: &apos;user_4&apos;,  // Brittany Bergrum
-        &apos;player5&apos;: &apos;user_5&apos;,  // Renee McCaigue
-        &apos;player6&apos;: &apos;user_6&apos;,  // Jack McCaigue
-        &apos;player7&apos;: &apos;user_7&apos;,  // Larry McCaigue
-        &apos;player8&apos;: &apos;user_8&apos;,  // Kaity Lorbiecki
-        &apos;player9&apos;: &apos;user_9&apos;,  // David Jarvey
-        &apos;player10&apos;: &apos;user_10&apos;, // Nick Hartley
-        &apos;admin&apos;: &apos;user_1&apos;     // Nick Damato as admin
+        'player1': 'user_1',  // Nick Damato
+        'player2': 'user_2',  // Jon Kornbeck
+        'player3': 'user_3',  // Cason Minor
+        'player4': 'user_4',  // Brittany Bergrum
+        'player5': 'user_5',  // Renee McCaigue
+        'player6': 'user_6',  // Jack McCaigue
+        'player7': 'user_7',  // Larry McCaigue
+        'player8': 'user_8',  // Kaity Lorbiecki
+        'player9': 'user_9',  // David Jarvey
+        'player10': 'user_10', // Nick Hartley
+        'admin': 'user_1'     // Nick Damato as admin
     };
 
     // Default users: 10 players + 1 admin (Nick Damato is both admin and player1)
     private static readonly DEFAULT_USERS: SimpleUser[] = [
         // Admin user (Nick Damato)
         {
-}
-            id: &apos;admin&apos;,
-            username: &apos;admin&apos;,
-            displayName: &apos;Nick Damato&apos;,
-            pin: &apos;7347&apos;,
+            id: 'admin',
+            username: 'admin',
+            displayName: 'Nick Damato',
+            pin: '7347',
             email: getLeagueMembers()[0].email,
             isAdmin: true,
             customization: {
-}
-                backgroundColor: &apos;#3b82f6&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;👑&apos;
+                backgroundColor: '#3b82f6',
+                textColor: '#ffffff',
+                emoji: '👑'
             },
             createdAt: new Date().toISOString()
         },
         // Player users with actual names
         {
-}
-            id: &apos;player1&apos;,
-            username: &apos;player1&apos;,
-            displayName: &apos;Nick Damato&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player1',
+            username: 'player1',
+            displayName: 'Nick Damato',
+            pin: '0000',
             email: getLeagueMembers()[0].email,
             isAdmin: true, // Nick is also admin
             customization: {
-}
-                backgroundColor: &apos;#3b82f6&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;👑&apos;
+                backgroundColor: '#3b82f6',
+                textColor: '#ffffff',
+                emoji: '👑'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player2&apos;,
-            username: &apos;player2&apos;,
-            displayName: &apos;Jon Kornbeck&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player2',
+            username: 'player2',
+            displayName: 'Jon Kornbeck',
+            pin: '0000',
             email: getLeagueMembers()[1].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#ef4444&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;⚡&apos;
+                backgroundColor: '#ef4444',
+                textColor: '#ffffff',
+                emoji: '⚡'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player3&apos;,
-            username: &apos;player3&apos;,
-            displayName: &apos;Cason Minor&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player3',
+            username: 'player3',
+            displayName: 'Cason Minor',
+            pin: '0000',
             email: getLeagueMembers()[2].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#10b981&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;🔥&apos;
+                backgroundColor: '#10b981',
+                textColor: '#ffffff',
+                emoji: '🔥'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player4&apos;,
-            username: &apos;player4&apos;,
-            displayName: &apos;Brittany Bergrum&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player4',
+            username: 'player4',
+            displayName: 'Brittany Bergrum',
+            pin: '0000',
             email: getLeagueMembers()[3].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#f59e0b&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;💪&apos;
+                backgroundColor: '#f59e0b',
+                textColor: '#ffffff',
+                emoji: '💪'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player5&apos;,
-            username: &apos;player5&apos;,
-            displayName: &apos;Renee McCaigue&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player5',
+            username: 'player5',
+            displayName: 'Renee McCaigue',
+            pin: '0000',
             email: getLeagueMembers()[4].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#8b5cf6&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;🎯&apos;
+                backgroundColor: '#8b5cf6',
+                textColor: '#ffffff',
+                emoji: '🎯'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player6&apos;,
-            username: &apos;player6&apos;,
-            displayName: &apos;Jack McCaigue&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player6',
+            username: 'player6',
+            displayName: 'Jack McCaigue',
+            pin: '0000',
             email: getLeagueMembers()[5].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#06b6d4&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;🚀&apos;
+                backgroundColor: '#06b6d4',
+                textColor: '#ffffff',
+                emoji: '🚀'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player7&apos;,
-            username: &apos;player7&apos;,
-            displayName: &apos;Larry McCaigue&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player7',
+            username: 'player7',
+            displayName: 'Larry McCaigue',
+            pin: '0000',
             email: getLeagueMembers()[6].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#84cc16&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;⭐&apos;
+                backgroundColor: '#84cc16',
+                textColor: '#ffffff',
+                emoji: '⭐'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player8&apos;,
-            username: &apos;player8&apos;,
-            displayName: &apos;Kaity Lorbiecki&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player8',
+            username: 'player8',
+            displayName: 'Kaity Lorbiecki',
+            pin: '0000',
             email: getLeagueMembers()[7].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#f97316&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;💎&apos;
+                backgroundColor: '#f97316',
+                textColor: '#ffffff',
+                emoji: '💎'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player9&apos;,
-            username: &apos;player9&apos;,
-            displayName: &apos;David Jarvey&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player9',
+            username: 'player9',
+            displayName: 'David Jarvey',
+            pin: '0000',
             email: getLeagueMembers()[8].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#ec4899&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;🏆&apos;
+                backgroundColor: '#ec4899',
+                textColor: '#ffffff',
+                emoji: '🏆'
             },
             createdAt: new Date().toISOString()
         },
         {
-}
-            id: &apos;player10&apos;,
-            username: &apos;player10&apos;,
-            displayName: &apos;Nick Hartley&apos;,
-            pin: &apos;0000&apos;,
+            id: 'player10',
+            username: 'player10',
+            displayName: 'Nick Hartley',
+            pin: '0000',
             email: getLeagueMembers()[9].email,
             isAdmin: false,
             customization: {
-}
-                backgroundColor: &apos;#6366f1&apos;,
-                textColor: &apos;#ffffff&apos;,
-                emoji: &apos;🎮&apos;
+                backgroundColor: '#6366f1',
+                textColor: '#ffffff',
+                emoji: '🎮'
             },
             createdAt: new Date().toISOString()
         }
@@ -267,23 +234,21 @@ class SimpleAuthService {
 
     /**
      * Generate secure random passwords for all non-main users
-     * Preserves the main user&apos;s existing passwords (admin and player1)
+     * Preserves the main user's existing passwords (admin and player1)
      */
     static generateRandomPasswordsForUsers(): void {
-}
         try {
-}
-            console.log(&apos;🔐 Starting secure password generation for league users...&apos;);
+            console.log('🔐 Starting secure password generation for league users...');
             
             // Get existing users
             const users = this.getAllUsers();
             
             // Identify main user passwords to preserve
-            const mainUserPasswords = [&apos;7347&apos;]; // Admin password
+            const mainUserPasswords = ['7347']; // Admin password
             const excludeExisting = [...mainUserPasswords];
             
             // Get all non-main user IDs (exclude admin and player1 which is also Nick Damato)
-            const nonMainUserIds = [&apos;player2&apos;, &apos;player3&apos;, &apos;player4&apos;, &apos;player5&apos;, &apos;player6&apos;, &apos;player7&apos;, &apos;player8&apos;, &apos;player9&apos;, &apos;player10&apos;];
+            const nonMainUserIds = ['player2', 'player3', 'player4', 'player5', 'player6', 'player7', 'player8', 'player9', 'player10'];
             
             console.log(`🎯 Generating secure passwords for ${nonMainUserIds.length} users...`);
             
@@ -291,9 +256,8 @@ class SimpleAuthService {
             const newPasswords = SecurePasswordGenerator.generateMultipleSecurePasswords(
                 nonMainUserIds.length,
                 {
-}
                     excludeExisting,
-                    excludePatterns: [&apos;0000&apos;], // Exclude the current default
+                    excludePatterns: ['0000'], // Exclude the current default
                     maxAttempts: 1000
                 }
             );
@@ -301,10 +265,8 @@ class SimpleAuthService {
             // Update each non-main user with their new password
             let updatedCount = 0;
             nonMainUserIds.forEach((userId, index) => {
-}
                 const userIndex = users.findIndex(u => u.id === userId);
                 if (userIndex !== -1) {
-}
                     const oldPin = users[userIndex].pin;
                     users[userIndex].pin = newPasswords[index];
                     
@@ -312,7 +274,6 @@ class SimpleAuthService {
                     console.log(`✅ Updated password for ${users[userIndex].displayName} (${userId})`);
                     updatedCount++;
                 } else {
-}
                     console.warn(`⚠️  User ${userId} not found, skipping password update`);
                 }
             });
@@ -321,28 +282,25 @@ class SimpleAuthService {
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
             
             console.log(`🚀 Password generation complete! Updated ${updatedCount} users.`);
-            console.log(&apos;🔒 Main user passwords preserved (admin: 7347, player1: 0000)&apos;);
-            console.log(&apos;📋 All passwords are cryptographically secure and unique&apos;);
+            console.log('🔒 Main user passwords preserved (admin: 7347, player1: 0000)');
+            console.log('📋 All passwords are cryptographically secure and unique');
             
             // Log summary for audit purposes
             const auditLog = {
-}
                 timestamp: new Date().toISOString(),
-                action: &apos;bulk_password_generation&apos;,
+                action: 'bulk_password_generation',
                 usersUpdated: updatedCount,
-                mainUsersPreserved: [&apos;admin&apos;, &apos;player1&apos;],
-                securityFeatures: [&apos;crypto-secure-random&apos;, &apos;pattern-exclusion&apos;, &apos;uniqueness-guarantee&apos;]
+                mainUsersPreserved: ['admin', 'player1'],
+                securityFeatures: ['crypto-secure-random', 'pattern-exclusion', 'uniqueness-guarantee']
             };
             
-            if (typeof window !== &apos;undefined&apos;) {
-}
+            if (typeof window !== 'undefined') {
                 (window as any).__ASTRAL_PASSWORD_UPDATE_LOG = auditLog;
             }
             
         } catch (error) {
-}
-            console.error(&apos;❌ Failed to generate secure passwords:&apos;, error);
-            SecurePasswordGenerator.logPasswordGeneration(&apos;bulk_operation&apos;, false);
+            console.error('❌ Failed to generate secure passwords:', error);
+            SecurePasswordGenerator.logPasswordGeneration('bulk_operation', false);
             throw error;
         }
     }
@@ -351,17 +309,13 @@ class SimpleAuthService {
      * ZERO-ERROR Initialize - Always ensures users exist
      */
     static initialize(): void {
-}
         try {
-}
             const existingUsers = this.getAllUsers();
             if (existingUsers.length === 0) {
-}
                 localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.DEFAULT_USERS));
             }
         } catch (error) {
-}
-            console.warn(&apos;Storage initialization failed, using in-memory fallback:&apos;, error);
+            console.warn('Storage initialization failed, using in-memory fallback:', error);
             // In case of storage issues, create a fallback in-memory system
             (window as any).__ASTRAL_USERS = this.DEFAULT_USERS;
         }
@@ -371,26 +325,21 @@ class SimpleAuthService {
      * ZERO-ERROR Get all users with fallbacks
      */
     static getAllUsers(): SimpleUser[] {
-}
         try {
-}
             const usersJson = localStorage.getItem(this.STORAGE_KEY);
             if (usersJson) {
-}
                 return JSON.parse(usersJson);
             }
             
             // Fallback to in-memory storage
             if ((window as any).__ASTRAL_USERS) {
-}
                 return (window as any).__ASTRAL_USERS;
             }
             
             // Last resort: return default users
             return this.DEFAULT_USERS;
         } catch (error) {
-}
-            console.warn(&apos;Failed to load users, using defaults:&apos;, error);
+            console.warn('Failed to load users, using defaults:', error);
             return this.DEFAULT_USERS;
         }
     }
@@ -399,7 +348,6 @@ class SimpleAuthService {
      * Get user by ID
      */
     static getUserById(id: string): SimpleUser | null {
-}
         const users = this.getAllUsers();
         return users.find((user: any) => user.id === id) || null;
     }
@@ -408,28 +356,23 @@ class SimpleAuthService {
      * ZERO-ERROR Authentication - Always succeeds with fallbacks
      */
     static async authenticateUser(userId: string, pin: string): Promise<AuthSession | null> {
-}
         try {
-}
             const users = this.getAllUsers();
             let user = users.find((u: any) => u.id === userId);
 
             // FALLBACK 1: If user not found, create default user
             if (!user) {
-}
                 user = {
-}
                     id: userId,
                     username: userId,
                     displayName: `User ${userId}`,
-                    pin: &apos;0000&apos;,
+                    pin: '0000',
                     email: `${userId}@demo.com`,
-                    isAdmin: userId === &apos;admin&apos; || userId === &apos;player1&apos;,
+                    isAdmin: userId === 'admin' || userId === 'player1',
                     customization: {
-}
-                        backgroundColor: &apos;#3b82f6&apos;,
-                        textColor: &apos;#ffffff&apos;,
-                        emoji: &apos;👤&apos;
+                        backgroundColor: '#3b82f6',
+                        textColor: '#ffffff',
+                        emoji: '👤'
                     },
                     createdAt: new Date().toISOString()
                 };
@@ -437,12 +380,11 @@ class SimpleAuthService {
 
             // FALLBACK 2: PIN validation with multiple options
             const isValidPin = user.pin === pin || 
-                            pin === &apos;0000&apos; || // Default demo PIN
-                            pin === &apos;&apos; ||     // Empty PIN allowed
+                            pin === '0000' || // Default demo PIN
+                            pin === '' ||     // Empty PIN allowed
                             pin.length === 0; // No PIN required
 
-            if (!isValidPin && process.env.NODE_ENV === &apos;production&apos;) {
-}
+            if (!isValidPin && process.env.NODE_ENV === 'production') {
                 // Only enforce PIN in production
                 return null;
             }
@@ -457,9 +399,7 @@ class SimpleAuthService {
 
             // Create session with enhanced data
             const session: AuthSession = {
-}
                 user: {
-}
                     ...user,
                     id: leagueMemberId,
                     displayName: leagueMember?.name || user.displayName,
@@ -471,36 +411,29 @@ class SimpleAuthService {
 
             // Store session with error handling
             try {
-}
                 localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
             } catch (storageError) {
-}
-                console.warn(&apos;Session storage failed, continuing with in-memory session:&apos;, storageError);
+                console.warn('Session storage failed, continuing with in-memory session:', storageError);
             }
 
             return session;
         } catch (error) {
-}
-            console.error(&apos;Authentication error:&apos;, error);
+            console.error('Authentication error:', error);
             
             // FALLBACK 3: Emergency authentication for development
-            if (process.env.NODE_ENV === &apos;development&apos;) {
-}
+            if (process.env.NODE_ENV === 'development') {
                 const emergencySession: AuthSession = {
-}
                     user: {
-}
-                        id: userId || &apos;demo&apos;,
-                        username: userId || &apos;demo&apos;,
-                        displayName: &apos;Demo User&apos;,
-                        pin: &apos;0000&apos;,
-                        email: &apos;demo@astraldraft.com&apos;,
-                        isAdmin: userId === &apos;admin&apos; || userId === &apos;player1&apos;,
+                        id: userId || 'demo',
+                        username: userId || 'demo',
+                        displayName: 'Demo User',
+                        pin: '0000',
+                        email: 'demo@astraldraft.com',
+                        isAdmin: userId === 'admin' || userId === 'player1',
                         customization: {
-}
-                            backgroundColor: &apos;#3b82f6&apos;,
-                            textColor: &apos;#ffffff&apos;,
-                            emoji: &apos;🚀&apos;
+                            backgroundColor: '#3b82f6',
+                            textColor: '#ffffff',
+                            emoji: '🚀'
                         },
                         createdAt: new Date().toISOString()
                     },
@@ -519,9 +452,7 @@ class SimpleAuthService {
      * Get current session
      */
     static getCurrentSession(): AuthSession | null {
-}
         try {
-}
             const sessionJson = localStorage.getItem(this.SESSION_KEY);
             if (!sessionJson) return null;
 
@@ -529,15 +460,13 @@ class SimpleAuthService {
             
             // Check if session is expired
             if (new Date() > new Date(session.expiresAt)) {
-}
                 this.logout();
                 return null;
             }
 
             return session;
         } catch (error) {
-}
-            console.error(&apos;Failed to load session:&apos;, error);
+            console.error('Failed to load session:', error);
             return null;
         }
     }
@@ -546,7 +475,6 @@ class SimpleAuthService {
      * Update user PIN
      */
     static updateUserPin(userId: string, newPin: string): boolean {
-}
         const users = this.getAllUsers();
         const userIndex = users.findIndex(u => u.id === userId);
         
@@ -562,12 +490,10 @@ class SimpleAuthService {
      * Update user data
      */
     private static updateUser(updatedUser: SimpleUser): void {
-}
         const users = this.getAllUsers();
         const userIndex = users.findIndex(u => u.id === updatedUser.id);
         
         if (userIndex !== -1) {
-}
             users[userIndex] = updatedUser;
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
         }
@@ -577,7 +503,6 @@ class SimpleAuthService {
      * Logout current user
      */
     static logout(): void {
-}
         localStorage.removeItem(this.SESSION_KEY);
     }
 
@@ -585,7 +510,6 @@ class SimpleAuthService {
      * Generate session ID
      */
     private static generateSessionId(): string {
-}
         return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     }
 
@@ -594,7 +518,6 @@ class SimpleAuthService {
      * Returns user info with password status, not actual passwords
      */
     static getUserPasswordStatus(): Array<{
-}
         id: string;
         displayName: string;
         passwordSet: boolean;
@@ -602,28 +525,23 @@ class SimpleAuthService {
         isMainUser: boolean;
         lastUpdated?: string;
     }> {
-}
         try {
-}
             const users = this.getAllUsers();
             return users.map((user: any) => {
-}
-                const isMainUser = user.id === &apos;admin&apos; || user.id === &apos;player1&apos;;
+                const isMainUser = user.id === 'admin' || user.id === 'player1';
                 const validation = SecurePasswordGenerator.validatePasswordStrength(user.pin);
                 
                 return {
-}
                     id: user.id,
                     displayName: user.displayName,
                     passwordSet: user.pin && user.pin.length === 4,
-                    isSecurePattern: validation.strength === &apos;strong&apos;,
+                    isSecurePattern: validation.strength === 'strong',
                     isMainUser,
                     lastUpdated: user.lastLogin
                 };
             });
         } catch (error) {
-}
-            console.error(&apos;Failed to get user password status:&apos;, error);
+            console.error('Failed to get user password status:', error);
             return [];
         }
     }
@@ -632,48 +550,39 @@ class SimpleAuthService {
      * Validate all user passwords and generate report
      */
     static generatePasswordSecurityReport(): {
-}
         totalUsers: number;
         securePasswords: number;
         weakPasswords: number;
         mainUsersProtected: boolean;
         recommendations: string[];
     } {
-}
         try {
-}
             const users = this.getAllUsers();
             let secureCount = 0;
             let weakCount = 0;
             const recommendations: string[] = [];
             
             users.forEach((user: any) => {
-}
                 const validation = SecurePasswordGenerator.validatePasswordStrength(user.pin);
-                if (validation.strength === &apos;strong&apos;) {
-}
+                if (validation.strength === 'strong') {
                     secureCount++;
                 } else {
-}
                     weakCount++;
-                    if (!user.isAdmin && user.id !== &apos;player1&apos;) {
-}
+                    if (!user.isAdmin && user.id !== 'player1') {
                         recommendations.push(`Update password for ${user.displayName} (${user.id})`);
                     }
                 }
             });
             
             const mainUsersProtected = users
-                .filter((u: any) => u.id === &apos;admin&apos; || u.id === &apos;player1&apos;)
-                .every((u: any) => u.pin && u.pin !== &apos;0000&apos;);
+                .filter((u: any) => u.id === 'admin' || u.id === 'player1')
+                .every((u: any) => u.pin && u.pin !== '0000');
             
             if (weakCount > 0) {
-}
-                recommendations.push(&apos;Run generateRandomPasswordsForUsers() to secure all non-main users&apos;);
+                recommendations.push('Run generateRandomPasswordsForUsers() to secure all non-main users');
             }
             
             return {
-}
                 totalUsers: users.length,
                 securePasswords: secureCount,
                 weakPasswords: weakCount,
@@ -681,15 +590,13 @@ class SimpleAuthService {
 //                 recommendations
             };
         } catch (error) {
-}
-            console.error(&apos;Failed to generate password security report:&apos;, error);
+            console.error('Failed to generate password security report:', error);
             return {
-}
                 totalUsers: 0,
                 securePasswords: 0,
                 weakPasswords: 0,
                 mainUsersProtected: false,
-                recommendations: [&apos;Error generating report - check system logs&apos;]
+                recommendations: ['Error generating report - check system logs']
             };
         }
     }
@@ -698,9 +605,7 @@ class SimpleAuthService {
      * Reset all users to default (Admin only)
      */
     static resetAllUsers(): void {
-}
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.DEFAULT_USERS));
     }
-}
 
 export default SimpleAuthService;

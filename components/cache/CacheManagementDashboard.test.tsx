@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import CacheManagementDashboard from &apos;./CacheManagementDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import CacheManagementDashboard from './CacheManagementDashboard';
 
-describe(&apos;CacheManagementDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('CacheManagementDashboard', () => {
+  it('renders without crashing', () => {
     render(<CacheManagementDashboard />);
-    expect(screen.getByTestId(&apos;cachemanagementdashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('cachemanagementdashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<CacheManagementDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<CacheManagementDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

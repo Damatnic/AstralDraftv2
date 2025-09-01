@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import RivalryWidget from &apos;./RivalryWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import RivalryWidget from './RivalryWidget';
 
-describe(&apos;RivalryWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('RivalryWidget', () => {
+  it('renders without crashing', () => {
     render(<RivalryWidget />);
-    expect(screen.getByTestId(&apos;rivalrywidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('rivalrywidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<RivalryWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<RivalryWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

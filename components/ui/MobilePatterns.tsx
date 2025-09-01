@@ -3,13 +3,12 @@
  * Bottom sheets, swipe gestures, and mobile-first navigation components
  */
 
-import React, { useMemo } from &apos;react&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
-import { AccessibleButton } from &apos;./AccessibleButton&apos;;
-import { useFocusTrap } from &apos;../../utils/accessibility&apos;;
+import React, { useMemo } from 'react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { AccessibleButton } from './AccessibleButton';
+import { useFocusTrap } from '../../utils/accessibility';
 
 interface BottomSheetProps {
-}
   isOpen: boolean;
   onClose: () => void;
   title?: string;
@@ -22,18 +21,15 @@ interface BottomSheetProps {
  * Bottom Sheet Modal for Mobile
  * Provides native mobile app-like modal experience
  */
-}
 
 export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
-}
   onClose,
   title,
   children,
-  className = &apos;&apos;,
+  className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -41,34 +37,28 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   const [currentY, setCurrentY] = React.useState(0);
   const sheetRef = React.useRef<HTMLDivElement>(null);
   const { containerRef } = useFocusTrap(isOpen);
-  const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Set the ref for both focus trap and sheet functionality
   React.useEffect(() => {
-}
     if (sheetRef.current && containerRef.current) {
-}
       containerRef.current = sheetRef.current;
     }
   }, [containerRef]);
 
   React.useEffect(() => {
-}
     const handleKeydown = (e: KeyboardEvent) => {
-}
-      if (e.key === &apos;Escape&apos; && isOpen) {
-}
+      if (e.key === 'Escape' && isOpen) {
         onClose();
     }
   };
 
-    document.addEventListener(&apos;keydown&apos;, handleKeydown);
-    return () => document.removeEventListener(&apos;keydown&apos;, handleKeydown);
+    document.addEventListener('keydown', handleKeydown);
+    return () => document.removeEventListener('keydown', handleKeydown);
   }, [isOpen, onClose]);
 
   const handleTouchStart = (e: React.TouchEvent) 
 } {
-}
     if (!isMobile) return;
     setIsDragging(true);
     setStartY(e.touches[0].clientY);
@@ -76,30 +66,24 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-}
     if (!isDragging || !isMobile) return;
     setCurrentY(e.touches[0].clientY);
   };
 
   const handleTouchEnd = () => {
-}
     if (!isDragging || !isMobile) return;
     
     const deltaY = currentY - startY;
     const threshold = 100; // Minimum drag distance to trigger action
 
     if (deltaY > threshold) {
-}
       // Dragged down - close or go to lower snap point
       if (currentSnap === 0) {
-}
         onClose();
       } else {
-}
         setCurrentSnap(Math.max(0, currentSnap - 1));
 
     } else if (deltaY < -threshold) {
-}
       // Dragged up - go to higher snap point
       setCurrentSnap(Math.min(snapPoints.length - 1, currentSnap + 1));
 
@@ -109,14 +93,12 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   };
 
   const getTransform = () => {
-}
-    if (!isOpen) return &apos;translateY(100%)&apos;;
+    if (!isOpen) return 'translateY(100%)';
     
     const snapPoint = snapPoints[currentSnap];
     const baseTransform = `translateY(${(1 - snapPoint) * 100}%)`;
     
     if (isDragging && currentY > startY) {
-}
       const dragOffset = Math.min(currentY - startY, 200);
       return `translateY(calc(${(1 - snapPoint) * 100}% + ${dragOffset}px))`;
 
@@ -138,15 +120,14 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
         ref={sheetRef}
         className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl z-50 transition-transform duration-300 ease-out ${className}`}
         style={{
-}
           transform: getTransform(),
-          maxHeight: &apos;90vh&apos;
+          maxHeight: '90vh'
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? &apos;bottom-sheet-title&apos; : undefined}
+        aria-labelledby={title ? 'bottom-sheet-title' : undefined}
       >
         {/* Drag Handle */}
         <div className="flex justify-center py-3 sm:px-4 md:px-6 lg:px-8">
@@ -155,7 +136,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
         
         {/* Header */}
         {title && (
-}
           <div className="flex items-center justify-between px-6 pb-4 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
             <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
               {title}
@@ -180,7 +160,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
 };
 
 interface SwipeGestureProps {
-}
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
@@ -193,43 +172,35 @@ interface SwipeGestureProps {
  * Swipe Gesture Handler
  * Provides swipe gesture detection for mobile interactions
  */
-}
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
-}
   onSwipeLeft,
   onSwipeRight,
   onSwipeUp,
   onSwipeDown,
   threshold = 50,
   children,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-}
     setTouchEnd(null);
     setTouchStart({
-}
       x: e.targetTouches[0].clientX,
       y: e.targetTouches[0].clientY
     });
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-}
     setTouchEnd({
-}
       x: e.targetTouches[0].clientX,
       y: e.targetTouches[0].clientY
     });
   };
 
   const handleTouchEnd = () => {
-}
     if (!touchStart || !touchEnd) return;
 
     const distanceX = touchStart.x - touchEnd.x;
@@ -241,23 +212,17 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
 
     // Determine primary direction
     if (Math.abs(distanceX) > Math.abs(distanceY)) {
-}
       // Horizontal swipe
       if (isLeftSwipe && onSwipeLeft) {
-}
         onSwipeLeft();
       } else if (isRightSwipe && onSwipeRight) {
-}
         onSwipeRight();
 
     } else {
-}
       // Vertical swipe
       if (isUpSwipe && onSwipeUp) {
-}
         onSwipeUp();
       } else if (isDownSwipe && onSwipeDown) {
-}
         onSwipeDown();
 
 
@@ -275,10 +240,9 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
 };
 
 interface MobileDrawerProps {
-}
   isOpen: boolean;
   onClose: () => void;
-  side?: &apos;left&apos; | &apos;right&apos;;
+  side?: 'left' | 'right';
   children: React.ReactNode;
   className?: string;
   overlay?: boolean;
@@ -287,43 +251,34 @@ interface MobileDrawerProps {
  * Mobile Drawer Navigation
  * Side drawer for mobile navigation
  */
-}
 
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({
-}
   isOpen,
   onClose,
-  side = &apos;left&apos;,
+  side = 'left',
   children,
-  className = &apos;&apos;,
+  className = '',
   overlay = true
 }: any) => {
-}
   const drawerRef = React.useRef<HTMLDivElement>(null);
   const { containerRef } = useFocusTrap(isOpen);
 
   React.useEffect(() => {
-}
     if (isOpen && drawerRef.current && containerRef.current) {
-}
       containerRef.current = drawerRef.current;
     }
   }, [isOpen, containerRef]);
 
   React.useEffect(() => {
-}
     const handleKeydown = (e: KeyboardEvent) => {
-}
-      if (e.key === &apos;Escape&apos; && isOpen) {
-}
+      if (e.key === 'Escape' && isOpen) {
         onClose();
     }
   };
 
-    document.addEventListener(&apos;keydown&apos;, handleKeydown);
+    document.addEventListener('keydown', handleKeydown);
     return () => {
-}
-      document.removeEventListener(&apos;keydown&apos;, handleKeydown);
+      document.removeEventListener('keydown', handleKeydown);
     };
   }, [isOpen, onClose]);
 
@@ -331,7 +286,6 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
     <>
       {/* Backdrop */}
       {overlay && isOpen && (
-}
         <div 
           className="fixed inset-0 bg-black/50 z-40 transition-opacity sm:px-4 md:px-6 lg:px-8"
           onClick={onClose}
@@ -341,20 +295,19 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 ${side === &apos;left&apos; ? &apos;left-0&apos; : &apos;right-0&apos;} h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl z-50 transform transition-transform duration-300 ease-out ${
-}
+        className={`fixed top-0 ${side === 'left' ? 'left-0' : 'right-0'} h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl z-50 transform transition-transform duration-300 ease-out ${
 //           isOpen 
-            ? &apos;translate-x-0&apos; 
-            : side === &apos;left&apos; 
-              ? &apos;-translate-x-full&apos; 
-              : &apos;translate-x-full&apos;
+            ? 'translate-x-0' 
+            : side === 'left' 
+              ? '-translate-x-full' 
+              : 'translate-x-full'
         } ${className}`}
         role="dialog"
         aria-modal="true"
       >
         <SwipeGesture>
-          onSwipeLeft={side === &apos;left&apos; ? onClose : undefined}
-          onSwipeRight={side === &apos;right&apos; ? onClose : undefined}
+          onSwipeLeft={side === 'left' ? onClose : undefined}
+          onSwipeRight={side === 'right' ? onClose : undefined}
           className="h-full sm:px-4 md:px-6 lg:px-8"
         >
           {children}
@@ -365,9 +318,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
 };
 
 interface MobileTabsProps {
-}
   tabs: Array<{
-}
     id: string;
     label: string;
     icon?: React.ReactNode;
@@ -382,22 +333,17 @@ interface MobileTabsProps {
  * Touch-friendly tab navigation for mobile
  */
 export const MobileTabs: React.FC<MobileTabsProps> = ({
-}
   tabs,
   activeTab,
   onTabChange,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   // Simple keyboard navigation implementation
   const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
-}
     const currentIndex = tabs.findIndex((tab: any) => tab.id === activeTab);
-    if (e.key === &apos;ArrowLeft&apos; && currentIndex > 0) {
-}
+    if (e.key === 'ArrowLeft' && currentIndex > 0) {
       onTabChange(tabs[currentIndex - 1].id);
-    } else if (e.key === &apos;ArrowRight&apos; && currentIndex < tabs.length - 1) {
-}
+    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
       onTabChange(tabs[currentIndex + 1].id);
 
   }, [tabs, activeTab, onTabChange]);
@@ -410,7 +356,6 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
       onKeyDown={handleKeyDown}
     >
       {tabs.map((tab: any) => (
-}
         <button
           key={tab.id}
           role="tab"
@@ -418,13 +363,12 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}
           `}
-          style={{ minHeight: &apos;44px&apos; }} // Touch target compliance
+          style={{ minHeight: '44px' }} // Touch target compliance
         >
           <span className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
             {tab.icon}
             <span className="truncate sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
             {tab.badge && (
-}
               <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                 {tab.badge}
               </span>
@@ -441,22 +385,18 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
  * Provides pull-to-refresh functionality
  */
 interface PullToRefreshProps {
-}
   onRefresh: () => Promise<void>;
   children: React.ReactNode;
   className?: string;
   threshold?: number;
 
-}
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
-}
   onRefresh,
   children,
-  className = &apos;&apos;,
+  className = '',
   threshold = 80
 }: any) => {
-}
   const [isPulling, setIsPulling] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [pullDistance, setPullDistance] = React.useState(0);
@@ -464,22 +404,18 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-}
     if (containerRef.current?.scrollTop === 0) {
-}
       setStartY(e.touches[0].clientY);
     }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-}
     if (containerRef.current?.scrollTop !== 0 || isRefreshing) return;
 
     const currentY = e.touches[0].clientY;
     const distance = Math.max(0, currentY - startY);
     
     if (distance > 0) {
-}
       e.preventDefault();
       setPullDistance(distance);
       setIsPulling(distance > threshold);
@@ -487,12 +423,9 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   };
 
   const handleTouchEnd = async () => {
-}
     if (pullDistance > threshold && !isRefreshing) {
-}
       setIsRefreshing(true);
       try {
-}
 
         await onRefresh();
       
@@ -508,9 +441,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       style={{
-}
         transform: `translateY(${Math.min(pullDistance * 0.5, 60)}px)`,
-        transition: pullDistance === 0 ? &apos;transform 0.3s ease-out&apos; : &apos;none&apos;
+        transition: pullDistance === 0 ? 'transform 0.3s ease-out' : 'none'
       }}
     >
       {/* Refresh Indicator */}
@@ -519,7 +451,6 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
         style={getRefreshIndicatorStyle()}
       >
         {isRefreshing ? (
-}
           <div className="animate-spin sm:px-4 md:px-6 lg:px-8">⟳</div>
         ) : isPulling ? (
           <div>⬇</div>

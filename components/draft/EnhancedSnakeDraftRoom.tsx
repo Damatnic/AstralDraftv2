@@ -3,24 +3,21 @@
  * Advanced draft interface with auto-draft, analytics, and keeper league support
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { useSnakeDraft, SnakeDraftState } from &apos;../../hooks/useSnakeDraft&apos;;
-import { Player, League, PlayerPosition } from &apos;../../types&apos;;
-import { DraftRecommendation, AutoDraftConfig } from &apos;../../services/enhancedDraftEngine&apos;;
-import GeniusAiChat from &apos;./GeniusAiChat&apos;;
-import &apos;./EnhancedSnakeDraftRoom.css&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { useSnakeDraft, SnakeDraftState } from '../../hooks/useSnakeDraft';
+import { Player, League, PlayerPosition } from '../../types';
+import { DraftRecommendation, AutoDraftConfig } from '../../services/enhancedDraftEngine';
+import GeniusAiChat from './GeniusAiChat';
+import './EnhancedSnakeDraftRoom.css';
 
 interface Props {
-}
   league: League;
   userTeamId: number;
   onExit: () => void;
 
-}
 
 interface PlayerRowProps {
-}
   player: Player;
   isInQueue: boolean;
   isInWatchlist: boolean;
@@ -32,7 +29,6 @@ interface PlayerRowProps {
   onRemoveFromWatchlist: () => void;}
 
 const PlayerRow: React.FC<PlayerRowProps> = ({ player,
-}
   isInQueue,
   isInWatchlist,
   recommendations,
@@ -42,20 +38,18 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player,
   onAddToWatchlist,
 //   onRemoveFromWatchlist
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const recommendation = recommendations.find((rec: any) => rec.player.id === player.id);
   
   return (
-    <div className={`player-row ${recommendation ? &apos;recommended&apos; : &apos;&apos;}`}>
+    <div className={`player-row ${recommendation ? 'recommended' : ''}`}>
       <div className="player-info sm:px-4 md:px-6 lg:px-8">
         <div className="player-name sm:px-4 md:px-6 lg:px-8">{player.name}</div>
         <div className="player-details sm:px-4 md:px-6 lg:px-8">
-          {player.position} | {player.team} | ADP: {player?.adp || &apos;N/A&apos;}
+          {player.position} | {player.team} | ADP: {player?.adp || 'N/A'}
           {Boolean(player?.tier) && <span className="tier sm:px-4 md:px-6 lg:px-8">Tier {player?.tier}</span>}
         </div>
         {recommendation && (
-}
           <div className="recommendation sm:px-4 md:px-6 lg:px-8">
             <span className="rec-confidence sm:px-4 md:px-6 lg:px-8">Confidence: {(recommendation.confidence * 100).toFixed(0)}%</span>
             <span className="rec-reason sm:px-4 md:px-6 lg:px-8">{recommendation.reasoning}</span>
@@ -72,7 +66,6 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player,
         </button>
         
         {isInQueue ? (
-}
           <button 
             className="btn-queue remove sm:px-4 md:px-6 lg:px-8"
             onClick={onRemoveFromQueue}
@@ -89,7 +82,6 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player,
         )}
         
         {isInWatchlist ? (
-}
           <button 
             className="btn-watchlist remove sm:px-4 md:px-6 lg:px-8"
             onClick={onRemoveFromWatchlist}
@@ -110,30 +102,24 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player,
 };
 
 interface AutoDraftPanelProps {
-}
   autoDraftEnabled: boolean;
   autoDraftConfig: AutoDraftConfig;
   onEnableAutoDraft: (config?: Partial<AutoDraftConfig>) => void;
   onDisableAutoDraft: () => void;
 
-}
 
 const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
-}
   autoDraftEnabled,
   autoDraftConfig,
   onEnableAutoDraft,
 //   onDisableAutoDraft
 }: any) => {
-}
   const [strategy, setStrategy] = useState(autoDraftConfig.strategy);
   const [riskTolerance, setRiskTolerance] = useState(autoDraftConfig.riskTolerance);
   const [avoidInjuryProne, setAvoidInjuryProne] = useState(autoDraftConfig.avoidInjuryProne);
   
   const handleConfigChange = () => {
-}
     onEnableAutoDraft({
-}
       strategy,
       riskTolerance,
 //       avoidInjuryProne
@@ -150,7 +136,7 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
           <select 
             id="strategy-select"
             value={strategy} 
-            onChange={(e: any) => setStrategy(e.target.value as AutoDraftConfig[&apos;strategy&apos;])}
+            onChange={(e: any) => setStrategy(e.target.value as AutoDraftConfig['strategy'])}
             <option value="BPA">Best Player Available</option>
             <option value="POSITIONAL_NEED">Positional Need</option>
             <option value="VALUE_BASED">Value Based</option>
@@ -164,7 +150,7 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
           <select 
             id="risk-select"
             value={riskTolerance} 
-            onChange={(e: any) => setRiskTolerance(e.target.value as AutoDraftConfig[&apos;riskTolerance&apos;])}
+            onChange={(e: any) => setRiskTolerance(e.target.value as AutoDraftConfig['riskTolerance'])}
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
             <option value="HIGH">High</option>
@@ -184,7 +170,6 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
       
       <div className="auto-draft-controls sm:px-4 md:px-6 lg:px-8">
         {autoDraftEnabled ? (
-}
           <button 
             className="btn-auto-draft disable sm:px-4 md:px-6 lg:px-8"
             onClick={onDisableAutoDraft}
@@ -205,12 +190,10 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
 };
 
 const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }: any) => {
-}
-  const [activeTab, setActiveTab] = useState<&apos;players&apos; | &apos;queue&apos; | &apos;watchlist&apos; | &apos;analytics&apos; | &apos;ai-assistant&apos;>(&apos;players&apos;);
+  const [activeTab, setActiveTab] = useState<'players' | 'queue' | 'watchlist' | 'analytics' | 'ai-assistant'>('players');
   const [showAiChat, setShowAiChat] = useState(false);
   
   const draftState: SnakeDraftState = useSnakeDraft({
-}
     league,
     userTeamId,
     autoDraftTimeout: 60000,
@@ -218,7 +201,6 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
   });
 
   const {
-}
     currentPick,
     currentRound,
     currentTeamId,
@@ -251,37 +233,30 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
   const userTeam = league.teams.find((team: any) => team.id === userTeamId);
   const isUserTurn = currentTeamId === userTeamId;
 
-  // Update recommendations when it&apos;s user&apos;s turn
+  // Update recommendations when it's user's turn
   useEffect(() => {
-}
     if (isUserTurn && !isComplete) {
-}
       getRecommendations();
     }
   }, [isUserTurn, isComplete, getRecommendations]);
 
   const renderPlayersList = () => {
-}
     let playersToShow: Player[];
     
-    if (activeTab === &apos;queue&apos;) {
-}
+    if (activeTab === 'queue') {
       playersToShow = draftQueue
         .map((id: any) => filteredPlayers.find((p: any) => p.id === id))
         .filter((player): player is Player => Boolean(player));
-    } else if (activeTab === &apos;watchlist&apos;) {
-}
+    } else if (activeTab === 'watchlist') {
       playersToShow = watchlist
         .map((id: any) => filteredPlayers.find((p: any) => p.id === id))
         .filter((player): player is Player => Boolean(player));
     } else {
-}
       playersToShow = filteredPlayers;
 
     return (
       <div className="players-list sm:px-4 md:px-6 lg:px-8">
         {playersToShow.map((player: any) => (
-}
           <PlayerRow>
             key={player.id}
             player={player}
@@ -304,7 +279,6 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
       <h3>Draft Analytics</h3>
       
       {draftAnalysis && (
-}
         <div className="position-analysis sm:px-4 md:px-6 lg:px-8">
           <h4>Position Analysis</h4>
           <div className="analysis-grid sm:px-4 md:px-6 lg:px-8">
@@ -314,7 +288,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
             </div>
             <div className="metric sm:px-4 md:px-6 lg:px-8">
               <span>Strategic Value:</span>
-              <span className={draftAnalysis.turnAnalysis.strategicValue > 0.7 ? &apos;high&apos; : draftAnalysis.turnAnalysis.strategicValue > 0.4 ? &apos;medium&apos; : &apos;low&apos;}>
+              <span className={draftAnalysis.turnAnalysis.strategicValue > 0.7 ? 'high' : draftAnalysis.turnAnalysis.strategicValue > 0.4 ? 'medium' : 'low'}>
                 {(draftAnalysis.turnAnalysis.strategicValue * 100).toFixed(1)}%
               </span>
             </div>
@@ -325,11 +299,9 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
           </div>
           
           {draftAnalysis.turnAnalysis.recommendations.length > 0 && (
-}
             <div className="turn-recommendations sm:px-4 md:px-6 lg:px-8">
               <h5>Position Recommendations:</h5>
               {draftAnalysis.turnAnalysis.recommendations.map((rec, index) => (
-}
                 <div key={`rec-${index}`} className="turn-recommendation sm:px-4 md:px-6 lg:px-8">
                   {rec}
                 </div>
@@ -338,11 +310,9 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
           )}
           
           {draftAnalysis.pickTrading.suggestedTrades.length > 0 && (
-}
             <div className="trade-suggestions sm:px-4 md:px-6 lg:px-8">
               <h5>Trade Suggestions:</h5>
               {draftAnalysis.pickTrading.suggestedTrades.map((trade, index) => (
-}
                 <div key={`trade-${index}`} className="trade-suggestion sm:px-4 md:px-6 lg:px-8">
                   {trade.rationale} (Value: {trade.valueGained.toFixed(2)})
                 </div>
@@ -353,11 +323,9 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
       )}
       
       {recommendations.length > 0 && (
-}
         <div className="recommendations sm:px-4 md:px-6 lg:px-8">
           <h4>Top Recommendations</h4>
           {recommendations.slice(0, 5).map((rec, index) => (
-}
             <div key={rec.player.id} className="recommendation-item sm:px-4 md:px-6 lg:px-8">
               <div className="rec-rank sm:px-4 md:px-6 lg:px-8">#{index + 1}</div>
               <div className="rec-player sm:px-4 md:px-6 lg:px-8">{rec.player.name}</div>
@@ -371,7 +339,6 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
   );
 
   if (isComplete) {
-}
     return (
       <div className="draft-complete sm:px-4 md:px-6 lg:px-8">
         <h2>Draft Complete!</h2>
@@ -388,7 +355,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
             Pick {currentPick} (Round {currentRound})
           </div>
           <div className="current-team sm:px-4 md:px-6 lg:px-8">
-            {isUserTurn ? &apos;Your Turn!&apos; : `${currentTeam?.name || &apos;Unknown&apos;}&apos;s Turn`}
+            {isUserTurn ? 'Your Turn!' : `${currentTeam?.name || 'Unknown'}'s Turn`}
           </div>
         </div>
         
@@ -397,15 +364,14 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
             className="ai-chat-toggle sm:px-4 md:px-6 lg:px-8"
             onClick={() => setShowAiChat(!showAiChat)}
           >
-            {showAiChat ? &apos;Hide&apos; : &apos;Show&apos;} Coach
+            {showAiChat ? 'Hide' : 'Show'} Coach
           </button>
           <button onClick={onExit} aria-label="Action button">Exit Draft</button>
         </div>
       </header>
 
-      <div className={`draft-content ${showAiChat ? &apos;with-ai-panel&apos; : &apos;&apos;}`}>
+      <div className={`draft-content ${showAiChat ? 'with-ai-panel' : ''}`}>
         {showAiChat && (
-}
           <div className="ai-chat-panel sm:px-4 md:px-6 lg:px-8">
             <GeniusAiChat>
               currentRoster={userTeam?.roster || []}
@@ -429,7 +395,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
             
             <select 
               value={positionFilter} 
-              onChange={(e: any) => setPositionFilter(e.target.value as PlayerPosition | &apos;ALL&apos;)}
+              onChange={(e: any) => setPositionFilter(e.target.value as PlayerPosition | 'ALL')}
             >
               <option value="ALL">All Positions</option>
               <option value="QB">QB</option>
@@ -442,11 +408,10 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
             
             <select 
               value={tierFilter} 
-              onChange={(e: any) => setTierFilter(e.target.value === &apos;ALL&apos; ? &apos;ALL&apos; : parseInt(e.target.value))}
+              onChange={(e: any) => setTierFilter(e.target.value === 'ALL' ? 'ALL' : parseInt(e.target.value))}
             >
               <option value="ALL">All Tiers</option>
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((tier: any) => (
-}
                 <option key={tier} value={tier}>Tier {tier}</option>
               ))}
             </select>
@@ -454,36 +419,35 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
 
           <div className="tabs sm:px-4 md:px-6 lg:px-8">
             <button 
-              className={activeTab === &apos;players&apos; ? &apos;active&apos; : &apos;&apos;}
-              onClick={() => setActiveTab(&apos;players&apos;)}
+              className={activeTab === 'players' ? 'active' : ''}
+              onClick={() => setActiveTab('players')}
               Available Players ({filteredPlayers.length})
             </button>
             <button 
-              className={activeTab === &apos;queue&apos; ? &apos;active&apos; : &apos;&apos;}
-              onClick={() => setActiveTab(&apos;queue&apos;)}
+              className={activeTab === 'queue' ? 'active' : ''}
+              onClick={() => setActiveTab('queue')}
               Queue ({draftQueue.length})
             </button>
             <button 
-              className={activeTab === &apos;watchlist&apos; ? &apos;active&apos; : &apos;&apos;}
-              onClick={() => setActiveTab(&apos;watchlist&apos;)}
+              className={activeTab === 'watchlist' ? 'active' : ''}
+              onClick={() => setActiveTab('watchlist')}
               Watchlist ({watchlist.length})
             </button>
             <button 
-              className={activeTab === &apos;analytics&apos; ? &apos;active&apos; : &apos;&apos;}
-              onClick={() => setActiveTab(&apos;analytics&apos;)}
+              className={activeTab === 'analytics' ? 'active' : ''}
+              onClick={() => setActiveTab('analytics')}
 //               Analytics
             </button>
             <button 
-              className={`ai-tab ${activeTab === &apos;ai-assistant&apos; ? &apos;active&apos; : &apos;&apos;}`}
-              onClick={() => setActiveTab(&apos;ai-assistant&apos;)}
+              className={`ai-tab ${activeTab === 'ai-assistant' ? 'active' : ''}`}
+              onClick={() => setActiveTab('ai-assistant')}
 //               Coach
             </button>
           </div>
 
           <div className="content-area sm:px-4 md:px-6 lg:px-8">
-            {activeTab === &apos;analytics&apos; ? renderAnalytics() : 
-}
-             activeTab === &apos;ai-assistant&apos; ? (
+            {activeTab === 'analytics' ? renderAnalytics() : 
+             activeTab === 'ai-assistant' ? (
               <GeniusAiChat>
                 currentRoster={userTeam?.roster || []}
                 availablePlayers={filteredPlayers}
@@ -506,12 +470,10 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
           />
 
           {userTeam && (
-}
             <div className="team-roster sm:px-4 md:px-6 lg:px-8">
               <h3>Your Roster</h3>
               <div className="roster-slots sm:px-4 md:px-6 lg:px-8">
                 {userTeam.roster?.map((player, index) => (
-}
                   <div key={index} className="roster-slot sm:px-4 md:px-6 lg:px-8">
                     <span className="position sm:px-4 md:px-6 lg:px-8">{player.position}</span>
                     <span className="name sm:px-4 md:px-6 lg:px-8">{player.name}</span>
@@ -525,12 +487,10 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
             <h3>Recent Picks</h3>
             <div className="recent-picks sm:px-4 md:px-6 lg:px-8">
               {league.draftPicks
-}
                 .filter((pick: any) => pick.playerId)
                 .slice(-10)
                 .reverse()
                 .map((pick, index) => {
-}
                   const team = league.teams.find((t: any) => t.id === pick.teamId);
                   return (
                     <div key={index} className="pick-item sm:px-4 md:px-6 lg:px-8">

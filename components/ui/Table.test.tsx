@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import Table from &apos;./Table&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Table from './Table';
 
-describe(&apos;Table&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('Table', () => {
+  it('renders without crashing', () => {
     render(<Table />);
-    expect(screen.getByTestId(&apos;table&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('table')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<Table />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<Table />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,26 +1,22 @@
 
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
+import React, { useMemo } from 'react';
 
 interface SparklineChartProps {
-}
     data: number[];
     width?: number;
     height?: number;
     strokeColor?: string;
     strokeWidth?: number;
 
-}
 
 const SparklineChart: React.FC<SparklineChartProps> = ({
-}
     data,
     width = 100,
     height = 30,
-    strokeColor = &apos;#06b6d4&apos;, // cyan-500
+    strokeColor = '#06b6d4', // cyan-500
     strokeWidth = 2,
 }: any) => {
-}
     if (data.length < 2) return null;
 
     const min = Math.min(...data);
@@ -29,12 +25,11 @@ const SparklineChart: React.FC<SparklineChartProps> = ({
 
     const points = data
         .map((d, i) => {
-}
             const x = (i / (data.length - 1)) * width;
             const y = height - ((d - min) / (range || 1)) * height;
             return `${x},${y}`;
         })
-        .join(&apos; &apos;);
+        .join(' ');
 
     return (
         <svg

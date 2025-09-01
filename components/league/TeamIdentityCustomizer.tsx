@@ -2,13 +2,12 @@
  * Team Identity & Customization System - Express team personality and style
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Palette, Crown, Music, Shirt, Image, Save, RefreshCw, Eye, Volume2 } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Palette, Crown, Music, Shirt, Image, Save, RefreshCw, Eye, Volume2 } from 'lucide-react';
 
 interface TeamIdentity {
-}
   teamId: string;
   teamName: string;
   motto: string;
@@ -16,177 +15,157 @@ interface TeamIdentity {
   secondaryColor: string;
   accentColor: string;
   logo: string;
-  logoType: &apos;emoji&apos; | &apos;icon&apos; | &apos;upload&apos;;
+  logoType: 'emoji' | 'icon' | 'upload';
   walkupSong: {
-}
     name: string;
     artist: string;
     url?: string;
     duration: number;
   };
   endZoneCelebration: {
-}
     name: string;
     animation: string;
     duration: number;
     particles: boolean;
   };
   jerseyDesign: {
-}
-    style: &apos;classic&apos; | &apos;modern&apos; | &apos;retro&apos; | &apos;futuristic&apos;;
-    pattern: &apos;solid&apos; | &apos;gradient&apos; | &apos;stripes&apos; | &apos;spots&apos;;
+    style: 'classic' | 'modern' | 'retro' | 'futuristic';
+    pattern: 'solid' | 'gradient' | 'stripes' | 'spots';
   };
   teamPersonality: {
-}
-    style: &apos;aggressive&apos; | &apos;analytical&apos; | &apos;fun&apos; | &apos;underdog&apos; | &apos;professional&apos;;
+    style: 'aggressive' | 'analytical' | 'fun' | 'underdog' | 'professional';
     traits: string[];
   };
   customBanner: {
-}
     text: string;
     background: string;
     animation: string;
   };
 
 interface TeamIdentityCustomizerProps {
-}
   teamId: string;
   currentIdentity?: TeamIdentity;
   onSave: (identity: TeamIdentity) => void;
   onPreview: (identity: TeamIdentity) => void;
 
-}
 
 const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
-}
   teamId,
   currentIdentity,
   onSave,
 //   onPreview
 }: any) => {
-}
   const [identity, setIdentity] = useState<TeamIdentity>(currentIdentity || {
-}
     teamId,
-    teamName: &apos;&apos;,
-    motto: &apos;&apos;,
-    primaryColor: &apos;#3b82f6&apos;,
-    secondaryColor: &apos;#1e40af&apos;,
-    accentColor: &apos;#fbbf24&apos;,
-    logo: &apos;⚡&apos;,
-    logoType: &apos;emoji&apos;,
+    teamName: '',
+    motto: '',
+    primaryColor: '#3b82f6',
+    secondaryColor: '#1e40af',
+    accentColor: '#fbbf24',
+    logo: '⚡',
+    logoType: 'emoji',
     walkupSong: {
-}
-      name: &apos;Eye of the Tiger&apos;,
-      artist: &apos;Survivor&apos;,
+      name: 'Eye of the Tiger',
+      artist: 'Survivor',
       duration: 30
     },
     endZoneCelebration: {
-}
-      name: &apos;Victory Dance&apos;,
-      animation: &apos;bounce&apos;,
+      name: 'Victory Dance',
+      animation: 'bounce',
       duration: 3000,
       particles: true
     },
     jerseyDesign: {
-}
-      style: &apos;modern&apos;,
-      pattern: &apos;gradient&apos;
+      style: 'modern',
+      pattern: 'gradient'
     },
     teamPersonality: {
-}
-      style: &apos;aggressive&apos;,
-      traits: [&apos;Competitive&apos;, &apos;Bold&apos;, &apos;Confident&apos;]
+      style: 'aggressive',
+      traits: ['Competitive', 'Bold', 'Confident']
     },
     customBanner: {
-}
-      text: &apos;CHAMPIONS&apos;,
-      background: &apos;gradient&apos;,
-      animation: &apos;pulse&apos;
+      text: 'CHAMPIONS',
+      background: 'gradient',
+      animation: 'pulse'
 
   });
 
-  const [activeTab, setActiveTab] = useState<&apos;colors&apos; | &apos;logo&apos; | &apos;audio&apos; | &apos;celebration&apos; | &apos;jersey&apos; | &apos;personality&apos;>(&apos;colors&apos;);
+  const [activeTab, setActiveTab] = useState<'colors' | 'logo' | 'audio' | 'celebration' | 'jersey' | 'personality'>('colors');
   const [previewMode, setPreviewMode] = useState(false);
 
   // Color presets for different team personalities
   const colorPresets = {
-}
     aggressive: [
-      { name: &apos;Fire&apos;, primary: &apos;#dc2626&apos;, secondary: &apos;#991b1b&apos;, accent: &apos;#fbbf24&apos; },
-      { name: &apos;Thunder&apos;, primary: &apos;#7c3aed&apos;, secondary: &apos;#5b21b6&apos;, accent: &apos;#a78bfa&apos; },
-      { name: &apos;Storm&apos;, primary: &apos;#1f2937&apos;, secondary: &apos;#111827&apos;, accent: &apos;#6b7280&apos; }
+      { name: 'Fire', primary: '#dc2626', secondary: '#991b1b', accent: '#fbbf24' },
+      { name: 'Thunder', primary: '#7c3aed', secondary: '#5b21b6', accent: '#a78bfa' },
+      { name: 'Storm', primary: '#1f2937', secondary: '#111827', accent: '#6b7280' }
     ],
     analytical: [
-      { name: &apos;Tech Blue&apos;, primary: &apos;#3b82f6&apos;, secondary: &apos;#1e40af&apos;, accent: &apos;#60a5fa&apos; },
-      { name: &apos;Data Green&apos;, primary: &apos;#10b981&apos;, secondary: &apos;#047857&apos;, accent: &apos;#34d399&apos; },
-      { name: &apos;Precision&apos;, primary: &apos;#6366f1&apos;, secondary: &apos;#4338ca&apos;, accent: &apos;#a5b4fc&apos; }
+      { name: 'Tech Blue', primary: '#3b82f6', secondary: '#1e40af', accent: '#60a5fa' },
+      { name: 'Data Green', primary: '#10b981', secondary: '#047857', accent: '#34d399' },
+      { name: 'Precision', primary: '#6366f1', secondary: '#4338ca', accent: '#a5b4fc' }
     ],
     fun: [
-      { name: &apos;Tropical&apos;, primary: &apos;#f59e0b&apos;, secondary: &apos;#d97706&apos;, accent: &apos;#fde047&apos; },
-      { name: &apos;Neon&apos;, primary: &apos;#ec4899&apos;, secondary: &apos;#be185d&apos;, accent: &apos;#f9a8d4&apos; },
-      { name: &apos;Rainbow&apos;, primary: &apos;#8b5cf6&apos;, secondary: &apos;#7c3aed&apos;, accent: &apos;#c4b5fd&apos; }
+      { name: 'Tropical', primary: '#f59e0b', secondary: '#d97706', accent: '#fde047' },
+      { name: 'Neon', primary: '#ec4899', secondary: '#be185d', accent: '#f9a8d4' },
+      { name: 'Rainbow', primary: '#8b5cf6', secondary: '#7c3aed', accent: '#c4b5fd' }
     ],
     underdog: [
-      { name: &apos;Gritty&apos;, primary: &apos;#78716c&apos;, secondary: &apos;#57534e&apos;, accent: &apos;#a8a29e&apos; },
-      { name: &apos;Determined&apos;, primary: &apos;#0f766e&apos;, secondary: &apos;#0d9488&apos;, accent: &apos;#5eead4&apos; },
-      { name: &apos;Scrappy&apos;, primary: &apos;#b45309&apos;, secondary: &apos;#92400e&apos;, accent: &apos;#fde68a&apos; }
+      { name: 'Gritty', primary: '#78716c', secondary: '#57534e', accent: '#a8a29e' },
+      { name: 'Determined', primary: '#0f766e', secondary: '#0d9488', accent: '#5eead4' },
+      { name: 'Scrappy', primary: '#b45309', secondary: '#92400e', accent: '#fde68a' }
     ],
     professional: [
-      { name: &apos;Corporate&apos;, primary: &apos;#1f2937&apos;, secondary: &apos;#111827&apos;, accent: &apos;#3b82f6&apos; },
-      { name: &apos;Executive&apos;, primary: &apos;#374151&apos;, secondary: &apos;#1f2937&apos;, accent: &apos;#10b981&apos; },
-      { name: &apos;Elite&apos;, primary: &apos;#581c87&apos;, secondary: &apos;#4c1d95&apos;, accent: &apos;#c4b5fd&apos; }
+      { name: 'Corporate', primary: '#1f2937', secondary: '#111827', accent: '#3b82f6' },
+      { name: 'Executive', primary: '#374151', secondary: '#1f2937', accent: '#10b981' },
+      { name: 'Elite', primary: '#581c87', secondary: '#4c1d95', accent: '#c4b5fd' }
 
   };
 
   // Logo options
-  const logoEmojis = [&apos;⚡&apos;, &apos;🔥&apos;, &apos;👑&apos;, &apos;🏆&apos;, &apos;🦅&apos;, &apos;🦁&apos;, &apos;⚔️&apos;, &apos;🛡️&apos;, &apos;💎&apos;, &apos;🎯&apos;, &apos;🚀&apos;, &apos;💀&apos;, &apos;👹&apos;, &apos;🐺&apos;, &apos;🐉&apos;];
+  const logoEmojis = ['⚡', '🔥', '👑', '🏆', '🦅', '🦁', '⚔️', '🛡️', '💎', '🎯', '🚀', '💀', '👹', '🐺', '🐉'];
   
   // Walk-up songs library
   const walkupSongs = [
-    { name: &apos;Eye of the Tiger&apos;, artist: &apos;Survivor&apos;, duration: 30 },
-    { name: &apos;We Will Rock You&apos;, artist: &apos;Queen&apos;, duration: 25 },
-    { name: &apos;Thunderstruck&apos;, artist: &apos;AC/DC&apos;, duration: 30 },
-    { name: &apos;Enter Sandman&apos;, artist: &apos;Metallica&apos;, duration: 35 },
-    { name: &apos;Lose Yourself&apos;, artist: &apos;Eminem&apos;, duration: 30 },
-    { name: &apos;Can\&apos;t Hold Us&apos;, artist: &apos;Macklemore&apos;, duration: 28 },
-    { name: &apos;Till I Collapse&apos;, artist: &apos;Eminem&apos;, duration: 32 },
-    { name: &apos;Remember the Name&apos;, artist: &apos;Fort Minor&apos;, duration: 30 },
-    { name: &apos;Pump It&apos;, artist: &apos;Black Eyed Peas&apos;, duration: 25 },
-    { name: &apos;All Star&apos;, artist: &apos;Smash Mouth&apos;, duration: 30 }
+    { name: 'Eye of the Tiger', artist: 'Survivor', duration: 30 },
+    { name: 'We Will Rock You', artist: 'Queen', duration: 25 },
+    { name: 'Thunderstruck', artist: 'AC/DC', duration: 30 },
+    { name: 'Enter Sandman', artist: 'Metallica', duration: 35 },
+    { name: 'Lose Yourself', artist: 'Eminem', duration: 30 },
+    { name: 'Can\'t Hold Us', artist: 'Macklemore', duration: 28 },
+    { name: 'Till I Collapse', artist: 'Eminem', duration: 32 },
+    { name: 'Remember the Name', artist: 'Fort Minor', duration: 30 },
+    { name: 'Pump It', artist: 'Black Eyed Peas', duration: 25 },
+    { name: 'All Star', artist: 'Smash Mouth', duration: 30 }
   ];
 
   // Celebration options
   const celebrations = [
-    { name: &apos;Victory Dance&apos;, animation: &apos;bounce&apos;, duration: 3000, particles: true },
-    { name: &apos;Championship Stomp&apos;, animation: &apos;shake&apos;, duration: 2500, particles: false },
-    { name: &apos;End Zone Spike&apos;, animation: &apos;fadeInUp&apos;, duration: 2000, particles: true },
-    { name: &apos;Crown Ceremony&apos;, animation: &apos;rotateIn&apos;, duration: 4000, particles: true },
-    { name: &apos;Fireworks Show&apos;, animation: &apos;zoomIn&apos;, duration: 5000, particles: true },
-    { name: &apos;Victory Lap&apos;, animation: &apos;slideInRight&apos;, duration: 3500, particles: false }
+    { name: 'Victory Dance', animation: 'bounce', duration: 3000, particles: true },
+    { name: 'Championship Stomp', animation: 'shake', duration: 2500, particles: false },
+    { name: 'End Zone Spike', animation: 'fadeInUp', duration: 2000, particles: true },
+    { name: 'Crown Ceremony', animation: 'rotateIn', duration: 4000, particles: true },
+    { name: 'Fireworks Show', animation: 'zoomIn', duration: 5000, particles: true },
+    { name: 'Victory Lap', animation: 'slideInRight', duration: 3500, particles: false }
   ];
 
   // Team personality traits
   const personalityTraits = {
-}
-    aggressive: [&apos;Competitive&apos;, &apos;Bold&apos;, &apos;Fearless&apos;, &apos;Dominant&apos;, &apos;Ruthless&apos;, &apos;Intense&apos;],
-    analytical: [&apos;Strategic&apos;, &apos;Data-driven&apos;, &apos;Methodical&apos;, &apos;Calculated&apos;, &apos;Precise&apos;, &apos;Logical&apos;],
-    fun: [&apos;Entertaining&apos;, &apos;Creative&apos;, &apos;Playful&apos;, &apos;Energetic&apos;, &apos;Colorful&apos;, &apos;Spontaneous&apos;],
-    underdog: [&apos;Resilient&apos;, &apos;Determined&apos;, &apos;Scrappy&apos;, &apos;Hardworking&apos;, &apos;Gritty&apos;, &apos;Persistent&apos;],
-    professional: [&apos;Disciplined&apos;, &apos;Organized&apos;, &apos;Consistent&apos;, &apos;Elite&apos;, &apos;Refined&apos;, &apos;Focused&apos;]
+    aggressive: ['Competitive', 'Bold', 'Fearless', 'Dominant', 'Ruthless', 'Intense'],
+    analytical: ['Strategic', 'Data-driven', 'Methodical', 'Calculated', 'Precise', 'Logical'],
+    fun: ['Entertaining', 'Creative', 'Playful', 'Energetic', 'Colorful', 'Spontaneous'],
+    underdog: ['Resilient', 'Determined', 'Scrappy', 'Hardworking', 'Gritty', 'Persistent'],
+    professional: ['Disciplined', 'Organized', 'Consistent', 'Elite', 'Refined', 'Focused']
   };
 
   const updateIdentity = (updates: Partial<TeamIdentity>) => {
-}
     const newIdentity = { ...identity, ...updates };
     setIdentity(newIdentity);
     onPreview(newIdentity);
   };
 
   const handleColorPreset = (preset: typeof colorPresets.aggressive[0]) => {
-}
     updateIdentity({
-}
       primaryColor: preset.primary,
       secondaryColor: preset.secondary,
       accentColor: preset.accent
@@ -194,16 +173,13 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   };
 
   const toggleTrait = (trait: string) => {
-}
     const currentTraits = identity.teamPersonality.traits;
     const newTraits = currentTraits.includes(trait)
       ? currentTraits.filter((t: any) => t !== trait)
       : [...currentTraits, trait].slice(0, 5); // Max 5 traits
     
     updateIdentity({
-}
       teamPersonality: {
-}
         ...identity.teamPersonality,
         traits: newTraits
 
@@ -217,12 +193,10 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Quick Presets</h4>
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           {Object.entries(colorPresets).map(([style, presets]) => (
-}
             <div key={style} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               <div className="text-sm text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">{style} Style</div>
               <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
                 {presets.map((preset: any) => (
-}
                   <button
                     key={preset.name}
                     onClick={() => handleColorPreset(preset)}
@@ -283,15 +257,13 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Logo</h4>
         <div className="grid grid-cols-8 gap-2 sm:px-4 md:px-6 lg:px-8">
           {logoEmojis.map((emoji: any) => (
-}
             <button
               key={emoji}
-              onClick={() => updateIdentity({ logo: emoji, logoType: &apos;emoji&apos; }}
+              onClick={() => updateIdentity({ logo: emoji, logoType: 'emoji' }}
               className={`p-3 text-2xl rounded-lg border transition-colors ${
-}
                 identity.logo === emoji
-                  ? &apos;border-primary-500 bg-primary-500/20&apos;
-                  : &apos;border-gray-600 hover:border-gray-500&apos;
+                  ? 'border-primary-500 bg-primary-500/20'
+                  : 'border-gray-600 hover:border-gray-500'
               }`}
             >
               {emoji}
@@ -321,15 +293,13 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Walk-up Song</h4>
         <div className="space-y-2 max-h-60 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
           {walkupSongs.map((song: any) => (
-}
             <button
               key={`${song.name}-${song.artist}`}
               onClick={() => updateIdentity({ walkupSong: song }}
               className={`w-full p-3 rounded-lg border transition-colors text-left ${
-}
                 identity.walkupSong.name === song.name
-                  ? &apos;border-primary-500 bg-primary-500/20&apos;
-                  : &apos;border-gray-600 hover:border-gray-500&apos;
+                  ? 'border-primary-500 bg-primary-500/20'
+                  : 'border-gray-600 hover:border-gray-500'
               }`}
             >
               <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{song.name}</div>
@@ -356,20 +326,18 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Victory Celebration</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {celebrations.map((celebration: any) => (
-}
             <button
               key={celebration.name}
               onClick={() => updateIdentity({ endZoneCelebration: celebration }}
               className={`p-4 rounded-lg border transition-colors text-left ${
-}
                 identity.endZoneCelebration.name === celebration.name
-                  ? &apos;border-primary-500 bg-primary-500/20&apos;
-                  : &apos;border-gray-600 hover:border-gray-500&apos;
+                  ? 'border-primary-500 bg-primary-500/20'
+                  : 'border-gray-600 hover:border-gray-500'
               }`}
             >
               <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{celebration.name}</div>
               <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                {celebration.duration / 1000}s • {celebration.particles ? &apos;With particles&apos; : &apos;Clean animation&apos;}
+                {celebration.duration / 1000}s • {celebration.particles ? 'With particles' : 'Clean animation'}
               </div>
             </button>
           ))}
@@ -383,7 +351,6 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           type="text"
           value={identity.customBanner.text}
           onChange={(e: any) => updateIdentity({ 
-}
             customBanner: { ...identity.customBanner, text: e.target.value }})}
           placeholder="Victory message..."
           className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
@@ -399,22 +366,18 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Personality</h4>
         <div className="grid grid-cols-5 gap-2 sm:px-4 md:px-6 lg:px-8">
           {(Object.keys(personalityTraits) as Array<keyof typeof personalityTraits>).map((style: any) => (
-}
             <button
               key={style}
               onClick={() = aria-label="Action button"> updateIdentity({ 
-}
                 teamPersonality: {
-}
                   style, 
                   traits: personalityTraits[style].slice(0, 3) 
 
               })}
               className={`p-3 rounded-lg border transition-colors ${
-}
                 identity.teamPersonality.style === style
-                  ? &apos;border-primary-500 bg-primary-500/20&apos;
-                  : &apos;border-gray-600 hover:border-gray-500&apos;
+                  ? 'border-primary-500 bg-primary-500/20'
+                  : 'border-gray-600 hover:border-gray-500'
               }`}
             >
               <div className="text-sm font-semibold text-white capitalize sm:px-4 md:px-6 lg:px-8">{style}</div>
@@ -430,7 +393,6 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {personalityTraits[identity.teamPersonality.style].map((trait: any) => (
-}
             <button
               key={trait}
               onClick={() => toggleTrait(trait)}`}
@@ -444,7 +406,6 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   );
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -460,7 +421,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           <Palette className="w-6 h-6 text-purple-400 sm:px-4 md:px-6 lg:px-8" />
           <div>
             <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Team Identity Studio</h2>
-            <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Express your team&apos;s unique personality</p>
+            <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Express your team's unique personality</p>
           </div>
         </div>
         
@@ -469,7 +430,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             onClick={() => setPreviewMode(!previewMode)}`}
           >
             <Eye className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-            {previewMode ? &apos;Exit Preview&apos; : &apos;Preview&apos;}
+            {previewMode ? 'Exit Preview' : 'Preview'}
           </button>
           <button
             onClick={() => onSave(identity)}
@@ -486,12 +447,11 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           {/* Navigation Tabs */}
           <div className="flex flex-wrap gap-2 mb-6 sm:px-4 md:px-6 lg:px-8">
             {[
-}
-              { id: &apos;colors&apos;, label: &apos;Colors&apos;, icon: Palette },
-              { id: &apos;logo&apos;, label: &apos;Logo & Motto&apos;, icon: Crown },
-              { id: &apos;audio&apos;, label: &apos;Walk-up Song&apos;, icon: Music },
-              { id: &apos;celebration&apos;, label: &apos;Celebrations&apos;, icon: Crown },
-              { id: &apos;personality&apos;, label: &apos;Personality&apos;, icon: Shirt }
+              { id: 'colors', label: 'Colors', icon: Palette },
+              { id: 'logo', label: 'Logo & Motto', icon: Crown },
+              { id: 'audio', label: 'Walk-up Song', icon: Music },
+              { id: 'celebration', label: 'Celebrations', icon: Crown },
+              { id: 'personality', label: 'Personality', icon: Shirt }
             ].map((tab: any) => (
               <button
                 key={tab.id}
@@ -505,11 +465,11 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
 
           {/* Tab Content */}
           <div className="bg-dark-700 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
-            {activeTab === &apos;colors&apos; && renderColorTab()}
-            {activeTab === &apos;logo&apos; && renderLogoTab()}
-            {activeTab === &apos;audio&apos; && renderAudioTab()}
-            {activeTab === &apos;celebration&apos; && renderCelebrationTab()}
-            {activeTab === &apos;personality&apos; && renderPersonalityTab()}
+            {activeTab === 'colors' && renderColorTab()}
+            {activeTab === 'logo' && renderLogoTab()}
+            {activeTab === 'audio' && renderAudioTab()}
+            {activeTab === 'celebration' && renderCelebrationTab()}
+            {activeTab === 'personality' && renderPersonalityTab()}
           </div>
         </div>
 
@@ -519,7 +479,6 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           <div 
             className="p-6 rounded-xl border-2 transition-all sm:px-4 md:px-6 lg:px-8"
             style={{
-}
               backgroundColor: `${identity.primaryColor}10`,
               borderColor: identity.primaryColor,
               background: `linear-gradient(135deg, ${identity.primaryColor}20, ${identity.secondaryColor}20)`
@@ -528,21 +487,19 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             <div className="text-center space-y-3 sm:px-4 md:px-6 lg:px-8">
               <div className="text-4xl sm:px-4 md:px-6 lg:px-8">{identity.logo}</div>
               <div>
-                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{identity.teamName || &apos;Team Name&apos;}</h3>
+                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{identity.teamName || 'Team Name'}</h3>
                 <p className="text-sm italic sm:px-4 md:px-6 lg:px-8" style={{ color: identity.accentColor }}>
-                  "{identity.motto || &apos;Your motto here&apos;}"
+                  "{identity.motto || 'Your motto here'}"
                 </p>
               </div>
               
               {/* Team Traits */}
               <div className="flex flex-wrap gap-1 justify-center sm:px-4 md:px-6 lg:px-8">
                 {identity.teamPersonality.traits.slice(0, 3).map((trait: any) => (
-}
                   <span 
                     key={trait}
                     className="px-2 py-1 rounded-full text-xs font-semibold sm:px-4 md:px-6 lg:px-8"
                     style={{ 
-}
                       backgroundColor: `${identity.accentColor}30`,
                       color: identity.accentColor 
                     }}
@@ -589,7 +546,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
               <div className="text-white sm:px-4 md:px-6 lg:px-8">Celebration: {identity.endZoneCelebration.name}</div>
               <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Duration: {identity.endZoneCelebration.duration / 1000}s</div>
-              <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Banner: "{identity.customBanner.text || &apos;VICTORY!&apos;}"</div>
+              <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Banner: "{identity.customBanner.text || 'VICTORY!'}"</div>
             </div>
           </div>
         </div>
@@ -598,7 +555,6 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       {/* Preview Mode Overlay */}
       <AnimatePresence>
         {previewMode && (
-}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -613,22 +569,21 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             >
               <div className="text-8xl animate-bounce sm:px-4 md:px-6 lg:px-8">{identity.logo}</div>
               <div>
-                <h1 className="text-6xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">{identity.teamName || &apos;TEAM NAME&apos;}</h1>
+                <h1 className="text-6xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">{identity.teamName || 'TEAM NAME'}</h1>
                 <p 
                   className="text-2xl font-bold mb-6 sm:px-4 md:px-6 lg:px-8"
                   style={{ color: identity.accentColor }}
                 >
-                  "{identity.motto || &apos;YOUR MOTTO HERE&apos;}"
+                  "{identity.motto || 'YOUR MOTTO HERE'}"
                 </p>
                 <div 
                   className="text-4xl font-bold px-8 py-4 rounded-lg animate-pulse sm:px-4 md:px-6 lg:px-8"
                   style={{ 
-}
                     backgroundColor: `${identity.primaryColor}30`,
                     border: `2px solid ${identity.accentColor}`
                   }}
                 >
-                  {identity.customBanner.text || &apos;VICTORY!&apos;}
+                  {identity.customBanner.text || 'VICTORY!'}
                 </div>
               </div>
               

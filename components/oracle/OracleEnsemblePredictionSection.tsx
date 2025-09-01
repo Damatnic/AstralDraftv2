@@ -1,9 +1,8 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState } from &apos;react&apos;;
-import &apos;./OracleEnsemblePredictionSection.css&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
+import './OracleEnsemblePredictionSection.css';
 
 interface EnsembleModel {
-}
   id: string;
   name: string;
   type: string;
@@ -13,10 +12,8 @@ interface EnsembleModel {
   confidence: number;
   description: string;
 
-}
 
 interface VotingMethod {
-}
   id: string;
   name: string;
   description: string;
@@ -25,7 +22,6 @@ interface VotingMethod {
   limitations: string[];
 
 interface WeightingStrategy {
-}
   id: string;
   name: string;
   description: string;
@@ -33,251 +29,223 @@ interface WeightingStrategy {
   advantages: string[];
   useCases: string[];
 
-}
 
 const OracleEnsemblePredictionSection: React.FC = () => {
-}
-  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;models&apos; | &apos;voting&apos; | &apos;weighting&apos; | &apos;optimization&apos; | &apos;demo&apos;>(&apos;overview&apos;);
-  const [selectedModel, setSelectedModel] = useState<string>(&apos;&apos;);
-  const [selectedVoting, setSelectedVoting] = useState<string>(&apos;weighted&apos;);
-  const [selectedWeighting, setSelectedWeighting] = useState<string>(&apos;performance&apos;);
+  const [activeTab, setActiveTab] = useState<'overview' | 'models' | 'voting' | 'weighting' | 'optimization' | 'demo'>('overview');
+  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [selectedVoting, setSelectedVoting] = useState<string>('weighted');
+  const [selectedWeighting, setSelectedWeighting] = useState<string>('performance');
   const [ensembleResults, setEnsembleResults] = useState<any>(null);
 
   // Ensemble models used by Oracle
   const ensembleModels: EnsembleModel[] = [
     {
-}
-      id: &apos;linear_regression&apos;,
-      name: &apos;Linear Regression&apos;,
-      type: &apos;Statistical&apos;,
+      id: 'linear_regression',
+      name: 'Linear Regression',
+      type: 'Statistical',
       accuracy: 78.5,
       weight: 0.15,
       prediction: 24.8,
       confidence: 0.82,
-      description: &apos;Linear relationship modeling for baseline predictions&apos;
+      description: 'Linear relationship modeling for baseline predictions'
     },
     {
-}
-      id: &apos;random_forest&apos;,
-      name: &apos;Random Forest&apos;,
-      type: &apos;Tree-based&apos;,
+      id: 'random_forest',
+      name: 'Random Forest',
+      type: 'Tree-based',
       accuracy: 82.3,
       weight: 0.20,
       prediction: 26.2,
       confidence: 0.88,
-      description: &apos;Ensemble of decision trees for robust predictions&apos;
+      description: 'Ensemble of decision trees for robust predictions'
     },
     {
-}
-      id: &apos;gradient_boosting&apos;,
-      name: &apos;Gradient Boosting&apos;,
-      type: &apos;Boosting&apos;,
+      id: 'gradient_boosting',
+      name: 'Gradient Boosting',
+      type: 'Boosting',
       accuracy: 84.1,
       weight: 0.25,
       prediction: 25.9,
       confidence: 0.91,
-      description: &apos;Sequential weak learners for high accuracy&apos;
+      description: 'Sequential weak learners for high accuracy'
     },
     {
-}
-      id: &apos;neural_network&apos;,
-      name: &apos;Neural Network&apos;,
-      type: &apos;Deep Learning&apos;,
+      id: 'neural_network',
+      name: 'Neural Network',
+      type: 'Deep Learning',
       accuracy: 85.7,
       weight: 0.25,
       prediction: 27.1,
       confidence: 0.89,
-      description: &apos;Multi-layer perceptron for complex patterns&apos;
+      description: 'Multi-layer perceptron for complex patterns'
     },
     {
-}
-      id: &apos;bayesian_regression&apos;,
-      name: &apos;Bayesian Regression&apos;,
-      type: &apos;Probabilistic&apos;,
+      id: 'bayesian_regression',
+      name: 'Bayesian Regression',
+      type: 'Probabilistic',
       accuracy: 79.8,
       weight: 0.15,
       prediction: 25.4,
       confidence: 0.85,
-      description: &apos;Uncertainty quantification and prior knowledge&apos;
+      description: 'Uncertainty quantification and prior knowledge'
 
   ];
 
   // Voting methodologies
   const votingMethods: VotingMethod[] = [
     {
-}
-      id: &apos;simple&apos;,
-      name: &apos;Simple Averaging&apos;,
-      description: &apos;Equal weight to all model predictions&apos;,
-      formula: &apos;Prediction = (P₁ + P₂ + ... + Pₙ) / n&apos;,
-      strengths: [&apos;Simple to implement&apos;, &apos;Reduces overfitting&apos;, &apos;Stable results&apos;],
-      limitations: [&apos;Ignores model quality&apos;, &apos;Poor models affect results&apos;, &apos;No confidence weighting&apos;]
+      id: 'simple',
+      name: 'Simple Averaging',
+      description: 'Equal weight to all model predictions',
+      formula: 'Prediction = (P₁ + P₂ + ... + Pₙ) / n',
+      strengths: ['Simple to implement', 'Reduces overfitting', 'Stable results'],
+      limitations: ['Ignores model quality', 'Poor models affect results', 'No confidence weighting']
     },
     {
-}
-      id: &apos;weighted&apos;,
-      name: &apos;Weighted Voting&apos;,
-      description: &apos;Weight predictions by model performance&apos;,
-      formula: &apos;Prediction = Σ(wᵢ × Pᵢ) where Σwᵢ = 1&apos;,
-      strengths: [&apos;Emphasizes better models&apos;, &apos;Customizable weights&apos;, &apos;Performance-based&apos;],
-      limitations: [&apos;Requires weight tuning&apos;, &apos;Risk of overfitting&apos;, &apos;Complex optimization&apos;]
+      id: 'weighted',
+      name: 'Weighted Voting',
+      description: 'Weight predictions by model performance',
+      formula: 'Prediction = Σ(wᵢ × Pᵢ) where Σwᵢ = 1',
+      strengths: ['Emphasizes better models', 'Customizable weights', 'Performance-based'],
+      limitations: ['Requires weight tuning', 'Risk of overfitting', 'Complex optimization']
     },
     {
-}
-      id: &apos;confidence&apos;,
-      name: &apos;Confidence-Based&apos;,
-      description: &apos;Weight by prediction confidence levels&apos;,
-      formula: &apos;Prediction = Σ(cᵢ × Pᵢ) / Σcᵢ&apos;,
-      strengths: [&apos;Adaptive weighting&apos;, &apos;Uncertainty aware&apos;, &apos;Dynamic adjustment&apos;],
-      limitations: [&apos;Confidence calibration needed&apos;, &apos;Complex computation&apos;, &apos;May amplify bias&apos;]
+      id: 'confidence',
+      name: 'Confidence-Based',
+      description: 'Weight by prediction confidence levels',
+      formula: 'Prediction = Σ(cᵢ × Pᵢ) / Σcᵢ',
+      strengths: ['Adaptive weighting', 'Uncertainty aware', 'Dynamic adjustment'],
+      limitations: ['Confidence calibration needed', 'Complex computation', 'May amplify bias']
     },
     {
-}
-      id: &apos;rank&apos;,
-      name: &apos;Rank-Based Voting&apos;,
-      description: &apos;Use model rankings instead of raw scores&apos;,
-      formula: &apos;Final Rank = Σ(wᵢ × Rankᵢ)&apos;,
-      strengths: [&apos;Scale invariant&apos;, &apos;Robust to outliers&apos;, &apos;Handles different scales&apos;],
-      limitations: [&apos;Loses magnitude info&apos;, &apos;Ties handling needed&apos;, &apos;Less precise&apos;]
+      id: 'rank',
+      name: 'Rank-Based Voting',
+      description: 'Use model rankings instead of raw scores',
+      formula: 'Final Rank = Σ(wᵢ × Rankᵢ)',
+      strengths: ['Scale invariant', 'Robust to outliers', 'Handles different scales'],
+      limitations: ['Loses magnitude info', 'Ties handling needed', 'Less precise']
     },
     {
-}
-      id: &apos;stacking&apos;,
-      name: &apos;Stacked Generalization&apos;,
-      description: &apos;Meta-learner combines base model outputs&apos;,
-      formula: &apos;Meta-Model(P₁, P₂, ..., Pₙ, Features)&apos;,
-      strengths: [&apos;Learns optimal combination&apos;, &apos;Non-linear mixing&apos;, &apos;Feature integration&apos;],
-      limitations: [&apos;Requires training data&apos;, &apos;Overfitting risk&apos;, &apos;Computational complexity&apos;]
+      id: 'stacking',
+      name: 'Stacked Generalization',
+      description: 'Meta-learner combines base model outputs',
+      formula: 'Meta-Model(P₁, P₂, ..., Pₙ, Features)',
+      strengths: ['Learns optimal combination', 'Non-linear mixing', 'Feature integration'],
+      limitations: ['Requires training data', 'Overfitting risk', 'Computational complexity']
     },
     {
-}
-      id: &apos;bayesian&apos;,
-      name: &apos;Bayesian Model Averaging&apos;,
-      description: &apos;Weight models by posterior probability&apos;,
-      formula: &apos;Prediction = Σ(P(M|Data) × P(Y|M,Data))&apos;,
-      strengths: [&apos;Principled uncertainty&apos;, &apos;Model uncertainty&apos;, &apos;Theoretical foundation&apos;],
-      limitations: [&apos;Computational intensive&apos;, &apos;Prior specification&apos;, &apos;Approximation needed&apos;]
+      id: 'bayesian',
+      name: 'Bayesian Model Averaging',
+      description: 'Weight models by posterior probability',
+      formula: 'Prediction = Σ(P(M|Data) × P(Y|M,Data))',
+      strengths: ['Principled uncertainty', 'Model uncertainty', 'Theoretical foundation'],
+      limitations: ['Computational intensive', 'Prior specification', 'Approximation needed']
 
   ];
 
   // Weighting strategies
   const weightingStrategies: WeightingStrategy[] = [
     {
-}
-      id: &apos;performance&apos;,
-      name: &apos;Performance-Based&apos;,
-      description: &apos;Weight by historical accuracy metrics&apos;,
-      method: &apos;wᵢ = Accuracyᵢ / Σ(Accuracy)&apos;,
-      advantages: [&apos;Rewards accurate models&apos;, &apos;Simple to compute&apos;, &apos;Intuitive approach&apos;],
-      useCases: [&apos;Stable environments&apos;, &apos;Clear performance metrics&apos;, &apos;Historical data available&apos;]
+      id: 'performance',
+      name: 'Performance-Based',
+      description: 'Weight by historical accuracy metrics',
+      method: 'wᵢ = Accuracyᵢ / Σ(Accuracy)',
+      advantages: ['Rewards accurate models', 'Simple to compute', 'Intuitive approach'],
+      useCases: ['Stable environments', 'Clear performance metrics', 'Historical data available']
     },
     {
-}
-      id: &apos;diversity&apos;,
-      name: &apos;Diversity-Based&apos;,
-      description: &apos;Weight by model diversity contribution&apos;,
-      method: &apos;wᵢ = (1 - Correlationᵢ) × Performanceᵢ&apos;,
-      advantages: [&apos;Promotes model diversity&apos;, &apos;Reduces correlation&apos;, &apos;Better generalization&apos;],
-      useCases: [&apos;Correlated models&apos;, &apos;Overfitting concerns&apos;, &apos;Robust predictions needed&apos;]
+      id: 'diversity',
+      name: 'Diversity-Based',
+      description: 'Weight by model diversity contribution',
+      method: 'wᵢ = (1 - Correlationᵢ) × Performanceᵢ',
+      advantages: ['Promotes model diversity', 'Reduces correlation', 'Better generalization'],
+      useCases: ['Correlated models', 'Overfitting concerns', 'Robust predictions needed']
     },
     {
-}
-      id: &apos;adaptive&apos;,
-      name: &apos;Adaptive Weighting&apos;,
-      description: &apos;Dynamic weights based on recent performance&apos;,
-      method: &apos;wᵢ(t) = α × wᵢ(t-1) + (1-α) × Performanceᵢ(t)&apos;,
-      advantages: [&apos;Adapts to changes&apos;, &apos;Recent performance focus&apos;, &apos;Non-stationary handling&apos;],
-      useCases: [&apos;Changing environments&apos;, &apos;Concept drift&apos;, &apos;Time-varying patterns&apos;]
+      id: 'adaptive',
+      name: 'Adaptive Weighting',
+      description: 'Dynamic weights based on recent performance',
+      method: 'wᵢ(t) = α × wᵢ(t-1) + (1-α) × Performanceᵢ(t)',
+      advantages: ['Adapts to changes', 'Recent performance focus', 'Non-stationary handling'],
+      useCases: ['Changing environments', 'Concept drift', 'Time-varying patterns']
     },
     {
-}
-      id: &apos;uncertainty&apos;,
-      name: &apos;Uncertainty-Based&apos;,
-      description: &apos;Weight by prediction uncertainty levels&apos;,
-      method: &apos;wᵢ = (1 / Uncertaintyᵢ) / Σ(1 / Uncertainty)&apos;,
-      advantages: [&apos;Uncertainty aware&apos;, &apos;Confidence weighting&apos;, &apos;Risk management&apos;],
-      useCases: [&apos;High-stakes decisions&apos;, &apos;Risk assessment&apos;, &apos;Calibrated predictions&apos;]
+      id: 'uncertainty',
+      name: 'Uncertainty-Based',
+      description: 'Weight by prediction uncertainty levels',
+      method: 'wᵢ = (1 / Uncertaintyᵢ) / Σ(1 / Uncertainty)',
+      advantages: ['Uncertainty aware', 'Confidence weighting', 'Risk management'],
+      useCases: ['High-stakes decisions', 'Risk assessment', 'Calibrated predictions']
     },
     {
-}
-      id: &apos;meta_learning&apos;,
-      name: &apos;Meta-Learning&apos;,
-      description: &apos;Learn optimal weights from data&apos;,
-      method: &apos;Optimize: min Σ(Actual - Σ(wᵢ × Predictionᵢ))²&apos;,
-      advantages: [&apos;Data-driven weights&apos;, &apos;Optimal combination&apos;, &apos;Feature integration&apos;],
-      useCases: [&apos;Complex relationships&apos;, &apos;Large datasets&apos;, &apos;Non-linear combinations&apos;]
+      id: 'meta_learning',
+      name: 'Meta-Learning',
+      description: 'Learn optimal weights from data',
+      method: 'Optimize: min Σ(Actual - Σ(wᵢ × Predictionᵢ))²',
+      advantages: ['Data-driven weights', 'Optimal combination', 'Feature integration'],
+      useCases: ['Complex relationships', 'Large datasets', 'Non-linear combinations']
     },
     {
-}
-      id: &apos;contextual&apos;,
-      name: &apos;Contextual Weighting&apos;,
-      description: &apos;Weight based on prediction context&apos;,
-      method: &apos;wᵢ = f(Context, Model_Type, Historical_Performance)&apos;,
-      advantages: [&apos;Context-aware&apos;, &apos;Situation-specific&apos;, &apos;Domain knowledge&apos;],
-      useCases: [&apos;Context-dependent performance&apos;, &apos;Domain expertise&apos;, &apos;Specialized models&apos;]
+      id: 'contextual',
+      name: 'Contextual Weighting',
+      description: 'Weight based on prediction context',
+      method: 'wᵢ = f(Context, Model_Type, Historical_Performance)',
+      advantages: ['Context-aware', 'Situation-specific', 'Domain knowledge'],
+      useCases: ['Context-dependent performance', 'Domain expertise', 'Specialized models']
 
   ];
 
   // Helper functions for scoring
   const getComplexityScore = (methodId: string): string => {
-}
     const scores: Record<string, string> = {
-}
-      &apos;simple&apos;: &apos;⭐&apos;,
-      &apos;weighted&apos;: &apos;⭐⭐&apos;,
-      &apos;confidence&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;rank&apos;: &apos;⭐⭐&apos;,
-      &apos;stacking&apos;: &apos;⭐⭐⭐⭐&apos;,
-      &apos;bayesian&apos;: &apos;⭐⭐⭐⭐⭐&apos;
+      'simple': '⭐',
+      'weighted': '⭐⭐',
+      'confidence': '⭐⭐⭐',
+      'rank': '⭐⭐',
+      'stacking': '⭐⭐⭐⭐',
+      'bayesian': '⭐⭐⭐⭐⭐'
     };
-    return scores[methodId] || &apos;⭐⭐⭐&apos;;
+    return scores[methodId] || '⭐⭐⭐';
   };
 
   const getAccuracyScore = (methodId: string): string => {
-}
     const scores: Record<string, string> = {
-}
-      &apos;simple&apos;: &apos;⭐⭐&apos;,
-      &apos;weighted&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;confidence&apos;: &apos;⭐⭐⭐⭐&apos;,
-      &apos;rank&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;stacking&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
-      &apos;bayesian&apos;: &apos;⭐⭐⭐⭐&apos;
+      'simple': '⭐⭐',
+      'weighted': '⭐⭐⭐',
+      'confidence': '⭐⭐⭐⭐',
+      'rank': '⭐⭐⭐',
+      'stacking': '⭐⭐⭐⭐⭐',
+      'bayesian': '⭐⭐⭐⭐'
     };
-    return scores[methodId] || &apos;⭐⭐⭐&apos;;
+    return scores[methodId] || '⭐⭐⭐';
   };
 
   const getRobustnessScore = (methodId: string): string => {
-}
     const scores: Record<string, string> = {
-}
-      &apos;simple&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;weighted&apos;: &apos;⭐⭐⭐⭐&apos;,
-      &apos;confidence&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;rank&apos;: &apos;⭐⭐⭐⭐&apos;,
-      &apos;stacking&apos;: &apos;⭐⭐&apos;,
-      &apos;bayesian&apos;: &apos;⭐⭐⭐⭐⭐&apos;
+      'simple': '⭐⭐⭐',
+      'weighted': '⭐⭐⭐⭐',
+      'confidence': '⭐⭐⭐',
+      'rank': '⭐⭐⭐⭐',
+      'stacking': '⭐⭐',
+      'bayesian': '⭐⭐⭐⭐⭐'
     };
-    return scores[methodId] || &apos;⭐⭐⭐&apos;;
+    return scores[methodId] || '⭐⭐⭐';
   };
 
   const getInterpretabilityScore = (methodId: string): string => {
-}
     const scores: Record<string, string> = {
-}
-      &apos;simple&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
-      &apos;weighted&apos;: &apos;⭐⭐⭐⭐&apos;,
-      &apos;confidence&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;rank&apos;: &apos;⭐⭐⭐&apos;,
-      &apos;stacking&apos;: &apos;⭐⭐&apos;,
-      &apos;bayesian&apos;: &apos;⭐&apos;
+      'simple': '⭐⭐⭐⭐⭐',
+      'weighted': '⭐⭐⭐⭐',
+      'confidence': '⭐⭐⭐',
+      'rank': '⭐⭐⭐',
+      'stacking': '⭐⭐',
+      'bayesian': '⭐'
     };
-    return scores[methodId] || &apos;⭐⭐⭐&apos;;
+    return scores[methodId] || '⭐⭐⭐';
   };
 
   // Calculate ensemble prediction
   const calculateEnsemblePrediction = () => {
-}
     const method = votingMethods.find((m: any) => m.id === selectedVoting);
     const weighting = weightingStrategies.find((w: any) => w.id === selectedWeighting);
     
@@ -286,24 +254,21 @@ const OracleEnsemblePredictionSection: React.FC = () => {
     let confidence = 0;
     
     switch (selectedVoting) {
-}
-      case &apos;simple&apos;:
+      case 'simple':
         finalPrediction = ensembleModels.reduce((sum, model) => sum + model.prediction, 0) / ensembleModels.length;
         confidence = ensembleModels.reduce((sum, model) => sum + model.confidence, 0) / ensembleModels.length;
         break;
         
-      case &apos;weighted&apos;:
+      case 'weighted':
         ensembleModels.forEach((model: any) => {
-}
           finalPrediction += model.weight * model.prediction;
           confidence += model.weight * model.confidence;
           totalWeight += model.weight;
         });
         break;
         
-      case &apos;confidence&apos;:
+      case 'confidence':
         ensembleModels.forEach((model: any) => {
-}
           const weight = model.confidence;
           finalPrediction += weight * model.prediction;
           confidence += weight * model.confidence;
@@ -319,7 +284,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
 
     // Calculate prediction variance for uncertainty
     const variance = ensembleModels.reduce((sum, model) => {
-}
       const diff = model.prediction - finalPrediction;
       return sum + model.weight * diff * diff;
     }, 0);
@@ -327,14 +291,12 @@ const OracleEnsemblePredictionSection: React.FC = () => {
     const uncertainty = Math.sqrt(variance);
     
     setEnsembleResults({
-}
       prediction: finalPrediction,
       confidence: confidence,
       uncertainty: uncertainty,
       method: method?.name,
       weighting: weighting?.name,
       modelContributions: ensembleModels.map((model: any) => ({
-}
         name: model.name,
         contribution: model.weight * model.prediction,
         weight: model.weight
@@ -345,32 +307,28 @@ const OracleEnsemblePredictionSection: React.FC = () => {
   // Optimization techniques
   const optimizationTechniques = [
     {
-}
-      name: &apos;Cross-Validation&apos;,
-      description: &apos;Validate ensemble performance across data folds&apos;,
-      implementation: &apos;K-fold CV with ensemble weight optimization&apos;,
-      benefits: [&apos;Unbiased performance estimate&apos;, &apos;Overfitting detection&apos;, &apos;Robust validation&apos;]
+      name: 'Cross-Validation',
+      description: 'Validate ensemble performance across data folds',
+      implementation: 'K-fold CV with ensemble weight optimization',
+      benefits: ['Unbiased performance estimate', 'Overfitting detection', 'Robust validation']
     },
     {
-}
-      name: &apos;Hyperparameter Tuning&apos;,
-      description: &apos;Optimize ensemble configuration parameters&apos;,
-      implementation: &apos;Grid search, random search, Bayesian optimization&apos;,
-      benefits: [&apos;Optimal configuration&apos;, &apos;Performance maximization&apos;, &apos;Automated tuning&apos;]
+      name: 'Hyperparameter Tuning',
+      description: 'Optimize ensemble configuration parameters',
+      implementation: 'Grid search, random search, Bayesian optimization',
+      benefits: ['Optimal configuration', 'Performance maximization', 'Automated tuning']
     },
     {
-}
-      name: &apos;Dynamic Model Selection&apos;,
-      description: &apos;Select subset of models based on performance&apos;,
-      implementation: &apos;Performance thresholding, diversity metrics&apos;,
-      benefits: [&apos;Removes poor models&apos;, &apos;Computational efficiency&apos;, &apos;Quality focus&apos;]
+      name: 'Dynamic Model Selection',
+      description: 'Select subset of models based on performance',
+      implementation: 'Performance thresholding, diversity metrics',
+      benefits: ['Removes poor models', 'Computational efficiency', 'Quality focus']
     },
     {
-}
-      name: &apos;Online Learning&apos;,
-      description: &apos;Update ensemble weights with new data&apos;,
-      implementation: &apos;Incremental weight updates, sliding windows&apos;,
-      benefits: [&apos;Adaptation to changes&apos;, &apos;Real-time updates&apos;, &apos;Concept drift handling&apos;]
+      name: 'Online Learning',
+      description: 'Update ensemble weights with new data',
+      implementation: 'Incremental weight updates, sliding windows',
+      benefits: ['Adaptation to changes', 'Real-time updates', 'Concept drift handling']
 
   ];
 
@@ -413,7 +371,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
         </div>
         
         <div className="overview-section sm:px-4 md:px-6 lg:px-8">
-          <h4>Oracle&apos;s Ensemble Architecture</h4>
+          <h4>Oracle's Ensemble Architecture</h4>
           <div className="architecture-diagram sm:px-4 md:px-6 lg:px-8">
             <div className="model-layer sm:px-4 md:px-6 lg:px-8">
               <h5>Base Models</h5>
@@ -467,20 +425,17 @@ const OracleEnsemblePredictionSection: React.FC = () => {
 
   const renderModels = () => (
     <div className="ensemble-models sm:px-4 md:px-6 lg:px-8">
-      <h3>🤖 Base Models in Oracle&apos;s Ensemble</h3>
+      <h3>🤖 Base Models in Oracle's Ensemble</h3>
       <div className="models-grid sm:px-4 md:px-6 lg:px-8">
         {ensembleModels.map((model: any) => (
-}
           <div 
             key={model.id} 
-            className={`model-card ${selectedModel === model.id ? &apos;selected&apos; : &apos;&apos;}`}
-            onClick={() => setSelectedModel(selectedModel === model.id ? &apos;&apos; : model.id)}
+            className={`model-card ${selectedModel === model.id ? 'selected' : ''}`}
+            onClick={() => setSelectedModel(selectedModel === model.id ? '' : model.id)}
             onKeyDown={(e: any) => {
-}
-              if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+              if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                setSelectedModel(selectedModel === model.id ? &apos;&apos; : model.id);
+                setSelectedModel(selectedModel === model.id ? '' : model.id);
 
             }}
             role="button"
@@ -512,47 +467,41 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <p className="model-description sm:px-4 md:px-6 lg:px-8">{model.description}</p>
             
             {selectedModel === model.id && (
-}
               <div className="model-details sm:px-4 md:px-6 lg:px-8">
                 <h5>Model Details</h5>
                 <div className="detail-grid sm:px-4 md:px-6 lg:px-8">
                   <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Strengths:</strong>
                     <ul>
-                      {model.type === &apos;Statistical&apos; && (
-}
+                      {model.type === 'Statistical' && (
                         <>
                           <li>Fast training and inference</li>
                           <li>Interpretable coefficients</li>
                           <li>Good baseline performance</li>
                         </>
                       )}
-                      {model.type === &apos;Tree-based&apos; && (
-}
+                      {model.type === 'Tree-based' && (
                         <>
                           <li>Handles non-linear relationships</li>
                           <li>Feature importance ranking</li>
                           <li>Robust to outliers</li>
                         </>
                       )}
-                      {model.type === &apos;Boosting&apos; && (
-}
+                      {model.type === 'Boosting' && (
                         <>
                           <li>High predictive accuracy</li>
                           <li>Handles complex patterns</li>
                           <li>Feature selection capability</li>
                         </>
                       )}
-                      {model.type === &apos;Deep Learning&apos; && (
-}
+                      {model.type === 'Deep Learning' && (
                         <>
                           <li>Captures complex non-linear patterns</li>
                           <li>Automatic feature learning</li>
                           <li>Scales with data size</li>
                         </>
                       )}
-                      {model.type === &apos;Probabilistic&apos; && (
-}
+                      {model.type === 'Probabilistic' && (
                         <>
                           <li>Uncertainty quantification</li>
                           <li>Incorporates prior knowledge</li>
@@ -564,40 +513,35 @@ const OracleEnsemblePredictionSection: React.FC = () => {
                   <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Use Cases:</strong>
                     <ul>
-                      {model.type === &apos;Statistical&apos; && (
-}
+                      {model.type === 'Statistical' && (
                         <>
                           <li>Linear trend identification</li>
                           <li>Baseline comparisons</li>
                           <li>Quick prototyping</li>
                         </>
                       )}
-                      {model.type === &apos;Tree-based&apos; && (
-}
+                      {model.type === 'Tree-based' && (
                         <>
                           <li>Feature interaction modeling</li>
                           <li>Mixed data types</li>
                           <li>Interpretable decisions</li>
                         </>
                       )}
-                      {model.type === &apos;Boosting&apos; && (
-}
+                      {model.type === 'Boosting' && (
                         <>
                           <li>Competition-grade accuracy</li>
                           <li>Structured data problems</li>
                           <li>Feature engineering</li>
                         </>
                       )}
-                      {model.type === &apos;Deep Learning&apos; && (
-}
+                      {model.type === 'Deep Learning' && (
                         <>
                           <li>High-dimensional data</li>
                           <li>Complex pattern recognition</li>
                           <li>Large dataset scenarios</li>
                         </>
                       )}
-                      {model.type === &apos;Probabilistic&apos; && (
-}
+                      {model.type === 'Probabilistic' && (
                         <>
                           <li>Risk assessment</li>
                           <li>Decision under uncertainty</li>
@@ -623,7 +567,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <span>Contribution</span>
           </div>
           {ensembleModels.map((model: any) => (
-}
             <div key={model.id} className="chart-row sm:px-4 md:px-6 lg:px-8">
               <span className="model-name sm:px-4 md:px-6 lg:px-8">{model.name}</span>
               <div className="accuracy-bar sm:px-4 md:px-6 lg:px-8">
@@ -653,15 +596,12 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       <h3>🗳️ Voting and Combination Methods</h3>
       <div className="voting-grid sm:px-4 md:px-6 lg:px-8">
         {votingMethods.map((method: any) => (
-}
           <div 
             key={method.id} 
-            className={`voting-card ${selectedVoting === method.id ? &apos;selected&apos; : &apos;&apos;}`}
+            className={`voting-card ${selectedVoting === method.id ? 'selected' : ''}`}
             onClick={() => setSelectedVoting(method.id)}
             onKeyDown={(e: any) => {
-}
-              if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+              if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 setSelectedVoting(method.id);
 
@@ -684,7 +624,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
                 <h6>✅ Strengths</h6>
                 <ul>
                   {method.strengths.map((strength, strengthIndex) => (
-}
                     <li key={`strength-${method.id}-${strengthIndex}`}>{strength}</li>
                   ))}
                 </ul>
@@ -693,7 +632,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
                 <h6>⚠️ Limitations</h6>
                 <ul>
                   {method.limitations.map((limitation, limitationIndex) => (
-}
                     <li key={`limitation-${method.id}-${limitationIndex}`}>{limitation}</li>
                   ))}
                 </ul>
@@ -714,7 +652,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <span>Interpretability</span>
           </div>
           {votingMethods.map((method: any) => (
-}
             <div key={method.id} className="table-row sm:px-4 md:px-6 lg:px-8">
               <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
               <span className="complexity-score sm:px-4 md:px-6 lg:px-8">
@@ -741,15 +678,12 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       <h3>⚖️ Weighting Strategies</h3>
       <div className="weighting-grid sm:px-4 md:px-6 lg:px-8">
         {weightingStrategies.map((strategy: any) => (
-}
           <div 
             key={strategy.id} 
-            className={`weighting-card ${selectedWeighting === strategy.id ? &apos;selected&apos; : &apos;&apos;}`}
+            className={`weighting-card ${selectedWeighting === strategy.id ? 'selected' : ''}`}
             onClick={() => setSelectedWeighting(strategy.id)}
             onKeyDown={(e: any) => {
-}
-              if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+              if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 setSelectedWeighting(strategy.id);
 
@@ -772,7 +706,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
                 <h6>🎯 Advantages</h6>
                 <ul>
                   {strategy.advantages.map((advantage, advIndex) => (
-}
                     <li key={`advantage-${strategy.id}-${advIndex}`}>{advantage}</li>
                   ))}
                 </ul>
@@ -781,7 +714,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
                 <h6>🎪 Use Cases</h6>
                 <ul>
                   {strategy.useCases.map((useCase, caseIndex) => (
-}
                     <li key={`usecase-${strategy.id}-${caseIndex}`}>{useCase}</li>
                   ))}
                 </ul>
@@ -795,14 +727,12 @@ const OracleEnsemblePredictionSection: React.FC = () => {
         <h4>📊 Weight Distribution Visualization</h4>
         <div className="weight-chart sm:px-4 md:px-6 lg:px-8">
           {ensembleModels.map((model, index) => (
-}
             <div key={model.id} className="weight-bar-container sm:px-4 md:px-6 lg:px-8">
               <div className="weight-label sm:px-4 md:px-6 lg:px-8">{model.name}</div>
               <div className="weight-bar sm:px-4 md:px-6 lg:px-8">
                 <div 
                   className="weight-fill sm:px-4 md:px-6 lg:px-8" 
                   style={{ 
-}
                     width: `${model.weight * 100}%`,
                     backgroundColor: `hsl(${index * 60}, 70%, 60%)`
                   }}
@@ -835,8 +765,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       <h3>🔧 Ensemble Optimization</h3>
       <div className="optimization-grid sm:px-4 md:px-6 lg:px-8">
         {optimizationTechniques.map((technique: any) => (
-}
-          <div key={technique.name.toLowerCase().replace(/\s+/g, &apos;-&apos;)} className="optimization-card sm:px-4 md:px-6 lg:px-8">
+          <div key={technique.name.toLowerCase().replace(/\s+/g, '-')} className="optimization-card sm:px-4 md:px-6 lg:px-8">
             <h4>{technique.name}</h4>
             <p className="technique-description sm:px-4 md:px-6 lg:px-8">{technique.description}</p>
             <div className="implementation sm:px-4 md:px-6 lg:px-8">
@@ -847,8 +776,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
               <strong>Benefits:</strong>
               <ul>
                 {technique.benefits.map((benefit, benefitIdx) => (
-}
-                  <li key={`benefit-${technique.name.toLowerCase().replace(/\s+/g, &apos;-&apos;)}-${benefitIdx}`}>{benefit}</li>
+                  <li key={`benefit-${technique.name.toLowerCase().replace(/\s+/g, '-')}-${benefitIdx}`}>{benefit}</li>
                 ))}
               </ul>
             </div>
@@ -857,7 +785,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       </div>
       
       <div className="optimization-process sm:px-4 md:px-6 lg:px-8">
-        <h4>🔄 Oracle&apos;s Optimization Process</h4>
+        <h4>🔄 Oracle's Optimization Process</h4>
         <div className="process-flow sm:px-4 md:px-6 lg:px-8">
           <div className="process-step sm:px-4 md:px-6 lg:px-8">
             <div className="step-number sm:px-4 md:px-6 lg:px-8">1</div>
@@ -950,7 +878,6 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       </div>
       
       {ensembleResults && (
-}
         <div className="demo-results sm:px-4 md:px-6 lg:px-8">
           <h4>🎯 Ensemble Results</h4>
           <div className="results-summary sm:px-4 md:px-6 lg:px-8">
@@ -981,14 +908,12 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <h5>🤝 Model Contributions</h5>
             <div className="contributions-chart sm:px-4 md:px-6 lg:px-8">
               {ensembleResults.modelContributions.map((contrib: any) => (
-}
-                <div key={`contribution-${contrib.name.toLowerCase().replace(/\s+/g, &apos;-&apos;)}`} className="contribution-bar sm:px-4 md:px-6 lg:px-8">
+                <div key={`contribution-${contrib.name.toLowerCase().replace(/\s+/g, '-')}`} className="contribution-bar sm:px-4 md:px-6 lg:px-8">
                   <span className="model-name sm:px-4 md:px-6 lg:px-8">{contrib.name}</span>
                   <div className="contribution-visual sm:px-4 md:px-6 lg:px-8">
                     <div 
                       className="contribution-fill sm:px-4 md:px-6 lg:px-8" 
                       style={{ 
-}
                         width: `${(contrib.contribution / ensembleResults.prediction) * 100}%`,
                         backgroundColor: `hsl(${ensembleResults.modelContributions.indexOf(contrib) * 60}, 70%, 60%)`
                       }}
@@ -1058,50 +983,50 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       
       <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button 
-          className={`nav-button ${activeTab === &apos;overview&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;overview&apos;)}
+          className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
+          onClick={() => setActiveTab('overview')}
         >
           📊 Overview
         </button>
         <button 
-          className={`nav-button ${activeTab === &apos;models&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;models&apos;)}
+          className={`nav-button ${activeTab === 'models' ? 'active' : ''}`}
+          onClick={() => setActiveTab('models')}
         >
           🤖 Base Models
         </button>
         <button 
-          className={`nav-button ${activeTab === &apos;voting&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;voting&apos;)}
+          className={`nav-button ${activeTab === 'voting' ? 'active' : ''}`}
+          onClick={() => setActiveTab('voting')}
         >
           🗳️ Voting Methods
         </button>
         <button 
-          className={`nav-button ${activeTab === &apos;weighting&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;weighting&apos;)}
+          className={`nav-button ${activeTab === 'weighting' ? 'active' : ''}`}
+          onClick={() => setActiveTab('weighting')}
         >
           ⚖️ Weighting
         </button>
         <button 
-          className={`nav-button ${activeTab === &apos;optimization&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;optimization&apos;)}
+          className={`nav-button ${activeTab === 'optimization' ? 'active' : ''}`}
+          onClick={() => setActiveTab('optimization')}
         >
           🔧 Optimization
         </button>
         <button 
-          className={`nav-button ${activeTab === &apos;demo&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;demo&apos;)}
+          className={`nav-button ${activeTab === 'demo' ? 'active' : ''}`}
+          onClick={() => setActiveTab('demo')}
         >
           🧪 Demo
         </button>
       </div>
       
       <div className="section-content sm:px-4 md:px-6 lg:px-8">
-        {activeTab === &apos;overview&apos; && renderOverview()}
-        {activeTab === &apos;models&apos; && renderModels()}
-        {activeTab === &apos;voting&apos; && renderVoting()}
-        {activeTab === &apos;weighting&apos; && renderWeighting()}
-        {activeTab === &apos;optimization&apos; && renderOptimization()}
-        {activeTab === &apos;demo&apos; && renderDemo()}
+        {activeTab === 'overview' && renderOverview()}
+        {activeTab === 'models' && renderModels()}
+        {activeTab === 'voting' && renderVoting()}
+        {activeTab === 'weighting' && renderWeighting()}
+        {activeTab === 'optimization' && renderOptimization()}
+        {activeTab === 'demo' && renderDemo()}
       </div>
     </div>
   );

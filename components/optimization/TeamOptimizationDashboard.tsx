@@ -3,10 +3,9 @@
  * Interactive UI for advanced team optimization and strategic management
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { 
-}
   Brain, 
   TrendingUp, 
   Target, 
@@ -30,10 +29,9 @@ import {
   UserMinus,
   FileText,
 //   Info
-} from &apos;lucide-react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-}
   advancedTeamOptimizer,
   type OptimizedTeam,
   type OptimizationOptions,
@@ -42,66 +40,56 @@ import {
   type WaiverTarget,
   type LineupConfiguration,
   type StartSitDecision
-} from &apos;../../services/advancedTeamOptimizer&apos;;
-import { useAuth } from &apos;../../contexts/AuthContext&apos;;
-import { toast } from &apos;react-hot-toast&apos;;
+} from '../../services/advancedTeamOptimizer';
+import { useAuth } from '../../contexts/AuthContext';
+import { toast } from 'react-hot-toast';
 
 interface TeamOptimizationDashboardProps {
-}
   leagueId: string;
   teamId: string;
   currentWeek: number;
-  scoringSystem: &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos; | &apos;superflex&apos;;
+  scoringSystem: 'standard' | 'ppr' | 'half_ppr' | 'superflex';
 
-}
 
 export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps> = ({
-}
   leagueId,
   teamId,
   currentWeek,
 //   scoringSystem
 }: any) => {
-}
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [optimizedTeam, setOptimizedTeam] = useState<OptimizedTeam | null>(null);
-  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;lineup&apos; | &apos;trades&apos; | &apos;waivers&apos; | &apos;strategy&apos;>(&apos;overview&apos;);
-  const [optimizationStrategy, setOptimizationStrategy] = useState<&apos;win_now&apos; | &apos;balanced&apos; | &apos;rebuild&apos;>(&apos;balanced&apos;);
+  const [activeTab, setActiveTab] = useState<'overview' | 'lineup' | 'trades' | 'waivers' | 'strategy'>('overview');
+  const [optimizationStrategy, setOptimizationStrategy] = useState<'win_now' | 'balanced' | 'rebuild'>('balanced');
   const [autoOptimize, setAutoOptimize] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
 
   useEffect(() => {
-}
     if (autoOptimize) {
-}
       const interval = setInterval(runOptimization, 60 * 60 * 1000); // Every hour
       return () => clearInterval(interval);
     }
   }, [autoOptimize]);
 
   const runOptimization = async () => {
-}
     setLoading(true);
     try {
-}
       // Get roster data (mock for now)
       const roster = await fetchRoster();
       
       const options: OptimizationOptions = {
-}
         strategy: optimizationStrategy,
         scoringSystem,
         leagueSize: 10,
         currentWeek: selectedWeek,
         playoffWeeks: [14, 15, 16],
         rosterRequirements: {
-}
           qb: { min: 1, max: 2 },
           rb: { min: 2, max: 6 },
           wr: { min: 2, max: 6 },
           te: { min: 1, max: 3 },
-          flex: { min: 1, max: 2, eligible: [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;] },
+          flex: { min: 1, max: 2, eligible: ['RB', 'WR', 'TE'] },
           k: { min: 1, max: 2 },
           def: { min: 1, max: 2 },
           bench: 6,
@@ -113,29 +101,25 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
       setOptimizedTeam(result);
       
       if (result.optimizationScore > 80) {
-}
         toast.success(`Team optimized! Score: ${result.optimizationScore.toFixed(1)}/100`);
       } else {
-}
         toast.warning(`Optimization complete. Score: ${result.optimizationScore.toFixed(1)}/100 - Improvements needed`);
   } finally {
-}
       setLoading(false);
 
   };
 
   const fetchRoster = async (): Promise<EnhancedPlayer[]> => {
-}
     // Mock implementation - would fetch real roster data
     return [];
   };
 
   const tabs = [
-    { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: Brain },
-    { id: &apos;lineup&apos;, label: &apos;Lineup&apos;, icon: Users },
-    { id: &apos;trades&apos;, label: &apos;Trades&apos;, icon: ArrowUpRight },
-    { id: &apos;waivers&apos;, label: &apos;Waivers&apos;, icon: UserPlus },
-    { id: &apos;strategy&apos;, label: &apos;Strategy&apos;, icon: Target }
+    { id: 'overview', label: 'Overview', icon: Brain },
+    { id: 'lineup', label: 'Lineup', icon: Users },
+    { id: 'trades', label: 'Trades', icon: ArrowUpRight },
+    { id: 'waivers', label: 'Waivers', icon: UserPlus },
+    { id: 'strategy', label: 'Strategy', icon: Target }
   ];
 
   return (
@@ -163,8 +147,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
                 >
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-}
-                      autoOptimize ? &apos;translate-x-6&apos; : &apos;translate-x-1&apos;
+                      autoOptimize ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
                 </button>
@@ -187,7 +170,6 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
                 className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                aria-label="Action button">
                 {loading ? (
-}
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin sm:px-4 md:px-6 lg:px-8" />
                     Optimizing...
@@ -205,7 +187,6 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
           {/* Tabs */}
           <div className="flex gap-1 mt-6 sm:px-4 md:px-6 lg:px-8">
             {tabs.map((tab: any) => {
-}
               const Icon = tab.icon;
               return (
                 <button
@@ -224,24 +205,19 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <AnimatePresence mode="wait">
-          {activeTab === &apos;overview&apos; && (
-}
+          {activeTab === 'overview' && (
             <OverviewTab optimizedTeam={optimizedTeam} />
           )}
-          {activeTab === &apos;lineup&apos; && (
-}
+          {activeTab === 'lineup' && (
             <LineupTab optimizedTeam={optimizedTeam} week={selectedWeek} />
           )}
-          {activeTab === &apos;trades&apos; && (
-}
+          {activeTab === 'trades' && (
             <TradesTab tradeTargets={optimizedTeam?.tradeTargets || []} />
           )}
-          {activeTab === &apos;waivers&apos; && (
-}
+          {activeTab === 'waivers' && (
             <WaiversTab waiverTargets={optimizedTeam?.waiverTargets || []} />
           )}
-          {activeTab === &apos;strategy&apos; && (
-}
+          {activeTab === 'strategy' && (
             <StrategyTab optimizedTeam={optimizedTeam} />
           )}
         </AnimatePresence>
@@ -252,9 +228,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
 
 // Overview Tab Component
 const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimizedTeam }: any) => {
-}
   if (!optimizedTeam) {
-}
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -270,36 +244,32 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
 
   const metrics = [
     {
-}
-      label: &apos;Optimization Score&apos;,
+      label: 'Optimization Score',
       value: optimizedTeam.optimizationScore.toFixed(1),
-      suffix: &apos;/100&apos;,
+      suffix: '/100',
       icon: Brain,
-      color: &apos;purple&apos;
+      color: 'purple'
     },
     {
-}
-      label: &apos;Playoff Probability&apos;,
+      label: 'Playoff Probability',
       value: (optimizedTeam.projectedOutcome.playoffProbability * 100).toFixed(1),
-      suffix: &apos;%&apos;,
+      suffix: '%',
       icon: Trophy,
-      color: &apos;yellow&apos;
+      color: 'yellow'
     },
     {
-}
-      label: &apos;Championship Odds&apos;,
+      label: 'Championship Odds',
       value: (optimizedTeam.projectedOutcome.championshipProbability * 100).toFixed(1),
-      suffix: &apos;%&apos;,
+      suffix: '%',
       icon: Award,
-      color: &apos;green&apos;
+      color: 'green'
     },
     {
-}
-      label: &apos;Projected Finish&apos;,
+      label: 'Projected Finish',
       value: optimizedTeam.projectedOutcome.expectedFinish.toFixed(0),
-      suffix: &apos;th&apos;,
+      suffix: 'th',
       icon: Target,
-      color: &apos;blue&apos;
+      color: 'blue'
 
   ];
 
@@ -313,7 +283,6 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {metrics.map((metric, index) => {
-}
           const Icon = metric.icon;
           return (
             <motion.div
@@ -354,7 +323,6 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
               <h4 className="text-green-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Strengths</h4>
               <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {Array.from(optimizedTeam.roster.strengthsByPosition.entries())
-}
                   .filter(([_, score]) => score > 1)
                   .map(([position, score]) => (
                     <div key={position} className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
@@ -379,7 +347,6 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
               <h4 className="text-red-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Weaknesses</h4>
               <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                 {optimizedTeam.roster.weaknesses.map((weakness: any) => (
-}
                   <div key={weakness} className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <AlertTriangle className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-white/80 sm:px-4 md:px-6 lg:px-8">{weakness}</span>
@@ -399,7 +366,6 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
           
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {optimizedTeam.roster.recommendations.map((rec, index) => (
-}
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
@@ -438,7 +404,7 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
           <div>
             <p className="text-white/60 text-sm mb-1 sm:px-4 md:px-6 lg:px-8">Confidence Range</p>
             <p className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
-              {optimizedTeam.projectedOutcome.confidenceInterval[0].toFixed(0)} - {&apos; &apos;}
+              {optimizedTeam.projectedOutcome.confidenceInterval[0].toFixed(0)} - {' '}
               {optimizedTeam.projectedOutcome.confidenceInterval[1].toFixed(0)}
             </p>
           </div>
@@ -450,9 +416,7 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
 
 // Lineup Tab Component
 const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }> = ({ optimizedTeam, week }: any) => {
-}
   if (!optimizedTeam) {
-}
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -496,7 +460,6 @@ const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }>
         {/* Starting Lineup */}
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           {Array.from(lineup.optimal.players.entries()).map(([position, player]) => (
-}
             <div
               key={position}
               className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -530,7 +493,6 @@ const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }>
         <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Start/Sit Decisions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {lineup.startSitDecisions.slice(0, 6).map((decision: any) => (
-}
             <div
               key={decision.player.id}
               className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8"
@@ -538,10 +500,9 @@ const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }>
               <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <div
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
-}
-                    decision.decision === &apos;start&apos;
-                      ? &apos;bg-green-500/20 text-green-400&apos;
-                      : &apos;bg-red-500/20 text-red-400&apos;
+                    decision.decision === 'start'
+                      ? 'bg-green-500/20 text-green-400'
+                      : 'bg-red-500/20 text-red-400'
                   }`}
                 >
                   {decision.decision.toUpperCase()}
@@ -566,9 +527,7 @@ const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }>
 
 // Trades Tab Component
 const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: any) => {
-}
   if (tradeTargets.length === 0) {
-}
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -588,7 +547,6 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: 
       className="space-y-6 sm:px-4 md:px-6 lg:px-8"
     >
       {tradeTargets.map((target, index) => (
-}
         <motion.div
           key={target.player.id}
           initial={{ opacity: 0, x: -20 }}
@@ -601,15 +559,14 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: 
               <div className="flex items-center gap-3 mb-2 sm:px-4 md:px-6 lg:px-8">
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
-}
-                    target.targetType === &apos;buy_low&apos;
-                      ? &apos;bg-green-500/20 text-green-400&apos;
-                      : target.targetType === &apos;sell_high&apos;
-                      ? &apos;bg-red-500/20 text-red-400&apos;
-                      : &apos;bg-yellow-500/20 text-yellow-400&apos;
+                    target.targetType === 'buy_low'
+                      ? 'bg-green-500/20 text-green-400'
+                      : target.targetType === 'sell_high'
+                      ? 'bg-red-500/20 text-red-400'
+                      : 'bg-yellow-500/20 text-yellow-400'
                   }`}
                 >
-                  {target.targetType.replace(&apos;_&apos;, &apos; &apos;).toUpperCase()}
+                  {target.targetType.replace('_', ' ').toUpperCase()}
                 </span>
                 <span className="text-white/60 sm:px-4 md:px-6 lg:px-8">
                   Urgency: {(target.urgency * 100).toFixed(0)}%
@@ -634,11 +591,9 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: 
           <p className="text-white/80 mb-4 sm:px-4 md:px-6 lg:px-8">{target.reasoning}</p>
 
           {target.packages.length > 0 && (
-}
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">Suggested Packages:</h4>
               {target.packages.slice(0, 2).map((pkg, pkgIndex) => (
-}
                 <div
                   key={pkgIndex}
                   className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8"
@@ -646,14 +601,14 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: 
                   <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">Give:</span>
                     <span className="text-white sm:px-4 md:px-6 lg:px-8">
-                      {pkg.give.map((p: any) => p.name).join(&apos;, &apos;)}
+                      {pkg.give.map((p: any) => p.name).join(', ')}
                     </span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-white/40 sm:px-4 md:px-6 lg:px-8" />
                   <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">Get:</span>
                     <span className="text-white sm:px-4 md:px-6 lg:px-8">
-                      {pkg.receive.map((p: any) => p.name).join(&apos;, &apos;)}
+                      {pkg.receive.map((p: any) => p.name).join(', ')}
                     </span>
                   </div>
                 </div>
@@ -668,9 +623,7 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: 
 
 // Waivers Tab Component
 const WaiversTab: React.FC<{ waiverTargets: WaiverTarget[] }> = ({ waiverTargets }: any) => {
-}
   if (waiverTargets.length === 0) {
-}
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -690,7 +643,6 @@ const WaiversTab: React.FC<{ waiverTargets: WaiverTarget[] }> = ({ waiverTargets
       className="space-y-4 sm:px-4 md:px-6 lg:px-8"
     >
       {waiverTargets.map((target, index) => (
-}
         <motion.div
           key={target.player.id}
           initial={{ opacity: 0, y: 20 }}
@@ -742,9 +694,7 @@ const WaiversTab: React.FC<{ waiverTargets: WaiverTarget[] }> = ({ waiverTargets
 
 // Strategy Tab Component
 const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimizedTeam }: any) => {
-}
   if (!optimizedTeam) {
-}
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -760,7 +710,6 @@ const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
   const strategy = optimizedTeam.seasonStrategy;
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -782,12 +731,12 @@ const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
             <div className="flex items-center gap-3 mb-2 sm:px-4 md:px-6 lg:px-8">
               <Calendar className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-lg font-semibold text-white capitalize sm:px-4 md:px-6 lg:px-8">
-                {strategy.currentPhase.replace(&apos;_&apos;, &apos; &apos;)}
+                {strategy.currentPhase.replace('_', ' ')}
               </span>
             </div>
             <p className="text-white/60 sm:px-4 md:px-6 lg:px-8">
               Approach: <span className="text-purple-400 capitalize sm:px-4 md:px-6 lg:px-8">
-                {strategy.approach.replace(&apos;_&apos;, &apos; &apos;)}
+                {strategy.approach.replace('_', ' ')}
               </span>
             </p>
           </div>
@@ -799,7 +748,6 @@ const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
         <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Strategic Priorities</h3>
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           {strategy.priorities.map((priority, index) => (
-}
             <div key={index} className="border-l-4 border-purple-500 pl-4 sm:px-4 md:px-6 lg:px-8">
               <div className="flex justify-between items-start mb-2 sm:px-4 md:px-6 lg:px-8">
                 <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{priority.priority}</h4>
@@ -809,7 +757,6 @@ const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
               </div>
               <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                 {priority.actions.map((action, actionIndex) => (
-}
                   <div key={actionIndex} className="flex items-center gap-2 text-white/80 text-sm sm:px-4 md:px-6 lg:px-8">
                     <ChevronRight className="w-4 h-4 text-white/40 sm:px-4 md:px-6 lg:px-8" />
                     {action}
@@ -827,7 +774,6 @@ const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
         <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Season Milestones</h3>
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           {strategy.milestones.map((milestone, index) => (
-}
             <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
               <div>
                 <p className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">Week {milestone.week}: {milestone.goal}</p>

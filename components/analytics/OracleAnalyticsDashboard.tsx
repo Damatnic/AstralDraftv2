@@ -1,17 +1,15 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
-import { Badge } from &apos;../ui/Badge&apos;;
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from &apos;recharts&apos;;
-import { TrendingUp, TrendingDown, Target, Trophy, Zap, BarChart3, Activity } from &apos;lucide-react&apos;;
-import { useAuth } from &apos;../../contexts/SimpleAuthContext&apos;;
-import { oracleApiClient } from &apos;../../services/oracleApiClient&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, Target, Trophy, Zap, BarChart3, Activity } from 'lucide-react';
+import { useAuth } from '../../contexts/SimpleAuthContext';
+import { oracleApiClient } from '../../services/oracleApiClient';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface PerformanceData {
-}
     predictionHistory: Array<{
-}
         id: string;
         week: number;
         question: string;
@@ -27,7 +25,6 @@ interface PerformanceData {
         isCorrect: boolean;
     }>;
     weeklyTrends: Array<{
-}
         week: number;
         totalPredictions: number;
         correctPredictions: number;
@@ -37,7 +34,6 @@ interface PerformanceData {
         oracleBeats: number;
     }>;
     typeBreakdown: Array<{
-}
         type: string;
         totalPredictions: number;
         correctPredictions: number;
@@ -46,19 +42,15 @@ interface PerformanceData {
         totalPoints: number;
     }>;
     confidenceAnalysis: Array<{
-}
         confidenceRange: string;
         totalPredictions: number;
         correctPredictions: number;
         accuracy: number;
         avgConfidence: number;
     }>;
-}
 
 interface GlobalAnalytics {
-}
     globalStats: {
-}
         totalUsers: number;
         totalPredictions: number;
         totalSubmissions: number;
@@ -68,7 +60,6 @@ interface GlobalAnalytics {
         oracleAccuracy: number;
     };
     weeklyParticipation: Array<{
-}
         week: number;
         predictionsCreated: number;
         totalSubmissions: number;
@@ -76,21 +67,18 @@ interface GlobalAnalytics {
         avgConfidence: number;
     }>;
     typePopularity: Array<{
-}
         type: string;
         totalPredictions: number;
         totalSubmissions: number;
         avgUserConfidence: number;
         uniqueParticipants: number;
     }>;
-}
 
 export const OracleAnalyticsDashboard: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const { user } = useAuth();
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
-    const isTablet = useMediaQuery(&apos;(max-width: 1024px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isTablet = useMediaQuery('(max-width: 1024px)');
     
     const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
     const [globalData, setGlobalData] = useState<GlobalAnalytics | null>(null);
@@ -101,24 +89,19 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     const [selectedWeeks, setSelectedWeeks] = useState<number>(10);
 
     useEffect(() => {
-}
         if (user?.id) {
-}
             loadAnalyticsData();
     }
   }, [user, selectedSeason, selectedWeeks]);
 
     const getPlayerNumber = (user: any): number => {
-}
         if (user.isAdmin) return 0; // Admin is player 0 for Oracle
         const match = user.id.match(/player(\d+)/);
         return match ? parseInt(match[1]) : 1;
     };
 
     const loadAnalyticsData = async () => {
-}
         try {
-}
 
             setLoading(true);
             setError(null);
@@ -127,12 +110,10 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
             const [performanceResponse, globalResponse, leaderboardResponse] = await Promise.all([
                 oracleApiClient.getPerformanceAnalytics(playerNumber, { 
-}
                     season: selectedSeason, 
                     weeks: selectedWeeks 
                 }),
                 oracleApiClient.getGlobalAnalytics({ 
-}
                     season: selectedSeason, 
                     weeks: selectedWeeks 
                 }),
@@ -140,35 +121,29 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             ]);
 
             if (performanceResponse.success) {
-}
                 setPerformanceData(performanceResponse.data);
             }
 
             if (globalResponse.success) {
-}
                 setGlobalData(globalResponse.data);
             }
 
             if (leaderboardResponse.success) {
-}
                 setLeaderboardData(leaderboardResponse.data);
             }
 
         } catch (error) {
-}
-            setError(error instanceof Error ? error.message : &apos;Failed to load analytics data&apos;);
+            setError(error instanceof Error ? error.message : 'Failed to load analytics data');
         } finally {
-}
             setLoading(false);
         }
 
     const StatCard: React.FC<{
-}
         title: string;
         value: string | number;
         description?: string;
         icon: React.ReactNode;
-        trend?: &apos;up&apos; | &apos;down&apos; | &apos;neutral&apos;;
+        trend?: 'up' | 'down' | 'neutral';
         trendValue?: string;
     }> = ({ title, value, description, icon, trend, trendValue }: any) => (
         <Card>
@@ -181,19 +156,15 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                         <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">{title}</p>
                         <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{value}</p>
                         {description && (
-}
                             <p className="text-xs text-gray-500 truncate sm:px-4 md:px-6 lg:px-8">{description}</p>
                         )}
                         {trend && trendValue && (
-}
                             <div className={`flex items-center text-xs ${
-}
-                                trend === &apos;up&apos; ? &apos;text-green-600&apos; : 
-                                trend === &apos;down&apos; ? &apos;text-red-600&apos; : &apos;text-gray-600&apos;
+                                trend === 'up' ? 'text-green-600' : 
+                                trend === 'down' ? 'text-red-600' : 'text-gray-600'
                             }`}>
-                                {trend === &apos;up&apos; ? <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : 
-}
-                                 trend === &apos;down&apos; ? <TrendingDown className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : null}
+                                {trend === 'up' ? <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : 
+                                 trend === 'down' ? <TrendingDown className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : null}
                                 <span className="truncate sm:px-4 md:px-6 lg:px-8">{trendValue}</span>
                             </div>
                         )}
@@ -204,7 +175,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     );
 
     if (loading) {
-}
         return (
             <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
@@ -213,7 +183,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     {[...Array(4)].map((_, i) => (
-}
                         <Card key={i}>
                             <CardContent className="p-4 sm:p-6">
                                 <div className="animate-pulse sm:px-4 md:px-6 lg:px-8">
@@ -229,7 +198,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
         );
 
     if (error) {
-}
         return (
             <div className="p-4 sm:p-6">
                 <Card>
@@ -285,25 +253,22 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
             {/* Key Performance Indicators */}
             {performanceData && globalData && (
-}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <StatCard>
                         title="Your Ranking"
-                        value={currentUserRank ? `#${currentUserRank.rank}` : &apos;Unranked&apos;}
+                        value={currentUserRank ? `#${currentUserRank.rank}` : 'Unranked'}
                         description="Current position"
                         icon={<Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
                     />
                     <StatCard>
                         title="Prediction Accuracy"
                         value={`${performanceData.weeklyTrends.length > 0 ? 
-}
                             Math.round(performanceData.weeklyTrends.reduce((acc, w) => acc + w.accuracy, 0) / performanceData.weeklyTrends.length) 
                             : 0}%`}
                         description={`vs Oracle ${globalData.globalStats.oracleAccuracy}%`}
                         icon={<Target className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
                         trend={performanceData.weeklyTrends.length >= 2 ? 
-}
-                            (performanceData.weeklyTrends[0].accuracy > performanceData.weeklyTrends[1].accuracy ? &apos;up&apos; : &apos;down&apos;) : &apos;neutral&apos;}
+                            (performanceData.weeklyTrends[0].accuracy > performanceData.weeklyTrends[1].accuracy ? 'up' : 'down') : 'neutral'}
                     />
                     <StatCard>
                         title="Current Streak"
@@ -322,7 +287,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
             {/* Performance Charts */}
             {performanceData && (
-}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     {/* Weekly Accuracy Trend */}
                     <Card>
@@ -370,7 +334,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                         angle={isMobile ? -45 : 0}
-                                        textAnchor={isMobile ? &apos;end&apos; : &apos;middle&apos;}
+                                        textAnchor={isMobile ? 'end' : 'middle'}
                                         height={isMobile ? 60 : 30}
                                     />
                                     <YAxis>
@@ -431,7 +395,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                         angle={isMobile ? -45 : 0}
-                                        textAnchor={isMobile ? &apos;end&apos; : &apos;middle&apos;}
+                                        textAnchor={isMobile ? 'end' : 'middle'}
                                         height={isMobile ? 60 : 30}
                                     />
                                     <YAxis>
@@ -450,7 +414,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
             {/* Recent Activity */}
             {performanceData && (
-}
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-white text-base sm:text-lg">Recent Prediction History</CardTitle>
@@ -458,7 +421,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                     <CardContent>
                         <div className="space-y-2 sm:space-y-3">
                             {performanceData.predictionHistory.slice(0, isMobile ? 3 : 5).map((prediction: any) => (
-}
                                 <div key={prediction.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg gap-2 sm:gap-0">
                                     <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                         <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{prediction.question}</p>
@@ -471,9 +433,8 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                             {prediction.userConfidence}% confidence
                                         </Badge>
                                         {prediction.isResolved && (
-}
                                             <Badge variant={prediction.isCorrect ? "default" : "destructive"} className="text-xs sm:px-4 md:px-6 lg:px-8">
-                                                {prediction.isCorrect ? &apos;Correct&apos; : &apos;Incorrect&apos;}
+                                                {prediction.isCorrect ? 'Correct' : 'Incorrect'}
                                             </Badge>
                                         )}
                                         <span className="text-xs sm:text-sm font-medium text-gray-900">

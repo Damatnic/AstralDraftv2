@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import AdvancedReportingInterface from &apos;./AdvancedReportingInterface&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AdvancedReportingInterface from './AdvancedReportingInterface';
 
-describe(&apos;AdvancedReportingInterface&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('AdvancedReportingInterface', () => {
+  it('renders without crashing', () => {
     render(<AdvancedReportingInterface />);
-    expect(screen.getByTestId(&apos;advancedreportinginterface&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('advancedreportinginterface')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<AdvancedReportingInterface />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<AdvancedReportingInterface />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

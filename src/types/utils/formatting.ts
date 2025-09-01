@@ -6,337 +6,262 @@
 // ==================== BASE FORMATTING TYPES ====================
 
 export interface FormatOptions {
-}
   locale?: string;
   timezone?: string;
   currency?: string;
-}
 
 export interface DisplayConfig {
-}
-  theme?: &apos;light&apos; | &apos;dark&apos;;
+  theme?: 'light' | 'dark';
   compactMode?: boolean;
   highContrast?: boolean;
-  fontSize?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
-}
+  fontSize?: 'sm' | 'md' | 'lg' | 'xl';
 
 // ==================== NUMBER FORMATTING ====================
 
 export interface NumberFormatOptions extends FormatOptions {
-}
   minimumFractionDigits?: number;
   maximumFractionDigits?: number;
-  notation?: &apos;standard&apos; | &apos;scientific&apos; | &apos;engineering&apos; | &apos;compact&apos;;
-  compactDisplay?: &apos;short&apos; | &apos;long&apos;;
+  notation?: 'standard' | 'scientific' | 'engineering' | 'compact';
+  compactDisplay?: 'short' | 'long';
   useGrouping?: boolean;
-  signDisplay?: &apos;auto&apos; | &apos;never&apos; | &apos;always&apos; | &apos;exceptZero&apos;;
-}
+  signDisplay?: 'auto' | 'never' | 'always' | 'exceptZero';
 
 export interface CurrencyFormatOptions extends NumberFormatOptions {
-}
   currency: string;
-  currencyDisplay?: &apos;symbol&apos; | &apos;narrowSymbol&apos; | &apos;code&apos; | &apos;name&apos;;
-}
+  currencyDisplay?: 'symbol' | 'narrowSymbol' | 'code' | 'name';
 
 export interface PercentageFormatOptions extends NumberFormatOptions {
-}
-  style: &apos;percent&apos;;
+  style: 'percent';
   minimumFractionDigits?: 1;
   maximumFractionDigits?: 1;
-}
 
 export interface ScoreFormatOptions extends NumberFormatOptions {
-}
   precision?: number;
   showSign?: boolean;
   abbreviate?: boolean;
   color?: boolean;
-}
 
 export interface RankFormatOptions {
-}
   suffix?: boolean; // Show "1st", "2nd", etc.
   showTies?: boolean;
   highlightUser?: boolean;
-}
 
 // ==================== DATE FORMATTING ====================
 
 export interface DateFormatOptions extends FormatOptions {
-}
-  dateStyle?: &apos;full&apos; | &apos;long&apos; | &apos;medium&apos; | &apos;short&apos;;
-  timeStyle?: &apos;full&apos; | &apos;long&apos; | &apos;medium&apos; | &apos;short&apos;;
-  weekday?: &apos;narrow&apos; | &apos;short&apos; | &apos;long&apos;;
-  era?: &apos;narrow&apos; | &apos;short&apos; | &apos;long&apos;;
-  year?: &apos;numeric&apos; | &apos;2-digit&apos;;
-  month?: &apos;numeric&apos; | &apos;2-digit&apos; | &apos;narrow&apos; | &apos;short&apos; | &apos;long&apos;;
-  day?: &apos;numeric&apos; | &apos;2-digit&apos;;
-  hour?: &apos;numeric&apos; | &apos;2-digit&apos;;
-  minute?: &apos;numeric&apos; | &apos;2-digit&apos;;
-  second?: &apos;numeric&apos; | &apos;2-digit&apos;;
-  timeZoneName?: &apos;short&apos; | &apos;long&apos; | &apos;shortOffset&apos; | &apos;longOffset&apos; | &apos;shortGeneric&apos; | &apos;longGeneric&apos;;
+  dateStyle?: 'full' | 'long' | 'medium' | 'short';
+  timeStyle?: 'full' | 'long' | 'medium' | 'short';
+  weekday?: 'narrow' | 'short' | 'long';
+  era?: 'narrow' | 'short' | 'long';
+  year?: 'numeric' | '2-digit';
+  month?: 'numeric' | '2-digit' | 'narrow' | 'short' | 'long';
+  day?: 'numeric' | '2-digit';
+  hour?: 'numeric' | '2-digit';
+  minute?: 'numeric' | '2-digit';
+  second?: 'numeric' | '2-digit';
+  timeZoneName?: 'short' | 'long' | 'shortOffset' | 'longOffset' | 'shortGeneric' | 'longGeneric';
   hour12?: boolean;
-}
 
 export interface RelativeDateFormatOptions extends FormatOptions {
-}
-  style?: &apos;long&apos; | &apos;short&apos; | &apos;narrow&apos;;
-  numeric?: &apos;always&apos; | &apos;auto&apos;;
-}
+  style?: 'long' | 'short' | 'narrow';
+  numeric?: 'always' | 'auto';
 
 export interface TimeAgoFormatOptions {
-}
   addSuffix?: boolean;
   includeSeconds?: boolean;
-}
 
 export interface GameTimeFormatOptions extends DateFormatOptions {
-}
   showCountdown?: boolean;
   showTimeZone?: boolean;
-  format?: &apos;full&apos; | &apos;date-only&apos; | &apos;time-only&apos; | &apos;relative&apos;;
-}
+  format?: 'full' | 'date-only' | 'time-only' | 'relative';
 
 // ==================== TEXT FORMATTING ====================
 
 export interface TextFormatOptions {
-}
   truncate?: {
-}
     maxLength: number;
     ellipsis?: string;
     wordBreak?: boolean;
   };
-  case?: &apos;upper&apos; | &apos;lower&apos; | &apos;title&apos; | &apos;sentence&apos; | &apos;camel&apos; | &apos;pascal&apos; | &apos;kebab&apos; | &apos;snake&apos;;
+  case?: 'upper' | 'lower' | 'title' | 'sentence' | 'camel' | 'pascal' | 'kebab' | 'snake';
   highlight?: {
-}
     query: string;
     className?: string;
     caseSensitive?: boolean;
   };
   linkify?: {
-}
     className?: string;
     target?: string;
     truncate?: number;
   };
-}
 
 export interface PlayerNameFormatOptions extends TextFormatOptions {
-}
-  format?: &apos;full&apos; | &apos;first-last&apos; | &apos;last-first&apos; | &apos;first-initial&apos; | &apos;initials&apos;;
+  format?: 'full' | 'first-last' | 'last-first' | 'first-initial' | 'initials';
   showPosition?: boolean;
   showTeam?: boolean;
-}
 
 export interface TeamNameFormatOptions extends TextFormatOptions {
-}
-  format?: &apos;full&apos; | &apos;city&apos; | &apos;mascot&apos; | &apos;abbreviation&apos;;
+  format?: 'full' | 'city' | 'mascot' | 'abbreviation';
   showLogo?: boolean;
   showRecord?: boolean;
-}
 
 // ==================== PLAYER STAT FORMATTING ====================
 
 export interface StatFormatOptions extends NumberFormatOptions {
-}
-  category?: &apos;passing&apos; | &apos;rushing&apos; | &apos;receiving&apos; | &apos;kicking&apos; | &apos;defense&apos;;
+  category?: 'passing' | 'rushing' | 'receiving' | 'kicking' | 'defense';
   showLabel?: boolean;
   showProjected?: boolean;
   compareToAverage?: boolean;
   colorCode?: boolean;
   abbreviate?: boolean;
-}
 
 export interface ProjectionFormatOptions extends StatFormatOptions {
-}
   showRange?: boolean;
   confidence?: boolean;
-  comparison?: &apos;none&apos; | &apos;ranking&apos; | &apos;tier&apos; | &apos;average&apos;;
-}
+  comparison?: 'none' | 'ranking' | 'tier' | 'average';
 
 export interface FantasyPointsFormatOptions extends ScoreFormatOptions {
-}
   showBreakdown?: boolean;
   showProjection?: boolean;
   showDifference?: boolean;
   highlightBest?: boolean;
-}
 
 // ==================== RECORD AND STANDINGS FORMATTING ====================
 
 export interface RecordFormatOptions {
-}
-  format?: &apos;wins-losses&apos; | &apos;wins-losses-ties&apos; | &apos;percentage&apos; | &apos;games-back&apos;;
+  format?: 'wins-losses' | 'wins-losses-ties' | 'percentage' | 'games-back';
   showPercentage?: boolean;
   precision?: number;
-}
 
 export interface StandingsFormatOptions {
-}
   showRank?: boolean;
   showDivision?: boolean;
   showWildCard?: boolean;
   showPlayoffIndicator?: boolean;
   highlightUser?: boolean;
   showTiebreakers?: boolean;
-}
 
 // ==================== DRAFT FORMATTING ====================
 
 export interface DraftPickFormatOptions {
-}
   showRound?: boolean;
   showOverall?: boolean;
   showTime?: boolean;
   showGrade?: boolean;
   showValue?: boolean;
-  format?: &apos;compact&apos; | &apos;detailed&apos;;
-}
+  format?: 'compact' | 'detailed';
 
 export interface AuctionValueFormatOptions extends CurrencyFormatOptions {
-}
   showBudgetRemaining?: boolean;
   showValueVsProjection?: boolean;
   highlightDeals?: boolean;
-  currency: &apos;USD&apos;; // Fantasy dollars
-}
+  currency: 'USD'; // Fantasy dollars
 
 export interface DraftGradeFormatOptions {
-}
   showLetter?: boolean;
   showNumeric?: boolean;
   showColor?: boolean;
   showBreakdown?: boolean;
-}
 
 // ==================== TRADE FORMATTING ====================
 
 export interface TradeFormatOptions {
-}
-  format?: &apos;compact&apos; | &apos;detailed&apos; | &apos;summary&apos;;
+  format?: 'compact' | 'detailed' | 'summary';
   showAnalysis?: boolean;
   showValue?: boolean;
   showFairness?: boolean;
   highlightWinner?: boolean;
-}
 
 export interface TradeAnalysisFormatOptions {
-}
   showScores?: boolean;
   showRecommendation?: boolean;
   showReasoning?: boolean;
   colorCode?: boolean;
-}
 
 // ==================== WAIVER FORMATTING ====================
 
 export interface WaiverFormatOptions {
-}
   showPriority?: boolean;
   showBid?: boolean;
   showAdvice?: boolean;
-  format?: &apos;compact&apos; | &apos;detailed&apos;;
-}
+  format?: 'compact' | 'detailed';
 
 export interface FAABFormatOptions extends CurrencyFormatOptions {
-}
   showRemaining?: boolean;
   showRecommended?: boolean;
   highlightHighBids?: boolean;
-}
 
 // ==================== MATCHUP FORMATTING ====================
 
 export interface MatchupFormatOptions {
-}
-  format?: &apos;scoreboard&apos; | &apos;detailed&apos; | &apos;preview&apos; | &apos;recap&apos;;
+  format?: 'scoreboard' | 'detailed' | 'preview' | 'recap';
   showProjections?: boolean;
   showLive?: boolean;
   showWinProbability?: boolean;
   showKey?: string; // Key matchup position
-}
 
 export interface ScoreboardFormatOptions extends ScoreFormatOptions {
-}
   showQuarter?: boolean;
   showTimeRemaining?: boolean;
   showProjected?: boolean;
   showLiveUpdates?: boolean;
   animate?: boolean;
-}
 
 // ==================== CHART AND GRAPH FORMATTING ====================
 
 export interface ChartFormatOptions {
-}
-  theme?: &apos;light&apos; | &apos;dark&apos;;
+  theme?: 'light' | 'dark';
   colorScheme?: string[];
   responsive?: boolean;
   animation?: boolean;
   tooltip?: {
-}
     enabled: boolean;
     format?: string;
   };
   legend?: {
-}
-    position: &apos;top&apos; | &apos;bottom&apos; | &apos;left&apos; | &apos;right&apos;;
-    format?: &apos;compact&apos; | &apos;detailed&apos;;
+    position: 'top' | 'bottom' | 'left' | 'right';
+    format?: 'compact' | 'detailed';
   };
-}
 
 export interface TrendFormatOptions extends ChartFormatOptions {
-}
-  timeframe?: &apos;week&apos; | &apos;month&apos; | &apos;season&apos; | &apos;career&apos;;
+  timeframe?: 'week' | 'month' | 'season' | 'career';
   showAverage?: boolean;
   showGoal?: boolean;
   highlightPeaks?: boolean;
-}
 
 // ==================== NOTIFICATION FORMATTING ====================
 
 export interface NotificationFormatOptions extends TextFormatOptions {
-}
-  format?: &apos;toast&apos; | &apos;banner&apos; | &apos;inline&apos; | &apos;modal&apos;;
+  format?: 'toast' | 'banner' | 'inline' | 'modal';
   showIcon?: boolean;
   showActions?: boolean;
   autoDisappear?: {
-}
     enabled: boolean;
     delay: number;
   };
   sound?: {
-}
     enabled: boolean;
     type: string;
   };
-}
 
 // ==================== LIST AND TABLE FORMATTING ====================
 
 export interface ListFormatOptions {
-}
-  format?: &apos;simple&apos; | &apos;detailed&apos; | &apos;card&apos; | &apos;table&apos;;
+  format?: 'simple' | 'detailed' | 'card' | 'table';
   showImages?: boolean;
   showMetadata?: boolean;
   groupBy?: string;
   sortBy?: {
-}
     field: string;
-    direction: &apos;asc&apos; | &apos;desc&apos;;
+    direction: 'asc' | 'desc';
   };
   pagination?: {
-}
     enabled: boolean;
     pageSize: number;
   };
-}
 
 export interface TableFormatOptions extends ListFormatOptions {
-}
   columns?: Array<{
-}
     key: string;
     label: string;
     width?: number;
@@ -348,30 +273,24 @@ export interface TableFormatOptions extends ListFormatOptions {
   hover?: boolean;
   responsive?: boolean;
   stickyHeader?: boolean;
-}
 
 // ==================== RESPONSIVE FORMATTING ====================
 
 export interface ResponsiveFormatOptions {
-}
   mobile?: any;
   tablet?: any;
   desktop?: any;
   breakpoints?: {
-}
     sm: number;
     md: number;
     lg: number;
     xl: number;
   };
-}
 
 // ==================== ACCESSIBILITY FORMATTING ====================
 
 export interface AccessibilityFormatOptions {
-}
   screenReader?: {
-}
     enabled: boolean;
     verbose?: boolean;
   };
@@ -380,90 +299,69 @@ export interface AccessibilityFormatOptions {
   reducedMotion?: boolean;
   focusVisible?: boolean;
   ariaLabels?: Record<string, string>;
-}
 
 // ==================== THEME-AWARE FORMATTING ====================
 
 export interface ThemeAwareFormatOptions {
-}
   light: any;
   dark: any;
   auto?: boolean;
   system?: boolean;
-}
 
 // ==================== LOCALIZATION FORMATTING ====================
 
 export interface LocalizationFormatOptions extends FormatOptions {
-}
   rtl?: boolean;
-  numberSystem?: &apos;arab&apos; | &apos;arabext&apos; | &apos;bali&apos; | &apos;beng&apos; | &apos;deva&apos; | &apos;fullwide&apos; | &apos;gujr&apos; | &apos;guru&apos; | &apos;hanidec&apos; | &apos;khmr&apos; | &apos;knda&apos; | &apos;laoo&apos; | &apos;latn&apos; | &apos;limb&apos; | &apos;mlym&apos; | &apos;mong&apos; | &apos;mymr&apos; | &apos;orya&apos; | &apos;tamldec&apos; | &apos;telu&apos; | &apos;thai&apos; | &apos;tibt&apos;;
-  calendar?: &apos;buddhist&apos; | &apos;chinese&apos; | &apos;coptic&apos; | &apos;ethioaa&apos; | &apos;ethiopic&apos; | &apos;gregory&apos; | &apos;hebrew&apos; | &apos;indian&apos; | &apos;islamic&apos; | &apos;islamicc&apos; | &apos;iso8601&apos; | &apos;japanese&apos; | &apos;persian&apos; | &apos;roc&apos;;
-}
+  numberSystem?: 'arab' | 'arabext' | 'bali' | 'beng' | 'deva' | 'fullwide' | 'gujr' | 'guru' | 'hanidec' | 'khmr' | 'knda' | 'laoo' | 'latn' | 'limb' | 'mlym' | 'mong' | 'mymr' | 'orya' | 'tamldec' | 'telu' | 'thai' | 'tibt';
+  calendar?: 'buddhist' | 'chinese' | 'coptic' | 'ethioaa' | 'ethiopic' | 'gregory' | 'hebrew' | 'indian' | 'islamic' | 'islamicc' | 'iso8601' | 'japanese' | 'persian' | 'roc';
 
 // ==================== COMBINED FORMAT CONFIGURATIONS ====================
 
 export interface PlayerDisplayConfig extends DisplayConfig {
-}
   name: PlayerNameFormatOptions;
   stats: StatFormatOptions;
   projections: ProjectionFormatOptions;
   fantasyPoints: FantasyPointsFormatOptions;
   rank: RankFormatOptions;
-}
 
 export interface TeamDisplayConfig extends DisplayConfig {
-}
   name: TeamNameFormatOptions;
   record: RecordFormatOptions;
   standings: StandingsFormatOptions;
-}
 
 export interface LeagueDisplayConfig extends DisplayConfig {
-}
   matchups: MatchupFormatOptions;
   scoreboard: ScoreboardFormatOptions;
   trades: TradeFormatOptions;
   waivers: WaiverFormatOptions;
   draft: DraftPickFormatOptions;
-}
 
 export interface DashboardDisplayConfig extends DisplayConfig {
-}
   charts: ChartFormatOptions;
   tables: TableFormatOptions;
   notifications: NotificationFormatOptions;
   responsive: ResponsiveFormatOptions;
-}
 
 // ==================== FORMAT HELPER TYPES ====================
 
 export interface FormattedValue<T = any> {
-}
   raw: T;
   formatted: string;
   metadata?: {
-}
     format: string;
     options: any;
     timestamp: Date;
   };
-}
 
 export interface FormatFunction<T = any, O = any> {
-}
   (value: T, options?: O): FormattedValue<T>;
-}
 
 export interface FormatRegistry {
-}
   [key: string]: FormatFunction;
-}
 
 // ==================== EXPORT ALL ====================
 
 export type {
-}
   FormatOptions,
   DisplayConfig,
   NumberFormatOptions,

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import CommandPalette from &apos;./CommandPalette&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import CommandPalette from './CommandPalette';
 
-describe(&apos;CommandPalette&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('CommandPalette', () => {
+  it('renders without crashing', () => {
     render(<CommandPalette />);
-    expect(screen.getByTestId(&apos;commandpalette&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('commandpalette')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<CommandPalette />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<CommandPalette />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

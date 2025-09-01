@@ -3,10 +3,9 @@
  * Advanced charts for displaying historical matchup performance trends
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
-}
   XAxis,
   YAxis,
   CartesianGrid,
@@ -21,12 +20,11 @@ import {
   ComposedChart,
   Area,
 //   Line
-} from &apos;recharts&apos;;
-import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
-import { Badge } from &apos;../ui/Badge&apos;;
-import { Tabs } from &apos;../ui/Tabs&apos;;
+} from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { Tabs } from '../ui/Tabs';
 import { 
-}
   TrendingUp, 
   TrendingDown, 
   Activity, 
@@ -36,34 +34,28 @@ import {
   Target,
   Shield,
 //   BarChart3
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 import { 
-}
   MatchupTrend, 
   DefensiveHeatMap, 
   WeatherTrendAnalysis,
 //   enhancedMatchupAnalyticsService 
-} from &apos;../../services/enhancedMatchupAnalyticsService&apos;;
+} from '../../services/enhancedMatchupAnalyticsService';
 
 interface MatchupTrendChartProps {
-}
   playerId: string;
   playerName: string;
   className?: string;
 
-}
 
 interface ChartDataPoint extends MatchupTrend {
-}
   formattedWeek: string;
   difficultyColor: string;
   weatherIcon: string;
 
 // Move tooltip component outside to avoid lint issues
 const CustomTooltip = ({ active, payload, label }: any) => {
-}
   if (active && payload?.length) {
-}
     const data = payload[0].payload as ChartDataPoint;
     return (
       <div className="bg-white p-3 border rounded-lg shadow-lg sm:px-4 md:px-6 lg:px-8">
@@ -82,28 +74,23 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
-}
   playerId,
   playerName,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const [trends, setTrends] = useState<MatchupTrend[]>([]);
   const [defensiveHeatMap, setDefensiveHeatMap] = useState<DefensiveHeatMap | null>(null);
   const [weatherAnalysis, setWeatherAnalysis] = useState<WeatherTrendAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState(&apos;trends&apos;);
+  const [activeTab, setActiveTab] = useState('trends');
 
   useEffect(() => {
-}
     loadMatchupData();
   }, [playerId]);
 
   const loadMatchupData = async () => {
-}
     try {
-}
 
       setLoading(true);
       setError(null);
@@ -118,25 +105,20 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
 
       // Load defensive heat map for most recent opponent
       if (trendsData.length > 0) {
-}
         const recentOpponent = trendsData[trendsData.length - 1].opponent;
-        const position = &apos;WR&apos;; // Mock position
+        const position = 'WR'; // Mock position
         const heatMapData = await enhancedMatchupAnalyticsService.generateDefensiveHeatMap(recentOpponent, position);
         setDefensiveHeatMap(heatMapData);
 
     } catch (error) {
-}
-      setError(&apos;Failed to load matchup analysis data&apos;);
+      setError('Failed to load matchup analysis data');
     } finally {
-}
       setLoading(false);
 
   };
 
   const prepareChartData = (): ChartDataPoint[] => {
-}
     return trends.map((trend: any) => ({
-}
       ...trend,
       formattedWeek: `W${trend.week}`,
       difficultyColor: getDifficultyColor(trend.defensiveRank),
@@ -145,61 +127,53 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
   };
 
   const getDifficultyColor = (defensiveRank: number): string => {
-}
-    if (defensiveRank <= 8) return &apos;#dc2626&apos;; // red - hard matchup
-    if (defensiveRank <= 16) return &apos;#f59e0b&apos;; // yellow - moderate
-    if (defensiveRank <= 24) return &apos;#22c55e&apos;; // green - easier
-    return &apos;#16a34a&apos;; // dark green - easy
+    if (defensiveRank <= 8) return '#dc2626'; // red - hard matchup
+    if (defensiveRank <= 16) return '#f59e0b'; // yellow - moderate
+    if (defensiveRank <= 24) return '#22c55e'; // green - easier
+    return '#16a34a'; // dark green - easy
   };
 
   const getWeatherIcon = (weather?: string): string => {
-}
     switch (weather) {
-}
-      case &apos;rain&apos;: return &apos;🌧️&apos;;
-      case &apos;snow&apos;: return &apos;❄️&apos;;
-      case &apos;wind&apos;: return &apos;💨&apos;;
-      case &apos;fog&apos;: return &apos;🌫️&apos;;
-      default: return &apos;☀️&apos;;
+      case 'rain': return '🌧️';
+      case 'snow': return '❄️';
+      case 'wind': return '💨';
+      case 'fog': return '🌫️';
+      default: return '☀️';
 
   };
 
-  const getTrendDirection = (data: ChartDataPoint[]): &apos;up&apos; | &apos;down&apos; | &apos;stable&apos; => {
-}
-    if (data.length < 3) return &apos;stable&apos;;
+  const getTrendDirection = (data: ChartDataPoint[]): 'up' | 'down' | 'stable' => {
+    if (data.length < 3) return 'stable';
     
     const recent = data.slice(-5);
     const firstHalf = recent.slice(0, 3).reduce((sum, d) => sum + d.fantasyPoints, 0) / 3;
     const secondHalf = recent.slice(-3).reduce((sum, d) => sum + d.fantasyPoints, 0) / 3;
     
     const difference = secondHalf - firstHalf;
-    if (difference > 2) return &apos;up&apos;;
-    if (difference < -2) return &apos;down&apos;;
-    return &apos;stable&apos;;
+    if (difference > 2) return 'up';
+    if (difference < -2) return 'down';
+    return 'stable';
   };
 
   const getBadgeVariant = (direction: string) => {
-}
     switch (direction) {
-}
-      case &apos;up&apos;: return &apos;default&apos;;
-      case &apos;down&apos;: return &apos;destructive&apos;;
-      default: return &apos;secondary&apos;;
+      case 'up': return 'default';
+      case 'down': return 'destructive';
+      default: return 'secondary';
 
   };
 
   const getDefensiveBadgeVariant = (rank: number) => {
-}
-    if (rank <= 10) return &apos;destructive&apos;;
-    if (rank <= 20) return &apos;default&apos;;
-    return &apos;secondary&apos;;
+    if (rank <= 10) return 'destructive';
+    if (rank <= 20) return 'default';
+    return 'secondary';
   };
 
   const chartData = prepareChartData();
   const trendDirection = getTrendDirection(chartData);
 
   if (loading) {
-}
     return (
       <Card className={className}>
         <CardHeader>
@@ -217,7 +191,6 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
     );
 
   if (error) {
-}
     return (
       <Card className={className}>
         <CardHeader>
@@ -239,9 +212,9 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
               Enhanced Matchup Analysis - {playerName}
             </div>
             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-              {trendDirection === &apos;up&apos; && <TrendingUp className="h-5 w-5 text-green-600 sm:px-4 md:px-6 lg:px-8" />}
-              {trendDirection === &apos;down&apos; && <TrendingDown className="h-5 w-5 text-red-600 sm:px-4 md:px-6 lg:px-8" />}
-              {trendDirection === &apos;stable&apos; && <Activity className="h-5 w-5 text-blue-600 sm:px-4 md:px-6 lg:px-8" />}
+              {trendDirection === 'up' && <TrendingUp className="h-5 w-5 text-green-600 sm:px-4 md:px-6 lg:px-8" />}
+              {trendDirection === 'down' && <TrendingDown className="h-5 w-5 text-red-600 sm:px-4 md:px-6 lg:px-8" />}
+              {trendDirection === 'stable' && <Activity className="h-5 w-5 text-blue-600 sm:px-4 md:px-6 lg:px-8" />}
               <Badge variant={getBadgeVariant(trendDirection)}>
                 {trendDirection} trend
               </Badge>
@@ -251,11 +224,10 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
         <CardContent>
           <Tabs>
             items={[
-}
-              { id: &apos;trends&apos;, label: &apos;Performance Trends&apos; },
-              { id: &apos;defensive&apos;, label: &apos;Defensive Analysis&apos; },
-              { id: &apos;weather&apos;, label: &apos;Weather Impact&apos; },
-              { id: &apos;efficiency&apos;, label: &apos;Efficiency Metrics&apos; }
+              { id: 'trends', label: 'Performance Trends' },
+              { id: 'defensive', label: 'Defensive Analysis' },
+              { id: 'weather', label: 'Weather Impact' },
+              { id: 'efficiency', label: 'Efficiency Metrics' }
             ]}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -263,8 +235,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
 
           <div className="mt-6 sm:px-4 md:px-6 lg:px-8">
             {/* Performance Trends Tab */}
-            {activeTab === &apos;trends&apos; && (
-}
+            {activeTab === 'trends' && (
               <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
@@ -306,13 +277,11 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
-                        {[&apos;positive&apos;, &apos;neutral&apos;, &apos;negative&apos;].map((script: any) => {
-}
+                        {['positive', 'neutral', 'negative'].map((script: any) => {
                           const count = trends.filter((t: any) => t.gameScript === script).length;
-                          const percentage = trends.length > 0 ? (count / trends.length * 100).toFixed(0) : &apos;0&apos;;
+                          const percentage = trends.length > 0 ? (count / trends.length * 100).toFixed(0) : '0';
                           
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -340,16 +309,16 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Avg Def Rank:</span>
                           <span className="font-medium sm:px-4 md:px-6 lg:px-8">
-                            #{trends.length > 0 ? (trends.reduce((sum, t) => sum + t.defensiveRank, 0) / trends.length).toFixed(0) : &apos;N/A&apos;}
+                            #{trends.length > 0 ? (trends.reduce((sum, t) => sum + t.defensiveRank, 0) / trends.length).toFixed(0) : 'N/A'}
                           </span>
                         </div>
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Toughest:</span>
-                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{trends.length > 0 ? Math.min(...trends.map((t: any) => t.defensiveRank)) : &apos;N/A&apos;}</span>
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{trends.length > 0 ? Math.min(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
                         </div>
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Easiest:</span>
-                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{trends.length > 0 ? Math.max(...trends.map((t: any) => t.defensiveRank)) : &apos;N/A&apos;}</span>
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{trends.length > 0 ? Math.max(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
                         </div>
                       </div>
                     </CardContent>
@@ -364,17 +333,17 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Avg Points:</span>
                           <span className="font-medium sm:px-4 md:px-6 lg:px-8">
-                            {trends.length > 0 ? (trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length).toFixed(1) : &apos;N/A&apos;}
+                            {trends.length > 0 ? (trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length).toFixed(1) : 'N/A'}
                           </span>
                         </div>
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Best Game:</span>
-                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">{trends.length > 0 ? Math.max(...trends.map((t: any) => t.fantasyPoints)).toFixed(1) : &apos;N/A&apos;}</span>
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">{trends.length > 0 ? Math.max(...trends.map((t: any) => t.fantasyPoints)).toFixed(1) : 'N/A'}</span>
                         </div>
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Consistency:</span>
                           <span className="font-medium sm:px-4 md:px-6 lg:px-8">
-                            {trends.length > 0 ? (100 - (Math.sqrt(trends.reduce((sum, t) => sum + Math.pow(t.fantasyPoints - (trends.reduce((s, tr) => s + tr.fantasyPoints, 0) / trends.length), 2), 0) / trends.length) / (trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length) * 100)).toFixed(0) : &apos;0&apos;}%
+                            {trends.length > 0 ? (100 - (Math.sqrt(trends.reduce((sum, t) => sum + Math.pow(t.fantasyPoints - (trends.reduce((s, tr) => s + tr.fantasyPoints, 0) / trends.length), 2), 0) / trends.length) / (trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length) * 100)).toFixed(0) : '0'}%
                           </span>
                         </div>
                       </div>
@@ -385,8 +354,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
             )}
 
             {/* Defensive Analysis Tab */}
-            {activeTab === &apos;defensive&apos; && defensiveHeatMap && (
-}
+            {activeTab === 'defensive' && defensiveHeatMap && (
               <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
@@ -397,14 +365,11 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       <Tooltip />
                       <Bar dataKey="fantasyPointsAllowed" name="Fantasy Points Allowed">
                         {defensiveHeatMap.weeklyTrends.map((entry, index) => {
-}
-                          let color = &apos;#22c55e&apos;; // green default
+                          let color = '#22c55e'; // green default
                           if (entry.fantasyPointsAllowed > 20) {
-}
-                            color = &apos;#dc2626&apos;; // red
+                            color = '#dc2626'; // red
                           } else if (entry.fantasyPointsAllowed > 15) {
-}
-                            color = &apos;#f59e0b&apos;; // yellow
+                            color = '#f59e0b'; // yellow
 
                           return <Cell key={`cell-${entry.week}-${index}`} fill={color} />;
                         })}
@@ -436,9 +401,8 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         <span>Yards Allowed:</span>
                         <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                           {(() => {
-}
-                            if (defensiveHeatMap.position === &apos;QB&apos;) return defensiveHeatMap.vsPosition.passingYards;
-                            if (defensiveHeatMap.position === &apos;RB&apos;) return defensiveHeatMap.vsPosition.rushingYards;
+                            if (defensiveHeatMap.position === 'QB') return defensiveHeatMap.vsPosition.passingYards;
+                            if (defensiveHeatMap.position === 'RB') return defensiveHeatMap.vsPosition.rushingYards;
                             return defensiveHeatMap.vsPosition.receivingYards;
                           })()}
                         </span>
@@ -488,8 +452,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
             )}
 
             {/* Weather Impact Tab */}
-            {activeTab === &apos;weather&apos; && weatherAnalysis && (
-}
+            {activeTab === 'weather' && weatherAnalysis && (
               <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card>
@@ -508,14 +471,14 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       </div>
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Cold Weather:</span>
-                        <span className={`font-medium ${weatherAnalysis.temperatureImpact.coldWeatherPerformance < 0 ? &apos;text-red-600&apos; : &apos;text-green-600&apos;}`}>
-                          {weatherAnalysis.temperatureImpact.coldWeatherPerformance > 0 ? &apos;+&apos; : &apos;&apos;}{weatherAnalysis.temperatureImpact.coldWeatherPerformance}%
+                        <span className={`font-medium ${weatherAnalysis.temperatureImpact.coldWeatherPerformance < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                          {weatherAnalysis.temperatureImpact.coldWeatherPerformance > 0 ? '+' : ''}{weatherAnalysis.temperatureImpact.coldWeatherPerformance}%
                         </span>
                       </div>
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Hot Weather:</span>
-                        <span className={`font-medium ${weatherAnalysis.temperatureImpact.hotWeatherPerformance < 0 ? &apos;text-red-600&apos; : &apos;text-green-600&apos;}`}>
-                          {weatherAnalysis.temperatureImpact.hotWeatherPerformance > 0 ? &apos;+&apos; : &apos;&apos;}{weatherAnalysis.temperatureImpact.hotWeatherPerformance}%
+                        <span className={`font-medium ${weatherAnalysis.temperatureImpact.hotWeatherPerformance < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                          {weatherAnalysis.temperatureImpact.hotWeatherPerformance > 0 ? '+' : ''}{weatherAnalysis.temperatureImpact.hotWeatherPerformance}%
                         </span>
                       </div>
                     </CardContent>
@@ -562,8 +525,8 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       </div>
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Running:</span>
-                        <span className={`font-medium ${weatherAnalysis.precipitationImpact.runningImpact > 0 ? &apos;text-green-600&apos; : &apos;text-red-600&apos;}`}>
-                          {weatherAnalysis.precipitationImpact.runningImpact > 0 ? &apos;+&apos; : &apos;&apos;}{weatherAnalysis.precipitationImpact.runningImpact}%
+                        <span className={`font-medium ${weatherAnalysis.precipitationImpact.runningImpact > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {weatherAnalysis.precipitationImpact.runningImpact > 0 ? '+' : ''}{weatherAnalysis.precipitationImpact.runningImpact}%
                         </span>
                       </div>
                     </CardContent>
@@ -581,7 +544,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="temperature" name="Temperature" unit="°F" />
                           <YAxis dataKey="fantasyPoints" name="Fantasy Points" />
-                          <Tooltip cursor={{ strokeDasharray: &apos;3 3&apos; }} />
+                          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
                           <Scatter name="Performance vs Temperature" fill="#8884d8" />
                         </ScatterChart>
                       </ResponsiveContainer>
@@ -592,8 +555,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
             )}
 
             {/* Efficiency Metrics Tab */}
-            {activeTab === &apos;efficiency&apos; && (
-}
+            {activeTab === 'efficiency' && (
               <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
@@ -626,19 +588,19 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Average Efficiency:</span>
                         <span className="font-medium sm:px-4 md:px-6 lg:px-8">
-                          {trends.length > 0 ? (trends.reduce((sum, t) => sum + t.efficiency, 0) / trends.length).toFixed(2) : &apos;N/A&apos;} pts/touch
+                          {trends.length > 0 ? (trends.reduce((sum, t) => sum + t.efficiency, 0) / trends.length).toFixed(2) : 'N/A'} pts/touch
                         </span>
                       </div>
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Best Efficiency:</span>
                         <span className="font-medium text-green-600 sm:px-4 md:px-6 lg:px-8">
-                          {trends.length > 0 ? Math.max(...trends.map((t: any) => t.efficiency)).toFixed(2) : &apos;N/A&apos;} pts/touch
+                          {trends.length > 0 ? Math.max(...trends.map((t: any) => t.efficiency)).toFixed(2) : 'N/A'} pts/touch
                         </span>
                       </div>
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Worst Efficiency:</span>
                         <span className="font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">
-                          {trends.length > 0 ? Math.min(...trends.map((t: any) => t.efficiency)).toFixed(2) : &apos;N/A&apos;} pts/touch
+                          {trends.length > 0 ? Math.min(...trends.map((t: any) => t.efficiency)).toFixed(2) : 'N/A'} pts/touch
                         </span>
                       </div>
                       <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">

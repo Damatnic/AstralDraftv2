@@ -3,24 +3,21 @@
  * React hook for comprehensive analytics data management
  */
 
-import { useState, useEffect, useCallback } from &apos;react&apos;;
-import { useAuth } from &apos;../contexts/AuthContext&apos;;
-import { enhancedAnalyticsService, type AnalyticsReport, type PredictiveInsight, type EnhancedAnalyticsMetrics } from &apos;../services/enhancedAnalyticsService&apos;;
+import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { enhancedAnalyticsService, type AnalyticsReport, type PredictiveInsight, type EnhancedAnalyticsMetrics } from '../services/enhancedAnalyticsService';
 
 export interface UseEnhancedAnalyticsOptions {
-}
   timeRange?: number; // Days
   autoRefresh?: boolean;
   refreshInterval?: number; // Milliseconds
-}
 
 export interface UseEnhancedAnalyticsReturn {
-}
   // Data
   report: AnalyticsReport | null;
   metrics: EnhancedAnalyticsMetrics | null;
   insights: PredictiveInsight[];
-  charts: AnalyticsReport[&apos;charts&apos;];
+  charts: AnalyticsReport['charts'];
   
   // Status
   loading: boolean;
@@ -29,20 +26,16 @@ export interface UseEnhancedAnalyticsReturn {
   
   // Actions
   refresh: () => Promise<void>;
-}
 
-  exportData: (format?: &apos;json&apos; | &apos;csv&apos;) => Promise<string>;
+  exportData: (format?: 'json' | 'csv') => Promise<string>;
   clearCache: () => void;
   
   // Configuration
   setTimeRange: (days: number) => void;
   timeRange: number;
-}
 
 export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}): UseEnhancedAnalyticsReturn => {
-}
   const {
-}
     timeRange: initialTimeRange = 30,
     autoRefresh = false,
     refreshInterval = 5 * 60 * 1000 // 5 minutes
@@ -59,10 +52,8 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
 
   // Load analytics data
   const loadAnalytics = useCallback(async (force = false) => {
-}
     if (!isAuthenticated || !user) {
-}
-      setError(&apos;User not authenticated&apos;);
+      setError('User not authenticated');
       return;
     }
 
@@ -72,59 +63,48 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
     setError(null);
 
     try {
-}
 
       const analyticsReport = await enhancedAnalyticsService.generateAnalyticsReport(timeRange);
       setReport(analyticsReport);
       setLastUpdated(new Date().toISOString());
     
     } catch (error) {
-}
         console.error(error);
     } catch (err) {
-}
-      const errorMessage = err instanceof Error ? err.message : &apos;Failed to load analytics&apos;;
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load analytics';
       setError(errorMessage);
-      console.error(&apos;Enhanced analytics error:&apos;, err);
+      console.error('Enhanced analytics error:', err);
     } finally {
-}
       setLoading(false);
     }
   }, [isAuthenticated, user, timeRange, loading]);
 
   // Refresh data
   const refresh = useCallback(async () => {
-}
     await loadAnalytics(true);
   }, [loadAnalytics]);
 
   // Export data
-  const exportData = useCallback(async (format: &apos;json&apos; | &apos;csv&apos; = &apos;json&apos;): Promise<string> => {
-}
+  const exportData = useCallback(async (format: 'json' | 'csv' = 'json'): Promise<string> => {
     try {
-}
 
       return await enhancedAnalyticsService.exportAnalyticsData(format);
 
     } catch (error) {
-}
         console.error(error);
     } catch (err) {
-}
-      const errorMessage = err instanceof Error ? err.message : &apos;Failed to export data&apos;;
+      const errorMessage = err instanceof Error ? err.message : 'Failed to export data';
       throw new Error(errorMessage);
     }
   }, []);
 
   // Clear cache
   const clearCache = useCallback(() => {
-}
     enhancedAnalyticsService.clearCache();
   }, []);
 
   // Set time range
   const setTimeRange = useCallback((days: number) => {
-}
     setTimeRangeState(days);
     // Clear current data to trigger reload
     setReport(null);
@@ -132,20 +112,16 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
 
   // Load data on mount and when dependencies change
   useEffect(() => {
-}
     if (isAuthenticated && user) {
-}
       loadAnalytics();
     }
   }, [isAuthenticated, user, timeRange, loadAnalytics]);
 
   // Auto-refresh effect
   useEffect(() => {
-}
     if (!autoRefresh || !isAuthenticated) return;
 
     const interval = setInterval(() => {
-}
       loadAnalytics();
     }
   }, refreshInterval);
@@ -155,9 +131,7 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
 
   // Clear data when user logs out
   useEffect(() => {
-}
     if (!isAuthenticated) {
-}
       setReport(null);
       setError(null);
       setLastUpdated(null);
@@ -170,7 +144,6 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
   const charts = report?.charts || [];
 
   return {
-}
     // Data
     report,
     metrics,

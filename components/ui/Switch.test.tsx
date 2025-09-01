@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import Switch from &apos;./Switch&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Switch from './Switch';
 
-describe(&apos;Switch&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('Switch', () => {
+  it('renders without crashing', () => {
     render(<Switch />);
-    expect(screen.getByTestId(&apos;switch&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('switch')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<Switch />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<Switch />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

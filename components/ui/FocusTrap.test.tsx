@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import FocusTrap from &apos;./FocusTrap&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import FocusTrap from './FocusTrap';
 
-describe(&apos;FocusTrap&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('FocusTrap', () => {
+  it('renders without crashing', () => {
     render(<FocusTrap />);
-    expect(screen.getByTestId(&apos;focustrap&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('focustrap')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<FocusTrap />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<FocusTrap />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

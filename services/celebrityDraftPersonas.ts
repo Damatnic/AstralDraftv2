@@ -3,55 +3,49 @@
  * AI-powered draft strategies mimicking celebrity approaches
  */
 
-import { Player, PlayerPosition } from &apos;../types&apos;;
+import { Player, PlayerPosition } from '../types';
 
 export interface CelebrityPersona {
-}
   id: string;
   name: string;
   avatar?: string;
   description: string;
   draftPhilosophy: string;
   strategies: {
-}
     positionPreference: PlayerPosition[];
     playerTraits: string[];
-    riskTolerance: &apos;conservative&apos; | &apos;moderate&apos; | &apos;aggressive&apos;;
+    riskTolerance: 'conservative' | 'moderate' | 'aggressive';
     valuationFactors: {
-}
       factor: string;
       weight: number;
     }[];
   };
   catchPhrases: string[];
   draftTips: string[];
-}
 
 export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
   {
-}
-    id: &apos;tom-brady&apos;,
-    name: &apos;Tom Brady&apos;,
-    description: &apos;The GOAT - Values proven winners and championship experience&apos;,
-    draftPhilosophy: &apos;Championships are won with smart, clutch players who perform when it matters most&apos;,
+    id: 'tom-brady',
+    name: 'Tom Brady',
+    description: 'The GOAT - Values proven winners and championship experience',
+    draftPhilosophy: 'Championships are won with smart, clutch players who perform when it matters most',
     strategies: {
-}
-      positionPreference: [&apos;QB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;RB&apos;],
-      playerTraits: [&apos;proven-veteran&apos;, &apos;clutch-performer&apos;, &apos;high-football-iq&apos;, &apos;leadership&apos;, &apos;playoff-experience&apos;],
-      riskTolerance: &apos;conservative&apos;,
+      positionPreference: ['QB', 'WR', 'TE', 'RB'],
+      playerTraits: ['proven-veteran', 'clutch-performer', 'high-football-iq', 'leadership', 'playoff-experience'],
+      riskTolerance: 'conservative',
       valuationFactors: [
-        { factor: &apos;championship_experience&apos;, weight: 0.25 },
-        { factor: &apos;consistency&apos;, weight: 0.30 },
-        { factor: &apos;veteran_presence&apos;, weight: 0.20 },
-        { factor: &apos;system_fit&apos;, weight: 0.15 },
-        { factor: &apos;injury_history&apos;, weight: -0.10 }
+        { factor: 'championship_experience', weight: 0.25 },
+        { factor: 'consistency', weight: 0.30 },
+        { factor: 'veteran_presence', weight: 0.20 },
+        { factor: 'system_fit', weight: 0.15 },
+        { factor: 'injury_history', weight: -0.10 }
       ]
     },
     catchPhrases: [
-      "This guy&apos;s a winner - reminds me of my Super Bowl teams",
+      "This guy's a winner - reminds me of my Super Bowl teams",
       "You need players who show up in December",
       "Leadership matters as much as talent",
-      "I&apos;d take this guy to war with me"
+      "I'd take this guy to war with me"
     ],
     draftTips: [
       "Never undervalue experience in crucial situations",
@@ -61,22 +55,20 @@ export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
     ]
   },
   {
-}
-    id: &apos;peyton-manning&apos;,
-    name: &apos;Peyton Manning&apos;,
-    description: &apos;The Cerebral One - Analytics-heavy, loves high-IQ players&apos;,
-    draftPhilosophy: &apos;Study the numbers, understand the matchups, and always be three moves ahead&apos;,
+    id: 'peyton-manning',
+    name: 'Peyton Manning',
+    description: 'The Cerebral One - Analytics-heavy, loves high-IQ players',
+    draftPhilosophy: 'Study the numbers, understand the matchups, and always be three moves ahead',
     strategies: {
-}
-      positionPreference: [&apos;QB&apos;, &apos;WR&apos;, &apos;RB&apos;, &apos;TE&apos;],
-      playerTraits: [&apos;high-target-share&apos;, &apos;route-running&apos;, &apos;pass-catching-rb&apos;, &apos;efficient&apos;, &apos;smart&apos;],
-      riskTolerance: &apos;moderate&apos;,
+      positionPreference: ['QB', 'WR', 'RB', 'TE'],
+      playerTraits: ['high-target-share', 'route-running', 'pass-catching-rb', 'efficient', 'smart'],
+      riskTolerance: 'moderate',
       valuationFactors: [
-        { factor: &apos;yards_after_catch&apos;, weight: 0.20 },
-        { factor: &apos;target_share&apos;, weight: 0.25 },
-        { factor: &apos;red_zone_usage&apos;, weight: 0.20 },
-        { factor: &apos;offensive_system&apos;, weight: 0.25 },
-        { factor: &apos;quarterback_quality&apos;, weight: 0.10 }
+        { factor: 'yards_after_catch', weight: 0.20 },
+        { factor: 'target_share', weight: 0.25 },
+        { factor: 'red_zone_usage', weight: 0.20 },
+        { factor: 'offensive_system', weight: 0.25 },
+        { factor: 'quarterback_quality', weight: 0.10 }
       ]
     },
     catchPhrases: [
@@ -93,26 +85,24 @@ export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
     ]
   },
   {
-}
-    id: &apos;michael-jordan&apos;,
-    name: &apos;Michael Jordan&apos;,
-    description: &apos;His Airness - Competitive players, clutch performers, winners&apos;,
-    draftPhilosophy: &apos;I don\&apos;t draft good players, I draft killers who want to win at all costs&apos;,
+    id: 'michael-jordan',
+    name: 'Michael Jordan',
+    description: 'His Airness - Competitive players, clutch performers, winners',
+    draftPhilosophy: 'I don\'t draft good players, I draft killers who want to win at all costs',
     strategies: {
-}
-      positionPreference: [&apos;RB&apos;, &apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;],
-      playerTraits: [&apos;alpha-mentality&apos;, &apos;clutch-gene&apos;, &apos;competitor&apos;, &apos;athletic-freak&apos;, &apos;winner&apos;],
-      riskTolerance: &apos;aggressive&apos;,
+      positionPreference: ['RB', 'WR', 'QB', 'TE'],
+      playerTraits: ['alpha-mentality', 'clutch-gene', 'competitor', 'athletic-freak', 'winner'],
+      riskTolerance: 'aggressive',
       valuationFactors: [
-        { factor: &apos;fourth_quarter_performance&apos;, weight: 0.25 },
-        { factor: &apos;primetime_games&apos;, weight: 0.20 },
-        { factor: &apos;athletic_score&apos;, weight: 0.20 },
-        { factor: &apos;competitive_drive&apos;, weight: 0.25 },
-        { factor: &apos;big_play_ability&apos;, weight: 0.10 }
+        { factor: 'fourth_quarter_performance', weight: 0.25 },
+        { factor: 'primetime_games', weight: 0.20 },
+        { factor: 'athletic_score', weight: 0.20 },
+        { factor: 'competitive_drive', weight: 0.25 },
+        { factor: 'big_play_ability', weight: 0.10 }
       ]
     },
     catchPhrases: [
-      "This kid&apos;s got that killer instinct",
+      "This kid's got that killer instinct",
       "And I took that personally... drafting him",
       "Champions are built different",
       "He reminds me of myself - refuses to lose"
@@ -125,124 +115,116 @@ export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
     ]
   },
   {
-}
-    id: &apos;lebron-james&apos;,
-    name: &apos;LeBron James&apos;,
-    description: &apos;The King - Athletic freaks, versatile players, high upside&apos;,
-    draftPhilosophy: &apos;Give me athletes who can do it all - they\&apos;ll find a way to produce&apos;,
+    id: 'lebron-james',
+    name: 'LeBron James',
+    description: 'The King - Athletic freaks, versatile players, high upside',
+    draftPhilosophy: 'Give me athletes who can do it all - they\'ll find a way to produce',
     strategies: {
-}
-      positionPreference: [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;QB&apos;],
-      playerTraits: [&apos;versatile&apos;, &apos;athletic&apos;, &apos;dual-threat&apos;, &apos;yac-ability&apos;, &apos;multi-position&apos;],
-      riskTolerance: &apos;moderate&apos;,
+      positionPreference: ['RB', 'WR', 'TE', 'QB'],
+      playerTraits: ['versatile', 'athletic', 'dual-threat', 'yac-ability', 'multi-position'],
+      riskTolerance: 'moderate',
       valuationFactors: [
-        { factor: &apos;athletic_measurables&apos;, weight: 0.30 },
-        { factor: &apos;versatility&apos;, weight: 0.25 },
-        { factor: &apos;age&apos;, weight: 0.15 },
-        { factor: &apos;upside&apos;, weight: 0.20 },
-        { factor: &apos;team_situation&apos;, weight: 0.10 }
+        { factor: 'athletic_measurables', weight: 0.30 },
+        { factor: 'versatility', weight: 0.25 },
+        { factor: 'age', weight: 0.15 },
+        { factor: 'upside', weight: 0.20 },
+        { factor: 'team_situation', weight: 0.10 }
       ]
     },
     catchPhrases: [
-      "This guy can play multiple positions - that&apos;s valuable",
+      "This guy can play multiple positions - that's valuable",
       "Built different - look at those combine numbers",
-      "He&apos;s got that next-level athleticism",
+      "He's got that next-level athleticism",
       "Young talent with room to grow - I like it"
     ],
     draftTips: [
       "Prioritize players who contribute in multiple ways",
       "Athletic testing correlates with breakout potential",
       "Target ascending players in improving offenses",
-      "Don&apos;t overlook dual-threat QBs and pass-catching RBs"
+      "Don't overlook dual-threat QBs and pass-catching RBs"
     ]
   },
   {
-}
-    id: &apos;patrick-mahomes&apos;,
-    name: &apos;Patrick Mahomes&apos;,
-    description: &apos;Showtime - Young talent, explosive players, risk-takers&apos;,
-    draftPhilosophy: &apos;No risk it, no biscuit - swing for the fences and create fireworks&apos;,
+    id: 'patrick-mahomes',
+    name: 'Patrick Mahomes',
+    description: 'Showtime - Young talent, explosive players, risk-takers',
+    draftPhilosophy: 'No risk it, no biscuit - swing for the fences and create fireworks',
     strategies: {
-}
-      positionPreference: [&apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;, &apos;RB&apos;],
-      playerTraits: [&apos;explosive&apos;, &apos;big-play&apos;, &apos;young-talent&apos;, &apos;upside&apos;, &apos;breakout-candidate&apos;],
-      riskTolerance: &apos;aggressive&apos;,
+      positionPreference: ['WR', 'QB', 'TE', 'RB'],
+      playerTraits: ['explosive', 'big-play', 'young-talent', 'upside', 'breakout-candidate'],
+      riskTolerance: 'aggressive',
       valuationFactors: [
-        { factor: &apos;explosive_play_rate&apos;, weight: 0.30 },
-        { factor: &apos;age_breakout_potential&apos;, weight: 0.25 },
-        { factor: &apos;deep_ball_ability&apos;, weight: 0.20 },
-        { factor: &apos;yards_per_touch&apos;, weight: 0.15 },
-        { factor: &apos;highlight_potential&apos;, weight: 0.10 }
+        { factor: 'explosive_play_rate', weight: 0.30 },
+        { factor: 'age_breakout_potential', weight: 0.25 },
+        { factor: 'deep_ball_ability', weight: 0.20 },
+        { factor: 'yards_per_touch', weight: 0.15 },
+        { factor: 'highlight_potential', weight: 0.10 }
       ]
     },
     catchPhrases: [
       "This guy can take it to the house any play",
-      "Speed kills - and he&apos;s got jets",
+      "Speed kills - and he's got jets",
       "Young hungry player ready to explode",
-      "That&apos;s a league-winner right there"
+      "That's a league-winner right there"
     ],
     draftTips: [
       "Target second and third-year breakouts",
       "Speed and explosiveness create weekly ceiling",
-      "Don&apos;t be afraid of high-risk, high-reward picks",
+      "Don't be afraid of high-risk, high-reward picks",
       "Stack explosive offenses for maximum upside"
     ]
   },
   {
-}
-    id: &apos;bill-belichick&apos;,
-    name: &apos;Bill Belichick&apos;,
-    description: &apos;The Hoodie - Value picks, system fits, depth over stars&apos;,
-    draftPhilosophy: &apos;Do your job - find value where others don\&apos;t look and build sustainable depth&apos;,
+    id: 'bill-belichick',
+    name: 'Bill Belichick',
+    description: 'The Hoodie - Value picks, system fits, depth over stars',
+    draftPhilosophy: 'Do your job - find value where others don\'t look and build sustainable depth',
     strategies: {
-}
-      positionPreference: [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;DST&apos;],
-      playerTraits: [&apos;system-fit&apos;, &apos;value&apos;, &apos;consistent&apos;, &apos;situational&apos;, &apos;depth&apos;],
-      riskTolerance: &apos;conservative&apos;,
+      positionPreference: ['RB', 'WR', 'TE', 'DST'],
+      playerTraits: ['system-fit', 'value', 'consistent', 'situational', 'depth'],
+      riskTolerance: 'conservative',
       valuationFactors: [
-        { factor: &apos;value_over_adp&apos;, weight: 0.35 },
-        { factor: &apos;role_security&apos;, weight: 0.25 },
-        { factor: &apos;system_familiarity&apos;, weight: 0.20 },
-        { factor: &apos;special_teams_value&apos;, weight: 0.10 },
-        { factor: &apos;injury_risk&apos;, weight: -0.10 }
+        { factor: 'value_over_adp', weight: 0.35 },
+        { factor: 'role_security', weight: 0.25 },
+        { factor: 'system_familiarity', weight: 0.20 },
+        { factor: 'special_teams_value', weight: 0.10 },
+        { factor: 'injury_risk', weight: -0.10 }
       ]
     },
     catchPhrases: [
       "Great value at this spot",
       "He does his job, nothing flashy",
       "System players win games",
-      "We&apos;re on to the next pick"
+      "We're on to the next pick"
     ],
     draftTips: [
       "Find value in later rounds",
       "Target players with secure roles",
       "Build depth at every position",
-      "Don&apos;t chase last year&apos;s stats"
+      "Don't chase last year's stats"
     ]
   },
   {
-}
-    id: &apos;travis-kelce&apos;,
-    name: &apos;Travis Kelce&apos;,
-    description: &apos;The Showman - TE-heavy, receiving backs, pass-catchers&apos;,
-    draftPhilosophy: &apos;Dominate the middle of the field with elite pass-catchers&apos;,
+    id: 'travis-kelce',
+    name: 'Travis Kelce',
+    description: 'The Showman - TE-heavy, receiving backs, pass-catchers',
+    draftPhilosophy: 'Dominate the middle of the field with elite pass-catchers',
     strategies: {
-}
-      positionPreference: [&apos;TE&apos;, &apos;WR&apos;, &apos;RB&apos;, &apos;QB&apos;],
-      playerTraits: [&apos;pass-catching&apos;, &apos;red-zone-target&apos;, &apos;reliable-hands&apos;, &apos;route-runner&apos;, &apos;mismatch&apos;],
-      riskTolerance: &apos;moderate&apos;,
+      positionPreference: ['TE', 'WR', 'RB', 'QB'],
+      playerTraits: ['pass-catching', 'red-zone-target', 'reliable-hands', 'route-runner', 'mismatch'],
+      riskTolerance: 'moderate',
       valuationFactors: [
-        { factor: &apos;targets_per_game&apos;, weight: 0.30 },
-        { factor: &apos;red_zone_targets&apos;, weight: 0.25 },
-        { factor: &apos;catch_rate&apos;, weight: 0.20 },
-        { factor: &apos;slot_usage&apos;, weight: 0.15 },
-        { factor: &apos;quarterback_rapport&apos;, weight: 0.10 }
+        { factor: 'targets_per_game', weight: 0.30 },
+        { factor: 'red_zone_targets', weight: 0.25 },
+        { factor: 'catch_rate', weight: 0.20 },
+        { factor: 'slot_usage', weight: 0.15 },
+        { factor: 'quarterback_rapport', weight: 0.10 }
       ]
     },
     catchPhrases: [
       "Elite tight ends are like cheat codes",
       "Pass-catching backs are the new meta",
-      "This guy&apos;s always open - trust me",
+      "This guy's always open - trust me",
       "Red zone monster right here"
     ],
     draftTips: [
@@ -253,29 +235,27 @@ export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
     ]
   },
   {
-}
-    id: &apos;shaquille-oneal&apos;,
-    name: &apos;Shaquille O\&apos;Neal&apos;,
-    description: &apos;The Diesel - Big personalities, power runners, dominant players&apos;,
-    draftPhilosophy: &apos;Dominate with power - give me the big dogs who punish defenses&apos;,
+    id: 'shaquille-oneal',
+    name: 'Shaquille O\'Neal',
+    description: 'The Diesel - Big personalities, power runners, dominant players',
+    draftPhilosophy: 'Dominate with power - give me the big dogs who punish defenses',
     strategies: {
-}
-      positionPreference: [&apos;RB&apos;, &apos;TE&apos;, &apos;DST&apos;, &apos;QB&apos;],
-      playerTraits: [&apos;power-runner&apos;, &apos;physical&apos;, &apos;dominant&apos;, &apos;personality&apos;, &apos;intimidating&apos;],
-      riskTolerance: &apos;aggressive&apos;,
+      positionPreference: ['RB', 'TE', 'DST', 'QB'],
+      playerTraits: ['power-runner', 'physical', 'dominant', 'personality', 'intimidating'],
+      riskTolerance: 'aggressive',
       valuationFactors: [
-        { factor: &apos;yards_after_contact&apos;, weight: 0.30 },
-        { factor: &apos;goal_line_carries&apos;, weight: 0.25 },
-        { factor: &apos;physical_dominance&apos;, weight: 0.20 },
-        { factor: &apos;personality_factor&apos;, weight: 0.15 },
-        { factor: &apos;broken_tackles&apos;, weight: 0.10 }
+        { factor: 'yards_after_contact', weight: 0.30 },
+        { factor: 'goal_line_carries', weight: 0.25 },
+        { factor: 'physical_dominance', weight: 0.20 },
+        { factor: 'personality_factor', weight: 0.15 },
+        { factor: 'broken_tackles', weight: 0.10 }
       ]
     },
     catchPhrases: [
       "BBQ chicken! This guy dominates",
-      "That&apos;s a bad man right there",
+      "That's a bad man right there",
       "Power football wins championships",
-      "He&apos;s got that dawg in him"
+      "He's got that dawg in him"
     ],
     draftTips: [
       "Physical runners wear down defenses",
@@ -285,54 +265,50 @@ export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
     ]
   },
   {
-}
-    id: &apos;charles-barkley&apos;,
-    name: &apos;Charles Barkley&apos;,
-    description: &apos;Sir Charles - Gut feelings, entertainment value, bold picks&apos;,
-    draftPhilosophy: &apos;Trust your gut, have fun, and don\&apos;t be afraid to go against the grain&apos;,
+    id: 'charles-barkley',
+    name: 'Charles Barkley',
+    description: 'Sir Charles - Gut feelings, entertainment value, bold picks',
+    draftPhilosophy: 'Trust your gut, have fun, and don\'t be afraid to go against the grain',
     strategies: {
-}
-      positionPreference: [&apos;RB&apos;, &apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;],
-      playerTraits: [&apos;entertaining&apos;, &apos;boom-bust&apos;, &apos;personality&apos;, &apos;underdog&apos;, &apos;sleeper&apos;],
-      riskTolerance: &apos;aggressive&apos;,
+      positionPreference: ['RB', 'WR', 'QB', 'TE'],
+      playerTraits: ['entertaining', 'boom-bust', 'personality', 'underdog', 'sleeper'],
+      riskTolerance: 'aggressive',
       valuationFactors: [
-        { factor: &apos;gut_feeling&apos;, weight: 0.30 },
-        { factor: &apos;entertainment_value&apos;, weight: 0.20 },
-        { factor: &apos;underdog_story&apos;, weight: 0.20 },
-        { factor: &apos;boom_potential&apos;, weight: 0.20 },
-        { factor: &apos;contrarian_value&apos;, weight: 0.10 }
+        { factor: 'gut_feeling', weight: 0.30 },
+        { factor: 'entertainment_value', weight: 0.20 },
+        { factor: 'underdog_story', weight: 0.20 },
+        { factor: 'boom_potential', weight: 0.20 },
+        { factor: 'contrarian_value', weight: 0.10 }
       ]
     },
     catchPhrases: [
-      "That&apos;s turrible analysis - I&apos;m taking him anyway",
+      "That's turrible analysis - I'm taking him anyway",
       "My gut says this is the pick",
-      "Everybody&apos;s wrong about this guy",
+      "Everybody's wrong about this guy",
       "Guaranteed league winner - Guaaaranteed!"
     ],
     draftTips: [
       "Sometimes you gotta trust your instincts",
-      "Don&apos;t follow the herd mentality",
+      "Don't follow the herd mentality",
       "Bold picks win championships",
-      "Have fun with it - it&apos;s just a game"
+      "Have fun with it - it's just a game"
     ]
   },
   {
-}
-    id: &apos;stephen-curry&apos;,
-    name: &apos;Stephen Curry&apos;,
-    description: &apos;Chef Curry - Efficiency metrics, three-down backs, consistency&apos;,
-    draftPhilosophy: &apos;Efficiency is everything - find players who maximize every opportunity&apos;,
+    id: 'stephen-curry',
+    name: 'Stephen Curry',
+    description: 'Chef Curry - Efficiency metrics, three-down backs, consistency',
+    draftPhilosophy: 'Efficiency is everything - find players who maximize every opportunity',
     strategies: {
-}
-      positionPreference: [&apos;WR&apos;, &apos;RB&apos;, &apos;QB&apos;, &apos;TE&apos;],
-      playerTraits: [&apos;efficient&apos;, &apos;consistent&apos;, &apos;three-down-back&apos;, &apos;high-floor&apos;, &apos;reliable&apos;],
-      riskTolerance: &apos;moderate&apos;,
+      positionPreference: ['WR', 'RB', 'QB', 'TE'],
+      playerTraits: ['efficient', 'consistent', 'three-down-back', 'high-floor', 'reliable'],
+      riskTolerance: 'moderate',
       valuationFactors: [
-        { factor: &apos;yards_per_touch&apos;, weight: 0.25 },
-        { factor: &apos;snap_share&apos;, weight: 0.25 },
-        { factor: &apos;efficiency_metrics&apos;, weight: 0.20 },
-        { factor: &apos;consistency_score&apos;, weight: 0.20 },
-        { factor: &apos;opportunity_share&apos;, weight: 0.10 }
+        { factor: 'yards_per_touch', weight: 0.25 },
+        { factor: 'snap_share', weight: 0.25 },
+        { factor: 'efficiency_metrics', weight: 0.20 },
+        { factor: 'consistency_score', weight: 0.20 },
+        { factor: 'opportunity_share', weight: 0.10 }
       ]
     },
     catchPhrases: [
@@ -351,17 +327,14 @@ export const CELEBRITY_PERSONAS: CelebrityPersona[] = [
 ];
 
 export class CelebrityPersonaEngine {
-}
   private selectedPersona: CelebrityPersona | null = null;
 
   selectPersona(personaId: string): CelebrityPersona | null {
-}
     this.selectedPersona = CELEBRITY_PERSONAS.find((p: any) => p.id === personaId) || null;
     return this.selectedPersona;
   }
 
   getSelectedPersona(): CelebrityPersona | null {
-}
     return this.selectedPersona;
   }
 
@@ -370,80 +343,68 @@ export class CelebrityPersonaEngine {
     currentRoster: Player[],
     pickNumber: number
   ): {
-}
     recommendedPlayer: Player | null;
     reasoning: string;
     confidence: number;
     catchPhrase: string;
   } {
-}
     if (!this.selectedPersona) {
-}
       return {
-}
         recommendedPlayer: null,
-        reasoning: &apos;No persona selected&apos;,
+        reasoning: 'No persona selected',
         confidence: 0,
-        catchPhrase: &apos;&apos;
+        catchPhrase: ''
       };
     }
 
     // Score each available player based on persona preferences
     const scoredPlayers = availablePlayers.map((player: any) => {
-}
       let score = 0;
       const reasons: string[] = [];
 
       // Position preference scoring
       const positionIndex = this.selectedPersona!.strategies.positionPreference.indexOf(player.position);
       if (positionIndex !== -1) {
-}
         score += (4 - positionIndex) * 25;
         reasons.push(`Preferred position (${player.position})`);
       }
 
       // Value vs ADP scoring
       if (player.adp && player.adp > pickNumber) {
-}
         const valueDiff = player.adp - pickNumber;
         score += Math.min(valueDiff * 2, 40);
         reasons.push(`Great value (ADP: ${player.adp})`);
       }
 
       // Risk tolerance adjustment
-      if (this.selectedPersona!.strategies.riskTolerance === &apos;conservative&apos;) {
-}
-        if (player.injuryStatus === &apos;healthy&apos;) score += 20;
+      if (this.selectedPersona!.strategies.riskTolerance === 'conservative') {
+        if (player.injuryStatus === 'healthy') score += 20;
         if (player.yearsExperience && player.yearsExperience > 3) score += 15;
-      } else if (this.selectedPersona!.strategies.riskTolerance === &apos;aggressive&apos;) {
-}
-        if (player.upside === &apos;high&apos;) score += 25;
+      } else if (this.selectedPersona!.strategies.riskTolerance === 'aggressive') {
+        if (player.upside === 'high') score += 25;
         if (player.age && player.age < 25) score += 15;
       }
 
       // Apply persona-specific factors
       this.selectedPersona!.strategies.valuationFactors.forEach((factor: any) => {
-}
         // Simplified scoring based on factor names
         switch (factor.factor) {
-}
-          case &apos;consistency&apos;:
-            if (player.consistency === &apos;high&apos;) score += 30 * factor.weight;
+          case 'consistency':
+            if (player.consistency === 'high') score += 30 * factor.weight;
             break;
-          case &apos;upside&apos;:
-            if (player.upside === &apos;high&apos;) score += 30 * factor.weight;
+          case 'upside':
+            if (player.upside === 'high') score += 30 * factor.weight;
             break;
-          case &apos;age&apos;:
+          case 'age':
             if (player.age && player.age < 26) score += 25 * factor.weight;
             break;
-          case &apos;veteran_presence&apos;:
+          case 'veteran_presence':
             if (player.yearsExperience && player.yearsExperience > 5) score += 25 * factor.weight;
             break;
         }
       });
 
       return {
-}
         player,
         score,// 
         reasons
@@ -455,13 +416,11 @@ export class CelebrityPersonaEngine {
     const topPick = scoredPlayers[0];
 
     if (!topPick || topPick.score === 0) {
-}
       return {
-}
         recommendedPlayer: null,
-        reasoning: &apos;No suitable players match persona preferences&apos;,
+        reasoning: 'No suitable players match persona preferences',
         confidence: 0,
-        catchPhrase: &apos;&apos;
+        catchPhrase: ''
       };
     }
 
@@ -479,19 +438,16 @@ export class CelebrityPersonaEngine {
     ];
 
     return {
-}
       recommendedPlayer: topPick.player,
-      reasoning: topPick.reasons.join(&apos;, &apos;),
+      reasoning: topPick.reasons.join(', '),
       confidence,// 
       catchPhrase
     };
   }
 
   getPersonaTip(): string {
-}
-    if (!this.selectedPersona) return &apos;&apos;;
+    if (!this.selectedPersona) return '';
     return this.selectedPersona.draftTips[
       Math.floor(Math.random() * this.selectedPersona.draftTips.length)
     ];
   }
-}

@@ -1,66 +1,56 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import type { LeagueSettings, User, CreateLeaguePayload, AiProfileData } from &apos;../../types&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { generateTeamBranding, generateAiTeamProfile } from &apos;../../services/geminiService&apos;;
-import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import type { LeagueSettings, User, CreateLeaguePayload, AiProfileData } from '../../types';
+import { Modal } from '../ui/Modal';
+import { motion } from 'framer-motion';
+import { generateTeamBranding, generateAiTeamProfile } from '../../services/geminiService';
+import { SparklesIcon } from '../icons/SparklesIcon';
+import { Avatar } from '../ui/Avatar';
 
 interface CreateLeagueModalProps {
-}
     onClose: () => void;
     user: User;
     dispatch: React.Dispatch<any>;
 
-}
 
 const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, dispatch }: any) => {
-}
-    const [name, setName] = React.useState(&apos;My Awesome League&apos;);
-    const [userTeamName, setUserTeamName] = React.useState(`${user.name}&apos;s Dynasty`);
+    const [name, setName] = React.useState('My Awesome League');
+    const [userTeamName, setUserTeamName] = React.useState(`${user.name}'s Dynasty`);
     const [userTeamAvatar, setUserTeamAvatar] = React.useState(user.avatar);
     const [isGenerating, setIsGenerating] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    const [draftFormat, setDraftFormat] = React.useState<LeagueSettings[&apos;draftFormat&apos;]>(&apos;SNAKE&apos;);
-    const [teamCount, setTeamCount] = React.useState<LeagueSettings[&apos;teamCount&apos;]>(12);
-    const [scoring, setScoring] = React.useState<LeagueSettings[&apos;scoring&apos;]>(&apos;PPR&apos;);
-    const [tradeDeadline, setTradeDeadline] = React.useState<LeagueSettings[&apos;tradeDeadline&apos;]>(10);
-    const [playoffFormat, setPlayoffFormat] = React.useState<LeagueSettings[&apos;playoffFormat&apos;]>(&apos;4_TEAM&apos;);
-    const [waiverRule, setWaiverRule] = React.useState<LeagueSettings[&apos;waiverRule&apos;]>(&apos;FAAB&apos;);
-    const [aiAssistanceLevel, setAiAssistanceLevel] = React.useState<LeagueSettings[&apos;aiAssistanceLevel&apos;]>(&apos;FULL&apos;);
+    const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');
+    const [teamCount, setTeamCount] = React.useState<LeagueSettings['teamCount']>(12);
+    const [scoring, setScoring] = React.useState<LeagueSettings['scoring']>('PPR');
+    const [tradeDeadline, setTradeDeadline] = React.useState<LeagueSettings['tradeDeadline']>(10);
+    const [playoffFormat, setPlayoffFormat] = React.useState<LeagueSettings['playoffFormat']>('4_TEAM');
+    const [waiverRule, setWaiverRule] = React.useState<LeagueSettings['waiverRule']>('FAAB');
+    const [aiAssistanceLevel, setAiAssistanceLevel] = React.useState<LeagueSettings['aiAssistanceLevel']>('FULL');
 
     const handleGenerateBranding = async () => {
-}
     try {
-}
         setIsGenerating(true);
         const branding = await generateTeamBranding(user.name);
         if (branding) {
-}
             setUserTeamName(branding.teamName);
             setUserTeamAvatar(branding.avatar);
         
-    `Generating AI managers... this may take a moment.`, type: &apos;SYSTEM&apos; 
+    `Generating AI managers... this may take a moment.`, type: 'SYSTEM' 
     }});
 
         try {
-}
             const aiProfilePromises = Array.from({ length: teamCount - 1 }).map(() => generateAiTeamProfile(name));
             const aiProfiles = (await Promise.all(aiProfilePromises)).filter(Boolean) as AiProfileData[];
             
             if (aiProfiles.length !== teamCount - 1) {
-}
                 throw new Error("Failed to generate all AI manager profiles.");
 
             const newLeague: CreateLeaguePayload = {
-}
                 id: `league_${Date.now()}`,
                 name,
                 settings: {
-}
                     draftFormat,
                     teamCount,
                     scoring,
@@ -70,26 +60,25 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                     waiverRule,
                     aiAssistanceLevel,
                 },
-                status: &apos;PRE_DRAFT&apos; as const,
+                status: 'PRE_DRAFT' as const,
                 commissionerId: user.id,
                 userTeamName,
                 userTeamAvatar,
                 aiProfiles,
             };
-            dispatch({ type: &apos;CREATE_LEAGUE&apos;, payload: newLeague });
-            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `League "${name}" created!`, type: &apos;SYSTEM&apos; }});
+            dispatch({ type: 'CREATE_LEAGUE', payload: newLeague });
+            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `League "${name}" created!`, type: 'SYSTEM' }});
             onClose();
 
         });
         } finally {
-}
             setIsSubmitting(false);
 
     };
 
     const inputClasses = "mobile-touch-target w-full bg-black/10 dark:bg-gray-900/50 border border-[var(--panel-border)] rounded-md px-3 py-3 text-sm placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-cyan-400";
     const labelClasses = "block text-sm font-medium text-[var(--text-secondary)] mb-1";
-    const buttonGroupButtonClasses = (isActive: boolean) => `flex-1 py-2 text-sm font-bold rounded-md transition-all ${isActive ? &apos;bg-cyan-400 text-black&apos; : &apos;bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50&apos;}`;
+    const buttonGroupButtonClasses = (isActive: boolean) => `flex-1 py-2 text-sm font-bold rounded-md transition-all ${isActive ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`;
 
     return (
         <Modal isOpen={true} onClose={onClose}>
@@ -134,7 +123,6 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                                     className="w-full mt-1 flex items-center justify-center gap-2 px-4 py-1.5 bg-transparent border border-cyan-400/50 text-cyan-300 font-bold text-xs rounded-md hover:bg-cyan-400/20 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                                 >
                                     {isGenerating ? (
-}
                                         <>
                                             <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                                             <span>Generating...</span>
@@ -155,32 +143,32 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                                 <div>
                                     <label className={labelClasses}>AI Assistance</label>
                                     <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setAiAssistanceLevel(&apos;FULL&apos;); }} className={buttonGroupButtonClasses(aiAssistanceLevel === &apos;FULL&apos;)}>Full</button>
-                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setAiAssistanceLevel(&apos;BASIC&apos;); }} className={buttonGroupButtonClasses(aiAssistanceLevel === &apos;BASIC&apos;)}>Basic</button>
+                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setAiAssistanceLevel('FULL'); }} className={buttonGroupButtonClasses(aiAssistanceLevel === 'FULL')}>Full</button>
+                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setAiAssistanceLevel('BASIC'); }} className={buttonGroupButtonClasses(aiAssistanceLevel === 'BASIC')}>Basic</button>
                                     </div>
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Draft Format</label>
                                     <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setDraftFormat(&apos;SNAKE&apos;); }} className={buttonGroupButtonClasses(draftFormat === &apos;SNAKE&apos;)}>SNAKE</button>
-                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setDraftFormat(&apos;AUCTION&apos;); }} className={buttonGroupButtonClasses(draftFormat === &apos;AUCTION&apos;)}>AUCTION</button>
+                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setDraftFormat('SNAKE'); }} className={buttonGroupButtonClasses(draftFormat === 'SNAKE')}>SNAKE</button>
+                                        <button type="button" onClick={(e: any) => { e.preventDefault(); setDraftFormat('AUCTION'); }} className={buttonGroupButtonClasses(draftFormat === 'AUCTION')}>AUCTION</button>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                <label className={labelClasses}>Scoring</label>
                                 <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setScoring(&apos;PPR&apos;); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === &apos;PPR&apos; ? &apos;bg-cyan-400 text-black&apos; : &apos;bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50&apos;}`}>PPR</button>
-                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setScoring(&apos;Half-PPR&apos;); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === &apos;Half-PPR&apos; ? &apos;bg-cyan-400 text-black&apos; : &apos;bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50&apos;}`}>Half-PPR</button>
-                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setScoring(&apos;Standard&apos;); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === &apos;Standard&apos; ? &apos;bg-cyan-400 text-black&apos; : &apos;bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50&apos;}`}>Standard</button>
+                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setScoring('PPR'); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'PPR' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>PPR</button>
+                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setScoring('Half-PPR'); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'Half-PPR' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>Half-PPR</button>
+                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setScoring('Standard'); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'Standard' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>Standard</button>
                                 </div>
                             </div>
 
                              <div>
                                 <label className={labelClasses}>Playoff Format</label>
                                 <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setPlayoffFormat(&apos;4_TEAM&apos;); }} className={buttonGroupButtonClasses(playoffFormat === &apos;4_TEAM&apos;)}>4 Teams</button>
-                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setPlayoffFormat(&apos;6_TEAM&apos;); }} className={buttonGroupButtonClasses(playoffFormat === &apos;6_TEAM&apos;)}>6 Teams</button>
+                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setPlayoffFormat('4_TEAM'); }} className={buttonGroupButtonClasses(playoffFormat === '4_TEAM')}>4 Teams</button>
+                                    <button type="button" onClick={(e: any) => { e.preventDefault(); setPlayoffFormat('6_TEAM'); }} className={buttonGroupButtonClasses(playoffFormat === '6_TEAM')}>6 Teams</button>
                                 </div>
                             </div>
 
@@ -201,7 +189,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                             disabled={isSubmitting}
                             className="mobile-touch-target px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-bold rounded-lg shadow-md hover:from-green-600 hover:to-cyan-600 transition-colors disabled:opacity-60 disabled:cursor-wait sm:px-4 md:px-6 lg:px-8"
                         >
-                            {isSubmitting ? &apos;Creating...&apos; : &apos;Create League&apos;}
+                            {isSubmitting ? 'Creating...' : 'Create League'}
                         </button>
                     </footer>
                 </form>

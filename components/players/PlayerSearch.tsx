@@ -18,7 +18,6 @@ interface PlayerSearchProps {
   filterPosition?: string;
   excludePlayerIds?: number[];
 
-}
 
 const PlayerSearch: FC<PlayerSearchProps> = ({
   onPlayerSelect,

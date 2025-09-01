@@ -4,65 +4,55 @@
  */
 
 export interface MobileTestResult {
-}
   component: string;
   testType: string;
   passed: boolean;
   issues: string[];
   recommendations: string[];
-}
 
 export interface TouchTargetTest {
-}
   element: string;
   selector: string;
   minSize: number;
   actualSize?: { width: number; height: number };
   passed: boolean;
-}
 
 export interface ViewportTest {
-}
   viewport: string;
   width: number;
   height: number;
   components: string[];
   issues: string[];
   passed: boolean;
-}
 
 class MobileTestingSuite {
-}
-  private readonly minTouchTargetSize = 44; // Apple&apos;s recommended minimum
+  private readonly minTouchTargetSize = 44; // Apple's recommended minimum
   private readonly viewportConfigs = [
-    { name: &apos;iPhone SE&apos;, width: 375, height: 667 },
-    { name: &apos;iPhone 12&apos;, width: 390, height: 844 },
-    { name: &apos;iPhone 14 Pro Max&apos;, width: 430, height: 932 },
-    { name: &apos;Samsung Galaxy S21&apos;, width: 360, height: 800 },
-    { name: &apos;iPad Mini&apos;, width: 768, height: 1024 },
-    { name: &apos;iPad Pro&apos;, width: 1024, height: 1366 }
+    { name: 'iPhone SE', width: 375, height: 667 },
+    { name: 'iPhone 12', width: 390, height: 844 },
+    { name: 'iPhone 14 Pro Max', width: 430, height: 932 },
+    { name: 'Samsung Galaxy S21', width: 360, height: 800 },
+    { name: 'iPad Mini', width: 768, height: 1024 },
+    { name: 'iPad Pro', width: 1024, height: 1366 }
   ];
 
   /**
    * Run comprehensive mobile testing suite
    */
   async runFullMobileSuite(): Promise<{
-}
     touchTargets: TouchTargetTest[];
     viewports: ViewportTest[];
     accessibility: MobileTestResult[];
     performance: MobileTestResult[];
     usability: MobileTestResult[];
     summary: {
-}
       totalTests: number;
       passed: number;
       failed: number;
       criticalIssues: number;
     };
   }> {
-}
-    console.log(&apos;🔍 Starting comprehensive mobile testing suite...&apos;);
+    console.log('🔍 Starting comprehensive mobile testing suite...');
 
     const touchTargets = await this.testTouchTargets();
     const viewports = await this.testViewportResponsiveness();
@@ -71,25 +61,23 @@ class MobileTestingSuite {
     const usability = await this.testMobileUsability();
 
     const allTests = [
-      ...touchTargets.map((t: any) => ({ passed: t.passed, testType: &apos;touch-target&apos; })),
-      ...viewports.map((v: any) => ({ passed: v.passed, testType: &apos;viewport&apos; })),
+      ...touchTargets.map((t: any) => ({ passed: t.passed, testType: 'touch-target' })),
+      ...viewports.map((v: any) => ({ passed: v.passed, testType: 'viewport' })),
       ...accessibility,
       ...performance,
       ...usability
     ];
 
     const summary = {
-}
       totalTests: allTests.length,
       passed: allTests.filter((t: any) => t.passed).length,
       failed: allTests.filter((t: any) => !t.passed).length,
-      criticalIssues: allTests.filter((t: any) => !t.passed && (t.testType === &apos;accessibility&apos; || t.testType === &apos;critical&apos;)).length
+      criticalIssues: allTests.filter((t: any) => !t.passed && (t.testType === 'accessibility' || t.testType === 'critical')).length
     };
 
     console.log(`✅ Mobile testing complete: ${summary.passed}/${summary.totalTests} tests passed`);
 
     return {
-}
       touchTargets,
       viewports,
       accessibility,
@@ -103,46 +91,43 @@ class MobileTestingSuite {
    * Test touch target sizes across the application
    */
   private async testTouchTargets(): Promise<TouchTargetTest[]> {
-}
     const touchTargetSelectors = [
       // Navigation elements
-      { element: &apos;Navigation buttons&apos;, selector: &apos;.nav-button, .navigation-item&apos; },
-      { element: &apos;Menu toggle&apos;, selector: &apos;.menu-toggle, .hamburger-menu&apos; },
+      { element: 'Navigation buttons', selector: '.nav-button, .navigation-item' },
+      { element: 'Menu toggle', selector: '.menu-toggle, .hamburger-menu' },
       
       // Interactive elements
-      { element: &apos;Primary buttons&apos;, selector: &apos;.btn-primary, .primary-button&apos; },
-      { element: &apos;Secondary buttons&apos;, selector: &apos;.btn-secondary, .secondary-button&apos; },
-      { element: &apos;Icon buttons&apos;, selector: &apos;.icon-button, .btn-icon&apos; },
-      { element: &apos;Tab buttons&apos;, selector: &apos;.tab-button, .nav-tab&apos; },
+      { element: 'Primary buttons', selector: '.btn-primary, .primary-button' },
+      { element: 'Secondary buttons', selector: '.btn-secondary, .secondary-button' },
+      { element: 'Icon buttons', selector: '.icon-button, .btn-icon' },
+      { element: 'Tab buttons', selector: '.tab-button, .nav-tab' },
       
       // Form elements
-      { element: &apos;Form inputs&apos;, selector: &apos;input, textarea, select&apos; },
-      { element: &apos;Form submit buttons&apos;, selector: &apos;input[type="submit"], button[type="submit"]&apos; },
-      { element: &apos;Checkbox inputs&apos;, selector: &apos;input[type="checkbox"]&apos; },
-      { element: &apos;Radio inputs&apos;, selector: &apos;input[type="radio"]&apos; },
+      { element: 'Form inputs', selector: 'input, textarea, select' },
+      { element: 'Form submit buttons', selector: 'input[type="submit"], button[type="submit"]' },
+      { element: 'Checkbox inputs', selector: 'input[type="checkbox"]' },
+      { element: 'Radio inputs', selector: 'input[type="radio"]' },
       
       // Draft interface
-      { element: &apos;Player cards&apos;, selector: &apos;.player-card&apos; },
-      { element: &apos;Draft buttons&apos;, selector: &apos;.draft-button&apos; },
-      { element: &apos;Queue controls&apos;, selector: &apos;.queue-control&apos; },
+      { element: 'Player cards', selector: '.player-card' },
+      { element: 'Draft buttons', selector: '.draft-button' },
+      { element: 'Queue controls', selector: '.queue-control' },
       
       // Oracle interface
-      { element: &apos;Prediction options&apos;, selector: &apos;.prediction-option&apos; },
-      { element: &apos;Confidence slider&apos;, selector: &apos;.confidence-slider&apos; },
-      { element: &apos;Submit prediction&apos;, selector: &apos;.submit-prediction&apos; },
+      { element: 'Prediction options', selector: '.prediction-option' },
+      { element: 'Confidence slider', selector: '.confidence-slider' },
+      { element: 'Submit prediction', selector: '.submit-prediction' },
       
       // General UI
-      { element: &apos;Modal close buttons&apos;, selector: &apos;.modal-close, .close-button&apos; },
-      { element: &apos;Dropdown triggers&apos;, selector: &apos;.dropdown-trigger&apos; },
-      { element: &apos;Card actions&apos;, selector: &apos;.card-action&apos; }
+      { element: 'Modal close buttons', selector: '.modal-close, .close-button' },
+      { element: 'Dropdown triggers', selector: '.dropdown-trigger' },
+      { element: 'Card actions', selector: '.card-action' }
     ];
 
     const results: TouchTargetTest[] = [];
 
     for (const target of touchTargetSelectors) {
-}
       const test: TouchTargetTest = {
-}
         element: target.element,
         selector: target.selector,
         minSize: this.minTouchTargetSize,
@@ -166,13 +151,10 @@ class MobileTestingSuite {
    * Test application across different viewport sizes
    */
   private async testViewportResponsiveness(): Promise<ViewportTest[]> {
-}
     const results: ViewportTest[] = [];
 
     for (const viewport of this.viewportConfigs) {
-}
       const test: ViewportTest = {
-}
         viewport: viewport.name,
         width: viewport.width,
         height: viewport.height,
@@ -197,43 +179,39 @@ class MobileTestingSuite {
    * Test mobile accessibility features
    */
   private async testMobileAccessibility(): Promise<MobileTestResult[]> {
-}
     return [
       {
-}
-        component: &apos;Screen Reader Support&apos;,
-        testType: &apos;accessibility&apos;,
+        component: 'Screen Reader Support',
+        testType: 'accessibility',
         passed: true,
         issues: [],
         recommendations: [
-          &apos;Add aria-labels to icon-only buttons&apos;,
-          &apos;Ensure form labels are properly associated&apos;,
-          &apos;Add landmark roles for main content areas&apos;
+          'Add aria-labels to icon-only buttons',
+          'Ensure form labels are properly associated',
+          'Add landmark roles for main content areas'
         ]
       },
       {
-}
-        component: &apos;Focus Management&apos;,
-        testType: &apos;accessibility&apos;,
+        component: 'Focus Management',
+        testType: 'accessibility',
         passed: false,
         issues: [
-          &apos;Some modal dialogs don\&apos;t trap focus properly&apos;,
-          &apos;Tab order is not logical in some complex components&apos;
+          'Some modal dialogs don\'t trap focus properly',
+          'Tab order is not logical in some complex components'
         ],
         recommendations: [
-          &apos;Implement focus trap for modals&apos;,
-          &apos;Review and fix tab order for all interactive elements&apos;
+          'Implement focus trap for modals',
+          'Review and fix tab order for all interactive elements'
         ]
       },
       {
-}
-        component: &apos;Color Contrast&apos;,
-        testType: &apos;accessibility&apos;,
+        component: 'Color Contrast',
+        testType: 'accessibility',
         passed: true,
         issues: [],
         recommendations: [
-          &apos;Verify contrast ratios meet WCAG AA standards&apos;,
-          &apos;Test with high contrast mode enabled&apos;
+          'Verify contrast ratios meet WCAG AA standards',
+          'Test with high contrast mode enabled'
         ]
       }
     ];
@@ -243,43 +221,39 @@ class MobileTestingSuite {
    * Test mobile performance characteristics
    */
   private async testMobilePerformance(): Promise<MobileTestResult[]> {
-}
     return [
       {
-}
-        component: &apos;Bundle Size&apos;,
-        testType: &apos;performance&apos;,
+        component: 'Bundle Size',
+        testType: 'performance',
         passed: true,
         issues: [],
         recommendations: [
-          &apos;Consider code splitting for Oracle Neural Network section&apos;,
-          &apos;Lazy load draft room components when not in use&apos;
+          'Consider code splitting for Oracle Neural Network section',
+          'Lazy load draft room components when not in use'
         ]
       },
       {
-}
-        component: &apos;Image Optimization&apos;,
-        testType: &apos;performance&apos;,
+        component: 'Image Optimization',
+        testType: 'performance',
         passed: false,
         issues: [
-          &apos;Some images not optimized for mobile bandwidth&apos;,
-          &apos;Missing responsive image sizes&apos;
+          'Some images not optimized for mobile bandwidth',
+          'Missing responsive image sizes'
         ],
         recommendations: [
-          &apos;Add WebP format support&apos;,
-          &apos;Implement responsive images with srcset&apos;,
-          &apos;Use next-gen image formats&apos;
+          'Add WebP format support',
+          'Implement responsive images with srcset',
+          'Use next-gen image formats'
         ]
       },
       {
-}
-        component: &apos;JavaScript Performance&apos;,
-        testType: &apos;performance&apos;,
+        component: 'JavaScript Performance',
+        testType: 'performance',
         passed: true,
         issues: [],
         recommendations: [
-          &apos;Monitor main thread blocking time&apos;,
-          &apos;Consider virtual scrolling for large player lists&apos;
+          'Monitor main thread blocking time',
+          'Consider virtual scrolling for large player lists'
         ]
       }
     ];
@@ -289,48 +263,44 @@ class MobileTestingSuite {
    * Test mobile usability aspects
    */
   private async testMobileUsability(): Promise<MobileTestResult[]> {
-}
     return [
       {
-}
-        component: &apos;Form Usability&apos;,
-        testType: &apos;usability&apos;,
+        component: 'Form Usability',
+        testType: 'usability',
         passed: false,
         issues: [
-          &apos;Input fields too small on some forms&apos;,
-          &apos;No input type optimization for mobile keyboards&apos;
+          'Input fields too small on some forms',
+          'No input type optimization for mobile keyboards'
         ],
         recommendations: [
-          &apos;Use input type="email" for email fields&apos;,
-          &apos;Use input type="tel" for phone numbers&apos;,
-          &apos;Increase input field heights to at least 44px&apos;,
-          &apos;Add proper autocomplete attributes&apos;
+          'Use input type="email" for email fields',
+          'Use input type="tel" for phone numbers',
+          'Increase input field heights to at least 44px',
+          'Add proper autocomplete attributes'
         ]
       },
       {
-}
-        component: &apos;Navigation Usability&apos;,
-        testType: &apos;usability&apos;,
+        component: 'Navigation Usability',
+        testType: 'usability',
         passed: true,
         issues: [],
         recommendations: [
-          &apos;Consider adding swipe gestures for tab navigation&apos;,
-          &apos;Add breadcrumbs for deep navigation paths&apos;
+          'Consider adding swipe gestures for tab navigation',
+          'Add breadcrumbs for deep navigation paths'
         ]
       },
       {
-}
-        component: &apos;Content Readability&apos;,
-        testType: &apos;usability&apos;,
+        component: 'Content Readability',
+        testType: 'usability',
         passed: false,
         issues: [
-          &apos;Some text too small on mobile devices&apos;,
-          &apos;Line height too tight in some components&apos;
+          'Some text too small on mobile devices',
+          'Line height too tight in some components'
         ],
         recommendations: [
-          &apos;Ensure minimum 16px font size for body text&apos;,
-          &apos;Increase line height to 1.5 for better readability&apos;,
-          &apos;Use larger font sizes for important information&apos;
+          'Ensure minimum 16px font size for body text',
+          'Increase line height to 1.5 for better readability',
+          'Use larger font sizes for important information'
         ]
       }
     ];
@@ -340,25 +310,21 @@ class MobileTestingSuite {
    * Simulate touch target size testing
    */
   private simulateTouchTargetSize(selector: string): { width: number; height: number } {
-}
     // Simulate different sizes based on component type
     const sizes: { [key: string]: { width: number; height: number } } = {
-}
-      &apos;.nav-button&apos;: { width: 48, height: 48 },
-      &apos;.btn-primary&apos;: { width: 120, height: 48 }, // Updated for mobile improvements
-      &apos;.btn-secondary&apos;: { width: 150, height: 48 }, // Updated for Oracle prediction options
-      &apos;.icon-button&apos;: { width: 44, height: 44 }, // Updated to meet minimum requirements
-      &apos;input&apos;: { width: 280, height: 44 }, // Updated for mobile touch targets
-      &apos;.player-card&apos;: { width: 300, height: 80 },
-      &apos;.prediction-option&apos;: { width: 150, height: 48 }, // Oracle prediction buttons
-      &apos;.submit-prediction&apos;: { width: 280, height: 48 } // Oracle submit button
+      '.nav-button': { width: 48, height: 48 },
+      '.btn-primary': { width: 120, height: 48 }, // Updated for mobile improvements
+      '.btn-secondary': { width: 150, height: 48 }, // Updated for Oracle prediction options
+      '.icon-button': { width: 44, height: 44 }, // Updated to meet minimum requirements
+      'input': { width: 280, height: 44 }, // Updated for mobile touch targets
+      '.player-card': { width: 300, height: 80 },
+      '.prediction-option': { width: 150, height: 48 }, // Oracle prediction buttons
+      '.submit-prediction': { width: 280, height: 48 } // Oracle submit button
     };
 
     // Find matching selector
     for (const [key, size] of Object.entries(sizes)) {
-}
       if (selector.includes(key)) {
-}
         return size;
       }
     }
@@ -370,24 +336,22 @@ class MobileTestingSuite {
    * Test components at specific viewport
    */
   private async testComponentsAtViewport(viewport: { name: string; width: number; height: number }): Promise<MobileTestResult[]> {
-}
     const components = [
-      &apos;Header Navigation&apos;,
-      &apos;Dashboard Cards&apos;,
-      &apos;Beat The Oracle Interface&apos;,
-      &apos;Draft Room Layout&apos;,
-      &apos;Player Lists&apos;,
-      &apos;Forms and Modals&apos;,
-      &apos;Settings Panel&apos;
+      'Header Navigation',
+      'Dashboard Cards',
+      'Beat The Oracle Interface',
+      'Draft Room Layout',
+      'Player Lists',
+      'Forms and Modals',
+      'Settings Panel'
     ];
 
     return components.map((component: any) => ({
-}
       component,
-      testType: &apos;viewport&apos;,
+      testType: 'viewport',
       passed: viewport.width >= 320, // Minimum supported width
       issues: viewport.width < 320 ? [`Component too narrow at ${viewport.width}px`] : [],
-      recommendations: viewport.width < 375 ? [&apos;Consider simplifying layout for very narrow screens&apos;] : []
+      recommendations: viewport.width < 375 ? ['Consider simplifying layout for very narrow screens'] : []
     }));
   }
 
@@ -395,7 +359,6 @@ class MobileTestingSuite {
    * Generate mobile testing report
    */
   generateMobileReport(results: any): string {
-}
     const { touchTargets, viewports, accessibility, performance, usability, summary } = results;
 
     const report = `
@@ -410,45 +373,38 @@ Generated: ${new Date().toISOString()}
 
 ## Touch Target Tests
 ${touchTargets.map((t: TouchTargetTest) =>
-}
-  `- **${t.element}**: ${t.passed ? &apos;✅ PASS&apos; : &apos;❌ FAIL&apos;} (${t.actualSize?.width}x${t.actualSize?.height}px)`
-).join(&apos;\n&apos;)}
+  `- **${t.element}**: ${t.passed ? '✅ PASS' : '❌ FAIL'} (${t.actualSize?.width}x${t.actualSize?.height}px)`
+).join('\n')}
 
 ## Viewport Tests
 ${viewports.map((v: ViewportTest) =>
-}
-  `- **${v.viewport}** (${v.width}x${v.height}): ${v.passed ? &apos;✅ PASS&apos; : &apos;❌ FAIL&apos;}${v.issues.length ? &apos;\n  Issues: &apos; + v.issues.join(&apos;, &apos;) : &apos;&apos;}`
-).join(&apos;\n&apos;)}
+  `- **${v.viewport}** (${v.width}x${v.height}): ${v.passed ? '✅ PASS' : '❌ FAIL'}${v.issues.length ? '\n  Issues: ' + v.issues.join(', ') : ''}`
+).join('\n')}
 
 ## Accessibility Issues
 ${accessibility.filter((a: MobileTestResult) => !a.passed).map((a: MobileTestResult) =>
-}
-  `- **${a.component}**: ${a.issues.join(&apos;, &apos;)}`
-).join(&apos;\n&apos;)}
+  `- **${a.component}**: ${a.issues.join(', ')}`
+).join('\n')}
 
 ## Performance Issues
 ${performance.filter((p: MobileTestResult) => !p.passed).map((p: MobileTestResult) =>
-}
-  `- **${p.component}**: ${p.issues.join(&apos;, &apos;)}`
-).join(&apos;\n&apos;)}
+  `- **${p.component}**: ${p.issues.join(', ')}`
+).join('\n')}
 
 ## Usability Issues
 ${usability.filter((u: MobileTestResult) => !u.passed).map((u: MobileTestResult) =>
-}
-  `- **${u.component}**: ${u.issues.join(&apos;, &apos;)}`
-).join(&apos;\n&apos;)}
+  `- **${u.component}**: ${u.issues.join(', ')}`
+).join('\n')}
 
 ## Recommendations
 ${[...accessibility, ...performance, ...usability]
-}
   .flatMap(item => item.recommendations)
   .map((rec: any) => `- ${rec}`)
-  .join(&apos;\n&apos;)}
+  .join('\n')}
 `;
 
     return report;
   }
-}
 
 // Export singleton instance
 export const mobileTestingSuite = new MobileTestingSuite();

@@ -4,41 +4,33 @@
  */
 
 // @ts-ignore - backend module
-import { getRows, getRow, runQuery } from &apos;../backend/db/index&apos;;
-import { oraclePerformanceService } from &apos;./oraclePerformanceService&apos;;
+import { getRows, getRow, runQuery } from '../backend/db/index';
+import { oraclePerformanceService } from './oraclePerformanceService';
 
 export interface OptimizedQueryConfig {
-}
     enableCache: boolean;
     cacheTTL: number;
     enablePagination: boolean;
     pageSize: number;
     enableIndexHints: boolean;
-}
 
 export interface QueryResult<T> {
-}
     data: T[];
     total: number;
     cached: boolean;
     executionTime: number;
     page?: number;
     pageSize?: number;
-}
 
 export interface PaginationOptions {
-}
     page: number;
     pageSize: number;
-}
 
 /**
  * Optimized Oracle Analytics Query Service
  */
 export class OptimizedOracleQueries {
-}
     private readonly defaultConfig: OptimizedQueryConfig = {
-}
         enableCache: true,
         cacheTTL: 300, // 5 minutes
         enablePagination: true,
@@ -57,7 +49,6 @@ export class OptimizedOracleQueries {
         pagination?: PaginationOptions,
         config: Partial<OptimizedQueryConfig> = {}
     ): Promise<QueryResult<any>> {
-}
         const queryConfig = { ...this.defaultConfig, ...config };
         const startTime = Date.now();
 
@@ -66,16 +57,13 @@ export class OptimizedOracleQueries {
             week || 0, 
             season || 0, 
             type
-        ) + `${status || &apos;&apos;}:${pagination?.page || 0}:${pagination?.pageSize || 0}`;
+        ) + `${status || ''}:${pagination?.page || 0}:${pagination?.pageSize || 0}`;
 
         // Check cache first
         if (queryConfig.enableCache) {
-}
             const cached = oraclePerformanceService.getCachedPredictions(cacheKey);
             if (cached) {
-}
                 return {
-}
                     ...cached,
                     cached: true,
                     executionTime: Date.now() - startTime
@@ -85,7 +73,7 @@ export class OptimizedOracleQueries {
 
         // Build optimized query with proper indexing hints
         let query = `
-            SELECT ${queryConfig.enableIndexHints ? &apos;/*+ INDEX(op, idx_oracle_predictions_week_season) */&apos; : &apos;&apos;}
+            SELECT ${queryConfig.enableIndexHints ? '/*+ INDEX(op, idx_oracle_predictions_week_season) */' : ''}
                 op.id,
                 op.week,
                 op.season,
@@ -110,61 +98,52 @@ export class OptimizedOracleQueries {
 
         // Add filtering conditions
         if (week !== undefined) {
-}
-            conditions.push(&apos;op.week = ?&apos;);
+            conditions.push('op.week = ?');
             params.push(week);
         }
         if (season !== undefined) {
-}
-            conditions.push(&apos;op.season = ?&apos;);
+            conditions.push('op.season = ?');
             params.push(season);
         }
         if (type) {
-}
-            conditions.push(&apos;op.type = ?&apos;);
+            conditions.push('op.type = ?');
             params.push(type);
         }
         if (status) {
-}
-            conditions.push(&apos;op.status = ?&apos;);
+            conditions.push('op.status = ?');
             params.push(status);
         }
 
         if (conditions.length > 0) {
-}
-            query += ` WHERE ${conditions.join(&apos; AND &apos;)}`;
+            query += ` WHERE ${conditions.join(' AND ')}`;
         }
 
-        query += &apos; GROUP BY op.id&apos;;
-        query += &apos; ORDER BY op.week DESC, op.created_at DESC&apos;;
+        query += ' GROUP BY op.id';
+        query += ' ORDER BY op.week DESC, op.created_at DESC';
 
         // Add pagination
         if (queryConfig.enablePagination && pagination) {
-}
             const offset = (pagination.page - 1) * pagination.pageSize;
             query += ` LIMIT ${pagination.pageSize} OFFSET ${offset}`;
         }
 
         try {
-}
             // Execute main query
             const data = await getRows(query, params);
             
             // Get total count for pagination (if needed)
             let total = data.length;
             if (queryConfig.enablePagination && pagination) {
-}
                 const countQuery = `
                     SELECT COUNT(DISTINCT op.id) as total
                     FROM oracle_predictions op
-                    ${conditions.length > 0 ? `WHERE ${conditions.join(&apos; AND &apos;)}` : &apos;&apos;}
+                    ${conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''}
                 `;
                 const countResult = await getRow(countQuery, params);
                 total = countResult?.total || 0;
             }
 
             const result = {
-}
                 data,
                 total,
                 cached: false,
@@ -175,18 +154,16 @@ export class OptimizedOracleQueries {
 
             // Cache the result
             if (queryConfig.enableCache) {
-}
                 oraclePerformanceService.cachePredictions(cacheKey, result);
             }
 
             // Record performance metrics
-            oraclePerformanceService.recordQueryMetrics(&apos;getOraclePredictions&apos;, result.executionTime);
+            oraclePerformanceService.recordQueryMetrics('getOraclePredictions', result.executionTime);
 
             return result;
 
         } catch (error) {
-}
-            console.error(&apos;❌ Optimized Oracle predictions query failed:&apos;, error);
+            console.error('❌ Optimized Oracle predictions query failed:', error);
             throw error;
         }
     }
@@ -196,11 +173,10 @@ export class OptimizedOracleQueries {
      */
     async getUserAnalyticsOptimized(
         userId: number,
-        timeframe: &apos;week&apos; | &apos;month&apos; | &apos;season&apos; = &apos;month&apos;,
+        timeframe: 'week' | 'month' | 'season' = 'month',
         season?: number,
         config: Partial<OptimizedQueryConfig> = {}
     ): Promise<QueryResult<any>> {
-}
         const queryConfig = { ...this.defaultConfig, ...config };
         const startTime = Date.now();
 
@@ -209,12 +185,9 @@ export class OptimizedOracleQueries {
 
         // Check cache first
         if (queryConfig.enableCache) {
-}
             const cached = oraclePerformanceService.getCachedUserData(cacheKey);
             if (cached) {
-}
                 return {
-}
                     ...cached,
                     cached: true,
                     executionTime: Date.now() - startTime
@@ -223,10 +196,9 @@ export class OptimizedOracleQueries {
         }
 
         try {
-}
             // Optimized user analytics query with proper indexing
             const query = `
-                SELECT ${queryConfig.enableIndexHints ? &apos;/*+ INDEX(up, idx_user_predictions_user_id) */&apos; : &apos;&apos;}
+                SELECT ${queryConfig.enableIndexHints ? '/*+ INDEX(up, idx_user_predictions_user_id) */' : ''}
                     u.id as user_id,
                     u.display_name,
                     COUNT(up.id) as total_predictions,
@@ -242,22 +214,20 @@ export class OptimizedOracleQueries {
                 INNER JOIN user_predictions up ON u.id = up.user_id
                 INNER JOIN oracle_predictions op ON up.prediction_id = op.id
                 WHERE u.id = ?
-                ${season ? &apos;AND op.season = ?&apos; : &apos;&apos;}
-                ${timeframe === &apos;week&apos; ? &apos;AND op.week >= CAST(strftime("%W", "now") AS INTEGER)&apos; : &apos;&apos;}
-                ${timeframe === &apos;month&apos; ? &apos;AND up.submitted_at >= date("now", "-1 month")&apos; : &apos;&apos;}
+                ${season ? 'AND op.season = ?' : ''}
+                ${timeframe === 'week' ? 'AND op.week >= CAST(strftime("%W", "now") AS INTEGER)' : ''}
+                ${timeframe === 'month' ? 'AND up.submitted_at >= date("now", "-1 month")' : ''}
                 GROUP BY u.id, u.display_name
             `;
 
             const params = [userId];
             if (season) {
-}
                 params.push(season);
             }
 
             const data = await getRows(query, params);
 
             const result = {
-}
                 data,
                 total: data.length,
                 cached: false,
@@ -266,18 +236,16 @@ export class OptimizedOracleQueries {
 
             // Cache the result
             if (queryConfig.enableCache) {
-}
                 oraclePerformanceService.cacheUserData(cacheKey, result);
             }
 
             // Record performance metrics
-            oraclePerformanceService.recordQueryMetrics(&apos;getUserAnalytics&apos;, result.executionTime);
+            oraclePerformanceService.recordQueryMetrics('getUserAnalytics', result.executionTime);
 
             return result;
 
         } catch (error) {
-}
-            console.error(&apos;❌ Optimized user analytics query failed:&apos;, error);
+            console.error('❌ Optimized user analytics query failed:', error);
             throw error;
         }
     }
@@ -288,10 +256,9 @@ export class OptimizedOracleQueries {
     async getOracleAccuracyAnalyticsOptimized(
         startDate: string,
         endDate: string,
-        groupBy: &apos;day&apos; | &apos;week&apos; | &apos;month&apos; = &apos;week&apos;,
+        groupBy: 'day' | 'week' | 'month' = 'week',
         config: Partial<OptimizedQueryConfig> = {}
     ): Promise<QueryResult<any>> {
-}
         const queryConfig = { ...this.defaultConfig, ...config };
         const startTime = Date.now();
 
@@ -299,18 +266,15 @@ export class OptimizedOracleQueries {
         const cacheKey = oraclePerformanceService.generateAnalyticsCacheKey(
             startDate,
             endDate,
-            [&apos;accuracy&apos;, &apos;confidence&apos;],
+            ['accuracy', 'confidence'],
 //             groupBy
         );
 
         // Check cache first
         if (queryConfig.enableCache) {
-}
             const cached = oraclePerformanceService.getCachedAnalytics(cacheKey);
             if (cached) {
-}
                 return {
-}
                     ...cached,
                     cached: true,
                     executionTime: Date.now() - startTime
@@ -319,18 +283,16 @@ export class OptimizedOracleQueries {
         }
 
         try {
-}
             // Build optimized analytics query with proper date formatting
             const dateFormat = {
-}
-                day: &apos;%Y-%m-%d&apos;,
-                week: &apos;%Y-%W&apos;,
-                month: &apos;%Y-%m&apos;
+                day: '%Y-%m-%d',
+                week: '%Y-%W',
+                month: '%Y-%m'
             }[groupBy];
 
             const query = `
-                SELECT ${queryConfig.enableIndexHints ? &apos;/*+ INDEX(op, idx_oracle_predictions_created_at) */&apos; : &apos;&apos;}
-                    strftime(&apos;${dateFormat}&apos;, op.created_at) as period,
+                SELECT ${queryConfig.enableIndexHints ? '/*+ INDEX(op, idx_oracle_predictions_created_at) */' : ''}
+                    strftime('${dateFormat}', op.created_at) as period,
                     op.type,
                     COUNT(*) as total_predictions,
                     SUM(CASE WHEN op.oracle_choice = op.actual_result THEN 1 ELSE 0 END) as correct_predictions,
@@ -352,15 +314,14 @@ export class OptimizedOracleQueries {
                 FROM oracle_predictions op
                 LEFT JOIN user_predictions up ON op.id = up.prediction_id
                 WHERE op.created_at BETWEEN ? AND ?
-                    AND op.status = &apos;resolved&apos;
-                GROUP BY strftime(&apos;${dateFormat}&apos;, op.created_at), op.type
+                    AND op.status = 'resolved'
+                GROUP BY strftime('${dateFormat}', op.created_at), op.type
                 ORDER BY period DESC, op.type
             `;
 
             const data = await getRows(query, [startDate, endDate]);
 
             const result = {
-}
                 data,
                 total: data.length,
                 cached: false,
@@ -369,18 +330,16 @@ export class OptimizedOracleQueries {
 
             // Cache the result
             if (queryConfig.enableCache) {
-}
                 oraclePerformanceService.cacheAnalytics(cacheKey, result);
             }
 
             // Record performance metrics
-            oraclePerformanceService.recordQueryMetrics(&apos;getOracleAccuracyAnalytics&apos;, result.executionTime);
+            oraclePerformanceService.recordQueryMetrics('getOracleAccuracyAnalytics', result.executionTime);
 
             return result;
 
         } catch (error) {
-}
-            console.error(&apos;❌ Optimized Oracle accuracy analytics query failed:&apos;, error);
+            console.error('❌ Optimized Oracle accuracy analytics query failed:', error);
             throw error;
         }
     }
@@ -394,21 +353,17 @@ export class OptimizedOracleQueries {
         limit: number = 50,
         config: Partial<OptimizedQueryConfig> = {}
     ): Promise<QueryResult<any>> {
-}
         const queryConfig = { ...this.defaultConfig, ...config };
         const startTime = Date.now();
 
         // Generate cache key
-        const cacheKey = `leaderboard:${season || &apos;all&apos;}:${week || &apos;all&apos;}:${limit}`;
+        const cacheKey = `leaderboard:${season || 'all'}:${week || 'all'}:${limit}`;
 
         // Check cache first
         if (queryConfig.enableCache) {
-}
             const cached = oraclePerformanceService.getCachedQuery(cacheKey);
             if (cached) {
-}
                 return {
-}
                     ...cached,
                     cached: true,
                     executionTime: Date.now() - startTime
@@ -417,11 +372,10 @@ export class OptimizedOracleQueries {
         }
 
         try {
-}
             // Optimized leaderboard query with ranking window functions
             const query = `
                 WITH user_stats AS (
-                    SELECT ${queryConfig.enableIndexHints ? &apos;/*+ INDEX(up, idx_user_predictions_user_id) */&apos; : &apos;&apos;}
+                    SELECT ${queryConfig.enableIndexHints ? '/*+ INDEX(up, idx_user_predictions_user_id) */' : ''}
                         u.id,
                         u.display_name,
                         u.avatar_url,
@@ -435,9 +389,9 @@ export class OptimizedOracleQueries {
                     FROM users u
                     INNER JOIN user_predictions up ON u.id = up.user_id
                     INNER JOIN oracle_predictions op ON up.prediction_id = op.id
-                    WHERE op.status = &apos;resolved&apos;
-                        ${season ? &apos;AND op.season = ?&apos; : &apos;&apos;}
-                        ${week ? &apos;AND op.week = ?&apos; : &apos;&apos;}
+                    WHERE op.status = 'resolved'
+                        ${season ? 'AND op.season = ?' : ''}
+                        ${week ? 'AND op.week = ?' : ''}
                     GROUP BY u.id, u.display_name, u.avatar_url
                     HAVING COUNT(up.id) >= 5  -- Minimum 5 predictions to qualify
                 )
@@ -459,7 +413,6 @@ export class OptimizedOracleQueries {
             const data = await getRows(query, params);
 
             const result = {
-}
                 data,
                 total: data.length,
                 cached: false,
@@ -468,18 +421,16 @@ export class OptimizedOracleQueries {
 
             // Cache the result
             if (queryConfig.enableCache) {
-}
                 oraclePerformanceService.cacheQuery(cacheKey, result);
             }
 
             // Record performance metrics
-            oraclePerformanceService.recordQueryMetrics(&apos;getLeaderboard&apos;, result.executionTime);
+            oraclePerformanceService.recordQueryMetrics('getLeaderboard', result.executionTime);
 
             return result;
 
         } catch (error) {
-}
-            console.error(&apos;❌ Optimized leaderboard query failed:&apos;, error);
+            console.error('❌ Optimized leaderboard query failed:', error);
             throw error;
         }
     }
@@ -488,24 +439,21 @@ export class OptimizedOracleQueries {
      * Batch update predictions for better performance
      */
     async batchUpdatePredictions(updates: Array<{ id: string; actualResult: number; resolvedAt?: Date }>): Promise<number> {
-}
         const startTime = Date.now();
 
         try {
-}
             // Use transaction for batch updates
-            await runQuery(&apos;BEGIN TRANSACTION&apos;);
+            await runQuery('BEGIN TRANSACTION');
 
             let updatedCount = 0;
             
             // Process in chunks to avoid memory issues
             const chunkSize = 100;
             for (let i = 0; i < updates.length; i += chunkSize) {
-}
                 const chunk = updates.slice(i, i + chunkSize);
                 
                 // Build batch update query
-                const placeholders = chunk.map(() => &apos;(?, ?, ?)&apos;).join(&apos;, &apos;);
+                const placeholders = chunk.map(() => '(?, ?, ?)').join(', ');
                 const query = `
                     INSERT OR REPLACE INTO oracle_predictions (id, actual_result, resolved_at, status)
                     VALUES ${placeholders}
@@ -513,7 +461,6 @@ export class OptimizedOracleQueries {
                 
                 const params: any[] = [];
                 chunk.forEach((update: any) => {
-}
                     params.push(
                         update.id,
                         update.actualResult,
@@ -525,21 +472,20 @@ export class OptimizedOracleQueries {
                 updatedCount += chunk.length;
             }
 
-            await runQuery(&apos;COMMIT&apos;);
+            await runQuery('COMMIT');
 
             // Invalidate related caches
-            oraclePerformanceService.clearCache(&apos;predictions&apos;);
-            oraclePerformanceService.clearCache(&apos;analytics&apos;);
+            oraclePerformanceService.clearCache('predictions');
+            oraclePerformanceService.clearCache('analytics');
 
             // Record performance metrics
-            oraclePerformanceService.recordQueryMetrics(&apos;batchUpdatePredictions&apos;, Date.now() - startTime);
+            oraclePerformanceService.recordQueryMetrics('batchUpdatePredictions', Date.now() - startTime);
 
             return updatedCount;
 
         } catch (error) {
-}
-            await runQuery(&apos;ROLLBACK&apos;);
-            console.error(&apos;❌ Batch update failed:&apos;, error);
+            await runQuery('ROLLBACK');
+            console.error('❌ Batch update failed:', error);
             throw error;
         }
     }
@@ -548,43 +494,38 @@ export class OptimizedOracleQueries {
      * Create optimized database indexes for better query performance
      */
     async createOptimizedIndexes(): Promise<void> {
-}
         const indexes = [
             // Oracle predictions indexes
-            &apos;CREATE INDEX IF NOT EXISTS idx_oracle_predictions_week_season ON oracle_predictions (week, season)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_oracle_predictions_type_status ON oracle_predictions (type, status)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_oracle_predictions_created_at ON oracle_predictions (created_at)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_oracle_predictions_status_week ON oracle_predictions (status, week)&apos;,
+            'CREATE INDEX IF NOT EXISTS idx_oracle_predictions_week_season ON oracle_predictions (week, season)',
+            'CREATE INDEX IF NOT EXISTS idx_oracle_predictions_type_status ON oracle_predictions (type, status)',
+            'CREATE INDEX IF NOT EXISTS idx_oracle_predictions_created_at ON oracle_predictions (created_at)',
+            'CREATE INDEX IF NOT EXISTS idx_oracle_predictions_status_week ON oracle_predictions (status, week)',
 
             // User predictions indexes
-            &apos;CREATE INDEX IF NOT EXISTS idx_user_predictions_user_id ON user_predictions (user_id)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_user_predictions_prediction_id ON user_predictions (prediction_id)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_user_predictions_submitted_at ON user_predictions (submitted_at)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_user_predictions_user_choice ON user_predictions (user_choice)&apos;,
+            'CREATE INDEX IF NOT EXISTS idx_user_predictions_user_id ON user_predictions (user_id)',
+            'CREATE INDEX IF NOT EXISTS idx_user_predictions_prediction_id ON user_predictions (prediction_id)',
+            'CREATE INDEX IF NOT EXISTS idx_user_predictions_submitted_at ON user_predictions (submitted_at)',
+            'CREATE INDEX IF NOT EXISTS idx_user_predictions_user_choice ON user_predictions (user_choice)',
 
             // Composite indexes for common query patterns
-            &apos;CREATE INDEX IF NOT EXISTS idx_oracle_predictions_composite ON oracle_predictions (season, week, type, status)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_user_predictions_composite ON user_predictions (user_id, prediction_id, user_choice)&apos;,
+            'CREATE INDEX IF NOT EXISTS idx_oracle_predictions_composite ON oracle_predictions (season, week, type, status)',
+            'CREATE INDEX IF NOT EXISTS idx_user_predictions_composite ON user_predictions (user_id, prediction_id, user_choice)',
 
             // Analytics optimization indexes
-            &apos;CREATE INDEX IF NOT EXISTS idx_oracle_analytics_user_week ON oracle_analytics (user_id, week)&apos;,
-            &apos;CREATE INDEX IF NOT EXISTS idx_user_analytics_created_at ON user_analytics (created_at)&apos;,
+            'CREATE INDEX IF NOT EXISTS idx_oracle_analytics_user_week ON oracle_analytics (user_id, week)',
+            'CREATE INDEX IF NOT EXISTS idx_user_analytics_created_at ON user_analytics (created_at)',
         ];
 
         try {
-}
             for (const indexQuery of indexes) {
-}
                 await runQuery(indexQuery);
             }
-            console.log(&apos;✅ Optimized database indexes created successfully&apos;);
+            console.log('✅ Optimized database indexes created successfully');
         } catch (error) {
-}
-            console.error(&apos;❌ Failed to create optimized indexes:&apos;, error);
+            console.error('❌ Failed to create optimized indexes:', error);
             throw error;
         }
     }
-}
 
 // Export singleton instance
 export const optimizedOracleQueries = new OptimizedOracleQueries();

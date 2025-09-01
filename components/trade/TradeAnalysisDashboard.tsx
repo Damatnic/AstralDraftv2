@@ -3,23 +3,21 @@
  * Comprehensive trade evaluation interface with fair value calculations and recommendations
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { 
-}
   useTradeAnalysis, 
   useTradeComparison, 
   useSingleTradeAnalysis,
 //   useTradeRecommendations 
-} from &apos;../../hooks/useTradeAnalysis&apos;;
-import { TradeProposal, TradeAnalysis, FantasyRoster } from &apos;../../services/tradeAnalysisService&apos;;
+} from '../../hooks/useTradeAnalysis';
+import { TradeProposal, TradeAnalysis, FantasyRoster } from '../../services/tradeAnalysisService';
 
 // Type aliases for better code organization
-type TradeAction = &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos;;
+type TradeAction = 'accept' | 'reject' | 'counter';
 
 // Dashboard props interface
 interface TradeAnalysisDashboardProps {
-}
   currentRoster: FantasyRoster;
   opponentRoster?: FantasyRoster;
   activeProposals?: TradeProposal[];
@@ -27,17 +25,13 @@ interface TradeAnalysisDashboardProps {
   className?: string;
 
 // Component interfaces
-}
 
 interface TradeScoreDisplayProps {
-}
   analysis: TradeAnalysis;
   compact?: boolean;
 
 interface PlayerValueCardProps {
-}
   player: {
-}
     playerId: string;
     playerName: string;
     position: string;
@@ -49,25 +43,21 @@ interface PlayerValueCardProps {
   isGiving: boolean;
 
 interface TradeRecommendationProps {
-}
   analysis: TradeAnalysis;
   onAccept?: () => void;
   onReject?: () => void;
   onCounter?: () => void;
 
 // Main dashboard component
-}
 
 const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
-}
   currentRoster,
   opponentRoster,
   activeProposals = [],
   onTradeAction,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
-  const [selectedTab, setSelectedTab] = useState<&apos;analyze&apos; | &apos;compare&apos; | &apos;recommendations&apos;>(&apos;analyze&apos;);
+  const [selectedTab, setSelectedTab] = useState<'analyze' | 'compare' | 'recommendations'>('analyze');
   const [selectedProposal, setSelectedProposal] = useState<TradeProposal | null>(null);
   const [customGivingPlayers, setCustomGivingPlayers] = useState<string[]>([]);
   const [customReceivingPlayers, setCustomReceivingPlayers] = useState<string[]>([]);
@@ -80,15 +70,12 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
 
   // Initialize recommendations
   useEffect(() => {
-}
     tradeRecommendations.generateRecommendations(currentRoster, {}, 1);
   }, [currentRoster]);
 
   // Handle proposal selection
   const handleProposalSelect = async () => {
-}
     try {
-}
 
     if (!opponentRoster) return;
     
@@ -96,27 +83,21 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
     await tradeAnalysis.analyzeTradeProposal(proposal, currentRoster, opponentRoster);
 
     } catch (error) {
-}
-      console.error(&apos;Error in handleProposalSelect:&apos;, error);
+      console.error('Error in handleProposalSelect:', error);
 
   };
 
   // Handle custom trade analysis
   const handleCustomTradeAnalysis = async () => {
-}
     try {
-}
 
     if (!opponentRoster || customGivingPlayers.length === 0 || customReceivingPlayers.length === 0) {
-}
       return;
     
     } catch (error) {
-}
-      console.error(&apos;Error in handleCustomTradeAnalysis:&apos;, error);
+      console.error('Error in handleCustomTradeAnalysis:', error);
 
     } catch (error) {
-}
         console.error(error);
     }await singleTradeAnalysis.analyzeTradeByPlayers(
       customGivingPlayers,
@@ -124,8 +105,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
       currentRoster,
       opponentRoster,
       {
-}
-        league: &apos;custom&apos;,
+        league: 'custom',
         week: 1,
         season: 2024,
         tradeDeadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
@@ -135,9 +115,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
 
   // Handle trade action
   const handleTradeAction = (action: TradeAction) => {
-}
     if (selectedProposal && onTradeAction) {
-}
       onTradeAction(selectedProposal.id, action);
 
   };
@@ -155,26 +133,25 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
       {/* Navigation Tabs */}
       <div className="dashboard-tabs sm:px-4 md:px-6 lg:px-8">
         <button
-          className={`tab-button ${selectedTab === &apos;analyze&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setSelectedTab(&apos;analyze&apos;)}
+          className={`tab-button ${selectedTab === 'analyze' ? 'active' : ''}`}
+          onClick={() => setSelectedTab('analyze')}
           Analyze Trades
         </button>
         <button
-          className={`tab-button ${selectedTab === &apos;compare&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setSelectedTab(&apos;compare&apos;)}
+          className={`tab-button ${selectedTab === 'compare' ? 'active' : ''}`}
+          onClick={() => setSelectedTab('compare')}
           Compare Offers
         </button>
         <button
-          className={`tab-button ${selectedTab === &apos;recommendations&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setSelectedTab(&apos;recommendations&apos;)}
+          className={`tab-button ${selectedTab === 'recommendations' ? 'active' : ''}`}
+          onClick={() => setSelectedTab('recommendations')}
 //           Recommendations
         </button>
       </div>
 
       {/* Tab Content */}
       <div className="tab-content sm:px-4 md:px-6 lg:px-8">
-        {selectedTab === &apos;analyze&apos; && (
-}
+        {selectedTab === 'analyze' && (
           <AnalyzeTradesTab>
             activeProposals={activeProposals}
             selectedProposal={selectedProposal}
@@ -191,8 +168,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
           />
         )}
 
-        {selectedTab === &apos;compare&apos; && (
-}
+        {selectedTab === 'compare' && (
           <CompareTradesTab>
             tradeComparison={tradeComparison}
             currentRoster={currentRoster}
@@ -200,8 +176,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
           />
         )}
 
-        {selectedTab === &apos;recommendations&apos; && (
-}
+        {selectedTab === 'recommendations' && (
           <RecommendationsTab>
             tradeRecommendations={tradeRecommendations}
             currentRoster={currentRoster}
@@ -214,7 +189,6 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
 
 // Analyze trades tab component
 const AnalyzeTradesTab: React.FC<{
-}
   activeProposals: TradeProposal[];
   selectedProposal: TradeProposal | null;
   onProposalSelect: (proposal: TradeProposal) => void;
@@ -225,10 +199,9 @@ const AnalyzeTradesTab: React.FC<{
   onCustomGivingChange: (players: string[]) => void;
   onCustomReceivingChange: (players: string[]) => void;
   onCustomAnalyze: () => void;
-  onTradeAction: (action: &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos;) => void;
+  onTradeAction: (action: 'accept' | 'reject' | 'counter') => void;
   currentRoster: FantasyRoster;
 }> = ({
-}
   activeProposals,
   selectedProposal,
   onProposalSelect,
@@ -242,25 +215,20 @@ const AnalyzeTradesTab: React.FC<{
   onTradeAction,
 //   currentRoster
 }: any) => {
-}
   return (
     <div className="analyze-trades-tab sm:px-4 md:px-6 lg:px-8">
       {/* Active Proposals Section */}
       <div className="proposals-section sm:px-4 md:px-6 lg:px-8">
         <h3>Active Trade Proposals</h3>
         {activeProposals.length > 0 ? (
-}
           <div className="proposals-list sm:px-4 md:px-6 lg:px-8">
             {activeProposals.map((proposal: any) => (
-}
               <div
                 key={proposal.id}
-                className={`proposal-card ${selectedProposal?.id === proposal.id ? &apos;selected&apos; : &apos;&apos;}`}
+                className={`proposal-card ${selectedProposal?.id === proposal.id ? 'selected' : ''}`}
                 onClick={() => onProposalSelect(proposal)}
                 onKeyDown={(e: any) => {
-}
-                  if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+                  if (e.key === 'Enter' || e.key === ' ') {
                     onProposalSelect(proposal);
 
                 }}
@@ -298,7 +266,7 @@ const AnalyzeTradesTab: React.FC<{
         <h3>Custom Trade Analyzer</h3>
         <div className="custom-trade-builder sm:px-4 md:px-6 lg:px-8">
           <div className="trade-side sm:px-4 md:px-6 lg:px-8">
-            <label>Players You&apos;re Giving:</label>
+            <label>Players You're Giving:</label>
             <PlayerSelector>
               availablePlayers={currentRoster.players}
               selectedPlayers={customGivingPlayers}
@@ -306,7 +274,7 @@ const AnalyzeTradesTab: React.FC<{
             />
           </div>
           <div className="trade-side sm:px-4 md:px-6 lg:px-8">
-            <label>Players You&apos;re Receiving:</label>
+            <label>Players You're Receiving:</label>
             <PlayerSelector>
               availablePlayers={[]} // Would get from opponent roster
               selectedPlayers={customReceivingPlayers}
@@ -325,7 +293,6 @@ const AnalyzeTradesTab: React.FC<{
 
       {/* Analysis Results */}
       {(tradeAnalysis.currentAnalysis || singleTradeAnalysis.analysis) && (
-}
         <div className="analysis-results sm:px-4 md:px-6 lg:px-8">
           <h3>Trade Analysis Results</h3>
           <TradeAnalysisDisplay>
@@ -338,7 +305,6 @@ const AnalyzeTradesTab: React.FC<{
 
       {/* Loading States */}
       {(tradeAnalysis.isAnalyzing || singleTradeAnalysis.isAnalyzing) && (
-}
         <div className="analysis-loading sm:px-4 md:px-6 lg:px-8">
           <div className="loading-spinner sm:px-4 md:px-6 lg:px-8"></div>
           <p>Analyzing trade proposal...</p>
@@ -347,7 +313,6 @@ const AnalyzeTradesTab: React.FC<{
 
       {/* Error States */}
       {(tradeAnalysis.error || singleTradeAnalysis.error) && (
-}
         <div className="analysis-error sm:px-4 md:px-6 lg:px-8">
           <p>Error: {tradeAnalysis.error || singleTradeAnalysis.error}</p>
         </div>
@@ -358,21 +323,17 @@ const AnalyzeTradesTab: React.FC<{
 
 // Compare trades tab component
 const CompareTradesTab: React.FC<{
-}
   tradeComparison: any;
   currentRoster: FantasyRoster;
   opponentRoster?: FantasyRoster;
 }> = ({ tradeComparison, currentRoster, opponentRoster }: any) => {
-}
   return (
     <div className="compare-trades-tab sm:px-4 md:px-6 lg:px-8">
       <h3>Trade Comparison</h3>
       {tradeComparison.proposals.length > 0 ? (
-}
         <div className="comparison-results sm:px-4 md:px-6 lg:px-8">
           <div className="rankings-list sm:px-4 md:px-6 lg:px-8">
             {tradeComparison.rankings.map((ranking: any, index: number) => (
-}
               <div key={ranking.tradeId} className="ranking-item sm:px-4 md:px-6 lg:px-8">
                 <span className="rank sm:px-4 md:px-6 lg:px-8">#{index + 1}</span>
                 <span className="score sm:px-4 md:px-6 lg:px-8">{ranking.score}%</span>
@@ -381,7 +342,6 @@ const CompareTradesTab: React.FC<{
             ))}
           </div>
           {tradeComparison.bestTrade && (
-}
             <div className="best-trade sm:px-4 md:px-6 lg:px-8">
               <h4>Best Trade Option</h4>
               <TradeScoreDisplay analysis={tradeComparison.bestTrade} />
@@ -399,17 +359,14 @@ const CompareTradesTab: React.FC<{
 
 // Recommendations tab component
 const RecommendationsTab: React.FC<{
-}
   tradeRecommendations: any;
   currentRoster: FantasyRoster;
 }> = ({ tradeRecommendations }: any) => {
-}
   return (
     <div className="recommendations-tab sm:px-4 md:px-6 lg:px-8">
       <h3>Trade Recommendations</h3>
       
       {tradeRecommendations.isGenerating ? (
-}
         <div className="recommendations-loading sm:px-4 md:px-6 lg:px-8">
           <div className="loading-spinner sm:px-4 md:px-6 lg:px-8"></div>
           <p>Generating personalized recommendations...</p>
@@ -420,7 +377,6 @@ const RecommendationsTab: React.FC<{
             <h4>Players to Consider Trading</h4>
             <ul className="recommendation-list sm:px-4 md:px-6 lg:px-8">
               {tradeRecommendations.recommendations.playerToTrade.map((rec: any, index: number) => (
-}
                 <li key={index} className="recommendation-item sm:px-4 md:px-6 lg:px-8">{rec}</li>
               ))}
             </ul>
@@ -430,7 +386,6 @@ const RecommendationsTab: React.FC<{
             <h4>Players to Target</h4>
             <ul className="recommendation-list sm:px-4 md:px-6 lg:px-8">
               {tradeRecommendations.recommendations.playersToTarget.map((rec: any, index: number) => (
-}
                 <li key={index} className="recommendation-item sm:px-4 md:px-6 lg:px-8">{rec}</li>
               ))}
             </ul>
@@ -440,7 +395,6 @@ const RecommendationsTab: React.FC<{
             <h4>Trade Strategies</h4>
             <ul className="recommendation-list sm:px-4 md:px-6 lg:px-8">
               {tradeRecommendations.recommendations.tradeStrategies.map((rec: any, index: number) => (
-}
                 <li key={index} className="recommendation-item sm:px-4 md:px-6 lg:px-8">{rec}</li>
               ))}
             </ul>
@@ -450,7 +404,6 @@ const RecommendationsTab: React.FC<{
             <h4>Market Trends</h4>
             <ul className="recommendation-list sm:px-4 md:px-6 lg:px-8">
               {tradeRecommendations.recommendations.marketTrends.map((rec: any, index: number) => (
-}
                 <li key={index} className="recommendation-item sm:px-4 md:px-6 lg:px-8">{rec}</li>
               ))}
             </ul>
@@ -463,12 +416,10 @@ const RecommendationsTab: React.FC<{
 
 // Trade analysis display component
 const TradeAnalysisDisplay: React.FC<{
-}
   analysis: TradeAnalysis;
-  onTradeAction?: (action: &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos;) => void;
+  onTradeAction?: (action: 'accept' | 'reject' | 'counter') => void;
   showActions?: boolean;
 }> = ({ analysis, onTradeAction, showActions = false }: any) => {
-}
   return (
     <div className="trade-analysis-display sm:px-4 md:px-6 lg:px-8">
       {/* Overall Score and Recommendation */}
@@ -476,9 +427,9 @@ const TradeAnalysisDisplay: React.FC<{
         <TradeScoreDisplay analysis={analysis} />
         <TradeRecommendationComponent>
           analysis={analysis}
-          onAccept={showActions ? () => onTradeAction?.(&apos;accept&apos;) : undefined}
-          onReject={showActions ? () => onTradeAction?.(&apos;reject&apos;) : undefined}
-          onCounter={showActions ? () => onTradeAction?.(&apos;counter&apos;) : undefined}
+          onAccept={showActions ? () => onTradeAction?.('accept') : undefined}
+          onReject={showActions ? () => onTradeAction?.('reject') : undefined}
+          onCounter={showActions ? () => onTradeAction?.('counter') : undefined}
         />
       </div>
 
@@ -490,7 +441,6 @@ const TradeAnalysisDisplay: React.FC<{
             <h5>Giving ({analysis.analysis.valueComparison.givingSide.totalValue.toFixed(1)})</h5>
             <div className="player-values sm:px-4 md:px-6 lg:px-8">
               {analysis.analysis.valueComparison.givingSide.playerValues.map((player: any) => (
-}
                 <PlayerValueCard key={player.playerId} player={player} isGiving={true} />
               ))}
             </div>
@@ -499,15 +449,14 @@ const TradeAnalysisDisplay: React.FC<{
             <h5>Receiving ({analysis.analysis.valueComparison.receivingSide.totalValue.toFixed(1)})</h5>
             <div className="player-values sm:px-4 md:px-6 lg:px-8">
               {analysis.analysis.valueComparison.receivingSide.playerValues.map((player: any) => (
-}
                 <PlayerValueCard key={player.playerId} player={player} isGiving={false} />
               ))}
             </div>
           </div>
         </div>
         <div className="value-difference sm:px-4 md:px-6 lg:px-8">
-          <span className={`difference ${analysis.analysis.valueComparison.valueDifference >= 0 ? &apos;positive&apos; : &apos;negative&apos;}`}>
-            {analysis.analysis.valueComparison.valueDifference >= 0 ? &apos;+&apos; : &apos;&apos;}
+          <span className={`difference ${analysis.analysis.valueComparison.valueDifference >= 0 ? 'positive' : 'negative'}`}>
+            {analysis.analysis.valueComparison.valueDifference >= 0 ? '+' : ''}
             {analysis.analysis.valueComparison.valueDifference.toFixed(1)} value difference
           </span>
         </div>
@@ -519,15 +468,15 @@ const TradeAnalysisDisplay: React.FC<{
         <div className="projection-metrics sm:px-4 md:px-6 lg:px-8">
           <div className="metric sm:px-4 md:px-6 lg:px-8">
             <span className="metric-label sm:px-4 md:px-6 lg:px-8">Rest of Season:</span>
-            <span className={`metric-value ${analysis.analysis.futureProjections.restOfSeasonProjection.cumulativeAdvantage >= 0 ? &apos;positive&apos; : &apos;negative&apos;}`}>
-              {analysis.analysis.futureProjections.restOfSeasonProjection.cumulativeAdvantage >= 0 ? &apos;+&apos; : &apos;&apos;}
+            <span className={`metric-value ${analysis.analysis.futureProjections.restOfSeasonProjection.cumulativeAdvantage >= 0 ? 'positive' : 'negative'}`}>
+              {analysis.analysis.futureProjections.restOfSeasonProjection.cumulativeAdvantage >= 0 ? '+' : ''}
               {analysis.analysis.futureProjections.restOfSeasonProjection.cumulativeAdvantage.toFixed(1)} points
             </span>
           </div>
           <div className="metric sm:px-4 md:px-6 lg:px-8">
             <span className="metric-label sm:px-4 md:px-6 lg:px-8">Playoffs:</span>
-            <span className={`metric-value ${analysis.analysis.futureProjections.playoffProjection.playoffAdvantage >= 0 ? &apos;positive&apos; : &apos;negative&apos;}`}>
-              {analysis.analysis.futureProjections.playoffProjection.playoffAdvantage >= 0 ? &apos;+&apos; : &apos;&apos;}
+            <span className={`metric-value ${analysis.analysis.futureProjections.playoffProjection.playoffAdvantage >= 0 ? 'positive' : 'negative'}`}>
+              {analysis.analysis.futureProjections.playoffProjection.playoffAdvantage >= 0 ? '+' : ''}
               {analysis.analysis.futureProjections.playoffProjection.playoffAdvantage.toFixed(1)} points
             </span>
           </div>
@@ -539,19 +488,17 @@ const TradeAnalysisDisplay: React.FC<{
         <h4>Risk Analysis</h4>
         <div className="risk-summary sm:px-4 md:px-6 lg:px-8">
           <span className={`risk-level ${analysis.analysis.riskAssessment.overallRisk}`}>
-            {analysis.analysis.riskAssessment.overallRisk.replace(&apos;_&apos;, &apos; &apos;)} Risk
+            {analysis.analysis.riskAssessment.overallRisk.replace('_', ' ')} Risk
           </span>
           <span className="risk-score sm:px-4 md:px-6 lg:px-8">
             Risk Score: {analysis.analysis.riskAssessment.riskScore.toFixed(0)}/100
           </span>
         </div>
         {analysis.analysis.riskAssessment.riskFactors.length > 0 && (
-}
           <div className="risk-factors sm:px-4 md:px-6 lg:px-8">
             {analysis.analysis.riskAssessment.riskFactors.map((factor, index) => (
-}
               <div key={index} className={`risk-factor ${factor.severity}`}>
-                <span className="factor-type sm:px-4 md:px-6 lg:px-8">{factor.type.replace(&apos;_&apos;, &apos; &apos;)}</span>
+                <span className="factor-type sm:px-4 md:px-6 lg:px-8">{factor.type.replace('_', ' ')}</span>
                 <span className="factor-description sm:px-4 md:px-6 lg:px-8">{factor.description}</span>
               </div>
             ))}
@@ -567,12 +514,10 @@ const TradeAnalysisDisplay: React.FC<{
 
       {/* Alternative Offers */}
       {analysis.alternativeOffers && analysis.alternativeOffers.length > 0 && (
-}
         <div className="alternative-offers sm:px-4 md:px-6 lg:px-8">
           <h4>Alternative Suggestions</h4>
           <div className="alternatives-list sm:px-4 md:px-6 lg:px-8">
             {analysis.alternativeOffers.map((offer, index) => (
-}
               <div key={index} className="alternative-offer sm:px-4 md:px-6 lg:px-8">
                 <div className="offer-score sm:px-4 md:px-6 lg:px-8">
                   Score: {offer.fairnessScore.toFixed(1)}%
@@ -591,28 +536,24 @@ const TradeAnalysisDisplay: React.FC<{
 
 // Trade score display component
 const TradeScoreDisplay: React.FC<TradeScoreDisplayProps> = ({ analysis, compact = false }: any) => {
-}
   const getScoreColor = (score: number) => {
-}
-    if (score >= 75) return &apos;excellent&apos;;
-    if (score >= 60) return &apos;good&apos;;
-    if (score >= 40) return &apos;fair&apos;;
-    return &apos;poor&apos;;
+    if (score >= 75) return 'excellent';
+    if (score >= 60) return 'good';
+    if (score >= 40) return 'fair';
+    return 'poor';
   };
 
   const getRecommendationColor = (recommendation: string) => {
-}
     switch (recommendation) {
-}
-      case &apos;accept&apos;: return &apos;accept&apos;;
-      case &apos;reject&apos;: return &apos;reject&apos;;
-      case &apos;counter&apos;: return &apos;counter&apos;;
-      default: return &apos;hold&apos;;
+      case 'accept': return 'accept';
+      case 'reject': return 'reject';
+      case 'counter': return 'counter';
+      default: return 'hold';
 
   };
 
   return (
-    <div className={`trade-score-display ${compact ? &apos;compact&apos; : &apos;&apos;}`}>
+    <div className={`trade-score-display ${compact ? 'compact' : ''}`}>
       <div className="score-container sm:px-4 md:px-6 lg:px-8">
         <div className={`score-circle ${getScoreColor(analysis.fairnessScore)}`}>
           <span className="score-value sm:px-4 md:px-6 lg:px-8">{analysis.fairnessScore.toFixed(0)}</span>
@@ -631,9 +572,8 @@ const TradeScoreDisplay: React.FC<TradeScoreDisplayProps> = ({ analysis, compact
 
 // Player value card component
 const PlayerValueCard: React.FC<PlayerValueCardProps> = ({ player, isGiving }: any) => {
-}
   return (
-    <div className={`player-value-card ${isGiving ? &apos;giving&apos; : &apos;receiving&apos;}`}>
+    <div className={`player-value-card ${isGiving ? 'giving' : 'receiving'}`}>
       <div className="player-info sm:px-4 md:px-6 lg:px-8">
         <span className="player-name sm:px-4 md:px-6 lg:px-8">{player.playerName}</span>
         <span className="player-details sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</span>
@@ -660,21 +600,17 @@ const PlayerValueCard: React.FC<PlayerValueCardProps> = ({ player, isGiving }: a
 
 // Trade recommendation component
 const TradeRecommendationComponent: React.FC<TradeRecommendationProps> = ({
-}
   analysis,
   onAccept,
   onReject,
 //   onCounter
 }: any) => {
-}
   const getRecommendationStyle = (recommendation: string) => {
-}
     switch (recommendation) {
-}
-      case &apos;accept&apos;: return &apos;recommendation-accept&apos;;
-      case &apos;reject&apos;: return &apos;recommendation-reject&apos;;
-      case &apos;counter&apos;: return &apos;recommendation-counter&apos;;
-      default: return &apos;recommendation-hold&apos;;
+      case 'accept': return 'recommendation-accept';
+      case 'reject': return 'recommendation-reject';
+      case 'counter': return 'recommendation-counter';
+      default: return 'recommendation-hold';
 
   };
 
@@ -684,22 +620,18 @@ const TradeRecommendationComponent: React.FC<TradeRecommendationProps> = ({
         <strong>{analysis.recommendation.toUpperCase()}</strong>
       </div>
       {(onAccept || onReject || onCounter) && (
-}
         <div className="recommendation-actions sm:px-4 md:px-6 lg:px-8">
           {onAccept && (
-}
             <button className="action-button accept sm:px-4 md:px-6 lg:px-8" onClick={onAccept} aria-label="Action button">
 //               Accept
             </button>
           )}
           {onCounter && (
-}
             <button className="action-button counter sm:px-4 md:px-6 lg:px-8" onClick={onCounter} aria-label="Action button">
 //               Counter
             </button>
           )}
           {onReject && (
-}
             <button className="action-button reject sm:px-4 md:px-6 lg:px-8" onClick={onReject} aria-label="Action button">
 //               Reject
             </button>
@@ -712,16 +644,13 @@ const TradeRecommendationComponent: React.FC<TradeRecommendationProps> = ({
 
 // Player selector component
 const PlayerSelector: React.FC<{
-}
   availablePlayers: any[];
   selectedPlayers: string[];
   onSelectionChange: (players: string[]) => void;
   placeholder: string;
 }> = ({ availablePlayers, selectedPlayers, onSelectionChange, placeholder }: any) => {
-}
   
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -733,7 +662,6 @@ const PlayerSelector: React.FC<{
     <div className="player-selector sm:px-4 md:px-6 lg:px-8">
       <div className="selected-players sm:px-4 md:px-6 lg:px-8">
         {selectedPlayers.length > 0 ? (
-}
           selectedPlayers.map((playerId: any) => (
             <div key={playerId} className="selected-player sm:px-4 md:px-6 lg:px-8">
               <span>{playerId}</span>

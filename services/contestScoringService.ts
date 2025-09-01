@@ -4,15 +4,14 @@
  * Integrates with productionSportsDataService for real game results
  */
 
-import { productionSportsDataService, type NFLGame } from &apos;./productionSportsDataService&apos;;
-import { logger } from &apos;./loggingService&apos;;
+import { productionSportsDataService, type NFLGame } from './productionSportsDataService';
+import { logger } from './loggingService';
 
 // Contest Types
 export interface Contest {
-}
   id: string;
   name: string;
-  type: &apos;weekly&apos; | &apos;season&apos; | &apos;playoff&apos; | &apos;custom&apos;;
+  type: 'weekly' | 'season' | 'playoff' | 'custom';
   description: string;
   season: number;
   week?: number; // For weekly contests
@@ -20,7 +19,7 @@ export interface Contest {
   endDate: string;
   entryFee: number;
   maxParticipants?: number;
-  status: &apos;pending&apos; | &apos;active&apos; | &apos;closed&apos; | &apos;completed&apos;;
+  status: 'pending' | 'active' | 'closed' | 'completed';
   rules: ContestRules;
   scoring: ContestScoring;
   prizePool: PrizePool;
@@ -30,31 +29,25 @@ export interface Contest {
   results?: ContestResults;
   createdAt: string;
   updatedAt: string;
-}
 
 export interface ContestRules {
-}
   predictionDeadline: string; // Minutes before game start
   maxPredictionsPerUser?: number;
   confidenceEnabled: boolean;
   allowLateEntry: boolean;
   requireAllPredictions: boolean;
-  tiebreaker: &apos;accuracy&apos; | &apos;confidence&apos; | &apos;submission_time&apos; | &apos;total_points&apos;;
-}
+  tiebreaker: 'accuracy' | 'confidence' | 'submission_time' | 'total_points';
 
 export interface ContestScoring {
-}
   correctPrediction: number; // Base points for correct prediction
   confidenceMultiplier: boolean; // Whether confidence affects scoring
   streakBonus: {
-}
     enabled: boolean;
     minStreak: number;
     bonusPerCorrect: number;
     maxBonus: number;
   };
   difficultyMultiplier: {
-}
     enabled: boolean;
     easy: number;
     medium: number;
@@ -63,26 +56,20 @@ export interface ContestScoring {
   };
   oracleBeatBonus: number; // Bonus for beating Oracle
   categoryWeights: Record<string, number>; // Weight by prediction type
-}
 
 export interface PrizePool {
-}
   totalPrize: number;
-  currency: &apos;USD&apos;;
+  currency: 'USD';
   distribution: PrizeDistribution[];
   guaranteedPrize: boolean;
-}
 
 export interface PrizeDistribution {
-}
   rank: number;
   percentage: number;
   amount: number;
   description: string;
-}
 
 export interface ContestParticipant {
-}
   userId: string;
   username: string;
   entryTime: string;
@@ -92,10 +79,8 @@ export interface ContestParticipant {
   rank?: number;
   predictions: ContestParticipantPrediction[];
   stats: ParticipantStats;
-}
 
 export interface ContestParticipantPrediction {
-}
   predictionId: string;
   choice: number;
   confidence: number;
@@ -104,10 +89,8 @@ export interface ContestParticipantPrediction {
   isCorrect?: boolean;
   pointsEarned?: number;
   difficultyMultiplier?: number;
-}
 
 export interface ParticipantStats {
-}
   totalPredictions: number;
   correctPredictions: number;
   accuracy: number;
@@ -117,25 +100,21 @@ export interface ParticipantStats {
   longestStreak: number;
   oracleBeats: number;
   categoryBreakdown: Record<string, CategoryStats>;
-}
 
 export interface CategoryStats {
-}
   total: number;
   correct: number;
   accuracy: number;
   points: number;
-}
 
 export interface ContestPrediction {
-}
   id: string;
   gameId: string;
-  type: &apos;spread&apos; | &apos;total&apos; | &apos;moneyline&apos; | &apos;player_prop&apos; | &apos;team_stat&apos;;
+  type: 'spread' | 'total' | 'moneyline' | 'player_prop' | 'team_stat';
   category: string;
   question: string;
   options: PredictionOption[];
-  difficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos; | &apos;expert&apos;;
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   deadline: string;
   game: NFLGame;
   oracleChoice?: number;
@@ -145,36 +124,28 @@ export interface ContestPrediction {
   isResolved: boolean;
   resolvedAt?: string;
   resolution?: PredictionResolution;
-}
 
 export interface PredictionOption {
-}
   id: number;
   text: string;
   odds?: number;
   probability?: number;
   description?: string;
-}
 
 export interface PredictionResolution {
-}
   correctAnswer: number;
   actualValue?: number;
   explanation: string;
-  resolutionSource: &apos;api&apos; | &apos;manual&apos; | &apos;oracle&apos;;
+  resolutionSource: 'api' | 'manual' | 'oracle';
   confidence: number;
-}
 
 export interface ContestLeaderboard {
-}
   contestId: string;
   lastUpdated: string;
   rankings: ContestRanking[];
   stats: LeaderboardStats;
-}
 
 export interface ContestRanking {
-}
   rank: number;
   userId: string;
   username: string;
@@ -184,13 +155,11 @@ export interface ContestRanking {
   totalPredictions: number;
   currentStreak: number;
   oracleBeats: number;
-  trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+  trend: 'up' | 'down' | 'stable';
   change: number; // Position change from last update
   potentialPayout?: number;
-}
 
 export interface LeaderboardStats {
-}
   totalParticipants: number;
   averageScore: number;
   averageAccuracy: number;
@@ -199,29 +168,23 @@ export interface LeaderboardStats {
   totalPredictions: number;
   resolvedPredictions: number;
   pendingPredictions: number;
-}
 
 export interface ContestResults {
-}
   contestId: string;
   finalRankings: ContestRanking[];
   payouts: ContestPayout[];
   stats: ContestFinalStats;
   completedAt: string;
-}
 
 export interface ContestPayout {
-}
   userId: string;
   rank: number;
   amount: number;
   percentage: number;
   paymentId?: string;
-  status: &apos;pending&apos; | &apos;processing&apos; | &apos;completed&apos; | &apos;failed&apos;;
-}
+  status: 'pending' | 'processing' | 'completed' | 'failed';
 
 export interface ContestFinalStats {
-}
   totalParticipants: number;
   totalPrizePool: number;
   averageFinalScore: number;
@@ -230,27 +193,22 @@ export interface ContestFinalStats {
   totalCorrectPredictions: number;
   surpriseResults: string[];
   topPerformers: TopPerformer[];
-}
 
 export interface TopPerformer {
-}
   userId: string;
   username: string;
-  category: &apos;highest_score&apos; | &apos;best_accuracy&apos; | &apos;most_oracle_beats&apos; | &apos;longest_streak&apos;;
+  category: 'highest_score' | 'best_accuracy' | 'most_oracle_beats' | 'longest_streak';
   value: number;
   description: string;
-}
 
 // Game Result Interfaces
 export interface GameResult {
-}
   gameId: string;
   homeScore: number;
   awayScore: number;
-  status: &apos;final&apos; | &apos;live&apos; | &apos;postponed&apos; | &apos;cancelled&apos;;
+  status: 'final' | 'live' | 'postponed' | 'cancelled';
   finalResult: {
-}
-    winner: &apos;home&apos; | &apos;away&apos; | &apos;tie&apos;;
+    winner: 'home' | 'away' | 'tie';
     margin: number;
     totalPoints: number;
     coveredSpread: boolean;
@@ -258,42 +216,34 @@ export interface GameResult {
   };
   playerStats?: PlayerGameStats[];
   lastUpdated: string;
-}
 
 export interface PlayerGameStats {
-}
   playerId: string;
   name: string;
   position: string;
   team: string;
   stats: Record<string, number>;
   fantasyPoints: number;
-}
 
 class ContestScoringService {
-}
   private readonly contests = new Map<string, Contest>();
   private readonly gameResults = new Map<string, GameResult>();
   private readonly evaluationCache = new Map<string, PredictionResolution>();
 
   constructor() {
-}
     this.initializeService();
   }
 
   private initializeService(): void {
-}
-    logger.info(&apos;Initializing Contest Scoring Service...&apos;);
+    logger.info('Initializing Contest Scoring Service...');
     
     // Set up periodic game result fetching
     setInterval(() => {
-}
       this.fetchAndUpdateGameResults();
     }, 2 * 60 * 1000); // Every 2 minutes during games
     
     // Set up periodic contest evaluation
     setInterval(() => {
-}
       this.evaluateActiveContests();
     }, 5 * 60 * 1000); // Every 5 minutes
   }
@@ -301,10 +251,8 @@ class ContestScoringService {
   /**
    * Create a new contest
    */
-  async createContest(contestData: Omit<Contest, &apos;id&apos; | &apos;createdAt&apos; | &apos;updatedAt&apos;>): Promise<Contest> {
-}
+  async createContest(contestData: Omit<Contest, 'id' | 'createdAt' | 'updatedAt'>): Promise<Contest> {
     const contest: Contest = {
-}
       ...contestData,
       id: this.generateContestId(),
       participants: [],
@@ -314,11 +262,9 @@ class ContestScoringService {
     };
 
     // Generate predictions for the contest
-    if (contest.type === &apos;weekly&apos; && contest.week) {
-}
+    if (contest.type === 'weekly' && contest.week) {
       contest.predictions = await this.generateWeeklyPredictions(contest.week, contest.season);
-    } else if (contest.type === &apos;season&apos;) {
-}
+    } else if (contest.type === 'season') {
       contest.predictions = await this.generateSeasonPredictions(contest.season);
     }
 
@@ -336,31 +282,25 @@ class ContestScoringService {
     username: string, 
     paymentId?: string
   ): Promise<boolean> {
-}
     const contest = this.contests.get(contestId);
     if (!contest) {
-}
-      throw new Error(&apos;Contest not found&apos;);
+      throw new Error('Contest not found');
     }
 
-    if (contest.status !== &apos;pending&apos; && contest.status !== &apos;active&apos;) {
-}
-      throw new Error(&apos;Contest registration is closed&apos;);
+    if (contest.status !== 'pending' && contest.status !== 'active') {
+      throw new Error('Contest registration is closed');
     }
 
     if (contest.maxParticipants && contest.participants.length >= contest.maxParticipants) {
-}
-      throw new Error(&apos;Contest is full&apos;);
+      throw new Error('Contest is full');
     }
 
     // Check if user already registered
     if (contest.participants.some((p: any) => p.userId === userId)) {
-}
-      throw new Error(&apos;User already registered for this contest&apos;);
+      throw new Error('User already registered for this contest');
     }
 
     const participant: ContestParticipant = {
-}
       userId,
       username,
       entryTime: new Date().toISOString(),
@@ -369,7 +309,6 @@ class ContestScoringService {
       totalScore: 0,
       predictions: [],
       stats: {
-}
         totalPredictions: 0,
         correctPredictions: 0,
         accuracy: 0,
@@ -396,47 +335,39 @@ class ContestScoringService {
     contestId: string,
     userId: string,
     predictionData: {
-}
       predictionId: string;
       choice: number;
       confidence: number;
       reasoning?: string;
     }
   ): Promise<boolean> {
-}
     const contest = this.contests.get(contestId);
     if (!contest) {
-}
-      throw new Error(&apos;Contest not found&apos;);
+      throw new Error('Contest not found');
     }
 
     const participant = contest.participants.find((p: any) => p.userId === userId);
     if (!participant) {
-}
-      throw new Error(&apos;User not registered for this contest&apos;);
+      throw new Error('User not registered for this contest');
     }
 
     const prediction = contest.predictions.find((p: any) => p.id === predictionData.predictionId);
     if (!prediction) {
-}
-      throw new Error(&apos;Prediction not found&apos;);
+      throw new Error('Prediction not found');
     }
 
     // Check deadline
     if (new Date() > new Date(prediction.deadline)) {
-}
-      throw new Error(&apos;Prediction deadline has passed&apos;);
+      throw new Error('Prediction deadline has passed');
     }
 
     // Check if user already made this prediction
     const existingPrediction = participant.predictions.find((p: any) => p.predictionId === predictionData.predictionId);
     if (existingPrediction && !contest.rules.allowLateEntry) {
-}
-      throw new Error(&apos;Prediction already submitted&apos;);
+      throw new Error('Prediction already submitted');
     }
 
     const participantPrediction: ContestParticipantPrediction = {
-}
       predictionId: predictionData.predictionId,
       choice: predictionData.choice,
       confidence: predictionData.confidence,
@@ -445,12 +376,10 @@ class ContestScoringService {
     };
 
     if (existingPrediction) {
-}
       // Update existing prediction
       const index = participant.predictions.findIndex(p => p.predictionId === predictionData.predictionId);
       participant.predictions[index] = participantPrediction;
     } else {
-}
       // Add new prediction
       participant.predictions.push(participantPrediction);
     }
@@ -464,9 +393,7 @@ class ContestScoringService {
    * Fetch and update game results from production sports data service
    */
   private async fetchAndUpdateGameResults(): Promise<void> {
-}
     try {
-}
       // Get live scores and completed games
       const liveScores = await productionSportsDataService.getLiveScores();
       const currentWeekGames = await productionSportsDataService.getCurrentWeekGames();
@@ -474,29 +401,22 @@ class ContestScoringService {
       const allGames = [...liveScores, ...currentWeekGames];
 
       for (const game of allGames) {
-}
-        if (game.status === &apos;completed&apos; && game.homeScore !== undefined && game.awayScore !== undefined) {
-}
-          let winner: &apos;home&apos; | &apos;away&apos; | &apos;tie&apos;;
+        if (game.status === 'completed' && game.homeScore !== undefined && game.awayScore !== undefined) {
+          let winner: 'home' | 'away' | 'tie';
           if (game.homeScore > game.awayScore) {
-}
-            winner = &apos;home&apos;;
+            winner = 'home';
           } else if (game.awayScore > game.homeScore) {
-}
-            winner = &apos;away&apos;;
+            winner = 'away';
           } else {
-}
-            winner = &apos;tie&apos;;
+            winner = 'tie';
           }
           
           const gameResult: GameResult = {
-}
             gameId: game.id,
             homeScore: game.homeScore,
             awayScore: game.awayScore,
-            status: &apos;final&apos;,
+            status: 'final',
             finalResult: {
-}
               winner,
               margin: Math.abs(game.homeScore - game.awayScore),
               totalPoints: game.homeScore + game.awayScore,
@@ -511,8 +431,7 @@ class ContestScoringService {
         }
       }
     } catch (error) {
-}
-      console.error(&apos;Failed to fetch game results:&apos;, error);
+      console.error('Failed to fetch game results:', error);
     }
   }
 
@@ -520,11 +439,8 @@ class ContestScoringService {
    * Evaluate all active contests for completed predictions
    */
   private async evaluateActiveContests(): Promise<void> {
-}
     for (const contest of this.contests.values()) {
-}
-      if (contest.status === &apos;active&apos; || contest.status === &apos;closed&apos;) {
-}
+      if (contest.status === 'active' || contest.status === 'closed') {
         await this.evaluateContest(contest.id);
       }
     }
@@ -534,23 +450,18 @@ class ContestScoringService {
    * Evaluate a specific contest and update scores
    */
   async evaluateContest(contestId: string): Promise<void> {
-}
     const contest = this.contests.get(contestId);
     if (!contest) {
-}
-      throw new Error(&apos;Contest not found&apos;);
+      throw new Error('Contest not found');
     }
 
     let hasNewResolutions = false;
 
-    // Evaluate each prediction that hasn&apos;t been resolved
+    // Evaluate each prediction that hasn't been resolved
     for (const prediction of contest.predictions) {
-}
       if (!prediction.isResolved) {
-}
         const resolution = await this.evaluatePrediction(prediction);
         if (resolution) {
-}
           prediction.resolution = resolution;
           prediction.isResolved = true;
           prediction.resolvedAt = new Date().toISOString();
@@ -563,7 +474,6 @@ class ContestScoringService {
     }
 
     if (hasNewResolutions) {
-}
       // Recalculate scores for all participants
       await this.calculateContestScores(contestId);
       
@@ -573,7 +483,6 @@ class ContestScoringService {
 
       // Check if contest is complete
       if (this.isContestComplete(contest)) {
-}
         await this.finalizeContest(contestId);
       }
     }
@@ -583,39 +492,35 @@ class ContestScoringService {
    * Evaluate a single prediction against game results
    */
   private async evaluatePrediction(prediction: ContestPrediction): Promise<PredictionResolution | null> {
-}
     const cacheKey = `${prediction.id}_${prediction.gameId}`;
     
     // Check cache first
     const cached = this.evaluationCache.get(cacheKey);
     if (cached) {
-}
       return cached;
     }
 
     const gameResult = this.gameResults.get(prediction.gameId);
-    if (!gameResult || gameResult.status !== &apos;final&apos;) {
-}
+    if (!gameResult || gameResult.status !== 'final') {
       return null; // Game not completed yet
     }
 
     let resolution: PredictionResolution;
 
     switch (prediction.type) {
-}
-      case &apos;spread&apos;:
+      case 'spread':
         resolution = this.evaluateSpreadPrediction(prediction, gameResult);
         break;
-      case &apos;total&apos;:
+      case 'total':
         resolution = this.evaluateTotalPrediction(prediction, gameResult);
         break;
-      case &apos;moneyline&apos;:
+      case 'moneyline':
         resolution = this.evaluateMoneylinePrediction(prediction, gameResult);
         break;
-      case &apos;player_prop&apos;:
+      case 'player_prop':
         resolution = await this.evaluatePlayerPropPrediction(prediction, gameResult);
         break;
-      case &apos;team_stat&apos;:
+      case 'team_stat':
         resolution = this.evaluateTeamStatPrediction(prediction, gameResult);
         break;
       default:
@@ -632,12 +537,10 @@ class ContestScoringService {
    * Calculate scores for all contest participants
    */
   private async calculateContestScores(contestId: string): Promise<void> {
-}
     const contest = this.contests.get(contestId);
     if (!contest) return;
 
     for (const participant of contest.participants) {
-}
       this.calculateParticipantScore(participant, contest);
     }
 
@@ -649,7 +552,6 @@ class ContestScoringService {
    * Calculate score for a single participant
    */
   private calculateParticipantScore(participant: ContestParticipant, contest: Contest): void {
-}
     let totalScore = 0;
     let correctPredictions = 0;
     let totalConfidence = 0;
@@ -659,12 +561,10 @@ class ContestScoringService {
     let oracleBeats = 0;
     const categoryBreakdown: Record<string, CategoryStats> = {};
 
-    // Process each participant&apos;s predictions
+    // Process each participant's predictions
     for (const userPrediction of participant.predictions) {
-}
       const contestPrediction = contest.predictions.find((p: any) => p.id === userPrediction.predictionId);
       if (!contestPrediction || !contestPrediction.isResolved || !contestPrediction.resolution) {
-}
         continue;
       }
 
@@ -676,18 +576,15 @@ class ContestScoringService {
       );
 
       if (scoreResult.isCorrect) {
-}
         correctPredictions++;
         tempStreak++;
         currentStreak = tempStreak;
         longestStreak = Math.max(longestStreak, tempStreak);
         
         if (scoreResult.beatOracle) {
-}
           oracleBeats++;
         }
       } else {
-}
         tempStreak = 0;
       }
 
@@ -702,7 +599,6 @@ class ContestScoringService {
     // Update participant stats
     participant.totalScore = Math.round(totalScore);
     participant.stats = {
-}
       totalPredictions: participant.predictions.length,
       correctPredictions,
       accuracy: participant.predictions.length > 0 ? (correctPredictions / participant.predictions.length) * 100 : 0,
@@ -724,10 +620,8 @@ class ContestScoringService {
     scoring: ContestScoring,
     currentStreak: number
   ): { isCorrect: boolean; beatOracle: boolean; points: number } {
-}
     const resolution = contestPrediction.resolution;
     if (!resolution) {
-}
       return { isCorrect: false, beatOracle: false, points: 0 };
     }
     
@@ -738,18 +632,15 @@ class ContestScoringService {
 
     let points = 0;
     if (isCorrect) {
-}
       points = scoring.correctPrediction;
 
       // Apply confidence multiplier
       if (scoring.confidenceMultiplier) {
-}
         points *= (userPrediction.confidence / 100);
       }
 
       // Apply difficulty multiplier
       if (scoring.difficultyMultiplier.enabled) {
-}
         const multiplier = scoring.difficultyMultiplier[contestPrediction.difficulty];
         points *= multiplier;
       }
@@ -761,7 +652,6 @@ class ContestScoringService {
       // Apply streak bonus
       const newStreak = currentStreak + 1;
       if (scoring.streakBonus.enabled && newStreak >= scoring.streakBonus.minStreak) {
-}
         const streakBonus = Math.min(
           newStreak * scoring.streakBonus.bonusPerCorrect,
           scoring.streakBonus.maxBonus
@@ -771,7 +661,6 @@ class ContestScoringService {
 
       // Oracle beat bonus
       if (beatOracle) {
-}
         points += scoring.oracleBeatBonus;
       }
     }
@@ -787,11 +676,8 @@ class ContestScoringService {
     category: string,
     scoreResult: { isCorrect: boolean; points: number }
   ): void {
-}
     if (!categoryBreakdown[category]) {
-}
       categoryBreakdown[category] = {
-}
         total: 0,
         correct: 0,
         accuracy: 0,
@@ -802,7 +688,6 @@ class ContestScoringService {
     categoryStats.total++;
     categoryStats.points += scoreResult.points;
     if (scoreResult.isCorrect) {
-}
       categoryStats.correct++;
     }
     categoryStats.accuracy = (categoryStats.correct / categoryStats.total) * 100;
@@ -812,25 +697,19 @@ class ContestScoringService {
    * Update current streaks for all participants
    */
   private updateCurrentStreaks(contest: Contest): void {
-}
     for (const participant of contest.participants) {
-}
       let currentStreak = 0;
       const sortedPredictions = participant.predictions
         .filter((p: any) => {
-}
           const pred = contest.predictions.find((cp: any) => cp.id === p.predictionId);
           return pred?.isResolved;
         })
         .sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
 
       for (let i = sortedPredictions.length - 1; i >= 0; i--) {
-}
         if (sortedPredictions[i].isCorrect) {
-}
           currentStreak++;
         } else {
-}
           break;
         }
       }
@@ -842,18 +721,15 @@ class ContestScoringService {
    * Generate leaderboard for a contest
    */
   private generateContestLeaderboard(contestId: string): ContestLeaderboard {
-}
     const contest = this.contests.get(contestId);
     if (!contest) {
-}
-      throw new Error(&apos;Contest not found&apos;);
+      throw new Error('Contest not found');
     }
 
     // Calculate rankings
     const rankings: ContestRanking[] = contest.participants
       .filter((p: any) => p.isActive)
       .map((participant: any) => ({
-}
         rank: 0, // Will be set after sorting
         userId: participant.userId,
         username: participant.username,
@@ -863,26 +739,23 @@ class ContestScoringService {
         totalPredictions: participant.stats.totalPredictions,
         currentStreak: participant.stats.currentStreak,
         oracleBeats: participant.stats.oracleBeats,
-        trend: &apos;stable&apos; as const, // Would track from previous rankings
+        trend: 'stable' as const, // Would track from previous rankings
         change: 0,
         potentialPayout: 0 // Will be calculated
       }))
       .sort((a, b) => {
-}
         // Primary sort: total score
         if (b.totalScore !== a.totalScore) {
-}
           return b.totalScore - a.totalScore;
         }
         // Tiebreaker based on contest rules
         switch (contest.rules.tiebreaker) {
-}
-          case &apos;accuracy&apos;:
+          case 'accuracy':
             return b.accuracy - a.accuracy;
-          case &apos;confidence&apos;:
+          case 'confidence':
             // Would need to store average confidence
             return 0;
-          case &apos;submission_time&apos;:
+          case 'submission_time':
             // Would need to track submission timing
             return 0;
           default:
@@ -890,7 +763,6 @@ class ContestScoringService {
         }
       })
       .map((ranking, index) => {
-}
         ranking.rank = index + 1;
         ranking.potentialPayout = this.calculatePotentialPayout(contest, ranking.rank);
         return ranking;
@@ -898,7 +770,6 @@ class ContestScoringService {
 
     // Calculate stats
     const stats: LeaderboardStats = {
-}
       totalParticipants: contest.participants.length,
       averageScore: rankings.length > 0 ? rankings.reduce((sum, r) => sum + r.totalScore, 0) / rankings.length : 0,
       averageAccuracy: rankings.length > 0 ? rankings.reduce((sum, r) => sum + r.accuracy, 0) / rankings.length : 0,
@@ -910,7 +781,6 @@ class ContestScoringService {
     };
 
     return {
-}
       contestId: contest.id,
       lastUpdated: new Date().toISOString(),
       rankings,
@@ -922,7 +792,6 @@ class ContestScoringService {
    * Check if contest is complete (all predictions resolved)
    */
   private isContestComplete(contest: Contest): boolean {
-}
     if (contest.predictions.length === 0) return false;
     return contest.predictions.every((p: any) => p.isResolved);
   }
@@ -931,7 +800,6 @@ class ContestScoringService {
    * Finalize contest and calculate payouts
    */
   private async finalizeContest(contestId: string): Promise<void> {
-}
     const contest = this.contests.get(contestId);
     if (!contest) return;
 
@@ -941,34 +809,30 @@ class ContestScoringService {
     const payouts: ContestPayout[] = leaderboard.rankings
       .filter((ranking: any) => ranking.potentialPayout && ranking.potentialPayout > 0)
       .map((ranking: any) => ({
-}
         userId: ranking.userId,
         rank: ranking.rank,
         amount: ranking.potentialPayout || 0,
         percentage: ((ranking.potentialPayout || 0) / contest.prizePool.totalPrize) * 100,
-        status: &apos;pending&apos; as const
+        status: 'pending' as const
       }));
 
     // Generate final stats
     const topPerformers: TopPerformer[] = [
       {
-}
         userId: leaderboard.rankings[0].userId,
         username: leaderboard.rankings[0].username,
-        category: &apos;highest_score&apos;,
+        category: 'highest_score',
         value: leaderboard.rankings[0].totalScore,
-        description: &apos;Highest total score&apos;
+        description: 'Highest total score'
       },
       ...this.findTopPerformers(contest, leaderboard.rankings)
     ];
 
     const results: ContestResults = {
-}
       contestId: contest.id,
       finalRankings: leaderboard.rankings,
       payouts,
       stats: {
-}
         totalParticipants: contest.participants.length,
         totalPrizePool: contest.prizePool.totalPrize,
         averageFinalScore: leaderboard.stats.averageScore,
@@ -982,7 +846,7 @@ class ContestScoringService {
     };
 
     contest.results = results;
-    contest.status = &apos;completed&apos;;
+    contest.status = 'completed';
     contest.updatedAt = new Date().toISOString();
 
     logger.info(`Contest ${contest.name} finalized with ${payouts.length} payouts`);
@@ -990,113 +854,95 @@ class ContestScoringService {
 
   // Prediction evaluation methods
   private evaluateSpreadPrediction(prediction: ContestPrediction, gameResult: GameResult): PredictionResolution {
-}
     // Implementation would depend on how spread predictions are structured
     // This is a simplified example
     const spread = this.extractSpreadFromPrediction(prediction);
     const coveredSpread = gameResult.finalResult.margin > Math.abs(spread);
     
     return {
-}
       correctAnswer: coveredSpread ? 0 : 1, // Simplified
       explanation: `Spread was ${spread}, actual margin was ${gameResult.finalResult.margin}`,
-      resolutionSource: &apos;api&apos;,
+      resolutionSource: 'api',
       confidence: 95
     };
   }
 
   private evaluateTotalPrediction(prediction: ContestPrediction, gameResult: GameResult): PredictionResolution {
-}
     const total = this.extractTotalFromPrediction(prediction);
     const hitOver = gameResult.finalResult.totalPoints > total;
     
     return {
-}
       correctAnswer: hitOver ? 0 : 1, // 0 for over, 1 for under
       actualValue: gameResult.finalResult.totalPoints,
       explanation: `Total was ${total}, actual total was ${gameResult.finalResult.totalPoints}`,
-      resolutionSource: &apos;api&apos;,
+      resolutionSource: 'api',
       confidence: 95
     };
   }
 
   private evaluateMoneylinePrediction(prediction: ContestPrediction, gameResult: GameResult): PredictionResolution {
-}
     let correctAnswer: number;
-    if (gameResult.finalResult.winner === &apos;home&apos;) {
-}
+    if (gameResult.finalResult.winner === 'home') {
       correctAnswer = 0;
-    } else if (gameResult.finalResult.winner === &apos;away&apos;) {
-}
+    } else if (gameResult.finalResult.winner === 'away') {
       correctAnswer = 1;
     } else {
-}
       correctAnswer = 2; // tie
     }
     
     return {
-}
       correctAnswer,
       explanation: `${gameResult.finalResult.winner} team won ${gameResult.homeScore}-${gameResult.awayScore}`,
-      resolutionSource: &apos;api&apos;,
+      resolutionSource: 'api',
       confidence: 100
     };
   }
 
   private async evaluatePlayerPropPrediction(prediction: ContestPrediction, _gameResult: GameResult): Promise<PredictionResolution> {
-}
     // Would need to fetch player stats for the specific game
     // This is a simplified implementation
     return {
-}
       correctAnswer: Math.floor(Math.random() * prediction.options.length),
-      explanation: &apos;Player prop resolved based on game stats&apos;,
-      resolutionSource: &apos;api&apos;,
+      explanation: 'Player prop resolved based on game stats',
+      resolutionSource: 'api',
       confidence: 90
     };
   }
 
   private evaluateTeamStatPrediction(prediction: ContestPrediction, _gameResult: GameResult): PredictionResolution {
-}
     // Implementation would depend on specific team stat being predicted
     return {
-}
       correctAnswer: Math.floor(Math.random() * prediction.options.length),
-      explanation: &apos;Team stat resolved based on game data&apos;,
-      resolutionSource: &apos;api&apos;,
+      explanation: 'Team stat resolved based on game data',
+      resolutionSource: 'api',
       confidence: 85
     };
   }
 
   // Helper methods
   private generateContestId(): string {
-}
     return `contest_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   private async generateWeeklyPredictions(week: number, season: number): Promise<ContestPrediction[]> {
-}
     try {
-}
       // Get games for the week
       const games = await productionSportsDataService.getCurrentWeekGames(week, season);
       const predictions: ContestPrediction[] = [];
 
       for (const game of games) {
-}
         // Create spread prediction
         predictions.push({
-}
           id: `spread_${game.id}`,
           gameId: game.id,
-          type: &apos;spread&apos;,
-          category: &apos;Game Lines&apos;,
+          type: 'spread',
+          category: 'Game Lines',
           question: `Who will cover the spread? ${game.awayTeam.name} vs ${game.homeTeam.name}`,
           options: [
             { id: 0, text: `${game.homeTeam.name} covers` },
             { id: 1, text: `${game.awayTeam.name} covers` }
           ],
-          difficulty: &apos;medium&apos;,
+          difficulty: 'medium',
           deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(),
           game,
           isResolved: false
@@ -1104,17 +950,16 @@ class ContestScoringService {
 
         // Create total prediction
         predictions.push({
-}
           id: `total_${game.id}`,
           gameId: game.id,
-          type: &apos;total&apos;,
-          category: &apos;Game Lines&apos;,
+          type: 'total',
+          category: 'Game Lines',
           question: `Will the total go over or under? ${game.awayTeam.name} vs ${game.homeTeam.name}`,
           options: [
-            { id: 0, text: &apos;Over&apos; },
-            { id: 1, text: &apos;Under&apos; }
+            { id: 0, text: 'Over' },
+            { id: 1, text: 'Under' }
           ],
-          difficulty: &apos;medium&apos;,
+          difficulty: 'medium',
           deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(),
           game,
           isResolved: false
@@ -1123,50 +968,42 @@ class ContestScoringService {
 
       return predictions;
     } catch (error) {
-}
-      console.error(&apos;Failed to generate weekly predictions:&apos;, error);
+      console.error('Failed to generate weekly predictions:', error);
       return [];
     }
   }
 
   private async generateSeasonPredictions(_season: number): Promise<ContestPrediction[]> {
-}
     // Would generate season-long predictions like division winners, playoff teams, etc.
     return [];
   }
 
   private calculateSpreadCovered(_game: NFLGame): boolean {
-}
     // This would need the actual spread data
     return Math.random() > 0.5; // Simplified
   }
 
   private calculateOverHit(_game: NFLGame): boolean {
-}
     // This would need the actual total data
     return Math.random() > 0.5; // Simplified
   }
 
   private extractSpreadFromPrediction(_prediction: ContestPrediction): number {
-}
     // Extract spread value from prediction structure
     return 3.5; // Simplified
   }
 
   private extractTotalFromPrediction(_prediction: ContestPrediction): number {
-}
     // Extract total value from prediction structure
     return 47.5; // Simplified
   }
 
   private calculatePotentialPayout(contest: Contest, rank: number): number {
-}
     const distribution = contest.prizePool.distribution.find((d: any) => d.rank === rank);
     return distribution ? distribution.amount : 0;
   }
 
   private findTopPerformers(contest: Contest, rankings: ContestRanking[]): TopPerformer[] {
-}
     const performers: TopPerformer[] = [];
 
     // Best accuracy
@@ -1174,14 +1011,12 @@ class ContestScoringService {
       current.accuracy > best.accuracy ? current : best, rankings[0]) : null;
     
     if (bestAccuracy) {
-}
       performers.push({
-}
         userId: bestAccuracy.userId,
         username: bestAccuracy.username,
-        category: &apos;best_accuracy&apos;,
+        category: 'best_accuracy',
         value: bestAccuracy.accuracy,
-        description: &apos;Highest accuracy percentage&apos;
+        description: 'Highest accuracy percentage'
       });
     }
 
@@ -1190,14 +1025,12 @@ class ContestScoringService {
       current.oracleBeats > best.oracleBeats ? current : best, rankings[0]) : null;
     
     if (mostOracleBeats) {
-}
       performers.push({
-}
         userId: mostOracleBeats.userId,
         username: mostOracleBeats.username,
-        category: &apos;most_oracle_beats&apos;,
+        category: 'most_oracle_beats',
         value: mostOracleBeats.oracleBeats,
-        description: &apos;Most times beating the Oracle&apos;
+        description: 'Most times beating the Oracle'
       });
     }
 
@@ -1205,16 +1038,12 @@ class ContestScoringService {
   }
 
   private findSurpriseResults(contest: Contest): string[] {
-}
     // Find predictions where Oracle was wrong or consensus was very different
     const surprises: string[] = [];
     
     for (const prediction of contest.predictions) {
-}
       if (prediction.isResolved && prediction.oracleChoice !== undefined) {
-}
         if (prediction.oracleChoice !== prediction.actualResult) {
-}
           surprises.push(`Oracle was wrong on: ${prediction.question}`);
         }
       }
@@ -1225,56 +1054,46 @@ class ContestScoringService {
 
   // Public API methods
   getContest(contestId: string): Contest | undefined {
-}
     return this.contests.get(contestId);
   }
 
   getAllContests(): Contest[] {
-}
     return Array.from(this.contests.values());
   }
 
   getActiveContests(): Contest[] {
-}
-    return Array.from(this.contests.values()).filter((c: any) => c.status === &apos;active&apos;);
+    return Array.from(this.contests.values()).filter((c: any) => c.status === 'active');
   }
 
   getContestLeaderboard(contestId: string): ContestLeaderboard | null {
-}
     const contest = this.contests.get(contestId);
     return contest?.leaderboard || null;
   }
 
   async getContestResults(contestId: string): Promise<ContestResults | null> {
-}
     const contest = this.contests.get(contestId);
     return contest?.results || null;
   }
 
   // Force evaluation for testing
   async forceEvaluateContest(contestId: string): Promise<void> {
-}
     await this.evaluateContest(contestId);
   }
 
   // Get service status
   getServiceStatus(): {
-}
     contestsActive: number;
     gameResultsCached: number;
     evaluationsCached: number;
     lastUpdate: string;
   } {
-}
     return {
-}
-      contestsActive: Array.from(this.contests.values()).filter((c: any) => c.status === &apos;active&apos;).length,
+      contestsActive: Array.from(this.contests.values()).filter((c: any) => c.status === 'active').length,
       gameResultsCached: this.gameResults.size,
       evaluationsCached: this.evaluationCache.size,
       lastUpdate: new Date().toISOString()
     };
   }
-}
 
 // Export singleton instance
 export const contestScoringService = new ContestScoringService();

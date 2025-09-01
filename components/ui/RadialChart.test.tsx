@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import RadialChart from &apos;./RadialChart&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import RadialChart from './RadialChart';
 
-describe(&apos;RadialChart&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('RadialChart', () => {
+  it('renders without crashing', () => {
     render(<RadialChart />);
-    expect(screen.getByTestId(&apos;radialchart&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('radialchart')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<RadialChart />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<RadialChart />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

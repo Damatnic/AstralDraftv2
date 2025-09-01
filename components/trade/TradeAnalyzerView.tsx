@@ -3,34 +3,31 @@
  * Sophisticated trade analysis tool with fairness evaluation, impact assessment, and automated suggestions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { Player, League, Team } from &apos;../../types&apos;;
-import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
-import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
-import { AlertTriangleIcon } from &apos;../icons/AlertTriangleIcon&apos;;
-import { CheckIcon } from &apos;../icons/CheckIcon&apos;;
-import { SearchIcon } from &apos;../icons/SearchIcon&apos;;
-import TradeBuilderTab from &apos;./TradeBuilderTab&apos;;
-import FairnessAnalysisTab from &apos;./FairnessAnalysisTab&apos;;
-import ImpactAssessmentTab from &apos;./ImpactAssessmentTab&apos;;
-import AutomatedSuggestionsTab from &apos;./AutomatedSuggestionsTab&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
+import { Player, League, Team } from '../../types';
+import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
+import { BarChartIcon } from '../icons/BarChartIcon';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
+import { CheckIcon } from '../icons/CheckIcon';
+import { SearchIcon } from '../icons/SearchIcon';
+import TradeBuilderTab from './TradeBuilderTab';
+import FairnessAnalysisTab from './FairnessAnalysisTab';
+import ImpactAssessmentTab from './ImpactAssessmentTab';
+import AutomatedSuggestionsTab from './AutomatedSuggestionsTab';
 
 interface TradeAnalyzerViewProps {
-}
     league: League;
     currentTeam: Team;
     dispatch: React.Dispatch<any>;
 
-}
 
 export interface TradeProposal {
-}
     id: string;
     fromTeam: Team;
     toTeam: Team;
@@ -38,27 +35,23 @@ export interface TradeProposal {
     toPlayers: Player[];
     fromDraftPicks?: DraftPick[];
     toDraftPicks?: DraftPick[];
-    status: &apos;draft&apos; | &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;countered&apos;;
+    status: 'draft' | 'pending' | 'accepted' | 'rejected' | 'countered';
     createdAt: Date;
     message?: string;
 
-}
 
 export interface DraftPick {
-}
     season: number;
     round: number;
     originalTeamId: string;
     estimatedValue: number;
     description: string;
 
-}
 
 export interface TradeAnalysis {
-}
-    overallGrade: &apos;A+&apos; | &apos;A&apos; | &apos;A-&apos; | &apos;B+&apos; | &apos;B&apos; | &apos;B-&apos; | &apos;C+&apos; | &apos;C&apos; | &apos;C-&apos; | &apos;D&apos; | &apos;F&apos;;
+    overallGrade: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F';
     fairnessScore: number; // 0-100, 50 is perfectly fair
-    recommendation: &apos;strong_accept&apos; | &apos;accept&apos; | &apos;consider&apos; | &apos;reject&apos; | &apos;strong_reject&apos;;
+    recommendation: 'strong_accept' | 'accept' | 'consider' | 'reject' | 'strong_reject';
     confidence: number; // 0-100
     
     // Value Analysis
@@ -84,10 +77,8 @@ export interface TradeAnalysis {
     weaknesses: string[];
     warnings: string[];
 
-}
 
 export interface TeamImpactAnalysis {
-}
     teamId: string;
     teamName: string;
     overallChange: number; // -100 to +100
@@ -99,49 +90,40 @@ export interface TeamImpactAnalysis {
     championshipOddsChange: number;
 
 export interface PositionalAnalysis {
-}
     position: string;
     scarcityScore: number;
     marketValue: number;
-    futureOutlook: &apos;bullish&apos; | &apos;neutral&apos; | &apos;bearish&apos;;
+    futureOutlook: 'bullish' | 'neutral' | 'bearish';
     replacementLevel: number;
     tradeImpact: number;
 
-}
 
 export interface RiskAssessment {
-}
-    overallRisk: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
+    overallRisk: 'low' | 'medium' | 'high';
     injuryRisk: number;
     performanceVolatility: number;
     ageRisk: number;
     situationalRisk: number;
     riskFactors: string[];
 
-}
 
 export interface ScheduleAnalysis {
-}
     byeWeekConflicts: number;
     strengthOfSchedule: number;
     playoffScheduleDiff: number;
     nextFourWeeksImpact: number;
     restOfSeasonOutlook: string;
 
-}
 
 export interface ImprovementSuggestion {
-}
-    type: &apos;add_player&apos; | &apos;remove_player&apos; | &apos;add_pick&apos; | &apos;adjust_terms&apos;;
+    type: 'add_player' | 'remove_player' | 'add_pick' | 'adjust_terms';
     description: string;
     impact: number;
     confidence: number;
     suggestion: string;
 
-}
 
 export interface AlternativeOffer {
-}
     id: string;
     description: string;
     fromPlayers: Player[];
@@ -149,48 +131,41 @@ export interface AlternativeOffer {
     expectedImprovement: number;
     reasoning: string;
 
-}
 
 const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }: any) => {
-}
-    const [selectedTab, setSelectedTab] = React.useState<&apos;builder&apos; | &apos;fairness&apos; | &apos;impact&apos; | &apos;suggestions&apos;>(&apos;builder&apos;);
+    const [selectedTab, setSelectedTab] = React.useState<'builder' | 'fairness' | 'impact' | 'suggestions'>('builder');
     const [currentProposal, setCurrentProposal] = React.useState<TradeProposal | null>(null);
     const [analysis, setAnalysis] = React.useState<TradeAnalysis | null>(null);
     const [isAnalyzing, setIsAnalyzing] = React.useState(false);
 
     const tabs = [
         {
-}
-            id: &apos;builder&apos;,
-            label: &apos;Trade Builder&apos;,
+            id: 'builder',
+            label: 'Trade Builder',
             icon: <ArrowRightLeftIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Build and configure trade proposals&apos;
+            description: 'Build and configure trade proposals'
         },
         {
-}
-            id: &apos;fairness&apos;,
-            label: &apos;Fairness Analysis&apos;,
+            id: 'fairness',
+            label: 'Fairness Analysis',
             icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Evaluate trade fairness and value&apos;
+            description: 'Evaluate trade fairness and value'
         },
         {
-}
-            id: &apos;impact&apos;,
-            label: &apos;Impact Assessment&apos;,
+            id: 'impact',
+            label: 'Impact Assessment',
             icon: <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Analyze long-term team impact&apos;
+            description: 'Analyze long-term team impact'
         },
         {
-}
-            id: &apos;suggestions&apos;,
-            label: &apos;Smart Suggestions&apos;,
+            id: 'suggestions',
+            label: 'Smart Suggestions',
             icon: <SearchIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;AI-powered trade recommendations&apos;
+            description: 'AI-powered trade recommendations'
 
     ];
 
     const analyzeTradeProposal = React.useCallback(async (proposal: TradeProposal) => {
-}
         if (!proposal.fromPlayers.length && !proposal.toPlayers.length) return;
         
         setIsAnalyzing(true);
@@ -206,45 +181,37 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
     }, [currentTeam, league]);
 
     React.useEffect(() => {
-}
         if (currentProposal) {
-}
             analyzeTradeProposal(currentProposal);
         } else {
-}
             setAnalysis(null);
 
     }, [currentProposal, analyzeTradeProposal]);
 
     const handleProposalUpdate = (proposal: TradeProposal) => {
-}
         setCurrentProposal(proposal);
     };
 
     const getGradeColor = (grade: string) => {
-}
-        if (grade.startsWith(&apos;A&apos;)) return &apos;text-green-400&apos;;
-        if (grade.startsWith(&apos;B&apos;)) return &apos;text-blue-400&apos;;
-        if (grade.startsWith(&apos;C&apos;)) return &apos;text-yellow-400&apos;;
-        return &apos;text-red-400&apos;;
+        if (grade.startsWith('A')) return 'text-green-400';
+        if (grade.startsWith('B')) return 'text-blue-400';
+        if (grade.startsWith('C')) return 'text-yellow-400';
+        return 'text-red-400';
     };
 
     const getRecommendationColor = (recommendation: string) => {
-}
-        if (recommendation.includes(&apos;accept&apos;)) return &apos;text-green-400&apos;;
-        if (recommendation === &apos;consider&apos;) return &apos;text-yellow-400&apos;;
-        return &apos;text-red-400&apos;;
+        if (recommendation.includes('accept')) return 'text-green-400';
+        if (recommendation === 'consider') return 'text-yellow-400';
+        return 'text-red-400';
     };
 
     const getRecommendationIcon = (recommendation: string) => {
-}
-        if (recommendation.includes(&apos;accept&apos;)) return <CheckIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-        if (recommendation === &apos;consider&apos;) return <AlertTriangleIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (recommendation.includes('accept')) return <CheckIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (recommendation === 'consider') return <AlertTriangleIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
         return <TrendingDownIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
     };
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -268,7 +235,6 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         </div>
                         
                         {analysis && (
-}
                             <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-2xl font-bold ${getGradeColor(analysis.overallGrade)}`}>
@@ -281,7 +247,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                         {getRecommendationIcon(analysis.recommendation)}
                                         <span className={`font-bold ${getRecommendationColor(analysis.recommendation)}`}>
-                                            {analysis.recommendation.replace(&apos;_&apos;, &apos; &apos;).toUpperCase()}
+                                            {analysis.recommendation.replace('_', ' ').toUpperCase()}
                                         </span>
                                     </div>
                                     <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Recommendation</div>
@@ -303,7 +269,6 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
             <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                 <div className="flex overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
-}
                         <button
                             key={tab.id}
                             onClick={() => setSelectedTab(tab.id as any)}`}
@@ -321,7 +286,6 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
             {/* Loading Overlay */}
             <AnimatePresence>
                 {isAnalyzing && (
-}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -354,8 +318,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
                     >
-                        {selectedTab === &apos;builder&apos; && (
-}
+                        {selectedTab === 'builder' && (
                             <TradeBuilderTab>
                                 league={league}
                                 currentTeam={currentTeam}
@@ -365,8 +328,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                             />
                         )}
                         
-                        {selectedTab === &apos;fairness&apos; && (
-}
+                        {selectedTab === 'fairness' && (
                             <FairnessAnalysisTab>
                                 proposal={currentProposal}
                                 analysis={analysis}
@@ -375,8 +337,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                             />
                         )}
                         
-                        {selectedTab === &apos;impact&apos; && (
-}
+                        {selectedTab === 'impact' && (
                             <ImpactAssessmentTab>
                                 proposal={currentProposal}
                                 analysis={analysis}
@@ -386,8 +347,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                             />
                         )}
                         
-                        {selectedTab === &apos;suggestions&apos; && (
-}
+                        {selectedTab === 'suggestions' && (
                             <AutomatedSuggestionsTab>
                                 proposal={currentProposal}
                                 analysis={analysis}
@@ -406,22 +366,19 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
 
 // Mock analysis generator for demonstration
 const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league: League): TradeAnalysis => {
-}
     const fromValue = proposal.fromPlayers.reduce((sum, p) => sum + p.auctionValue, 0);
     const toValue = proposal.toPlayers.reduce((sum, p) => sum + p.auctionValue, 0);
     const valueDiff = toValue - fromValue;
     
     return {
-}
-        overallGrade: valueDiff > 10 ? &apos;A-&apos; : valueDiff > 0 ? &apos;B+&apos; : valueDiff > -5 ? &apos;B&apos; : &apos;C+&apos;,
+        overallGrade: valueDiff > 10 ? 'A-' : valueDiff > 0 ? 'B+' : valueDiff > -5 ? 'B' : 'C+',
         fairnessScore: Math.max(20, Math.min(80, 50 + (valueDiff * 2))),
-        recommendation: valueDiff > 8 ? &apos;accept&apos; : valueDiff > -3 ? &apos;consider&apos; : &apos;reject&apos;,
+        recommendation: valueDiff > 8 ? 'accept' : valueDiff > -3 ? 'consider' : 'reject',
         confidence: 85,
         currentValueDiff: valueDiff,
         projectedValueDiff: valueDiff * 1.2,
         seasonEndValueDiff: valueDiff * 0.8,
         fromTeamImpact: {
-}
             teamId: currentTeam.id.toString(),
             teamName: currentTeam.name,
             overallChange: -valueDiff * 0.5,
@@ -433,7 +390,6 @@ const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league
             championshipOddsChange: valueDiff > 0 ? 2 : -1
         },
         toTeamImpact: {
-}
             teamId: proposal.toTeam.id.toString(),
             teamName: proposal.toTeam.name,
             overallChange: valueDiff * 0.5,
@@ -446,36 +402,34 @@ const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league
         },
         positionalAnalysis: [],
         riskAssessment: {
-}
-            overallRisk: &apos;medium&apos;,
+            overallRisk: 'medium',
             injuryRisk: 15,
             performanceVolatility: 20,
             ageRisk: 10,
             situationalRisk: 12,
-            riskFactors: [&apos;Player age concerns&apos;, &apos;Position depth&apos;]
+            riskFactors: ['Player age concerns', 'Position depth']
         },
         scheduleAnalysis: {
-}
             byeWeekConflicts: 1,
             strengthOfSchedule: 0.52,
             playoffScheduleDiff: 2.1,
             nextFourWeeksImpact: 1.5,
-            restOfSeasonOutlook: &apos;Favorable matchups ahead&apos;
+            restOfSeasonOutlook: 'Favorable matchups ahead'
         },
         improvementSuggestions: [],
         alternativeOffers: [],
         strengths: [
-            &apos;Improves starting lineup strength&apos;,
-            &apos;Good value trade based on ADP&apos;,
-            &apos;Addresses positional need&apos;
+            'Improves starting lineup strength',
+            'Good value trade based on ADP',
+            'Addresses positional need'
         ],
         weaknesses: [
-            &apos;Reduces bench depth&apos;,
-            &apos;Age concerns with acquired players&apos;
+            'Reduces bench depth',
+            'Age concerns with acquired players'
         ],
         warnings: [
-            &apos;Consider bye week conflicts&apos;,
-            &apos;Monitor injury risk&apos;
+            'Consider bye week conflicts',
+            'Monitor injury risk'
 
     };
 };

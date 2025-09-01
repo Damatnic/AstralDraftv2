@@ -1,13 +1,10 @@
-import { ErrorBoundary } from &apos;../components/ui/ErrorBoundary&apos;;
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
 interface ProjectIntegrityViewProps {
-}
   // No props currently needed, but interface ready for future expansion
 
-}
 
 const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
-}
   return (
     <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <header className="flex-shrink-0 mb-6">

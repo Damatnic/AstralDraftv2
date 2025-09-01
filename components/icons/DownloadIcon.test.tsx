@@ -1,44 +1,36 @@
 
 interface IconProps {
-}
   size?: number | string;
-}
 
   className?: string;
   color?: string;
-  &apos;aria-label&apos;?: string;
+  'aria-label'?: string;
 
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import DownloadIcon from &apos;./DownloadIcon&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import DownloadIcon from './DownloadIcon';
 
-describe(&apos;DownloadIcon&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('DownloadIcon', () => {
+  it('renders without crashing', () => {
     render(<DownloadIcon />);
-    expect(screen.getByTestId(&apos;downloadicon&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('downloadicon')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<DownloadIcon />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<DownloadIcon />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,21 +1,20 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { Player } from &apos;../../types&apos;;
-import { NewsIcon } from &apos;../icons/NewsIcon&apos;;
-import { InjuryIcon } from &apos;../icons/InjuryIcon&apos;;
-import { QueueIcon } from &apos;../icons/QueueIcon&apos;;
-import { CompareIcon } from &apos;../icons/CompareIcon&apos;;
-import { PencilIcon } from &apos;../icons/PencilIcon&apos;;
-import { StarIcon } from &apos;../icons/StarIcon&apos;;
-import { StarFilledIcon } from &apos;../icons/StarFilledIcon&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { GemIcon } from &apos;../icons/GemIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
+import type { Player } from '../../types';
+import { NewsIcon } from '../icons/NewsIcon';
+import { InjuryIcon } from '../icons/InjuryIcon';
+import { QueueIcon } from '../icons/QueueIcon';
+import { CompareIcon } from '../icons/CompareIcon';
+import { PencilIcon } from '../icons/PencilIcon';
+import { StarIcon } from '../icons/StarIcon';
+import { StarFilledIcon } from '../icons/StarFilledIcon';
+import { useAppState } from '../../contexts/AppContext';
+import { GemIcon } from '../icons/GemIcon';
 
 interface PlayerCardProps {
-}
   player: Player;
   onSelect: () => void;
   onAddToQueue: () => void;
@@ -28,60 +27,50 @@ interface PlayerCardProps {
   isSelectedForCompare: boolean;
   isInQueue: boolean;
 
-}
 
 const positionStyles: Record<string, { border: string; bg: string; glow: string; badge: string }> = {
-}
     QB: {
-}
-        border: &apos;border-l-4 border-red-500&apos;,
-        bg: &apos;bg-gradient-to-r from-red-500/10 via-transparent to-transparent&apos;,
-        glow: &apos;hover:shadow-[0_0_30px_rgba(239,68,68,0.3)]&apos;,
-        badge: &apos;bg-gradient-to-r from-red-500 to-red-600&apos;
+        border: 'border-l-4 border-red-500',
+        bg: 'bg-gradient-to-r from-red-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(239,68,68,0.3)]',
+        badge: 'bg-gradient-to-r from-red-500 to-red-600'
     },
     RB: {
-}
-        border: &apos;border-l-4 border-emerald-500&apos;,
-        bg: &apos;bg-gradient-to-r from-emerald-500/10 via-transparent to-transparent&apos;,
-        glow: &apos;hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]&apos;,
-        badge: &apos;bg-gradient-to-r from-emerald-500 to-emerald-600&apos;
+        border: 'border-l-4 border-emerald-500',
+        bg: 'bg-gradient-to-r from-emerald-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]',
+        badge: 'bg-gradient-to-r from-emerald-500 to-emerald-600'
     },
     WR: {
-}
-        border: &apos;border-l-4 border-blue-500&apos;,
-        bg: &apos;bg-gradient-to-r from-blue-500/10 via-transparent to-transparent&apos;,
-        glow: &apos;hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]&apos;,
-        badge: &apos;bg-gradient-to-r from-blue-500 to-blue-600&apos;
+        border: 'border-l-4 border-blue-500',
+        bg: 'bg-gradient-to-r from-blue-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]',
+        badge: 'bg-gradient-to-r from-blue-500 to-blue-600'
     },
     TE: {
-}
-        border: &apos;border-l-4 border-amber-500&apos;,
-        bg: &apos;bg-gradient-to-r from-amber-500/10 via-transparent to-transparent&apos;,
-        glow: &apos;hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]&apos;,
-        badge: &apos;bg-gradient-to-r from-amber-500 to-amber-600&apos;
+        border: 'border-l-4 border-amber-500',
+        bg: 'bg-gradient-to-r from-amber-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]',
+        badge: 'bg-gradient-to-r from-amber-500 to-amber-600'
     },
     DST: {
-}
-        border: &apos;border-l-4 border-purple-500&apos;,
-        bg: &apos;bg-gradient-to-r from-purple-500/10 via-transparent to-transparent&apos;,
-        glow: &apos;hover:shadow-[0_0_30px_rgba(139,92,246,0.3)]&apos;,
-        badge: &apos;bg-gradient-to-r from-purple-500 to-purple-600&apos;
+        border: 'border-l-4 border-purple-500',
+        bg: 'bg-gradient-to-r from-purple-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.3)]',
+        badge: 'bg-gradient-to-r from-purple-500 to-purple-600'
     },
     K: {
-}
-        border: &apos;border-l-4 border-pink-500&apos;,
-        bg: &apos;bg-gradient-to-r from-pink-500/10 via-transparent to-transparent&apos;,
-        glow: &apos;hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]&apos;,
-        badge: &apos;bg-gradient-to-r from-pink-500 to-pink-600&apos;
+        border: 'border-l-4 border-pink-500',
+        bg: 'bg-gradient-to-r from-pink-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]',
+        badge: 'bg-gradient-to-r from-pink-500 to-pink-600'
 
 };
 
 const PlayerCard: React.FC<PlayerCardProps> = ({ 
-}
     player, onSelect, onAddToQueue, onDraft, onNominate, onAddNote,
     isMyTurn, isNominationTurn, onToggleCompare, isSelectedForCompare, isInQueue 
 }: any) => {
-}
   const { state, dispatch } = useAppState();
   const hasNews = player.newsFeed && player.newsFeed.length > 0;
   const hasInjury = player?.injuryHistory && player?.injuryHistory.length > 0;
@@ -89,14 +78,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   const isValuePick = player.rank < (player?.adp ?? 999) - 10;
   
   const handleToggleWatchlist = (e: React.MouseEvent) => {
-}
     e.stopPropagation(); // Prevent onSelect from firing
     if(isOnWatchlist) {
-}
-        dispatch({ type: &apos;REMOVE_FROM_WATCHLIST&apos;, payload: player.id });
+        dispatch({ type: 'REMOVE_FROM_WATCHLIST', payload: player.id });
     } else {
-}
-        dispatch({ type: &apos;ADD_TO_WATCHLIST&apos;, payload: player.id });
+        dispatch({ type: 'ADD_TO_WATCHLIST', payload: player.id });
 
   };
 
@@ -105,21 +91,19 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   return (
     <motion.div
       className={`
-}
         group relative w-full text-left
         glass-card p-3 sm:p-4
         ${positionStyle.border} ${positionStyle.bg} ${positionStyle.glow}
-        ${isSelectedForCompare ? &apos;ring-2 ring-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.4)]&apos; : &apos;&apos;}
+        ${isSelectedForCompare ? 'ring-2 ring-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.4)]' : ''}
         transition-all duration-300 hover:scale-[1.02]
         overflow-hidden
       `}
       {...{
-}
         layout: true,
         initial: { opacity: 0, y: 20, scale: 0.95 },
         animate: { opacity: 1, y: 0, scale: 1 },
         exit: { opacity: 0, y: -20, scale: 0.95 },
-        transition: { duration: 0.3, type: &apos;spring&apos;, stiffness: 200, damping: 25 },
+        transition: { duration: 0.3, type: 'spring', stiffness: 200, damping: 25 },
       }}
     >
       {/* Premium gradient overlay on hover */}
@@ -129,14 +113,14 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
         <div className="flex flex-col gap-0.5 sm:gap-1">
             <button
                 onClick={handleToggleWatchlist}
-                className={`p-1 sm:p-1.5 rounded-md transition-colors mobile-touch-target ${isOnWatchlist ? &apos;text-yellow-400&apos; : &apos;text-gray-500 hover:text-yellow-400&apos;}`}
+                className={`p-1 sm:p-1.5 rounded-md transition-colors mobile-touch-target ${isOnWatchlist ? 'text-yellow-400' : 'text-gray-500 hover:text-yellow-400'}`}
                 aria-label={isOnWatchlist ? `Remove ${player.name} from watchlist` : `Add ${player.name} to watchlist`}
             >
                 {isOnWatchlist ? <StarFilledIcon className="h-3 w-3 sm:h-4 sm:w-4" /> : <StarIcon className="h-3 w-3 sm:h-4 sm:w-4" />}
             </button>
             <button
                 onClick={onToggleCompare}
-                className={`p-1 sm:p-1.5 rounded-md transition-colors mobile-touch-target ${isSelectedForCompare ? &apos;bg-cyan-400/20 text-cyan-300&apos; : &apos;text-gray-500 hover:text-cyan-400&apos;}`}
+                className={`p-1 sm:p-1.5 rounded-md transition-colors mobile-touch-target ${isSelectedForCompare ? 'bg-cyan-400/20 text-cyan-300' : 'text-gray-500 hover:text-cyan-400'}`}
                 aria-label={`Toggle comparison for ${player.name}`}
             >
                 <CompareIcon className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -155,20 +139,17 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <p className="font-bold text-sm sm:text-base text-white truncate">{player.name}</p>
                     {isValuePick && (
-}
                         <div className="flex-shrink-0 flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[10px] sm:text-xs font-bold rounded-full shadow-lg shadow-emerald-500/30">
                             <GemIcon /> <span className="hidden sm:inline">VALUE</span>
                         </div>
                     )}
                     {hasNews && (
-}
                         <div className="relative flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                             <NewsIcon className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 animate-pulse" />
                             <div className="absolute inset-0 blur-sm bg-cyan-400/50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
                         </div>
                     )}
                     {hasInjury && (
-}
                         <div className="relative flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                             <InjuryIcon className="w-3 h-3 sm:w-4 sm:h-4 text-red-400 animate-pulse" />
                             <div className="absolute inset-0 blur-sm bg-red-400/50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
@@ -192,7 +173,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                 <div className="space-y-0.5 text-[10px] sm:text-xs">
                     <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         <span className="hidden sm:inline">ADP: </span>
-                        <span className="font-semibold text-gray-300 sm:px-4 md:px-6 lg:px-8">{player?.adp ?? &apos;N/A&apos;}</span>
+                        <span className="font-semibold text-gray-300 sm:px-4 md:px-6 lg:px-8">{player?.adp ?? 'N/A'}</span>
                     </p>
                     <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         <span className="hidden sm:inline">Bye: </span>
@@ -203,9 +184,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
         </button>
 
         {(() => {
-}
             if (isNominationTurn) {
-}
                 return (
                     <button
                         onClick={onNominate}
@@ -217,7 +196,6 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                     </button>
                 );
             } else if (isMyTurn) {
-}
                 return (
                     <button
                         onClick={onDraft}
@@ -229,11 +207,10 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                     </button>
                 );
             } else {
-}
                 return (
                     <button 
                         onClick={onAddToQueue}
-                        className={`flex-shrink-0 p-1.5 sm:p-2 rounded-md bg-transparent hover:bg-cyan-400/20 transition-all mobile-touch-target ${isInQueue ? &apos;text-cyan-400 opacity-100&apos; : &apos;text-gray-500 opacity-0 group-hover:opacity-100&apos;}`}
+                        className={`flex-shrink-0 p-1.5 sm:p-2 rounded-md bg-transparent hover:bg-cyan-400/20 transition-all mobile-touch-target ${isInQueue ? 'text-cyan-400 opacity-100' : 'text-gray-500 opacity-0 group-hover:opacity-100'}`}
                         aria-label={isInQueue ? "Player is in queue" : "Add to queue"}
                     >
                         <QueueIcon />

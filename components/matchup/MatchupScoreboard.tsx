@@ -1,11 +1,10 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import type { Team, MatchupTeam } from &apos;../../types&apos;;
-import AnimatedNumber from &apos;../ui/AnimatedNumber&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import type { Team, MatchupTeam } from '../../types';
+import AnimatedNumber from '../ui/AnimatedNumber';
+import { Avatar } from '../ui/Avatar';
 
 interface MatchupScoreboardProps {
-}
     myTeam: Team;
     opponentTeam: Team;
     myMatchupTeam: MatchupTeam;
@@ -13,15 +12,11 @@ interface MatchupScoreboardProps {
     week: number;
     isLive: boolean;
 
-}
 
 const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentTeam, myMatchupTeam, opponentMatchupTeam, week, isLive }: any) => {
-}
     
     const calculateProjectedScore = (team: Team) => {
-}
         return team.roster.slice(0, 9).reduce((total, player) => {
-}
             const weeklyProj = player.stats.weeklyProjections[week] || player.stats.projection / 17;
             return total + weeklyProj;
         }, 0);
@@ -32,10 +27,9 @@ const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentT
     const opponentScore = isFutureWeek ? calculateProjectedScore(opponentTeam) : opponentMatchupTeam.score;
 
     const getStatus = () => {
-}
         if (isLive) return <span className="text-red-400 animate-pulse sm:px-4 md:px-6 lg:px-8">LIVE</span>;
-        if (myMatchupTeam.score > 0 || opponentMatchupTeam.score > 0) return &apos;FINAL&apos;;
-        return &apos;PROJECTED&apos;;
+        if (myMatchupTeam.score > 0 || opponentMatchupTeam.score > 0) return 'FINAL';
+        return 'PROJECTED';
     };
 
     return (

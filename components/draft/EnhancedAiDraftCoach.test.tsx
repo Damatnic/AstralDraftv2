@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import EnhancedAiDraftCoach from &apos;./EnhancedAiDraftCoach&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import EnhancedAiDraftCoach from './EnhancedAiDraftCoach';
 
-describe(&apos;EnhancedAiDraftCoach&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('EnhancedAiDraftCoach', () => {
+  it('renders without crashing', () => {
     render(<EnhancedAiDraftCoach />);
-    expect(screen.getByTestId(&apos;enhancedaidraftcoach&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('enhancedaidraftcoach')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<EnhancedAiDraftCoach />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<EnhancedAiDraftCoach />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

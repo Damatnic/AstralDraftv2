@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import TeamOptimizationDashboard from &apos;./TeamOptimizationDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TeamOptimizationDashboard from './TeamOptimizationDashboard';
 
-describe(&apos;TeamOptimizationDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('TeamOptimizationDashboard', () => {
+  it('renders without crashing', () => {
     render(<TeamOptimizationDashboard />);
-    expect(screen.getByTestId(&apos;teamoptimizationdashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('teamoptimizationdashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<TeamOptimizationDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<TeamOptimizationDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

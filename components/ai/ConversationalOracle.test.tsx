@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ConversationalOracle from &apos;./ConversationalOracle&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ConversationalOracle from './ConversationalOracle';
 
-describe(&apos;ConversationalOracle&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ConversationalOracle', () => {
+  it('renders without crashing', () => {
     render(<ConversationalOracle />);
-    expect(screen.getByTestId(&apos;conversationaloracle&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('conversationaloracle')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ConversationalOracle />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ConversationalOracle />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

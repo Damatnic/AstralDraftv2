@@ -3,29 +3,25 @@
  * Generates weekly matchups for the fantasy football season
  */
 
-import type { Team, Matchup } from &apos;../types&apos;;
+import type { Team, Matchup } from '../types';
 
 interface ScheduleConfig {
-}
   teams: Team[];
   regularSeasonWeeks: number;
   playoffWeeks: number;
   playoffTeams: number;
-}
 
 /**
  * Generate a complete season schedule using round-robin algorithm
  * Ensures each team plays every other team at least once
  */
 export function generateRegularSeasonSchedule(config: ScheduleConfig): Matchup[] {
-}
   const { teams, regularSeasonWeeks } = config;
   const matchups: Matchup[] = [];
   const teamCount = teams.length;
   
   if (teamCount % 2 !== 0) {
-}
-    throw new Error(&apos;League must have an even number of teams&apos;);
+    throw new Error('League must have an even number of teams');
   }
 
   // Round-robin schedule generation
@@ -33,26 +29,21 @@ export function generateRegularSeasonSchedule(config: ScheduleConfig): Matchup[]
   
   // Create matchups for each week
   for (let week = 1; week <= regularSeasonWeeks; week++) {
-}
     const weekIndex = (week - 1) % scheduleMatrix.length;
     const weekMatchups = scheduleMatrix[weekIndex];
     
     weekMatchups.forEach((pairing, index) => {
-}
       const [teamAIndex, teamBIndex] = pairing;
       const teamA = teams[teamAIndex];
       const teamB = teams[teamBIndex];
       
       const matchup: Matchup = {
-}
         id: `week${week}_match${index + 1}`,
         week,
         teamA: {
-}
           teamId: teamA.id,
           score: 0,
           lineup: {
-}
             QB: [],
             RB: [],
             WR: [],
@@ -65,11 +56,9 @@ export function generateRegularSeasonSchedule(config: ScheduleConfig): Matchup[]
           benchPoints: 0
         },
         teamB: {
-}
           teamId: teamB.id,
           score: 0,
           lineup: {
-}
             QB: [],
             RB: [],
             WR: [],
@@ -90,7 +79,6 @@ export function generateRegularSeasonSchedule(config: ScheduleConfig): Matchup[]
   }
   
   return matchups;
-}
 
 /**
  * Generate playoff bracket matchups
@@ -99,7 +87,6 @@ export function generatePlayoffSchedule(
   config: ScheduleConfig,
   regularSeasonStandings: Team[]
 ): Matchup[] {
-}
   const { playoffWeeks, playoffTeams } = config;
   const matchups: Matchup[] = [];
   const playoffStartWeek = config.regularSeasonWeeks + 1;
@@ -109,17 +96,15 @@ export function generatePlayoffSchedule(
   
   // Week 15: Quarterfinals (if 6 teams, top 2 get bye)
   if (playoffWeeks >= 1) {
-}
     const week15Matchups: Matchup[] = [];
     
     if (playoffTeams === 6) {
-}
       // 3 vs 6
       week15Matchups.push(createPlayoffMatchup(
         playoffStartWeek,
         qualifiedTeams[2],
         qualifiedTeams[5],
-        &apos;qf1&apos;
+        'qf1'
       ));
       
       // 4 vs 5
@@ -127,16 +112,15 @@ export function generatePlayoffSchedule(
         playoffStartWeek,
         qualifiedTeams[3],
         qualifiedTeams[4],
-        &apos;qf2&apos;
+        'qf2'
       ));
     } else if (playoffTeams === 4) {
-}
       // 1 vs 4
       week15Matchups.push(createPlayoffMatchup(
         playoffStartWeek,
         qualifiedTeams[0],
         qualifiedTeams[3],
-        &apos;sf1&apos;
+        'sf1'
       ));
       
       // 2 vs 3
@@ -144,7 +128,7 @@ export function generatePlayoffSchedule(
         playoffStartWeek,
         qualifiedTeams[1],
         qualifiedTeams[2],
-        &apos;sf2&apos;
+        'sf2'
       ));
     }
     
@@ -153,19 +137,17 @@ export function generatePlayoffSchedule(
   
   // Week 16: Semifinals
   if (playoffWeeks >= 2) {
-}
     // This would be populated based on Week 15 results
     // For now, creating placeholder matchups
     const week16Matchups: Matchup[] = [];
     
     if (playoffTeams === 6) {
-}
       // 1 vs lowest remaining seed
       week16Matchups.push(createPlayoffMatchup(
         playoffStartWeek + 1,
         qualifiedTeams[0],
         qualifiedTeams[3], // Placeholder
-        &apos;sf1&apos;
+        'sf1'
       ));
       
       // 2 vs highest remaining seed
@@ -173,7 +155,7 @@ export function generatePlayoffSchedule(
         playoffStartWeek + 1,
         qualifiedTeams[1],
         qualifiedTeams[2], // Placeholder
-        &apos;sf2&apos;
+        'sf2'
       ));
     }
     
@@ -182,13 +164,12 @@ export function generatePlayoffSchedule(
   
   // Week 17: Championship & Consolation
   if (playoffWeeks >= 3) {
-}
     // Championship game
     matchups.push(createPlayoffMatchup(
       playoffStartWeek + 2,
       qualifiedTeams[0], // Placeholder - would be semifinal winners
       qualifiedTeams[1], // Placeholder
-      &apos;championship&apos;
+      'championship'
     ));
     
     // 3rd place game
@@ -196,12 +177,11 @@ export function generatePlayoffSchedule(
       playoffStartWeek + 2,
       qualifiedTeams[2], // Placeholder - would be semifinal losers
       qualifiedTeams[3], // Placeholder
-      &apos;consolation&apos;
+      'consolation'
     ));
   }
   
   return matchups;
-}
 
 /**
  * Create a playoff matchup
@@ -212,17 +192,13 @@ function createPlayoffMatchup(
   teamB: Team,
   matchupId: string
 ): Matchup {
-}
   return {
-}
     id: `week${week}_${matchupId}`,
     week,
     teamA: {
-}
       teamId: teamA.id,
       score: 0,
       lineup: {
-}
         QB: [],
         RB: [],
         WR: [],
@@ -235,11 +211,9 @@ function createPlayoffMatchup(
       benchPoints: 0
     },
     teamB: {
-}
       teamId: teamB.id,
       score: 0,
       lineup: {
-}
         QB: [],
         RB: [],
         WR: [],
@@ -254,22 +228,18 @@ function createPlayoffMatchup(
     isComplete: false,
     isPlayoffs: true
   };
-}
 
 /**
  * Generate round-robin schedule matrix
  */
 function generateRoundRobinSchedule(teamCount: number): number[][][] {
-}
   const rounds: number[][][] = [];
   const teams = Array.from({ length: teamCount }, (_, i) => i);
   
   for (let round = 0; round < teamCount - 1; round++) {
-}
     const pairs: number[][] = [];
     
     for (let i = 0; i < teamCount / 2; i++) {
-}
       const team1 = teams[i];
       const team2 = teams[teamCount - 1 - i];
       pairs.push([team1, team2]);
@@ -286,12 +256,10 @@ function generateRoundRobinSchedule(teamCount: number): number[][][] {
   const baseRounds = teamCount - 1;
   
   for (let week = 0; week < 14; week++) {
-}
     fullSchedule.push(rounds[week % baseRounds]);
   }
   
   return fullSchedule;
-}
 
 /**
  * Get matchups for a specific week
@@ -300,9 +268,7 @@ export function getWeekMatchups(
   allMatchups: Matchup[],
   week: number
 ): Matchup[] {
-}
   return allMatchups.filter((m: any) => m.week === week);
-}
 
 /**
  * Get upcoming matchups for a team
@@ -313,7 +279,6 @@ export function getTeamUpcomingMatchups(
   currentWeek: number,
   weeksAhead: number = 3
 ): Matchup[] {
-}
   return allMatchups
     .filter((m: any) => 
       (m.teamA.teamId === teamId || m.teamB.teamId === teamId) &&
@@ -321,7 +286,6 @@ export function getTeamUpcomingMatchups(
       m.week <= currentWeek + weeksAhead
     )
     .sort((a, b) => a.week - b.week);
-}
 
 /**
  * Calculate strength of schedule for remaining games
@@ -332,7 +296,6 @@ export function calculateStrengthOfSchedule(
   currentWeek: number,
   teamRecords: Map<number, { wins: number; losses: number }>
 ): number {
-}
   const remainingMatchups = allMatchups.filter((m: any) =>
     (m.teamA.teamId === teamId || m.teamB.teamId === teamId) &&
     m.week > currentWeek &&
@@ -343,17 +306,14 @@ export function calculateStrengthOfSchedule(
   let opponentCount = 0;
   
   remainingMatchups.forEach((matchup: any) => {
-}
     const opponentId = matchup.teamA.teamId === teamId 
       ? matchup.teamB.teamId 
       : matchup.teamA.teamId;
     
     const opponentRecord = teamRecords.get(opponentId);
     if (opponentRecord) {
-}
       const totalGames = opponentRecord.wins + opponentRecord.losses;
       if (totalGames > 0) {
-}
         totalOpponentWinPct += opponentRecord.wins / totalGames;
         opponentCount++;
       }
@@ -361,25 +321,20 @@ export function calculateStrengthOfSchedule(
   });
   
   return opponentCount > 0 ? totalOpponentWinPct / opponentCount : 0.5;
-}
 
 /**
  * Validate schedule for conflicts and fairness
  */
 export function validateSchedule(matchups: Matchup[]): {
-}
   isValid: boolean;
   errors: string[];
 } {
-}
   const errors: string[] = [];
   
   // Group matchups by week
   const weekMap = new Map<number, Matchup[]>();
   matchups.forEach((m: any) => {
-}
     if (!weekMap.has(m.week)) {
-}
       weekMap.set(m.week, []);
     }
     weekMap.get(m.week)!.push(m);
@@ -387,18 +342,14 @@ export function validateSchedule(matchups: Matchup[]): {
   
   // Check each week
   weekMap.forEach((weekMatchups, week) => {
-}
     const teamsThisWeek = new Set<number>();
     
     weekMatchups.forEach((matchup: any) => {
-}
       // Check for duplicate teams in same week
       if (teamsThisWeek.has(matchup.teamA.teamId)) {
-}
         errors.push(`Team ${matchup.teamA.teamId} scheduled twice in week ${week}`);
       }
       if (teamsThisWeek.has(matchup.teamB.teamId)) {
-}
         errors.push(`Team ${matchup.teamB.teamId} scheduled twice in week ${week}`);
       }
       
@@ -408,8 +359,6 @@ export function validateSchedule(matchups: Matchup[]): {
   });
   
   return {
-}
     isValid: errors.length === 0,
 //     errors
   };
-}

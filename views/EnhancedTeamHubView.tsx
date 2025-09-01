@@ -3,26 +3,26 @@
  * A cutting-edge fantasy football team management experience
  */
 
-import React, { useState, useEffect, useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { getUserTeam, getDaysUntilNextWeek } from &apos;../data/leagueData&apos;;
-import RosterManagement from &apos;../components/roster/RosterManagement&apos;;
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from &apos;../components/ui/Card&apos;;
-import { Button } from &apos;../components/ui/Button&apos;;
-import LineupOptimizer from &apos;../components/team/LineupOptimizer&apos;;
-import { TrophyIcon } from &apos;../components/icons/TrophyIcon&apos;;
-import { ChartBarIcon } from &apos;../components/icons/ChartBarIcon&apos;;
-import { CalendarIcon } from &apos;../components/icons/CalendarIcon&apos;;
-import { UsersIcon } from &apos;../components/icons/UsersIcon&apos;;
-import { ZapIcon } from &apos;../components/icons/ZapIcon&apos;;
-import { TrendingUpIcon } from &apos;../components/icons/TrendingUpIcon&apos;;
-import { DollarSignIcon } from &apos;../components/icons/DollarSignIcon&apos;;
-import { TargetIcon } from &apos;../components/icons/TargetIcon&apos;;
-import { FireIcon } from &apos;../components/icons/FireIcon&apos;;
-import { ShieldCheckIcon } from &apos;../components/icons/ShieldCheckIcon&apos;;
-import { SparklesIcon } from &apos;../components/icons/SparklesIcon&apos;;
-import { BrainCircuitIcon } from &apos;../components/icons/BrainCircuitIcon&apos;;
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../contexts/AppContext';
+import { getUserTeam, getDaysUntilNextWeek } from '../data/leagueData';
+import RosterManagement from '../components/roster/RosterManagement';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+import LineupOptimizer from '../components/team/LineupOptimizer';
+import { TrophyIcon } from '../components/icons/TrophyIcon';
+import { ChartBarIcon } from '../components/icons/ChartBarIcon';
+import { CalendarIcon } from '../components/icons/CalendarIcon';
+import { UsersIcon } from '../components/icons/UsersIcon';
+import { ZapIcon } from '../components/icons/ZapIcon';
+import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
+import { DollarSignIcon } from '../components/icons/DollarSignIcon';
+import { TargetIcon } from '../components/icons/TargetIcon';
+import { FireIcon } from '../components/icons/FireIcon';
+import { ShieldCheckIcon } from '../components/icons/ShieldCheckIcon';
+import { SparklesIcon } from '../components/icons/SparklesIcon';
+import { BrainCircuitIcon } from '../components/icons/BrainCircuitIcon';
 
 // Icon for back navigation
 const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }: any) => (
@@ -32,9 +32,8 @@ const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }: any) =
 );
 
 const EnhancedTeamHubView: React.FC = () => {
-}
   const { state, dispatch } = useAppState();
-  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;roster&apos; | &apos;lineup&apos; | &apos;analytics&apos; | &apos;schedule&apos;>(&apos;overview&apos;);
+  const [activeTab, setActiveTab] = useState<'overview' | 'roster' | 'lineup' | 'analytics' | 'schedule'>('overview');
   const [isLoading, setIsLoading] = useState(false);
   const [showOptimizer, setShowOptimizer] = useState(false);
 
@@ -44,24 +43,21 @@ const EnhancedTeamHubView: React.FC = () => {
 
   // Calculate team statistics
   const teamStats = useMemo(() => {
-}
     if (!userTeam) return null;
     
     const totalProjectedPoints = userTeam.roster.reduce((sum, player) => sum + player.projectedPoints, 0);
     const avgPlayerRank = userTeam.roster.reduce((sum, player) => sum + player.fantasyRank, 0) / userTeam.roster.length;
     const positionGroups = userTeam.roster.reduce((acc, player) => {
-}
       acc[player.position] = (acc[player.position] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
     
     return {
-}
       totalProjectedPoints,
       avgPlayerRank,
       positionGroups,
       winProbability: (userTeam.record.wins / (userTeam.record.wins + userTeam.record.losses + 0.001)) * 100,
-      streakType: userTeam.record.wins > 3 ? &apos;hot&apos; : userTeam.record.losses > 3 ? &apos;cold&apos; : &apos;neutral&apos;,
+      streakType: userTeam.record.wins > 3 ? 'hot' : userTeam.record.losses > 3 ? 'cold' : 'neutral',
       playoffChance: 73.2, // Mock data
       powerRanking: 3, // Mock data
       scheduleStrength: 0.52 // Mock data
@@ -69,7 +65,6 @@ const EnhancedTeamHubView: React.FC = () => {
   }, [userTeam]);
 
   if (!league || !userTeam) {
-}
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900/20 to-dark-950 flex items-center justify-center">
         <Card variant="elevated" className="max-w-md w-full">
@@ -79,7 +74,7 @@ const EnhancedTeamHubView: React.FC = () => {
           </CardHeader>
           <CardFooter>
             <Button>
-              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               variant="primary"
 //               fullWidth
             >
@@ -91,18 +86,16 @@ const EnhancedTeamHubView: React.FC = () => {
     );
 
   const tabs = [
-    { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: <TargetIcon className="w-5 h-5" /> },
-    { id: &apos;roster&apos;, label: &apos;Roster&apos;, icon: <UsersIcon className="w-5 h-5" /> },
-    { id: &apos;lineup&apos;, label: &apos;Lineup&apos;, icon: <ZapIcon className="w-5 h-5" /> },
-    { id: &apos;analytics&apos;, label: &apos;Analytics&apos;, icon: <ChartBarIcon className="w-5 h-5" /> },
-    { id: &apos;schedule&apos;, label: &apos;Schedule&apos;, icon: <CalendarIcon className="w-5 h-5" /> }
+    { id: 'overview', label: 'Overview', icon: <TargetIcon className="w-5 h-5" /> },
+    { id: 'roster', label: 'Roster', icon: <UsersIcon className="w-5 h-5" /> },
+    { id: 'lineup', label: 'Lineup', icon: <ZapIcon className="w-5 h-5" /> },
+    { id: 'analytics', label: 'Analytics', icon: <ChartBarIcon className="w-5 h-5" /> },
+    { id: 'schedule', label: 'Schedule', icon: <CalendarIcon className="w-5 h-5" /> }
   ];
 
   const renderTabContent = () => {
-}
     switch (activeTab) {
-}
-      case &apos;overview&apos;:
+      case 'overview':
         return (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Team Performance Card */}
@@ -169,7 +162,6 @@ const EnhancedTeamHubView: React.FC = () => {
                   </div>
                   <div className="h-32 flex items-end gap-2">
                     {[65, 72, 68, 74, 73.2].map((value, index) => (
-}
                       <motion.div
                         key={index}
                         className="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t-lg relative group"
@@ -214,7 +206,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   variant="default" 
 //                   fullWidth 
                   icon={<TrendingUpIcon className="w-4 h-4" />}
-                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TRADES&apos; })}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
                 >
                   Trade Center
                 </Button>
@@ -222,7 +214,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   variant="outline" 
 //                   fullWidth 
                   icon={<DollarSignIcon className="w-4 h-4" />}
-                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;WAIVER_WIRE&apos; })}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' })}
                 >
                   Waiver Wire
                 </Button>
@@ -230,7 +222,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   variant="ghost" 
 //                   fullWidth 
                   icon={<SparklesIcon className="w-4 h-4" />}
-                  onClick={() => setActiveTab(&apos;analytics&apos;)}
+                  onClick={() => setActiveTab('analytics')}
                 >
                   View Analytics
                 </Button>
@@ -251,13 +243,11 @@ const EnhancedTeamHubView: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {Object.entries(teamStats?.positionGroups || {}).map(([position, count]) => {
-}
-                    const strength = count >= 3 ? &apos;strong&apos; : count >= 2 ? &apos;adequate&apos; : &apos;weak&apos;;
+                    const strength = count >= 3 ? 'strong' : count >= 2 ? 'adequate' : 'weak';
                     const strengthColors = {
-}
-                      strong: &apos;from-secondary-500 to-secondary-600&apos;,
-                      adequate: &apos;from-primary-500 to-primary-600&apos;,
-                      weak: &apos;from-danger-500 to-danger-600&apos;
+                      strong: 'from-secondary-500 to-secondary-600',
+                      adequate: 'from-primary-500 to-primary-600',
+                      weak: 'from-danger-500 to-danger-600'
                     };
                     
                     return (
@@ -288,7 +278,7 @@ const EnhancedTeamHubView: React.FC = () => {
           </div>
         );
         
-      case &apos;roster&apos;:
+      case 'roster':
         return (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -303,11 +293,10 @@ const EnhancedTeamHubView: React.FC = () => {
           </motion.div>
         );
         
-      case &apos;lineup&apos;:
+      case 'lineup':
         return (
           <div className="space-y-6">
             {showOptimizer ? (
-}
               <LineupOptimizer>
                 team={userTeam}
                 league={league}
@@ -337,7 +326,6 @@ const EnhancedTeamHubView: React.FC = () => {
                     <div className="space-y-3">
                       <h4 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Starters</h4>
                       {userTeam.roster.slice(0, 9).map((player: any, index: number) => (
-}
                         <motion.div
                           key={player.id}
                           className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
@@ -351,7 +339,7 @@ const EnhancedTeamHubView: React.FC = () => {
                             </div>
                             <div>
                               <div className="font-medium text-white">{player.name}</div>
-                              <div className="text-xs text-gray-500">{player.team} vs {player.opponent || &apos;TBD&apos;}</div>
+                              <div className="text-xs text-gray-500">{player.team} vs {player.opponent || 'TBD'}</div>
                             </div>
                           </div>
                           <div className="text-right">
@@ -366,7 +354,6 @@ const EnhancedTeamHubView: React.FC = () => {
                     <div className="space-y-3">
                       <h4 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Bench</h4>
                       {userTeam.roster.slice(9, 15).map((player: any, index: number) => (
-}
                         <motion.div
                           key={player.id}
                           className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors opacity-75"
@@ -410,7 +397,7 @@ const EnhancedTeamHubView: React.FC = () => {
           </div>
         );
         
-      case &apos;analytics&apos;:
+      case 'analytics':
         return (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Advanced Metrics */}
@@ -448,11 +435,10 @@ const EnhancedTeamHubView: React.FC = () => {
                     <h4 className="text-sm font-medium text-gray-400 mb-3">Team Strengths</h4>
                     <div className="grid grid-cols-2 gap-3">
                       {[
-}
-                        { label: &apos;Offense&apos;, value: 92, color: &apos;from-danger-500 to-danger-600&apos; },
-                        { label: &apos;Defense&apos;, value: 78, color: &apos;from-primary-500 to-primary-600&apos; },
-                        { label: &apos;Depth&apos;, value: 85, color: &apos;from-secondary-500 to-secondary-600&apos; },
-                        { label: &apos;Upside&apos;, value: 88, color: &apos;from-accent-500 to-accent-600&apos; }
+                        { label: 'Offense', value: 92, color: 'from-danger-500 to-danger-600' },
+                        { label: 'Defense', value: 78, color: 'from-primary-500 to-primary-600' },
+                        { label: 'Depth', value: 85, color: 'from-secondary-500 to-secondary-600' },
+                        { label: 'Upside', value: 88, color: 'from-accent-500 to-accent-600' }
                       ].map((stat: any) => (
                         <div key={stat.label}>
                           <div className="flex justify-between text-xs mb-1">
@@ -486,7 +472,6 @@ const EnhancedTeamHubView: React.FC = () => {
               <CardContent>
                 <div className="h-64 flex items-end gap-2">
                   {[98, 112, 105, 125, 118, 103, 115, 121, 108, 119].map((score, index) => (
-}
                     <motion.div
                       key={index}
                       className="flex-1 relative group"
@@ -526,8 +511,7 @@ const EnhancedTeamHubView: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {userTeam.roster.slice(0, 3).map((player: any, index: number) => {
-}
-                    const medals = [&apos;🥇&apos;, &apos;🥈&apos;, &apos;🥉&apos;];
+                    const medals = ['🥇', '🥈', '🥉'];
                     return (
                       <motion.div
                         key={player.id}
@@ -566,7 +550,7 @@ const EnhancedTeamHubView: React.FC = () => {
           </div>
         );
         
-      case &apos;schedule&apos;:
+      case 'schedule':
         return (
           <div className="space-y-6">
             {/* Upcoming Matchups */}
@@ -580,7 +564,6 @@ const EnhancedTeamHubView: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[1, 2, 3].map((week: any) => {
-}
                     const opponent = league.teams[week % league.teams.length];
                     const isHome = week % 2 === 0;
                     return (
@@ -601,7 +584,7 @@ const EnhancedTeamHubView: React.FC = () => {
                             <div className="w-px h-12 bg-white/20" />
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm text-gray-400">{isHome ? &apos;vs&apos; : &apos;@&apos;}</span>
+                                <span className="text-sm text-gray-400">{isHome ? 'vs' : '@'}</span>
                                 <span className="text-lg font-bold text-white">{opponent.name}</span>
                               </div>
                               <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -632,7 +615,6 @@ const EnhancedTeamHubView: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {Array.from({ length: 14 }, (_, i) => i + 1).map((week: any) => {
-}
                     const isPast = week <= 12;
                     const isWin = isPast && Math.random() > 0.4;
                     const opponent = league.teams[week % league.teams.length];
@@ -641,12 +623,11 @@ const EnhancedTeamHubView: React.FC = () => {
                       <motion.div
                         key={week}
                         className={`p-3 rounded-lg border ${
-}
 //                           isPast 
                             ? isWin 
-                              ? &apos;bg-secondary-500/10 border-secondary-500/30&apos; 
-                              : &apos;bg-danger-500/10 border-danger-500/30&apos;
-                            : &apos;bg-white/5 border-white/10&apos;
+                              ? 'bg-secondary-500/10 border-secondary-500/30' 
+                              : 'bg-danger-500/10 border-danger-500/30'
+                            : 'bg-white/5 border-white/10'
                         }`}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -655,22 +636,19 @@ const EnhancedTeamHubView: React.FC = () => {
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-medium text-gray-400">Week {week}</span>
                           {isPast && (
-}
                             <span className={`text-xs font-bold ${
-}
-                              isWin ? &apos;text-secondary-400&apos; : &apos;text-danger-400&apos;
+                              isWin ? 'text-secondary-400' : 'text-danger-400'
                             }`}>
-                              {isWin ? &apos;W&apos; : &apos;L&apos;}
+                              {isWin ? 'W' : 'L'}
                             </span>
                           )}
                         </div>
                         <div className="text-sm font-medium text-white">
-                          {week % 2 === 0 ? &apos;vs&apos; : &apos;@&apos;} {opponent.name.split(&apos; &apos;)[0]}
+                          {week % 2 === 0 ? 'vs' : '@'} {opponent.name.split(' ')[0]}
                         </div>
                         {isPast && (
-}
                           <div className="text-xs text-gray-500 mt-1">
-                            {isWin ? &apos;118&apos; : &apos;102&apos;}-{isWin ? &apos;105&apos; : &apos;115&apos;}
+                            {isWin ? '118' : '102'}-{isWin ? '105' : '115'}
                           </div>
                         )}
                       </motion.div>
@@ -713,7 +691,7 @@ const EnhancedTeamHubView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Button>
-              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               variant="ghost"
               icon={<ChevronLeftIcon className="w-5 h-5" />}
             >
@@ -732,8 +710,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-2xl shadow-lg shadow-primary-500/30">
                     {userTeam.avatar}
                   </div>
-                  {teamStats?.streakType === &apos;hot&apos; && (
-}
+                  {teamStats?.streakType === 'hot' && (
                     <motion.div 
                       className="absolute -top-1 -right-1 w-4 h-4 bg-danger-500 rounded-full"
                       animate={{ scale: [1, 1.2, 1] }}
@@ -779,8 +756,7 @@ const EnhancedTeamHubView: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Draft Countdown (if pre-draft) */}
-        {league.status === &apos;PRE_DRAFT&apos; && (
-}
+        {league.status === 'PRE_DRAFT' && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -818,19 +794,16 @@ const EnhancedTeamHubView: React.FC = () => {
           <div className="bg-dark-900/50 backdrop-blur-sm rounded-2xl p-2 border border-white/10">
             <div className="flex gap-2">
               {tabs.map((tab: any) => (
-}
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`relative flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
-}
                     activeTab === tab.id 
-                      ? &apos;text-white&apos; 
-                      : &apos;text-gray-400 hover:text-gray-300&apos;
+                      ? 'text-white' 
+                      : 'text-gray-400 hover:text-gray-300'
                   }`}
                 >
                   {activeTab === tab.id && (
-}
                     <motion.div
                       layoutId="activeTab"
                       className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl shadow-lg shadow-primary-500/30"
@@ -839,8 +812,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   )}
                   <span className="relative">{tab.icon}</span>
                   <span className="relative font-medium">{tab.label}</span>
-                  {tab.id === &apos;lineup&apos; && showOptimizer && (
-}
+                  {tab.id === 'lineup' && showOptimizer && (
                     <motion.div
                       className="absolute -top-1 -right-1 w-2 h-2 bg-secondary-400 rounded-full"
                       animate={{ scale: [1, 1.3, 1] }}
@@ -879,7 +851,6 @@ const EnhancedTeamHubView: React.FC = () => {
           size="lg"
           className="rounded-full shadow-2xl shadow-primary-500/30 w-14 h-14 p-0"
           onClick={() => {
-}
             // Open AI assistant modal
           }}
         >
@@ -895,8 +866,7 @@ const EnhancedTeamHubView: React.FC = () => {
       </motion.div>
 
       {/* Performance Indicator */}
-      {teamStats?.streakType === &apos;hot&apos; && (
-}
+      {teamStats?.streakType === 'hot' && (
         <motion.div
           className="fixed bottom-6 left-6 z-40 bg-gradient-to-r from-danger-500 to-warning-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
           initial={{ x: -100 }}
@@ -910,8 +880,7 @@ const EnhancedTeamHubView: React.FC = () => {
 
       {/* Lineup Optimizer Modal */}
       <AnimatePresence>
-        {showOptimizer && activeTab !== &apos;lineup&apos; && (
-}
+        {showOptimizer && activeTab !== 'lineup' && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
             initial={{ opacity: 0 }}
@@ -947,8 +916,6 @@ const EnhancedTeamHubView: React.FC = () => {
       </AnimatePresence>
     </div>
   );
-}
 
-}
 
 export default EnhancedTeamHubView;

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import PlayerComparisonTab from &apos;./PlayerComparisonTab&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PlayerComparisonTab from './PlayerComparisonTab';
 
-describe(&apos;PlayerComparisonTab&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('PlayerComparisonTab', () => {
+  it('renders without crashing', () => {
     render(<PlayerComparisonTab />);
-    expect(screen.getByTestId(&apos;playercomparisontab&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('playercomparisontab')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<PlayerComparisonTab />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<PlayerComparisonTab />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import LeagueCreationWizard from &apos;./LeagueCreationWizard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import LeagueCreationWizard from './LeagueCreationWizard';
 
-describe(&apos;LeagueCreationWizard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('LeagueCreationWizard', () => {
+  it('renders without crashing', () => {
     render(<LeagueCreationWizard />);
-    expect(screen.getByTestId(&apos;leaguecreationwizard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('leaguecreationwizard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<LeagueCreationWizard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<LeagueCreationWizard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

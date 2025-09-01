@@ -3,7 +3,7 @@
  * Provides all necessary types for React components in Astral Draft
  */
 
-import { FC, ReactNode, ComponentProps, MouseEvent, ChangeEvent, FormEvent, FocusEvent, KeyboardEvent } from &apos;react&apos;;
+import { FC, ReactNode, ComponentProps, MouseEvent, ChangeEvent, FormEvent, FocusEvent, KeyboardEvent } from 'react';
 
 // ==========================================
 // COMMON COMPONENT PROP INTERFACES
@@ -13,26 +13,21 @@ import { FC, ReactNode, ComponentProps, MouseEvent, ChangeEvent, FormEvent, Focu
  * Base props that most components should extend
  */
 export interface BaseComponentProps {
-}
   className?: string;
   children?: ReactNode;
-  &apos;data-testid&apos;?: string;
-}
+  'data-testid'?: string;
 
 /**
  * Props for components that can be clicked
  */
 export interface ClickableProps {
-}
   onClick?: (event: MouseEvent<HTMLElement>) => void;
   disabled?: boolean;
-}
 
 /**
  * Props for form input components
  */
 export interface InputProps {
-}
   value?: string | number;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
@@ -43,16 +38,13 @@ export interface InputProps {
   required?: boolean;
   name?: string;
   id?: string;
-}
 
 /**
  * Props for form components
  */
 export interface FormProps {
-}
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   onReset?: (event: FormEvent<HTMLFormElement>) => void;
-}
 
 // ==========================================
 // REACT EVENT HANDLER TYPES
@@ -111,35 +103,27 @@ export type ReactFC<P = {}> = FC<P>;
  * Component with children
  */
 export interface WithChildren {
-}
   children: ReactNode;
-}
 
 /**
  * Optional children
  */
 export interface WithOptionalChildren {
-}
   children?: ReactNode;
-}
 
 /**
  * Component with loading state
  */
 export interface WithLoading {
-}
   isLoading?: boolean;
   loadingText?: string;
-}
 
 /**
  * Component with error state
  */
 export interface WithError {
-}
   error?: string | null;
   onClearError?: () => void;
-}
 
 // ==========================================
 // MODAL AND OVERLAY TYPES
@@ -149,25 +133,21 @@ export interface WithError {
  * Modal component props
  */
 export interface ModalProps extends BaseComponentProps {
-}
   isOpen: boolean;
   onClose: () => void;
   title?: string;
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos; | &apos;full&apos;;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
-}
 
 /**
  * Dropdown component props
  */
 export interface DropdownProps extends BaseComponentProps {
-}
   isOpen: boolean;
   onToggle: () => void;
   trigger: ReactNode;
-  position?: &apos;bottom-left&apos; | &apos;bottom-right&apos; | &apos;top-left&apos; | &apos;top-right&apos;;
-}
+  position?: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
 
 // ==========================================
 // FORM COMPONENT TYPES
@@ -177,39 +157,33 @@ export interface DropdownProps extends BaseComponentProps {
  * Button component props
  */
 export interface ButtonProps extends BaseComponentProps, ClickableProps {
-}
-  type?: &apos;button&apos; | &apos;submit&apos; | &apos;reset&apos;;
-  variant?: &apos;primary&apos; | &apos;secondary&apos; | &apos;danger&apos; | &apos;success&apos; | &apos;warning&apos; | &apos;info&apos; | &apos;ghost&apos;;
-  size?: &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info' | 'ghost';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   fullWidth?: boolean;
   loading?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-}
 
 /**
  * Input component props
  */
 export interface InputComponentProps extends BaseComponentProps, InputProps {
-}
-  type?: &apos;text&apos; | &apos;email&apos; | &apos;password&apos; | &apos;number&apos; | &apos;tel&apos; | &apos;url&apos; | &apos;search&apos;;
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
   label?: string;
   error?: string;
   helperText?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
-}
+  size?: 'sm' | 'md' | 'lg';
 
 /**
  * Select component props
  */
 export interface SelectProps extends BaseComponentProps {
-}
   value?: string | number;
   onChange?: SelectChangeHandler;
   options: Array<{
-}
     value: string | number;
     label: string;
     disabled?: boolean;
@@ -219,7 +193,6 @@ export interface SelectProps extends BaseComponentProps {
   error?: string;
   label?: string;
   multiple?: boolean;
-}
 
 // ==========================================
 // LIST AND TABLE TYPES
@@ -229,42 +202,36 @@ export interface SelectProps extends BaseComponentProps {
  * List item props
  */
 export interface ListItemProps extends BaseComponentProps, ClickableProps {
-}
   selected?: boolean;
   active?: boolean;
-  variant?: &apos;default&apos; | &apos;compact&apos; | &apos;expanded&apos;;
-}
+  variant?: 'default' | 'compact' | 'expanded';
 
 /**
  * Table column definition
  */
 export interface TableColumn<T = any> {
-}
   key: string;
   label: string;
   sortable?: boolean;
   width?: string | number;
-  align?: &apos;left&apos; | &apos;center&apos; | &apos;right&apos;;
+  align?: 'left' | 'center' | 'right';
   render?: (value: any, item: T, index: number) => ReactNode;
-}
 
 /**
  * Table component props
  */
 export interface TableProps<T = any> extends BaseComponentProps {
-}
   data: T[];
   columns: TableColumn<T>[];
   onRowClick?: (item: T, index: number) => void;
   sortBy?: string;
-  sortDirection?: &apos;asc&apos; | &apos;desc&apos;;
-  onSort?: (column: string, direction: &apos;asc&apos; | &apos;desc&apos;) => void;
+  sortDirection?: 'asc' | 'desc';
+  onSort?: (column: string, direction: 'asc' | 'desc') => void;
   loading?: boolean;
   emptyMessage?: string;
   selectable?: boolean;
   selectedItems?: T[];
   onSelectionChange?: (selectedItems: T[]) => void;
-}
 
 // ==========================================
 // NAVIGATION AND LAYOUT TYPES
@@ -274,7 +241,6 @@ export interface TableProps<T = any> extends BaseComponentProps {
  * Navigation item
  */
 export interface NavItem {
-}
   id: string;
   label: string;
   icon?: ReactNode;
@@ -284,29 +250,24 @@ export interface NavItem {
   disabled?: boolean;
   badge?: string | number;
   children?: NavItem[];
-}
 
 /**
  * Navigation component props
  */
 export interface NavigationProps extends BaseComponentProps {
-}
   items: NavItem[];
-  orientation?: &apos;horizontal&apos; | &apos;vertical&apos;;
-  variant?: &apos;default&apos; | &apos;pills&apos; | &apos;underline&apos;;
-}
+  orientation?: 'horizontal' | 'vertical';
+  variant?: 'default' | 'pills' | 'underline';
 
 /**
  * Sidebar component props
  */
 export interface SidebarProps extends BaseComponentProps {
-}
   isOpen?: boolean;
   onToggle?: () => void;
   width?: string | number;
-  position?: &apos;left&apos; | &apos;right&apos;;
+  position?: 'left' | 'right';
   overlay?: boolean;
-}
 
 // ==========================================
 // FEEDBACK COMPONENT TYPES
@@ -316,33 +277,27 @@ export interface SidebarProps extends BaseComponentProps {
  * Alert component props
  */
 export interface AlertProps extends BaseComponentProps {
-}
-  type: &apos;success&apos; | &apos;error&apos; | &apos;warning&apos; | &apos;info&apos;;
+  type: 'success' | 'error' | 'warning' | 'info';
   title?: string;
   message: string;
   dismissible?: boolean;
   onDismiss?: () => void;
   icon?: ReactNode;
-}
 
 /**
  * Toast notification props
  */
-export interface ToastProps extends Omit<AlertProps, &apos;dismissible&apos;> {
-}
+export interface ToastProps extends Omit<AlertProps, 'dismissible'> {
   duration?: number;
-  position?: &apos;top-left&apos; | &apos;top-right&apos; | &apos;bottom-left&apos; | &apos;bottom-right&apos; | &apos;top-center&apos; | &apos;bottom-center&apos;;
-}
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 
 /**
  * Loading spinner props
  */
 export interface SpinnerProps extends BaseComponentProps {
-}
-  size?: &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
   label?: string;
-}
 
 // ==========================================
 // UTILITY TYPES
@@ -366,8 +321,7 @@ export type OptionalProps<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K
 /**
  * Extend HTML element props
  */
-export type HTMLProps<T extends HTMLElement> = Omit<ComponentProps<any>, &apos;ref&apos;> & {
-}
+export type HTMLProps<T extends HTMLElement> = Omit<ComponentProps<any>, 'ref'> & {
   ref?: React.Ref<T>;
 };
 
@@ -379,41 +333,35 @@ export type HTMLProps<T extends HTMLElement> = Omit<ComponentProps<any>, &apos;r
  * Player card component props
  */
 export interface PlayerCardProps extends BaseComponentProps {
-}
   player: any; // Will use Player type from main types file
   onSelect?: (player: any) => void;
   onDeselect?: (player: any) => void;
   selected?: boolean;
-  variant?: &apos;compact&apos; | &apos;detailed&apos; | &apos;draft&apos;;
+  variant?: 'compact' | 'detailed' | 'draft';
   showStats?: boolean;
   showNotes?: boolean;
   draggable?: boolean;
-}
 
 /**
  * Team card component props
  */
 export interface TeamCardProps extends BaseComponentProps {
-}
   team: any; // Will use Team type from main types file
   onClick?: (team: any) => void;
   selected?: boolean;
-  variant?: &apos;compact&apos; | &apos;detailed&apos;;
+  variant?: 'compact' | 'detailed';
   showRecord?: boolean;
   showRoster?: boolean;
-}
 
 /**
  * Draft component props
  */
 export interface DraftComponentProps extends BaseComponentProps {
-}
   league: any; // Will use League type from main types file
   onPickPlayer?: (playerId: number, teamId: number) => void;
   onUndoPick?: () => void;
   currentPick?: number;
   timeRemaining?: number;
-}
 
 // ==========================================
 // EXPORT ALL COMMON REACT TYPES
@@ -421,7 +369,6 @@ export interface DraftComponentProps extends BaseComponentProps {
 
 // Re-export common React types for convenience
 export type {
-}
   FC,
   ReactNode,
   ComponentProps,
@@ -430,4 +377,4 @@ export type {
   FormEvent,
   FocusEvent,
 //   KeyboardEvent
-} from &apos;react&apos;;
+} from 'react';

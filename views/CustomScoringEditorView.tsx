@@ -1,15 +1,13 @@
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { SettingsIcon } from &apos;../components/icons/SettingsIcon&apos;;
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import ErrorDisplay from '../components/core/ErrorDisplay';
+import { motion } from 'framer-motion';
+import { SettingsIcon } from '../components/icons/SettingsIcon';
 
 const CustomScoringEditorView: React.FC = () => {
-}
     const { league } = useLeague();
 
     if (!league) {
-}
         return <ErrorDisplay message="No league selected" />;
 
     return (

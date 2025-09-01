@@ -3,30 +3,27 @@
  * AI-powered lineup suggestions and optimization tools
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { Player, Team, League, PlayerPosition } from &apos;../../types&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { RefreshIcon } from &apos;../icons/RefreshIcon&apos;;
-import { CheckIcon } from &apos;../icons/CheckIcon&apos;;
-import { XIcon } from &apos;../icons/XIcon&apos;;
-import { StarIcon } from &apos;../icons/StarIcon&apos;;
-import { BrainCircuitIcon } from &apos;../icons/BrainCircuitIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
+import { Player, Team, League, PlayerPosition } from '../../types';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { RefreshIcon } from '../icons/RefreshIcon';
+import { CheckIcon } from '../icons/CheckIcon';
+import { XIcon } from '../icons/XIcon';
+import { StarIcon } from '../icons/StarIcon';
+import { BrainCircuitIcon } from '../icons/BrainCircuitIcon';
 
 interface LineupOptimizerProps {
-}
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
     canEdit: boolean;
 
-}
 
 interface LineupSuggestion {
-}
     id: string;
     name: string;
     starters: Player[];
@@ -34,28 +31,23 @@ interface LineupSuggestion {
     confidence: number;
     reasoning: string;
     improvements: string[];
-    riskLevel: &apos;Low&apos; | &apos;Medium&apos; | &apos;High&apos;;
-}
+    riskLevel: 'Low' | 'Medium' | 'High';
 
 interface OptimizerSettings {
-}
-    optimizeFor: &apos;ceiling&apos; | &apos;floor&apos; | &apos;projection&apos;;
-    riskTolerance: &apos;conservative&apos; | &apos;balanced&apos; | &apos;aggressive&apos;;
+    optimizeFor: 'ceiling' | 'floor' | 'projection';
+    riskTolerance: 'conservative' | 'balanced' | 'aggressive';
     considerMatchups: boolean;
     considerWeather: boolean;
     considerInjuries: boolean;
 
-}
 
 const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }: any) => {
-}
     const [isOptimizing, setIsOptimizing] = React.useState(false);
     const [suggestions, setSuggestions] = React.useState<LineupSuggestion[]>([]);
     const [selectedSuggestion, setSelectedSuggestion] = React.useState<LineupSuggestion | null>(null);
     const [settings, setSettings] = React.useState<OptimizerSettings>({
-}
-        optimizeFor: &apos;projection&apos;,
-        riskTolerance: &apos;balanced&apos;,
+        optimizeFor: 'projection',
+        riskTolerance: 'balanced',
         considerMatchups: true,
         considerWeather: true,
         considerInjuries: true
@@ -66,19 +58,17 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
     const currentProjection = currentLineup.reduce((sum, player) => sum + player.stats.projection, 0);
 
     const positionSlots = [
-        { position: &apos;QB&apos;, count: 1 },
-        { position: &apos;RB&apos;, count: 2 },
-        { position: &apos;WR&apos;, count: 2 },
-        { position: &apos;TE&apos;, count: 1 },
-        { position: &apos;FLEX&apos;, count: 1 }, // RB/WR/TE
-        { position: &apos;DST&apos;, count: 1 },
-        { position: &apos;K&apos;, count: 1 }
+        { position: 'QB', count: 1 },
+        { position: 'RB', count: 2 },
+        { position: 'WR', count: 2 },
+        { position: 'TE', count: 1 },
+        { position: 'FLEX', count: 1 }, // RB/WR/TE
+        { position: 'DST', count: 1 },
+        { position: 'K', count: 1 }
     ];
 
     const generateOptimizations = async () => {
-}
     try {
-}
 
         setIsOptimizing(true);
         
@@ -87,49 +77,46 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
         const mockSuggestions: LineupSuggestion[] = [
             {
-}
-                id: &apos;1&apos;,
-                name: &apos;Maximum Points&apos;,
+                id: '1',
+                name: 'Maximum Points',
                 starters: team.roster.slice(0, 9), // Mock optimized lineup
                 projectedScore: currentProjection + 8.5,
                 confidence: 87,
-                reasoning: &apos;This lineup maximizes projected points by starting your highest-scoring players at each position.&apos;,
+                reasoning: 'This lineup maximizes projected points by starting your highest-scoring players at each position.',
                 improvements: [
-                    &apos;Move Josh Jacobs to RB2 for better matchup vs weak run defense&apos;,
-                    &apos;Start Mike Evans over Jerry Jeudy due to target share increase&apos;,
-                    &apos;Consider streaming defense with better matchup&apos;
+                    'Move Josh Jacobs to RB2 for better matchup vs weak run defense',
+                    'Start Mike Evans over Jerry Jeudy due to target share increase',
+                    'Consider streaming defense with better matchup'
                 ],
-                riskLevel: &apos;Medium&apos;
+                riskLevel: 'Medium'
             },
             {
-}
-                id: &apos;2&apos;,
-                name: &apos;Safe Floor&apos;,
+                id: '2',
+                name: 'Safe Floor',
                 starters: team.roster.slice(0, 9),
                 projectedScore: currentProjection + 2.3,
                 confidence: 94,
-                reasoning: &apos;Conservative lineup focused on consistent performers with high floors.&apos;,
+                reasoning: 'Conservative lineup focused on consistent performers with high floors.',
                 improvements: [
-                    &apos;Start reliable pass-catching RBs for higher floor&apos;,
-                    &apos;Avoid boom-or-bust WR3 options&apos;,
-                    &apos;Play proven veterans over rookies in key spots&apos;
+                    'Start reliable pass-catching RBs for higher floor',
+                    'Avoid boom-or-bust WR3 options',
+                    'Play proven veterans over rookies in key spots'
                 ],
-                riskLevel: &apos;Low&apos;
+                riskLevel: 'Low'
             },
             {
-}
-                id: &apos;3&apos;,
-                name: &apos;High Ceiling&apos;,
+                id: '3',
+                name: 'High Ceiling',
                 starters: team.roster.slice(0, 9),
                 projectedScore: currentProjection + 12.7,
                 confidence: 73,
-                reasoning: &apos;Aggressive lineup targeting maximum upside with boom potential.&apos;,
+                reasoning: 'Aggressive lineup targeting maximum upside with boom potential.',
                 improvements: [
-                    &apos;Start high-upside WRs in plus matchups&apos;,
-                    &apos;Play RBs with goal-line opportunity&apos;,
-                    &apos;Target quarterbacks in projected shootouts&apos;
+                    'Start high-upside WRs in plus matchups',
+                    'Play RBs with goal-line opportunity',
+                    'Target quarterbacks in projected shootouts'
                 ],
-                riskLevel: &apos;High&apos;
+                riskLevel: 'High'
             }
         ];
 
@@ -137,21 +124,17 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
         setSelectedSuggestion(mockSuggestions[0]);
         setIsOptimizing(false);
     } catch (error) {
-}
-        console.error(&apos;Error in generateOptimizations:&apos;, error);
+        console.error('Error in generateOptimizations:', error);
         setIsOptimizing(false);
     }
     };
 
     const applyLineup = (suggestion: LineupSuggestion) => {
-}
         if (!canEdit) return;
 
         dispatch({
-}
-            type: &apos;SET_LINEUP&apos;,
+            type: 'SET_LINEUP',
             payload: {
-}
                 leagueId: league.id,
                 teamId: team.id,
                 playerIds: suggestion.starters.map((p: any) => p.id)
@@ -159,12 +142,10 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
         });
 
         dispatch({
-}
-            type: &apos;ADD_NOTIFICATION&apos;,
+            type: 'ADD_NOTIFICATION',
             payload: {
-}
                 message: `Applied "${suggestion.name}" lineup optimization`,
-                type: &apos;SYSTEM&apos;
+                type: 'SYSTEM'
             }
         });
     };
@@ -173,10 +154,9 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
         <div
             key={suggestion.id}
             className={`p-4 border rounded-lg cursor-pointer transition-all ${
-}
                 selectedSuggestion?.id === suggestion.id
-                    ? &apos;border-blue-500 bg-blue-500/10&apos;
-                    : &apos;border-[var(--panel-border)] hover:border-gray-500&apos;
+                    ? 'border-blue-500 bg-blue-500/10'
+                    : 'border-[var(--panel-border)] hover:border-gray-500'
             }`}
             onClick={() => setSelectedSuggestion(suggestion)}
             role="button"
@@ -186,10 +166,9 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                 <h4 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{suggestion.name}</h4>
                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
-}
-                        suggestion.riskLevel === &apos;Low&apos; ? &apos;bg-green-500/20 text-green-400&apos; :
-                        suggestion.riskLevel === &apos;Medium&apos; ? &apos;bg-yellow-500/20 text-yellow-400&apos; :
-                        &apos;bg-red-500/20 text-red-400&apos;
+                        suggestion.riskLevel === 'Low' ? 'bg-green-500/20 text-green-400' :
+                        suggestion.riskLevel === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-red-500/20 text-red-400'
                     }`}>
                         {suggestion.riskLevel} Risk
                     </span>
@@ -220,10 +199,8 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
             <p className="text-sm text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">{suggestion.reasoning}</p>
 
             {canEdit && (
-}
                 <button
                     onClick={(e: any) => {
-}
                         e.stopPropagation();
                         applyLineup(suggestion);
                     }}
@@ -314,7 +291,6 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
                         {isOptimizing ? (
-}
                             <>
                                 <RefreshIcon className="w-4 h-4 animate-spin sm:px-4 md:px-6 lg:px-8" />
                                 Optimizing...
@@ -341,10 +317,9 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {currentLineup.map((player, index) => (
-}
                             <div key={player.id} className="flex items-center gap-3 p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <Avatar>
-                                    avatar={player.astralIntelligence?.spiritAnimal?.[0] || &apos;🏈&apos;}
+                                    avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
                                     className="w-10 h-10 text-xl rounded-md sm:px-4 md:px-6 lg:px-8"
                                 />
                                 <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
@@ -365,7 +340,6 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
             {/* Optimization Suggestions */}
             {suggestions.length > 0 && (
-}
                 <Widget title="Lineup Suggestions">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
@@ -374,7 +348,6 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
                         {/* Detailed View */}
                         {selectedSuggestion && (
-}
                             <div className="border-t border-[var(--panel-border)] pt-4 sm:px-4 md:px-6 lg:px-8">
                                 <h4 className="font-semibold text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                     Detailed Analysis: {selectedSuggestion.name}
@@ -385,11 +358,10 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                                         <h5 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Recommended Starters</h5>
                                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             {selectedSuggestion.starters.map((player, index) => (
-}
                                                 <div key={player.id} className="flex items-center justify-between p-2 bg-[var(--panel-bg)] rounded sm:px-4 md:px-6 lg:px-8">
                                                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                                         <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded sm:px-4 md:px-6 lg:px-8">
-                                                            {positionSlots[index]?.position || &apos;FLEX&apos;}
+                                                            {positionSlots[index]?.position || 'FLEX'}
                                                         </span>
                                                         <span className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
                                                         <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">({player.position})</span>
@@ -404,7 +376,6 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                                         <h5 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Key Improvements</h5>
                                         <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             {selectedSuggestion.improvements.map((improvement, index) => (
-}
                                                 <li key={index} className="flex items-start gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
                                                     <TrendingUpIcon className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                                     <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{improvement}</span>
@@ -421,7 +392,6 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
             {/* Empty State */}
             {suggestions.length === 0 && !isOptimizing && (
-}
                 <Widget title="Lineup Optimization">
                     <div className="p-8 text-center sm:px-4 md:px-6 lg:px-8">
                         <BrainCircuitIcon className="w-16 h-16 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
@@ -432,7 +402,6 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                             Get AI-powered lineup suggestions based on projections, matchups, and your preferences.
                         </p>
                         {canEdit ? (
-}
                             <button
                                 onClick={generateOptimizations}
                                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium sm:px-4 md:px-6 lg:px-8"

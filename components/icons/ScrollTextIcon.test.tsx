@@ -1,44 +1,36 @@
 
 interface IconProps {
-}
   size?: number | string;
-}
 
   className?: string;
   color?: string;
-  &apos;aria-label&apos;?: string;
+  'aria-label'?: string;
 
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ScrollTextIcon from &apos;./ScrollTextIcon&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ScrollTextIcon from './ScrollTextIcon';
 
-describe(&apos;ScrollTextIcon&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ScrollTextIcon', () => {
+  it('renders without crashing', () => {
     render(<ScrollTextIcon />);
-    expect(screen.getByTestId(&apos;scrolltexticon&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('scrolltexticon')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ScrollTextIcon />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ScrollTextIcon />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

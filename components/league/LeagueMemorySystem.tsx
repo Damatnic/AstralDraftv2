@@ -2,21 +2,19 @@
  * League Memory & Photo Sharing System - Capture and share legendary moments
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Camera, Image, Heart, MessageCircle, Trophy, Calendar, Users, Star, Upload, Filter } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Camera, Image, Heart, MessageCircle, Trophy, Calendar, Users, Star, Upload, Filter } from 'lucide-react';
 
 interface LeagueMemory {
-}
   id: string;
-  type: &apos;photo&apos; | &apos;video&apos; | &apos;meme&apos; | &apos;celebration&apos; | &apos;draft_moment&apos;;
+  type: 'photo' | 'video' | 'meme' | 'celebration' | 'draft_moment';
   title: string;
   description: string;
   mediaUrl: string;
   thumbnailUrl?: string;
   uploadedBy: {
-}
     userId: string;
     userName: string;
     teamName: string;
@@ -26,12 +24,10 @@ interface LeagueMemory {
   week?: number;
   season: number;
   likes: Array<{
-}
     userId: string;
     userName: string;
   }>;
   comments: Array<{
-}
     id: string;
     userId: string;
     userName: string;
@@ -39,35 +35,30 @@ interface LeagueMemory {
     timestamp: Date;
   }>;
   featured: boolean;
-  category: &apos;draft&apos; | &apos;game_day&apos; | &apos;celebration&apos; | &apos;trash_talk&apos; | &apos;general&apos;;
+  category: 'draft' | 'game_day' | 'celebration' | 'trash_talk' | 'general';
 
 interface LeagueMemorySystemProps {
-}
   leagueId: string;
   userId: string;
   userName: string;
-  onUpload?: (memory: Omit<LeagueMemory, &apos;id&apos; | &apos;uploadedAt&apos; | &apos;likes&apos; | &apos;comments&apos;>) => void;
+  onUpload?: (memory: Omit<LeagueMemory, 'id' | 'uploadedAt' | 'likes' | 'comments'>) => void;
 
-}
 
 const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
-}
   leagueId,
   userId,
   userName,
 //   onUpload
 }: any) => {
-}
   const [memories, setMemories] = useState<LeagueMemory[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<&apos;all&apos; | LeagueMemory[&apos;category&apos;]>(&apos;all&apos;);
-  const [viewMode, setViewMode] = useState<&apos;grid&apos; | &apos;timeline&apos;>(&apos;grid&apos;);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | LeagueMemory['category']>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedMemory, setSelectedMemory] = useState<LeagueMemory | null>(null);
-  const [newComment, setNewComment] = useState(&apos;&apos;);
+  const [newComment, setNewComment] = useState('');
 
   // Generate real memories - initially empty, users will add their own
   const generateRealMemories = (): LeagueMemory[] => {
-}
     // Return empty array - users will add their own real memories
     return [];
   };
@@ -75,22 +66,17 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   const [allMemories] = useState<LeagueMemory[]>(generateRealMemories());
 
   useEffect(() => {
-}
-    const filtered = selectedCategory === &apos;all&apos; 
+    const filtered = selectedCategory === 'all' 
       ? allMemories 
       : allMemories.filter((m: any) => m.category === selectedCategory);
     setMemories(filtered);
   }, [selectedCategory, allMemories]);
 
   const handleLike = (memoryId: string) => {
-}
     setMemories(prev => prev.map((memory: any) => {
-}
       if (memory.id === memoryId) {
-}
         const isLiked = memory.likes.some((like: any) => like.userId === userId);
         return {
-}
           ...memory,
           likes: isLiked
             ? memory.likes.filter((like: any) => like.userId !== userId)
@@ -102,18 +88,13 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   };
 
   const handleComment = (memoryId: string, comment: string) => {
-}
     if (!comment.trim()) return;
 
     setMemories(prev => prev.map((memory: any) => {
-}
       if (memory.id === memoryId) {
-}
         return {
-}
           ...memory,
           comments: [...memory.comments, {
-}
             id: `c${Date.now()}`,
             userId,
             userName,
@@ -125,35 +106,30 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
       return memory;
     }));
 
-    setNewComment(&apos;&apos;);
+    setNewComment('');
   };
 
-  const getTypeIcon = (type: LeagueMemory[&apos;type&apos;]) => {
-}
+  const getTypeIcon = (type: LeagueMemory['type']) => {
     switch (type) {
-}
-      case &apos;photo&apos;: return <Image className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;meme&apos;: return <Star className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;celebration&apos;: return <Trophy className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;video&apos;: return <Camera className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'photo': return <Image className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'meme': return <Star className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'celebration': return <Trophy className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'video': return <Camera className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Image className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
-  const getCategoryColor = (category: LeagueMemory[&apos;category&apos;]) => {
-}
+  const getCategoryColor = (category: LeagueMemory['category']) => {
     switch (category) {
-}
-      case &apos;draft&apos;: return &apos;text-purple-400 bg-purple-500/20&apos;;
-      case &apos;game_day&apos;: return &apos;text-green-400 bg-green-500/20&apos;;
-      case &apos;celebration&apos;: return &apos;text-yellow-400 bg-yellow-500/20&apos;;
-      case &apos;trash_talk&apos;: return &apos;text-red-400 bg-red-500/20&apos;;
-      default: return &apos;text-blue-400 bg-blue-500/20&apos;;
+      case 'draft': return 'text-purple-400 bg-purple-500/20';
+      case 'game_day': return 'text-green-400 bg-green-500/20';
+      case 'celebration': return 'text-yellow-400 bg-yellow-500/20';
+      case 'trash_talk': return 'text-red-400 bg-red-500/20';
+      default: return 'text-blue-400 bg-blue-500/20';
 
   };
 
   const formatTimeAgo = (date: Date) => {
-}
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -163,11 +139,10 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
     if (days > 0) return `${days}d ago`;
     if (hours > 0) return `${hours}h ago`;
     if (minutes > 0) return `${minutes}m ago`;
-    return &apos;Just now&apos;;
+    return 'Just now';
   };
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -189,13 +164,12 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
         
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-            {([&apos;all&apos;, &apos;draft&apos;, &apos;game_day&apos;, &apos;celebration&apos;, &apos;trash_talk&apos;, &apos;general&apos;] as const).map((category: any) => (
-}
+            {(['all', 'draft', 'game_day', 'celebration', 'trash_talk', 'general'] as const).map((category: any) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}`}
               >
-                {category === &apos;all&apos; ? &apos;All&apos; : category.replace(&apos;_&apos;, &apos; &apos;).split(&apos; &apos;).map((w: any) => w.charAt(0).toUpperCase() + w.slice(1)).join(&apos; &apos;)}
+                {category === 'all' ? 'All' : category.replace('_', ' ').split(' ').map((w: any) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </button>
             ))}
           </div>
@@ -215,7 +189,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
         </div>
         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
           <button
-            onClick={() => setViewMode(&apos;grid&apos;)}`}
+            onClick={() => setViewMode('grid')}`}
           >
             <div className="w-4 h-4 grid grid-cols-2 gap-0.5 sm:px-4 md:px-6 lg:px-8">
               <div className="bg-current rounded-sm sm:px-4 md:px-6 lg:px-8"></div>
@@ -225,7 +199,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
             </div>
           </button>
           <button
-            onClick={() => setViewMode(&apos;timeline&apos;)}`}
+            onClick={() => setViewMode('timeline')}`}
           >
             <div className="w-4 h-4 flex flex-col gap-0.5 sm:px-4 md:px-6 lg:px-8">
               <div className="bg-current h-1 rounded-sm sm:px-4 md:px-6 lg:px-8"></div>
@@ -237,25 +211,21 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
       </div>
 
       {/* Memories Display */}
-      {viewMode === &apos;grid&apos; ? (
-}
+      {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {memories.map((memory: any) => (
-}
             <motion.div
               key={memory.id}
 //               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className={`bg-dark-700 rounded-lg overflow-hidden border ${
-}
-                memory.featured ? &apos;border-gold-500&apos; : &apos;border-gray-600&apos;
+                memory.featured ? 'border-gold-500' : 'border-gray-600'
               } hover:border-primary-500/50 transition-all cursor-pointer`}
               onClick={() => setSelectedMemory(memory)}
             >
               {/* Featured Badge */}
               {memory.featured && (
-}
                 <div className="absolute top-2 left-2 z-10 bg-gold-500 text-black px-2 py-1 rounded-full text-xs font-bold sm:px-4 md:px-6 lg:px-8">
                   ⭐ FEATURED
                 </div>
@@ -266,10 +236,9 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10 sm:px-4 md:px-6 lg:px-8"></div>
                 <div className="absolute inset-0 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                   <div className="text-6xl opacity-20 sm:px-4 md:px-6 lg:px-8">
-                    {memory.type === &apos;photo&apos; ? &apos;📷&apos; : 
-}
-                     memory.type === &apos;meme&apos; ? &apos;😂&apos; : 
-                     memory.type === &apos;celebration&apos; ? &apos;🏆&apos; : &apos;🎥&apos;}
+                    {memory.type === 'photo' ? '📷' : 
+                     memory.type === 'meme' ? '😂' : 
+                     memory.type === 'celebration' ? '🏆' : '🎥'}
                   </div>
                 </div>
                 
@@ -285,7 +254,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                   <h3 className="font-bold text-white text-sm sm:px-4 md:px-6 lg:px-8">{memory.title}</h3>
                   <span className={`px-2 py-0.5 rounded-full text-xs ${getCategoryColor(memory.category)}`}>
-                    {memory.category.replace(&apos;_&apos;, &apos; &apos;).toUpperCase()}
+                    {memory.category.replace('_', ' ').toUpperCase()}
                   </span>
                 </div>
                 
@@ -294,13 +263,11 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1 mb-3 sm:px-4 md:px-6 lg:px-8">
                   {memory.tags.slice(0, 3).map((tag: any) => (
-}
                     <span key={tag} className="px-2 py-0.5 bg-dark-600 text-gray-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
                       #{tag}
                     </span>
                   ))}
                   {memory.tags.length > 3 && (
-}
                     <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">+{memory.tags.length - 3} more</span>
                   )}
                 </div>
@@ -319,26 +286,22 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                   <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                     <button
                       onClick={(e) = aria-label="Action button"> {
-}
                         e.stopPropagation();
                         handleLike(memory.id);
                       }}
                       className={`flex items-center gap-1 text-xs transition-colors ${
-}
                         memory.likes.some((like: any) => like.userId === userId)
-                          ? &apos;text-red-400 hover:text-red-300&apos;
-                          : &apos;text-gray-500 hover:text-red-400&apos;
+                          ? 'text-red-400 hover:text-red-300'
+                          : 'text-gray-500 hover:text-red-400'
                       }`}
                     >
                       <Heart className={`w-3 h-3 ${
-}
-                        memory.likes.some((like: any) => like.userId === userId) ? &apos;fill-current&apos; : &apos;&apos;
+                        memory.likes.some((like: any) => like.userId === userId) ? 'fill-current' : ''
                       }`} />
                       {memory.likes.length}
                     </button>
                     <button
                       onClick={(e) = aria-label="Action button"> {
-}
                         e.stopPropagation();
                         setSelectedMemory(memory);
                       }}
@@ -358,7 +321,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
         // Timeline View
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
           {memories.map((memory: any) => (
-}
             <motion.div
               key={memory.id}
 //               layout
@@ -369,10 +331,9 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
               <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                 <div className="w-16 h-16 bg-dark-600 rounded-lg flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                   <div className="text-2xl sm:px-4 md:px-6 lg:px-8">
-                    {memory.type === &apos;photo&apos; ? &apos;📷&apos; : 
-}
-                     memory.type === &apos;meme&apos; ? &apos;😂&apos; : 
-                     memory.type === &apos;celebration&apos; ? &apos;🏆&apos; : &apos;🎥&apos;}
+                    {memory.type === 'photo' ? '📷' : 
+                     memory.type === 'meme' ? '😂' : 
+                     memory.type === 'celebration' ? '🏆' : '🎥'}
                   </div>
                 </div>
               </div>
@@ -386,7 +347,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                       <span>•</span>
                       <span>{formatTimeAgo(memory.uploadedAt)}</span>
                       {memory.week && (
-}
                         <>
                           <span>•</span>
                           <span>Week {memory.week}</span>
@@ -395,7 +355,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                     </div>
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs ${getCategoryColor(memory.category)}`}>
-                    {memory.category.replace(&apos;_&apos;, &apos; &apos;).toUpperCase()}
+                    {memory.category.replace('_', ' ').toUpperCase()}
                   </span>
                 </div>
                 
@@ -404,7 +364,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1 mb-3 sm:px-4 md:px-6 lg:px-8">
                   {memory.tags.map((tag: any) => (
-}
                     <span key={tag} className="px-2 py-1 bg-dark-600 text-gray-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
                       #{tag}
                     </span>
@@ -417,8 +376,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                     onClick={() => handleLike(memory.id)}`}
                   >
                     <Heart className={`w-4 h-4 ${
-}
-                      memory.likes.some((like: any) => like.userId === userId) ? &apos;fill-current&apos; : &apos;&apos;
+                      memory.likes.some((like: any) => like.userId === userId) ? 'fill-current' : ''
                     }`} />
                     {memory.likes.length} likes
                   </button>
@@ -438,7 +396,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
       {/* Memory Detail Modal */}
       <AnimatePresence>
         {selectedMemory && (
-}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -464,10 +421,9 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 {/* Media Display */}
                 <div className="aspect-video bg-dark-700 rounded-lg mb-4 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                   <div className="text-8xl opacity-50 sm:px-4 md:px-6 lg:px-8">
-                    {selectedMemory.type === &apos;photo&apos; ? &apos;📷&apos; : 
-}
-                     selectedMemory.type === &apos;meme&apos; ? &apos;😂&apos; : 
-                     selectedMemory.type === &apos;celebration&apos; ? &apos;🏆&apos; : &apos;🎥&apos;}
+                    {selectedMemory.type === 'photo' ? '📷' : 
+                     selectedMemory.type === 'meme' ? '😂' : 
+                     selectedMemory.type === 'celebration' ? '🏆' : '🎥'}
                   </div>
                 </div>
 
@@ -476,7 +432,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                   {selectedMemory.tags.map((tag: any) => (
-}
                     <span key={tag} className="px-3 py-1 bg-primary-600/20 text-primary-300 text-sm rounded-full sm:px-4 md:px-6 lg:px-8">
                       #{tag}
                     </span>
@@ -489,8 +444,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                     onClick={() => handleLike(selectedMemory.id)}`}
                   >
                     <Heart className={`w-5 h-5 ${
-}
-                      selectedMemory.likes.some((like: any) => like.userId === userId) ? &apos;fill-current&apos; : &apos;&apos;
+                      selectedMemory.likes.some((like: any) => like.userId === userId) ? 'fill-current' : ''
                     }`} />
                     {selectedMemory.likes.length} likes
                   </button>
@@ -502,7 +456,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                   <h3 className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Comments</h3>
                   
                   {selectedMemory.comments.map((comment: any) => (
-}
                     <div key={comment.id} className="p-3 bg-dark-700 rounded-lg sm:px-4 md:px-6 lg:px-8">
                       <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="font-semibold text-white text-sm sm:px-4 md:px-6 lg:px-8">{comment.userName}</span>
@@ -519,9 +472,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                       onChange={(e: any) => setNewComment(e.target.value)}
                       className="flex-1 bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 text-sm sm:px-4 md:px-6 lg:px-8"
                       onKeyPress={(e: any) => {
-}
-                        if (e.key === &apos;Enter&apos;) {
-}
+                        if (e.key === 'Enter') {
                           handleComment(selectedMemory.id, newComment);
 
                       }}
@@ -543,7 +494,6 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
       {/* Upload Modal */}
       <AnimatePresence>
         {showUploadModal && (
-}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

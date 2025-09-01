@@ -1,44 +1,36 @@
 
 interface IconProps {
-}
   size?: number | string;
-}
 
   className?: string;
   color?: string;
-  &apos;aria-label&apos;?: string;
+  'aria-label'?: string;
 
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MinusIcon from &apos;./MinusIcon&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MinusIcon from './MinusIcon';
 
-describe(&apos;MinusIcon&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MinusIcon', () => {
+  it('renders without crashing', () => {
     render(<MinusIcon />);
-    expect(screen.getByTestId(&apos;minusicon&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('minusicon')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MinusIcon />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MinusIcon />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

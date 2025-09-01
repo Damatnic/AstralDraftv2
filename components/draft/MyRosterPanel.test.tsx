@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MyRosterPanel from &apos;./MyRosterPanel&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MyRosterPanel from './MyRosterPanel';
 
-describe(&apos;MyRosterPanel&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MyRosterPanel', () => {
+  it('renders without crashing', () => {
     render(<MyRosterPanel />);
-    expect(screen.getByTestId(&apos;myrosterpanel&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('myrosterpanel')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MyRosterPanel />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MyRosterPanel />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

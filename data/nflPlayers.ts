@@ -3,69 +3,66 @@
  * Comprehensive player data with stats, projections, and fantasy relevance
  */
 
-import { Player } from &apos;../types&apos;;
+import { Player } from '../types';
 
 // NFL Teams mapping
 export const NFL_TEAMS = {
-}
-  &apos;ARI&apos;: { name: &apos;Arizona Cardinals&apos;, conference: &apos;NFC&apos;, division: &apos;West&apos;, color: &apos;#97233F&apos; },
-  &apos;ATL&apos;: { name: &apos;Atlanta Falcons&apos;, conference: &apos;NFC&apos;, division: &apos;South&apos;, color: &apos;#A71930&apos; },
-  &apos;BAL&apos;: { name: &apos;Baltimore Ravens&apos;, conference: &apos;AFC&apos;, division: &apos;North&apos;, color: &apos;#241773&apos; },
-  &apos;BUF&apos;: { name: &apos;Buffalo Bills&apos;, conference: &apos;AFC&apos;, division: &apos;East&apos;, color: &apos;#00338D&apos; },
-  &apos;CAR&apos;: { name: &apos;Carolina Panthers&apos;, conference: &apos;NFC&apos;, division: &apos;South&apos;, color: &apos;#0085CA&apos; },
-  &apos;CHI&apos;: { name: &apos;Chicago Bears&apos;, conference: &apos;NFC&apos;, division: &apos;North&apos;, color: &apos;#0B162A&apos; },
-  &apos;CIN&apos;: { name: &apos;Cincinnati Bengals&apos;, conference: &apos;AFC&apos;, division: &apos;North&apos;, color: &apos;#FB4F14&apos; },
-  &apos;CLE&apos;: { name: &apos;Cleveland Browns&apos;, conference: &apos;AFC&apos;, division: &apos;North&apos;, color: &apos;#311D00&apos; },
-  &apos;DAL&apos;: { name: &apos;Dallas Cowboys&apos;, conference: &apos;NFC&apos;, division: &apos;East&apos;, color: &apos;#003594&apos; },
-  &apos;DEN&apos;: { name: &apos;Denver Broncos&apos;, conference: &apos;AFC&apos;, division: &apos;West&apos;, color: &apos;#FB4F14&apos; },
-  &apos;DET&apos;: { name: &apos;Detroit Lions&apos;, conference: &apos;NFC&apos;, division: &apos;North&apos;, color: &apos;#0076B6&apos; },
-  &apos;GB&apos;: { name: &apos;Green Bay Packers&apos;, conference: &apos;NFC&apos;, division: &apos;North&apos;, color: &apos;#203731&apos; },
-  &apos;HOU&apos;: { name: &apos;Houston Texans&apos;, conference: &apos;AFC&apos;, division: &apos;South&apos;, color: &apos;#03202F&apos; },
-  &apos;IND&apos;: { name: &apos;Indianapolis Colts&apos;, conference: &apos;AFC&apos;, division: &apos;South&apos;, color: &apos;#002C5F&apos; },
-  &apos;JAX&apos;: { name: &apos;Jacksonville Jaguars&apos;, conference: &apos;AFC&apos;, division: &apos;South&apos;, color: &apos;#006778&apos; },
-  &apos;KC&apos;: { name: &apos;Kansas City Chiefs&apos;, conference: &apos;AFC&apos;, division: &apos;West&apos;, color: &apos;#E31837&apos; },
-  &apos;LV&apos;: { name: &apos;Las Vegas Raiders&apos;, conference: &apos;AFC&apos;, division: &apos;West&apos;, color: &apos;#000000&apos; },
-  &apos;LAC&apos;: { name: &apos;Los Angeles Chargers&apos;, conference: &apos;AFC&apos;, division: &apos;West&apos;, color: &apos;#0080C6&apos; },
-  &apos;LAR&apos;: { name: &apos;Los Angeles Rams&apos;, conference: &apos;NFC&apos;, division: &apos;West&apos;, color: &apos;#003594&apos; },
-  &apos;MIA&apos;: { name: &apos;Miami Dolphins&apos;, conference: &apos;AFC&apos;, division: &apos;East&apos;, color: &apos;#008E97&apos; },
-  &apos;MIN&apos;: { name: &apos;Minnesota Vikings&apos;, conference: &apos;NFC&apos;, division: &apos;North&apos;, color: &apos;#4F2683&apos; },
-  &apos;NE&apos;: { name: &apos;New England Patriots&apos;, conference: &apos;AFC&apos;, division: &apos;East&apos;, color: &apos;#002244&apos; },
-  &apos;NO&apos;: { name: &apos;New Orleans Saints&apos;, conference: &apos;NFC&apos;, division: &apos;South&apos;, color: &apos;#D3BC8D&apos; },
-  &apos;NYG&apos;: { name: &apos;New York Giants&apos;, conference: &apos;NFC&apos;, division: &apos;East&apos;, color: &apos;#0B2265&apos; },
-  &apos;NYJ&apos;: { name: &apos;New York Jets&apos;, conference: &apos;AFC&apos;, division: &apos;East&apos;, color: &apos;#125740&apos; },
-  &apos;PHI&apos;: { name: &apos;Philadelphia Eagles&apos;, conference: &apos;NFC&apos;, division: &apos;East&apos;, color: &apos;#004C54&apos; },
-  &apos;PIT&apos;: { name: &apos;Pittsburgh Steelers&apos;, conference: &apos;AFC&apos;, division: &apos;North&apos;, color: &apos;#FFB612&apos; },
-  &apos;SF&apos;: { name: &apos;San Francisco 49ers&apos;, conference: &apos;NFC&apos;, division: &apos;West&apos;, color: &apos;#AA0000&apos; },
-  &apos;SEA&apos;: { name: &apos;Seattle Seahawks&apos;, conference: &apos;NFC&apos;, division: &apos;West&apos;, color: &apos;#002244&apos; },
-  &apos;TB&apos;: { name: &apos;Tampa Bay Buccaneers&apos;, conference: &apos;NFC&apos;, division: &apos;South&apos;, color: &apos;#D50A0A&apos; },
-  &apos;TEN&apos;: { name: &apos;Tennessee Titans&apos;, conference: &apos;AFC&apos;, division: &apos;South&apos;, color: &apos;#0C2340&apos; },
-  &apos;WAS&apos;: { name: &apos;Washington Commanders&apos;, conference: &apos;NFC&apos;, division: &apos;East&apos;, color: &apos;#5A1414&apos; }
+  'ARI': { name: 'Arizona Cardinals', conference: 'NFC', division: 'West', color: '#97233F' },
+  'ATL': { name: 'Atlanta Falcons', conference: 'NFC', division: 'South', color: '#A71930' },
+  'BAL': { name: 'Baltimore Ravens', conference: 'AFC', division: 'North', color: '#241773' },
+  'BUF': { name: 'Buffalo Bills', conference: 'AFC', division: 'East', color: '#00338D' },
+  'CAR': { name: 'Carolina Panthers', conference: 'NFC', division: 'South', color: '#0085CA' },
+  'CHI': { name: 'Chicago Bears', conference: 'NFC', division: 'North', color: '#0B162A' },
+  'CIN': { name: 'Cincinnati Bengals', conference: 'AFC', division: 'North', color: '#FB4F14' },
+  'CLE': { name: 'Cleveland Browns', conference: 'AFC', division: 'North', color: '#311D00' },
+  'DAL': { name: 'Dallas Cowboys', conference: 'NFC', division: 'East', color: '#003594' },
+  'DEN': { name: 'Denver Broncos', conference: 'AFC', division: 'West', color: '#FB4F14' },
+  'DET': { name: 'Detroit Lions', conference: 'NFC', division: 'North', color: '#0076B6' },
+  'GB': { name: 'Green Bay Packers', conference: 'NFC', division: 'North', color: '#203731' },
+  'HOU': { name: 'Houston Texans', conference: 'AFC', division: 'South', color: '#03202F' },
+  'IND': { name: 'Indianapolis Colts', conference: 'AFC', division: 'South', color: '#002C5F' },
+  'JAX': { name: 'Jacksonville Jaguars', conference: 'AFC', division: 'South', color: '#006778' },
+  'KC': { name: 'Kansas City Chiefs', conference: 'AFC', division: 'West', color: '#E31837' },
+  'LV': { name: 'Las Vegas Raiders', conference: 'AFC', division: 'West', color: '#000000' },
+  'LAC': { name: 'Los Angeles Chargers', conference: 'AFC', division: 'West', color: '#0080C6' },
+  'LAR': { name: 'Los Angeles Rams', conference: 'NFC', division: 'West', color: '#003594' },
+  'MIA': { name: 'Miami Dolphins', conference: 'AFC', division: 'East', color: '#008E97' },
+  'MIN': { name: 'Minnesota Vikings', conference: 'NFC', division: 'North', color: '#4F2683' },
+  'NE': { name: 'New England Patriots', conference: 'AFC', division: 'East', color: '#002244' },
+  'NO': { name: 'New Orleans Saints', conference: 'NFC', division: 'South', color: '#D3BC8D' },
+  'NYG': { name: 'New York Giants', conference: 'NFC', division: 'East', color: '#0B2265' },
+  'NYJ': { name: 'New York Jets', conference: 'AFC', division: 'East', color: '#125740' },
+  'PHI': { name: 'Philadelphia Eagles', conference: 'NFC', division: 'East', color: '#004C54' },
+  'PIT': { name: 'Pittsburgh Steelers', conference: 'AFC', division: 'North', color: '#FFB612' },
+  'SF': { name: 'San Francisco 49ers', conference: 'NFC', division: 'West', color: '#AA0000' },
+  'SEA': { name: 'Seattle Seahawks', conference: 'NFC', division: 'West', color: '#002244' },
+  'TB': { name: 'Tampa Bay Buccaneers', conference: 'NFC', division: 'South', color: '#D50A0A' },
+  'TEN': { name: 'Tennessee Titans', conference: 'AFC', division: 'South', color: '#0C2340' },
+  'WAS': { name: 'Washington Commanders', conference: 'NFC', division: 'East', color: '#5A1414' }
 };
 
 // Top Fantasy Players for 2024-2025 Season
 export const NFL_PLAYERS_2024: Player[] = [
   // QUARTERBACKS
   {
-}
     id: 1001,
-    name: &apos;Josh Allen&apos;,
-    position: &apos;QB&apos;,
-    team: &apos;BUF&apos;,
+    name: 'Josh Allen',
+    position: 'QB',
+    team: 'BUF',
     jerseyNumber: 17,
     age: 28,
-    height: &apos;6\&apos;5"&apos;,
+    height: '6\'5"',
     weight: 237,
-    college: &apos;Wyoming&apos;,
+    college: 'Wyoming',
     experience: 7,
     fantasyRank: 1,
     adp: 1.2,
     projectedPoints: 385.5,
     lastSeasonPoints: 378.2,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 12,
     stats: {
-}
       passingYards: 4306,
       passingTouchdowns: 29,
       interceptions: 18,
@@ -75,26 +72,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 1002,
-    name: &apos;Lamar Jackson&apos;,
-    position: &apos;QB&apos;,
-    team: &apos;BAL&apos;,
+    name: 'Lamar Jackson',
+    position: 'QB',
+    team: 'BAL',
     jerseyNumber: 8,
     age: 27,
-    height: &apos;6\&apos;2"&apos;,
+    height: '6\'2"',
     weight: 212,
-    college: &apos;Louisville&apos;,
+    college: 'Louisville',
     experience: 7,
     fantasyRank: 2,
     adp: 2.1,
     projectedPoints: 375.8,
     lastSeasonPoints: 365.4,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
-}
       passingYards: 3678,
       passingTouchdowns: 24,
       interceptions: 7,
@@ -104,26 +99,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 1003,
-    name: &apos;Jalen Hurts&apos;,
-    position: &apos;QB&apos;,
-    team: &apos;PHI&apos;,
+    name: 'Jalen Hurts',
+    position: 'QB',
+    team: 'PHI',
     jerseyNumber: 1,
     age: 25,
-    height: &apos;6\&apos;1"&apos;,
+    height: '6\'1"',
     weight: 223,
-    college: &apos;Oklahoma&apos;,
+    college: 'Oklahoma',
     experience: 4,
     fantasyRank: 3,
     adp: 3.5,
     projectedPoints: 365.2,
     lastSeasonPoints: 342.1,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
-}
       passingYards: 3858,
       passingTouchdowns: 23,
       interceptions: 15,
@@ -133,26 +126,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 1004,
-    name: &apos;Patrick Mahomes&apos;,
-    position: &apos;QB&apos;,
-    team: &apos;KC&apos;,
+    name: 'Patrick Mahomes',
+    position: 'QB',
+    team: 'KC',
     jerseyNumber: 15,
     age: 29,
-    height: &apos;6\&apos;3"&apos;,
+    height: '6\'3"',
     weight: 230,
-    college: &apos;Texas Tech&apos;,
+    college: 'Texas Tech',
     experience: 8,
     fantasyRank: 4,
     adp: 4.2,
     projectedPoints: 358.7,
     lastSeasonPoints: 334.8,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 10,
     stats: {
-}
       passingYards: 4183,
       passingTouchdowns: 27,
       interceptions: 14,
@@ -162,26 +153,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 1005,
-    name: &apos;Dak Prescott&apos;,
-    position: &apos;QB&apos;,
-    team: &apos;DAL&apos;,
+    name: 'Dak Prescott',
+    position: 'QB',
+    team: 'DAL',
     jerseyNumber: 4,
     age: 31,
-    height: &apos;6\&apos;2"&apos;,
+    height: '6\'2"',
     weight: 238,
-    college: &apos;Mississippi State&apos;,
+    college: 'Mississippi State',
     experience: 9,
     fantasyRank: 5,
     adp: 8.3,
     projectedPoints: 325.4,
     lastSeasonPoints: 318.9,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 7,
     stats: {
-}
       passingYards: 4516,
       passingTouchdowns: 36,
       interceptions: 9,
@@ -193,26 +182,24 @@ export const NFL_PLAYERS_2024: Player[] = [
 
   // RUNNING BACKS
   {
-}
     id: 2001,
-    name: &apos;Christian McCaffrey&apos;,
-    position: &apos;RB&apos;,
-    team: &apos;SF&apos;,
+    name: 'Christian McCaffrey',
+    position: 'RB',
+    team: 'SF',
     jerseyNumber: 23,
     age: 28,
-    height: &apos;5\&apos;11"&apos;,
+    height: '5\'11"',
     weight: 205,
-    college: &apos;Stanford&apos;,
+    college: 'Stanford',
     experience: 8,
     fantasyRank: 1,
     adp: 1.8,
     projectedPoints: 285.6,
     lastSeasonPoints: 278.3,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 9,
     stats: {
-}
       rushingYards: 1459,
       rushingTouchdowns: 14,
       receptions: 67,
@@ -222,26 +209,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 2002,
-    name: &apos;Austin Ekeler&apos;,
-    position: &apos;RB&apos;,
-    team: &apos;WAS&apos;,
+    name: 'Austin Ekeler',
+    position: 'RB',
+    team: 'WAS',
     jerseyNumber: 30,
     age: 29,
-    height: &apos;5\&apos;10"&apos;,
+    height: '5\'10"',
     weight: 200,
-    college: &apos;Western Colorado&apos;,
+    college: 'Western Colorado',
     experience: 8,
     fantasyRank: 2,
     adp: 12.4,
     projectedPoints: 245.8,
     lastSeasonPoints: 198.7,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
-}
       rushingYards: 628,
       rushingTouchdowns: 5,
       receptions: 51,
@@ -251,26 +236,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 2003,
-    name: &apos;Derrick Henry&apos;,
-    position: &apos;RB&apos;,
-    team: &apos;BAL&apos;,
+    name: 'Derrick Henry',
+    position: 'RB',
+    team: 'BAL',
     jerseyNumber: 22,
     age: 30,
-    height: &apos;6\&apos;3"&apos;,
+    height: '6\'3"',
     weight: 247,
-    college: &apos;Alabama&apos;,
+    college: 'Alabama',
     experience: 9,
     fantasyRank: 3,
     adp: 15.7,
     projectedPoints: 235.4,
     lastSeasonPoints: 224.1,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
-}
       rushingYards: 1167,
       rushingTouchdowns: 12,
       receptions: 20,
@@ -280,26 +263,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 2004,
-    name: &apos;Saquon Barkley&apos;,
-    position: &apos;RB&apos;,
-    team: &apos;PHI&apos;,
+    name: 'Saquon Barkley',
+    position: 'RB',
+    team: 'PHI',
     jerseyNumber: 26,
     age: 27,
-    height: &apos;6\&apos;0"&apos;,
+    height: '6\'0"',
     weight: 233,
-    college: &apos;Penn State&apos;,
+    college: 'Penn State',
     experience: 7,
     fantasyRank: 4,
     adp: 8.9,
     projectedPoints: 258.3,
     lastSeasonPoints: 181.2,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
-}
       rushingYards: 962,
       rushingTouchdowns: 10,
       receptions: 41,
@@ -309,26 +290,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 2005,
-    name: &apos;Jonathan Taylor&apos;,
-    position: &apos;RB&apos;,
-    team: &apos;IND&apos;,
+    name: 'Jonathan Taylor',
+    position: 'RB',
+    team: 'IND',
     jerseyNumber: 28,
     age: 25,
-    height: &apos;5\&apos;10"&apos;,
+    height: '5\'10"',
     weight: 226,
-    college: &apos;Wisconsin&apos;,
+    college: 'Wisconsin',
     experience: 5,
     fantasyRank: 5,
     adp: 18.2,
     projectedPoints: 225.7,
     lastSeasonPoints: 156.8,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
-}
       rushingYards: 741,
       rushingTouchdowns: 7,
       receptions: 38,
@@ -340,26 +319,24 @@ export const NFL_PLAYERS_2024: Player[] = [
 
   // WIDE RECEIVERS
   {
-}
     id: 3001,
-    name: &apos;Tyreek Hill&apos;,
-    position: &apos;WR&apos;,
-    team: &apos;MIA&apos;,
+    name: 'Tyreek Hill',
+    position: 'WR',
+    team: 'MIA',
     jerseyNumber: 10,
     age: 30,
-    height: &apos;5\&apos;10"&apos;,
+    height: '5\'10"',
     weight: 185,
-    college: &apos;West Alabama&apos;,
+    college: 'West Alabama',
     experience: 9,
     fantasyRank: 1,
     adp: 5.3,
     projectedPoints: 275.8,
     lastSeasonPoints: 268.4,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 6,
     stats: {
-}
       receptions: 119,
       receivingYards: 1799,
       receivingTouchdowns: 13,
@@ -369,26 +346,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 3002,
-    name: &apos;CeeDee Lamb&apos;,
-    position: &apos;WR&apos;,
-    team: &apos;DAL&apos;,
+    name: 'CeeDee Lamb',
+    position: 'WR',
+    team: 'DAL',
     jerseyNumber: 88,
     age: 25,
-    height: &apos;6\&apos;2"&apos;,
+    height: '6\'2"',
     weight: 198,
-    college: &apos;Oklahoma&apos;,
+    college: 'Oklahoma',
     experience: 5,
     fantasyRank: 2,
     adp: 6.1,
     projectedPoints: 268.9,
     lastSeasonPoints: 256.7,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 7,
     stats: {
-}
       receptions: 135,
       receivingYards: 1749,
       receivingTouchdowns: 12,
@@ -398,26 +373,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 3003,
-    name: &apos;Ja\&apos;Marr Chase&apos;,
-    position: &apos;WR&apos;,
-    team: &apos;CIN&apos;,
+    name: 'Ja\'Marr Chase',
+    position: 'WR',
+    team: 'CIN',
     jerseyNumber: 1,
     age: 24,
-    height: &apos;6\&apos;0"&apos;,
+    height: '6\'0"',
     weight: 201,
-    college: &apos;LSU&apos;,
+    college: 'LSU',
     experience: 4,
     fantasyRank: 3,
     adp: 7.2,
     projectedPoints: 265.4,
     lastSeasonPoints: 241.8,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 12,
     stats: {
-}
       receptions: 100,
       receivingYards: 1216,
       receivingTouchdowns: 7,
@@ -427,26 +400,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 3004,
-    name: &apos;Amon-Ra St. Brown&apos;,
-    position: &apos;WR&apos;,
-    team: &apos;DET&apos;,
+    name: 'Amon-Ra St. Brown',
+    position: 'WR',
+    team: 'DET',
     jerseyNumber: 14,
     age: 25,
-    height: &apos;6\&apos;0"&apos;,
+    height: '6\'0"',
     weight: 197,
-    college: &apos;USC&apos;,
+    college: 'USC',
     experience: 4,
     fantasyRank: 4,
     adp: 9.8,
     projectedPoints: 258.7,
     lastSeasonPoints: 245.3,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
-}
       receptions: 119,
       receivingYards: 1515,
       receivingTouchdowns: 10,
@@ -456,26 +427,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 3005,
-    name: &apos;A.J. Brown&apos;,
-    position: &apos;WR&apos;,
-    team: &apos;PHI&apos;,
+    name: 'A.J. Brown',
+    position: 'WR',
+    team: 'PHI',
     jerseyNumber: 11,
     age: 27,
-    height: &apos;6\&apos;0"&apos;,
+    height: '6\'0"',
     weight: 226,
-    college: &apos;Ole Miss&apos;,
+    college: 'Ole Miss',
     experience: 6,
     fantasyRank: 5,
     adp: 11.4,
     projectedPoints: 252.1,
     lastSeasonPoints: 238.9,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
-}
       receptions: 106,
       receivingYards: 1456,
       receivingTouchdowns: 7,
@@ -487,26 +456,24 @@ export const NFL_PLAYERS_2024: Player[] = [
 
   // TIGHT ENDS
   {
-}
     id: 4001,
-    name: &apos;Travis Kelce&apos;,
-    position: &apos;TE&apos;,
-    team: &apos;KC&apos;,
+    name: 'Travis Kelce',
+    position: 'TE',
+    team: 'KC',
     jerseyNumber: 87,
     age: 35,
-    height: &apos;6\&apos;5"&apos;,
+    height: '6\'5"',
     weight: 250,
-    college: &apos;Cincinnati&apos;,
+    college: 'Cincinnati',
     experience: 12,
     fantasyRank: 1,
     adp: 25.3,
     projectedPoints: 195.8,
     lastSeasonPoints: 188.4,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 10,
     stats: {
-}
       receptions: 93,
       receivingYards: 984,
       receivingTouchdowns: 5,
@@ -516,26 +483,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 4002,
-    name: &apos;Mark Andrews&apos;,
-    position: &apos;TE&apos;,
-    team: &apos;BAL&apos;,
+    name: 'Mark Andrews',
+    position: 'TE',
+    team: 'BAL',
     jerseyNumber: 89,
     age: 29,
-    height: &apos;6\&apos;5"&apos;,
+    height: '6\'5"',
     weight: 256,
-    college: &apos;Oklahoma&apos;,
+    college: 'Oklahoma',
     experience: 7,
     fantasyRank: 2,
     adp: 45.7,
     projectedPoints: 165.2,
     lastSeasonPoints: 142.8,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
-}
       receptions: 45,
       receivingYards: 544,
       receivingTouchdowns: 6,
@@ -545,26 +510,24 @@ export const NFL_PLAYERS_2024: Player[] = [
     }
   },
   {
-}
     id: 4003,
-    name: &apos;Sam LaPorta&apos;,
-    position: &apos;TE&apos;,
-    team: &apos;DET&apos;,
+    name: 'Sam LaPorta',
+    position: 'TE',
+    team: 'DET',
     jerseyNumber: 87,
     age: 23,
-    height: &apos;6\&apos;4"&apos;,
+    height: '6\'4"',
     weight: 249,
-    college: &apos;Iowa&apos;,
+    college: 'Iowa',
     experience: 2,
     fantasyRank: 3,
     adp: 38.9,
     projectedPoints: 175.4,
     lastSeasonPoints: 172.1,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
-}
       receptions: 86,
       receivingYards: 889,
       receivingTouchdowns: 10,
@@ -576,26 +539,24 @@ export const NFL_PLAYERS_2024: Player[] = [
 
   // KICKERS
   {
-}
     id: 5001,
-    name: &apos;Justin Tucker&apos;,
-    position: &apos;K&apos;,
-    team: &apos;BAL&apos;,
+    name: 'Justin Tucker',
+    position: 'K',
+    team: 'BAL',
     jerseyNumber: 9,
     age: 35,
-    height: &apos;6\&apos;1"&apos;,
+    height: '6\'1"',
     weight: 183,
-    college: &apos;Texas&apos;,
+    college: 'Texas',
     experience: 13,
     fantasyRank: 1,
     adp: 145.2,
     projectedPoints: 135.8,
     lastSeasonPoints: 131.0,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
-}
       fieldGoalsMade: 30,
       fieldGoalsAttempted: 35,
       extraPointsMade: 41,
@@ -606,26 +567,24 @@ export const NFL_PLAYERS_2024: Player[] = [
 
   // DEFENSES
   {
-}
     id: 6001,
-    name: &apos;San Francisco 49ers&apos;,
-    position: &apos;DST&apos;,
-    team: &apos;SF&apos;,
+    name: 'San Francisco 49ers',
+    position: 'DST',
+    team: 'SF',
     jerseyNumber: 0,
     age: 0,
-    height: &apos;&apos;,
+    height: '',
     weight: 0,
-    college: &apos;&apos;,
+    college: '',
     experience: 0,
     fantasyRank: 1,
     adp: 125.4,
     projectedPoints: 145.2,
     lastSeasonPoints: 142.8,
-    injuryStatus: &apos;healthy&apos;,
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 9,
     stats: {
-}
       sacks: 48,
       interceptions: 22,
       fumbleRecoveries: 12,
@@ -638,54 +597,42 @@ export const NFL_PLAYERS_2024: Player[] = [
 
 // Helper functions
 export function getPlayersByPosition(position: string): Player[] {
-}
   return NFL_PLAYERS_2024.filter((player: Player) => player.position === position);
-}
 
 export function getPlayersByTeam(team: string): Player[] {
-}
   return NFL_PLAYERS_2024.filter((player: Player) => player.team === team);
-}
 
 export function searchPlayers(query: string): Player[] {
-}
   const searchTerm = query.toLowerCase();
   return NFL_PLAYERS_2024.filter((player: Player) => 
     player.name.toLowerCase().includes(searchTerm) ||
     player.team.toLowerCase().includes(searchTerm) ||
     player.position.toLowerCase().includes(searchTerm)
   );
-}
 
 export function getTopPlayersByPosition(position: string, count: number = 10): Player[] {
-}
   return getPlayersByPosition(position)
     .sort((a, b) => a.fantasyRank - b.fantasyRank)
     .slice(0, count);
-}
 
 export function getPlayerById(id: number): Player | undefined {
-}
   return NFL_PLAYERS_2024.find((player: Player) => player.id === id);
-}
 
 // Position groups for roster management
 export const POSITION_GROUPS = {
-}
-  QB: { name: &apos;Quarterback&apos;, slots: 1, maxRoster: 3 },
-  RB: { name: &apos;Running Back&apos;, slots: 2, maxRoster: 6 },
-  WR: { name: &apos;Wide Receiver&apos;, slots: 2, maxRoster: 6 },
-  TE: { name: &apos;Tight End&apos;, slots: 1, maxRoster: 3 },
-  FLEX: { name: &apos;Flex (RB/WR/TE)&apos;, slots: 1, maxRoster: 0 },
-  K: { name: &apos;Kicker&apos;, slots: 1, maxRoster: 2 },
-  DST: { name: &apos;Defense/Special Teams&apos;, slots: 1, maxRoster: 2 },
-  BENCH: { name: &apos;Bench&apos;, slots: 6, maxRoster: 6 },
-  IR: { name: &apos;Injured Reserve&apos;, slots: 2, maxRoster: 2 }
+  QB: { name: 'Quarterback', slots: 1, maxRoster: 3 },
+  RB: { name: 'Running Back', slots: 2, maxRoster: 6 },
+  WR: { name: 'Wide Receiver', slots: 2, maxRoster: 6 },
+  TE: { name: 'Tight End', slots: 1, maxRoster: 3 },
+  FLEX: { name: 'Flex (RB/WR/TE)', slots: 1, maxRoster: 0 },
+  K: { name: 'Kicker', slots: 1, maxRoster: 2 },
+  DST: { name: 'Defense/Special Teams', slots: 1, maxRoster: 2 },
+  BENCH: { name: 'Bench', slots: 6, maxRoster: 6 },
+  IR: { name: 'Injured Reserve', slots: 2, maxRoster: 2 }
 };
 
 // Draft tiers for better draft strategy
 export const DRAFT_TIERS = {
-}
   QB: [
     { tier: 1, players: [1001, 1002, 1003, 1004] }, // Elite QBs
     { tier: 2, players: [1005] }, // QB1s

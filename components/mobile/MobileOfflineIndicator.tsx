@@ -3,46 +3,39 @@
  * Shows offline status and sync progress for mobile users
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { mobileOfflineService } from &apos;../../services/mobileOfflineService&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { mobileOfflineService } from '../../services/mobileOfflineService';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
-}
     announceToScreenReader,
     useReducedMotion,
-} from &apos;../../utils/mobileAccessibilityUtils&apos;;
+} from '../../utils/mobileAccessibilityUtils';
 
 import {
-}
 //     VisuallyHidden
-} from &apos;../../utils/mobileAccessibilityComponents&apos;;
+} from '../../utils/mobileAccessibilityComponents';
 import {
-}
     WifiOffIcon,
     WifiIcon,
     RefreshCwIcon,
     CheckCircleIcon,
 //     ClockIcon
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 interface OfflineIndicatorProps {
-}
     className?: string;
-    position?: &apos;top&apos; | &apos;bottom&apos;;
+    position?: 'top' | 'bottom';
     showDetails?: boolean;
 
-}
 
-const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &apos;&apos;,
-}
-    position = &apos;top&apos;,
+const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = '',
+    position = 'top',
     showDetails = false
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
     const [offlineState, setOfflineState] = React.useState(mobileOfflineService.getState());
     const [showBanner, setShowBanner] = React.useState(false);
     const [lastOnlineTime, setLastOnlineTime] = React.useState<Date | null>(null);
@@ -50,32 +43,26 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
 
     // Announce status changes to screen readers
     React.useEffect(() => {
-}
         const unsubscribe = mobileOfflineService.subscribe((state: any) => {
-}
             const previousOfflineStatus = offlineState.isOffline;
             setOfflineState(state);
             
             // Announce status changes
             if (state.isOffline !== previousOfflineStatus) {
-}
                 const message = state.isOffline 
-                    ? &apos;Connection lost. You are now offline. Draft data will be saved locally and synced when reconnected.&apos;
-                    : &apos;Connection restored. You are now online. Syncing pending changes.&apos;;
-                announceToScreenReader(message, &apos;assertive&apos;);
+                    ? 'Connection lost. You are now offline. Draft data will be saved locally and synced when reconnected.'
+                    : 'Connection restored. You are now online. Syncing pending changes.';
+                announceToScreenReader(message, 'assertive');
 
             // Show banner when going offline or coming back online
             if (state.isOffline !== previousOfflineStatus) {
-}
                 setShowBanner(true);
                 
                 if (!state.isOffline) {
-}
                     setLastOnlineTime(new Date());
                     // Hide banner after successful reconnection
                     setTimeout(() => setShowBanner(false), 3000);
                 } else {
-}
                     // Keep banner visible while offline
                     setShowBanner(true);
 
@@ -86,95 +73,76 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
     }, [offlineState.isOffline]);
 
     React.useEffect(() => {
-}
         // Auto-hide banner after 5 seconds when going offline
         if (offlineState.isOffline && showBanner) {
-}
             const timer = setTimeout(() => setShowBanner(false), 5000);
             return () => clearTimeout(timer);
     }
   }, [offlineState.isOffline, showBanner]);
 
     const getStatusIcon = () => {
-}
         if (offlineState.syncInProgress) {
-}
-            return <RefreshCwIcon className={`w-4 h-4 ${!prefersReducedMotion ? &apos;animate-spin&apos; : &apos;&apos;}`} />;
+            return <RefreshCwIcon className={`w-4 h-4 ${!prefersReducedMotion ? 'animate-spin' : ''}`} />;
 
         if (offlineState.isOffline) {
-}
             return <WifiOffIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
 
         if (offlineState.pendingActions.length > 0) {
-}
             return <ClockIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
 
         return <WifiIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
     };
 
     const getStatusText = () => {
-}
         if (offlineState.syncInProgress) {
-}
-            return &apos;Syncing...&apos;;
+            return 'Syncing...';
 
         if (offlineState.isOffline) {
-}
-            return &apos;Offline Mode&apos;;
+            return 'Offline Mode';
 
         if (offlineState.pendingActions.length > 0) {
-}
             return `${offlineState.pendingActions.length} pending`;
 
-        return &apos;Online&apos;;
+        return 'Online';
     };
 
     const getStatusColor = () => {
-}
         if (offlineState.syncInProgress) {
-}
-            return &apos;text-blue-400 bg-blue-500/20&apos;;
+            return 'text-blue-400 bg-blue-500/20';
 
         if (offlineState.isOffline) {
-}
-            return &apos;text-red-400 bg-red-500/20&apos;;
+            return 'text-red-400 bg-red-500/20';
 
         if (offlineState.pendingActions.length > 0) {
-}
-            return &apos;text-yellow-400 bg-yellow-500/20&apos;;
+            return 'text-yellow-400 bg-yellow-500/20';
 
-        return &apos;text-green-400 bg-green-500/20&apos;;
+        return 'text-green-400 bg-green-500/20';
     };
 
     const getStatusDescription = () => {
-}
         if (offlineState.isOffline) {
-}
             return offlineState.hasOfflineData 
-                ? &apos;You can continue drafting. Changes will sync when reconnected.&apos;
-                : &apos;Limited functionality available. Try to reconnect.&apos;;
+                ? 'You can continue drafting. Changes will sync when reconnected.'
+                : 'Limited functionality available. Try to reconnect.';
 
         if (offlineState.pendingActions.length > 0) {
-}
             return `Syncing ${offlineState.pendingActions.length} pending changes...`;
 
-        return &apos;All changes have been synced successfully.&apos;;
+        return 'All changes have been synced successfully.';
     };
 
     const getBannerTitle = () => {
-}
-        return offlineState.isOffline ? &apos;You\&apos;re offline&apos; : &apos;Back online!&apos;;
+        return offlineState.isOffline ? 'You\'re offline' : 'Back online!';
     };
 
     const formatLastSync = () => {
-}
-        if (!offlineState.lastSync) return &apos;Never&apos;;
+        if (!offlineState.lastSync) return 'Never';
         
         const now = new Date();
         const diff = now.getTime() - offlineState.lastSync.getTime();
         const minutes = Math.floor(diff / 60000);
         
-        if (minutes < 1) return &apos;Just now&apos;;
+        if (minutes < 1) return 'Just now';
         if (minutes < 60) return `${minutes}m ago`;
         
         const hours = Math.floor(minutes / 60);
@@ -185,24 +153,20 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
     };
 
     const handleBannerClick = () => {
-}
         if (!offlineState.isOffline && offlineState.pendingActions.length > 0) {
-}
             mobileOfflineService.syncPendingActions();
-            announceToScreenReader(&apos;Manually syncing pending changes&apos;, &apos;polite&apos;);
+            announceToScreenReader('Manually syncing pending changes', 'polite');
     }
   };
 
     const handleSyncNow = (e: React.MouseEvent) => {
-}
         e.stopPropagation();
         mobileOfflineService.syncPendingActions();
-        announceToScreenReader(&apos;Manual sync initiated&apos;, &apos;polite&apos;);
+        announceToScreenReader('Manual sync initiated', 'polite');
     };
 
-    // Don&apos;t show on desktop unless specifically requested
+    // Don't show on desktop unless specifically requested
     if (!isMobile && !showDetails) {
-}
         return null;
 
     const animationProps = prefersReducedMotion 
@@ -212,17 +176,16 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
     const bannerAnimationProps = prefersReducedMotion
         ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
         : { 
-}
-            initial: { y: position === &apos;top&apos; ? -100 : 100, opacity: 0 },
+            initial: { y: position === 'top' ? -100 : 100, opacity: 0 },
             animate: { y: 0, opacity: 1 },
-            exit: { y: position === &apos;top&apos; ? -100 : 100, opacity: 0 }
+            exit: { y: position === 'top' ? -100 : 100, opacity: 0 }
         };
 
     return (
         <>
             {/* Persistent Status Indicator */}
             <output
-                className={`fixed ${position === &apos;top&apos; ? &apos;top-4&apos; : &apos;bottom-4&apos;} right-4 z-50 ${className}`}
+                className={`fixed ${position === 'top' ? 'top-4' : 'bottom-4'} right-4 z-50 ${className}`}
                 aria-label={`Connection status: ${getStatusText()}`}
             >
                 <motion.div
@@ -233,12 +196,10 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
                     <VisuallyHidden>
                         Connection status: {getStatusText()}
                         {offlineState.pendingActions.length > 0 && 
-}
                             `, ${offlineState.pendingActions.length} actions pending sync`
 
                     </VisuallyHidden>
                     {showDetails && (
-}
                         <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">
                             {getStatusText()}
                         </span>
@@ -249,33 +210,28 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
             {/* Status Change Banner */}
             <AnimatePresence>
                 {showBanner && (
-}
                     <motion.div
                         {...bannerAnimationProps}
-                        className={`fixed ${position === &apos;top&apos; ? &apos;top-0&apos; : &apos;bottom-0&apos;} left-0 right-0 z-40`}
+                        className={`fixed ${position === 'top' ? 'top-0' : 'bottom-0'} left-0 right-0 z-40`}
                     >
                         <button
                             onClick={handleBannerClick}
                             onKeyDown={(e: any) => {
-}
-                                if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+                                if (e.key === 'Enter' || e.key === ' ') {
                                     e.preventDefault();
                                     handleBannerClick();
 
                             }}
                             disabled={!(!offlineState.isOffline && offlineState.pendingActions.length > 0)}
                             className={`mx-4 my-2 p-4 rounded-lg border border-[var(--panel-border)] bg-[var(--panel-bg)] w-full text-left mobile-focus-ring ${
-}
                                 (!offlineState.isOffline && offlineState.pendingActions.length > 0) 
-                                    ? &apos;cursor-pointer hover:bg-[var(--panel-bg-hover)] transition-colors&apos; 
-                                    : &apos;cursor-default&apos;
+                                    ? 'cursor-pointer hover:bg-[var(--panel-bg-hover)] transition-colors' 
+                                    : 'cursor-default'
                             }`}
                             aria-label={`Connection status: ${getBannerTitle()}. ${getStatusDescription()}. ${
-}
                                 (!offlineState.isOffline && offlineState.pendingActions.length > 0) 
-                                    ? &apos;Press to sync pending changes.&apos; 
-                                    : &apos;&apos;
+                                    ? 'Press to sync pending changes.' 
+                                    : ''
                             }`}
                         >
                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
@@ -290,7 +246,6 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
                                         </h3>
                                         
                                         {!offlineState.isOffline && lastOnlineTime && (
-}
                                             <CheckCircleIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
                                         )}
                                     </div>
@@ -300,7 +255,6 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
                                     </p>
                                     
                                     {showDetails && (
-}
                                         <div className="grid grid-cols-2 gap-4 mt-3 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                             <div>
                                                 <span className="block font-medium sm:px-4 md:px-6 lg:px-8">Last Sync</span>
@@ -316,13 +270,10 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
                                 </div>
                                 
                                 {(offlineState.pendingActions.length > 0 && !offlineState.isOffline) && (
-}
                                     <button
                                         onClick={handleSyncNow}
                                         onKeyDown={(e: any) => {
-}
-                                            if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+                                            if (e.key === 'Enter' || e.key === ' ') {
                                                 e.preventDefault();
                                                 handleSyncNow(e as any);
 
@@ -341,28 +292,27 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
 
             {/* Detailed Status Panel for Settings/Debug */}
             {showDetails && (
-}
                 <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 mt-4 sm:px-4 md:px-6 lg:px-8">
                     <h4 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">Offline Status Details</h4>
                     
                     <div className="space-y-3 text-sm sm:px-4 md:px-6 lg:px-8">
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Connection Status:</span>
-                            <span className={offlineState.isOffline ? &apos;text-red-400&apos; : &apos;text-green-400&apos;}>
-                                {offlineState.isOffline ? &apos;Offline&apos; : &apos;Online&apos;}
+                            <span className={offlineState.isOffline ? 'text-red-400' : 'text-green-400'}>
+                                {offlineState.isOffline ? 'Offline' : 'Online'}
                             </span>
                         </div>
                         
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Offline Data Available:</span>
-                            <span className={offlineState.hasOfflineData ? &apos;text-green-400&apos; : &apos;text-red-400&apos;}>
-                                {offlineState.hasOfflineData ? &apos;Yes&apos; : &apos;No&apos;}
+                            <span className={offlineState.hasOfflineData ? 'text-green-400' : 'text-red-400'}>
+                                {offlineState.hasOfflineData ? 'Yes' : 'No'}
                             </span>
                         </div>
                         
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Pending Actions:</span>
-                            <span className={offlineState.pendingActions.length > 0 ? &apos;text-yellow-400&apos; : &apos;text-green-400&apos;}>
+                            <span className={offlineState.pendingActions.length > 0 ? 'text-yellow-400' : 'text-green-400'}>
                                 {offlineState.pendingActions.length}
                             </span>
                         </div>
@@ -376,26 +326,22 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = &
                         
                         <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Sync in Progress:</span>
-                            <span className={offlineState.syncInProgress ? &apos;text-blue-400&apos; : &apos;text-green-400&apos;}>
-                                {offlineState.syncInProgress ? &apos;Yes&apos; : &apos;No&apos;}
+                            <span className={offlineState.syncInProgress ? 'text-blue-400' : 'text-green-400'}>
+                                {offlineState.syncInProgress ? 'Yes' : 'No'}
                             </span>
                         </div>
                     </div>
                     
                     {offlineState.pendingActions.length > 0 && (
-}
                         <div className="mt-4 pt-3 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                             <h5 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Pending Actions:</h5>
                             <div className="space-y-1 text-xs sm:px-4 md:px-6 lg:px-8">
                                 {offlineState.pendingActions.map((action, index) => (
-}
                                     <div key={action.id} className="flex justify-between text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         <span>{action.type}</span>
                                         <span>Retry {
-}
 action.retryCount
     } catch (error) {
-}
         console.error(error);
     }/{action.maxRetries}</span>
                                     </div>

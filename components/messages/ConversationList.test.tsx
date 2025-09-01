@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ConversationList from &apos;./ConversationList&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ConversationList from './ConversationList';
 
-describe(&apos;ConversationList&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ConversationList', () => {
+  it('renders without crashing', () => {
     render(<ConversationList />);
-    expect(screen.getByTestId(&apos;conversationlist&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('conversationlist')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ConversationList />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ConversationList />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

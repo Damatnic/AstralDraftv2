@@ -1,47 +1,39 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { useLeague } from &apos;../../hooks/useLeague&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { SwordsIcon } from &apos;../icons/SwordsIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { useLeague } from '../../hooks/useLeague';
+import { Modal } from '../ui/Modal';
+import { SwordsIcon } from '../icons/SwordsIcon';
 
 interface ProposeSideBetModalProps {
-}
     onClose: () => void;
 
-}
 
 const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: any) => {
-}
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
-    const [opponentId, setOpponentId] = React.useState<string>(&apos;&apos;);
-    const [terms, setTerms] = React.useState(&apos;&apos;);
-    const [stakes, setStakes] = React.useState(&apos;&apos;);
+    const [opponentId, setOpponentId] = React.useState<string>('');
+    const [terms, setTerms] = React.useState('');
+    const [stakes, setStakes] = React.useState('');
 
     if (!league || !myTeam) return null;
 
     const opponents = league.teams.filter((t: any) => t.id !== myTeam.id);
 
     const handleSubmit = (e: React.FormEvent) => {
-}
         e.preventDefault();
         if (!opponentId || !terms.trim() || !stakes.trim()) {
-}
-            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "All fields are required.", type: &apos;SYSTEM&apos; } });
+            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "All fields are required.", type: 'SYSTEM' } });
             return;
         }
 
         dispatch({
-}
-            type: &apos;PROPOSE_SIDE_BET&apos;,
+            type: 'PROPOSE_SIDE_BET',
             payload: {
-}
                 leagueId: league.id,
                 bet: {
-}
                     proposerId: myTeam.id,
                     accepterId: Number(opponentId),
                     terms,
@@ -49,7 +41,7 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: an
                 }
             }
         });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Side bet proposed!&apos;, type: &apos;SYSTEM&apos; } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Side bet proposed!', type: 'SYSTEM' } });
         onClose();
     };
 

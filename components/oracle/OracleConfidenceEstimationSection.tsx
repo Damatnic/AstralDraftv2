@@ -1,9 +1,8 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState } from &apos;react&apos;;
-import &apos;./OracleConfidenceEstimationSection.css&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
+import './OracleConfidenceEstimationSection.css';
 
 interface ConfidenceMethod {
-}
   id: string;
   name: string;
   description: string;
@@ -14,20 +13,17 @@ interface ConfidenceMethod {
   confidenceRange: string;
   useCases: string[];
 
-}
 
 interface UncertaintySource {
-}
   id: string;
   name: string;
-  type: &apos;Aleatoric&apos; | &apos;Epistemic&apos;;
+  type: 'Aleatoric' | 'Epistemic';
   description: string;
   quantificationMethod: string;
-  impact: &apos;Low&apos; | &apos;Medium&apos; | &apos;High&apos;;
+  impact: 'Low' | 'Medium' | 'High';
   mitigation: string[];
 
 interface CalibrationMetric {
-}
   id: string;
   name: string;
   formula: string;
@@ -35,10 +31,8 @@ interface CalibrationMetric {
   idealValue: string;
   interpretation: string;
 
-}
 
 interface PredictionInterval {
-}
   id: string;
   confidence: number;
   lowerBound: number;
@@ -49,368 +43,336 @@ interface PredictionInterval {
 
 // Helper functions for method ratings
 const getMethodEffectiveness = (methodId: string): string => {
-}
   const ratings: Record<string, string> = {
-}
-    &apos;temperature_scaling&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
-    &apos;evidential_deep_learning&apos;: &apos;⭐⭐⭐⭐&apos;,
-    &apos;conformal_prediction&apos;: &apos;⭐⭐⭐&apos;,
-    &apos;ensemble_uncertainty&apos;: &apos;⭐⭐&apos;,
-    &apos;monte_carlo&apos;: &apos;⭐&apos;,
-    &apos;bayesian_neural_networks&apos;: &apos;⭐&apos;
+    'temperature_scaling': '⭐⭐⭐⭐⭐',
+    'evidential_deep_learning': '⭐⭐⭐⭐',
+    'conformal_prediction': '⭐⭐⭐',
+    'ensemble_uncertainty': '⭐⭐',
+    'monte_carlo': '⭐',
+    'bayesian_neural_networks': '⭐'
   };
-  return ratings[methodId] || &apos;⭐&apos;;
+  return ratings[methodId] || '⭐';
 };
 
 const getMethodSpeedRating = (methodId: string): string => {
-}
   const ratings: Record<string, string> = {
-}
-    &apos;ensemble_uncertainty&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
-    &apos;evidential_deep_learning&apos;: &apos;⭐⭐⭐⭐&apos;,
-    &apos;conformal_prediction&apos;: &apos;⭐⭐⭐⭐&apos;,
-    &apos;temperature_scaling&apos;: &apos;⭐⭐⭐&apos;,
-    &apos;monte_carlo&apos;: &apos;⭐⭐⭐&apos;,
-    &apos;bayesian_neural_networks&apos;: &apos;⭐⭐⭐&apos;
+    'ensemble_uncertainty': '⭐⭐⭐⭐⭐',
+    'evidential_deep_learning': '⭐⭐⭐⭐',
+    'conformal_prediction': '⭐⭐⭐⭐',
+    'temperature_scaling': '⭐⭐⭐',
+    'monte_carlo': '⭐⭐⭐',
+    'bayesian_neural_networks': '⭐⭐⭐'
   };
-  return ratings[methodId] || &apos;⭐⭐⭐&apos;;
+  return ratings[methodId] || '⭐⭐⭐';
 };
 
 const getMethodScalabilityRating = (methodId: string): string => {
-}
   const ratings: Record<string, string> = {
-}
-    &apos;temperature_scaling&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
-    &apos;ensemble_uncertainty&apos;: &apos;⭐⭐⭐⭐&apos;,
-    &apos;conformal_prediction&apos;: &apos;⭐⭐⭐&apos;,
-    &apos;evidential_deep_learning&apos;: &apos;⭐⭐&apos;,
-    &apos;monte_carlo&apos;: &apos;⭐&apos;,
-    &apos;bayesian_neural_networks&apos;: &apos;⭐&apos;
+    'temperature_scaling': '⭐⭐⭐⭐⭐',
+    'ensemble_uncertainty': '⭐⭐⭐⭐',
+    'conformal_prediction': '⭐⭐⭐',
+    'evidential_deep_learning': '⭐⭐',
+    'monte_carlo': '⭐',
+    'bayesian_neural_networks': '⭐'
   };
-  return ratings[methodId] || &apos;⭐&apos;;
+  return ratings[methodId] || '⭐';
 };
 
 const getMethodRobustnessRating = (methodId: string): string => {
-}
   const ratings: Record<string, string> = {
-}
-    &apos;conformal_prediction&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
-    &apos;evidential_deep_learning&apos;: &apos;⭐⭐⭐⭐&apos;,
-    &apos;ensemble_uncertainty&apos;: &apos;⭐⭐⭐&apos;,
-    &apos;temperature_scaling&apos;: &apos;⭐⭐⭐&apos;,
-    &apos;monte_carlo&apos;: &apos;⭐⭐&apos;,
-    &apos;bayesian_neural_networks&apos;: &apos;⭐⭐&apos;
+    'conformal_prediction': '⭐⭐⭐⭐⭐',
+    'evidential_deep_learning': '⭐⭐⭐⭐',
+    'ensemble_uncertainty': '⭐⭐⭐',
+    'temperature_scaling': '⭐⭐⭐',
+    'monte_carlo': '⭐⭐',
+    'bayesian_neural_networks': '⭐⭐'
   };
-  return ratings[methodId] || &apos;⭐⭐&apos;;
+  return ratings[methodId] || '⭐⭐';
 };
 
 const getConfidenceClass = (confidence: number): string => {
-}
-  if (confidence > 0.8) return &apos;high&apos;;
-  if (confidence > 0.7) return &apos;medium&apos;;
-  return &apos;low&apos;;
+  if (confidence > 0.8) return 'high';
+  if (confidence > 0.7) return 'medium';
+  return 'low';
 };
 
 function OracleConfidenceEstimationSection() {
-}
-  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;methods&apos; | &apos;uncertainty&apos; | &apos;calibration&apos; | &apos;intervals&apos; | &apos;demo&apos;>(&apos;overview&apos;);
-  const [selectedMethod, setSelectedMethod] = useState<string>(&apos;monte_carlo&apos;);
-  const [selectedUncertaintyType, setSelectedUncertaintyType] = useState<string>(&apos;aleatoric&apos;);
+  const [activeTab, setActiveTab] = useState<'overview' | 'methods' | 'uncertainty' | 'calibration' | 'intervals' | 'demo'>('overview');
+  const [selectedMethod, setSelectedMethod] = useState<string>('monte_carlo');
+  const [selectedUncertaintyType, setSelectedUncertaintyType] = useState<string>('aleatoric');
   const [confidenceLevel, setConfidenceLevel] = useState<number>(95);
   const [simulationResults, setSimulationResults] = useState<any>(null);
 
   // Confidence Estimation Methods
   const confidenceMethods: ConfidenceMethod[] = [
     {
-}
-      id: &apos;monte_carlo&apos;,
-      name: &apos;Monte Carlo Dropout&apos;,
-      description: &apos;Uses dropout at inference time to approximate Bayesian uncertainty through multiple forward passes&apos;,
-      formula: &apos;μ = (1/T)∑f(x), σ² = (1/T)∑(f(x) - μ)²&apos;,
+      id: 'monte_carlo',
+      name: 'Monte Carlo Dropout',
+      description: 'Uses dropout at inference time to approximate Bayesian uncertainty through multiple forward passes',
+      formula: 'μ = (1/T)∑f(x), σ² = (1/T)∑(f(x) - μ)²',
       advantages: [
-        &apos;Easy to implement with existing models&apos;,
-        &apos;Provides both prediction and uncertainty&apos;,
-        &apos;No architectural changes required&apos;,
-        &apos;Computationally efficient&apos;
+        'Easy to implement with existing models',
+        'Provides both prediction and uncertainty',
+        'No architectural changes required',
+        'Computationally efficient'
       ],
       limitations: [
-        &apos;Approximation quality depends on dropout rate&apos;,
-        &apos;May underestimate uncertainty&apos;,
-        &apos;Requires multiple forward passes&apos;,
-        &apos;Not theoretically grounded&apos;
+        'Approximation quality depends on dropout rate',
+        'May underestimate uncertainty',
+        'Requires multiple forward passes',
+        'Not theoretically grounded'
       ],
-      implementationDetails: &apos;Enable dropout during inference and run T=100 forward passes to estimate prediction variance&apos;,
-      confidenceRange: &apos;0-100% based on prediction variance&apos;,
-      useCases: [&apos;Real-time prediction confidence&apos;, &apos;Model uncertainty estimation&apos;, &apos;Active learning&apos;]
+      implementationDetails: 'Enable dropout during inference and run T=100 forward passes to estimate prediction variance',
+      confidenceRange: '0-100% based on prediction variance',
+      useCases: ['Real-time prediction confidence', 'Model uncertainty estimation', 'Active learning']
     },
     {
-}
-      id: &apos;bayesian_neural_network&apos;,
-      name: &apos;Bayesian Neural Networks&apos;,
-      description: &apos;Treats network weights as probability distributions rather than point estimates&apos;,
-      formula: &apos;p(y|x,D) = ∫p(y|x,θ)p(θ|D)dθ&apos;,
+      id: 'bayesian_neural_network',
+      name: 'Bayesian Neural Networks',
+      description: 'Treats network weights as probability distributions rather than point estimates',
+      formula: 'p(y|x,D) = ∫p(y|x,θ)p(θ|D)dθ',
       advantages: [
-        &apos;Principled uncertainty quantification&apos;,
-        &apos;Naturally captures model uncertainty&apos;,
-        &apos;Theoretically well-founded&apos;,
-        &apos;Provides full posterior distribution&apos;
+        'Principled uncertainty quantification',
+        'Naturally captures model uncertainty',
+        'Theoretically well-founded',
+        'Provides full posterior distribution'
       ],
       limitations: [
-        &apos;Computationally expensive&apos;,
-        &apos;Complex implementation&apos;,
-        &apos;Slower inference&apos;,
-        &apos;Requires specialized training&apos;
+        'Computationally expensive',
+        'Complex implementation',
+        'Slower inference',
+        'Requires specialized training'
       ],
-      implementationDetails: &apos;Use variational inference with mean-field approximation and reparameterization trick&apos;,
-      confidenceRange: &apos;0-100% from posterior predictive distribution&apos;,
-      useCases: [&apos;High-stakes predictions&apos;, &apos;Safety-critical applications&apos;, &apos;Research applications&apos;]
+      implementationDetails: 'Use variational inference with mean-field approximation and reparameterization trick',
+      confidenceRange: '0-100% from posterior predictive distribution',
+      useCases: ['High-stakes predictions', 'Safety-critical applications', 'Research applications']
     },
     {
-}
-      id: &apos;ensemble_uncertainty&apos;,
-      name: &apos;Deep Ensembles&apos;,
-      description: &apos;Trains multiple independent models and uses ensemble disagreement as uncertainty measure&apos;,
-      formula: &apos;σ²_ensemble = (1/M)∑(fᵢ(x) - f̄(x))²&apos;,
+      id: 'ensemble_uncertainty',
+      name: 'Deep Ensembles',
+      description: 'Trains multiple independent models and uses ensemble disagreement as uncertainty measure',
+      formula: 'σ²_ensemble = (1/M)∑(fᵢ(x) - f̄(x))²',
       advantages: [
-        &apos;High-quality uncertainty estimates&apos;,
-        &apos;Captures both types of uncertainty&apos;,
-        &apos;Simple to understand and implement&apos;,
-        &apos;Proven effectiveness&apos;
+        'High-quality uncertainty estimates',
+        'Captures both types of uncertainty',
+        'Simple to understand and implement',
+        'Proven effectiveness'
       ],
       limitations: [
-        &apos;Computationally expensive training&apos;,
-        &apos;Multiple models to maintain&apos;,
-        &apos;Higher memory requirements&apos;,
-        &apos;Slower inference&apos;
+        'Computationally expensive training',
+        'Multiple models to maintain',
+        'Higher memory requirements',
+        'Slower inference'
       ],
-      implementationDetails: &apos;Train 5-10 models with different initializations and compute prediction variance&apos;,
-      confidenceRange: &apos;0-100% based on ensemble variance&apos;,
-      useCases: [&apos;Production systems&apos;, &apos;Critical predictions&apos;, &apos;Uncertainty-aware decisions&apos;]
+      implementationDetails: 'Train 5-10 models with different initializations and compute prediction variance',
+      confidenceRange: '0-100% based on ensemble variance',
+      useCases: ['Production systems', 'Critical predictions', 'Uncertainty-aware decisions']
     },
     {
-}
-      id: &apos;evidential_deep_learning&apos;,
-      name: &apos;Evidential Deep Learning&apos;,
-      description: &apos;Learns a higher-order distribution over predictions to capture uncertainty&apos;,
-      formula: &apos;p(y|x) ~ NormalInverseGamma(μ,λ,α,β)&apos;,
+      id: 'evidential_deep_learning',
+      name: 'Evidential Deep Learning',
+      description: 'Learns a higher-order distribution over predictions to capture uncertainty',
+      formula: 'p(y|x) ~ NormalInverseGamma(μ,λ,α,β)',
       advantages: [
-        &apos;Single forward pass&apos;,
-        &apos;Separates aleatoric and epistemic uncertainty&apos;,
-        &apos;Theoretically principled&apos;,
-        &apos;Computationally efficient&apos;
+        'Single forward pass',
+        'Separates aleatoric and epistemic uncertainty',
+        'Theoretically principled',
+        'Computationally efficient'
       ],
       limitations: [
-        &apos;Complex loss function&apos;,
-        &apos;Sensitive to hyperparameters&apos;,
-        &apos;Limited empirical validation&apos;,
-        &apos;Requires specialized architecture&apos;
+        'Complex loss function',
+        'Sensitive to hyperparameters',
+        'Limited empirical validation',
+        'Requires specialized architecture'
       ],
-      implementationDetails: &apos;Modify output layer to predict distribution parameters and use evidential loss&apos;,
-      confidenceRange: &apos;0-100% from evidential distribution&apos;,
-      useCases: [&apos;Out-of-distribution detection&apos;, &apos;Active learning&apos;, &apos;Robust predictions&apos;]
+      implementationDetails: 'Modify output layer to predict distribution parameters and use evidential loss',
+      confidenceRange: '0-100% from evidential distribution',
+      useCases: ['Out-of-distribution detection', 'Active learning', 'Robust predictions']
     },
     {
-}
-      id: &apos;conformal_prediction&apos;,
-      name: &apos;Conformal Prediction&apos;,
-      description: &apos;Provides prediction intervals with finite-sample validity guarantees&apos;,
-      formula: &apos;C(x) = {y : s(x,y) ≤ ĝ((n+1)(1-α))}&apos;,
+      id: 'conformal_prediction',
+      name: 'Conformal Prediction',
+      description: 'Provides prediction intervals with finite-sample validity guarantees',
+      formula: 'C(x) = {y : s(x,y) ≤ ĝ((n+1)(1-α))}',
       advantages: [
-        &apos;Distribution-free guarantees&apos;,
-        &apos;Valid for any model&apos;,
-        &apos;Exact coverage probability&apos;,
-        &apos;Model-agnostic approach&apos;
+        'Distribution-free guarantees',
+        'Valid for any model',
+        'Exact coverage probability',
+        'Model-agnostic approach'
       ],
       limitations: [
-        &apos;Requires calibration set&apos;,
-        &apos;May produce large intervals&apos;,
-        &apos;Limited to coverage guarantees&apos;,
-        &apos;No uncertainty quantification&apos;
+        'Requires calibration set',
+        'May produce large intervals',
+        'Limited to coverage guarantees',
+        'No uncertainty quantification'
       ],
-      implementationDetails: &apos;Use nonconformity scores and calibration set to construct prediction intervals&apos;,
-      confidenceRange: &apos;User-specified confidence level (e.g., 90%, 95%)&apos;,
-      useCases: [&apos;Safety-critical applications&apos;, &apos;Regulatory compliance&apos;, &apos;Risk management&apos;]
+      implementationDetails: 'Use nonconformity scores and calibration set to construct prediction intervals',
+      confidenceRange: 'User-specified confidence level (e.g., 90%, 95%)',
+      useCases: ['Safety-critical applications', 'Regulatory compliance', 'Risk management']
     },
     {
-}
-      id: &apos;temperature_scaling&apos;,
-      name: &apos;Temperature Scaling&apos;,
-      description: &apos;Post-hoc calibration method that rescales logits to improve confidence calibration&apos;,
-      formula: &apos;p̂ᵢ = max σ(zᵢ/T), where T is learned temperature&apos;,
+      id: 'temperature_scaling',
+      name: 'Temperature Scaling',
+      description: 'Post-hoc calibration method that rescales logits to improve confidence calibration',
+      formula: 'p̂ᵢ = max σ(zᵢ/T), where T is learned temperature',
       advantages: [
-        &apos;Simple and effective&apos;,
-        &apos;Fast calibration&apos;,
-        &apos;Preserves accuracy&apos;,
-        &apos;Single parameter optimization&apos;
+        'Simple and effective',
+        'Fast calibration',
+        'Preserves accuracy',
+        'Single parameter optimization'
       ],
       limitations: [
-        &apos;Only for classification&apos;,
-        &apos;Requires validation set&apos;,
-        &apos;Uniform scaling&apos;,
-        &apos;Limited expressiveness&apos;
+        'Only for classification',
+        'Requires validation set',
+        'Uniform scaling',
+        'Limited expressiveness'
       ],
-      implementationDetails: &apos;Optimize temperature parameter T on validation set using NLL loss&apos;,
-      confidenceRange: &apos;0-100% calibrated confidence scores&apos;,
-      useCases: [&apos;Model calibration&apos;, &apos;Confidence thresholding&apos;, &apos;Decision making&apos;]
+      implementationDetails: 'Optimize temperature parameter T on validation set using NLL loss',
+      confidenceRange: '0-100% calibrated confidence scores',
+      useCases: ['Model calibration', 'Confidence thresholding', 'Decision making']
 
   ];
 
   // Uncertainty Sources
   const uncertaintySources: UncertaintySource[] = [
     {
-}
-      id: &apos;data_noise&apos;,
-      name: &apos;Data/Measurement Noise&apos;,
-      type: &apos;Aleatoric&apos;,
-      description: &apos;Inherent randomness in player performance and game outcomes that cannot be reduced&apos;,
-      quantificationMethod: &apos;Statistical analysis of historical variance in player performance&apos;,
-      impact: &apos;Medium&apos;,
-      mitigation: [&apos;Robust loss functions&apos;, &apos;Data augmentation&apos;, &apos;Ensemble methods&apos;]
+      id: 'data_noise',
+      name: 'Data/Measurement Noise',
+      type: 'Aleatoric',
+      description: 'Inherent randomness in player performance and game outcomes that cannot be reduced',
+      quantificationMethod: 'Statistical analysis of historical variance in player performance',
+      impact: 'Medium',
+      mitigation: ['Robust loss functions', 'Data augmentation', 'Ensemble methods']
     },
     {
-}
-      id: &apos;model_uncertainty&apos;,
-      name: &apos;Model Parameter Uncertainty&apos;,
-      type: &apos;Epistemic&apos;,
-      description: &apos;Uncertainty about the optimal model parameters due to limited training data&apos;,
-      quantificationMethod: &apos;Bayesian inference over model weights&apos;,
-      impact: &apos;High&apos;,
-      mitigation: [&apos;Bayesian neural networks&apos;, &apos;Dropout&apos;, &apos;Weight decay regularization&apos;]
+      id: 'model_uncertainty',
+      name: 'Model Parameter Uncertainty',
+      type: 'Epistemic',
+      description: 'Uncertainty about the optimal model parameters due to limited training data',
+      quantificationMethod: 'Bayesian inference over model weights',
+      impact: 'High',
+      mitigation: ['Bayesian neural networks', 'Dropout', 'Weight decay regularization']
     },
     {
-}
-      id: &apos;structural_uncertainty&apos;,
-      name: &apos;Model Structure Uncertainty&apos;,
-      type: &apos;Epistemic&apos;,
-      description: &apos;Uncertainty about the correct model architecture and feature selection&apos;,
-      quantificationMethod: &apos;Model averaging across different architectures&apos;,
-      impact: &apos;High&apos;,
-      mitigation: [&apos;Neural architecture search&apos;, &apos;Ensemble of different models&apos;, &apos;Cross-validation&apos;]
+      id: 'structural_uncertainty',
+      name: 'Model Structure Uncertainty',
+      type: 'Epistemic',
+      description: 'Uncertainty about the correct model architecture and feature selection',
+      quantificationMethod: 'Model averaging across different architectures',
+      impact: 'High',
+      mitigation: ['Neural architecture search', 'Ensemble of different models', 'Cross-validation']
     },
     {
-}
-      id: &apos;distributional_shift&apos;,
-      name: &apos;Distribution Shift&apos;,
-      type: &apos;Epistemic&apos;,
-      description: &apos;Changes in data distribution between training and deployment (injuries, rule changes)&apos;,
-      quantificationMethod: &apos;Out-of-distribution detection and domain adaptation metrics&apos;,
-      impact: &apos;High&apos;,
-      mitigation: [&apos;Continual learning&apos;, &apos;Domain adaptation&apos;, &apos;Robust optimization&apos;]
+      id: 'distributional_shift',
+      name: 'Distribution Shift',
+      type: 'Epistemic',
+      description: 'Changes in data distribution between training and deployment (injuries, rule changes)',
+      quantificationMethod: 'Out-of-distribution detection and domain adaptation metrics',
+      impact: 'High',
+      mitigation: ['Continual learning', 'Domain adaptation', 'Robust optimization']
     },
     {
-}
-      id: &apos;feature_uncertainty&apos;,
-      name: &apos;Feature/Input Uncertainty&apos;,
-      type: &apos;Aleatoric&apos;,
-      description: &apos;Uncertainty in measured features like weather conditions or injury status&apos;,
-      quantificationMethod: &apos;Propagation of input uncertainties through the model&apos;,
-      impact: &apos;Medium&apos;,
-      mitigation: [&apos;Input noise modeling&apos;, &apos;Robust features&apos;, &apos;Multiple data sources&apos;]
+      id: 'feature_uncertainty',
+      name: 'Feature/Input Uncertainty',
+      type: 'Aleatoric',
+      description: 'Uncertainty in measured features like weather conditions or injury status',
+      quantificationMethod: 'Propagation of input uncertainties through the model',
+      impact: 'Medium',
+      mitigation: ['Input noise modeling', 'Robust features', 'Multiple data sources']
     },
     {
-}
-      id: &apos;temporal_uncertainty&apos;,
-      name: &apos;Temporal Dynamics&apos;,
-      type: &apos;Aleatoric&apos;,
-      description: &apos;Uncertainty due to changing player form, team dynamics, and seasonal effects&apos;,
-      quantificationMethod: &apos;Time-series analysis and trend detection&apos;,
-      impact: &apos;Medium&apos;,
-      mitigation: [&apos;Recurrent architectures&apos;, &apos;Attention mechanisms&apos;, &apos;Adaptive learning rates&apos;]
+      id: 'temporal_uncertainty',
+      name: 'Temporal Dynamics',
+      type: 'Aleatoric',
+      description: 'Uncertainty due to changing player form, team dynamics, and seasonal effects',
+      quantificationMethod: 'Time-series analysis and trend detection',
+      impact: 'Medium',
+      mitigation: ['Recurrent architectures', 'Attention mechanisms', 'Adaptive learning rates']
 
   ];
 
   // Calibration Metrics
   const calibrationMetrics: CalibrationMetric[] = [
     {
-}
-      id: &apos;ece&apos;,
-      name: &apos;Expected Calibration Error (ECE)&apos;,
-      formula: &apos;ECE = Σᵦ (nᵦ/n)|acc(b) - conf(b)|&apos;,
-      description: &apos;Measures the difference between confidence and accuracy across confidence bins&apos;,
-      idealValue: &apos;0.0&apos;,
-      interpretation: &apos;Lower values indicate better calibration. ECE < 0.05 is considered well-calibrated.&apos;
+      id: 'ece',
+      name: 'Expected Calibration Error (ECE)',
+      formula: 'ECE = Σᵦ (nᵦ/n)|acc(b) - conf(b)|',
+      description: 'Measures the difference between confidence and accuracy across confidence bins',
+      idealValue: '0.0',
+      interpretation: 'Lower values indicate better calibration. ECE < 0.05 is considered well-calibrated.'
     },
     {
-}
-      id: &apos;mce&apos;,
-      name: &apos;Maximum Calibration Error (MCE)&apos;,
-      formula: &apos;MCE = maxᵦ|acc(b) - conf(b)|&apos;,
-      description: &apos;Maximum difference between confidence and accuracy across all bins&apos;,
-      idealValue: &apos;0.0&apos;,
-      interpretation: &apos;Measures worst-case calibration error. MCE < 0.1 indicates reasonable calibration.&apos;
+      id: 'mce',
+      name: 'Maximum Calibration Error (MCE)',
+      formula: 'MCE = maxᵦ|acc(b) - conf(b)|',
+      description: 'Maximum difference between confidence and accuracy across all bins',
+      idealValue: '0.0',
+      interpretation: 'Measures worst-case calibration error. MCE < 0.1 indicates reasonable calibration.'
     },
     {
-}
-      id: &apos;reliability_diagram&apos;,
-      name: &apos;Reliability Diagram&apos;,
-      formula: &apos;Plot of bin accuracy vs bin confidence&apos;,
-      description: &apos;Visual representation of calibration across different confidence levels&apos;,
-      idealValue: &apos;Perfect diagonal line&apos;,
-      interpretation: &apos;Points below diagonal indicate overconfidence, above indicate underconfidence.&apos;
+      id: 'reliability_diagram',
+      name: 'Reliability Diagram',
+      formula: 'Plot of bin accuracy vs bin confidence',
+      description: 'Visual representation of calibration across different confidence levels',
+      idealValue: 'Perfect diagonal line',
+      interpretation: 'Points below diagonal indicate overconfidence, above indicate underconfidence.'
     },
     {
-}
-      id: &apos;brier_score&apos;,
-      name: &apos;Brier Score&apos;,
-      formula: &apos;BS = (1/N)Σᵢ(pᵢ - yᵢ)²&apos;,
-      description: &apos;Measures accuracy of probabilistic predictions&apos;,
-      idealValue: &apos;0.0&apos;,
-      interpretation: &apos;Lower scores indicate better calibrated predictions. Combines calibration and sharpness.&apos;
+      id: 'brier_score',
+      name: 'Brier Score',
+      formula: 'BS = (1/N)Σᵢ(pᵢ - yᵢ)²',
+      description: 'Measures accuracy of probabilistic predictions',
+      idealValue: '0.0',
+      interpretation: 'Lower scores indicate better calibrated predictions. Combines calibration and sharpness.'
     },
     {
-}
-      id: &apos;log_likelihood&apos;,
-      name: &apos;Negative Log-Likelihood&apos;,
-      formula: &apos;NLL = -(1/N)Σᵢlog(pᵢ)&apos;,
-      description: &apos;Measures quality of predicted probabilities&apos;,
-      idealValue: &apos;Lower values&apos;,
-      interpretation: &apos;Proper scoring rule that rewards confident correct predictions and penalizes confident incorrect ones.&apos;
+      id: 'log_likelihood',
+      name: 'Negative Log-Likelihood',
+      formula: 'NLL = -(1/N)Σᵢlog(pᵢ)',
+      description: 'Measures quality of predicted probabilities',
+      idealValue: 'Lower values',
+      interpretation: 'Proper scoring rule that rewards confident correct predictions and penalizes confident incorrect ones.'
 
   ];
 
   // Generate prediction intervals
   const generatePredictionIntervals = (confidenceLevel: number): PredictionInterval[] => {
-}
     const prediction = 18.5; // Example fantasy points prediction
     const baseUncertainty = 3.2;
     
     return [
       {
-}
-        id: &apos;monte_carlo_interval&apos;,
+        id: 'monte_carlo_interval',
         confidence: confidenceLevel,
         prediction: prediction,
-        method: &apos;Monte Carlo Dropout&apos;,
+        method: 'Monte Carlo Dropout',
         lowerBound: prediction - (baseUncertainty * (confidenceLevel / 100) * 1.96),
         upperBound: prediction + (baseUncertainty * (confidenceLevel / 100) * 1.96),
         width: 2 * (baseUncertainty * (confidenceLevel / 100) * 1.96)
       },
       {
-}
-        id: &apos;bayesian_interval&apos;,
+        id: 'bayesian_interval',
         confidence: confidenceLevel,
         prediction: prediction,
-        method: &apos;Bayesian Neural Network&apos;,
+        method: 'Bayesian Neural Network',
         lowerBound: prediction - (baseUncertainty * 0.9 * (confidenceLevel / 100) * 1.96),
         upperBound: prediction + (baseUncertainty * 0.9 * (confidenceLevel / 100) * 1.96),
         width: 2 * (baseUncertainty * 0.9 * (confidenceLevel / 100) * 1.96)
       },
       {
-}
-        id: &apos;ensemble_interval&apos;,
+        id: 'ensemble_interval',
         confidence: confidenceLevel,
         prediction: prediction,
-        method: &apos;Deep Ensemble&apos;,
+        method: 'Deep Ensemble',
         lowerBound: prediction - (baseUncertainty * 1.1 * (confidenceLevel / 100) * 1.96),
         upperBound: prediction + (baseUncertainty * 1.1 * (confidenceLevel / 100) * 1.96),
         width: 2 * (baseUncertainty * 1.1 * (confidenceLevel / 100) * 1.96)
       },
       {
-}
-        id: &apos;conformal_interval&apos;,
+        id: 'conformal_interval',
         confidence: confidenceLevel,
         prediction: prediction,
-        method: &apos;Conformal Prediction&apos;,
+        method: 'Conformal Prediction',
         lowerBound: prediction - (baseUncertainty * 1.2 * (confidenceLevel / 100) * 1.96),
         upperBound: prediction + (baseUncertainty * 1.2 * (confidenceLevel / 100) * 1.96),
         width: 2 * (baseUncertainty * 1.2 * (confidenceLevel / 100) * 1.96)
@@ -420,9 +382,7 @@ function OracleConfidenceEstimationSection() {
 
   // Simulate confidence estimation
   const simulateConfidenceEstimation = () => {
-}
     const predictions = Array.from({ length: 100 }, (_, i) => ({
-}
       id: i,
       player: `Player ${i + 1}`,
       prediction: 15 + Math.random() * 10,
@@ -432,7 +392,6 @@ function OracleConfidenceEstimationSection() {
     }));
 
     setSimulationResults({
-}
       predictions,
       averageConfidence: predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length,
       averageUncertainty: predictions.reduce((sum, p) => sum + p.uncertainty, 0) / predictions.length,
@@ -483,7 +442,7 @@ function OracleConfidenceEstimationSection() {
         </div>
         
         <div className="overview-section sm:px-4 md:px-6 lg:px-8">
-          <h4>Oracle&apos;s Confidence Framework</h4>
+          <h4>Oracle's Confidence Framework</h4>
           <div className="confidence-framework sm:px-4 md:px-6 lg:px-8">
             <div className="framework-flow sm:px-4 md:px-6 lg:px-8">
               <div className="flow-stage sm:px-4 md:px-6 lg:px-8">
@@ -575,10 +534,9 @@ function OracleConfidenceEstimationSection() {
       <h3>🔬 Confidence Estimation Methods</h3>
       <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {confidenceMethods.map((method: any) => (
-}
           <button
             key={method.id}
-            className={`method-card ${selectedMethod === method.id ? &apos;selected&apos; : &apos;&apos;}`}
+            className={`method-card ${selectedMethod === method.id ? 'selected' : ''}`}
             onClick={() => setSelectedMethod(method.id)}
             aria-label={`Select ${method.name} method`}
           >
@@ -603,7 +561,6 @@ function OracleConfidenceEstimationSection() {
                 <h6>✅ Advantages</h6>
                 <ul>
                   {method.advantages.map((advantage, index) => (
-}
                     <li key={`advantage-${method.id}-${index}`}>{advantage}</li>
                   ))}
                 </ul>
@@ -612,7 +569,6 @@ function OracleConfidenceEstimationSection() {
                 <h6>⚠️ Limitations</h6>
                 <ul>
                   {method.limitations.map((limitation, index) => (
-}
                     <li key={`limitation-${method.id}-${index}`}>{limitation}</li>
                   ))}
                 </ul>
@@ -620,7 +576,6 @@ function OracleConfidenceEstimationSection() {
             </div>
             
             {selectedMethod === method.id && (
-}
               <div className="method-details sm:px-4 md:px-6 lg:px-8">
                 <div className="implementation-details sm:px-4 md:px-6 lg:px-8">
                   <h6>🔧 Implementation</h6>
@@ -631,7 +586,6 @@ function OracleConfidenceEstimationSection() {
                   <h6>🎯 Use Cases</h6>
                   <ul>
                     {method.useCases.map((useCase, index) => (
-}
                       <li key={`usecase-${method.id}-${index}`}>{useCase}</li>
                     ))}
                   </ul>
@@ -653,7 +607,6 @@ function OracleConfidenceEstimationSection() {
             <span>Theoretical Foundation</span>
           </div>
           {confidenceMethods.map((method: any) => (
-}
             <div key={`comparison-${method.id}`} className="table-row sm:px-4 md:px-6 lg:px-8">
               <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
               <span className="cost-score sm:px-4 md:px-6 lg:px-8">
@@ -680,20 +633,20 @@ function OracleConfidenceEstimationSection() {
       <h3>🔍 Uncertainty Sources & Analysis</h3>
       <div className="uncertainty-type-selector sm:px-4 md:px-6 lg:px-8">
         <button
-          className={`type-button ${selectedUncertaintyType === &apos;aleatoric&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setSelectedUncertaintyType(&apos;aleatoric&apos;)}
+          className={`type-button ${selectedUncertaintyType === 'aleatoric' ? 'active' : ''}`}
+          onClick={() => setSelectedUncertaintyType('aleatoric')}
         >
           🎲 Aleatoric (Data) Uncertainty
         </button>
         <button
-          className={`type-button ${selectedUncertaintyType === &apos;epistemic&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setSelectedUncertaintyType(&apos;epistemic&apos;)}
+          className={`type-button ${selectedUncertaintyType === 'epistemic' ? 'active' : ''}`}
+          onClick={() => setSelectedUncertaintyType('epistemic')}
         >
           🧠 Epistemic (Model) Uncertainty
         </button>
         <button
-          className={`type-button ${selectedUncertaintyType === &apos;all&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setSelectedUncertaintyType(&apos;all&apos;)}
+          className={`type-button ${selectedUncertaintyType === 'all' ? 'active' : ''}`}
+          onClick={() => setSelectedUncertaintyType('all')}
         >
           📊 All Sources
         </button>
@@ -701,8 +654,7 @@ function OracleConfidenceEstimationSection() {
       
       <div className="uncertainty-grid sm:px-4 md:px-6 lg:px-8">
         {uncertaintySources
-}
-          .filter((source: any) => selectedUncertaintyType === &apos;all&apos; || source.type.toLowerCase() === selectedUncertaintyType)
+          .filter((source: any) => selectedUncertaintyType === 'all' || source.type.toLowerCase() === selectedUncertaintyType)
           .map((source: any) => (
             <div key={source.id} className={`uncertainty-card ${source.type.toLowerCase()}`}>
               <div className="uncertainty-header sm:px-4 md:px-6 lg:px-8">
@@ -724,7 +676,6 @@ function OracleConfidenceEstimationSection() {
                 <h6>🛡️ Mitigation Strategies</h6>
                 <ul>
                   {source.mitigation.map((strategy, index) => (
-}
                     <li key={`mitigation-${source.id}-${index}`}>{strategy}</li>
                   ))}
                 </ul>
@@ -734,7 +685,7 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       <div className="uncertainty-framework sm:px-4 md:px-6 lg:px-8">
-        <h4>🔬 Oracle&apos;s Uncertainty Decomposition</h4>
+        <h4>🔬 Oracle's Uncertainty Decomposition</h4>
         <div className="decomposition-formula sm:px-4 md:px-6 lg:px-8">
           <div className="formula-card sm:px-4 md:px-6 lg:px-8">
             <h6>Total Uncertainty Decomposition</h6>
@@ -778,7 +729,6 @@ function OracleConfidenceEstimationSection() {
         <h4>📊 Calibration Metrics</h4>
         <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
           {calibrationMetrics.map((metric: any) => (
-}
             <div key={metric.id} className="metric-card sm:px-4 md:px-6 lg:px-8">
               <h5>{metric.name}</h5>
               <div className="metric-formula sm:px-4 md:px-6 lg:px-8">
@@ -842,7 +792,7 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       <div className="calibration-results sm:px-4 md:px-6 lg:px-8">
-        <h4>📈 Oracle&apos;s Calibration Performance</h4>
+        <h4>📈 Oracle's Calibration Performance</h4>
         <div className="results-dashboard sm:px-4 md:px-6 lg:px-8">
           <div className="calibration-score sm:px-4 md:px-6 lg:px-8">
             <h5>Overall Calibration Score</h5>
@@ -880,7 +830,6 @@ function OracleConfidenceEstimationSection() {
   );
 
   const renderIntervals = () => {
-}
     const intervals = generatePredictionIntervals(confidenceLevel);
     
     return (
@@ -888,7 +837,7 @@ function OracleConfidenceEstimationSection() {
         <h3>📊 Prediction Intervals</h3>
         <div className="intervals-intro sm:px-4 md:px-6 lg:px-8">
           <p>
-            Prediction intervals provide a range of plausible values for Oracle&apos;s predictions, 
+            Prediction intervals provide a range of plausible values for Oracle's predictions, 
             giving you a complete picture of uncertainty rather than just point estimates.
           </p>
         </div>
@@ -910,7 +859,6 @@ function OracleConfidenceEstimationSection() {
           <h4>📈 Prediction Intervals for {confidenceLevel}% Confidence</h4>
           <div className="intervals-grid sm:px-4 md:px-6 lg:px-8">
             {intervals.map((interval: any) => (
-}
               <div key={interval.id} className="interval-card sm:px-4 md:px-6 lg:px-8">
                 <h5>{interval.method}</h5>
                 <div className="interval-display sm:px-4 md:px-6 lg:px-8">
@@ -977,7 +925,6 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       {simulationResults && (
-}
         <div className="simulation-results sm:px-4 md:px-6 lg:px-8">
           <h4>📊 Confidence Analysis Results</h4>
           <div className="results-summary sm:px-4 md:px-6 lg:px-8">
@@ -1025,7 +972,6 @@ function OracleConfidenceEstimationSection() {
                 <span>Method</span>
               </div>
               {simulationResults.predictions.slice(0, 10).map((prediction: any) => (
-}
                 <div key={prediction.id} className="table-row sm:px-4 md:px-6 lg:px-8">
                   <span className="player-name sm:px-4 md:px-6 lg:px-8">{prediction.player}</span>
                   <span className="prediction-value sm:px-4 md:px-6 lg:px-8">{prediction.prediction.toFixed(1)}</span>
@@ -1054,14 +1000,14 @@ function OracleConfidenceEstimationSection() {
           <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Uncertainty as Information</h5>
             <p>
-              High uncertainty doesn&apos;t mean bad predictions - it indicates situations where 
+              High uncertainty doesn't mean bad predictions - it indicates situations where 
               multiple outcomes are plausible, creating opportunity for strategic advantage.
             </p>
           </div>
           <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Dynamic Confidence</h5>
             <p>
-              Oracle&apos;s confidence adapts to changing conditions. Pre-game confidence may differ 
+              Oracle's confidence adapts to changing conditions. Pre-game confidence may differ 
               from in-game confidence as new information becomes available.
             </p>
           </div>
@@ -1081,55 +1027,55 @@ function OracleConfidenceEstimationSection() {
     <div className="oracle-confidence-section sm:px-4 md:px-6 lg:px-8">
       <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2>🎯 Confidence Scores & Uncertainty Quantification</h2>
-        <p>Understanding prediction reliability and uncertainty bounds in Oracle&apos;s AI system</p>
+        <p>Understanding prediction reliability and uncertainty bounds in Oracle's AI system</p>
       </div>
       
       <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button
-          className={`nav-button ${activeTab === &apos;overview&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;overview&apos;)}
+          className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
+          onClick={() => setActiveTab('overview')}
         >
           📊 Overview
         </button>
         <button
-          className={`nav-button ${activeTab === &apos;methods&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;methods&apos;)}
+          className={`nav-button ${activeTab === 'methods' ? 'active' : ''}`}
+          onClick={() => setActiveTab('methods')}
         >
           🔬 Methods
         </button>
         <button
-          className={`nav-button ${activeTab === &apos;uncertainty&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;uncertainty&apos;)}
+          className={`nav-button ${activeTab === 'uncertainty' ? 'active' : ''}`}
+          onClick={() => setActiveTab('uncertainty')}
         >
           🔍 Uncertainty
         </button>
         <button
-          className={`nav-button ${activeTab === &apos;calibration&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;calibration&apos;)}
+          className={`nav-button ${activeTab === 'calibration' ? 'active' : ''}`}
+          onClick={() => setActiveTab('calibration')}
         >
           ⚖️ Calibration
         </button>
         <button
-          className={`nav-button ${activeTab === &apos;intervals&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;intervals&apos;)}
+          className={`nav-button ${activeTab === 'intervals' ? 'active' : ''}`}
+          onClick={() => setActiveTab('intervals')}
         >
           📊 Intervals
         </button>
         <button
-          className={`nav-button ${activeTab === &apos;demo&apos; ? &apos;active&apos; : &apos;&apos;}`}
-          onClick={() => setActiveTab(&apos;demo&apos;)}
+          className={`nav-button ${activeTab === 'demo' ? 'active' : ''}`}
+          onClick={() => setActiveTab('demo')}
         >
           🧪 Demo
         </button>
       </div>
       
       <div className="section-content sm:px-4 md:px-6 lg:px-8">
-        {activeTab === &apos;overview&apos; && renderOverview()}
-        {activeTab === &apos;methods&apos; && renderMethods()}
-        {activeTab === &apos;uncertainty&apos; && renderUncertainty()}
-        {activeTab === &apos;calibration&apos; && renderCalibration()}
-        {activeTab === &apos;intervals&apos; && renderIntervals()}
-        {activeTab === &apos;demo&apos; && renderDemo()}
+        {activeTab === 'overview' && renderOverview()}
+        {activeTab === 'methods' && renderMethods()}
+        {activeTab === 'uncertainty' && renderUncertainty()}
+        {activeTab === 'calibration' && renderCalibration()}
+        {activeTab === 'intervals' && renderIntervals()}
+        {activeTab === 'demo' && renderDemo()}
       </div>
     </div>
   );

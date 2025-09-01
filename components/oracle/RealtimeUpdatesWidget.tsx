@@ -3,83 +3,72 @@
  * Displays live activity feed for Oracle predictions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-}
     ZapIcon, 
     UsersIcon, 
     AlertTriangleIcon, 
     ClockIcon,
     BrainIcon,
 //     ActivityIcon
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
 
 export interface RealtimeUpdate {
-}
     id: string;
-    type: &apos;PREDICTION_UPDATE&apos; | &apos;USER_JOINED&apos; | &apos;CONSENSUS_CHANGE&apos; | &apos;TIME_WARNING&apos;;
+    type: 'PREDICTION_UPDATE' | 'USER_JOINED' | 'CONSENSUS_CHANGE' | 'TIME_WARNING';
     message: string;
     timestamp: string;
     data?: any;
 
-}
 
 interface RealtimeUpdatesWidgetProps {
-}
     updates: RealtimeUpdate[];
     className?: string;
     maxUpdates?: number;
     compact?: boolean;
 
 export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
-}
     updates,
-    className = &apos;&apos;,
+    className = '',
     maxUpdates = 10,
     compact = false
 }: any) => {
-}
     const displayUpdates = updates.slice(0, maxUpdates);
 
-    const getUpdateIcon = (type: RealtimeUpdate[&apos;type&apos;]) => {
-}
+    const getUpdateIcon = (type: RealtimeUpdate['type']) => {
         switch (type) {
-}
-            case &apos;PREDICTION_UPDATE&apos;:
+            case 'PREDICTION_UPDATE':
                 return BrainIcon;
-            case &apos;USER_JOINED&apos;:
+            case 'USER_JOINED':
                 return UsersIcon;
-            case &apos;CONSENSUS_CHANGE&apos;:
+            case 'CONSENSUS_CHANGE':
                 return ActivityIcon;
-            case &apos;TIME_WARNING&apos;:
+            case 'TIME_WARNING':
                 return ClockIcon;
             default:
                 return ZapIcon;
 
     };
 
-    const getUpdateColor = (type: RealtimeUpdate[&apos;type&apos;]) => {
-}
+    const getUpdateColor = (type: RealtimeUpdate['type']) => {
         switch (type) {
-}
-            case &apos;PREDICTION_UPDATE&apos;:
-                return &apos;text-blue-400&apos;;
-            case &apos;USER_JOINED&apos;:
-                return &apos;text-green-400&apos;;
-            case &apos;CONSENSUS_CHANGE&apos;:
-                return &apos;text-purple-400&apos;;
-            case &apos;TIME_WARNING&apos;:
-                return &apos;text-yellow-400&apos;;
+            case 'PREDICTION_UPDATE':
+                return 'text-blue-400';
+            case 'USER_JOINED':
+                return 'text-green-400';
+            case 'CONSENSUS_CHANGE':
+                return 'text-purple-400';
+            case 'TIME_WARNING':
+                return 'text-yellow-400';
             default:
-                return &apos;text-gray-400&apos;;
+                return 'text-gray-400';
 
     };
 
     const formatTimestamp = (timestamp: string) => {
-}
         const date = new Date(timestamp);
         const now = new Date();
         const diffMs = now.getTime() - date.getTime();
@@ -87,30 +76,24 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
         const diffMinutes = Math.floor(diffSeconds / 60);
 
         if (diffSeconds < 60) {
-}
-            return &apos;just now&apos;;
+            return 'just now';
         } else if (diffMinutes < 60) {
-}
             return `${diffMinutes}m ago`;
         } else {
-}
-            return date.toLocaleTimeString([], { hour: &apos;2-digit&apos;, minute: &apos;2-digit&apos; });
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     };
 
     if (compact) {
-}
         return (
             <div className={`space-y-2 max-h-48 overflow-y-auto ${className}`}>
                 <AnimatePresence mode="popLayout">
                     {displayUpdates.length === 0 ? (
-}
                         <div className="text-sm text-gray-500 italic text-center py-4 sm:px-4 md:px-6 lg:px-8">
                             No updates yet...
                         </div>
                     ) : (
                         displayUpdates.map((update: any) => {
-}
                             const Icon = getUpdateIcon(update.type);
                             const iconColor = getUpdateColor(update.type);
                             
@@ -145,7 +128,6 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
             <div className="space-y-3 max-h-64 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="popLayout">
                     {displayUpdates.length === 0 ? (
-}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -161,7 +143,6 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                         </motion.div>
                     ) : (
                         displayUpdates.map((update, index) => {
-}
                             const Icon = getUpdateIcon(update.type);
                             const iconColor = getUpdateColor(update.type);
                             
@@ -172,7 +153,6 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                     transition={{ 
-}
                                         duration: 0.4,
                                         delay: index * 0.05,
                                         type: "spring",
@@ -192,8 +172,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                                             <div className="text-sm md:text-xs text-gray-500">
                                                 {formatTimestamp(update.timestamp)}
                                             </div>
-                                            {update.type === &apos;TIME_WARNING&apos; && (
-}
+                                            {update.type === 'TIME_WARNING' && (
                                                 <div className="flex items-center space-x-1 text-sm md:text-xs text-yellow-400">
                                                     <AlertTriangleIcon className="w-4 h-4 md:w-3 md:h-3" />
                                                     <span>Urgent</span>
@@ -208,7 +187,6 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                 </AnimatePresence>
                 
                 {displayUpdates.length >= maxUpdates && (
-}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

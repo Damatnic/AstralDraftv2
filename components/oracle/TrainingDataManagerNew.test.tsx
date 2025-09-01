@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import TrainingDataManagerNew from &apos;./TrainingDataManagerNew&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TrainingDataManagerNew from './TrainingDataManagerNew';
 
-describe(&apos;TrainingDataManagerNew&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('TrainingDataManagerNew', () => {
+  it('renders without crashing', () => {
     render(<TrainingDataManagerNew />);
-    expect(screen.getByTestId(&apos;trainingdatamanagernew&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('trainingdatamanagernew')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<TrainingDataManagerNew />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<TrainingDataManagerNew />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

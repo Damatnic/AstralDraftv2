@@ -3,29 +3,24 @@
  * Provides resilient WebSocket connections with automatic fallback
  */
 
-import { EventEmitter } from &apos;events&apos;;
+import { EventEmitter } from 'events';
 
 export interface WebSocketConfig {
-}
   url: string;
   reconnectAttempts?: number;
   reconnectDelay?: number;
   heartbeatInterval?: number;
   timeout?: number;
   fallbackToPolling?: boolean;
-}
 
 export enum ConnectionState {
-}
-  DISCONNECTED = &apos;disconnected&apos;,
-  CONNECTING = &apos;connecting&apos;,
-  CONNECTED = &apos;connected&apos;,
-  RECONNECTING = &apos;reconnecting&apos;,
-  FAILED = &apos;failed&apos;
-}
+  DISCONNECTED = 'disconnected',
+  CONNECTING = 'connecting',
+  CONNECTED = 'connected',
+  RECONNECTING = 'reconnecting',
+  FAILED = 'failed'
 
 class ResilientWebSocketService extends EventEmitter {
-}
   private socket: WebSocket | null = null;
   private config: Required<WebSocketConfig>;
   private reconnectTimer: NodeJS.Timeout | null = null;
@@ -37,11 +32,9 @@ class ResilientWebSocketService extends EventEmitter {
   private pollingTimer: NodeJS.Timeout | null = null;
 
   constructor(config: WebSocketConfig) {
-}
     super();
     
     this.config = {
-}
       url: config.url,
       reconnectAttempts: config.reconnectAttempts ?? 5,
       reconnectDelay: config.reconnectDelay ?? 5000,
@@ -55,27 +48,22 @@ class ResilientWebSocketService extends EventEmitter {
    * Connect to WebSocket with error handling
    */
   async connect(): Promise<void> {
-}
     if (this.connectionState === ConnectionState.CONNECTED) {
-}
-      console.log(&apos;WebSocket already connected&apos;);
+      console.log('WebSocket already connected');
       return;
     }
 
     if (this.connectionState === ConnectionState.CONNECTING) {
-}
-      console.log(&apos;WebSocket connection already in progress&apos;);
+      console.log('WebSocket connection already in progress');
       return;
     }
 
     this.setConnectionState(ConnectionState.CONNECTING);
 
     try {
-}
       // Check if WebSocket is available
-      if (typeof WebSocket === &apos;undefined&apos;) {
-}
-        throw new Error(&apos;WebSocket not supported in this environment&apos;);
+      if (typeof WebSocket === 'undefined') {
+        throw new Error('WebSocket not supported in this environment');
       }
 
       // Validate URL
@@ -86,40 +74,33 @@ class ResilientWebSocketService extends EventEmitter {
       
       // Set up timeout for connection
       const connectionTimeout = setTimeout(() => {
-}
         if (this.connectionState === ConnectionState.CONNECTING) {
-}
           this.handleConnectionTimeout();
         }
       }, this.config.timeout);
 
       // Set up event handlers
       this.socket.onopen = () => {
-}
         clearTimeout(connectionTimeout);
         this.handleOpen();
       };
 
       this.socket.onclose = (event: any) => {
-}
         clearTimeout(connectionTimeout);
         this.handleClose(event);
       };
 
       this.socket.onerror = (error: any) => {
-}
         clearTimeout(connectionTimeout);
         this.handleError(error);
       };
 
       this.socket.onmessage = (event: any) => {
-}
         this.handleMessage(event);
       };
 
     } catch (error) {
-}
-      console.error(&apos;Failed to create WebSocket connection:&apos;, error);
+      console.error('Failed to create WebSocket connection:', error);
       this.handleConnectionFailure();
     }
   }
@@ -128,24 +109,20 @@ class ResilientWebSocketService extends EventEmitter {
    * Normalize WebSocket URL
    */
   private normalizeWebSocketUrl(url: string): string {
-}
     // Handle relative URLs
-    if (url.startsWith(&apos;/&apos;)) {
-}
-      const protocol = window.location.protocol === &apos;https:&apos; ? &apos;wss:&apos; : &apos;ws:&apos;;
+    if (url.startsWith('/')) {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       return `${protocol}//${window.location.host}${url}`;
     }
     
     // Convert http to ws
-    if (url.startsWith(&apos;http://&apos;)) {
-}
-      return url.replace(&apos;http://&apos;, &apos;ws://&apos;);
+    if (url.startsWith('http://')) {
+      return url.replace('http://', 'ws://');
     }
     
     // Convert https to wss
-    if (url.startsWith(&apos;https://&apos;)) {
-}
-      return url.replace(&apos;https://&apos;, &apos;wss://&apos;);
+    if (url.startsWith('https://')) {
+      return url.replace('https://', 'wss://');
     }
     
     return url;
@@ -155,8 +132,7 @@ class ResilientWebSocketService extends EventEmitter {
    * Handle successful connection
    */
   private handleOpen(): void {
-}
-    console.log(&apos;WebSocket connected successfully&apos;);
+    console.log('WebSocket connected successfully');
     this.setConnectionState(ConnectionState.CONNECTED);
     this.reconnectCount = 0;
     this.isPollingMode = false;
@@ -171,14 +147,13 @@ class ResilientWebSocketService extends EventEmitter {
     this.processMessageQueue();
     
     // Emit connected event
-    this.emit(&apos;connected&apos;);
+    this.emit('connected');
   }
 
   /**
    * Handle connection close
    */
   private handleClose(event: CloseEvent): void {
-}
     console.log(`WebSocket closed: ${event.code} - ${event.reason}`);
     
     this.stopHeartbeat();
@@ -186,12 +161,10 @@ class ResilientWebSocketService extends EventEmitter {
     
     // Determine if we should reconnect
     if (event.code === 1000 || event.code === 1001) {
-}
       // Normal closure
       this.setConnectionState(ConnectionState.DISCONNECTED);
-      this.emit(&apos;disconnected&apos;, { code: event.code, reason: event.reason });
+      this.emit('disconnected', { code: event.code, reason: event.reason });
     } else {
-}
       // Abnormal closure - attempt reconnection
       this.attemptReconnection();
     }
@@ -201,22 +174,19 @@ class ResilientWebSocketService extends EventEmitter {
    * Handle connection error
    */
   private handleError(error: Event): void {
-}
-    console.error(&apos;WebSocket error:&apos;, error);
-    this.emit(&apos;error&apos;, error);
+    console.error('WebSocket error:', error);
+    this.emit('error', error);
     
-    // Don&apos;t change state here, let close handler manage state
+    // Don't change state here, let close handler manage state
   }
 
   /**
    * Handle connection timeout
    */
   private handleConnectionTimeout(): void {
-}
-    console.warn(&apos;WebSocket connection timeout&apos;);
+    console.warn('WebSocket connection timeout');
     
     if (this.socket) {
-}
       this.socket.close();
       this.socket = null;
     }
@@ -228,19 +198,14 @@ class ResilientWebSocketService extends EventEmitter {
    * Handle connection failure
    */
   private handleConnectionFailure(): void {
-}
     if (this.reconnectCount < this.config.reconnectAttempts) {
-}
       this.attemptReconnection();
     } else if (this.config.fallbackToPolling) {
-}
       this.fallbackToPolling();
     } else {
-}
       this.setConnectionState(ConnectionState.FAILED);
-      this.emit(&apos;failed&apos;, { 
-}
-        message: &apos;WebSocket connection failed after maximum attempts&apos;,
+      this.emit('failed', { 
+        message: 'WebSocket connection failed after maximum attempts',
         reconnectAttempts: this.reconnectCount 
       });
     }
@@ -250,9 +215,7 @@ class ResilientWebSocketService extends EventEmitter {
    * Attempt to reconnect
    */
   private attemptReconnection(): void {
-}
     if (this.connectionState === ConnectionState.RECONNECTING) {
-}
       return;
     }
     
@@ -263,12 +226,10 @@ class ResilientWebSocketService extends EventEmitter {
     console.log(`Attempting reconnection #${this.reconnectCount} in ${delay}ms`);
     
     this.reconnectTimer = setTimeout(() => {
-}
       this.connect();
     }, delay);
     
-    this.emit(&apos;reconnecting&apos;, { 
-}
+    this.emit('reconnecting', { 
       attempt: this.reconnectCount,
       maxAttempts: this.config.reconnectAttempts,
 //       delay 
@@ -279,7 +240,6 @@ class ResilientWebSocketService extends EventEmitter {
    * Calculate exponential backoff delay for reconnection
    */
   private calculateReconnectDelay(): number {
-}
     const baseDelay = this.config.reconnectDelay;
     const maxDelay = baseDelay * 10;
     const delay = Math.min(baseDelay * Math.pow(2, this.reconnectCount - 1), maxDelay);
@@ -291,12 +251,11 @@ class ResilientWebSocketService extends EventEmitter {
    * Fallback to polling mode
    */
   private fallbackToPolling(): void {
-}
-    console.log(&apos;Falling back to polling mode&apos;);
+    console.log('Falling back to polling mode');
     this.isPollingMode = true;
     this.setConnectionState(ConnectionState.CONNECTED);
     
-    this.emit(&apos;fallback&apos;, { mode: &apos;polling&apos; });
+    this.emit('fallback', { mode: 'polling' });
     
     // Start polling
     this.startPolling();
@@ -306,35 +265,27 @@ class ResilientWebSocketService extends EventEmitter {
    * Start polling as fallback
    */
   private startPolling(): void {
-}
     if (this.pollingTimer) {
-}
       return;
     }
     
     const poll = async () => {
-}
       try {
-}
         // Make HTTP request to get updates
-        const response = await fetch(`${this.config.url.replace(/^ws/, &apos;http&apos;)}/poll`, {
-}
-          method: &apos;POST&apos;,
-          headers: { &apos;Content-Type&apos;: &apos;application/json&apos; },
+        const response = await fetch(`${this.config.url.replace(/^ws/, 'http')}/poll`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-}
             lastUpdate: Date.now() - 30000 // Get last 30 seconds of data
           })
         });
         
         if (response.ok) {
-}
           const data = await response.json();
-          this.emit(&apos;message&apos;, { data: JSON.stringify(data) });
+          this.emit('message', { data: JSON.stringify(data) });
         }
       } catch (error) {
-}
-        console.warn(&apos;Polling request failed:&apos;, error);
+        console.warn('Polling request failed:', error);
       }
     };
     
@@ -347,9 +298,7 @@ class ResilientWebSocketService extends EventEmitter {
    * Stop polling
    */
   private stopPolling(): void {
-}
     if (this.pollingTimer) {
-}
       clearInterval(this.pollingTimer);
       this.pollingTimer = null;
     }
@@ -359,22 +308,18 @@ class ResilientWebSocketService extends EventEmitter {
    * Handle incoming message
    */
   private handleMessage(event: MessageEvent): void {
-}
     try {
-}
       const data = JSON.parse(event.data);
-      this.emit(&apos;message&apos;, data);
+      this.emit('message', data);
       
       // Handle specific message types
       if (data.type) {
-}
         this.emit(data.type, data.payload);
       }
     } catch (error) {
-}
-      console.error(&apos;Failed to parse WebSocket message:&apos;, error);
+      console.error('Failed to parse WebSocket message:', error);
       // Emit raw message as fallback
-      this.emit(&apos;raw-message&apos;, event.data);
+      this.emit('raw-message', event.data);
     }
   }
 
@@ -382,14 +327,11 @@ class ResilientWebSocketService extends EventEmitter {
    * Start heartbeat to keep connection alive
    */
   private startHeartbeat(): void {
-}
     this.stopHeartbeat();
     
     this.heartbeatTimer = setInterval(() => {
-}
       if (this.isConnected()) {
-}
-        this.send(&apos;ping&apos;, { timestamp: Date.now() });
+        this.send('ping', { timestamp: Date.now() });
       }
     }, this.config.heartbeatInterval);
   }
@@ -398,9 +340,7 @@ class ResilientWebSocketService extends EventEmitter {
    * Stop heartbeat
    */
   private stopHeartbeat(): void {
-}
     if (this.heartbeatTimer) {
-}
       clearInterval(this.heartbeatTimer);
       this.heartbeatTimer = null;
     }
@@ -410,26 +350,20 @@ class ResilientWebSocketService extends EventEmitter {
    * Send a message
    */
   send(event: string, data: any = {}): void {
-}
     const message = { event, data, timestamp: Date.now() };
     
     if (this.isConnected() && !this.isPollingMode) {
-}
       try {
-}
         this.socket!.send(JSON.stringify(message));
-        this.emit(&apos;sent&apos;, message);
+        this.emit('sent', message);
       } catch (error) {
-}
-        console.error(&apos;Failed to send message:&apos;, error);
+        console.error('Failed to send message:', error);
         this.queueMessage(event, data);
       }
     } else if (this.isPollingMode) {
-}
       // In polling mode, queue for next poll or send via HTTP
       this.sendViaHttp(message);
     } else {
-}
       // Queue message for when connected
       this.queueMessage(event, data);
     }
@@ -439,18 +373,14 @@ class ResilientWebSocketService extends EventEmitter {
    * Send message via HTTP in polling mode
    */
   private async sendViaHttp(message: any): Promise<void> {
-}
     try {
-}
-      await fetch(`${this.config.url.replace(/^ws/, &apos;http&apos;)}/send`, {
-}
-        method: &apos;POST&apos;,
-        headers: { &apos;Content-Type&apos;: &apos;application/json&apos; },
+      await fetch(`${this.config.url.replace(/^ws/, 'http')}/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(message)
       });
     } catch (error) {
-}
-      console.error(&apos;Failed to send message via HTTP:&apos;, error);
+      console.error('Failed to send message via HTTP:', error);
     }
   }
 
@@ -458,12 +388,10 @@ class ResilientWebSocketService extends EventEmitter {
    * Queue a message
    */
   private queueMessage(event: string, data: any): void {
-}
     this.messageQueue.push({ event, data });
     
     // Limit queue size
     if (this.messageQueue.length > 100) {
-}
       this.messageQueue.shift();
     }
   }
@@ -472,12 +400,9 @@ class ResilientWebSocketService extends EventEmitter {
    * Process queued messages
    */
   private processMessageQueue(): void {
-}
     while (this.messageQueue.length > 0) {
-}
       const message = this.messageQueue.shift();
       if (message) {
-}
         this.send(message.event, message.data);
       }
     }
@@ -487,12 +412,10 @@ class ResilientWebSocketService extends EventEmitter {
    * Set connection state
    */
   private setConnectionState(state: ConnectionState): void {
-}
     if (this.connectionState !== state) {
-}
       const previousState = this.connectionState;
       this.connectionState = state;
-      this.emit(&apos;state-change&apos;, { from: previousState, to: state });
+      this.emit('state-change', { from: previousState, to: state });
     }
   }
 
@@ -500,10 +423,8 @@ class ResilientWebSocketService extends EventEmitter {
    * Disconnect WebSocket
    */
   disconnect(): void {
-}
     // Clear timers
     if (this.reconnectTimer) {
-}
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
@@ -513,8 +434,7 @@ class ResilientWebSocketService extends EventEmitter {
     
     // Close socket
     if (this.socket) {
-}
-      this.socket.close(1000, &apos;Client disconnect&apos;);
+      this.socket.close(1000, 'Client disconnect');
       this.socket = null;
     }
     
@@ -522,14 +442,13 @@ class ResilientWebSocketService extends EventEmitter {
     this.messageQueue = [];
     
     this.setConnectionState(ConnectionState.DISCONNECTED);
-    this.emit(&apos;disconnected&apos;, { code: 1000, reason: &apos;Client disconnect&apos; });
+    this.emit('disconnected', { code: 1000, reason: 'Client disconnect' });
   }
 
   /**
    * Check if connected
    */
   isConnected(): boolean {
-}
     return this.socket?.readyState === WebSocket.OPEN;
   }
 
@@ -537,7 +456,6 @@ class ResilientWebSocketService extends EventEmitter {
    * Get connection state
    */
   getState(): ConnectionState {
-}
     return this.connectionState;
   }
 
@@ -545,29 +463,24 @@ class ResilientWebSocketService extends EventEmitter {
    * Get connection info
    */
   getConnectionInfo(): {
-}
     state: ConnectionState;
     isPolling: boolean;
     reconnectCount: number;
     queueSize: number;
   } {
-}
     return {
-}
       state: this.connectionState,
       isPolling: this.isPollingMode,
       reconnectCount: this.reconnectCount,
       queueSize: this.messageQueue.length
     };
   }
-}
 
 // Create default WebSocket service
 const defaultConfig: WebSocketConfig = {
-}
-  url: process.env.NODE_ENV === &apos;production&apos; 
-    ? &apos;wss://astraldraft.netlify.app/ws&apos;
-    : &apos;ws://localhost:3001&apos;,
+  url: process.env.NODE_ENV === 'production' 
+    ? 'wss://astraldraft.netlify.app/ws'
+    : 'ws://localhost:3001',
   reconnectAttempts: 5,
   reconnectDelay: 3000,
   heartbeatInterval: 30000,
@@ -578,25 +491,18 @@ const defaultConfig: WebSocketConfig = {
 export const websocketService = new ResilientWebSocketService(defaultConfig);
 
 // Auto-connect in browser environment
-if (typeof window !== &apos;undefined&apos;) {
-}
+if (typeof window !== 'undefined') {
   // Wait for DOM ready
-  if (document.readyState === &apos;loading&apos;) {
-}
-    document.addEventListener(&apos;DOMContentLoaded&apos;, () => {
-}
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
       websocketService.connect().catch(err => {
-}
-        console.warn(&apos;WebSocket auto-connect failed:&apos;, err);
+        console.warn('WebSocket auto-connect failed:', err);
       });
     });
   } else {
-}
     websocketService.connect().catch(err => {
-}
-      console.warn(&apos;WebSocket auto-connect failed:&apos;, err);
+      console.warn('WebSocket auto-connect failed:', err);
     });
   }
-}
 
 export default websocketService;

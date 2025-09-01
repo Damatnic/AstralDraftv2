@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MobileDraftInterface from &apos;./MobileDraftInterface&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MobileDraftInterface from './MobileDraftInterface';
 
-describe(&apos;MobileDraftInterface&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MobileDraftInterface', () => {
+  it('renders without crashing', () => {
     render(<MobileDraftInterface />);
-    expect(screen.getByTestId(&apos;mobiledraftinterface&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('mobiledraftinterface')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MobileDraftInterface />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MobileDraftInterface />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

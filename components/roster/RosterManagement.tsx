@@ -3,64 +3,54 @@
  * Comprehensive roster interface for managing team players
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Player, Team } from &apos;../../types&apos;;
-import { POSITION_GROUPS, NFL_TEAMS } from &apos;../../data/nflPlayers&apos;;
-import PlayerSearch from &apos;../players/PlayerSearch&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { Player, Team } from '../../types';
+import { POSITION_GROUPS, NFL_TEAMS } from '../../data/nflPlayers';
+import PlayerSearch from '../players/PlayerSearch';
 
 interface RosterManagementProps {
-}
   team: Team;
   isOwner?: boolean;
   showAddDropButtons?: boolean;
 
-}
 
 interface RosterSlot {
-}
   position: string;
   player: Player | null;
   isStarter: boolean;
   isLocked?: boolean;
-}
 
 const RosterManagement: React.FC<RosterManagementProps> = ({
-}
   team,
   isOwner = false,
   showAddDropButtons = false
 }: any) => {
-}
   const { state, dispatch } = useAppState();
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState<string>(&apos;&apos;);
-  const [rosterView, setRosterView] = useState<&apos;starters&apos; | &apos;bench&apos; | &apos;all&apos;>(&apos;all&apos;);
+  const [selectedPosition, setSelectedPosition] = useState<string>('');
+  const [rosterView, setRosterView] = useState<'starters' | 'bench' | 'all'>('all');
 
   const league = state.leagues[0];
   
   // Create roster slots based on league settings
   const createRosterSlots = (): RosterSlot[] => {
-}
     const slots: RosterSlot[] = [];
     const rosterFormat = league.settings.rosterFormat;
     
     // Starting lineup slots
     Object.entries(rosterFormat).forEach(([position, count]) => {
-}
-      if (position === &apos;BENCH&apos; || position === &apos;IR&apos;) return;
+      if (position === 'BENCH' || position === 'IR') return;
       
       for (let i = 0; i < count; i++) {
-}
         const player = team.roster.find((p: any) => 
           p.position === position && 
           !slots.some((slot: any) => slot.player?.id === p.id)
         ) || null;
         
         slots.push({
-}
           position,
           player,
           isStarter: true,
@@ -75,10 +65,8 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
     );
     
     for (let i = 0; i < rosterFormat.BENCH; i++) {
-}
       slots.push({
-}
-        position: &apos;BENCH&apos;,
+        position: 'BENCH',
         player: benchPlayers[i] || null,
         isStarter: false,
         isLocked: false
@@ -87,10 +75,8 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
 
     // IR slots
     for (let i = 0; i < (rosterFormat.IR || 0); i++) {
-}
       slots.push({
-}
-        position: &apos;IR&apos;,
+        position: 'IR',
         player: null, // IR players would be handled separately
         isStarter: false,
         isLocked: false
@@ -102,85 +88,71 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
 
   const rosterSlots = createRosterSlots();
   const starterSlots = rosterSlots.filter((slot: any) => slot.isStarter);
-  const benchSlots = rosterSlots.filter((slot: any) => slot.position === &apos;BENCH&apos;);
-  const irSlots = rosterSlots.filter((slot: any) => slot.position === &apos;IR&apos;);
+  const benchSlots = rosterSlots.filter((slot: any) => slot.position === 'BENCH');
+  const irSlots = rosterSlots.filter((slot: any) => slot.position === 'IR');
 
   const getPositionColor = (position: string) => {
-}
     switch (position) {
-}
-      case &apos;QB&apos;: return &apos;bg-red-600&apos;;
-      case &apos;RB&apos;: return &apos;bg-green-600&apos;;
-      case &apos;WR&apos;: return &apos;bg-blue-600&apos;;
-      case &apos;TE&apos;: return &apos;bg-yellow-600&apos;;
-      case &apos;FLEX&apos;: return &apos;bg-purple-600&apos;;
-      case &apos;K&apos;: return &apos;bg-pink-600&apos;;
-      case &apos;DST&apos;: return &apos;bg-gray-600&apos;;
-      case &apos;BENCH&apos;: return &apos;bg-slate-600&apos;;
-      case &apos;IR&apos;: return &apos;bg-red-800&apos;;
-      default: return &apos;bg-gray-500&apos;;
+      case 'QB': return 'bg-red-600';
+      case 'RB': return 'bg-green-600';
+      case 'WR': return 'bg-blue-600';
+      case 'TE': return 'bg-yellow-600';
+      case 'FLEX': return 'bg-purple-600';
+      case 'K': return 'bg-pink-600';
+      case 'DST': return 'bg-gray-600';
+      case 'BENCH': return 'bg-slate-600';
+      case 'IR': return 'bg-red-800';
+      default: return 'bg-gray-500';
     }
   };
 
   const getInjuryStatusColor = (status: string) => {
-}
     switch (status) {
-}
-      case &apos;HEALTHY&apos;: return &apos;text-green-400&apos;;
-      case &apos;QUESTIONABLE&apos;: return &apos;text-yellow-400&apos;;
-      case &apos;DOUBTFUL&apos;: return &apos;text-orange-400&apos;;
-      case &apos;OUT&apos;: return &apos;text-red-400&apos;;
-      case &apos;IR&apos;: return &apos;text-red-600&apos;;
-      default: return &apos;text-gray-400&apos;;
+      case 'HEALTHY': return 'text-green-400';
+      case 'QUESTIONABLE': return 'text-yellow-400';
+      case 'DOUBTFUL': return 'text-orange-400';
+      case 'OUT': return 'text-red-400';
+      case 'IR': return 'text-red-600';
+      default: return 'text-gray-400';
     }
   };
 
   const handleAddPlayer = (position: string) => {
-}
     setSelectedPosition(position);
     setShowPlayerSearch(true);
   };
 
   const handlePlayerSelect = (player: Player) => {
-}
     // Add player to roster
     dispatch({
-}
-      type: &apos;ADD_PLAYER_TO_ROSTER&apos;,
+      type: 'ADD_PLAYER_TO_ROSTER',
       payload: { teamId: team.id, player }
     });
     
     dispatch({
-}
-      type: &apos;ADD_NOTIFICATION&apos;,
+      type: 'ADD_NOTIFICATION',
       payload: {
-}
         message: `${player.name} added to ${team.name}!`,
-        type: &apos;SUCCESS&apos;
+        type: 'SUCCESS'
       }
     });
     
     setShowPlayerSearch(false);
-    setSelectedPosition(&apos;&apos;);
+    setSelectedPosition('');
   };
 
   const handleDropPlayer = (player: Player) => {
-}
     if (window.confirm(`Are you sure you want to drop ${player.name}?`)) {
-}
       dispatch({
-}
-        type: &apos;REMOVE_PLAYER_FROM_ROSTER&apos;,
+        type: 'REMOVE_PLAYER_FROM_ROSTER',
         payload: { teamId: team.id, playerId: player.id }
       });
       
       dispatch({
-}
-        type: &apos;ADD_NOTIFICATION&apos;,
+        type: 'ADD_NOTIFICATION',
         payload: {
-}
           message: `${player.name} dropped from ${team.name}`,
-          type: &apos;INFO&apos;
+          type: 'INFO'
         }
       });
     }
@@ -192,10 +164,9 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       className={`p-4 rounded-lg border-2 ${
-}
         slot.player 
-          ? &apos;bg-slate-700/50 border-slate-600 hover:border-slate-500&apos; 
-          : &apos;bg-slate-800/50 border-dashed border-slate-600 hover:border-slate-500&apos;
+          ? 'bg-slate-700/50 border-slate-600 hover:border-slate-500' 
+          : 'bg-slate-800/50 border-dashed border-slate-600 hover:border-slate-500'
       } transition-colors`}
     >
       {/* Position Label */}
@@ -204,13 +175,11 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           {slot.position}
         </div>
         {slot.isStarter && (
-}
           <span className="text-xs text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">STARTER</span>
         )}
       </div>
 
       {slot.player ? (
-}
         /* Player Card */
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
@@ -229,7 +198,6 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
             </div>
             
             {showAddDropButtons && isOwner && (
-}
               <button
                 onClick={() => handleDropPlayer(slot.player!)}
               >
@@ -252,7 +220,6 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
 
           {/* Bye Week Warning */}
           {slot.player.byeWeek && (
-}
             <div className="text-xs text-yellow-400 text-center sm:px-4 md:px-6 lg:px-8">
               Bye Week {slot.player.byeWeek}
             </div>
@@ -264,7 +231,6 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           <div className="text-slate-500 text-2xl mb-2 sm:px-4 md:px-6 lg:px-8">+</div>
           <div className="text-slate-400 text-sm mb-3 sm:px-4 md:px-6 lg:px-8">Empty Slot</div>
           {showAddDropButtons && isOwner && (
-}
             <button
               onClick={() => handleAddPlayer(slot.position)}
             >
@@ -277,12 +243,10 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
   );
 
   const filteredSlots = () => {
-}
     switch (rosterView) {
-}
-      case &apos;starters&apos;:
+      case 'starters':
         return starterSlots;
-      case &apos;bench&apos;:
+      case 'bench':
         return [...benchSlots, ...irSlots];
       default:
         return rosterSlots;
@@ -304,8 +268,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
 
         {/* View Toggle */}
         <div className="flex bg-slate-800 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
-          {([&apos;all&apos;, &apos;starters&apos;, &apos;bench&apos;] as const).map((view: any) => (
-}
+          {(['all', 'starters', 'bench'] as const).map((view: any) => (
             <button
               key={view}
               onClick={() => setRosterView(view)}
@@ -319,7 +282,6 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       {/* Roster Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredSlots().map((slot, index) => (
-}
           <RosterSlotComponent key={`${slot.position}-${index}`} slot={slot} index={index} />
         ))}
       </div>
@@ -348,7 +310,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           </div>
           <div className="text-center sm:px-4 md:px-6 lg:px-8">
             <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
-              {team.roster.filter((p: any) => p.injuryStatus === &apos;HEALTHY&apos;).length}
+              {team.roster.filter((p: any) => p.injuryStatus === 'HEALTHY').length}
             </div>
             <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Healthy Players</div>
           </div>
@@ -358,7 +320,6 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       {/* Player Search Modal */}
       <AnimatePresence>
         {showPlayerSearch && (
-}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -386,7 +347,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
               
               <PlayerSearch>
                 onPlayerSelect={handlePlayerSelect}
-                filterPosition={selectedPosition === &apos;FLEX&apos; ? &apos;&apos; : selectedPosition}
+                filterPosition={selectedPosition === 'FLEX' ? '' : selectedPosition}
                 excludePlayerIds={team.roster.map((p: any) => p.id)}
                 showAddButton={true}
               />

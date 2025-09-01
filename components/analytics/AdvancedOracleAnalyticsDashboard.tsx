@@ -3,26 +3,22 @@
  * Comprehensive performance tracking with Oracle vs user analysis
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { 
-}
     LineChart, Line, BarChart, Bar,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from &apos;recharts&apos;;
+} from 'recharts';
 import {
-}
     TrendingUp, TrendingDown, Target, Brain,
     Trophy, Users, Zap,
     Activity, Eye, Award, Download, RefreshCw
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 
 interface AdvancedAnalyticsMetrics {
-}
     oracle: {
-}
         overallAccuracy: number;
         weeklyAccuracy: Array<{ week: number; accuracy: number; predictions: number }>;
         typeAccuracy: Record<string, { accuracy: number; volume: number }>;
@@ -30,7 +26,6 @@ interface AdvancedAnalyticsMetrics {
         predictionTrends: Array<{ date: string; accuracy: number; volume: number }>;
     };
     users: {
-}
         averageAccuracy: number;
         beatOracleRate: number;
         participationTrends: Array<{ week: number; users: number; predictions: number }>;
@@ -38,9 +33,7 @@ interface AdvancedAnalyticsMetrics {
         topPerformers: Array<{ user: string; accuracy: number; oracleBeats: number }>;
     };
     comparative: {
-}
         weeklyComparison: Array<{ 
-}
             week: number; 
             oracleAccuracy: number; 
             userAccuracy: number; 
@@ -48,14 +41,12 @@ interface AdvancedAnalyticsMetrics {
             userConfidence: number;
         }>;
         typeComparison: Array<{
-}
             type: string;
             oracleAccuracy: number;
             userAccuracy: number;
             difficulty: number;
         }>;
         confidenceComparison: Array<{
-}
             confidenceRange: string;
             oracleAccuracy: number;
             userAccuracy: number;
@@ -64,50 +55,41 @@ interface AdvancedAnalyticsMetrics {
         }>;
     };
     insights: {
-}
-        performanceGaps: Array<{ metric: string; gap: number; trend: &apos;improving&apos; | &apos;declining&apos; | &apos;stable&apos; }>;
+        performanceGaps: Array<{ metric: string; gap: number; trend: 'improving' | 'declining' | 'stable' }>;
         userBehaviors: Array<{ behavior: string; impact: number; recommendation: string }>;
         marketInefficiencies: Array<{ area: string; opportunity: number; description: string }>;
         predictionPatterns: Array<{ pattern: string; frequency: number; successRate: number }>;
     };
-}
 
 interface ReportFilters {
-}
-    timeframe: &apos;week&apos; | &apos;month&apos; | &apos;season&apos; | &apos;all&apos;;
+    timeframe: 'week' | 'month' | 'season' | 'all';
     predictionTypes: string[];
     confidenceRange: [number, number];
-    includedUsers: &apos;all&apos; | &apos;active&apos; | &apos;top10&apos; | &apos;custom&apos;;
+    includedUsers: 'all' | 'active' | 'top10' | 'custom';
     season: number;
 
-}
 
 const AdvancedOracleAnalyticsDashboard: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const [metrics, setMetrics] = useState<AdvancedAnalyticsMetrics | null>(null);
     const [loading, setLoading] = useState(true);
     const [_filters, _setFilters] = useState<ReportFilters>({
-}
-        timeframe: &apos;season&apos;,
-        predictionTypes: [&apos;PLAYER_PERFORMANCE&apos;, &apos;GAME_OUTCOME&apos;, &apos;WEEKLY_SCORING&apos;],
+        timeframe: 'season',
+        predictionTypes: ['PLAYER_PERFORMANCE', 'GAME_OUTCOME', 'WEEKLY_SCORING'],
         confidenceRange: [0, 100],
-        includedUsers: &apos;all&apos;,
+        includedUsers: 'all',
         season: 2024
     });
     const [reportGenerating, setReportGenerating] = useState(false);
 
     useEffect(() => {
-}
         loadAdvancedAnalytics();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadAdvancedAnalytics = async () => {
-}
         setLoading(true);
         try {
-}
 
             // Fetch comprehensive analytics data
             const [oracleStats, userStats, comparativeStats] = await Promise.all([
@@ -119,7 +101,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             const insights = generateAdvancedInsights(oracleStats, userStats, comparativeStats);
 
             setMetrics({
-}
                 oracle: oracleStats,
                 users: userStats,
                 comparative: comparativeStats,
@@ -127,160 +108,136 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             });
     
     } catch (error) {
-}
             // Use mock data for demo
             setMetrics(generateMockAdvancedMetrics());
         } finally {
-}
             setLoading(false);
         }
     };
 
     const fetchOraclePerformanceData = async () => {
-}
         try {
-}
 
             const response = await fetch(`/api/oracle/analytics/performance?season=${_filters.season}`);
             return response.json();
         } catch (error) {
-}
             console.error(error);
             return null;
         }
     };
 
     const fetchUserPerformanceData = async () => {
-}
         try {
-}
             const response = await fetch(`/api/oracle/analytics/users?season=${_filters.season}`);
             return response.json();
         } catch (error) {
-}
             console.error(error);
             return null;
         }
     };
 
     const fetchComparativeAnalytics = async () => {
-}
         try {
-}
             const response = await fetch(`/api/oracle/analytics/comparative?season=${_filters.season}`);
             return response.json();
         } catch (error) {
-}
             console.error(error);
             return null;
         }
     };
 
     const generateAdvancedInsights = (oracle: any, users: any, comparative: any) => {
-}
         // Advanced AI-powered insight generation
         const performanceGaps = [
-            { metric: &apos;Overall Accuracy&apos;, gap: oracle.overallAccuracy - users.averageAccuracy, trend: &apos;stable&apos; as const },
-            { metric: &apos;Confidence Calibration&apos;, gap: calculateCalibrationGap(oracle, users), trend: &apos;improving&apos; as const },
-            { metric: &apos;High-Confidence Predictions&apos;, gap: calculateHighConfidenceGap(oracle, users), trend: &apos;declining&apos; as const }
+            { metric: 'Overall Accuracy', gap: oracle.overallAccuracy - users.averageAccuracy, trend: 'stable' as const },
+            { metric: 'Confidence Calibration', gap: calculateCalibrationGap(oracle, users), trend: 'improving' as const },
+            { metric: 'High-Confidence Predictions', gap: calculateHighConfidenceGap(oracle, users), trend: 'declining' as const }
         ];
 
         const userBehaviors = [
-            { behavior: &apos;Overconfidence Bias&apos;, impact: 15, recommendation: &apos;Users tend to be overconfident in game outcome predictions&apos; },
-            { behavior: &apos;Recency Bias&apos;, impact: 12, recommendation: &apos;Users weight recent performance too heavily&apos; },
-            { behavior: &apos;Home Team Bias&apos;, impact: 8, recommendation: &apos;Users favor home teams beyond statistical justification&apos; }
+            { behavior: 'Overconfidence Bias', impact: 15, recommendation: 'Users tend to be overconfident in game outcome predictions' },
+            { behavior: 'Recency Bias', impact: 12, recommendation: 'Users weight recent performance too heavily' },
+            { behavior: 'Home Team Bias', impact: 8, recommendation: 'Users favor home teams beyond statistical justification' }
         ];
 
         const marketInefficiencies = [
-            { area: &apos;Player Performance Late Season&apos;, opportunity: 22, description: &apos;Users underestimate player fatigue effects&apos; },
-            { area: &apos;Weather Impact Predictions&apos;, opportunity: 18, description: &apos;Weather effects consistently undervalued&apos; },
-            { area: &apos;Division Rivalry Games&apos;, opportunity: 14, description: &apos;Emotional betting in rivalry matchups&apos; }
+            { area: 'Player Performance Late Season', opportunity: 22, description: 'Users underestimate player fatigue effects' },
+            { area: 'Weather Impact Predictions', opportunity: 18, description: 'Weather effects consistently undervalued' },
+            { area: 'Division Rivalry Games', opportunity: 14, description: 'Emotional betting in rivalry matchups' }
         ];
 
         const predictionPatterns = [
-            { pattern: &apos;High Confidence + Low Accuracy&apos;, frequency: 23, successRate: 45 },
-            { pattern: &apos;Conservative Betting&apos;, frequency: 67, successRate: 72 },
-            { pattern: &apos;Contrarian Picks&apos;, frequency: 12, successRate: 58 }
+            { pattern: 'High Confidence + Low Accuracy', frequency: 23, successRate: 45 },
+            { pattern: 'Conservative Betting', frequency: 67, successRate: 72 },
+            { pattern: 'Contrarian Picks', frequency: 12, successRate: 58 }
         ];
 
         return { performanceGaps, userBehaviors, marketInefficiencies, predictionPatterns };
     };
 
     const calculateCalibrationGap = (oracle: any, users: any): number => {
-}
         // Calculate how well-calibrated predictions are
         return Math.abs(oracle.confidenceCalibration?.[0]?.predicted - oracle.confidenceCalibration?.[0]?.actual) || 5;
     };
 
     const calculateHighConfidenceGap = (oracle: any, users: any): number => {
-}
         // Calculate performance gap in high confidence predictions
         return 12; // Mock calculation
     };
 
     const generateMockAdvancedMetrics = (): AdvancedAnalyticsMetrics => {
-}
         const weeks = Array.from({ length: 18 }, (_, i) => i + 1);
         
         return {
-}
             oracle: {
-}
                 overallAccuracy: 78.5,
                 weeklyAccuracy: weeks.map((week: any) => ({
-}
                     week,
                     accuracy: 65 + Math.random() * 30,
                     predictions: 3 + Math.floor(Math.random() * 4)
                 })),
                 typeAccuracy: {
-}
-                    &apos;PLAYER_PERFORMANCE&apos;: { accuracy: 82, volume: 45 },
-                    &apos;GAME_OUTCOME&apos;: { accuracy: 75, volume: 38 },
-                    &apos;WEEKLY_SCORING&apos;: { accuracy: 71, volume: 27 }
+                    'PLAYER_PERFORMANCE': { accuracy: 82, volume: 45 },
+                    'GAME_OUTCOME': { accuracy: 75, volume: 38 },
+                    'WEEKLY_SCORING': { accuracy: 71, volume: 27 }
                 },
                 confidenceCalibration: [
-                    { range: &apos;90-100%&apos;, predicted: 95, actual: 89 },
-                    { range: &apos;80-89%&apos;, predicted: 85, actual: 83 },
-                    { range: &apos;70-79%&apos;, predicted: 75, actual: 76 },
-                    { range: &apos;60-69%&apos;, predicted: 65, actual: 68 }
+                    { range: '90-100%', predicted: 95, actual: 89 },
+                    { range: '80-89%', predicted: 85, actual: 83 },
+                    { range: '70-79%', predicted: 75, actual: 76 },
+                    { range: '60-69%', predicted: 65, actual: 68 }
                 ],
                 predictionTrends: weeks.map((week: any) => ({
-}
                     date: `Week ${week}`,
                     accuracy: 65 + Math.random() * 25,
                     volume: 3 + Math.floor(Math.random() * 4)
                 }))
             },
             users: {
-}
                 averageAccuracy: 64.2,
                 beatOracleRate: 28.5,
                 participationTrends: weeks.map((week: any) => ({
-}
                     week,
                     users: 8 + Math.floor(Math.random() * 15),
                     predictions: 25 + Math.floor(Math.random() * 50)
                 })),
                 confidenceDistribution: [
-                    { range: &apos;90-100%&apos;, count: 12, accuracy: 58 },
-                    { range: &apos;80-89%&apos;, count: 28, accuracy: 67 },
-                    { range: &apos;70-79%&apos;, count: 45, accuracy: 71 },
-                    { range: &apos;60-69%&apos;, count: 38, accuracy: 65 },
-                    { range: &apos;50-59%&apos;, count: 22, accuracy: 62 }
+                    { range: '90-100%', count: 12, accuracy: 58 },
+                    { range: '80-89%', count: 28, accuracy: 67 },
+                    { range: '70-79%', count: 45, accuracy: 71 },
+                    { range: '60-69%', count: 38, accuracy: 65 },
+                    { range: '50-59%', count: 22, accuracy: 62 }
                 ],
                 topPerformers: [
-                    { user: &apos;Player 5&apos;, accuracy: 85, oracleBeats: 12 },
-                    { user: &apos;Player 3&apos;, accuracy: 82, oracleBeats: 10 },
-                    { user: &apos;Player 8&apos;, accuracy: 79, oracleBeats: 9 },
-                    { user: &apos;Player 1&apos;, accuracy: 77, oracleBeats: 8 },
-                    { user: &apos;Player 7&apos;, accuracy: 75, oracleBeats: 7 }
+                    { user: 'Player 5', accuracy: 85, oracleBeats: 12 },
+                    { user: 'Player 3', accuracy: 82, oracleBeats: 10 },
+                    { user: 'Player 8', accuracy: 79, oracleBeats: 9 },
+                    { user: 'Player 1', accuracy: 77, oracleBeats: 8 },
+                    { user: 'Player 7', accuracy: 75, oracleBeats: 7 }
                 ]
             },
             comparative: {
-}
                 weeklyComparison: weeks.map((week: any) => ({
-}
                     week,
                     oracleAccuracy: 65 + Math.random() * 25,
                     userAccuracy: 55 + Math.random() * 25,
@@ -288,52 +245,48 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     userConfidence: 68 + Math.random() * 25
                 })),
                 typeComparison: [
-                    { type: &apos;PLAYER_PERFORMANCE&apos;, oracleAccuracy: 82, userAccuracy: 68, difficulty: 7.5 },
-                    { type: &apos;GAME_OUTCOME&apos;, oracleAccuracy: 75, userAccuracy: 62, difficulty: 8.2 },
-                    { type: &apos;WEEKLY_SCORING&apos;, oracleAccuracy: 71, userAccuracy: 59, difficulty: 8.8 }
+                    { type: 'PLAYER_PERFORMANCE', oracleAccuracy: 82, userAccuracy: 68, difficulty: 7.5 },
+                    { type: 'GAME_OUTCOME', oracleAccuracy: 75, userAccuracy: 62, difficulty: 8.2 },
+                    { type: 'WEEKLY_SCORING', oracleAccuracy: 71, userAccuracy: 59, difficulty: 8.8 }
                 ],
                 confidenceComparison: [
-                    { confidenceRange: &apos;90-100%&apos;, oracleAccuracy: 89, userAccuracy: 58, oracleVolume: 15, userVolume: 12 },
-                    { confidenceRange: &apos;80-89%&apos;, oracleAccuracy: 83, userAccuracy: 67, oracleVolume: 28, userVolume: 28 },
-                    { confidenceRange: &apos;70-79%&apos;, oracleAccuracy: 76, userAccuracy: 71, oracleVolume: 32, userVolume: 45 },
-                    { confidenceRange: &apos;60-69%&apos;, oracleAccuracy: 68, userAccuracy: 65, oracleVolume: 25, userVolume: 38 }
+                    { confidenceRange: '90-100%', oracleAccuracy: 89, userAccuracy: 58, oracleVolume: 15, userVolume: 12 },
+                    { confidenceRange: '80-89%', oracleAccuracy: 83, userAccuracy: 67, oracleVolume: 28, userVolume: 28 },
+                    { confidenceRange: '70-79%', oracleAccuracy: 76, userAccuracy: 71, oracleVolume: 32, userVolume: 45 },
+                    { confidenceRange: '60-69%', oracleAccuracy: 68, userAccuracy: 65, oracleVolume: 25, userVolume: 38 }
                 ]
             },
             insights: {
-}
                 performanceGaps: [
-                    { metric: &apos;Overall Accuracy&apos;, gap: 14.3, trend: &apos;stable&apos; },
-                    { metric: &apos;Confidence Calibration&apos;, gap: 8.7, trend: &apos;improving&apos; },
-                    { metric: &apos;High-Confidence Predictions&apos;, gap: 21.5, trend: &apos;declining&apos; }
+                    { metric: 'Overall Accuracy', gap: 14.3, trend: 'stable' },
+                    { metric: 'Confidence Calibration', gap: 8.7, trend: 'improving' },
+                    { metric: 'High-Confidence Predictions', gap: 21.5, trend: 'declining' }
                 ],
                 userBehaviors: [
-                    { behavior: &apos;Overconfidence Bias&apos;, impact: 15, recommendation: &apos;Users tend to be overconfident in game outcome predictions&apos; },
-                    { behavior: &apos;Recency Bias&apos;, impact: 12, recommendation: &apos;Users weight recent performance too heavily&apos; },
-                    { behavior: &apos;Home Team Bias&apos;, impact: 8, recommendation: &apos;Users favor home teams beyond statistical justification&apos; }
+                    { behavior: 'Overconfidence Bias', impact: 15, recommendation: 'Users tend to be overconfident in game outcome predictions' },
+                    { behavior: 'Recency Bias', impact: 12, recommendation: 'Users weight recent performance too heavily' },
+                    { behavior: 'Home Team Bias', impact: 8, recommendation: 'Users favor home teams beyond statistical justification' }
                 ],
                 marketInefficiencies: [
-                    { area: &apos;Player Performance Late Season&apos;, opportunity: 22, description: &apos;Users underestimate player fatigue effects&apos; },
-                    { area: &apos;Weather Impact Predictions&apos;, opportunity: 18, description: &apos;Weather effects consistently undervalued&apos; },
-                    { area: &apos;Division Rivalry Games&apos;, opportunity: 14, description: &apos;Emotional betting in rivalry matchups&apos; }
+                    { area: 'Player Performance Late Season', opportunity: 22, description: 'Users underestimate player fatigue effects' },
+                    { area: 'Weather Impact Predictions', opportunity: 18, description: 'Weather effects consistently undervalued' },
+                    { area: 'Division Rivalry Games', opportunity: 14, description: 'Emotional betting in rivalry matchups' }
                 ],
                 predictionPatterns: [
-                    { pattern: &apos;High Confidence + Low Accuracy&apos;, frequency: 23, successRate: 45 },
-                    { pattern: &apos;Conservative Betting&apos;, frequency: 67, successRate: 72 },
-                    { pattern: &apos;Contrarian Picks&apos;, frequency: 12, successRate: 58 }
+                    { pattern: 'High Confidence + Low Accuracy', frequency: 23, successRate: 45 },
+                    { pattern: 'Conservative Betting', frequency: 67, successRate: 72 },
+                    { pattern: 'Contrarian Picks', frequency: 12, successRate: 58 }
                 ]
             }
         };
     };
 
     const generateReport = async () => {
-}
         setReportGenerating(true);
         try {
-}
 
             // Generate comprehensive PDF report
             const reportData = {
-}
                 metrics,
                 filters: _filters,
                 generatedAt: new Date().toISOString(),
@@ -341,28 +294,25 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             };
 
             // In a real implementation, this would call a backend service
-            const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: &apos;application/json&apos; });
+            const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement(&apos;a&apos;);
+            const a = document.createElement('a');
             a.href = url;
-            a.download = `oracle-analytics-report-${new Date().toISOString().split(&apos;T&apos;)[0]}.json`;
+            a.download = `oracle-analytics-report-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         } catch (error) {
-}
-            console.error(&apos;Failed to generate report:&apos;, error);
+            console.error('Failed to generate report:', error);
         } finally {
-}
             setReportGenerating(false);
         }
     };
 
     const MetricCard: React.FC<{
-}
         title: string;
         value: string;
         subtitle?: string;
-        trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+        trend?: 'up' | 'down' | 'stable';
         icon: React.ReactNode;
         color: string;
     }> = ({ title, value, subtitle, trend, icon, color }: any) => (
@@ -374,11 +324,10 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                         <div className="flex items-center space-x-2">
                             <span className={`text-xl font-bold ${color}`}>{value}</span>
                             {trend && (
-}
                                 <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
-                                    {trend === &apos;up&apos; && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
-                                    {trend === &apos;down&apos; && <TrendingDown className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
-                                    {trend === &apos;stable&apos; && <div className="w-4 h-1 bg-gray-400 rounded sm:px-4 md:px-6 lg:px-8" />}
+                                    {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
+                                    {trend === 'down' && <TrendingDown className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
+                                    {trend === 'stable' && <div className="w-4 h-1 bg-gray-400 rounded sm:px-4 md:px-6 lg:px-8" />}
                                 </div>
                             )}
                         </div>
@@ -393,7 +342,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     );
 
     if (loading) {
-}
         return (
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -404,7 +352,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
         );
 
     if (!metrics) {
-}
         return (
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <Widget title="Advanced Analytics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
@@ -447,7 +394,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                         className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
                         <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                        <span>{reportGenerating ? &apos;Generating...&apos; : &apos;Export Report&apos;}</span>
+                        <span>{reportGenerating ? 'Generating...' : 'Export Report'}</span>
                     </button>
                 </div>
             </div>
@@ -506,10 +453,9 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                 <YAxis stroke="#9CA3AF" />
                                 <Tooltip>
                                     contentStyle={{ 
-}
-                                        backgroundColor: &apos;#1F2937&apos;, 
-                                        border: &apos;1px solid #374151&apos;,
-                                        borderRadius: &apos;0.5rem&apos;
+                                        backgroundColor: '#1F2937', 
+                                        border: '1px solid #374151',
+                                        borderRadius: '0.5rem'
                                     }}
                                 />
                                 <Legend />
@@ -519,7 +465,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                     stroke="#8B5CF6" 
                                     strokeWidth={3}
                                     name="Oracle"
-                                    dot={{ fill: &apos;#8B5CF6&apos;, strokeWidth: 2, r: 4 }}
+                                    dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 4 }}
                                 />
                                 <Line>
                                     type="monotone" 
@@ -527,7 +473,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                     stroke="#3B82F6" 
                                     strokeWidth={3}
                                     name="Users Average"
-                                    dot={{ fill: &apos;#3B82F6&apos;, strokeWidth: 2, r: 4 }}
+                                    dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
                                 />
                             </LineChart>
                         </ResponsiveContainer>
@@ -547,10 +493,9 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                 <YAxis stroke="#9CA3AF" />
                                 <Tooltip>
                                     contentStyle={{ 
-}
-                                        backgroundColor: &apos;#1F2937&apos;, 
-                                        border: &apos;1px solid #374151&apos;,
-                                        borderRadius: &apos;0.5rem&apos;
+                                        backgroundColor: '#1F2937', 
+                                        border: '1px solid #374151',
+                                        borderRadius: '0.5rem'
                                     }}
                                 />
                                 <Bar dataKey="predicted" fill="#F59E0B" name="Predicted" />
@@ -574,10 +519,9 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                             <YAxis stroke="#9CA3AF" />
                             <Tooltip>
                                 contentStyle={{ 
-}
-                                    backgroundColor: &apos;#1F2937&apos;, 
-                                    border: &apos;1px solid #374151&apos;,
-                                    borderRadius: &apos;0.5rem&apos;
+                                    backgroundColor: '#1F2937', 
+                                    border: '1px solid #374151',
+                                    borderRadius: '0.5rem'
                                 }}
                             />
                             <Legend />
@@ -601,18 +545,17 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     <CardContent>
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {metrics.insights.performanceGaps.map((gap, index) => (
-}
                                 <div key={index} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div>
                                         <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{gap.metric}</div>
                                         <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                                            Gap: {gap.gap > 0 ? &apos;+&apos; : &apos;&apos;}{gap.gap.toFixed(1)}%
+                                            Gap: {gap.gap > 0 ? '+' : ''}{gap.gap.toFixed(1)}%
                                         </div>
                                     </div>
                                     <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                                        {gap.trend === &apos;improving&apos; && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
-                                        {gap.trend === &apos;declining&apos; && <TrendingDown className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
-                                        {gap.trend === &apos;stable&apos; && <div className="w-4 h-1 bg-gray-400 rounded sm:px-4 md:px-6 lg:px-8" />}
+                                        {gap.trend === 'improving' && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
+                                        {gap.trend === 'declining' && <TrendingDown className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
+                                        {gap.trend === 'stable' && <div className="w-4 h-1 bg-gray-400 rounded sm:px-4 md:px-6 lg:px-8" />}
                                         <span className="text-xs text-gray-500 capitalize sm:px-4 md:px-6 lg:px-8">{gap.trend}</span>
                                     </div>
                                 </div>
@@ -632,7 +575,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     <CardContent>
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {metrics.insights.userBehaviors.map((behavior, index) => (
-}
                                 <div key={index} className="p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                         <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{behavior.behavior}</div>
@@ -659,7 +601,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     <CardContent>
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {metrics.users.topPerformers.map((performer, index) => (
-}
                                 <div key={index} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                                         <div className="flex items-center justify-center w-8 h-8 bg-blue-600 rounded-full text-white font-bold text-sm sm:px-4 md:px-6 lg:px-8">
@@ -688,7 +629,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     <CardContent>
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {metrics.insights.marketInefficiencies.map((inefficiency, index) => (
-}
                                 <div key={index} className="p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                         <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{inefficiency.area}</div>

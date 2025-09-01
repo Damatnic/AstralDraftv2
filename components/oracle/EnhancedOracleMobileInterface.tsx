@@ -4,19 +4,18 @@
  * Features responsive design, touch interactions, and mobile-first UX
  */
 
-import React, { useMemo, useState, useEffect, useCallback } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAuth } from &apos;../../contexts/SimpleAuthContext&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
-import { oracleApiClient } from &apos;../../services/oracleApiClient&apos;;
-import { PredictionResponse } from &apos;../../services/oracleApiClient&apos;;
-import { useOracleWebSocket, OracleWebSocketMessage } from &apos;../../hooks/useOracleWebSocket&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
-import { useOracleNotifications } from &apos;../../hooks/useOracleNotifications&apos;;
-import { oracleMobileService } from &apos;../../services/oracleMobileService&apos;;
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../contexts/SimpleAuthContext';
+import { Widget } from '../ui/Widget';
+import { ZapIcon } from '../icons/ZapIcon';
+import { oracleApiClient } from '../../services/oracleApiClient';
+import { PredictionResponse } from '../../services/oracleApiClient';
+import { useOracleWebSocket, OracleWebSocketMessage } from '../../hooks/useOracleWebSocket';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { useOracleNotifications } from '../../hooks/useOracleNotifications';
+import { oracleMobileService } from '../../services/oracleMobileService';
 import { 
-}
     BarChart3, 
     Target, 
     Settings, 
@@ -30,46 +29,41 @@ import {
     Zap,
     AlertCircle,
 //     CheckCircle
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
-import UserStatsWidget, { UserStats } from &apos;./UserStatsWidget&apos;;
-import RealtimeUpdatesWidget, { RealtimeUpdate } from &apos;./RealtimeUpdatesWidget&apos;;
-import PredictionCard, { LivePrediction } from &apos;./PredictionCard&apos;;
-import PredictionDetail from &apos;./PredictionDetail&apos;;
-import OracleErrorBoundary from &apos;./OracleErrorBoundary&apos;;
-import { OracleAnalyticsDashboard } from &apos;../analytics/OracleAnalyticsDashboard&apos;;
-import { NotificationCenter } from &apos;./NotificationCenter&apos;;
-import { NotificationPreferencesComponent } from &apos;./NotificationPreferences&apos;;
+import UserStatsWidget, { UserStats } from './UserStatsWidget';
+import RealtimeUpdatesWidget, { RealtimeUpdate } from './RealtimeUpdatesWidget';
+import PredictionCard, { LivePrediction } from './PredictionCard';
+import PredictionDetail from './PredictionDetail';
+import OracleErrorBoundary from './OracleErrorBoundary';
+import { OracleAnalyticsDashboard } from '../analytics/OracleAnalyticsDashboard';
+import { NotificationCenter } from './NotificationCenter';
+import { NotificationPreferencesComponent } from './NotificationPreferences';
 
 interface Props {
-}
     week?: number;
     className?: string;
 
-}
 
 interface MobileTouchState {
-}
     startX: number;
     startY: number;
     startTime: number;}
 
 const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1, 
-}
-    className = &apos;&apos; 
+    className = '' 
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const { user, isAuthenticated } = useAuth();
     
     // Media queries for responsive design
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
-    const isTablet = useMediaQuery(&apos;(min-width: 769px) and (max-width: 1024px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1024px)');
     
     // Mobile-specific state
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [touchState, setTouchState] = useState<MobileTouchState | null>(null);
-    const [swipeDirection, setSwipeDirection] = useState<&apos;left&apos; | &apos;right&apos; | null>(null);
+    const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
     const [showMobileFAB, setShowMobileFAB] = useState(true);
     
     // Core State
@@ -77,13 +71,12 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     const [selectedPrediction, setSelectedPrediction] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [activeView, setActiveView] = useState<&apos;predictions&apos; | &apos;analytics&apos; | &apos;stats&apos;>(&apos;predictions&apos;);
+    const [activeView, setActiveView] = useState<'predictions' | 'analytics' | 'stats'>('predictions');
     const [showNotificationSettings, setShowNotificationSettings] = useState(false);
     
     // Real-time State
     const [realtimeUpdates, setRealtimeUpdates] = useState<RealtimeUpdate[]>([]);
     const [userStats, setUserStats] = useState<UserStats>({
-}
         totalPredictions: 0,
         correctPredictions: 0,
         accuracy: 0,
@@ -93,33 +86,27 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
     // Notification system (only keeping used function)
     const {
-}
 //         notifyAccuracyUpdate
     } = useOracleNotifications();
 
     // Initialize mobile features
     useEffect(() => {
-}
         if (isMobile) {
-}
             // Setup viewport for mobile
-            const viewport = document.querySelector(&apos;meta[name=viewport]&apos;) || document.createElement(&apos;meta&apos;);
-            viewport.setAttribute(&apos;name&apos;, &apos;viewport&apos;);
-            viewport.setAttribute(&apos;content&apos;, &apos;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover&apos;);
-            if (!document.querySelector(&apos;meta[name=viewport]&apos;)) {
-}
+            const viewport = document.querySelector('meta[name=viewport]') || document.createElement('meta');
+            viewport.setAttribute('name', 'viewport');
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+            if (!document.querySelector('meta[name=viewport]')) {
                 document.head.appendChild(viewport);
     }
   }, [isMobile]);
 
     // Mobile touch handlers
     const handleTouchStart = useCallback((e: React.TouchEvent) => {
-}
         if (!isMobile) return;
         
         const touch = e.touches[0];
         setTouchState({
-}
             startX: touch.clientX,
             startY: touch.clientY,
             startTime: Date.now()
@@ -127,22 +114,19 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
         
         // Setup long press detection
         const longPressTimer = setTimeout(() => {
-}
             oracleMobileService.vibrate([50]); // Haptic feedback
         }, 500);
         
         // Clear timer on touch end
         const clearTimer = () => {
-}
             clearTimeout(longPressTimer);
         };
         
-        e.currentTarget.addEventListener(&apos;touchend&apos;, clearTimer, { once: true });
-        e.currentTarget.addEventListener(&apos;touchcancel&apos;, clearTimer, { once: true });
+        e.currentTarget.addEventListener('touchend', clearTimer, { once: true });
+        e.currentTarget.addEventListener('touchcancel', clearTimer, { once: true });
     }, [isMobile]);
 
     const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-}
         if (!touchState || !isMobile) return;
         
         const touch = e.changedTouches[0];
@@ -157,18 +141,15 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
         if (Math.abs(deltaX) > Math.abs(deltaY) && 
             Math.abs(deltaX) > minSwipeDistance && 
             deltaTime < maxSwipeTime) {
-}
             
-            const direction = deltaX > 0 ? &apos;right&apos; : &apos;left&apos;;
+            const direction = deltaX > 0 ? 'right' : 'left';
             setSwipeDirection(direction);
             
             // Handle swipe navigation
-            if (direction === &apos;left&apos; && activeView === &apos;predictions&apos;) {
-}
-                setActiveView(&apos;analytics&apos;);
-            } else if (direction === &apos;right&apos; && activeView === &apos;analytics&apos;) {
-}
-                setActiveView(&apos;predictions&apos;);
+            if (direction === 'left' && activeView === 'predictions') {
+                setActiveView('analytics');
+            } else if (direction === 'right' && activeView === 'analytics') {
+                setActiveView('predictions');
 
             oracleMobileService.vibrate([25]); // Light haptic feedback
             
@@ -180,18 +161,14 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
     // Mobile scroll detection for FAB hiding
     useEffect(() => {
-}
         if (!isMobile) return;
         
         let lastScrollY = window.scrollY;
         let ticking = false;
         
         const handleScroll = () => {
-}
             if (!ticking) {
-}
                 requestAnimationFrame(() => {
-}
                     const currentScrollY = window.scrollY;
                     setShowMobileFAB(currentScrollY < lastScrollY || currentScrollY < 100);
                     lastScrollY = currentScrollY;
@@ -201,41 +178,35 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
         };
         
-        window.addEventListener(&apos;scroll&apos;, handleScroll, { passive: true });
-        return () => window.removeEventListener(&apos;scroll&apos;, handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
     }, [isMobile]);
 
     // Helper functions (moved before usage in dependencies)
     const updatePrediction = useCallback((updatedPrediction: LivePrediction) => {
-}
         setPredictions(prev => 
             prev.map((p: any) => p.id === updatedPrediction.id ? updatedPrediction : p)
         );
     }, []);
 
     const addRealtimeUpdate = useCallback((update: RealtimeUpdate) => {
-}
         setRealtimeUpdates(prev => [update, ...prev.slice(0, 9)]);
     }, []);
 
     // WebSocket message handler
     const handleWebSocketMessage = useCallback((message: any) => {
-}
         switch (message.type) {
-}
-            case &apos;PREDICTION_UPDATE&apos;:
+            case 'PREDICTION_UPDATE':
                 updatePrediction(message.data);
                 addRealtimeUpdate({
-}
                     id: Date.now().toString(),
-                    type: &apos;PREDICTION_UPDATE&apos;,
+                    type: 'PREDICTION_UPDATE',
                     message: `Updated ${message.data.playerName} prediction`,
                     timestamp: new Date().toISOString()
                 });
                 break;
-            case &apos;ACCURACY_UPDATE&apos;:
+            case 'ACCURACY_UPDATE':
                 if (user?.id) {
-}
                     setUserStats(prev => ({ ...prev, accuracy: message.data.accuracy }));
                     notifyAccuracyUpdate(message.data.accuracy, message.data.previousAccuracy || 0);
 
@@ -245,22 +216,18 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
     // WebSocket connection
     const { connectionStatus } = useOracleWebSocket({
-}
-        userId: user?.id || &apos;&apos;,
+        userId: user?.id || '',
         week,
         onMessage: handleWebSocketMessage
     });
 
     // Load predictions
     useEffect(() => {
-}
         loadPredictions();
     }, [week]);
 
     const loadPredictions = async () => {
-}
         try {
-}
             setLoading(true);
             setError(null);
             
@@ -268,11 +235,9 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
             
             // Transform PredictionResponse[] to LivePrediction[]
             const livePredictions: LivePrediction[] = response.data.map((p: PredictionResponse) => ({
-}
                 id: p.id,
                 question: p.question,
                 options: p.options.map((opt: string, idx: number) => ({
-}
                     text: opt,
                     probability: 0.5 // Default probability
                 })),
@@ -291,9 +256,8 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
             setPredictions(livePredictions);
             
             // Note: userStats would need to be fetched separately or the API response structure needs to be updated
-            // For now, we&apos;ll skip setting userStats from this response since it&apos;s not part of WeeklyPredictionsResponse
+            // For now, we'll skip setting userStats from this response since it's not part of WeeklyPredictionsResponse
   } finally {
-}
             setLoading(false);
 
     };
@@ -308,21 +272,21 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
         >
             <div className="flex items-center justify-around py-2 px-4 sm:px-4 md:px-6 lg:px-8">
                 <button
-                    onClick={() => setActiveView(&apos;predictions&apos;)}`}
+                    onClick={() => setActiveView('predictions')}`}
                 >
                     <Target className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Predictions</span>
                 </button>
                 
                 <button
-                    onClick={() => setActiveView(&apos;stats&apos;)}`}
+                    onClick={() => setActiveView('stats')}`}
                 >
                     <TrendingUp className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Stats</span>
                 </button>
                 
                 <button
-                    onClick={() => setActiveView(&apos;analytics&apos;)}`}
+                    onClick={() => setActiveView('analytics')}`}
                 >
                     <BarChart3 className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Analytics</span>
@@ -342,7 +306,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     const MobileFAB = () => (
         <AnimatePresence>
             {showMobileFAB && (
-}
                 <motion.button
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -360,7 +323,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     const MobileQuickMenu = () => (
         <AnimatePresence>
             {isMobileMenuOpen && (
-}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -381,7 +343,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             
                             <button
                                 onClick={() = aria-label="Action button"> {
-}
                                     loadPredictions();
                                     setIsMobileMenuOpen(false);
                                 }}
@@ -398,8 +359,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             
                             <button
                                 onClick={() = aria-label="Action button"> {
-}
-                                    setActiveView(&apos;analytics&apos;);
+                                    setActiveView('analytics');
                                     setIsMobileMenuOpen(false);
                                 }}
                                 className="w-full flex items-center space-x-3 p-4 bg-gray-700 rounded-xl text-left hover:bg-gray-600 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -415,7 +375,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             
                             <button
                                 onClick={() = aria-label="Action button"> {
-}
                                     setShowNotificationSettings(true);
                                     setIsMobileMenuOpen(false);
                                 }}
@@ -446,16 +405,13 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     const MobileSwipeIndicators = () => (
         <div className="flex justify-center space-x-2 py-2 sm:px-4 md:px-6 lg:px-8">
             <div className={`w-2 h-2 rounded-full transition-colors ${
-}
-                activeView === &apos;predictions&apos; ? &apos;bg-blue-400&apos; : &apos;bg-gray-600&apos;
+                activeView === 'predictions' ? 'bg-blue-400' : 'bg-gray-600'
             }`}></div>
             <div className={`w-2 h-2 rounded-full transition-colors ${
-}
-                activeView === &apos;stats&apos; ? &apos;bg-green-400&apos; : &apos;bg-gray-600&apos;
+                activeView === 'stats' ? 'bg-green-400' : 'bg-gray-600'
             }`}></div>
             <div className={`w-2 h-2 rounded-full transition-colors ${
-}
-                activeView === &apos;analytics&apos; ? &apos;bg-purple-400&apos; : &apos;bg-gray-600&apos;
+                activeView === 'analytics' ? 'bg-purple-400' : 'bg-gray-600'
             }`}></div>
         </div>
     );
@@ -465,19 +421,16 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
         <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg mb-4 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                 <div className={`w-2 h-2 rounded-full ${
-}
-                    connectionStatus === &apos;connected&apos; ? &apos;bg-green-400&apos; : 
-                    connectionStatus === &apos;connecting&apos; ? &apos;bg-yellow-400&apos; : &apos;bg-red-400&apos;
+                    connectionStatus === 'connected' ? 'bg-green-400' : 
+                    connectionStatus === 'connecting' ? 'bg-yellow-400' : 'bg-red-400'
                 }`}></div>
                 <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
-                    {connectionStatus === &apos;connected&apos; ? &apos;Live&apos; : 
-}
-                     connectionStatus === &apos;connecting&apos; ? &apos;Connecting...&apos; : &apos;Offline&apos;}
+                    {connectionStatus === 'connected' ? 'Live' : 
+                     connectionStatus === 'connecting' ? 'Connecting...' : 'Offline'}
                 </span>
             </div>
             
             {predictions.length > 0 && (
-}
                 <div className="flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8">
                     <Users className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -489,7 +442,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     );
 
     if (!isAuthenticated) {
-}
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-900 sm:px-4 md:px-6 lg:px-8">
                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -503,12 +455,11 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     return (
         <OracleErrorBoundary>
             <div 
-                className={`w-full ${isMobile ? &apos;pb-20&apos; : &apos;&apos;} ${className}`}
+                className={`w-full ${isMobile ? 'pb-20' : ''} ${className}`}
                 onTouchStart={handleTouchStart}
             >
                 {/* Mobile Header */}
                 {isMobile && (
-}
                     <div className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 z-40 p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                             <h1 className="text-xl font-bold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
@@ -534,18 +485,16 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                 <div className="relative overflow-hidden sm:px-4 md:px-6 lg:px-8">
                     <motion.div
                         key={activeView}
-                        initial={{ x: swipeDirection === &apos;left&apos; ? 300 : swipeDirection === &apos;right&apos; ? -300 : 0, opacity: 0 }}
+                        initial={{ x: swipeDirection === 'left' ? 300 : swipeDirection === 'right' ? -300 : 0, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: swipeDirection === &apos;left&apos; ? -300 : 300, opacity: 0 }}
+                        exit={{ x: swipeDirection === 'left' ? -300 : 300, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="w-full sm:px-4 md:px-6 lg:px-8"
                     >
-                        {activeView === &apos;predictions&apos; && (
-}
-                            <div className={`space-y-6 ${isMobile ? &apos;p-4&apos; : &apos;p-6&apos;}`}>
+                        {activeView === 'predictions' && (
+                            <div className={`space-y-6 ${isMobile ? 'p-4' : 'p-6'}`}>
                                 {/* Mobile Tips */}
                                 {isMobile && (
-}
                                     <div className="bg-blue-600/10 border border-blue-600/20 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
                                         <p className="text-sm text-blue-200 flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                             <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -556,7 +505,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
                                 {/* Error State */}
                                 {error && (
-}
                                     <div className="bg-red-600/10 border border-red-600/20 rounded-lg p-4 flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
                                         <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                         <div>
@@ -573,10 +521,8 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
                                 {/* Loading State */}
                                 {loading && (
-}
                                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {[...Array(3)].map((_, i) => (
-}
                                             <div key={i} className="bg-gray-800/50 rounded-lg p-4 animate-pulse sm:px-4 md:px-6 lg:px-8">
                                                 <div className="h-6 bg-gray-700 rounded w-3/4 mb-3 sm:px-4 md:px-6 lg:px-8"></div>
                                                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
@@ -590,15 +536,12 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
                                 {/* Predictions Grid */}
                                 {!loading && predictions.length > 0 && (
-}
                                     <div className={`grid gap-4 ${
-}
-                                        isMobile ? &apos;grid-cols-1&apos; : 
-                                        isTablet ? &apos;grid-cols-1 lg:grid-cols-2&apos; : 
-                                        &apos;grid-cols-1 lg:grid-cols-2 xl:grid-cols-3&apos;
+                                        isMobile ? 'grid-cols-1' : 
+                                        isTablet ? 'grid-cols-1 lg:grid-cols-2' : 
+                                        'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'
                                     }`}>
                                         {predictions.map((prediction: any) => (
-}
                                             <PredictionCard>
                                                 key={prediction.id}
                                                 prediction={prediction}
@@ -611,7 +554,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
                                 {/* Empty State */}
                                 {!loading && predictions.length === 0 && !error && (
-}
                                     <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
                                         <Target className="w-16 h-16 text-gray-600 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
                                         <h3 className="text-lg font-semibold text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">No Predictions Available</h3>
@@ -626,9 +568,8 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             </div>
                         )}
 
-                        {activeView === &apos;stats&apos; && (
-}
-                            <div className={`space-y-6 ${isMobile ? &apos;p-4&apos; : &apos;p-6&apos;}`}>
+                        {activeView === 'stats' && (
+                            <div className={`space-y-6 ${isMobile ? 'p-4' : 'p-6'}`}>
                                 <UserStatsWidget>
                                     stats={userStats} 
                                     className="w-full sm:px-4 md:px-6 lg:px-8"
@@ -640,9 +581,8 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             </div>
                         )}
 
-                        {activeView === &apos;analytics&apos; && (
-}
-                            <div className={`${isMobile ? &apos;p-4&apos; : &apos;p-6&apos;}`}>
+                        {activeView === 'analytics' && (
+                            <div className={`${isMobile ? 'p-4' : 'p-6'}`}>
                                 <OracleAnalyticsDashboard />
                             </div>
                         )}
@@ -652,7 +592,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                 {/* Selected Prediction Detail Modal */}
                 <AnimatePresence>
                     {selectedPrediction && (
-}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -664,8 +603,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
                                 className={`bg-gray-800 rounded-xl max-h-[90vh] overflow-y-auto ${
-}
-                                    isMobile ? &apos;w-full max-w-sm&apos; : &apos;w-full max-w-2xl&apos;
+                                    isMobile ? 'w-full max-w-sm' : 'w-full max-w-2xl'
                                 }`}
                                 onClick={(e: any) => e.stopPropagation()}
                                 <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 sm:px-4 md:px-6 lg:px-8">
@@ -680,13 +618,10 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                 </div>
                                 
                                 {predictions.find((p: any) => p.id === selectedPrediction) && (
-}
                                     <PredictionDetail>
                                         prediction={predictions.find((p: any) => p.id === selectedPrediction)!}
                                         onSubmit={async (predictionId, choice, confidence) => {
-}
                                             try {
-}
 
                                                 await oracleApiClient.submitPrediction(predictionId, choice, confidence, user?.id);
                                                 setSelectedPrediction(null);
@@ -694,11 +629,9 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                                 
                                                 // Mobile success feedback
                                                 if (isMobile) {
-}
                                                     oracleMobileService.vibrate([50, 50, 50]);
                                                 }`bg-gray-800 rounded-xl max-h-[90vh] overflow-y-auto ${
-}
-                                    isMobile ? &apos;w-full max-w-sm&apos; : &apos;w-full max-w-lg&apos;
+                                    isMobile ? 'w-full max-w-sm' : 'w-full max-w-lg'
                                 }`}
                                 onClick={(e: any) => e.stopPropagation()}
                                 <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 sm:px-4 md:px-6 lg:px-8">
@@ -723,7 +656,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
                 {/* Mobile-specific UI components */}
                 {isMobile && (
-}
                     <>
                         <MobileBottomNav />
                         <MobileFAB />

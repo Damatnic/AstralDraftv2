@@ -3,58 +3,52 @@
  * Interface for building and configuring trade proposals
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { Player, League, Team } from &apos;../../types&apos;;
-import { TradeProposal, DraftPick } from &apos;./TradeAnalyzerView&apos;;
-import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
-import { PlusCircleIcon } from &apos;../icons/PlusCircleIcon&apos;;
-import { SearchIcon } from &apos;../icons/SearchIcon&apos;;
-import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
+import { Player, League, Team } from '../../types';
+import { TradeProposal, DraftPick } from './TradeAnalyzerView';
+import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
+import { PlusCircleIcon } from '../icons/PlusCircleIcon';
+import { SearchIcon } from '../icons/SearchIcon';
+import { CloseIcon } from '../icons/CloseIcon';
 
 interface TradeBuilderTabProps {
-}
     league: League;
     currentTeam: Team;
     proposal: TradeProposal | null;
     onProposalUpdate: (proposal: TradeProposal) => void;
     dispatch: React.Dispatch<any>;
 
-}
 
 interface PlayerSearchResult extends Player {
-}
     teamName: string;
     isAvailable: boolean;
 
 const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
-}
     currentTeam,
     proposal,
     onProposalUpdate,
 //     dispatch
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null);
     const [fromPlayers, setFromPlayers] = React.useState<Player[]>([]);
     const [toPlayers, setToPlayers] = React.useState<Player[]>([]);
     const [fromPicks, setFromPicks] = React.useState<DraftPick[]>([]);
     const [toPicks, setToPicks] = React.useState<DraftPick[]>([]);
-    const [searchTerm, setSearchTerm] = React.useState(&apos;&apos;);
-    const [showPlayerSearch, setShowPlayerSearch] = React.useState<&apos;from&apos; | &apos;to&apos; | null>(null);
-    const [tradeMessage, setTradeMessage] = React.useState(&apos;&apos;);
+    const [searchTerm, setSearchTerm] = React.useState('');
+    const [showPlayerSearch, setShowPlayerSearch] = React.useState<'from' | 'to' | null>(null);
+    const [tradeMessage, setTradeMessage] = React.useState('');
 
     // Mock players data for demonstration
     const mockPlayers: PlayerSearchResult[] = React.useMemo(() => [
         {
-}
             id: 1,
-            name: &apos;Josh Allen&apos;,
-            position: &apos;QB&apos;,
-            team: &apos;BUF&apos;,
+            name: 'Josh Allen',
+            position: 'QB',
+            team: 'BUF',
             rank: 1,
             adp: 12,
             bye: 7,
@@ -62,21 +56,19 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
             age: 27,
             auctionValue: 45,
             stats: {
-}
                 projection: 285,
                 lastYear: 275,
                 vorp: 45,
                 weeklyProjections: {}
             },
-            teamName: selectedTeam?.name || &apos;Team Alpha&apos;,
+            teamName: selectedTeam?.name || 'Team Alpha',
             isAvailable: true
         },
         {
-}
             id: 2,
-            name: &apos;Derrick Henry&apos;,
-            position: &apos;RB&apos;,
-            team: &apos;TEN&apos;,
+            name: 'Derrick Henry',
+            position: 'RB',
+            team: 'TEN',
             rank: 8,
             adp: 18,
             bye: 6,
@@ -84,21 +76,19 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
             age: 29,
             auctionValue: 38,
             stats: {
-}
                 projection: 245,
                 lastYear: 230,
                 vorp: 32,
                 weeklyProjections: {}
             },
-            teamName: selectedTeam?.name || &apos;Team Alpha&apos;,
+            teamName: selectedTeam?.name || 'Team Alpha',
             isAvailable: true
         },
         {
-}
             id: 3,
-            name: &apos;Cooper Kupp&apos;,
-            position: &apos;WR&apos;,
-            team: &apos;LAR&apos;,
+            name: 'Cooper Kupp',
+            position: 'WR',
+            team: 'LAR',
             rank: 5,
             adp: 15,
             bye: 9,
@@ -106,13 +96,12 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
             age: 30,
             auctionValue: 42,
             stats: {
-}
                 projection: 265,
                 lastYear: 250,
                 vorp: 38,
                 weeklyProjections: {}
             },
-            teamName: selectedTeam?.name || &apos;Team Alpha&apos;,
+            teamName: selectedTeam?.name || 'Team Alpha',
             isAvailable: true
 
     ], [selectedTeam?.name]);
@@ -123,7 +112,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
     );
 
     const filteredPlayers = React.useMemo(() => {
-}
         if (!searchTerm) return mockPlayers;
         return mockPlayers.filter((player: any) =>
             player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -133,11 +121,8 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
     }, [mockPlayers, searchTerm]);
 
     React.useEffect(() => {
-}
         if (selectedTeam && (fromPlayers.length > 0 || toPlayers.length > 0 || fromPicks.length > 0 || toPicks.length > 0)) {
-}
             const newProposal: TradeProposal = {
-}
                 id: `trade-${Date.now()}`,
                 fromTeam: currentTeam,
                 toTeam: selectedTeam,
@@ -145,7 +130,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                 toPlayers,
                 fromDraftPicks: fromPicks,
                 toDraftPicks: toPicks,
-                status: &apos;draft&apos;,
+                status: 'draft',
                 createdAt: new Date(),
                 message: tradeMessage
             };
@@ -153,73 +138,58 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
 
     }, [selectedTeam, fromPlayers, toPlayers, fromPicks, toPicks, tradeMessage, currentTeam, onProposalUpdate]);
 
-    const addPlayer = (player: Player, side: &apos;from&apos; | &apos;to&apos;) => {
-}
-        if (side === &apos;from&apos;) {
-}
+    const addPlayer = (player: Player, side: 'from' | 'to') => {
+        if (side === 'from') {
             setFromPlayers(prev => [...prev, player]);
         } else {
-}
             setToPlayers(prev => [...prev, player]);
 
         setShowPlayerSearch(null);
-        setSearchTerm(&apos;&apos;);
+        setSearchTerm('');
     };
 
-    const removePlayer = (playerId: number, side: &apos;from&apos; | &apos;to&apos;) => {
-}
-        if (side === &apos;from&apos;) {
-}
+    const removePlayer = (playerId: number, side: 'from' | 'to') => {
+        if (side === 'from') {
             setFromPlayers(prev => prev.filter((p: any) => p.id !== playerId));
         } else {
-}
             setToPlayers(prev => prev.filter((p: any) => p.id !== playerId));
 
     };
 
-    const addDraftPick = (side: &apos;from&apos; | &apos;to&apos;) => {
-}
+    const addDraftPick = (side: 'from' | 'to') => {
         const newPick: DraftPick = {
-}
             season: 2024,
             round: 1,
-            originalTeamId: side === &apos;from&apos; ? currentTeam.id.toString() : selectedTeam?.id.toString() || &apos;&apos;,
+            originalTeamId: side === 'from' ? currentTeam.id.toString() : selectedTeam?.id.toString() || '',
             estimatedValue: 15,
-            description: &apos;2024 1st Round Pick&apos;
+            description: '2024 1st Round Pick'
         };
 
-        if (side === &apos;from&apos;) {
-}
+        if (side === 'from') {
             setFromPicks(prev => [...prev, newPick]);
         } else {
-}
             setToPicks(prev => [...prev, newPick]);
 
     };
 
-    const removeDraftPick = (index: number, side: &apos;from&apos; | &apos;to&apos;) => {
-}
-        if (side === &apos;from&apos;) {
-}
+    const removeDraftPick = (index: number, side: 'from' | 'to') => {
+        if (side === 'from') {
             setFromPicks(prev => prev.filter((_, i) => i !== index));
         } else {
-}
             setToPicks(prev => prev.filter((_, i) => i !== index));
 
     };
 
     const clearTrade = () => {
-}
         setFromPlayers([]);
         setToPlayers([]);
         setFromPicks([]);
         setToPicks([]);
-        setTradeMessage(&apos;&apos;);
+        setTradeMessage('');
         setSelectedTeam(null);
     };
 
     const getTotalValue = (players: Player[], picks: DraftPick[]) => {
-}
         const playerValue = players.reduce((sum, p) => sum + p.auctionValue, 0);
         const pickValue = picks.reduce((sum, p) => sum + p.estimatedValue, 0);
         return playerValue + pickValue;
@@ -235,17 +205,15 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
             <Widget title="Trade Partner" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-4">
                     {availableTeams.map((team: any) => (
-}
                         <motion.button
                             key={team.id}
                             onClick={() => setSelectedTeam(team)}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             className={`p-4 rounded-lg border transition-all ${
-}
                                 selectedTeam?.id === team.id
-                                    ? &apos;border-blue-400 bg-blue-500/20 text-blue-400&apos;
-                                    : &apos;border-[var(--panel-border)] bg-white/5 text-[var(--text-primary)] hover:border-blue-400/50&apos;
+                                    ? 'border-blue-400 bg-blue-500/20 text-blue-400'
+                                    : 'border-[var(--panel-border)] bg-white/5 text-[var(--text-primary)] hover:border-blue-400/50'
                             }`}
                         >
                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
@@ -261,7 +229,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
             </Widget>
 
             {selectedTeam && (
-}
                 <>
                     {/* Trade Configuration */}
                     <div className="grid lg:grid-cols-2 gap-6">
@@ -277,7 +244,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                                         <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Players</h4>
                                         <button
-                                            onClick={() => setShowPlayerSearch(&apos;from&apos;)}
+                                            onClick={() => setShowPlayerSearch('from')}
                                         >
                                             <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Player
@@ -286,7 +253,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     
                                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {fromPlayers.map((player: any) => (
-}
                                             <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                                     <Avatar avatar="🏈" className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8" />
@@ -298,7 +264,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                                     </div>
                                                 </div>
                                                 <button
-                                                    onClick={() => removePlayer(player.id, &apos;from&apos;)}
+                                                    onClick={() => removePlayer(player.id, 'from')}
                                                 >
                                                     <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
@@ -306,7 +272,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                         ))}
                                         
                                         {fromPlayers.length === 0 && (
-}
                                             <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 No players selected
                                             </div>
@@ -319,7 +284,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                                         <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Draft Picks</h4>
                                         <button
-                                            onClick={() => addDraftPick(&apos;from&apos;)}
+                                            onClick={() => addDraftPick('from')}
                                         >
                                             <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Pick
@@ -328,7 +293,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     
                                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {fromPicks.map((pick, index) => (
-}
                                             <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                                 <div>
                                                     <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{pick.description}</div>
@@ -337,7 +301,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                                     </div>
                                                 </div>
                                                 <button
-                                                    onClick={() => removeDraftPick(index, &apos;from&apos;)}
+                                                    onClick={() => removeDraftPick(index, 'from')}
                                                 >
                                                     <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
@@ -345,7 +309,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                         ))}
                                         
                                         {fromPicks.length === 0 && (
-}
                                             <div className="text-center py-4 text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">
                                                 No draft picks included
                                             </div>
@@ -367,7 +330,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                                         <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Players</h4>
                                         <button
-                                            onClick={() => setShowPlayerSearch(&apos;to&apos;)}
+                                            onClick={() => setShowPlayerSearch('to')}
                                         >
                                             <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Player
@@ -376,7 +339,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     
                                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {toPlayers.map((player: any) => (
-}
                                             <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                                     <Avatar avatar="🏈" className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8" />
@@ -388,7 +350,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                                     </div>
                                                 </div>
                                                 <button
-                                                    onClick={() => removePlayer(player.id, &apos;to&apos;)}
+                                                    onClick={() => removePlayer(player.id, 'to')}
                                                 >
                                                     <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
@@ -396,7 +358,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                         ))}
                                         
                                         {toPlayers.length === 0 && (
-}
                                             <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 No players selected
                                             </div>
@@ -409,7 +370,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                                         <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Draft Picks</h4>
                                         <button
-                                            onClick={() => addDraftPick(&apos;to&apos;)}
+                                            onClick={() => addDraftPick('to')}
                                         >
                                             <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Pick
@@ -418,7 +379,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     
                                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {toPicks.map((pick, index) => (
-}
                                             <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                                 <div>
                                                     <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{pick.description}</div>
@@ -427,7 +387,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                                     </div>
                                                 </div>
                                                 <button
-                                                    onClick={() => removeDraftPick(index, &apos;to&apos;)}
+                                                    onClick={() => removeDraftPick(index, 'to')}
                                                 >
                                                     <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
@@ -435,7 +395,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                         ))}
                                         
                                         {toPicks.length === 0 && (
-}
                                             <div className="text-center py-4 text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">
                                                 No draft picks included
                                             </div>
@@ -448,7 +407,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
 
                     {/* Trade Summary */}
                     {(fromPlayers.length > 0 || toPlayers.length > 0 || fromPicks.length > 0 || toPicks.length > 0) && (
-}
                         <Widget title="Trade Summary" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                             <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center justify-center gap-4 p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
@@ -466,18 +424,16 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                 </div>
                                 
                                 <div className={`text-center p-3 rounded-lg ${
-}
                                     Math.abs(valueDifference) <= 5 
-                                        ? &apos;bg-green-500/20 text-green-400&apos; 
+                                        ? 'bg-green-500/20 text-green-400' 
                                         : Math.abs(valueDifference) <= 15
-                                        ? &apos;bg-yellow-500/20 text-yellow-400&apos;
-                                        : &apos;bg-red-500/20 text-red-400&apos;
+                                        ? 'bg-yellow-500/20 text-yellow-400'
+                                        : 'bg-red-500/20 text-red-400'
                                 }`}>
                                     <div className="font-medium sm:px-4 md:px-6 lg:px-8">
                                         {valueDifference === 0 
-}
-                                            ? &apos;Perfectly balanced trade&apos; 
-                                            : `${valueDifference > 0 ? &apos;You receive&apos; : &apos;You give&apos;} $${Math.abs(valueDifference)} more value`
+                                            ? 'Perfectly balanced trade' 
+                                            : `${valueDifference > 0 ? 'You receive' : 'You give'} $${Math.abs(valueDifference)} more value`
 
                                     </div>
                                 </div>
@@ -513,7 +469,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
 
                     {/* Trade Message */}
                     {(fromPlayers.length === 0 && toPlayers.length === 0 && fromPicks.length === 0 && toPicks.length === 0) && (
-}
                         <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             <ArrowRightLeftIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                             <h3 className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Build Your Trade</h3>
@@ -526,7 +481,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
             {/* Player Search Modal */}
             <AnimatePresence>
                 {showPlayerSearch && (
-}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -543,7 +497,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                         >
                             <div className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                                 <h3 className="text-lg font-bold text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">
-                                    Add Player to {showPlayerSearch === &apos;from&apos; ? currentTeam.name : selectedTeam?.name}
+                                    Add Player to {showPlayerSearch === 'from' ? currentTeam.name : selectedTeam?.name}
                                 </h3>
                                 <div className="relative sm:px-4 md:px-6 lg:px-8">
                                     <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
@@ -560,7 +514,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                             <div className="p-4 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                     {filteredPlayers.map((player: any) => (
-}
                                         <button
                                             key={player.id}
                                             onClick={() => addPlayer(player, showPlayerSearch)}
@@ -578,7 +531,6 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
                                     ))}
                                     
                                     {filteredPlayers.length === 0 && (
-}
                                         <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                             No players found
                                         </div>

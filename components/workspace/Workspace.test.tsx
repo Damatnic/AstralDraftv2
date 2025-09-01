@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import Workspace from &apos;./Workspace&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Workspace from './Workspace';
 
-describe(&apos;Workspace&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('Workspace', () => {
+  it('renders without crashing', () => {
     render(<Workspace />);
-    expect(screen.getByTestId(&apos;workspace&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('workspace')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<Workspace />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<Workspace />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

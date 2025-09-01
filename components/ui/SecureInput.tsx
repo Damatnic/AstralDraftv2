@@ -3,13 +3,12 @@
  * Provides built-in input sanitization and security features
  */
 
-import React, { useState, useCallback, useMemo, forwardRef, useImperativeHandle, useRef } from &apos;react&apos;;
-import { sanitizeInput, SecurityValidators } from &apos;../../utils/security&apos;;
+import React, { useState, useCallback, useMemo, forwardRef, useImperativeHandle, useRef } from 'react';
+import { sanitizeInput, SecurityValidators } from '../../utils/security';
 
-interface SecureInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, &apos;onChange&apos; | &apos;onBlur&apos;> {
-}
+interface SecureInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'onBlur'> {
   /** Input validation type */
-  validationType?: &apos;email&apos; | &apos;password&apos; | &apos;username&apos; | &apos;teamName&apos; | &apos;text&apos; | &apos;number&apos; | &apos;url&apos;;
+  validationType?: 'email' | 'password' | 'username' | 'teamName' | 'text' | 'number' | 'url';
   
   /** Custom validation function */
   customValidator?: (value: string) => boolean | string;
@@ -38,23 +37,19 @@ interface SecureInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   /** Additional CSS classes */
   className?: string;
   
-  /** Security level: &apos;standard&apos; | &apos;high&apos; */
-  securityLevel?: &apos;standard&apos; | &apos;high&apos;;
-}
+  /** Security level: 'standard' | 'high' */
+  securityLevel?: 'standard' | 'high';
 
 export interface SecureInputRef {
-}
   getValue: () => string;
   getSanitizedValue: () => string;
   isValid: () => boolean;
   validate: () => boolean;
   focus: () => void;
   clear: () => void;
-}
 
 const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
-}
-  validationType = &apos;text&apos;,
+  validationType = 'text',
   customValidator,
   sanitizeOnChange = true,
   showErrors = true,
@@ -63,18 +58,17 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
   onSecureBlur,
   maxLength = 1000,
   enableRateLimit = false,
-  className = &apos;&apos;,
-  securityLevel = &apos;standard&apos;,
+  className = '',
+  securityLevel = 'standard',
   value: controlledValue,
   defaultValue,
   ...props
 }, ref) => {
-}
   const inputRef = useRef<HTMLInputElement>(null);
   const [internalValue, setInternalValue] = useState<string>(
-    (controlledValue as string) || (defaultValue as string) || &apos;&apos;
+    (controlledValue as string) || (defaultValue as string) || ''
   );
-  const [error, setError] = useState<string>(&apos;&apos;);
+  const [error, setError] = useState<string>('');
   const [isValidState, setIsValidState] = useState<boolean>(true);
   const [lastChangeTime, setLastChangeTime] = useState<number>(0);
 
@@ -87,92 +81,75 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
 
   // Validation function
   const validateInput = useCallback((value: string): { isValid: boolean; error: string } => {
-}
     if (!value && props.required) {
-}
-      return { isValid: false, error: errorMessage || &apos;This field is required&apos; };
+      return { isValid: false, error: errorMessage || 'This field is required' };
     }
 
     // Length validation
     if (value.length > maxLength) {
-}
       return { isValid: false, error: `Maximum ${maxLength} characters allowed` };
     }
 
     // Type-specific validation
     switch (validationType) {
-}
-      case &apos;email&apos;:
+      case 'email':
         if (value && !SecurityValidators.isValidEmail(value)) {
-}
-          return { isValid: false, error: errorMessage || &apos;Please enter a valid email address&apos; };
+          return { isValid: false, error: errorMessage || 'Please enter a valid email address' };
         }
         break;
       
-      case &apos;password&apos;:
+      case 'password':
         if (value && !SecurityValidators.isValidPassword(value)) {
-}
-          return { isValid: false, error: errorMessage || &apos;Password must be at least 8 characters with uppercase, lowercase, number, and special character&apos; };
+          return { isValid: false, error: errorMessage || 'Password must be at least 8 characters with uppercase, lowercase, number, and special character' };
         }
         break;
       
-      case &apos;username&apos;:
+      case 'username':
         if (value && !SecurityValidators.isValidUsername(value)) {
-}
-          return { isValid: false, error: errorMessage || &apos;Username must be 3-20 characters, letters, numbers, and underscores only&apos; };
+          return { isValid: false, error: errorMessage || 'Username must be 3-20 characters, letters, numbers, and underscores only' };
         }
         break;
       
-      case &apos;teamName&apos;:
+      case 'teamName':
         if (value && !SecurityValidators.isValidTeamName(value)) {
-}
-          return { isValid: false, error: errorMessage || &apos;Team name must be 1-30 characters, letters, numbers, spaces, hyphens, and apostrophes only&apos; };
+          return { isValid: false, error: errorMessage || 'Team name must be 1-30 characters, letters, numbers, spaces, hyphens, and apostrophes only' };
         }
         break;
       
-      case &apos;url&apos;:
+      case 'url':
         if (value) {
-}
           try {
-}
             new URL(value);
           } catch {
-}
-            return { isValid: false, error: errorMessage || &apos;Please enter a valid URL&apos; };
+            return { isValid: false, error: errorMessage || 'Please enter a valid URL' };
           }
         }
         break;
       
-      case &apos;number&apos;:
+      case 'number':
         if (value && isNaN(Number(value))) {
-}
-          return { isValid: false, error: errorMessage || &apos;Please enter a valid number&apos; };
+          return { isValid: false, error: errorMessage || 'Please enter a valid number' };
         }
         break;
     }
 
     // Custom validation
     if (customValidator && value) {
-}
       const customResult = customValidator(value);
-      if (typeof customResult === &apos;string&apos;) {
-}
+      if (typeof customResult === 'string') {
         return { isValid: false, error: customResult };
       }
       if (!customResult) {
-}
-        return { isValid: false, error: errorMessage || &apos;Invalid input&apos; };
+        return { isValid: false, error: errorMessage || 'Invalid input' };
       }
     }
 
-    return { isValid: true, error: &apos;&apos; };
+    return { isValid: true, error: '' };
   }, [validationType, customValidator, maxLength, errorMessage, props.required]);
 
   // Sanitize input value
   const sanitizeValue = useCallback((value: string): string => {
-}
-    if (securityLevel === &apos;high&apos;) {
-}
+    if (securityLevel === 'high') {
       return sanitizeInput(value);
     }
     
@@ -182,13 +159,11 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
 
   // Handle input change
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-}
     const rawValue = event.target.value;
     const currentTime = Date.now();
     
     // Rate limiting
     if (enableRateLimit && (currentTime - lastChangeTime) < RATE_LIMIT_MS) {
-}
       return;
     }
 
@@ -197,7 +172,6 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
     
     // Update internal state for uncontrolled component
     if (!isControlled) {
-}
       setInternalValue(sanitizedValue);
     }
 
@@ -209,7 +183,6 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
 
     // Call secure change callback
     if (onSecureChange) {
-}
       onSecureChange(sanitizedValue, validation.isValid);
     }
   }, [
@@ -224,7 +197,6 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
 
   // Handle blur event
   const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
-}
     const rawValue = event.target.value;
     const sanitizedValue = sanitizeValue(rawValue);
     
@@ -235,31 +207,26 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
 
     // Update value if sanitization changed it and not controlled
     if (!isControlled && sanitizedValue !== rawValue) {
-}
       setInternalValue(sanitizedValue);
     }
 
     // Call secure blur callback
     if (onSecureBlur) {
-}
       onSecureBlur(sanitizedValue, validation.isValid);
     }
 
     // Call original onBlur if provided
     if (props.onBlur) {
-}
       props.onBlur(event);
     }
   }, [sanitizeValue, validateInput, onSecureBlur, isControlled, props.onBlur]);
 
   // Expose methods via ref
   useImperativeHandle(ref, () => ({
-}
     getValue: () => displayValue,
     getSanitizedValue: () => sanitizeValue(displayValue),
     isValid: () => isValidState,
     validate: () => {
-}
       const validation = validateInput(displayValue);
       setIsValidState(validation.isValid);
       setError(validation.error);
@@ -267,27 +234,23 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
     },
     focus: () => inputRef.current?.focus(),
     clear: () => {
-}
       if (!isControlled) {
-}
-        setInternalValue(&apos;&apos;);
+        setInternalValue('');
       }
-      setError(&apos;&apos;);
+      setError('');
       setIsValidState(true);
       if (onSecureChange) {
-}
-        onSecureChange(&apos;&apos;, true);
+        onSecureChange('', true);
       }
     }
   }), [displayValue, sanitizeValue, validateInput, isValidState, onSecureChange, isControlled]);
 
   // Compute CSS classes
   const inputClasses = useMemo(() => {
-}
-    const baseClasses = &apos;w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors&apos;;
+    const baseClasses = 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors';
     const stateClasses = error && showErrors
-      ? &apos;border-red-500 focus:ring-red-500 focus:border-red-500&apos;
-      : &apos;border-gray-300 focus:ring-blue-500 focus:border-blue-500&apos;;
+      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500';
     
     return `${baseClasses} ${stateClasses} ${className}`;
   }, [error, showErrors, className]);
@@ -297,24 +260,22 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
       <input
         {...props}
         ref={inputRef}
-        type={validationType === &apos;password&apos; ? &apos;password&apos; : props.type || &apos;text&apos;}
+        type={validationType === 'password' ? 'password' : props.type || 'text'}
         value={displayValue}
         onChange={handleChange}
         onBlur={handleBlur}
         maxLength={maxLength}
         className={inputClasses}
         autoComplete={
-}
-          validationType === &apos;password&apos; ? &apos;current-password&apos; :
-          validationType === &apos;email&apos; ? &apos;email&apos; :
-          validationType === &apos;username&apos; ? &apos;username&apos; :
+          validationType === 'password' ? 'current-password' :
+          validationType === 'email' ? 'email' :
+          validationType === 'username' ? 'username' :
           props.autoComplete
         }
-        spellCheck={validationType === &apos;password&apos; ? false : props.spellCheck}
+        spellCheck={validationType === 'password' ? false : props.spellCheck}
       />
       
       {error && showErrors && (
-}
         <div className="mt-1 text-sm text-red-600" role="alert" aria-live="polite">
           {error}
         </div>
@@ -322,7 +283,6 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
       
       {/* Character count for longer inputs */}
       {maxLength > 100 && displayValue.length > maxLength * 0.8 && (
-}
         <div className="mt-1 text-sm text-gray-500">
           {displayValue.length}/{maxLength} characters
         </div>
@@ -331,6 +291,6 @@ const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
   );
 });
 
-SecureInput.displayName = &apos;SecureInput&apos;;
+SecureInput.displayName = 'SecureInput';
 
 export default SecureInput;

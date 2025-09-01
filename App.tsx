@@ -16,7 +16,6 @@ if (import.meta.env.PROD) {
       originalConsoleError.apply(console, args);
     }
   };
-}
 
 import React, { useEffect, FC, ReactNode } from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
@@ -77,7 +76,6 @@ const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 // Enhanced loading component with better visuals and performance
 interface SimpleLoaderProps {
   message?: string;
-}
 
 const SimpleLoader: FC<SimpleLoaderProps> = ({ message = "Loading..." }: any) => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
@@ -665,7 +663,6 @@ const AppContent: FC = () => {
 // NUCLEAR-LEVEL Error Prevention Component
 interface NuclearErrorBoundaryProps {
   children: ReactNode;
-}
 
 const NuclearErrorBoundary: FC<NuclearErrorBoundaryProps> = ({ children }: any) => {
   const [hasError, setHasError] = React.useState(false);

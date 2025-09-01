@@ -3,57 +3,48 @@
  * Modern, professional login screen with stunning visuals
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import SimpleAuthService from &apos;../../services/simpleAuthService&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from &apos;../ui/Card&apos;;
-import { Button } from &apos;../ui/Button&apos;;
-import SecureInput from &apos;../ui/SecureInput&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import SimpleAuthService from '../../services/simpleAuthService';
+import { useAppState } from '../../contexts/AppContext';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
+import { Button } from '../ui/Button';
+import SecureInput from '../ui/SecureInput';
 
 interface SimplePlayerLoginProps {
-}
   onLogin?: (user: any) => void;
-}
 
 const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) => {
-}
   const { dispatch } = useAppState();
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
-  const [pin, setPin] = useState(&apos;&apos;);
-  const [error, setError] = useState(&apos;&apos;);
+  const [pin, setPin] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSocialOptions, setShowSocialOptions] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-  const [demoMode] = useState(() => localStorage.getItem(&apos;astral_demo_mode&apos;) === &apos;true&apos;);
+  const [demoMode] = useState(() => localStorage.getItem('astral_demo_mode') === 'true');
 
   // Track mouse position for interactive background
   useEffect(() => {
-}
     const handleMouseMove = (e: MouseEvent) => {
-}
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
       setMousePosition({ x, y });
     };
 
-    window.addEventListener(&apos;mousemove&apos;, handleMouseMove);
-    return () => window.removeEventListener(&apos;mousemove&apos;, handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   // ZERO-ERROR Auto-login for demo mode
   useEffect(() => {
-}
     if (demoMode && !selectedPlayer) {
-}
       // Auto-select first player in demo mode
       setTimeout(() => {
-}
-        setSelectedPlayer(&apos;player1&apos;);
+        setSelectedPlayer('player1');
         setTimeout(() => {
-}
-          setPin(&apos;0000&apos;);
+          setPin('0000');
           setTimeout(handleLogin, 500);
         }, 200);
       }, 1000);
@@ -62,100 +53,84 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
 
   // Player colors and emojis - Nick Damato is both player1 and admin
   const playerData = [
-    { id: &apos;player1&apos;, name: &apos;Nick Damato&apos;, color: &apos;from-blue-500 to-purple-600&apos;, emoji: &apos;👑&apos;, isAdmin: true, badge: &apos;Commissioner&apos; },
-    { id: &apos;player2&apos;, name: &apos;Jon Kornbeck&apos;, color: &apos;from-red-500 to-pink-600&apos;, emoji: &apos;⚡&apos;, isAdmin: false, badge: &apos;3x Champion&apos; },
-    { id: &apos;player3&apos;, name: &apos;Cason Minor&apos;, color: &apos;from-emerald-500 to-teal-600&apos;, emoji: &apos;🔥&apos;, isAdmin: false, badge: &apos;Rising Star&apos; },
-    { id: &apos;player4&apos;, name: &apos;Brittany Bergrum&apos;, color: &apos;from-amber-500 to-orange-600&apos;, emoji: &apos;💪&apos;, isAdmin: false, badge: &apos;Draft Master&apos; },
-    { id: &apos;player5&apos;, name: &apos;Renee McCaigue&apos;, color: &apos;from-purple-500 to-pink-600&apos;, emoji: &apos;🎯&apos;, isAdmin: false, badge: &apos;Trade Wizard&apos; },
-    { id: &apos;player6&apos;, name: &apos;Jack McCaigue&apos;, color: &apos;from-cyan-500 to-blue-600&apos;, emoji: &apos;🚀&apos;, isAdmin: false, badge: &apos;Waiver King&apos; },
-    { id: &apos;player7&apos;, name: &apos;Larry McCaigue&apos;, color: &apos;from-lime-500 to-green-600&apos;, emoji: &apos;⭐&apos;, isAdmin: false, badge: &apos;Legend&apos; },
-    { id: &apos;player8&apos;, name: &apos;Kaity Lorbiecki&apos;, color: &apos;from-orange-500 to-red-600&apos;, emoji: &apos;💎&apos;, isAdmin: false, badge: &apos;Elite&apos; },
-    { id: &apos;player9&apos;, name: &apos;David Jarvey&apos;, color: &apos;from-pink-500 to-rose-600&apos;, emoji: &apos;🏆&apos;, isAdmin: false, badge: &apos;Champion&apos; },
-    { id: &apos;player10&apos;, name: &apos;Nick Hartley&apos;, color: &apos;from-indigo-500 to-purple-600&apos;, emoji: &apos;🎮&apos;, isAdmin: false, badge: &apos;Strategist&apos; },
+    { id: 'player1', name: 'Nick Damato', color: 'from-blue-500 to-purple-600', emoji: '👑', isAdmin: true, badge: 'Commissioner' },
+    { id: 'player2', name: 'Jon Kornbeck', color: 'from-red-500 to-pink-600', emoji: '⚡', isAdmin: false, badge: '3x Champion' },
+    { id: 'player3', name: 'Cason Minor', color: 'from-emerald-500 to-teal-600', emoji: '🔥', isAdmin: false, badge: 'Rising Star' },
+    { id: 'player4', name: 'Brittany Bergrum', color: 'from-amber-500 to-orange-600', emoji: '💪', isAdmin: false, badge: 'Draft Master' },
+    { id: 'player5', name: 'Renee McCaigue', color: 'from-purple-500 to-pink-600', emoji: '🎯', isAdmin: false, badge: 'Trade Wizard' },
+    { id: 'player6', name: 'Jack McCaigue', color: 'from-cyan-500 to-blue-600', emoji: '🚀', isAdmin: false, badge: 'Waiver King' },
+    { id: 'player7', name: 'Larry McCaigue', color: 'from-lime-500 to-green-600', emoji: '⭐', isAdmin: false, badge: 'Legend' },
+    { id: 'player8', name: 'Kaity Lorbiecki', color: 'from-orange-500 to-red-600', emoji: '💎', isAdmin: false, badge: 'Elite' },
+    { id: 'player9', name: 'David Jarvey', color: 'from-pink-500 to-rose-600', emoji: '🏆', isAdmin: false, badge: 'Champion' },
+    { id: 'player10', name: 'Nick Hartley', color: 'from-indigo-500 to-purple-600', emoji: '🎮', isAdmin: false, badge: 'Strategist' },
   ];
 
   const handlePlayerSelect = (playerId: string) => {
-}
     setSelectedPlayer(playerId);
-    setPin(&apos;&apos;);
-    setError(&apos;&apos;);
+    setPin('');
+    setError('');
   };
 
   const handlePinChange = (value: string) => {
-}
     // ZERO-ERROR MODE: Allow any input and auto-correct
-    const sanitized = value.replace(/[^\d]/g, &apos;&apos;); // Remove non-digits
+    const sanitized = value.replace(/[^\d]/g, ''); // Remove non-digits
     const trimmed = sanitized.slice(0, 4); // Limit to 4 digits
     setPin(trimmed);
-    setError(&apos;&apos;); // Always clear errors on input
+    setError(''); // Always clear errors on input
   };
 
   const handleLogin = useCallback(async () => {
-}
     try {
-}
       // ZERO-ERROR LOGIN MODE - Eliminate all barriers
       if (!selectedPlayer) {
-}
-        setError(&apos;Please select a player first&apos;);
+        setError('Please select a player first');
         return;
       }
 
       // Allow any PIN length - auto-pad with zeros if needed
-      const normalizedPin = pin.padEnd(4, &apos;0&apos;);
+      const normalizedPin = pin.padEnd(4, '0');
 
       setIsLoading(true);
-      setError(&apos;&apos;);
+      setError('');
       
       // Initialize auth service with enhanced error handling
       SimpleAuthService.initialize();
       
       // For Nick Damato (player1), check if using admin PIN (7347) or player PIN (0000)
       let authId = selectedPlayer;
-      if (selectedPlayer === &apos;player1&apos; && normalizedPin === &apos;7347&apos;) {
-}
-        authId = &apos;admin&apos;; // Use admin account for Nick Damato with admin PIN
+      if (selectedPlayer === 'player1' && normalizedPin === '7347') {
+        authId = 'admin'; // Use admin account for Nick Damato with admin PIN
       }
 
       // Attempt authentication with multiple fallbacks
       let session = null;
       try {
-}
         session = await SimpleAuthService.authenticateUser(authId, normalizedPin);
       } catch (authError) {
-}
-        console.log(&apos;Primary auth attempt failed, trying fallback&apos;);
+        console.log('Primary auth attempt failed, trying fallback');
       }
       
       // Fallback 1: Try with original PIN if normalized fails
       if (!session && normalizedPin !== pin) {
-}
         try {
-}
           session = await SimpleAuthService.authenticateUser(authId, pin);
         } catch {
-}
           // Silent fail, try next fallback
         }
       }
 
       // Fallback 2: For demo purposes, allow default PIN for all players
-      if (!session && normalizedPin !== &apos;0000&apos;) {
-}
+      if (!session && normalizedPin !== '0000') {
         try {
-}
-          session = await SimpleAuthService.authenticateUser(authId, &apos;0000&apos;);
+          session = await SimpleAuthService.authenticateUser(authId, '0000');
         } catch {
-}
           // Silent fail, use demo mode
         }
       }
 
       if (session) {
-}
         // SUCCESS - Force login regardless of backend state
         const userPayload = {
-}
           id: session.user.id,
           name: session.user.displayName,
           email: session.user.email || `${authId}@astraldraft.com`,
@@ -163,88 +138,76 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         };
         
         // Dispatch login action
-        dispatch({ type: &apos;LOGIN&apos;, payload: userPayload });
+        dispatch({ type: 'LOGIN', payload: userPayload });
 
         // Call onLogin callback if provided
         if (onLogin) {
-}
           onLogin(session.user);
         }
 
         // Force clear any residual errors
-        setError(&apos;&apos;);
+        setError('');
       } else {
-}
         // Last resort: Demo mode login (always allow for zero barriers)
         const selectedPlayerData = playerData.find((p: any) => p.id === selectedPlayer);
         const demoUser = {
-}
           id: selectedPlayer,
-          name: selectedPlayerData?.name || &apos;Demo User&apos;,
+          name: selectedPlayerData?.name || 'Demo User',
           email: `${selectedPlayer}@astraldraft.com`,
-          avatar: selectedPlayerData?.emoji || &apos;👤&apos;,
+          avatar: selectedPlayerData?.emoji || '👤',
           isAdmin: selectedPlayerData?.isAdmin || false,
-          badge: selectedPlayerData?.badge || &apos;Player&apos;
+          badge: selectedPlayerData?.badge || 'Player'
         };
         
         // Store demo user in localStorage for persistence
-        localStorage.setItem(&apos;currentUser&apos;, JSON.stringify(demoUser));
-        localStorage.setItem(&apos;authToken&apos;, `demo-token-${selectedPlayer}`);
+        localStorage.setItem('currentUser', JSON.stringify(demoUser));
+        localStorage.setItem('authToken', `demo-token-${selectedPlayer}`);
         
-        dispatch({ type: &apos;LOGIN&apos;, payload: demoUser });
+        dispatch({ type: 'LOGIN', payload: demoUser });
         
         if (onLogin) {
-}
           onLogin(demoUser as any);
         }
 
-        setError(&apos;&apos;);
+        setError('');
       }
     } catch (error) {
-}
       // NUCLEAR FALLBACK: Always allow login regardless of any errors
-      console.warn(&apos;🚨 Login error caught, forcing login:&apos;, error);
+      console.warn('🚨 Login error caught, forcing login:', error);
       
       const forceUser = {
-}
-        id: selectedPlayer || &apos;emergency&apos;,
-        name: playerData.find((p: any) => p.id === selectedPlayer)?.name || &apos;Emergency User&apos;,
-        email: &apos;emergency@astraldraft.com&apos;,
-        avatar: playerData.find((p: any) => p.id === selectedPlayer)?.emoji || &apos;🔓&apos;
+        id: selectedPlayer || 'emergency',
+        name: playerData.find((p: any) => p.id === selectedPlayer)?.name || 'Emergency User',
+        email: 'emergency@astraldraft.com',
+        avatar: playerData.find((p: any) => p.id === selectedPlayer)?.emoji || '🔓'
       };
       
-      dispatch({ type: &apos;LOGIN&apos;, payload: forceUser });
+      dispatch({ type: 'LOGIN', payload: forceUser });
       
       if (onLogin) {
-}
         onLogin(forceUser as any);
       }
 
-      console.log(&apos;✅ EMERGENCY LOGIN SUCCESSFUL&apos;);
+      console.log('✅ EMERGENCY LOGIN SUCCESSFUL');
     } finally {
-}
       setIsLoading(false);
     }
   }, [selectedPlayer, pin, playerData, dispatch, onLogin]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-}
     // ZERO-ERROR MODE: Allow Enter with any PIN length
-    if (e.key === &apos;Enter&apos; && selectedPlayer) {
-}
+    if (e.key === 'Enter' && selectedPlayer) {
       handleLogin();
     }
   };
 
   const handleBack = () => {
-}
     setSelectedPlayer(null);
-    setPin(&apos;&apos;);
-    setError(&apos;&apos;);
+    setPin('');
+    setError('');
   };
 
   const getSelectedPlayerData = () => {
-}
     return playerData.find((p: any) => p.id === selectedPlayer);
   };
 
@@ -256,23 +219,21 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         <div 
           className="absolute w-[800px] h-[800px] rounded-full opacity-20 sm:px-4 md:px-6 lg:px-8"
           style={{
-}
-            background: &apos;radial-gradient(circle, rgba(94, 107, 255, 0.4) 0%, transparent 70%)&apos;,
+            background: 'radial-gradient(circle, rgba(94, 107, 255, 0.4) 0%, transparent 70%)',
             left: `${mousePosition.x - 50}%`,
             top: `${mousePosition.y - 50}%`,
-            transform: &apos;translate(-50%, -50%)&apos;,
-            transition: &apos;all 0.3s ease-out&apos;
+            transform: 'translate(-50%, -50%)',
+            transition: 'all 0.3s ease-out'
           }}
         />
         <div 
           className="absolute w-[600px] h-[600px] rounded-full opacity-20 sm:px-4 md:px-6 lg:px-8"
           style={{
-}
-            background: &apos;radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%)&apos;,
+            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%)',
             right: `${100 - mousePosition.x - 20}%`,
             bottom: `${100 - mousePosition.y - 20}%`,
-            transform: &apos;translate(50%, 50%)&apos;,
-            transition: &apos;all 0.5s ease-out&apos;
+            transform: 'translate(50%, 50%)',
+            transition: 'all 0.5s ease-out'
           }}
         />
         
@@ -281,22 +242,18 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         
         {/* Floating particles */}
         {[...Array(20)].map((_, i) => (
-}
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-white/20 rounded-full sm:px-4 md:px-6 lg:px-8"
             initial={{
-}
               x: Math.random() * window.innerWidth,
               y: window.innerHeight + 20,
             }}
             animate={{
-}
               y: -20,
               x: Math.random() * window.innerWidth,
             }}
             transition={{
-}
               duration: Math.random() * 10 + 10,
               repeat: Infinity,
               ease: "linear",
@@ -333,11 +290,10 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
               ASTRAL DRAFT
             </h1>
             <p className="text-xl text-gray-400 font-light tracking-wide sm:px-4 md:px-6 lg:px-8">
-              {demoMode ? &apos;Demo Mode - No Login Required!&apos; : &apos;Elite Fantasy Football Platform&apos;}
+              {demoMode ? 'Demo Mode - No Login Required!' : 'Elite Fantasy Football Platform'}
             </p>
             <div className="flex items-center justify-center gap-4 mt-4 sm:px-4 md:px-6 lg:px-8">
               {demoMode ? (
-}
                 <>
                   <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-xs text-green-300 animate-pulse sm:px-4 md:px-6 lg:px-8">
                     🎮 Demo Mode Active
@@ -364,7 +320,6 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
 
           <AnimatePresence mode="wait">
             {!selectedPlayer ? (
-}
               /* Player Selection Grid */
               <motion.div
                 key="player-grid"
@@ -376,16 +331,14 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                 {/* Quick Access Section */}
                 <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
                   <h2 className="text-2xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
-                    {demoMode ? &apos;🚀 Auto-Login Active!&apos; : &apos;Choose Your Team&apos;}
+                    {demoMode ? '🚀 Auto-Login Active!' : 'Choose Your Team'}
                   </h2>
                   <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     {demoMode 
-}
-                      ? &apos;Click any player to instantly access the league&apos; 
-                      : &apos;Select your profile to access the league&apos;}
+                      ? 'Click any player to instantly access the league' 
+                      : 'Select your profile to access the league'}
                   </p>
                   {demoMode && (
-}
                     <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full sm:px-4 md:px-6 lg:px-8">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
                       <span className="text-sm text-green-300 sm:px-4 md:px-6 lg:px-8">Demo Mode: No PIN Required</span>
@@ -395,7 +348,6 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
                   {playerData.map((player, index) => (
-}
                     <motion.div
                       key={player.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -430,11 +382,9 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                           
                           {/* Badge */}
                           <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-2
-}
                             ${player.isAdmin 
-}
-                              ? &apos;bg-yellow-500/20 text-yellow-300 border border-yellow-500/30&apos; 
-                              : &apos;bg-white/10 text-gray-300 border border-white/20&apos;
+                              ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' 
+                              : 'bg-white/10 text-gray-300 border border-white/20'
                             }`}>
                             {player.badge}
                           </div>
@@ -465,10 +415,9 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
 
                   <div className="grid grid-cols-3 gap-3 sm:px-4 md:px-6 lg:px-8">
                     {[
-}
-                      { name: &apos;Google&apos;, icon: &apos;🔍&apos;, color: &apos;hover:bg-red-500/10 hover:border-red-500/30&apos; },
-                      { name: &apos;Apple&apos;, icon: &apos;🍎&apos;, color: &apos;hover:bg-gray-500/10 hover:border-gray-500/30&apos; },
-                      { name: &apos;Yahoo&apos;, icon: &apos;📧&apos;, color: &apos;hover:bg-purple-500/10 hover:border-purple-500/30&apos; }
+                      { name: 'Google', icon: '🔍', color: 'hover:bg-red-500/10 hover:border-red-500/30' },
+                      { name: 'Apple', icon: '🍎', color: 'hover:bg-gray-500/10 hover:border-gray-500/30' },
+                      { name: 'Yahoo', icon: '📧', color: 'hover:bg-purple-500/10 hover:border-purple-500/30' }
                     ].map((provider: any) => (
                       <Button>
                         key={provider.name}
@@ -486,7 +435,6 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                   </div>
 
                   {showSocialOptions && (
-}
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -545,11 +493,9 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                         transition={{ delay: 0.3 }}
                       >
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-}
                           ${getSelectedPlayerData()?.isAdmin 
-}
-                            ? &apos;bg-yellow-500/20 text-yellow-300 border border-yellow-500/30&apos; 
-                            : &apos;bg-white/10 text-gray-300 border border-white/20&apos;
+                            ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' 
+                            : 'bg-white/10 text-gray-300 border border-white/20'
                           }`}>
                           {getSelectedPlayerData()?.badge}
                         </span>
@@ -581,7 +527,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                             transition={{ duration: 1, repeat: Infinity }}
                           />
                           <span className="text-sm text-primary-300 sm:px-4 md:px-6 lg:px-8">
-                            {pin.length > 0 ? &apos;Ready to sign in!&apos; : &apos;Enter any PIN to continue&apos;}
+                            {pin.length > 0 ? 'Ready to sign in!' : 'Enter any PIN to continue'}
                           </span>
                           <motion.div
                             className="w-3 h-3 bg-primary-500 rounded-full sm:px-4 md:px-6 lg:px-8"
@@ -623,8 +569,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                         transition={{ delay: 0.5 }}
                       >
                         <div className="text-center space-y-1 sm:px-4 md:px-6 lg:px-8">
-                          {selectedPlayer === &apos;player1&apos; ? (
-}
+                          {selectedPlayer === 'player1' ? (
                             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                               <p className="text-xs text-gray-500 uppercase tracking-wider sm:px-4 md:px-6 lg:px-8">Quick Access</p>
                               <div className="flex justify-center gap-4 sm:px-4 md:px-6 lg:px-8">

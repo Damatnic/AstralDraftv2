@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MobileLayout from &apos;./MobileLayout&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MobileLayout from './MobileLayout';
 
-describe(&apos;MobileLayout&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MobileLayout', () => {
+  it('renders without crashing', () => {
     render(<MobileLayout />);
-    expect(screen.getByTestId(&apos;mobilelayout&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('mobilelayout')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MobileLayout />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MobileLayout />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

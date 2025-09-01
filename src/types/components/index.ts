@@ -4,14 +4,13 @@
  */
 
 // Component props
-export * from &apos;./props&apos;;
+export * from './props';
 
 // Event handlers
-export * from &apos;./events&apos;;
+export * from './events';
 
 // Re-export commonly used component types
 export type {
-}
   // Base props
   BaseComponentProps,
   InteractiveProps,
@@ -83,10 +82,9 @@ export type {
   ErrorBoundaryProps,
   TooltipProps,
 //   PopoverProps
-} from &apos;./props&apos;;
+} from './props';
 
 export type {
-}
   // Basic event handlers
   FormChangeHandler,
   FormSubmitHandler,
@@ -132,4 +130,4 @@ export type {
   AnalyticsEventHandlers,
   ErrorEventHandlers,
 //   LifecycleEventHandlers
-} from &apos;./events&apos;;
+} from './events';

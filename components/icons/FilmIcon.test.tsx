@@ -1,44 +1,36 @@
 
 interface IconProps {
-}
   size?: number | string;
-}
 
   className?: string;
   color?: string;
-  &apos;aria-label&apos;?: string;
+  'aria-label'?: string;
 
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import FilmIcon from &apos;./FilmIcon&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import FilmIcon from './FilmIcon';
 
-describe(&apos;FilmIcon&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('FilmIcon', () => {
+  it('renders without crashing', () => {
     render(<FilmIcon />);
-    expect(screen.getByTestId(&apos;filmicon&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('filmicon')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<FilmIcon />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<FilmIcon />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

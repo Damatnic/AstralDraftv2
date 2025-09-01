@@ -1,16 +1,15 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { LazyImage } from &apos;../ui/LazyImage&apos;;
-import { MenuIcon } from &apos;../icons/MenuIcon&apos;;
-import TeamSwitcher from &apos;../ui/TeamSwitcher&apos;;
-import { MailIcon } from &apos;../icons/MailIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { useAppState } from '../../contexts/AppContext';
+import { motion } from 'framer-motion';
+import { Avatar } from '../ui/Avatar';
+import { LazyImage } from '../ui/LazyImage';
+import { MenuIcon } from '../icons/MenuIcon';
+import TeamSwitcher from '../ui/TeamSwitcher';
+import { MailIcon } from '../icons/MailIcon';
 
 const Header: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { user } = state;
 
@@ -31,7 +30,7 @@ const Header: React.FC = () => {
             <div className="flex items-center gap-2 sm:gap-4">
                 <TeamSwitcher />
                 <button 
-                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MESSAGES&apos; })}
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MESSAGES' })}
                     className="relative p-2 rounded-full hover:bg-white/10"
                     aria-label="Open messages"
                 >
@@ -39,14 +38,14 @@ const Header: React.FC = () => {
                     {hasUnreadMessages && <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-slate-800"></div>}
                 </button>
                 <button 
-                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;PROFILE&apos; })}
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROFILE' })}
                     className="flex items-center gap-2 p-1 pr-3 rounded-full hover:bg-white/10"
                 >
-                    <Avatar avatar={user?.avatar || &apos;/&apos;} className="w-8 h-8 text-lg rounded-full" />
-                    <span className="font-semibold text-sm hidden sm:block">{user?.name || &apos;Guest&apos;}</span>
+                    <Avatar avatar={user?.avatar || '/'} className="w-8 h-8 text-lg rounded-full" />
+                    <span className="font-semibold text-sm hidden sm:block">{user?.name || 'Guest'}</span>
                 </button>
                 <button 
-                    onClick={() => dispatch({ type: &apos;TOGGLE_MOBILE_NAV&apos; })}
+                    onClick={() => dispatch({ type: 'TOGGLE_MOBILE_NAV' })}
                     className="sm:hidden p-2 rounded-full hover:bg-white/10"
                     aria-label="Open navigation menu"
                 >

@@ -3,22 +3,19 @@
  * WCAG 2.1 Level AA Compliant Data Table
  */
 
-import React, { useState, useRef, useEffect } from &apos;react&apos;;
-import { KEYBOARD_KEYS, announceToScreenReader } from &apos;../../../utils/accessibility&apos;;
+import React, { useState, useRef, useEffect } from 'react';
+import { KEYBOARD_KEYS, announceToScreenReader } from '../../../utils/accessibility';
 
 interface Column<T> {
-}
   key: keyof T | string;
   label: string;
   sortable?: boolean;
   width?: string;
-  align?: &apos;left&apos; | &apos;center&apos; | &apos;right&apos;;
+  align?: 'left' | 'center' | 'right';
   render?: (value: any, row: T, index: number) => React.ReactNode;
   ariaLabel?: (row: T) => string;
-}
 
 interface AccessibleTableProps<T> {
-}
   columns: Column<T>[];
   data: T[];
   caption: string;
@@ -27,7 +24,7 @@ interface AccessibleTableProps<T> {
   selectable?: boolean;
   onRowSelect?: (row: T, index: number) => void;
   selectedRows?: Set<number>;
-  onSort?: (column: string, direction: &apos;asc&apos; | &apos;desc&apos;) => void;
+  onSort?: (column: string, direction: 'asc' | 'desc') => void;
   loading?: boolean;
   emptyMessage?: string;
   striped?: boolean;
@@ -35,10 +32,8 @@ interface AccessibleTableProps<T> {
   compact?: boolean;
   stickyHeader?: boolean;
   keyExtractor?: (row: T, index: number) => string | number;
-}
 
 function AccessibleTable<T extends Record<string, any>>({
-}
   columns,
   data,
   caption,
@@ -49,47 +44,42 @@ function AccessibleTable<T extends Record<string, any>>({
   selectedRows = new Set(),
   onSort,
   loading = false,
-  emptyMessage = &apos;No data available&apos;,
+  emptyMessage = 'No data available',
   striped = true,
   hoverable = true,
   compact = false,
   stickyHeader = false,
 //   keyExtractor
 }: AccessibleTableProps<T>) {
-}
   const [sortColumn, setSortColumn] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<&apos;asc&apos; | &apos;desc&apos;>(&apos;asc&apos;);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [focusedCell, setFocusedCell] = useState<{ row: number; col: number }>({ row: -1, col: -1 });
   const tableRef = useRef<HTMLTableElement>(null);
 
   // Handle sorting
   const handleSort = (columnKey: string) => {
-}
     if (!sortable) return;
 
-    const newDirection = sortColumn === columnKey && sortDirection === &apos;asc&apos; ? &apos;desc&apos; : &apos;asc&apos;;
+    const newDirection = sortColumn === columnKey && sortDirection === 'asc' ? 'desc' : 'asc';
     setSortColumn(columnKey);
     setSortDirection(newDirection);
     
     if (onSort) {
-}
       onSort(columnKey, newDirection);
     }
 
     announceToScreenReader(
-      `Sorted by ${columns.find((c: any) => c.key === columnKey)?.label} ${newDirection === &apos;asc&apos; ? &apos;ascending&apos; : &apos;descending&apos;}`,
-      &apos;polite&apos;
+      `Sorted by ${columns.find((c: any) => c.key === columnKey)?.label} ${newDirection === 'asc' ? 'ascending' : 'descending'}`,
+      'polite'
     );
   };
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent, rowIndex: number, colIndex: number) => {
-}
     let newRow = rowIndex;
     let newCol = colIndex;
 
     switch (e.key) {
-}
       case KEYBOARD_KEYS.ARROW_UP:
         e.preventDefault();
         newRow = Math.max(0, rowIndex - 1);
@@ -109,29 +99,24 @@ function AccessibleTable<T extends Record<string, any>>({
       case KEYBOARD_KEYS.HOME:
         e.preventDefault();
         if (e.ctrlKey) {
-}
           newRow = 0;
           newCol = 0;
         } else {
-}
           newCol = 0;
         }
         break;
       case KEYBOARD_KEYS.END:
         e.preventDefault();
         if (e.ctrlKey) {
-}
           newRow = data.length - 1;
           newCol = columns.length - 1;
         } else {
-}
           newCol = columns.length - 1;
         }
         break;
       case KEYBOARD_KEYS.ENTER:
       case KEYBOARD_KEYS.SPACE:
         if (selectable && onRowSelect) {
-}
           e.preventDefault();
           onRowSelect(data[rowIndex], rowIndex);
         }
@@ -150,10 +135,9 @@ function AccessibleTable<T extends Record<string, any>>({
   };
 
   // Size styles
-  const cellPadding = compact ? &apos;px-3 py-2&apos; : &apos;px-4 py-3&apos;;
+  const cellPadding = compact ? 'px-3 py-2' : 'px-4 py-3';
 
   if (loading) {
-}
     return (
       <div className="flex items-center justify-center p-8" role="status" aria-live="polite">
         <svg
@@ -197,35 +181,30 @@ function AccessibleTable<T extends Record<string, any>>({
           {summary && `. ${summary}`}
         </caption>
         
-        <thead className={`${stickyHeader ? &apos;sticky top-0 z-10&apos; : &apos;&apos;} bg-gray-800`}>
+        <thead className={`${stickyHeader ? 'sticky top-0 z-10' : ''} bg-gray-800`}>
           <tr role="row">
             {columns.map((column, colIndex) => (
-}
               <th
                 key={column.key as string}
                 className={`
-}
                   ${cellPadding}
-                  text-${column.align || &apos;left&apos;}
+                  text-${column.align || 'left'}
                   font-semibold text-gray-200
                   border-b border-gray-700
-                  ${column.sortable ? &apos;cursor-pointer hover:bg-gray-700&apos; : &apos;&apos;}
-                  ${column.width || &apos;&apos;}
+                  ${column.sortable ? 'cursor-pointer hover:bg-gray-700' : ''}
+                  ${column.width || ''}
                 `}
                 role="columnheader"
                 aria-sort={
-}
                   sortColumn === column.key
-                    ? sortDirection === &apos;asc&apos;
-                      ? &apos;ascending&apos;
-                      : &apos;descending&apos;
-                    : &apos;none&apos;
+                    ? sortDirection === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
                 }
                 onClick={() => column.sortable && handleSort(column.key as string)}
                 onKeyDown={(e: any) => {
-}
                   if (column.sortable && (e.key === KEYBOARD_KEYS.ENTER || e.key === KEYBOARD_KEYS.SPACE)) {
-}
                     e.preventDefault();
                     handleSort(column.key as string);
                   }
@@ -236,11 +215,9 @@ function AccessibleTable<T extends Record<string, any>>({
                 <div className="flex items-center justify-between">
                   <span>{column.label}</span>
                   {column.sortable && (
-}
                     <span className="ml-2" aria-hidden="true">
                       {sortColumn === column.key ? (
-}
-                        sortDirection === &apos;asc&apos; ? &apos;↑&apos; : &apos;↓&apos;
+                        sortDirection === 'asc' ? '↑' : '↓'
                       ) : (
                         <span className="text-gray-500">↕</span>
                       )}
@@ -254,7 +231,6 @@ function AccessibleTable<T extends Record<string, any>>({
         
         <tbody>
           {data.length === 0 ? (
-}
             <tr>
               <td
                 colSpan={columns.length}
@@ -266,7 +242,6 @@ function AccessibleTable<T extends Record<string, any>>({
             </tr>
           ) : (
             data.map((row, rowIndex) => {
-}
               const rowKey = keyExtractor ? keyExtractor(row, rowIndex) : rowIndex;
               const isSelected = selectedRows.has(rowIndex);
               
@@ -274,11 +249,10 @@ function AccessibleTable<T extends Record<string, any>>({
                 <tr
                   key={rowKey}
                   className={`
-}
-                    ${striped && rowIndex % 2 === 0 ? &apos;bg-gray-800/50&apos; : &apos;&apos;}
-                    ${hoverable ? &apos;hover:bg-gray-700/50&apos; : &apos;&apos;}
-                    ${isSelected ? &apos;bg-blue-900/30&apos; : &apos;&apos;}
-                    ${selectable ? &apos;cursor-pointer&apos; : &apos;&apos;}
+                    ${striped && rowIndex % 2 === 0 ? 'bg-gray-800/50' : ''}
+                    ${hoverable ? 'hover:bg-gray-700/50' : ''}
+                    ${isSelected ? 'bg-blue-900/30' : ''}
+                    ${selectable ? 'cursor-pointer' : ''}
                     transition-colors
                   `}
                   role="row"
@@ -287,17 +261,15 @@ function AccessibleTable<T extends Record<string, any>>({
                   onClick={() => selectable && onRowSelect && onRowSelect(row, rowIndex)}
                 >
                   {columns.map((column, colIndex) => {
-}
-                    const value = column.key in row ? row[column.key as keyof T] : &apos;&apos;;
+                    const value = column.key in row ? row[column.key as keyof T] : '';
                     const cellContent = column.render ? column.render(value, row, rowIndex) : value;
                     
                     return (
                       <td
                         key={`${rowKey}-${column.key as string}`}
                         className={`
-}
                           ${cellPadding}
-                          text-${column.align || &apos;left&apos;}
+                          text-${column.align || 'left'}
                           text-gray-300
                           border-b border-gray-700/50
                         `}
@@ -324,12 +296,10 @@ function AccessibleTable<T extends Record<string, any>>({
       {/* Screen reader summary */}
       <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
         {`Table with ${data.length} rows and ${columns.length} columns. ${
-}
-          selectable ? &apos;Press Enter or Space to select a row.&apos; : &apos;&apos;
+          selectable ? 'Press Enter or Space to select a row.' : ''
         } Use arrow keys to navigate.`}
       </div>
     </div>
   );
-}
 
 export default AccessibleTable;

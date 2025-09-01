@@ -1,43 +1,39 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import { SettingsIcon } from &apos;../components/icons/SettingsIcon&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
-import type { LeagueSettings } from &apos;../types&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import { SettingsIcon } from '../components/icons/SettingsIcon';
+import ErrorDisplay from '../components/core/ErrorDisplay';
+import type { LeagueSettings } from '../types';
 
 const EditLeagueSettingsView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
 
-    const [name, setName] = React.useState(league?.name || &apos;&apos;);
-    const [logoUrl, setLogoUrl] = React.useState(league?.logoUrl || &apos;&apos;);
+    const [name, setName] = React.useState(league?.name || '');
+    const [logoUrl, setLogoUrl] = React.useState(league?.logoUrl || '');
     const [tradeDeadline, setTradeDeadline] = React.useState(league?.settings.tradeDeadline || 10);
     const [keeperCount, setKeeperCount] = React.useState(league?.settings.keeperCount || 0);
-    const [aiAssistanceLevel, setAiAssistanceLevel] = React.useState<LeagueSettings[&apos;aiAssistanceLevel&apos;]>(league?.settings.aiAssistanceLevel || &apos;FULL&apos;);
+    const [aiAssistanceLevel, setAiAssistanceLevel] = React.useState<LeagueSettings['aiAssistanceLevel']>(league?.settings.aiAssistanceLevel || 'FULL');
 
     if (!league || state.user?.id !== league.commissionerId) {
-}
-        return <ErrorDisplay title="Access Denied" message="You are not the commissioner of this league." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
+        return <ErrorDisplay title="Access Denied" message="You are not the commissioner of this league." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
 
-    const isDraftComplete = league.status !== &apos;PRE_DRAFT&apos; && league.status !== &apos;DRAFTING&apos;;
+    const isDraftComplete = league.status !== 'PRE_DRAFT' && league.status !== 'DRAFTING';
 
     const handleSaveChanges = (e: React.FormEvent) => {
-}
         e.preventDefault();
         dispatch({
-}
-            type: &apos;UPDATE_LEAGUE_SETTINGS&apos;,
+            type: 'UPDATE_LEAGUE_SETTINGS',
             payload: { leagueId: league.id, name, logoUrl, tradeDeadline, keeperCount, aiAssistanceLevel }
         });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;League settings saved!&apos;, type: &apos;SYSTEM&apos; } });
-        dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;COMMISSIONER_TOOLS&apos; });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'League settings saved!', type: 'SYSTEM' } });
+        dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' });
     };
 
     const labelClasses = "block text-sm font-medium text-gray-400 mb-1";
     const inputClasses = "glass-input mobile-touch-target w-full px-3 py-3";
-    const buttonGroupButtonClasses = (isActive: boolean) => `flex-1 py-2 text-sm font-bold rounded-md transition-all ${isActive ? &apos;bg-cyan-400 text-black&apos; : &apos;bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50&apos;}`;
+    const buttonGroupButtonClasses = (isActive: boolean) => `flex-1 py-2 text-sm font-bold rounded-md transition-all ${isActive ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`;
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -48,7 +44,7 @@ const EditLeagueSettingsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;COMMISSIONER_TOOLS&apos; }) className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }) className="glass-button">
                     Back to Tools
                 </button>
             </header>
@@ -64,16 +60,16 @@ const EditLeagueSettingsView: React.FC = () => {
                                 <label htmlFor="logo-url" className={labelClasses}>League Logo URL</label>
                                 <input id="logo-url" type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="https://example.com/logo.png" />
                             </div>
-                            <div className={isDraftComplete ? &apos;opacity-50&apos; : &apos;&apos;}>
+                            <div className={isDraftComplete ? 'opacity-50' : ''}>
                                 <label className={labelClasses}>AI Assistance Level</label>
                                  <div className="flex gap-2">
-                                    <button type="button" onClick={() => setAiAssistanceLevel(&apos;FULL&apos;)} disabled={isDraftComplete}>Full AI</button>
-                                    <button type="button" onClick={() => setAiAssistanceLevel(&apos;BASIC&apos;)} disabled={isDraftComplete}>Basic AI</button>
+                                    <button type="button" onClick={() => setAiAssistanceLevel('FULL')} disabled={isDraftComplete}>Full AI</button>
+                                    <button type="button" onClick={() => setAiAssistanceLevel('BASIC')} disabled={isDraftComplete}>Basic AI</button>
                                 </div>
                                 <p className="text-xs text-gray-500 mt-1">Basic AI disables strategic advice features like lineup suggestions and trade analysis.</p>
                                 {isDraftComplete && <p className="text-xs text-yellow-400 mt-1">Cannot be changed after the draft.</p>}
                             </div>
-                            <div className={isDraftComplete ? &apos;opacity-50&apos; : &apos;&apos;}>
+                            <div className={isDraftComplete ? 'opacity-50' : ''}>
                                 <label htmlFor="trade-deadline" className={labelClasses}>Trade Deadline (Week): {tradeDeadline}</label>
                                 <input
                                     id="trade-deadline"
@@ -87,7 +83,7 @@ const EditLeagueSettingsView: React.FC = () => {
                                 />
                                 {isDraftComplete && <p className="text-xs text-yellow-400 mt-1">Cannot be changed after the draft.</p>}
                             </div>
-                             <div className={isDraftComplete ? &apos;opacity-50&apos; : &apos;&apos;}>
+                             <div className={isDraftComplete ? 'opacity-50' : ''}>
                                 <label htmlFor="keeper-count" className={labelClasses}>Keepers per Team: {keeperCount}</label>
                                 <input
                                     id="keeper-count"

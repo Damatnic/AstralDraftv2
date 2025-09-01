@@ -3,65 +3,54 @@
  * Comprehensive analytics dashboard with performance metrics, predictive insights, and advanced visualization
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import {
-}
   LineChart, Line, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart,
   PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
-} from &apos;recharts&apos;;
+} from 'recharts';
 import {
-}
   TrendingUp, TrendingDown, Target, Brain, 
   Calendar, Download, RefreshCw,
   BarChart3, LineChart as LineChartIcon,
   RadarIcon, AlertCircle
-} from &apos;lucide-react&apos;;
-import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
-import { Tabs, TabsList, TabsTrigger, TabsContent } from &apos;../ui/ShadcnTabs&apos;;
-import { Progress } from &apos;../ui/Progress&apos;;
-import { Badge } from &apos;../ui/Badge&apos;;
-import { useAuth } from &apos;../../contexts/AuthContext&apos;;
-import { useEnhancedAnalytics } from &apos;../../hooks/useEnhancedAnalytics&apos;;
+} from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/ShadcnTabs';
+import { Progress } from '../ui/Progress';
+import { Badge } from '../ui/Badge';
+import { useAuth } from '../../contexts/AuthContext';
+import { useEnhancedAnalytics } from '../../hooks/useEnhancedAnalytics';
 
 interface EnhancedAnalyticsDashboardProps {
-}
   className?: string;
   onExport?: (data: any) => void;
 
-}
 
 interface PerformanceMetric {
-}
   id: string;
   name: string;
   value: number;
   change: number;
-  trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
-  format: &apos;percentage&apos; | &apos;number&apos; | &apos;currency&apos; | &apos;time&apos;;
+  trend: 'up' | 'down' | 'stable';
+  format: 'percentage' | 'number' | 'currency' | 'time';
   color: string;
   description?: string;
-}
 
 interface ChartConfig {
-}
-  type: &apos;line&apos; | &apos;area&apos; | &apos;bar&apos; | &apos;pie&apos; | &apos;radar&apos; | &apos;scatter&apos;;
+  type: 'line' | 'area' | 'bar' | 'pie' | 'radar' | 'scatter';
   title: string;
   data: any[];
   config: any;
-}
 
 const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
-}
-  className = &apos;&apos;,
+  className = '',
 //   onExport
 }: any) => {
-}
   const { isAuthenticated } = useAuth();
   const {
-}
     report,
     metrics,
     insights,
@@ -75,42 +64,34 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   } = useEnhancedAnalytics({ timeRange: 7, autoRefresh: false });
 
   // State management
-  const [activeTab, setActiveTab] = useState(&apos;overview&apos;);
+  const [activeTab, setActiveTab] = useState('overview');
   const [refreshing, setRefreshing] = useState(false);
 
   const refreshData = async () => {
-}
     try {
-}
 
     setRefreshing(true);
     await refresh();
     setRefreshing(false);
 
     } catch (error) {
-}
-      console.error(&apos;Error in refreshData:&apos;, error);
+      console.error('Error in refreshData:', error);
     } finally {
-}
       setRefreshing(false);
     }
   };
 
   const exportAnalytics = async () => {
-}
     try {
-}
-      const data = await exportData(&apos;json&apos;);
+      const data = await exportData('json');
       
       if (onExport) {
-}
         onExport(JSON.parse(data));
       } else {
-}
         // Default export as JSON
-        const blob = new Blob([data], { type: &apos;application/json&apos; });
+        const blob = new Blob([data], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement(&apos;a&apos;);
+        const a = document.createElement('a');
         a.href = url;
         a.download = `analytics-${timeRange}d-${Date.now()}.json`;
         document.body.appendChild(a);
@@ -119,13 +100,11 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
         URL.revokeObjectURL(url);
       }
     } catch (error) {
-}
-      console.error(&apos;Error in exportAnalytics:&apos;, error);
+      console.error('Error in exportAnalytics:', error);
     }
   };
 
   if (!isAuthenticated) {
-}
     return (
       <div className={`enhanced-analytics-dashboard ${className}`}>
         <Card>
@@ -140,7 +119,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   }
 
   if (error) {
-}
     return (
       <div className={`enhanced-analytics-dashboard ${className}`}>
         <Card>
@@ -161,7 +139,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   }
 
   if (loading) {
-}
     return (
       <div className={`enhanced-analytics-dashboard ${className}`}>
         <Card>
@@ -176,7 +153,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   }
 
   if (loading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -211,7 +187,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
             disabled={refreshing}
             className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
            aria-label="Action button">
-            <RefreshCw className={`w-4 h-4 ${refreshing ? &apos;animate-spin&apos; : &apos;&apos;}`} />
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
           
           <button
@@ -226,7 +202,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
 
       {/* Loading state */}
       {loading && (
-}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <Card key={i}>
@@ -244,7 +219,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
 
       {/* Main content */}
       {!loading && (
-}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4 sm:px-4 md:px-6 lg:px-8">
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -258,72 +232,65 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
             {/* Key metrics grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {metrics && [
-}
                 {
-}
-                  id: &apos;accuracy&apos;,
-                  name: &apos;Overall Accuracy&apos;,
+                  id: 'accuracy',
+                  name: 'Overall Accuracy',
                   value: metrics.accuracy.overall * 100,
                   change: metrics.accuracy.trend * 100,
-                  trend: metrics.accuracy.trend >= 0 ? &apos;up&apos; : &apos;down&apos;,
-                  format: &apos;percentage&apos;,
-                  color: &apos;#10B981&apos;,
-                  description: &apos;Overall prediction accuracy across all categories&apos;
+                  trend: metrics.accuracy.trend >= 0 ? 'up' : 'down',
+                  format: 'percentage',
+                  color: '#10B981',
+                  description: 'Overall prediction accuracy across all categories'
                 },
                 {
-}
-                  id: &apos;win_rate&apos;,
-                  name: &apos;User Win Rate&apos;,
+                  id: 'win_rate',
+                  name: 'User Win Rate',
                   value: metrics.performance.userWinRate * 100,
                   change: 0,
-                  trend: &apos;stable&apos;,
-                  format: &apos;percentage&apos;,
-                  color: &apos;#3B82F6&apos;,
-                  description: &apos;Your success rate against Oracle predictions&apos;
+                  trend: 'stable',
+                  format: 'percentage',
+                  color: '#3B82F6',
+                  description: 'Your success rate against Oracle predictions'
                 },
                 {
-}
-                  id: &apos;predictions&apos;,
-                  name: &apos;Total Predictions&apos;,
+                  id: 'predictions',
+                  name: 'Total Predictions',
                   value: metrics.engagement.totalPredictions,
                   change: 0,
-                  trend: &apos;stable&apos;,
-                  format: &apos;number&apos;,
-                  color: &apos;#8B5CF6&apos;,
-                  description: &apos;Total number of predictions made&apos;
+                  trend: 'stable',
+                  format: 'number',
+                  color: '#8B5CF6',
+                  description: 'Total number of predictions made'
                 },
                 {
-}
-                  id: &apos;confidence&apos;,
-                  name: &apos;Confidence Correlation&apos;,
+                  id: 'confidence',
+                  name: 'Confidence Correlation',
                   value: metrics.performance.confidenceCorrelation * 100,
                   change: 0,
-                  trend: &apos;stable&apos;,
-                  format: &apos;percentage&apos;,
-                  color: &apos;#F59E0B&apos;,
-                  description: &apos;How well confidence levels predict actual outcomes&apos;
+                  trend: 'stable',
+                  format: 'percentage',
+                  color: '#F59E0B',
+                  description: 'How well confidence levels predict actual outcomes'
                 },
                 {
-}
-                  id: &apos;consistency&apos;,
-                  name: &apos;Weekly Consistency&apos;,
+                  id: 'consistency',
+                  name: 'Weekly Consistency',
                   value: metrics.accuracy.weeklyConsistency,
                   change: 0,
-                  trend: &apos;stable&apos;,
-                  format: &apos;percentage&apos;,
-                  color: &apos;#06B6D4&apos;,
-                  description: &apos;Consistency of performance across weeks&apos;
+                  trend: 'stable',
+                  format: 'percentage',
+                  color: '#06B6D4',
+                  description: 'Consistency of performance across weeks'
                 },
                 {
-}
-                  id: &apos;percentile&apos;,
-                  name: &apos;User Percentile&apos;,
+                  id: 'percentile',
+                  name: 'User Percentile',
                   value: metrics.comparative.userPercentile,
                   change: 0,
-                  trend: &apos;stable&apos;,
-                  format: &apos;number&apos;,
-                  color: &apos;#EF4444&apos;,
-                  description: &apos;Your ranking compared to other users&apos;
+                  trend: 'stable',
+                  format: 'number',
+                  color: '#EF4444',
+                  description: 'Your ranking compared to other users'
                 }
               ].map((metric: any) => (
                 <motion.div
@@ -337,20 +304,18 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                       <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-sm font-medium text-gray-600 sm:px-4 md:px-6 lg:px-8">{metric.name}</h3>
                         <div className={`flex items-center text-sm ${
-}
-                          metric.trend === &apos;up&apos; ? &apos;text-green-600&apos; : 
-                          metric.trend === &apos;down&apos; ? &apos;text-red-600&apos; : &apos;text-gray-600&apos;
+                          metric.trend === 'up' ? 'text-green-600' : 
+                          metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
                         }`}>
-                          {metric.trend === &apos;up&apos; && <TrendingUp className="w-4 h-4 mr-1 sm:px-4 md:px-6 lg:px-8" />}
-                          {metric.trend === &apos;down&apos; && <TrendingDown className="w-4 h-4 mr-1 sm:px-4 md:px-6 lg:px-8" />}
-                          {metric.change > 0 ? &apos;+&apos; : &apos;&apos;}{metric.change.toFixed(1)}%
+                          {metric.trend === 'up' && <TrendingUp className="w-4 h-4 mr-1 sm:px-4 md:px-6 lg:px-8" />}
+                          {metric.trend === 'down' && <TrendingDown className="w-4 h-4 mr-1 sm:px-4 md:px-6 lg:px-8" />}
+                          {metric.change > 0 ? '+' : ''}{metric.change.toFixed(1)}%
                         </div>
                       </div>
                       
                       <div className="flex items-center mb-3 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-2xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">
-                          {metric.format === &apos;percentage&apos; ? 
-}
+                          {metric.format === 'percentage' ? 
                             `${metric.value.toFixed(1)}%` : 
                             metric.value.toLocaleString()
                           }
@@ -361,7 +326,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                         <div
                           className="h-2 rounded-full transition-all duration-500 sm:px-4 md:px-6 lg:px-8"
                           style={{ 
-}
                             width: `${Math.min(100, metric.value)}%`,
                             backgroundColor: metric.color
                           }}
@@ -369,7 +333,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                       </div>
 
                       {metric.description && (
-}
                         <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{metric.description}</p>
                       )}
                     </CardContent>
@@ -381,7 +344,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
             {/* Charts grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {charts.map((chart, index) => (
-}
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -391,17 +353,16 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                        {chart.type === &apos;line&apos; && <LineChartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
-                        {chart.type === &apos;bar&apos; && <BarChart3 className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
-                        {chart.type === &apos;radar&apos; && <RadarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
+                        {chart.type === 'line' && <LineChartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
+                        {chart.type === 'bar' && <BarChart3 className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
+                        {chart.type === 'radar' && <RadarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
                         {chart.title}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="h-64 sm:px-4 md:px-6 lg:px-8">
                         <ResponsiveContainer width="100%" height="100%">
-                          {chart.type === &apos;line&apos; ? (
-}
+                          {chart.type === 'line' ? (
                             <LineChart data={chart.data}>
                               <CartesianGrid strokeDasharray="3 3" />
                               <XAxis dataKey={chart.config.xAxisKey} />
@@ -415,7 +376,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                                 dot={{ fill: chart.config.color, strokeWidth: 2, r: 4 }}
                               />
                             </LineChart>
-                          ) : chart.type === &apos;bar&apos; ? (
+                          ) : chart.type === 'bar' ? (
                             <BarChart data={chart.data}>
                               <CartesianGrid strokeDasharray="3 3" />
                               <XAxis dataKey={chart.config.xAxisKey} />
@@ -423,7 +384,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                               <Tooltip />
                               <Bar dataKey={chart.config.yAxisKey} fill="#3B82F6" />
                             </BarChart>
-                          ) : chart.type === &apos;radar&apos; ? (
+                          ) : chart.type === 'radar' ? (
                             <RadarChart data={chart.data}>
                               <PolarGrid />
                               <PolarAngleAxis dataKey={chart.config.angleKey} />
@@ -459,7 +420,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                 </CardHeader>
                 <CardContent className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                   {metrics && Object.entries(metrics.accuracy.byCategory).map(([type, accuracy]) => (
-}
                     <div key={type} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                       <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">{type}</span>
                       <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -497,7 +457,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
           <TabsContent value="insights" className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {insights.map((insight, index) => (
-}
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -512,7 +471,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                           {insight.title}
                         </CardTitle>
                         <Badge>
-                          variant={insight.confidence > 80 ? &apos;default&apos; : &apos;secondary&apos;}
+                          variant={insight.confidence > 80 ? 'default' : 'secondary'}
                         >
                           {insight.confidence}% confident
                         </Badge>
@@ -524,10 +483,9 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                           <Target className="w-4 h-4 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                           <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Impact:</span>
                           <Badge variant="default" className={
-}
-                            insight.impact === &apos;high&apos; ? &apos;border-red-300 text-red-700&apos; :
-                            insight.impact === &apos;medium&apos; ? &apos;border-yellow-300 text-yellow-700&apos; :
-                            &apos;border-green-300 text-green-700&apos;
+                            insight.impact === 'high' ? 'border-red-300 text-red-700' :
+                            insight.impact === 'medium' ? 'border-yellow-300 text-yellow-700' :
+                            'border-green-300 text-green-700'
                           }>
                             {insight.impact}
                           </Badge>
@@ -539,12 +497,10 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                       </div>
 
                       {insight.recommendations && insight.recommendations.length > 0 && (
-}
                         <div>
                           <h4 className="text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Recommendations:</h4>
                           <ul className="text-sm text-gray-600 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             {insight.recommendations.map((rec: string, i: number) => (
-}
                               <li key={`rec-${insight.id}-${i}`} className="flex items-start gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-blue-500 mt-1 sm:px-4 md:px-6 lg:px-8">•</span>
                                 {rec}
@@ -555,7 +511,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                       )}
 
                       {insight.data?.potentialGain && (
-}
                         <div className="bg-green-50 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
                           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <TrendingUp className="w-4 h-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />
@@ -575,7 +530,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
           {/* Comparative Tab */}
           <TabsContent value="comparative" className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {metrics && (
-}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card>
                   <CardHeader>
@@ -602,7 +556,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                     <div className="pt-4 border-t sm:px-4 md:px-6 lg:px-8">
                       <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Your Percentile</span>
-                        <Badge variant={metrics.comparative.userPercentile > 75 ? &apos;default&apos; : &apos;secondary&apos;}>
+                        <Badge variant={metrics.comparative.userPercentile > 75 ? 'default' : 'secondary'}>
                           {metrics.comparative.userPercentile}th
                         </Badge>
                       </div>

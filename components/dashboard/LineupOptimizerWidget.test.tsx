@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import LineupOptimizerWidget from &apos;./LineupOptimizerWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import LineupOptimizerWidget from './LineupOptimizerWidget';
 
-describe(&apos;LineupOptimizerWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('LineupOptimizerWidget', () => {
+  it('renders without crashing', () => {
     render(<LineupOptimizerWidget />);
-    expect(screen.getByTestId(&apos;lineupoptimizerwidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('lineupoptimizerwidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<LineupOptimizerWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<LineupOptimizerWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

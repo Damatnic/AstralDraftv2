@@ -1,39 +1,32 @@
 
 
-import React, { useCallback } from &apos;react&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { ThemeToggle } from &apos;../ui/ThemeToggle&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import ToggleSwitch from &apos;../ui/ToggleSwitch&apos;;
-import { requestNotificationPermission } from &apos;../../utils/notifications&apos;;
+import React, { useCallback } from 'react';
+import { Modal } from '../ui/Modal';
+import { ThemeToggle } from '../ui/ThemeToggle';
+import { useAppState } from '../../contexts/AppContext';
+import ToggleSwitch from '../ui/ToggleSwitch';
+import { requestNotificationPermission } from '../../utils/notifications';
 
 interface PreferencesModalProps {
-}
     onClose: () => void;
 
-}
 
 export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }: any) => {
-}
     const { state, dispatch } = useAppState();
 
     const handleRequestPermission = () => {
-}
-        if (state.notificationPermission === &apos;default&apos;) {
-}
+        if (state.notificationPermission === 'default') {
             requestNotificationPermission(dispatch);
 
     };
 
     const getNotificationButton = () => {
-}
         switch(state.notificationPermission) {
-}
-            case &apos;granted&apos;:
+            case 'granted':
                 return <span className="text-sm font-semibold text-green-400 sm:px-4 md:px-6 lg:px-8">Enabled</span>;
-            case &apos;denied&apos;:
+            case 'denied':
                 return <span className="text-sm font-semibold text-red-400 sm:px-4 md:px-6 lg:px-8">Blocked</span>;
-            case &apos;default&apos;:
+            case 'default':
             default:
                 return (
                     <button onClick={handleRequestPermission} className="px-3 py-1 text-sm font-bold bg-cyan-500/20 text-cyan-300 rounded-md hover:bg-cyan-500/30 sm:px-4 md:px-6 lg:px-8">
@@ -57,7 +50,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }: a
                         <ToggleSwitch>
                             id="sound-toggle"
                             checked={state.soundEnabled}
-                            onChange={() => dispatch({ type: &apos;TOGGLE_SOUND&apos; }}
+                            onChange={() => dispatch({ type: 'TOGGLE_SOUND' }}
                         />
                     </div>
                     <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">

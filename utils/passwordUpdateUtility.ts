@@ -3,50 +3,44 @@
  * Provides easy interface to update user passwords and test the system
  */
 
-import SimpleAuthService from &apos;../services/simpleAuthService&apos;;
-import SecurePasswordGenerator from &apos;./securePasswordGenerator&apos;;
+import SimpleAuthService from '../services/simpleAuthService';
+import SecurePasswordGenerator from './securePasswordGenerator';
 
 export class PasswordUpdateUtility {
-}
   /**
    * Execute the password generation process
    */
   static async executePasswordUpdate(): Promise<{
-}
     success: boolean;
     message: string;
     report?: any;
     errors?: string[];
   }> {
-}
     try {
-}
-      console.log(&apos;🚀 Starting password update utility...&apos;);
+      console.log('🚀 Starting password update utility...');
       
       // Initialize auth service first
       SimpleAuthService.initialize();
       
       // Generate security report before update
       const reportBefore = SimpleAuthService.generatePasswordSecurityReport();
-      console.log(&apos;📊 Security Report (Before):&apos;, reportBefore);
+      console.log('📊 Security Report (Before):', reportBefore);
       
       // Execute password generation
       SimpleAuthService.generateRandomPasswordsForUsers();
       
       // Generate security report after update
       const reportAfter = SimpleAuthService.generatePasswordSecurityReport();
-      console.log(&apos;📊 Security Report (After):&apos;, reportAfter);
+      console.log('📊 Security Report (After):', reportAfter);
       
       // Get password status for verification
       const passwordStatus = SimpleAuthService.getUserPasswordStatus();
-      console.log(&apos;📋 User Password Status:&apos;, passwordStatus);
+      console.log('📋 User Password Status:', passwordStatus);
       
       return {
-}
         success: true,
         message: `Successfully updated passwords for ${reportAfter.securePasswords} users`,
         report: {
-}
           before: reportBefore,
           after: reportAfter,
           userStatus: passwordStatus
@@ -55,7 +49,6 @@ export class PasswordUpdateUtility {
       
       console.log(`🔐 Generated ${count} sample secure passwords`);
       passwords.forEach((password, index) => {
-}
         const validation = SecurePasswordGenerator.validatePasswordStrength(password);
         console.log(`  ${index + 1}. ${password} - Strength: ${validation.strength}`);
       });
@@ -63,8 +56,7 @@ export class PasswordUpdateUtility {
       return passwords;
     
     } catch (error) {
-}
-      console.error(&apos;Failed to generate sample passwords:&apos;, error);
+      console.error('Failed to generate sample passwords:', error);
       return [];
     }
   }
@@ -73,54 +65,47 @@ export class PasswordUpdateUtility {
    * Check system compatibility
    */
   static checkSystemCompatibility(): {
-}
     cryptoSupported: boolean;
     localStorageAvailable: boolean;
     webWorkerSupported: boolean;
     issues: string[];
   } {
-}
     const issues: string[] = [];
     
     // Check crypto API
-    const cryptoSupported = typeof crypto !== &apos;undefined&apos; && 
-                           typeof crypto.getRandomValues === &apos;function&apos;;
+    const cryptoSupported = typeof crypto !== 'undefined' && 
+                           typeof crypto.getRandomValues === 'function';
     if (!cryptoSupported) {
-}
-      issues.push(&apos;Crypto API not available - passwords may be less secure&apos;);
+      issues.push('Crypto API not available - passwords may be less secure');
     }
 
     // Check localStorage
     let localStorageAvailable = false;
     try {
-}
 
-      localStorage.setItem(&apos;test&apos;, &apos;test&apos;);
-      localStorage.removeItem(&apos;test&apos;);
+      localStorage.setItem('test', 'test');
+      localStorage.removeItem('test');
       localStorageAvailable = true;
     } catch (e) {
-}
-      console.error(&apos;localStorage error:&apos;, e);
+      console.error('localStorage error:', e);
       localStorageAvailable = false;
-      issues.push(&apos;localStorage not available - session management may fail&apos;);
+      issues.push('localStorage not available - session management may fail');
     }
 
     // Check Web Worker support (for future enhancements)
-    const webWorkerSupported = typeof Worker !== &apos;undefined&apos;;
+    const webWorkerSupported = typeof Worker !== 'undefined';
     if (!webWorkerSupported) {
-}
-      issues.push(&apos;Web Workers not supported - performance may be reduced&apos;);
+      issues.push('Web Workers not supported - performance may be reduced');
     }
 
     const result = {
-}
       cryptoSupported,
       localStorageAvailable,
       webWorkerSupported,
 //       issues
     };
 
-    console.log(&apos;🔍 System Compatibility Check:&apos;, result);
+    console.log('🔍 System Compatibility Check:', result);
     return result;
   }
 
@@ -128,49 +113,44 @@ export class PasswordUpdateUtility {
    * Emergency reset (for development/testing only)
    */
   static emergencyReset(): void {
-}
-    console.warn(&apos;⚠️ EMERGENCY RESET: Resetting all users to defaults&apos;);
+    console.warn('⚠️ EMERGENCY RESET: Resetting all users to defaults');
     SimpleAuthService.resetAllUsers();
-    console.log(&apos;✅ Reset complete - all users restored to default state&apos;);
+    console.log('✅ Reset complete - all users restored to default state');
   }
 
   /**
    * Demo the complete password update workflow
    */
   static async demonstrateWorkflow(): Promise<void> {
-}
-    console.log(&apos;🎬 Starting Password Update Workflow Demo&apos;);
-    console.log(&apos;================================================&apos;);
+    console.log('🎬 Starting Password Update Workflow Demo');
+    console.log('================================================');
 
     // Step 1: Check compatibility
-    console.log(&apos;\n1️⃣ Checking system compatibility...&apos;);
+    console.log('\n1️⃣ Checking system compatibility...');
     this.checkSystemCompatibility();
 
     // Step 2: Test password validation
-    console.log(&apos;\n2️⃣ Testing password validation...&apos;);
+    console.log('\n2️⃣ Testing password validation...');
     this.testPasswordValidation();
 
     // Step 3: Generate sample passwords
-    console.log(&apos;\n3️⃣ Generating sample secure passwords...&apos;);
+    console.log('\n3️⃣ Generating sample secure passwords...');
     this.generateSamplePasswords(3);
 
     // Step 4: Execute password update
-    console.log(&apos;\n4️⃣ Executing password update...&apos;);
+    console.log('\n4️⃣ Executing password update...');
     const result = await this.executePasswordUpdate();
     
     if (result.success) {
-}
-      console.log(&apos;✅ Workflow completed successfully!&apos;);
-      console.log(&apos;📈 Summary:&apos;, result.message);
+      console.log('✅ Workflow completed successfully!');
+      console.log('📈 Summary:', result.message);
     } else {
-}
-      console.error(&apos;❌ Workflow failed:&apos;, result.errors);
+      console.error('❌ Workflow failed:', result.errors);
     }
 
-    console.log(&apos;\n================================================&apos;);
-    console.log(&apos;🎬 Demo Complete&apos;);
+    console.log('\n================================================');
+    console.log('🎬 Demo Complete');
   }
-}
 
 // Export convenience functions for direct use
 export const executePasswordUpdate = () => PasswordUpdateUtility.executePasswordUpdate();

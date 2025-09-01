@@ -5,7 +5,6 @@ const terminalVelocity = 9;
 const drag = 0.075;
 
 interface ConfettiParticle {
-}
     x: number;
     y: number;
     w: number;
@@ -18,38 +17,31 @@ interface ConfettiParticle {
     tilt: number;
     tiltAngle: number;
     tiltAngleIncrement: number;
-}
 
 export const useConfetti = () => {
-}
     const [canvas, setCanvas] = React.useState<HTMLCanvasElement | null>(null);
 
     React.useEffect(() => {
-}
-        const c = document.getElementById(&apos;confetti-canvas&apos;) as HTMLCanvasElement | null;
+        const c = document.getElementById('confetti-canvas') as HTMLCanvasElement | null;
         if (c) setCanvas(c);
     }, []);
 
     const triggerConfetti = React.useCallback(() => {
-}
         if (!canvas) return;
 
-        const ctx = canvas.getContext(&apos;2d&apos;);
+        const ctx = canvas.getContext('2d');
         if (!ctx) return;
         
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         let particles: ConfettiParticle[] = [];
-        const colors = [&apos;#06b6d4&apos;, &apos;#22c55e&apos;, &apos;#a855f7&apos;, &apos;#facc15&apos;, &apos;#ec4899&apos;];
+        const colors = ['#06b6d4', '#22c55e', '#a855f7', '#facc15', '#ec4899'];
 
         const createParticles = () => {
-}
             particles = [];
             for (let i = 0; i < confettiCount; i++) {
-}
                 particles.push({
-}
                     x: canvas.width * 0.5,
                     y: canvas.height * 0.5,
                     w: Math.random() * 8 + 5,
@@ -67,11 +59,9 @@ export const useConfetti = () => {
         };
 
         const update = () => {
-}
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach((p, i) => {
-}
                 p.vx *= (1 - drag);
                 p.vy += gravity;
                 p.vy = Math.min(p.vy, terminalVelocity);
@@ -91,16 +81,13 @@ export const useConfetti = () => {
                 ctx.restore();
 
                 if (p.y > canvas.height) {
-}
                     particles.splice(i, 1);
                 }
             });
 
             if (particles.length > 0) {
-}
                 requestAnimationFrame(update);
             } else {
-}
                  ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
         };

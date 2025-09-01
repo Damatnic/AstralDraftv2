@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import FinalStandingsTable from &apos;./FinalStandingsTable&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import FinalStandingsTable from './FinalStandingsTable';
 
-describe(&apos;FinalStandingsTable&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('FinalStandingsTable', () => {
+  it('renders without crashing', () => {
     render(<FinalStandingsTable />);
-    expect(screen.getByTestId(&apos;finalstandingstable&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('finalstandingstable')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<FinalStandingsTable />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<FinalStandingsTable />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

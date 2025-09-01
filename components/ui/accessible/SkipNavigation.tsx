@@ -5,50 +5,41 @@
 
 
 interface SkipLink {
-}
   id: string;
   label: string;
-}
 
 interface SkipNavigationProps {
-}
   links?: SkipLink[];
-}
 
 const defaultLinks: SkipLink[] = [
-  { id: &apos;main-content&apos;, label: &apos;Skip to main content&apos; },
-  { id: &apos;navigation&apos;, label: &apos;Skip to navigation&apos; },
-  { id: &apos;footer&apos;, label: &apos;Skip to footer&apos; }
+  { id: 'main-content', label: 'Skip to main content' },
+  { id: 'navigation', label: 'Skip to navigation' },
+  { id: 'footer', label: 'Skip to footer' }
 ];
 
 const SkipNavigation: React.FC<SkipNavigationProps> = ({ 
-}
   links = defaultLinks 
 }: any) => {
-}
   return (
     <div className="skip-navigation">
       {links.map((link: any) => (
-}
         <a
           key={link.id}
           href={`#${link.id}`}
           className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:no-underline focus:rounded-br-lg"
           onClick={(e: any) => {
-}
             e.preventDefault();
             const target = document.getElementById(link.id);
             if (target) {
-}
-              target.scrollIntoView({ behavior: &apos;smooth&apos; });
+              target.scrollIntoView({ behavior: 'smooth' });
               target.focus({ preventScroll: true });
               
               // Announce navigation
-              const announcement = document.createElement(&apos;div&apos;);
-              announcement.setAttribute(&apos;role&apos;, &apos;status&apos;);
-              announcement.setAttribute(&apos;aria-live&apos;, &apos;polite&apos;);
-              announcement.className = &apos;sr-only&apos;;
-              announcement.textContent = `Navigated to ${link.label.replace(&apos;Skip to &apos;, &apos;&apos;)}`;
+              const announcement = document.createElement('div');
+              announcement.setAttribute('role', 'status');
+              announcement.setAttribute('aria-live', 'polite');
+              announcement.className = 'sr-only';
+              announcement.textContent = `Navigated to ${link.label.replace('Skip to ', '')}`;
               document.body.appendChild(announcement);
               setTimeout(() => document.body.removeChild(announcement), 1000);
             }
@@ -59,9 +50,7 @@ const SkipNavigation: React.FC<SkipNavigationProps> = ({
       ))}
       
       <style jsx>{`
-}
         .skip-link:focus {
-}
           clip: auto !important;
           clip-path: none !important;
           height: auto !important;

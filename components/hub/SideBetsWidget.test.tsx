@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import SideBetsWidget from &apos;./SideBetsWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SideBetsWidget from './SideBetsWidget';
 
-describe(&apos;SideBetsWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('SideBetsWidget', () => {
+  it('renders without crashing', () => {
     render(<SideBetsWidget />);
-    expect(screen.getByTestId(&apos;sidebetswidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('sidebetswidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<SideBetsWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<SideBetsWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

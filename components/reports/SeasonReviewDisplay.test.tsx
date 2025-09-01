@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import SeasonReviewDisplay from &apos;./SeasonReviewDisplay&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SeasonReviewDisplay from './SeasonReviewDisplay';
 
-describe(&apos;SeasonReviewDisplay&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('SeasonReviewDisplay', () => {
+  it('renders without crashing', () => {
     render(<SeasonReviewDisplay />);
-    expect(screen.getByTestId(&apos;seasonreviewdisplay&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('seasonreviewdisplay')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<SeasonReviewDisplay />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<SeasonReviewDisplay />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

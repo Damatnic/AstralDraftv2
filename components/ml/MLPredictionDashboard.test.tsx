@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MLPredictionDashboard from &apos;./MLPredictionDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MLPredictionDashboard from './MLPredictionDashboard';
 
-describe(&apos;MLPredictionDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MLPredictionDashboard', () => {
+  it('renders without crashing', () => {
     render(<MLPredictionDashboard />);
-    expect(screen.getByTestId(&apos;mlpredictiondashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('mlpredictiondashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MLPredictionDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MLPredictionDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

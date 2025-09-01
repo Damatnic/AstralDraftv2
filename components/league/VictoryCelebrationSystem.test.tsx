@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import VictoryCelebrationSystem from &apos;./VictoryCelebrationSystem&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import VictoryCelebrationSystem from './VictoryCelebrationSystem';
 
-describe(&apos;VictoryCelebrationSystem&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('VictoryCelebrationSystem', () => {
+  it('renders without crashing', () => {
     render(<VictoryCelebrationSystem />);
-    expect(screen.getByTestId(&apos;victorycelebrationsystem&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('victorycelebrationsystem')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<VictoryCelebrationSystem />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<VictoryCelebrationSystem />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

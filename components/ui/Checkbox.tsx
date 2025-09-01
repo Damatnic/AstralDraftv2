@@ -1,19 +1,15 @@
 
-interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, &apos;type&apos;> {
-}
+interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
   error?: string;
-}
 
 export const Checkbox: React.FC<CheckboxProps> = ({
-}
   label,
   error,
-  className = &apos;&apos;,
+  className = '',
   id,
   ...props
 }: any) => {
-}
   const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
@@ -26,7 +22,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           {...props}
         />
         {label && (
-}
           <label htmlFor={checkboxId} className="text-sm font-medium text-[var(--text-primary)] cursor-pointer">
             {label}
           </label>
@@ -34,7 +29,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       </div>
       
       {error && (
-}
         <p className="text-sm text-red-400" role="alert">
           {error}
         </p>

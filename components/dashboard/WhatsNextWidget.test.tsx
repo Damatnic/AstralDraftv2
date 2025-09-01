@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import WhatsNextWidget from &apos;./WhatsNextWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import WhatsNextWidget from './WhatsNextWidget';
 
-describe(&apos;WhatsNextWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('WhatsNextWidget', () => {
+  it('renders without crashing', () => {
     render(<WhatsNextWidget />);
-    expect(screen.getByTestId(&apos;whatsnextwidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('whatsnextwidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<WhatsNextWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<WhatsNextWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

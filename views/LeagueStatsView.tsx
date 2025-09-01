@@ -1,21 +1,20 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
-import { calculateLeagueStats } from &apos;../utils/stats&apos;;
-import type { TeamStats } from &apos;../utils/stats&apos;;
-import { Avatar } from &apos;../components/ui/Avatar&apos;;
-import { TrophyIcon } from &apos;../components/icons/TrophyIcon&apos;;
-import { FlameIcon } from &apos;../components/icons/FlameIcon&apos;;
-import { ShieldAlertIcon } from &apos;../components/icons/ShieldAlertIcon&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import ErrorDisplay from '../components/core/ErrorDisplay';
+import { calculateLeagueStats } from '../utils/stats';
+import type { TeamStats } from '../utils/stats';
+import { Avatar } from '../components/ui/Avatar';
+import { TrophyIcon } from '../components/icons/TrophyIcon';
+import { FlameIcon } from '../components/icons/FlameIcon';
+import { ShieldAlertIcon } from '../components/icons/ShieldAlertIcon';
 
 const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamStats[]; valueKey: keyof TeamStats; subtext?: (stat: TeamStats) => string }> = ({ title, icon, data, valueKey, subtext }: any) => (
     <Widget title={title} icon={icon}>
         <div className="p-2 space-y-1">
             {data.map((stat, index) => (
-}
-                <div key={stat.teamId} className={`flex items-center gap-3 p-2 rounded-md ${index === 0 ? &apos;bg-yellow-500/10&apos; : &apos;bg-black/10&apos;}`}>
+                <div key={stat.teamId} className={`flex items-center gap-3 p-2 rounded-md ${index === 0 ? 'bg-yellow-500/10' : 'bg-black/10'}`}>
                     <span className="font-bold text-lg w-6 text-center">{index + 1}</span>
                     <Avatar avatar={stat.avatar} className="w-8 h-8 rounded-md" />
                     <div className="flex-grow">
@@ -23,7 +22,7 @@ const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamSt
                         {subtext && <p className="text-xs text-gray-400">{subtext(stat)}</p>}
                     </div>
                     <p className="font-bold text-lg font-mono">
-                        {(valueKey === &apos;highestWeek&apos; ? stat.highestWeek.score : stat[valueKey] as number).toFixed(2)}
+                        {(valueKey === 'highestWeek' ? stat.highestWeek.score : stat[valueKey] as number).toFixed(2)}
                     </p>
                 </div>
             ))}
@@ -32,13 +31,11 @@ const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamSt
 );
 
 const LeagueStatsView: React.FC = () => {
-}
     const { dispatch } = useAppState();
     const { league } = useLeague();
     
-    if (!league || league.status === &apos;PRE_DRAFT&apos; || league.status === &apos;DRAFTING&apos;) {
-}
-        return <ErrorDisplay title="Not Available" message="League stats will be available once the season starts." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; })} />;
+    if (!league || league.status === 'PRE_DRAFT' || league.status === 'DRAFTING') {
+        return <ErrorDisplay title="Not Available" message="League stats will be available once the season starts." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} />;
 
     const leaderboards = calculateLeagueStats(league);
 
@@ -51,7 +48,7 @@ const LeagueStatsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; }) className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="back-btn">
                     Back to League Hub
                 </button>
             </header>

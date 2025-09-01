@@ -1,2 +1,2 @@
 // Re-export useAppState hook from AppContext for backwards compatibility
-export { useAppState } from &apos;../contexts/AppContext&apos;;
+export { useAppState } from '../contexts/AppContext';

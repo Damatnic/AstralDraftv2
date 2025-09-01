@@ -3,25 +3,24 @@
  * Comprehensive responsive utilities, breakpoint management, and adaptive layouts
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, ReactNode, useEffect, useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, ReactNode, useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // =========================================
 // BREAKPOINT SYSTEM
 // =========================================
 
 export const breakpoints = {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-  xs: &apos;475px&apos;,
-  sm: &apos;640px&apos;,
-  md: &apos;768px&apos;,
-  lg: &apos;1024px&apos;,
-  xl: &apos;1280px&apos;,
-  &apos;2xl&apos;: &apos;1536px&apos;,
-  &apos;3xl&apos;: &apos;1920px&apos;,
-  &apos;4xl&apos;: &apos;2560px&apos;
+  xs: '475px',
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  '2xl': '1536px',
+  '3xl': '1920px',
+  '4xl': '2560px'
 } as const;
 
 export type Breakpoint = keyof typeof breakpoints;
@@ -31,20 +30,17 @@ export type Breakpoint = keyof typeof breakpoints;
 // =========================================
 
 export const useMediaQuery = (query: string): boolean => {
-}
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
-}
     const media = window.matchMedia(query);
     if (media.matches !== matches) {
-}
       setMatches(media.matches);
 
     const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
-    media.addEventListener(&apos;change&apos;, listener);
+    media.addEventListener('change', listener);
     
-    return () => media.removeEventListener(&apos;change&apos;, listener);
+    return () => media.removeEventListener('change', listener);
     }
   }, [matches, query]);
 
@@ -52,54 +48,46 @@ export const useMediaQuery = (query: string): boolean => {
 };
 
 export const useBreakpoint = (breakpoint: Breakpoint): boolean => {
-}
   return useMediaQuery(`(min-width: ${breakpoints[breakpoint]})`);
 };
 
 export const useCurrentBreakpoint = (): Breakpoint => {
-}
-  const isXs = useBreakpoint(&apos;xs&apos;);
-  const isSm = useBreakpoint(&apos;sm&apos;);
-  const isMd = useBreakpoint(&apos;md&apos;);
-  const isLg = useBreakpoint(&apos;lg&apos;);
-  const isXl = useBreakpoint(&apos;xl&apos;);
-  const is2xl = useBreakpoint(&apos;2xl&apos;);
-  const is3xl = useBreakpoint(&apos;3xl&apos;);
-  const is4xl = useBreakpoint(&apos;4xl&apos;);
+  const isXs = useBreakpoint('xs');
+  const isSm = useBreakpoint('sm');
+  const isMd = useBreakpoint('md');
+  const isLg = useBreakpoint('lg');
+  const isXl = useBreakpoint('xl');
+  const is2xl = useBreakpoint('2xl');
+  const is3xl = useBreakpoint('3xl');
+  const is4xl = useBreakpoint('4xl');
 
-  if (is4xl) return &apos;4xl&apos;;
-  if (is3xl) return &apos;3xl&apos;;
-  if (is2xl) return &apos;2xl&apos;;
-  if (isXl) return &apos;xl&apos;;
-  if (isLg) return &apos;lg&apos;;
-  if (isMd) return &apos;md&apos;;
-  if (isSm) return &apos;sm&apos;;
-  if (isXs) return &apos;xs&apos;;
-  return &apos;xs&apos;; // fallback for mobile
+  if (is4xl) return '4xl';
+  if (is3xl) return '3xl';
+  if (is2xl) return '2xl';
+  if (isXl) return 'xl';
+  if (isLg) return 'lg';
+  if (isMd) return 'md';
+  if (isSm) return 'sm';
+  if (isXs) return 'xs';
+  return 'xs'; // fallback for mobile
 };
 
 export const useViewportSize = () => {
-}
   const [windowSize, setWindowSize] = useState({
-}
-    width: typeof window !== &apos;undefined&apos; ? window.innerWidth : 0,
-    height: typeof window !== &apos;undefined&apos; ? window.innerHeight : 0,
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
   });
 
   useEffect(() => {
-}
     const handleResize = () => {
-}
       setWindowSize({
-}
         width: window.innerWidth,
         height: window.innerHeight,
       });
 
-    window.addEventListener(&apos;resize&apos;, handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-}
-      window.removeEventListener(&apos;resize&apos;, handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -111,45 +99,40 @@ export const useViewportSize = () => {
 // =========================================
 
 interface ContainerProps {
-}
   children: ReactNode;
-  maxWidth?: Breakpoint | &apos;full&apos; | &apos;none&apos;;
+  maxWidth?: Breakpoint | 'full' | 'none';
   padding?: boolean;
   center?: boolean;
   className?: string;
 
-}
 
 export const Container: React.FC<ContainerProps> = ({
-}
   children,
-  maxWidth = &apos;xl&apos;,
+  maxWidth = 'xl',
   padding = true,
   center = true,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const maxWidthClasses = {
-}
-    xs: &apos;max-w-xs&apos;,
-    sm: &apos;max-w-sm&apos;,
-    md: &apos;max-w-md&apos;,
-    lg: &apos;max-w-lg&apos;,
-    xl: &apos;max-w-xl&apos;,
-    &apos;2xl&apos;: &apos;max-w-2xl&apos;,
-    &apos;3xl&apos;: &apos;max-w-3xl&apos;,
-    &apos;4xl&apos;: &apos;max-w-4xl&apos;,
-    full: &apos;max-w-full&apos;,
-    none: &apos;&apos;
+    xs: 'max-w-xs',
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '3xl': 'max-w-3xl',
+    '4xl': 'max-w-4xl',
+    full: 'max-w-full',
+    none: ''
   };
 
   const classes = [
-    &apos;w-full&apos;,
-    maxWidth !== &apos;none&apos; ? maxWidthClasses[maxWidth] : &apos;&apos;,
-    center ? &apos;mx-auto&apos; : &apos;&apos;,
-    padding ? &apos;px-4 sm:px-6 lg:px-8&apos; : &apos;&apos;,
+    'w-full',
+    maxWidth !== 'none' ? maxWidthClasses[maxWidth] : '',
+    center ? 'mx-auto' : '',
+    padding ? 'px-4 sm:px-6 lg:px-8' : '',
 //     className
-  ].filter(Boolean).join(&apos; &apos;);
+  ].filter(Boolean).join(' ');
 
   return <div className={classes}>{children}</div>;
 };
@@ -159,74 +142,61 @@ export const Container: React.FC<ContainerProps> = ({
 // =========================================
 
 interface GridProps {
-}
   children: ReactNode;
   cols?: {
-}
     xs?: number;
     sm?: number;
     md?: number;
     lg?: number;
     xl?: number;
-    &apos;2xl&apos;?: number;
+    '2xl'?: number;
   };
   gap?: {
-}
     xs?: number;
     sm?: number;
     md?: number;
     lg?: number;
     xl?: number;
-    &apos;2xl&apos;?: number;
+    '2xl'?: number;
   } | number;
   className?: string;
 
 export const ResponsiveGrid: React.FC<GridProps> = ({
-}
   children,
   cols = { xs: 1, sm: 2, md: 3, lg: 4 },
   gap = 4,
-  className = &apos;&apos;
+  className = ''
 }) => {
-}
   const colClasses = [];
   const gapClasses = [];
 
   // Handle columns
   Object.entries(cols).forEach(([breakpoint, colCount]) => {
-}
-    if (breakpoint === &apos;xs&apos;) {
-}
+    if (breakpoint === 'xs') {
       colClasses.push(`grid-cols-${colCount}`);
     } else {
-}
       colClasses.push(`${breakpoint}:grid-cols-${colCount}`);
 
   });
 
   // Handle gap
-  if (typeof gap === &apos;number&apos;) {
-}
+  if (typeof gap === 'number') {
     gapClasses.push(`gap-${gap}`);
   } else {
-}
     Object.entries(gap).forEach(([breakpoint, gapSize]) => {
-}
-      if (breakpoint === &apos;xs&apos;) {
-}
+      if (breakpoint === 'xs') {
         gapClasses.push(`gap-${gapSize}`);
       } else {
-}
         gapClasses.push(`${breakpoint}:gap-${gapSize}`);
 
     });
 
   const classes = [
-    &apos;grid&apos;,
+    'grid',
     ...colClasses,
     ...gapClasses,
 //     className
-  ].filter(Boolean).join(&apos; &apos;);
+  ].filter(Boolean).join(' ');
 
   return <div className={classes}>{children}</div>;
 };
@@ -236,48 +206,40 @@ export const ResponsiveGrid: React.FC<GridProps> = ({
 // =========================================
 
 interface ShowProps {
-}
   children: ReactNode;
   above?: Breakpoint;
   below?: Breakpoint;
   only?: Breakpoint | Breakpoint[];
 
-}
 
 export const Show: React.FC<ShowProps> = ({
-}
   children,
   above,
   below,
 //   only
 }: any) => {
-}
   const currentBreakpoint = useCurrentBreakpoint();
-  const breakpointOrder: Breakpoint[] = [&apos;xs&apos;, &apos;sm&apos;, &apos;md&apos;, &apos;lg&apos;, &apos;xl&apos;, &apos;2xl&apos;, &apos;3xl&apos;, &apos;4xl&apos;];
+  const breakpointOrder: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
   
   let shouldShow = true;
 
   if (above) {
-}
     const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
     const aboveIndex = breakpointOrder.indexOf(above);
     shouldShow = currentIndex >= aboveIndex;
 
   if (below) {
-}
     const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
     const belowIndex = breakpointOrder.indexOf(below);
     shouldShow = currentIndex <= belowIndex;
 
   if (only) {
-}
     const onlyBreakpoints = Array.isArray(only) ? only : [only];
     shouldShow = onlyBreakpoints.includes(currentBreakpoint);
 
   return (
     <AnimatePresence>
       {shouldShow && (
-}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -292,34 +254,28 @@ export const Show: React.FC<ShowProps> = ({
 };
 
 export const Hide: React.FC<ShowProps> = (props: any) => {
-}
   const { children, above, below, only } = props;
   
   // Invert the logic for Hide component
   const invertedProps: ShowProps = { children };
   
   if (above) {
-}
     // Hide above becomes show below the previous breakpoint
-    const breakpointOrder: Breakpoint[] = [&apos;xs&apos;, &apos;sm&apos;, &apos;md&apos;, &apos;lg&apos;, &apos;xl&apos;, &apos;2xl&apos;, &apos;3xl&apos;, &apos;4xl&apos;];
+    const breakpointOrder: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
     const aboveIndex = breakpointOrder.indexOf(above);
     if (aboveIndex > 0) {
-}
       invertedProps.below = breakpointOrder[aboveIndex - 1];
 
   } else if (below) {
-}
     // Hide below becomes show above the next breakpoint
-    const breakpointOrder: Breakpoint[] = [&apos;xs&apos;, &apos;sm&apos;, &apos;md&apos;, &apos;lg&apos;, &apos;xl&apos;, &apos;2xl&apos;, &apos;3xl&apos;, &apos;4xl&apos;];
+    const breakpointOrder: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
     const belowIndex = breakpointOrder.indexOf(below);
     if (belowIndex < breakpointOrder.length - 1) {
-}
       invertedProps.above = breakpointOrder[belowIndex + 1];
 
   } else if (only) {
-}
     // Hide only these breakpoints - show all others
-    const allBreakpoints: Breakpoint[] = [&apos;xs&apos;, &apos;sm&apos;, &apos;md&apos;, &apos;lg&apos;, &apos;xl&apos;, &apos;2xl&apos;, &apos;3xl&apos;, &apos;4xl&apos;];
+    const allBreakpoints: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
     const onlyBreakpoints = Array.isArray(only) ? only : [only];
     const otherBreakpoints = allBreakpoints.filter((bp: any) => !onlyBreakpoints.includes(bp));
     invertedProps.only = otherBreakpoints;
@@ -332,30 +288,26 @@ export const Hide: React.FC<ShowProps> = (props: any) => {
 // =========================================
 
 interface ResponsiveValueProps<T> {
-}
   xs?: T;
   sm?: T;
   md?: T;
   lg?: T;
   xl?: T;
-  &apos;2xl&apos;?: T;
-  &apos;3xl&apos;?: T;
-  &apos;4xl&apos;?: T;
+  '2xl'?: T;
+  '3xl'?: T;
+  '4xl'?: T;
 
 export const useResponsiveValue = <T,>(values: ResponsiveValueProps<T>): T | undefined => {
-}
   const currentBreakpoint = useCurrentBreakpoint();
-  const breakpointOrder: Breakpoint[] = [&apos;4xl&apos;, &apos;3xl&apos;, &apos;2xl&apos;, &apos;xl&apos;, &apos;lg&apos;, &apos;md&apos;, &apos;sm&apos;, &apos;xs&apos;];
+  const breakpointOrder: Breakpoint[] = ['4xl', '3xl', '2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
   
   // Find the current breakpoint index
   const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
   
   // Look for a value at current breakpoint or fallback to smaller breakpoints
   for (let i = currentIndex; i < breakpointOrder.length; i++) {
-}
     const breakpoint = breakpointOrder[i];
     if (values[breakpoint] !== undefined) {
-}
       return values[breakpoint];
 
 
@@ -367,60 +319,54 @@ export const useResponsiveValue = <T,>(values: ResponsiveValueProps<T>): T | und
 // =========================================
 
 interface ResponsiveTextProps {
-}
   children: ReactNode;
-  size?: ResponsiveValueProps<&apos;xs&apos; | &apos;sm&apos; | &apos;base&apos; | &apos;lg&apos; | &apos;xl&apos; | &apos;2xl&apos; | &apos;3xl&apos; | &apos;4xl&apos; | &apos;5xl&apos; | &apos;6xl&apos; | &apos;7xl&apos; | &apos;8xl&apos; | &apos;9xl&apos;>;
-  weight?: ResponsiveValueProps<&apos;thin&apos; | &apos;extralight&apos; | &apos;light&apos; | &apos;normal&apos; | &apos;medium&apos; | &apos;semibold&apos; | &apos;bold&apos; | &apos;extrabold&apos; | &apos;black&apos;>;
+  size?: ResponsiveValueProps<'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | '8xl' | '9xl'>;
+  weight?: ResponsiveValueProps<'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'>;
   className?: string;
 
-}
 
 export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
-}
   children,
   size,
   weight,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const currentSize = size ? useResponsiveValue(size) : undefined;
   const currentWeight = weight ? useResponsiveValue(weight) : undefined;
 
   const sizeClasses = {
-}
-    xs: &apos;text-xs&apos;,
-    sm: &apos;text-sm&apos;,
-    base: &apos;text-base&apos;,
-    lg: &apos;text-lg&apos;,
-    xl: &apos;text-xl&apos;,
-    &apos;2xl&apos;: &apos;text-2xl&apos;,
-    &apos;3xl&apos;: &apos;text-3xl&apos;,
-    &apos;4xl&apos;: &apos;text-4xl&apos;,
-    &apos;5xl&apos;: &apos;text-5xl&apos;,
-    &apos;6xl&apos;: &apos;text-6xl&apos;,
-    &apos;7xl&apos;: &apos;text-7xl&apos;,
-    &apos;8xl&apos;: &apos;text-8xl&apos;,
-    &apos;9xl&apos;: &apos;text-9xl&apos;
+    xs: 'text-xs',
+    sm: 'text-sm',
+    base: 'text-base',
+    lg: 'text-lg',
+    xl: 'text-xl',
+    '2xl': 'text-2xl',
+    '3xl': 'text-3xl',
+    '4xl': 'text-4xl',
+    '5xl': 'text-5xl',
+    '6xl': 'text-6xl',
+    '7xl': 'text-7xl',
+    '8xl': 'text-8xl',
+    '9xl': 'text-9xl'
   };
 
   const weightClasses = {
-}
-    thin: &apos;font-thin&apos;,
-    extralight: &apos;font-extralight&apos;,
-    light: &apos;font-light&apos;,
-    normal: &apos;font-normal&apos;,
-    medium: &apos;font-medium&apos;,
-    semibold: &apos;font-semibold&apos;,
-    bold: &apos;font-bold&apos;,
-    extrabold: &apos;font-extrabold&apos;,
-    black: &apos;font-black&apos;
+    thin: 'font-thin',
+    extralight: 'font-extralight',
+    light: 'font-light',
+    normal: 'font-normal',
+    medium: 'font-medium',
+    semibold: 'font-semibold',
+    bold: 'font-bold',
+    extrabold: 'font-extrabold',
+    black: 'font-black'
   };
 
   const classes = [
-    currentSize ? sizeClasses[currentSize] : &apos;&apos;,
-    currentWeight ? weightClasses[currentWeight] : &apos;&apos;,
+    currentSize ? sizeClasses[currentSize] : '',
+    currentWeight ? weightClasses[currentWeight] : '',
 //     className
-  ].filter(Boolean).join(&apos; &apos;);
+  ].filter(Boolean).join(' ');
 
   return <span className={classes}>{children}</span>;
 };
@@ -430,21 +376,18 @@ export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
 // =========================================
 
 export const isMobile = (): boolean => {
-}
-  if (typeof window === &apos;undefined&apos;) return false;
+  if (typeof window === 'undefined') return false;
   return window.innerWidth < parseInt(breakpoints.md);
 };
 
 export const isTablet = (): boolean => {
-}
-  if (typeof window === &apos;undefined&apos;) return false;
+  if (typeof window === 'undefined') return false;
   const width = window.innerWidth;
   return width >= parseInt(breakpoints.md) && width < parseInt(breakpoints.lg);
 };
 
 export const isDesktop = (): boolean => {
-}
-  if (typeof window === &apos;undefined&apos;) return false;
+  if (typeof window === 'undefined') return false;
   return window.innerWidth >= parseInt(breakpoints.lg);
 };
 
@@ -453,7 +396,6 @@ export const isDesktop = (): boolean => {
 // =========================================
 
 interface ResponsiveSpacingProps {
-}
   children: ReactNode;
   m?: ResponsiveValueProps<number>;
   mx?: ResponsiveValueProps<number>;
@@ -471,16 +413,13 @@ interface ResponsiveSpacingProps {
   pr?: ResponsiveValueProps<number>;
   className?: string;
 
-}
 
 export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
-}
   children,
   m, mx, my, mt, mb, ml, mr,
   p, px, py, pt, pb, pl, pr,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const currentBreakpoint = useCurrentBreakpoint();
   const spacingClasses: string[] = [];
 
@@ -488,38 +427,35 @@ export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
     property: string,
     values: ResponsiveValueProps<number> | undefined
   ) => {
-}
     if (!values) return;
     
     Object.entries(values).forEach(([breakpoint, value]) => {
-}
       if (value !== undefined) {
-}
-        const prefix = breakpoint === &apos;xs&apos; ? &apos;&apos; : `${breakpoint}:`;
+        const prefix = breakpoint === 'xs' ? '' : `${breakpoint}:`;
         spacingClasses.push(`${prefix}${property}-${value}`);
 
     });
   };
 
-  addSpacingClass(&apos;m&apos;, m);
-  addSpacingClass(&apos;mx&apos;, mx);
-  addSpacingClass(&apos;my&apos;, my);
-  addSpacingClass(&apos;mt&apos;, mt);
-  addSpacingClass(&apos;mb&apos;, mb);
-  addSpacingClass(&apos;ml&apos;, ml);
-  addSpacingClass(&apos;mr&apos;, mr);
-  addSpacingClass(&apos;p&apos;, p);
-  addSpacingClass(&apos;px&apos;, px);
-  addSpacingClass(&apos;py&apos;, py);
-  addSpacingClass(&apos;pt&apos;, pt);
-  addSpacingClass(&apos;pb&apos;, pb);
-  addSpacingClass(&apos;pl&apos;, pl);
-  addSpacingClass(&apos;pr&apos;, pr);
+  addSpacingClass('m', m);
+  addSpacingClass('mx', mx);
+  addSpacingClass('my', my);
+  addSpacingClass('mt', mt);
+  addSpacingClass('mb', mb);
+  addSpacingClass('ml', ml);
+  addSpacingClass('mr', mr);
+  addSpacingClass('p', p);
+  addSpacingClass('px', px);
+  addSpacingClass('py', py);
+  addSpacingClass('pt', pt);
+  addSpacingClass('pb', pb);
+  addSpacingClass('pl', pl);
+  addSpacingClass('pr', pr);
 
   const classes = [
     ...spacingClasses,
 //     className
-  ].filter(Boolean).join(&apos; &apos;);
+  ].filter(Boolean).join(' ');
 
   return <div className={classes}>{children}</div>;
 };
@@ -529,21 +465,17 @@ export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
 // =========================================
 
 interface AspectRatioProps {
-}
   children: ReactNode;
   ratio?: number | string;
   className?: string;
 
-}
 
 export const AspectRatio: React.FC<AspectRatioProps> = ({
-}
   children,
-  ratio = &apos;16/9&apos;,
-  className = &apos;&apos;
+  ratio = '16/9',
+  className = ''
 }: any) => {
-}
-  const aspectRatioValue = typeof ratio === &apos;number&apos; 
+  const aspectRatioValue = typeof ratio === 'number' 
     ? `${ratio * 100}%` 
     : `calc(100% / (${ratio}))`;
 
@@ -561,44 +493,39 @@ export const AspectRatio: React.FC<AspectRatioProps> = ({
 // =========================================
 
 interface ResponsiveImageProps {
-}
   src: string;
   alt: string;
   sizes?: string;
   srcSet?: string;
   className?: string;
-  objectFit?: &apos;cover&apos; | &apos;contain&apos; | &apos;fill&apos; | &apos;none&apos; | &apos;scale-down&apos;;
-  loading?: &apos;lazy&apos; | &apos;eager&apos;;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  loading?: 'lazy' | 'eager';
   priority?: boolean;
 
-}
 
 export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
-}
   src,
   alt,
-  sizes = &apos;(min-width: 768px) 50vw, 100vw&apos;,
+  sizes = '(min-width: 768px) 50vw, 100vw',
   srcSet,
-  className = &apos;&apos;,
-  objectFit = &apos;cover&apos;,
-  loading = &apos;lazy&apos;,
+  className = '',
+  objectFit = 'cover',
+  loading = 'lazy',
   priority = false
 }) => {
-}
   const objectFitClasses = {
-}
-    cover: &apos;object-cover&apos;,
-    contain: &apos;object-contain&apos;,
-    fill: &apos;object-fill&apos;,
-    none: &apos;object-none&apos;,
-    &apos;scale-down&apos;: &apos;object-scale-down&apos;
+    cover: 'object-cover',
+    contain: 'object-contain',
+    fill: 'object-fill',
+    none: 'object-none',
+    'scale-down': 'object-scale-down'
   };
 
   const classes = [
-    &apos;w-full h-full&apos;,
+    'w-full h-full',
     objectFitClasses[objectFit],
 //     className
-  ].filter(Boolean).join(&apos; &apos;);
+  ].filter(Boolean).join(' ');
 
   return (
     <img
@@ -607,7 +534,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
       sizes={sizes}
       srcSet={srcSet}
       className={classes}
-      loading={priority ? &apos;eager&apos; : loading}
+      loading={priority ? 'eager' : loading}
       decoding="async"
     />
   );
@@ -618,12 +545,10 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
 // =========================================
 
 export const BreakpointDebugger: React.FC = () => {
-}
   const currentBreakpoint = useCurrentBreakpoint();
   const { width, height } = useViewportSize();
 
-  if (process.env.NODE_ENV === &apos;production&apos;) {
-}
+  if (process.env.NODE_ENV === 'production') {
     return null;
 
   return (
@@ -639,7 +564,6 @@ export const BreakpointDebugger: React.FC = () => {
 // =========================================
 
 export default {
-}
   Container,
   ResponsiveGrid,
   Show,

@@ -3,29 +3,25 @@
  * Enhanced responsive design and touch interactions for Oracle predictions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion } from 'framer-motion';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { 
-}
     Menu, 
     Target, 
     BarChart3, 
     TrendingUp, 
 //     Settings
-} from &apos;lucide-react&apos;;
-import OracleRealTimePredictionInterface from &apos;./OracleRealTimePredictionInterface&apos;;
+} from 'lucide-react';
+import OracleRealTimePredictionInterface from './OracleRealTimePredictionInterface';
 
 interface Props {
-}
     week?: number;
     className?: string;
 
 // Mobile Bottom Navigation Component
-}
 
 const MobileBottomNav: React.FC<{
-}
     activeView: string;
     onViewChange: (view: string) => void;
     onSettingsOpen: () => void;
@@ -34,25 +30,25 @@ const MobileBottomNav: React.FC<{
         className="fixed bottom-0 left-0 right-0 bg-gray-800/95 backdrop-blur-sm border-t border-gray-700 z-50 sm:px-4 md:px-6 lg:px-8"
         initial={{ y: 100 }}
         animate={{ y: 0 }}
-        style={{ paddingBottom: &apos;env(safe-area-inset-bottom)&apos; }}
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
         <div className="flex items-center justify-around py-2 px-4 sm:px-4 md:px-6 lg:px-8">
             <button
-                onClick={() => onViewChange(&apos;predictions&apos;)}`}
+                onClick={() => onViewChange('predictions')}`}
             >
                 <Target className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                 <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Predictions</span>
             </button>
             
             <button
-                onClick={() => onViewChange(&apos;stats&apos;)}`}
+                onClick={() => onViewChange('stats')}`}
             >
                 <TrendingUp className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                 <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Stats</span>
             </button>
             
             <button
-                onClick={() => onViewChange(&apos;analytics&apos;)}`}
+                onClick={() => onViewChange('analytics')}`}
             >
                 <BarChart3 className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                 <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Analytics</span>
@@ -71,7 +67,6 @@ const MobileBottomNav: React.FC<{
 
 // Mobile Header Component
 const MobileHeader: React.FC<{
-}
     onMenuToggle: () => void;
     accuracy: number;
 }> = ({ onMenuToggle, accuracy }: any) => (
@@ -97,33 +92,27 @@ const MobileHeader: React.FC<{
 
 // Mobile Swipe Indicators
 const MobileSwipeIndicators: React.FC<{
-}
     activeView: string;
 }> = ({ activeView }: any) => (
     <div className="flex justify-center space-x-2 py-2 sm:px-4 md:px-6 lg:px-8">
         <div className={`w-2 h-2 rounded-full transition-colors ${
-}
-            activeView === &apos;predictions&apos; ? &apos;bg-blue-400&apos; : &apos;bg-gray-600&apos;
+            activeView === 'predictions' ? 'bg-blue-400' : 'bg-gray-600'
         }`}></div>
         <div className={`w-2 h-2 rounded-full transition-colors ${
-}
-            activeView === &apos;stats&apos; ? &apos;bg-green-400&apos; : &apos;bg-gray-600&apos;
+            activeView === 'stats' ? 'bg-green-400' : 'bg-gray-600'
         }`}></div>
         <div className={`w-2 h-2 rounded-full transition-colors ${
-}
-            activeView === &apos;analytics&apos; ? &apos;bg-purple-400&apos; : &apos;bg-gray-600&apos;
+            activeView === 'analytics' ? 'bg-purple-400' : 'bg-gray-600'
         }`}></div>
     </div>
 );
 
 const MobileOptimizedOracleInterface: React.FC<Props> = ({ 
-}
     week = 1, 
-    className = &apos;&apos; 
+    className = '' 
 }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
-    const [activeView, setActiveView] = React.useState(&apos;predictions&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const [activeView, setActiveView] = React.useState('predictions');
     const [showMobileMenu, setShowMobileMenu] = React.useState(false);
 
     // For demo purposes, using placeholder accuracy
@@ -131,7 +120,6 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
 
     // If not mobile, render the regular interface
     if (!isMobile) {
-}
         return (
             <OracleRealTimePredictionInterface>
                 week={week} 
@@ -179,14 +167,12 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                 activeView={activeView}
                 onViewChange={setActiveView}
                 onSettingsOpen={() => {
-}
                     // Future: Open settings modal
                 }}
             />
 
             {/* Mobile Menu Modal */}
             {showMobileMenu && (
-}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -199,7 +185,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                         animate={{ y: 0 }}
                         exit={{ y: "100%" }}
                         className="w-full bg-gray-800 rounded-t-3xl p-6 sm:px-4 md:px-6 lg:px-8"
-                        style={{ paddingBottom: &apos;env(safe-area-inset-bottom)&apos; }}
+                        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
                         onClick={(e: any) => e.stopPropagation()}
                     >
                         <div className="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6 sm:px-4 md:px-6 lg:px-8"></div>
@@ -209,8 +195,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                             
                             <button
                                 onClick={() = aria-label="Action button"> {
-}
-                                    setActiveView(&apos;predictions&apos;);
+                                    setActiveView('predictions');
                                     setShowMobileMenu(false);
                                 }}
                                 className="w-full flex items-center space-x-3 p-4 bg-gray-700 rounded-xl text-left hover:bg-gray-600 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -226,8 +211,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                             
                             <button
                                 onClick={() = aria-label="Action button"> {
-}
-                                    setActiveView(&apos;analytics&apos;);
+                                    setActiveView('analytics');
                                     setShowMobileMenu(false);
                                 }}
                                 className="w-full flex items-center space-x-3 p-4 bg-gray-700 rounded-xl text-left hover:bg-gray-600 transition-colors sm:px-4 md:px-6 lg:px-8"

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import TradeEventMessage from &apos;./TradeEventMessage&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TradeEventMessage from './TradeEventMessage';
 
-describe(&apos;TradeEventMessage&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('TradeEventMessage', () => {
+  it('renders without crashing', () => {
     render(<TradeEventMessage />);
-    expect(screen.getByTestId(&apos;tradeeventmessage&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('tradeeventmessage')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<TradeEventMessage />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<TradeEventMessage />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

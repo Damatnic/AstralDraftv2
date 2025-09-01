@@ -3,28 +3,25 @@
  * Long-term team impact analysis with projections and trends
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { League, Team } from &apos;../../types&apos;;
-import { TradeProposal, TradeAnalysis, TeamImpactAnalysis } from &apos;./TradeAnalyzerView&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
-import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
-import { CalendarIcon } from &apos;../icons/CalendarIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { League, Team } from '../../types';
+import { TradeProposal, TradeAnalysis, TeamImpactAnalysis } from './TradeAnalyzerView';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { BarChartIcon } from '../icons/BarChartIcon';
+import { CalendarIcon } from '../icons/CalendarIcon';
 
 interface ImpactAssessmentTabProps {
-}
     proposal: TradeProposal | null;
     analysis: TradeAnalysis | null;
     league: League;
     currentTeam: Team;
     dispatch: React.Dispatch<any>;
 
-}
 
 interface ImpactMetric {
-}
     name: string;
     value: number;
     unit: string;
@@ -32,90 +29,77 @@ interface ImpactMetric {
     isPositive: boolean;}
 
 const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
-}
     proposal,
     analysis,
     league,
     currentTeam,
 //     dispatch
 }: any) => {
-}
     const impactMetrics: ImpactMetric[] = React.useMemo(() => {
-}
         if (!analysis) return [];
         
         const impact = analysis.fromTeamImpact;
         return [
             {
-}
-                name: &apos;Starting Lineup&apos;,
+                name: 'Starting Lineup',
                 value: impact.startingLineupChange,
-                unit: &apos;pts/week&apos;,
-                description: &apos;Expected change in weekly scoring&apos;,
+                unit: 'pts/week',
+                description: 'Expected change in weekly scoring',
                 isPositive: impact.startingLineupChange > 0
             },
             {
-}
-                name: &apos;Bench Depth&apos;,
+                name: 'Bench Depth',
                 value: impact.benchDepthChange,
-                unit: &apos;depth score&apos;,
-                description: &apos;Quality of backup players&apos;,
+                unit: 'depth score',
+                description: 'Quality of backup players',
                 isPositive: impact.benchDepthChange > 0
             },
             {
-}
-                name: &apos;Playoff Odds&apos;,
+                name: 'Playoff Odds',
                 value: impact.playoffOddsChange,
-                unit: &apos;%&apos;,
-                description: &apos;Change in playoff probability&apos;,
+                unit: '%',
+                description: 'Change in playoff probability',
                 isPositive: impact.playoffOddsChange > 0
             },
             {
-}
-                name: &apos;Championship Odds&apos;,
+                name: 'Championship Odds',
                 value: impact.championshipOddsChange,
-                unit: &apos;%&apos;,
-                description: &apos;Change in championship probability&apos;,
+                unit: '%',
+                description: 'Change in championship probability',
                 isPositive: impact.championshipOddsChange > 0
 
         ];
     }, [analysis]);
 
     const scheduleMetrics = React.useMemo(() => {
-}
         if (!analysis) return [];
         
         const schedule = analysis.scheduleAnalysis;
         return [
             {
-}
-                name: &apos;Bye Week Conflicts&apos;,
+                name: 'Bye Week Conflicts',
                 value: schedule.byeWeekConflicts,
-                description: &apos;Additional bye week complications&apos;
+                description: 'Additional bye week complications'
             },
             {
-}
-                name: &apos;Next 4 Weeks Impact&apos;,
+                name: 'Next 4 Weeks Impact',
                 value: schedule.nextFourWeeksImpact,
-                description: &apos;Short-term scoring change&apos;
+                description: 'Short-term scoring change'
             },
             {
-}
-                name: &apos;Playoff Schedule&apos;,
+                name: 'Playoff Schedule',
                 value: schedule.playoffScheduleDiff,
-                description: &apos;Strength of playoff matchups&apos;
+                description: 'Strength of playoff matchups'
 
         ];
     }, [analysis]);
 
     const getImpactColor = (value: number, isPositive: boolean) => {
-}
-        if (Math.abs(value) < 0.5) return &apos;text-gray-400&apos;;
-        return isPositive ? &apos;text-green-400&apos; : &apos;text-red-400&apos;;
+        if (Math.abs(value) < 0.5) return 'text-gray-400';
+        return isPositive ? 'text-green-400' : 'text-red-400';
     };
 
     const getImpactIcon = (value: number, isPositive: boolean) => {
-}
         if (Math.abs(value) < 0.5) return null;
         return isPositive ? 
             <TrendingUpIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" /> : 
@@ -123,7 +107,6 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
     };
 
     if (!proposal || !analysis) {
-}
         return (
             <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                 <BarChartIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
@@ -140,12 +123,11 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="text-center mb-4 sm:px-4 md:px-6 lg:px-8">
                             <div className={`text-3xl font-bold mb-2 ${
-}
-                                analysis.fromTeamImpact.overallChange > 0 ? &apos;text-green-400&apos; : 
-                                analysis.fromTeamImpact.overallChange < 0 ? &apos;text-red-400&apos; : 
-                                &apos;text-gray-400&apos;
+                                analysis.fromTeamImpact.overallChange > 0 ? 'text-green-400' : 
+                                analysis.fromTeamImpact.overallChange < 0 ? 'text-red-400' : 
+                                'text-gray-400'
                             }`}>
-                                {analysis.fromTeamImpact.overallChange > 0 ? &apos;+&apos; : &apos;&apos;}
+                                {analysis.fromTeamImpact.overallChange > 0 ? '+' : ''}
                                 {analysis.fromTeamImpact.overallChange.toFixed(1)}
                             </div>
                             <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Overall Team Change</div>
@@ -153,7 +135,6 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                         
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {impactMetrics.map((metric, index) => (
-}
                                 <motion.div
                                     key={metric.name}
                                     initial={{ opacity: 0, x: -20 }}
@@ -173,7 +154,7 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                                         </div>
                                     </div>
                                     <div className={`text-lg font-bold ${getImpactColor(metric.value, metric.isPositive)}`}>
-                                        {metric.value > 0 ? &apos;+&apos; : &apos;&apos;}{metric.value.toFixed(1)}{metric.unit}
+                                        {metric.value > 0 ? '+' : ''}{metric.value.toFixed(1)}{metric.unit}
                                     </div>
                                 </motion.div>
                             ))}
@@ -185,12 +166,11 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="text-center mb-4 sm:px-4 md:px-6 lg:px-8">
                             <div className={`text-3xl font-bold mb-2 ${
-}
-                                analysis.toTeamImpact.overallChange > 0 ? &apos;text-green-400&apos; : 
-                                analysis.toTeamImpact.overallChange < 0 ? &apos;text-red-400&apos; : 
-                                &apos;text-gray-400&apos;
+                                analysis.toTeamImpact.overallChange > 0 ? 'text-green-400' : 
+                                analysis.toTeamImpact.overallChange < 0 ? 'text-red-400' : 
+                                'text-gray-400'
                             }`}>
-                                {analysis.toTeamImpact.overallChange > 0 ? &apos;+&apos; : &apos;&apos;}
+                                {analysis.toTeamImpact.overallChange > 0 ? '+' : ''}
                                 {analysis.toTeamImpact.overallChange.toFixed(1)}
                             </div>
                             <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Their Team Change</div>
@@ -200,7 +180,6 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                             <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                     {analysis.toTeamImpact.startingLineupChange > 0 ? 
-}
                                         <TrendingUpIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" /> : 
                                         <TrendingDownIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />
 
@@ -210,10 +189,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                                     </div>
                                 </div>
                                 <div className={`text-lg font-bold ${
-}
-                                    analysis.toTeamImpact.startingLineupChange > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                    analysis.toTeamImpact.startingLineupChange > 0 ? 'text-green-400' : 'text-red-400'
                                 }`}>
-                                    {analysis.toTeamImpact.startingLineupChange > 0 ? &apos;+&apos; : &apos;&apos;}
+                                    {analysis.toTeamImpact.startingLineupChange > 0 ? '+' : ''}
                                     {analysis.toTeamImpact.startingLineupChange.toFixed(1)}pts
                                 </div>
                             </div>
@@ -221,7 +199,6 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                             <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                     {analysis.toTeamImpact.playoffOddsChange > 0 ? 
-}
                                         <TrendingUpIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" /> : 
                                         <TrendingDownIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />
 
@@ -231,10 +208,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                                     </div>
                                 </div>
                                 <div className={`text-lg font-bold ${
-}
-                                    analysis.toTeamImpact.playoffOddsChange > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                    analysis.toTeamImpact.playoffOddsChange > 0 ? 'text-green-400' : 'text-red-400'
                                 }`}>
-                                    {analysis.toTeamImpact.playoffOddsChange > 0 ? &apos;+&apos; : &apos;&apos;}
+                                    {analysis.toTeamImpact.playoffOddsChange > 0 ? '+' : ''}
                                     {analysis.toTeamImpact.playoffOddsChange.toFixed(1)}%
                                 </div>
                             </div>
@@ -248,7 +224,6 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                 <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         {scheduleMetrics.map((metric, index) => (
-}
                             <motion.div
                                 key={metric.name}
                                 initial={{ opacity: 0, y: 20 }}
@@ -257,7 +232,7 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                                 className="text-center p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8"
                             >
                                 <div className="text-xl font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
-                                    {metric.value > 0 ? &apos;+&apos; : &apos;&apos;}{metric.value}
+                                    {metric.value > 0 ? '+' : ''}{metric.value}
                                 </div>
                                 <div className="font-medium text-[var(--text-primary)] text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
                                     {metric.name}
@@ -334,13 +309,11 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                             <h4 className="font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Risk Factors</h4>
                             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {analysis.riskAssessment.riskFactors.map((factor, index) => (
-}
                                     <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                         <div className={`w-2 h-2 rounded-full ${
-}
-                                            analysis.riskAssessment.overallRisk === &apos;high&apos; ? &apos;bg-red-400&apos; :
-                                            analysis.riskAssessment.overallRisk === &apos;medium&apos; ? &apos;bg-yellow-400&apos; :
-                                            &apos;bg-green-400&apos;
+                                            analysis.riskAssessment.overallRisk === 'high' ? 'bg-red-400' :
+                                            analysis.riskAssessment.overallRisk === 'medium' ? 'bg-yellow-400' :
+                                            'bg-green-400'
                                         }`} />
                                         <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{factor}</span>
                                     </div>
@@ -351,10 +324,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                                 <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                     <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Overall Risk</span>
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-}
-                                        analysis.riskAssessment.overallRisk === &apos;low&apos; ? &apos;bg-green-500/20 text-green-400&apos; :
-                                        analysis.riskAssessment.overallRisk === &apos;medium&apos; ? &apos;bg-yellow-500/20 text-yellow-400&apos; :
-                                        &apos;bg-red-500/20 text-red-400&apos;
+                                        analysis.riskAssessment.overallRisk === 'low' ? 'bg-green-500/20 text-green-400' :
+                                        analysis.riskAssessment.overallRisk === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                                        'bg-red-500/20 text-red-400'
                                     }`}>
                                         {analysis.riskAssessment.overallRisk.toUpperCase()}
                                     </span>
@@ -375,10 +347,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                             </div>
                             <div className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Next Month</div>
                             <div className={`text-lg font-medium ${
-}
-                                analysis.scheduleAnalysis.nextFourWeeksImpact > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                analysis.scheduleAnalysis.nextFourWeeksImpact > 0 ? 'text-green-400' : 'text-red-400'
                             }`}>
-                                {analysis.scheduleAnalysis.nextFourWeeksImpact > 0 ? &apos;+&apos; : &apos;&apos;}
+                                {analysis.scheduleAnalysis.nextFourWeeksImpact > 0 ? '+' : ''}
                                 {analysis.scheduleAnalysis.nextFourWeeksImpact.toFixed(1)} pts/week
                             </div>
                         </div>
@@ -389,10 +360,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                             </div>
                             <div className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Weeks 15-17</div>
                             <div className={`text-lg font-medium ${
-}
-                                analysis.scheduleAnalysis.playoffScheduleDiff > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                analysis.scheduleAnalysis.playoffScheduleDiff > 0 ? 'text-green-400' : 'text-red-400'
                             }`}>
-                                {analysis.scheduleAnalysis.playoffScheduleDiff > 0 ? &apos;+&apos; : &apos;&apos;}
+                                {analysis.scheduleAnalysis.playoffScheduleDiff > 0 ? '+' : ''}
                                 {analysis.scheduleAnalysis.playoffScheduleDiff.toFixed(1)} matchup rating
                             </div>
                         </div>
@@ -403,10 +373,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
                             </div>
                             <div className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Next Season</div>
                             <div className={`text-lg font-medium ${
-}
-                                analysis.seasonEndValueDiff > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                analysis.seasonEndValueDiff > 0 ? 'text-green-400' : 'text-red-400'
                             }`}>
-                                {analysis.seasonEndValueDiff > 0 ? &apos;+&apos; : &apos;&apos;}
+                                {analysis.seasonEndValueDiff > 0 ? '+' : ''}
                                 ${Math.abs(analysis.seasonEndValueDiff)} value
                             </div>
                         </div>

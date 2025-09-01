@@ -3,10 +3,9 @@
  * Comprehensive tools for detecting and reporting memory leaks
  */
 
-import { memoryManager } from &apos;./memoryCleanup&apos;;
+import { memoryManager } from './memoryCleanup';
 
 interface LeakTestResult {
-}
   testName: string;
   passed: boolean;
   initialMemory: number;
@@ -15,10 +14,8 @@ interface LeakTestResult {
   duration: number;
   leakDetected: boolean;
   details: string;
-}
 
 interface ComponentLeakTest {
-}
   componentName: string;
   mountCount: number;
   unmountCount: number;
@@ -27,10 +24,8 @@ interface ComponentLeakTest {
   activeListeners: number;
   memoryRetained: number;
   possibleLeaks: string[];
-}
 
 class MemoryLeakTester {
-}
   private testResults: LeakTestResult[] = [];
   private componentTests: Map<string, ComponentLeakTest> = new Map();
   private globalListeners = new Map<string, number>();
@@ -44,15 +39,12 @@ class MemoryLeakTester {
     testName: string,
     testFn: () => Promise<void>,
     options: {
-}
       iterations?: number;
       delayBetween?: number;
       memoryThreshold?: number;
     } = {}
   ): Promise<LeakTestResult> {
-}
     const {
-}
       iterations = 10,
       delayBetween = 100,
       memoryThreshold = 5 * 1024 * 1024 // 5MB
@@ -69,7 +61,6 @@ class MemoryLeakTester {
 
     // Run test iterations
     for (let i = 0; i < iterations; i++) {
-}
       await testFn();
       await this.delay(delayBetween);
     }
@@ -84,7 +75,6 @@ class MemoryLeakTester {
     const leakDetected = memoryGrowth > memoryThreshold;
 
     const result: LeakTestResult = {
-}
       testName,
       passed: !leakDetected,
       initialMemory,
@@ -100,7 +90,6 @@ class MemoryLeakTester {
     this.testResults.push(result);
     
     console.log(`[Leak Test] Completed: ${testName}`, {
-}
       passed: result.passed,
       growth: this.formatBytes(memoryGrowth),
       duration: `${duration}ms`
@@ -113,9 +102,7 @@ class MemoryLeakTester {
    * Track component lifecycle for leak detection
    */
   trackComponentMount(componentName: string) {
-}
     const existing = this.componentTests.get(componentName) || {
-}
       componentName,
       mountCount: 0,
       unmountCount: 0,
@@ -131,16 +118,13 @@ class MemoryLeakTester {
   }
 
   trackComponentUnmount(componentName: string) {
-}
     const test = this.componentTests.get(componentName);
     if (test) {
-}
       test.unmountCount++;
       
       // Check for imbalanced mount/unmount
       if (test.mountCount > test.unmountCount + 1) {
-}
-        test.possibleLeaks.push(&apos;Component not properly unmounting&apos;);
+        test.possibleLeaks.push('Component not properly unmounting');
       }
     }
   }
@@ -149,42 +133,34 @@ class MemoryLeakTester {
    * Audit global event listeners
    */
   auditEventListeners(): {
-}
     total: number;
     byType: Map<string, number>;
     suspicious: string[];
   } {
-}
     const listeners = new Map<string, number>();
     const suspicious: string[] = [];
 
     // Check window listeners
-    if (typeof window !== &apos;undefined&apos;) {
-}
+    if (typeof window !== 'undefined') {
       const windowListeners = (window as any).getEventListeners?.(window) || {};
       Object.keys(windowListeners).forEach((event: any) => {
-}
         const count = windowListeners[event].length;
         listeners.set(`window.${event}`, count);
         
         if (count > 10) {
-}
           suspicious.push(`High listener count on window.${event}: ${count}`);
         }
       });
     }
 
     // Check document listeners
-    if (typeof document !== &apos;undefined&apos;) {
-}
+    if (typeof document !== 'undefined') {
       const docListeners = (document as any).getEventListeners?.(document) || {};
       Object.keys(docListeners).forEach((event: any) => {
-}
         const count = docListeners[event].length;
         listeners.set(`document.${event}`, count);
         
         if (count > 10) {
-}
           suspicious.push(`High listener count on document.${event}: ${count}`);
         }
       });
@@ -199,13 +175,11 @@ class MemoryLeakTester {
    * Audit active timers and intervals
    */
   auditTimers(): {
-}
     activeTimers: number;
     activeIntervals: number;
     timerLeakRatio: number;
     intervalLeakRatio: number;
   } {
-}
     const stats = memoryManager.getMemoryStats();
     
     const timerLeakRatio = this.timerCounts.active > 0 
@@ -217,7 +191,6 @@ class MemoryLeakTester {
       : 0;
 
     return {
-}
       activeTimers: stats.activeTimers,
       activeIntervals: stats.activeIntervals,
       timerLeakRatio,
@@ -229,17 +202,14 @@ class MemoryLeakTester {
    * Perform comprehensive memory audit
    */
   performFullAudit(): {
-}
     timestamp: string;
     memory: {
-}
       current: number;
       baseline: number;
       peak: number;
       growth: number;
     };
     resources: {
-}
       timers: number;
       intervals: number;
       listeners: number;
@@ -251,7 +221,6 @@ class MemoryLeakTester {
     issues: string[];
     recommendations: string[];
   } {
-}
     const stats = memoryManager.getMemoryStats();
     const listenerAudit = this.auditEventListeners();
     const timerAudit = this.auditTimers();
@@ -262,30 +231,26 @@ class MemoryLeakTester {
     // Check memory growth
     const memoryGrowth = stats.current - stats.baseline;
     if (memoryGrowth > 50 * 1024 * 1024) { // 50MB
-}
       issues.push(`High memory growth: ${this.formatBytes(memoryGrowth)}`);
-      recommendations.push(&apos;Investigate component lifecycle and data retention&apos;);
+      recommendations.push('Investigate component lifecycle and data retention');
     }
 
     // Check timers
     if (stats.activeTimers > 20) {
-}
       issues.push(`Too many active timers: ${stats.activeTimers}`);
-      recommendations.push(&apos;Review timer usage and ensure proper cleanup&apos;);
+      recommendations.push('Review timer usage and ensure proper cleanup');
     }
 
     // Check intervals
     if (stats.activeIntervals > 10) {
-}
       issues.push(`Too many active intervals: ${stats.activeIntervals}`);
-      recommendations.push(&apos;Consider consolidating intervals or using RAF&apos;);
+      recommendations.push('Consider consolidating intervals or using RAF');
     }
 
     // Check listeners
     if (listenerAudit.total > 100) {
-}
       issues.push(`Too many event listeners: ${listenerAudit.total}`);
-      recommendations.push(&apos;Review event listener usage and use delegation&apos;);
+      recommendations.push('Review event listener usage and use delegation');
     }
 
     // Check for suspicious patterns
@@ -293,38 +258,31 @@ class MemoryLeakTester {
 
     // Check timer leak ratios
     if (timerAudit.timerLeakRatio > 0.2) {
-}
       issues.push(`Timer leak detected: ${(timerAudit.timerLeakRatio * 100).toFixed(1)}% not cleared`);
-      recommendations.push(&apos;Ensure all timers are cleared on cleanup&apos;);
+      recommendations.push('Ensure all timers are cleared on cleanup');
     }
 
     if (timerAudit.intervalLeakRatio > 0.2) {
-}
       issues.push(`Interval leak detected: ${(timerAudit.intervalLeakRatio * 100).toFixed(1)}% not cleared`);
-      recommendations.push(&apos;Ensure all intervals are cleared on cleanup&apos;);
+      recommendations.push('Ensure all intervals are cleared on cleanup');
     }
 
     // Check component tests
     this.componentTests.forEach((test: any) => {
-}
       if (test.mountCount > test.unmountCount + 1) {
-}
         issues.push(`Component leak: ${test.componentName} (${test.mountCount} mounts, ${test.unmountCount} unmounts)`);
       }
     });
 
     return {
-}
       timestamp: new Date().toISOString(),
       memory: {
-}
         current: stats.current,
         baseline: stats.baseline,
         peak: stats.peak,
         growth: memoryGrowth
       },
       resources: {
-}
         timers: stats.activeTimers,
         intervals: stats.activeIntervals,
         listeners: stats.activeListeners,
@@ -342,7 +300,6 @@ class MemoryLeakTester {
    * Generate HTML report
    */
   generateHTMLReport(): string {
-}
     const audit = this.performFullAudit();
     
     return `
@@ -409,16 +366,14 @@ class MemoryLeakTester {
 
   <h2>Issues Found (${audit.issues.length})</h2>
   ${audit.issues.length === 0 
-}
-    ? &apos;<p class="status pass">No issues detected!</p>&apos;
-    : audit.issues.map((issue: any) => `<div class="issue">⚠️ ${issue}</div>`).join(&apos;&apos;)
+    ? '<p class="status pass">No issues detected!</p>'
+    : audit.issues.map((issue: any) => `<div class="issue">⚠️ ${issue}</div>`).join('')
   }
 
   <h2>Recommendations</h2>
   ${audit.recommendations.length === 0
-}
-    ? &apos;<p class="status pass">No recommendations - system is healthy!</p>&apos;
-    : audit.recommendations.map((rec: any) => `<div class="recommendation">✅ ${rec}</div>`).join(&apos;&apos;)
+    ? '<p class="status pass">No recommendations - system is healthy!</p>'
+    : audit.recommendations.map((rec: any) => `<div class="recommendation">✅ ${rec}</div>`).join('')
   }
 
   <h2>Component Lifecycle Tests</h2>
@@ -434,19 +389,18 @@ class MemoryLeakTester {
     </thead>
     <tbody>
       ${audit.components.map((comp: any) => `
-}
         <tr>
           <td>${comp.componentName}</td>
           <td>${comp.mountCount}</td>
           <td>${comp.unmountCount}</td>
           <td>
-            <span class="status ${comp.mountCount === comp.unmountCount ? &apos;pass&apos; : &apos;warning&apos;}">
-              ${comp.mountCount === comp.unmountCount ? &apos;Balanced&apos; : &apos;Imbalanced&apos;}
+            <span class="status ${comp.mountCount === comp.unmountCount ? 'pass' : 'warning'}">
+              ${comp.mountCount === comp.unmountCount ? 'Balanced' : 'Imbalanced'}
             </span>
           </td>
-          <td>${comp.possibleLeaks.join(&apos;, &apos;) || &apos;None&apos;}</td>
+          <td>${comp.possibleLeaks.join(', ') || 'None'}</td>
         </tr>
-      `).join(&apos;&apos;)}
+      `).join('')}
     </tbody>
   </table>
 
@@ -463,19 +417,18 @@ class MemoryLeakTester {
     </thead>
     <tbody>
       ${audit.testResults.map((result: any) => `
-}
         <tr>
           <td>${result.testName}</td>
           <td>
-            <span class="status ${result.passed ? &apos;pass&apos; : &apos;fail&apos;}">
-              ${result.passed ? &apos;PASS&apos; : &apos;FAIL&apos;}
+            <span class="status ${result.passed ? 'pass' : 'fail'}">
+              ${result.passed ? 'PASS' : 'FAIL'}
             </span>
           </td>
           <td>${this.formatBytes(result.memoryGrowth)}</td>
           <td>${result.duration}ms</td>
           <td>${result.details}</td>
         </tr>
-      `).join(&apos;&apos;)}
+      `).join('')}
     </tbody>
   </table>
 </body>
@@ -487,7 +440,6 @@ class MemoryLeakTester {
    * Stress test for memory leaks
    */
   async runStressTest(duration: number = 30000): Promise<void> {
-}
     console.log(`[Stress Test] Starting ${duration / 1000} second stress test...`);
     
     const startTime = Date.now();
@@ -495,10 +447,8 @@ class MemoryLeakTester {
     let iterations = 0;
 
     while (Date.now() - startTime < duration) {
-}
       // Simulate heavy operations
       const data = new Array(1000).fill(null).map(() => ({
-}
         id: Math.random(),
         data: new Array(100).fill(Math.random())
       }));
@@ -506,15 +456,14 @@ class MemoryLeakTester {
       // Create and destroy timers
       const timers = [];
       for (let i = 0; i < 10; i++) {
-}
         timers.push(setTimeout(() => {}, 100));
       }
       timers.forEach(clearTimeout);
 
       // Create and remove event listeners
       const handler = () => {};
-      window.addEventListener(&apos;test&apos;, handler);
-      window.removeEventListener(&apos;test&apos;, handler);
+      window.addEventListener('test', handler);
+      window.removeEventListener('test', handler);
 
       iterations++;
       await this.delay(100);
@@ -524,7 +473,6 @@ class MemoryLeakTester {
     const memoryGrowth = finalMemory - initialMemory;
 
     console.log(`[Stress Test] Completed`, {
-}
       iterations,
       duration: `${duration / 1000}s`,
       memoryGrowth: this.formatBytes(memoryGrowth),
@@ -534,9 +482,7 @@ class MemoryLeakTester {
 
   // Helper methods
   private getMemoryUsage(): number {
-}
-    if (typeof window !== &apos;undefined&apos; && &apos;performance&apos; in window) {
-}
+    if (typeof window !== 'undefined' && 'performance' in window) {
       const memory = (performance as any).memory;
       return memory?.usedJSHeapSize || 0;
     }
@@ -544,24 +490,19 @@ class MemoryLeakTester {
   }
 
   private formatBytes(bytes: number): string {
-}
     const mb = bytes / (1024 * 1024);
     return `${mb.toFixed(2)} MB`;
   }
 
   private forceGC(): void {
-}
-    if (typeof (window as any).gc === &apos;function&apos;) {
-}
+    if (typeof (window as any).gc === 'function') {
       (window as any).gc();
     }
   }
 
   private delay(ms: number): Promise<void> {
-}
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-}
 
 // Create singleton instance
 export const leakTester = new MemoryLeakTester();

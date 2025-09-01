@@ -1,11 +1,11 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { generateSeasonReview } from &apos;../services/geminiService&apos;;
-import type { League, SeasonReviewData } from &apos;../types&apos;;
-import SeasonReviewDisplay from &apos;../components/reports/SeasonReviewDisplay&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import LoadingSpinner from &apos;../components/ui/LoadingSpinner&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { generateSeasonReview } from '../services/geminiService';
+import type { League, SeasonReviewData } from '../types';
+import SeasonReviewDisplay from '../components/reports/SeasonReviewDisplay';
+import { useLeague } from '../hooks/useLeague';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import ErrorDisplay from '../components/core/ErrorDisplay';
 
 const SeasonReviewLoader: React.FC = () => (
     <div className="p-4 sm:p-6 animate-pulse">
@@ -26,38 +26,30 @@ const SeasonReviewLoader: React.FC = () => (
 );
 
 const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }: any) => {
-}
     const [review, setReview] = React.useState<SeasonReviewData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
     const [retryCount, setRetryCount] = React.useState(0);
 
     const fetchReview = React.useCallback(async () => {
-}
         setIsLoading(true);
         setError(null);
         try {
-}
 
             const data = await generateSeasonReview(league, seasonYear);
             if (data) {
-}
                 setReview(data);
             } else {
-}
                  setError("The Oracle could not produce a season review. Please try again later.");
 
     } catch (error) {
-}
             setError("An error occurred while consulting the Oracle for a season review.");
         } finally {
-}
             setIsLoading(false);
 
     }, [league, seasonYear]);
     
     React.useEffect(() => {
-}
         fetchReview();
     }, [fetchReview, retryCount]);
 
@@ -72,14 +64,13 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} - {seasonYear} Season</p>
                 </div>
-                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HISTORY&apos; }) className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HISTORY' }) className="glass-button">
                     Back to History
                 </button>
             </header>
             <main className="flex-grow glass-pane rounded-2xl overflow-hidden">
                 <div className="h-full overflow-y-auto">
                      {isLoading ? <SeasonReviewLoader /> :
-}
                      error ? <ErrorDisplay message={error} onRetry={handleRetry} /> :
                      review ? <SeasonReviewDisplay review={review} teams={league.teams} /> :
                      <div className="p-6 text-center text-gray-400">No review available for this season.</div>
@@ -91,17 +82,15 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
 };
 
 const SeasonReviewView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const seasonYear = state.activeSeasonReviewYear;
 
     if (!league || !seasonYear) {
-}
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a season to review from the League History.</p>
-                 <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="glass-button-primary mt-4">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="glass-button-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>

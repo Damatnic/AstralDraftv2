@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MobileGestureNavigation from &apos;./MobileGestureNavigation&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MobileGestureNavigation from './MobileGestureNavigation';
 
-describe(&apos;MobileGestureNavigation&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MobileGestureNavigation', () => {
+  it('renders without crashing', () => {
     render(<MobileGestureNavigation />);
-    expect(screen.getByTestId(&apos;mobilegesturenavigation&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('mobilegesturenavigation')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MobileGestureNavigation />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MobileGestureNavigation />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

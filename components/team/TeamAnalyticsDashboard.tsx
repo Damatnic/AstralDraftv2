@@ -3,158 +3,138 @@
  * Comprehensive performance metrics and analytics for team management
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { Team, League, Player } from &apos;../../types&apos;;
-import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
-import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { TargetIcon } from &apos;../icons/TargetIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
+import { Team, League, Player } from '../../types';
+import { BarChartIcon } from '../icons/BarChartIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TargetIcon } from '../icons/TargetIcon';
 
 interface TeamAnalyticsDashboardProps {
-}
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
 
-}
 
 interface WeeklyPerformance {
-}
     week: number;
     points: number;
     projectedPoints: number;
     opponent: string;
-    result: &apos;W&apos; | &apos;L&apos; | &apos;T&apos;;
+    result: 'W' | 'L' | 'T';
 
 interface PositionAnalysis {
-}
     position: string;
     averagePoints: number;
     consistency: number;
-    trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+    trend: 'up' | 'down' | 'stable';
     topPlayer: Player;
     depth: number;
 
-}
 
 interface MatchupPreview {
-}
     opponent: Team;
     winProbability: number;
     projectedScore: number;
     opponentProjected: number;
     keyMatchups: {
-}
         myPlayer: Player;
         theirPlayer: Player;
-        advantage: &apos;favor&apos; | &apos;against&apos; | &apos;neutral&apos;;
+        advantage: 'favor' | 'against' | 'neutral';
     }[];
 
 const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, league, dispatch }: any) => {
-}
-    const [selectedTab, setSelectedTab] = React.useState<&apos;overview&apos; | &apos;trends&apos; | &apos;projections&apos; | &apos;matchup&apos;>(&apos;overview&apos;);
+    const [selectedTab, setSelectedTab] = React.useState<'overview' | 'trends' | 'projections' | 'matchup'>('overview');
 
     // Mock data - in real app this would come from analytics service
     const weeklyPerformance: WeeklyPerformance[] = [
-        { week: 1, points: 142.5, projectedPoints: 138.2, opponent: &apos;Thunder Bolts&apos;, result: &apos;W&apos; },
-        { week: 2, points: 118.3, projectedPoints: 125.8, opponent: &apos;Fire Dragons&apos;, result: &apos;L&apos; },
-        { week: 3, points: 156.7, projectedPoints: 141.3, opponent: &apos;Ice Wolves&apos;, result: &apos;W&apos; },
-        { week: 4, points: 134.2, projectedPoints: 139.7, opponent: &apos;Storm Eagles&apos;, result: &apos;W&apos; }
+        { week: 1, points: 142.5, projectedPoints: 138.2, opponent: 'Thunder Bolts', result: 'W' },
+        { week: 2, points: 118.3, projectedPoints: 125.8, opponent: 'Fire Dragons', result: 'L' },
+        { week: 3, points: 156.7, projectedPoints: 141.3, opponent: 'Ice Wolves', result: 'W' },
+        { week: 4, points: 134.2, projectedPoints: 139.7, opponent: 'Storm Eagles', result: 'W' }
     ];
 
     const positionAnalysis: PositionAnalysis[] = [
         {
-}
-            position: &apos;QB&apos;,
+            position: 'QB',
             averagePoints: 22.8,
             consistency: 8.5,
-            trend: &apos;up&apos;,
-            topPlayer: { id: 1, name: &apos;Josh Allen&apos;, position: &apos;QB&apos;, team: &apos;BUF&apos; } as Player,
+            trend: 'up',
+            topPlayer: { id: 1, name: 'Josh Allen', position: 'QB', team: 'BUF' } as Player,
             depth: 2
         },
         {
-}
-            position: &apos;RB&apos;,
+            position: 'RB',
             averagePoints: 18.4,
             consistency: 6.2,
-            trend: &apos;stable&apos;,
-            topPlayer: { id: 2, name: &apos;Christian McCaffrey&apos;, position: &apos;RB&apos;, team: &apos;SF&apos; } as Player,
+            trend: 'stable',
+            topPlayer: { id: 2, name: 'Christian McCaffrey', position: 'RB', team: 'SF' } as Player,
             depth: 4
         },
         {
-}
-            position: &apos;WR&apos;,
+            position: 'WR',
             averagePoints: 15.7,
             consistency: 7.1,
-            trend: &apos;down&apos;,
-            topPlayer: { id: 3, name: &apos;Tyreek Hill&apos;, position: &apos;WR&apos;, team: &apos;MIA&apos; } as Player,
+            trend: 'down',
+            topPlayer: { id: 3, name: 'Tyreek Hill', position: 'WR', team: 'MIA' } as Player,
             depth: 5
         },
         {
-}
-            position: &apos;TE&apos;,
+            position: 'TE',
             averagePoints: 12.3,
             consistency: 5.8,
-            trend: &apos;up&apos;,
-            topPlayer: { id: 4, name: &apos;Travis Kelce&apos;, position: &apos;TE&apos;, team: &apos;KC&apos; } as Player,
+            trend: 'up',
+            topPlayer: { id: 4, name: 'Travis Kelce', position: 'TE', team: 'KC' } as Player,
             depth: 2
 
     ];
 
     const nextMatchup: MatchupPreview = {
-}
         opponent: {
-}
             id: 5, 
-            name: &apos;Desert Hawks&apos;, 
-            owner: { id: &apos;5&apos;, name: &apos;Mike Wilson&apos;, avatar: &apos;🦅&apos; },
-            avatar: &apos;🏜️&apos;
+            name: 'Desert Hawks', 
+            owner: { id: '5', name: 'Mike Wilson', avatar: '🦅' },
+            avatar: '🏜️'
         } as Team,
         winProbability: 67,
         projectedScore: 128.5,
         opponentProjected: 118.2,
         keyMatchups: [
             {
-}
-                myPlayer: { id: 1, name: &apos;Josh Allen&apos;, position: &apos;QB&apos; } as Player,
-                theirPlayer: { id: 6, name: &apos;Lamar Jackson&apos;, position: &apos;QB&apos; } as Player,
-                advantage: &apos;neutral&apos;
+                myPlayer: { id: 1, name: 'Josh Allen', position: 'QB' } as Player,
+                theirPlayer: { id: 6, name: 'Lamar Jackson', position: 'QB' } as Player,
+                advantage: 'neutral'
             },
             {
-}
-                myPlayer: { id: 2, name: &apos;Christian McCaffrey&apos;, position: &apos;RB&apos; } as Player,
-                theirPlayer: { id: 7, name: &apos;Derrick Henry&apos;, position: &apos;RB&apos; } as Player,
-                advantage: &apos;favor&apos;
+                myPlayer: { id: 2, name: 'Christian McCaffrey', position: 'RB' } as Player,
+                theirPlayer: { id: 7, name: 'Derrick Henry', position: 'RB' } as Player,
+                advantage: 'favor'
 
     };
 
-    const getTrendIcon = (trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;) => {
-}
+    const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
         switch (trend) {
-}
-            case &apos;up&apos;:
+            case 'up':
                 return <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case &apos;down&apos;:
+            case 'down':
                 return <TrendingDownIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
 
     };
 
-    const getAdvantageColor = (advantage: &apos;favor&apos; | &apos;against&apos; | &apos;neutral&apos;) => {
-}
+    const getAdvantageColor = (advantage: 'favor' | 'against' | 'neutral') => {
         switch (advantage) {
-}
-            case &apos;favor&apos;:
-                return &apos;text-green-400&apos;;
-            case &apos;against&apos;:
-                return &apos;text-red-400&apos;;
+            case 'favor':
+                return 'text-green-400';
+            case 'against':
+                return 'text-red-400';
             default:
-                return &apos;text-gray-400&apos;;
+                return 'text-gray-400';
 
     };
 
@@ -163,11 +143,10 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
             {/* Tab Navigation */}
             <div className="flex space-x-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                 {[
-}
-                    { id: &apos;overview&apos;, label: &apos;Overview&apos; },
-                    { id: &apos;trends&apos;, label: &apos;Trends&apos; },
-                    { id: &apos;projections&apos;, label: &apos;Projections&apos; },
-                    { id: &apos;matchup&apos;, label: &apos;Next Matchup&apos; }
+                    { id: 'overview', label: 'Overview' },
+                    { id: 'trends', label: 'Trends' },
+                    { id: 'projections', label: 'Projections' },
+                    { id: 'matchup', label: 'Next Matchup' }
                 ].map((tab: any) => (
                     <button
                         key={tab.id}
@@ -179,8 +158,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
             </div>
 
             {/* Overview Tab */}
-            {selectedTab === &apos;overview&apos; && (
-}
+            {selectedTab === 'overview' && (
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {/* Performance Summary */}
                     <Widget title="Season Performance">
@@ -194,7 +172,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                                 </div>
                                 <div className="text-center p-3 bg-green-500/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
-                                        {weeklyPerformance.filter((w: any) => w.result === &apos;W&apos;).length}-{weeklyPerformance.filter((w: any) => w.result === &apos;L&apos;).length}
+                                        {weeklyPerformance.filter((w: any) => w.result === 'W').length}-{weeklyPerformance.filter((w: any) => w.result === 'L').length}
                                     </div>
                                     <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Record</div>
                                 </div>
@@ -217,7 +195,6 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                         <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                             <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                 {positionAnalysis.map((pos: any) => (
-}
                                     <div key={pos.position} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                             <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
@@ -239,9 +216,8 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                                                 <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                                                     {getTrendIcon(pos.trend)}
                                                     <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
-                                                        {pos.trend === &apos;up&apos; ? &apos;Trending Up&apos; : 
-}
-                                                         pos.trend === &apos;down&apos; ? &apos;Trending Down&apos; : &apos;Stable&apos;}
+                                                        {pos.trend === 'up' ? 'Trending Up' : 
+                                                         pos.trend === 'down' ? 'Trending Down' : 'Stable'}
                                                     </span>
                                                 </div>
                                             </div>
@@ -255,8 +231,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
             )}
 
             {/* Trends Tab */}
-            {selectedTab === &apos;trends&apos; && (
-}
+            {selectedTab === 'trends' && (
                 <Widget title="Performance Trends">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
@@ -264,12 +239,10 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                                 <h4 className="font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Weekly Performance</h4>
                                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                     {weeklyPerformance.map((week: any) => (
-}
                                         <div key={week.week} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-}
-                                                    week.result === &apos;W&apos; ? &apos;bg-green-500/20 text-green-400&apos; : &apos;bg-red-500/20 text-red-400&apos;
+                                                    week.result === 'W' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
                                                 }`}>
                                                     {week.result}
                                                 </div>
@@ -282,10 +255,9 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                                             <div className="text-right sm:px-4 md:px-6 lg:px-8">
                                                 <div className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{week.points}</div>
                                                 <div className={`text-sm ${
-}
-                                                    week.points > week.projectedPoints ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                                    week.points > week.projectedPoints ? 'text-green-400' : 'text-red-400'
                                                 }`}>
-                                                    {week.points > week.projectedPoints ? &apos;+&apos; : &apos;&apos;}{(week.points - week.projectedPoints).toFixed(1)} vs proj
+                                                    {week.points > week.projectedPoints ? '+' : ''}{(week.points - week.projectedPoints).toFixed(1)} vs proj
                                                 </div>
                                             </div>
                                         </div>
@@ -298,8 +270,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
             )}
 
             {/* Projections Tab */}
-            {selectedTab === &apos;projections&apos; && (
-}
+            {selectedTab === 'projections' && (
                 <Widget title="Rest of Season Projections">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -340,8 +311,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
             )}
 
             {/* Next Matchup Tab */}
-            {selectedTab === &apos;matchup&apos; && (
-}
+            {selectedTab === 'matchup' && (
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     <Widget title="Week 5 Matchup Preview">
                         <div className="p-4 sm:px-4 md:px-6 lg:px-8">
@@ -369,7 +339,6 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                                 <h4 className="font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Key Matchups</h4>
                                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                     {nextMatchup.keyMatchups.map((matchup, index) => (
-}
                                         <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                                 <TargetIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
@@ -384,9 +353,8 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                                             </div>
                                             
                                             <div className={`px-3 py-1 rounded text-sm font-medium ${getAdvantageColor(matchup.advantage)}`}>
-                                                {matchup.advantage === &apos;favor&apos; ? &apos;Advantage&apos; : 
-}
-                                                 matchup.advantage === &apos;against&apos; ? &apos;Disadvantage&apos; : &apos;Even&apos;}
+                                                {matchup.advantage === 'favor' ? 'Advantage' : 
+                                                 matchup.advantage === 'against' ? 'Disadvantage' : 'Even'}
                                             </div>
                                         </div>
                                     ))}

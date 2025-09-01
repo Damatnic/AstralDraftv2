@@ -1,36 +1,30 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { Shield, Smartphone, Key, Copy, CheckCircle, AlertCircle, Download } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Shield, Smartphone, Key, Copy, CheckCircle, AlertCircle, Download } from 'lucide-react';
 
 interface MFASetupProps {
-}
   onComplete?: () => void;
   onCancel?: () => void;
 
-}
 
 interface MFAStatus {
-}
   enabled: boolean;
   backupCodesCount: number;
   enabledAt?: string;
   lastBackupCodeUsed?: string;
 
 interface SetupData {
-}
   qrCode: string;
   manualEntryKey: string;
   instructions: string;
 
-}
 
 const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-  const [step, setStep] = useState<&apos;status&apos; | &apos;setup&apos; | &apos;verify&apos; | &apos;complete&apos;>(&apos;status&apos;);
+  const [step, setStep] = useState<'status' | 'setup' | 'verify' | 'complete'>('status');
   const [mfaStatus, setMfaStatus] = useState<MFAStatus | null>(null);
   const [setupData, setSetupData] = useState<SetupData | null>(null);
-  const [verificationCode, setVerificationCode] = useState(&apos;&apos;);
+  const [verificationCode, setVerificationCode] = useState('');
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,161 +32,128 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
   const [manualEntry, setManualEntry] = useState(false);
 
   useEffect(() => {
-}
     loadMFAStatus();
   }, []);
 
   const loadMFAStatus = async () => {
-}
     try {
-}
       setLoading(true);
-      const response = await fetch(&apos;/api/mfa/status&apos;, {
-}
+      const response = await fetch('/api/mfa/status', {
         headers: {
-}
-          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
 
       });
       
       if (response.ok) {
-}
         const data = await response.json();
         setMfaStatus(data.mfa);
   } finally {
-}
       setLoading(false);
 
   };
 
   const startSetup = async () => {
-}
     try {
-}
       setLoading(true);
       setError(null);
       
-      const response = await fetch(&apos;/api/mfa/setup&apos;, {
-}
-        method: &apos;POST&apos;,
+      const response = await fetch('/api/mfa/setup', {
+        method: 'POST',
         headers: {
-}
-          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}`,
-          &apos;Content-Type&apos;: &apos;application/json&apos;
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
 
       });
       
       if (response.ok) {
-}
         const data = await response.json();
         setSetupData(data.setup);
-        setStep(&apos;setup&apos;);
+        setStep('setup');
       } else {
-}
         const error = await response.json();
-        setError(error.error || &apos;Failed to start MFA setup&apos;);
+        setError(error.error || 'Failed to start MFA setup');
 
     } catch (error) {
-}
-      console.error(&apos;MFA setup error:&apos;, error);
-      setError(&apos;Failed to start MFA setup&apos;);
+      console.error('MFA setup error:', error);
+      setError('Failed to start MFA setup');
     } finally {
-}
       setLoading(false);
 
   };
 
   const verifyAndEnable = async () => {
-}
     try {
-}
     if (verificationCode.length !== 6) {
-}
-      setError(&apos;Please enter a 6-digit verification code&apos;);
+      setError('Please enter a 6-digit verification code');
       return;
     
-    `Bearer ${localStorage.getItem(&apos;token&apos;)}`,
-          &apos;Content-Type&apos;: &apos;application/json&apos;
+    `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ token: verificationCode })
       });
       
       if (response.ok) {
-}
         const data = await response.json();
         setBackupCodes(data.backupCodes);
-        setStep(&apos;complete&apos;);
+        setStep('complete');
         await loadMFAStatus();
       } else {
-}
         const error = await response.json();
-        setError(error.error || &apos;Verification failed&apos;);
+        setError(error.error || 'Verification failed');
   } finally {
-}
       setLoading(false);
 
   };
 
   const disableMFA = async (password: string, mfaToken: string) => {
-}
     try {
-}
       setLoading(true);
       setError(null);
       
-      const response = await fetch(&apos;/api/mfa/disable&apos;, {
-}
-        method: &apos;POST&apos;,
+      const response = await fetch('/api/mfa/disable', {
+        method: 'POST',
         headers: {
-}
-          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}`,
-          &apos;Content-Type&apos;: &apos;application/json&apos;
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ password, mfaToken })
       });
       
       if (response.ok) {
-}
         await loadMFAStatus();
-        setStep(&apos;status&apos;);
+        setStep('status');
       } else {
-}
         const error = await response.json();
-        setError(error.error || &apos;Failed to disable MFA&apos;);
+        setError(error.error || 'Failed to disable MFA');
 
     } catch (error) {
-}
-      console.error(&apos;MFA disable error:&apos;, error);
-      setError(&apos;Failed to disable MFA&apos;);
+      console.error('MFA disable error:', error);
+      setError('Failed to disable MFA');
     } finally {
-}
       setLoading(false);
 
   };
 
   const copyToClipboard = async (text: string) => {
-}
     try {
-}
 
       await navigator.clipboard.writeText(text);
       setCopiedCode(text);
       setTimeout(() => setCopiedCode(null), 2000);
 
     } catch (error) {
-}
-      console.error(&apos;Failed to copy:&apos;, error);
+      console.error('Failed to copy:', error);
 
   };
 
   const downloadBackupCodes = () => {
-}
-    const content = backupCodes.join(&apos;\n&apos;);
-    const blob = new Blob([content], { type: &apos;text/plain&apos; });
+    const content = backupCodes.join('\n');
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement(&apos;a&apos;);
+    const a = document.createElement('a');
     a.href = url;
-    a.download = &apos;astral-draft-backup-codes.txt&apos;;
+    a.download = 'astral-draft-backup-codes.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -200,7 +161,6 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
   };
 
   if (loading && !mfaStatus) {
-}
     return (
       <div className="flex items-center justify-center p-8 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
@@ -217,7 +177,6 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
       </div>
 
       {error && (
-}
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 mb-6 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
             <AlertCircle className="w-5 h-5 text-red-400 mr-2 sm:px-4 md:px-6 lg:px-8" />
@@ -226,11 +185,9 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
         </div>
       )}
 
-      {step === &apos;status&apos; && mfaStatus && (
-}
+      {step === 'status' && mfaStatus && (
         <div>
           {mfaStatus.enabled ? (
-}
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
               <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
@@ -240,7 +197,6 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
                   </span>
                 </div>
                 {mfaStatus.enabledAt && (
-}
                   <p className="text-sm text-green-600 dark:text-green-300 mt-2 sm:px-4 md:px-6 lg:px-8">
                     Enabled on {new Date(mfaStatus.enabledAt).toLocaleDateString()}
                   </p>
@@ -258,9 +214,8 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
                   </span>
                 </div>
                 {mfaStatus.backupCodesCount <= 2 && (
-}
                   <p className="text-amber-600 dark:text-amber-400 text-sm mt-2 sm:px-4 md:px-6 lg:px-8">
-                    You&apos;re running low on backup codes. Consider regenerating them.
+                    You're running low on backup codes. Consider regenerating them.
                   </p>
                 )}
               </div>
@@ -294,7 +249,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
               <div className="prose dark:prose-invert sm:px-4 md:px-6 lg:px-8">
                 <p>
                   Two-factor authentication adds an extra layer of security to your account.
-                  When enabled, you&apos;ll need to provide a verification code from your
+                  When enabled, you'll need to provide a verification code from your
                   authenticator app in addition to your password.
                 </p>
                 <h4>Benefits:</h4>
@@ -310,15 +265,14 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
                 disabled={loading}
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                aria-label="Action button">
-                {loading ? &apos;Starting Setup...&apos; : &apos;Enable Two-Factor Authentication&apos;}
+                {loading ? 'Starting Setup...' : 'Enable Two-Factor Authentication'}
               </button>
             </div>
           )}
         </div>
       )}
 
-      {step === &apos;setup&apos; && setupData && (
-}
+      {step === 'setup' && setupData && (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
           <div className="text-center sm:px-4 md:px-6 lg:px-8">
             <h3 className="text-xl font-semibold mb-4 sm:px-4 md:px-6 lg:px-8">Setup Your Authenticator App</h3>
@@ -329,7 +283,6 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
 
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 text-center sm:px-4 md:px-6 lg:px-8">
             {!manualEntry ? (
-}
               <div>
                 <div className="bg-white p-4 rounded-lg inline-block mb-4 sm:px-4 md:px-6 lg:px-8">
                   <img 
@@ -341,7 +294,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
                 <button
                   onClick={() => setManualEntry(true)}
                 >
-                  Can&apos;t scan? Enter code manually
+                  Can't scan? Enter code manually
                 </button>
               </div>
             ) : (
@@ -359,7 +312,6 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
                     <Copy className="w-4 h-4 inline sm:px-4 md:px-6 lg:px-8" />
                   </button>
                   {copiedCode === setupData.manualEntryKey && (
-}
                     <span className="ml-2 text-green-600 text-sm sm:px-4 md:px-6 lg:px-8">Copied!</span>
                   )}
                 </div>
@@ -385,15 +337,14 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
           </div>
 
           <button
-            onClick={() => setStep(&apos;verify&apos;)}
+            onClick={() => setStep('verify')}
           >
             Continue to Verification
           </button>
         </div>
       )}
 
-      {step === &apos;verify&apos; && (
-}
+      {step === 'verify' && (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
           <div className="text-center sm:px-4 md:px-6 lg:px-8">
             <Smartphone className="w-16 h-16 text-blue-600 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
@@ -411,7 +362,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
               type="text"
               maxLength={6}
               value={verificationCode}
-              onChange={(e: any) => setVerificationCode(e.target.value.replace(/\D/g, &apos;&apos;))}
+              onChange={(e: any) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
               placeholder="000000"
               autoComplete="one-time-code"
             />
@@ -419,7 +370,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
 
           <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
             <button
-              onClick={() => setStep(&apos;setup&apos;)}
+              onClick={() => setStep('setup')}
             >
 //               Back
             </button>
@@ -428,14 +379,13 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
               disabled={loading || verificationCode.length !== 6}
               className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
              aria-label="Action button">
-              {loading ? &apos;Verifying...&apos; : &apos;Enable MFA&apos;}
+              {loading ? 'Verifying...' : 'Enable MFA'}
             </button>
           </div>
         </div>
       )}
 
-      {step === &apos;complete&apos; && (
-}
+      {step === 'complete' && (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
           <div className="text-center sm:px-4 md:px-6 lg:px-8">
             <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
@@ -458,7 +408,6 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
             
             <div className="bg-white dark:bg-gray-800 p-4 rounded border font-mono text-sm sm:px-4 md:px-6 lg:px-8">
               {backupCodes.map((code, index) => (
-}
                 <div key={index} className="flex justify-between items-center py-1 sm:px-4 md:px-6 lg:px-8">
                   <span>{code}</span>
                   <button
@@ -481,9 +430,8 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
 
           <button
             onClick={() = aria-label="Action button"> {
-}
               onComplete?.();
-              setStep(&apos;status&apos;);
+              setStep('status');
             }}
             className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4 md:px-6 lg:px-8"
           >
@@ -492,8 +440,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
         </div>
       )}
 
-      {onCancel && step !== &apos;status&apos; && (
-}
+      {onCancel && step !== 'status' && (
         <div className="mt-6 text-center sm:px-4 md:px-6 lg:px-8">
           <button
             onClick={onCancel}

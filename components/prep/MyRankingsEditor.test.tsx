@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import MyRankingsEditor from &apos;./MyRankingsEditor&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import MyRankingsEditor from './MyRankingsEditor';
 
-describe(&apos;MyRankingsEditor&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('MyRankingsEditor', () => {
+  it('renders without crashing', () => {
     render(<MyRankingsEditor />);
-    expect(screen.getByTestId(&apos;myrankingseditor&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('myrankingseditor')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<MyRankingsEditor />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<MyRankingsEditor />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

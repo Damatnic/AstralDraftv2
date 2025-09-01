@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import AnalyticsModal from &apos;./AnalyticsModal&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AnalyticsModal from './AnalyticsModal';
 
-describe(&apos;AnalyticsModal&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('AnalyticsModal', () => {
+  it('renders without crashing', () => {
     render(<AnalyticsModal />);
-    expect(screen.getByTestId(&apos;analyticsmodal&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('analyticsmodal')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<AnalyticsModal />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<AnalyticsModal />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

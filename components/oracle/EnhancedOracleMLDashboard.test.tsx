@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import EnhancedOracleMLDashboard from &apos;./EnhancedOracleMLDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import EnhancedOracleMLDashboard from './EnhancedOracleMLDashboard';
 
-describe(&apos;EnhancedOracleMLDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('EnhancedOracleMLDashboard', () => {
+  it('renders without crashing', () => {
     render(<EnhancedOracleMLDashboard />);
-    expect(screen.getByTestId(&apos;enhancedoraclemldashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('enhancedoraclemldashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<EnhancedOracleMLDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<EnhancedOracleMLDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

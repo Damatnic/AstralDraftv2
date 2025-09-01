@@ -4,25 +4,24 @@
  * Integrates regression models, feature engineering, and ensemble predictions
  */
 
-import { logger } from &apos;./loggingService&apos;;
-import { productionSportsDataService, type NFLPlayer } from &apos;./productionSportsDataService&apos;;
-import { oracleMachineLearningService, type FeatureVector, type MLTrainingData } from &apos;./oracleMachineLearningService&apos;;
-import { injuryTrackingService } from &apos;./injuryTrackingService&apos;;
+import { logger } from './loggingService';
+import { productionSportsDataService, type NFLPlayer } from './productionSportsDataService';
+import { oracleMachineLearningService, type FeatureVector, type MLTrainingData } from './oracleMachineLearningService';
+import { injuryTrackingService } from './injuryTrackingService';
 
 // Core ML prediction interfaces
-export type GameScript = &apos;positive&apos; | &apos;neutral&apos; | &apos;negative&apos;;
-export type VenueType = &apos;home&apos; | &apos;away&apos;;
-export type WeatherImpactType = &apos;positive&apos; | &apos;neutral&apos; | &apos;negative&apos;;
-export type RecoveryStatus = &apos;healthy&apos; | &apos;limited&apos; | &apos;questionable&apos;;
+export type GameScript = 'positive' | 'neutral' | 'negative';
+export type VenueType = 'home' | 'away';
+export type WeatherImpactType = 'positive' | 'neutral' | 'negative';
+export type RecoveryStatus = 'healthy' | 'limited' | 'questionable';
 
 export interface PlayerPredictionFeatures {
-}
   // Historical performance metrics
   recentPerformance: number[];           // Last 5 games fantasy points
   seasonAverage: number;                 // Season fantasy points per game
   carreerAverage: number;                // Career fantasy points per game
   consistencyScore: number;              // Performance volatility (0-1)
-  trendDirection: &apos;improving&apos; | &apos;declining&apos; | &apos;stable&apos;;
+  trendDirection: 'improving' | 'declining' | 'stable';
   
   // Matchup analysis
   matchupDifficulty: number;             // 0-10 scale, 10 being hardest
@@ -52,19 +51,15 @@ export interface PlayerPredictionFeatures {
   separationScore: number;               // Receiver separation metrics
   pressureRate: number;                  // For QBs
   targetQuality: number;                 // Quality of targets received
-}
 
 export interface WeatherImpact {
-}
   temperature: number;
   windSpeed: number;
   precipitation: number;
   dome: boolean;
   expectedImpact: WeatherImpactType;
-}
 
 export interface PlayerPredictionResult {
-}
   playerId: string;
   playerName: string;
   position: string;
@@ -96,59 +91,46 @@ export interface PlayerPredictionResult {
   upside: string[];
   reasoning: string;
   lastUpdated: string;
-}
 
 export interface MLPredictionRange {
-}
   expected: number;
   low: number;                           // 25th percentile
   high: number;                          // 75th percentile
   probability: number;                   // Confidence in expected value
-}
 
 export interface ModelConsensus {
-}
   linearRegression: ModelPrediction;
   randomForest: ModelPrediction;
   gradientBoosting: ModelPrediction;
   neuralNetwork: ModelPrediction;
   svm: ModelPrediction;
   ensemble: ModelPrediction;
-}
 
 export interface ModelPrediction {
-}
   prediction: number;
   confidence: number;
   weight: number;
   featureImportance: Record<string, number>;
-}
 
 export interface PlayerComparison {
-}
   player1: PlayerPredictionResult;
   player2: PlayerPredictionResult;
-  recommendation: &apos;player1&apos; | &apos;player2&apos; | &apos;toss_up&apos;;
+  recommendation: 'player1' | 'player2' | 'toss_up';
   reasoning: string;
   advantages: {
-}
     player1: string[];
     player2: string[];
   };
   riskComparison: string;
-}
 
 export interface WeeklyRankings {
-}
   position: string;
   players: PlayerPredictionResult[];
   confidence: number;
   lastUpdated: string;
   methodology: string;
-}
 
 export interface BacktestResult {
-}
   playerId: string;
   week: number;
   predicted: number;
@@ -158,10 +140,8 @@ export interface BacktestResult {
   percentageError: number;
   rank: number;
   features: PlayerPredictionFeatures;
-}
 
 export interface ModelPerformanceMetrics {
-}
   meanAbsoluteError: number;
   rootMeanSquareError: number;
   meanAbsolutePercentageError: number;
@@ -170,12 +150,9 @@ export interface ModelPerformanceMetrics {
   rankCorrelation: number;               // Spearman correlation of rankings
   calibration: number;                   // Reliability of confidence intervals
   lastValidated: string;
-}
 
 class MachineLearningPlayerPredictionService {
-}
   private readonly MODEL_WEIGHTS = {
-}
     linearRegression: 0.15,
     randomForest: 0.25,
     gradientBoosting: 0.25,
@@ -184,7 +161,6 @@ class MachineLearningPlayerPredictionService {
   };
   
   private readonly FEATURE_WEIGHTS = {
-}
     recentPerformance: 0.25,
     matchup: 0.20,
     teamContext: 0.15,
@@ -206,17 +182,14 @@ class MachineLearningPlayerPredictionService {
     week: number, 
     season: number = 2024
   ): Promise<PlayerPredictionResult> {
-}
     const cacheKey = `ml_prediction_${playerId}_${week}_${season}`;
     const cached = this.getCached(cacheKey);
     if (cached) return cached;
 
     try {
-}
       // Gather comprehensive player data
       const player = await productionSportsDataService.getPlayerDetails(playerId);
       if (!player) {
-}
         throw new Error(`Player ${playerId} not found`);
       }
 
@@ -244,14 +217,12 @@ class MachineLearningPlayerPredictionService {
       const analysis = await this.generatePredictionAnalysis(features, modelPredictions, player);
       
       const result: PlayerPredictionResult = {
-}
         playerId,
         playerName: player.name,
         position: player.position,
         team: player.team,
         week,
         fantasyPoints: {
-}
           expected: modelPredictions.ensemble.prediction,
           low: floor,
           high: ceiling,
@@ -274,7 +245,6 @@ class MachineLearningPlayerPredictionService {
       return result;
 
     } catch (error) {
-}
       console.error(`Failed to generate ML prediction for player ${playerId}:`, error);
       throw error;
     }
@@ -289,13 +259,11 @@ class MachineLearningPlayerPredictionService {
     season: number = 2024,
     limit: number = 50
   ): Promise<WeeklyRankings> {
-}
     const cacheKey = `weekly_rankings_${position}_${week}_${season}_${limit}`;
     const cached = this.getCached(cacheKey);
     if (cached) return cached;
 
     try {
-}
       // Get all players for position
       const players = await this.getPlayersByPosition(position);
       
@@ -314,19 +282,17 @@ class MachineLearningPlayerPredictionService {
       const confidence = this.calculateRankingConfidence(rankedPredictions);
       
       const rankings: WeeklyRankings = {
-}
         position,
         players: rankedPredictions,
         confidence,
         lastUpdated: new Date().toISOString(),
-        methodology: &apos;Ensemble ML models with recent performance weighting&apos;
+        methodology: 'Ensemble ML models with recent performance weighting'
       };
 
       this.setCached(cacheKey, rankings, 60 * 60 * 1000); // Cache for 1 hour
       return rankings;
 
     } catch (error) {
-}
       console.error(`Failed to generate weekly rankings for ${position}:`, error);
       throw error;
     }
@@ -341,16 +307,13 @@ class MachineLearningPlayerPredictionService {
     week: number,
     season: number = 2024
   ): Promise<PlayerComparison> {
-}
     try {
-}
       const [prediction1, prediction2] = await Promise.all([
         this.generatePlayerPrediction(playerId1, week, season),
         this.generatePlayerPrediction(playerId2, week, season)
       ]);
 
       const comparison = this.analyzePlayerComparison(prediction1, prediction2) as {
-}
         recommendation: string;
         reasoning: string;
         advantages: string[];
@@ -358,7 +321,6 @@ class MachineLearningPlayerPredictionService {
       };
 
       return {
-}
         player1: prediction1,
         player2: prediction2,
         recommendation: comparison.recommendation,
@@ -368,7 +330,6 @@ class MachineLearningPlayerPredictionService {
       };
 
     } catch (error) {
-}
       logger.error(`Failed to compare players ${playerId1} vs ${playerId2}:`, error);
       throw error;
     }
@@ -382,13 +343,10 @@ class MachineLearningPlayerPredictionService {
     endWeek: number,
     season: number = 2023
   ): Promise<ModelPerformanceMetrics> {
-}
     try {
-}
       const backtestResults: BacktestResult[] = [];
       
       for (let week = startWeek; week <= endWeek; week++) {
-}
         const weekResults = await this.backtestWeek(week, season);
         backtestResults.push(...weekResults);
       }
@@ -399,8 +357,7 @@ class MachineLearningPlayerPredictionService {
       return metrics;
 
     } catch (error) {
-}
-      console.error(&apos;Failed to backtest model performance:&apos;, error);
+      console.error('Failed to backtest model performance:', error);
       throw error;
     }
   }
@@ -409,15 +366,12 @@ class MachineLearningPlayerPredictionService {
    * Update model with new prediction outcomes
    */
   async updateModelWithOutcomes(outcomes: BacktestResult[]): Promise<void> {
-}
     try {
-}
       // Convert backtest results to ML training data
       const trainingData: MLTrainingData[] = outcomes.map((outcome: any) => ({
-}
         predictionId: `${outcome.playerId}_${outcome.week}`,
         week: outcome.week,
-        type: &apos;PLAYER_PERFORMANCE&apos;,
+        type: 'PLAYER_PERFORMANCE',
         confidence: 0.8, // Default confidence for training
         oracleChoice: Math.round(outcome.predicted),
         actualResult: Math.round(outcome.actual),
@@ -428,7 +382,6 @@ class MachineLearningPlayerPredictionService {
 
       // Update ML service with new training data
       for (const data of trainingData) {
-}
         await oracleMachineLearningService.recordPredictionOutcome(
           data.predictionId,
           data.week,
@@ -443,8 +396,7 @@ class MachineLearningPlayerPredictionService {
       logger.info(`✅ Updated ML models with ${outcomes.length} new outcomes`);
 
     } catch (error) {
-}
-      logger.error(&apos;Failed to update model with outcomes:&apos;, error);
+      logger.error('Failed to update model with outcomes:', error);
     }
   }
 
@@ -455,9 +407,7 @@ class MachineLearningPlayerPredictionService {
     week: number, 
     season: number
   ): Promise<PlayerPredictionFeatures> {
-}
     try {
-}
       // Get recent performance data
       const recentPerformance = await this.getRecentPerformance(player.id, 5);
       
@@ -475,7 +425,6 @@ class MachineLearningPlayerPredictionService {
 
       // Cast matchupData to expected interface
       const matchup = matchupData as {
-}
         difficulty: number;
         positionRank: number;
         targetShare: number;
@@ -495,7 +444,6 @@ class MachineLearningPlayerPredictionService {
       };
 
       return {
-}
         recentPerformance,
         seasonAverage: player.stats.fantasyPoints || 0,
         carreerAverage: await this.getCareerAverage(player.id),
@@ -523,7 +471,6 @@ class MachineLearningPlayerPredictionService {
       };
 
     } catch (error) {
-}
       logger.error(`Failed to extract features for player ${player.id}:`, error);
       // Return default features if extraction fails
       return this.getDefaultFeatures(player);
@@ -534,7 +481,6 @@ class MachineLearningPlayerPredictionService {
     features: PlayerPredictionFeatures, 
     position: string
   ): Promise<ModelConsensus> {
-}
     // Convert features to format expected by models
     const modelInput = this.prepareModelInput(features, position);
     
@@ -563,7 +509,6 @@ class MachineLearningPlayerPredictionService {
     ]);
 
     return {
-}
       linearRegression: linearPrediction,
       randomForest: forestPrediction,
       gradientBoosting: boostingPrediction,
@@ -578,34 +523,29 @@ class MachineLearningPlayerPredictionService {
     position: string,
     models: ModelConsensus
   ): Promise<Partial<PlayerPredictionResult>> {
-}
     const basePrediction = models.ensemble.prediction;
     
     switch (position) {
-}
-      case &apos;QB&apos;:
+      case 'QB':
         return {
-}
           passingYards: this.predictPassingYards(features, basePrediction),
           passingTouchdowns: this.predictPassingTDs(features, basePrediction),
-          rushingYards: this.predictRushingYards(features, basePrediction, &apos;QB&apos;),
-          rushingTouchdowns: this.predictRushingTDs(features, basePrediction, &apos;QB&apos;)
+          rushingYards: this.predictRushingYards(features, basePrediction, 'QB'),
+          rushingTouchdowns: this.predictRushingTDs(features, basePrediction, 'QB')
         };
         
-      case &apos;RB&apos;:
+      case 'RB':
         return {
-}
-          rushingYards: this.predictRushingYards(features, basePrediction, &apos;RB&apos;),
-          rushingTouchdowns: this.predictRushingTDs(features, basePrediction, &apos;RB&apos;),
-          receivingYards: this.predictReceivingYards(features, basePrediction, &apos;RB&apos;),
-          receivingTouchdowns: this.predictReceivingTDs(features, basePrediction, &apos;RB&apos;),
-          receptions: this.predictReceptions(features, basePrediction, &apos;RB&apos;)
+          rushingYards: this.predictRushingYards(features, basePrediction, 'RB'),
+          rushingTouchdowns: this.predictRushingTDs(features, basePrediction, 'RB'),
+          receivingYards: this.predictReceivingYards(features, basePrediction, 'RB'),
+          receivingTouchdowns: this.predictReceivingTDs(features, basePrediction, 'RB'),
+          receptions: this.predictReceptions(features, basePrediction, 'RB')
         };
         
-      case &apos;WR&apos;:
-      case &apos;TE&apos;:
+      case 'WR':
+      case 'TE':
         return {
-}
           receivingYards: this.predictReceivingYards(features, basePrediction, position),
           receivingTouchdowns: this.predictReceivingTDs(features, basePrediction, position),
           receptions: this.predictReceptions(features, basePrediction, position)
@@ -621,71 +561,58 @@ class MachineLearningPlayerPredictionService {
     models: ModelConsensus,
     player: NFLPlayer
   ): Promise<{
-}
     keyFactors: string[];
     riskFactors: string[];
     upside: string[];
     reasoning: string;
   }> {
-}
     const keyFactors: string[] = [];
     const riskFactors: string[] = [];
     const upside: string[] = [];
 
     // Analyze key performance drivers
     if (features.recentPerformance.length > 0) {
-}
       const recentAvg = features.recentPerformance.reduce((a, b) => a + b, 0) / features.recentPerformance.length;
       if (recentAvg > features.seasonAverage * 1.1) {
-}
         keyFactors.push(`Strong recent form (${recentAvg.toFixed(1)} avg last 5 games)`);
       }
     }
 
     // Matchup analysis
     if (features.matchupDifficulty <= 3) {
-}
-      keyFactors.push(&apos;Favorable matchup opportunity&apos;);
-      upside.push(&apos;Soft defensive matchup could lead to increased volume&apos;);
+      keyFactors.push('Favorable matchup opportunity');
+      upside.push('Soft defensive matchup could lead to increased volume');
     } else if (features.matchupDifficulty >= 7) {
-}
-      riskFactors.push(&apos;Challenging defensive matchup&apos;);
+      riskFactors.push('Challenging defensive matchup');
     }
 
     // Injury concerns
     if (features.injuryRisk > 0.3) {
-}
       riskFactors.push(`Elevated injury risk (${(features.injuryRisk * 100).toFixed(0)}%)`);
     }
 
     // Weather factors
-    if (features.weather.expectedImpact === &apos;negative&apos;) {
-}
-      riskFactors.push(&apos;Adverse weather conditions expected&apos;);
-    } else if (features.weather.expectedImpact === &apos;positive&apos;) {
-}
-      upside.push(&apos;Weather conditions favor offensive performance&apos;);
+    if (features.weather.expectedImpact === 'negative') {
+      riskFactors.push('Adverse weather conditions expected');
+    } else if (features.weather.expectedImpact === 'positive') {
+      upside.push('Weather conditions favor offensive performance');
     }
 
     // Game script considerations
-    if (features.gameScript === &apos;positive&apos;) {
-}
-      keyFactors.push(&apos;Positive game script expected&apos;);
-      upside.push(&apos;Team likely to have increased offensive opportunities&apos;);
+    if (features.gameScript === 'positive') {
+      keyFactors.push('Positive game script expected');
+      upside.push('Team likely to have increased offensive opportunities');
     }
 
     // Model consensus analysis
     const modelVariance = this.calculateModelVariance(models);
     if (modelVariance > 3) {
-}
-      riskFactors.push(&apos;High model disagreement indicates uncertainty&apos;);
+      riskFactors.push('High model disagreement indicates uncertainty');
     } else {
-}
-      keyFactors.push(&apos;Strong model consensus on projection&apos;);
+      keyFactors.push('Strong model consensus on projection');
     }
 
     const reasoning = this.generateReasoningText(features, models, player, {
-}
       keyFactors,
       riskFactors,
 //       upside
@@ -697,10 +624,8 @@ class MachineLearningPlayerPredictionService {
   // Model implementations (simplified for production)
   
   private async runLinearRegression(input: any): Promise<ModelPrediction> {
-}
     // Simplified linear regression model
     const weights = {
-}
       recentPerformance: 0.4,
       seasonAverage: 0.3,
       matchup: 0.2,
@@ -708,12 +633,10 @@ class MachineLearningPlayerPredictionService {
     };
     
     const prediction = Object.entries(weights).reduce((sum, [key, weight]) => {
-}
       return sum + (input[key] || 0) * weight;
     }, 0);
 
     return {
-}
       prediction: Math.max(0, prediction),
       confidence: 0.75,
       weight: this.MODEL_WEIGHTS.linearRegression,
@@ -722,13 +645,11 @@ class MachineLearningPlayerPredictionService {
   }
 
   private async runRandomForest(input: any): Promise<ModelPrediction> {
-}
     // Simulate random forest with multiple decision trees
     const trees = 100;
     const predictions: number[] = [];
     
     for (let i = 0; i < trees; i++) {
-}
       // Simulate tree prediction with randomness
       const treePrediction = input.recentPerformance * (0.8 + Math.random() * 0.4) +
                            input.matchup * (0.15 + Math.random() * 0.1) +
@@ -740,12 +661,10 @@ class MachineLearningPlayerPredictionService {
     const confidence = 1 - (Math.sqrt(predictions.reduce((sum, p) => sum + Math.pow(p - prediction, 2), 0) / predictions.length) / prediction);
 
     return {
-}
       prediction,
       confidence: Math.max(0.5, Math.min(0.95, confidence)),
       weight: this.MODEL_WEIGHTS.randomForest,
       featureImportance: {
-}
         recentPerformance: 0.35,
         matchup: 0.25,
         teamContext: 0.20,
@@ -756,14 +675,12 @@ class MachineLearningPlayerPredictionService {
   }
 
   private async runGradientBoosting(input: any): Promise<ModelPrediction> {
-}
     // Simulate gradient boosting with sequential learning
     let prediction = input.seasonAverage || 12; // Base prediction
     
     // Simulate boosting iterations
     const iterations = 50;
     for (let i = 0; i < iterations; i++) {
-}
       const learningRate = 0.1;
       const residual = input.recentPerformance - prediction;
       prediction += learningRate * residual * (1 - i / iterations); // Diminishing learning rate
@@ -774,12 +691,10 @@ class MachineLearningPlayerPredictionService {
     prediction *= (1 + (input.teamContext || 0) * 0.05);
 
     return {
-}
       prediction: Math.max(0, prediction),
       confidence: 0.85,
       weight: this.MODEL_WEIGHTS.gradientBoosting,
       featureImportance: {
-}
         recentPerformance: 0.40,
         seasonAverage: 0.25,
         matchup: 0.20,
@@ -789,7 +704,6 @@ class MachineLearningPlayerPredictionService {
   }
 
   private async runNeuralNetwork(input: any): Promise<ModelPrediction> {
-}
     // Simulate neural network with hidden layers
     const inputLayer = [
       input.recentPerformance || 0,
@@ -801,7 +715,6 @@ class MachineLearningPlayerPredictionService {
     
     // Hidden layer 1 (5 neurons)
     const hiddenLayer1 = inputLayer.map((val, i) => {
-}
       const weight = 0.5 + Math.sin(i) * 0.3; // Simulate learned weights
       return Math.max(0, val * weight); // ReLU activation
     });
@@ -815,18 +728,15 @@ class MachineLearningPlayerPredictionService {
     
     // Output layer
     const prediction = hiddenLayer2.reduce((sum, val, i) => {
-}
       const outputWeight = [0.4, 0.4, 0.2][i];
       return sum + val * outputWeight;
     }, 0);
 
     return {
-}
       prediction: Math.max(0, prediction),
       confidence: 0.78,
       weight: this.MODEL_WEIGHTS.neuralNetwork,
       featureImportance: {
-}
         recentPerformance: 0.30,
         seasonAverage: 0.25,
         matchup: 0.20,
@@ -837,7 +747,6 @@ class MachineLearningPlayerPredictionService {
   }
 
   private async runSVM(input: any): Promise<ModelPrediction> {
-}
     // Simulate Support Vector Machine regression
     const supportVectors = [
       { performance: 18, matchup: 6, output: 22 },
@@ -852,7 +761,6 @@ class MachineLearningPlayerPredictionService {
     let totalWeight = 0;
     
     supportVectors.forEach((sv: any) => {
-}
       const distance = Math.pow(input.recentPerformance - sv.performance, 2) + 
                       Math.pow(input.matchup - sv.matchup, 2);
       const similarity = Math.exp(-gamma * distance);
@@ -863,12 +771,10 @@ class MachineLearningPlayerPredictionService {
     prediction = totalWeight > 0 ? prediction / totalWeight : input.seasonAverage || 12;
 
     return {
-}
       prediction: Math.max(0, prediction),
       confidence: 0.80,
       weight: this.MODEL_WEIGHTS.svm,
       featureImportance: {
-}
         recentPerformance: 0.45,
         matchup: 0.35,
         seasonAverage: 0.20
@@ -877,29 +783,23 @@ class MachineLearningPlayerPredictionService {
   }
 
   private calculateEnsemblePrediction(predictions: ModelPrediction[]): ModelPrediction {
-}
     const weightedPrediction = predictions.reduce((sum, model) => {
-}
       return sum + model.prediction * model.weight;
     }, 0);
     
     const weightedConfidence = predictions.reduce((sum, model) => {
-}
       return sum + model.confidence * model.weight;
     }, 0);
     
     // Combine feature importance across models
     const combinedImportance: Record<string, number> = {};
     predictions.forEach((model: any) => {
-}
       Object.entries(model.featureImportance).forEach(([feature, importance]) => {
-}
         combinedImportance[feature] = (combinedImportance[feature] || 0) + importance * model.weight;
       });
     });
 
     return {
-}
       prediction: weightedPrediction,
       confidence: weightedConfidence,
       weight: 1.0,
@@ -910,16 +810,13 @@ class MachineLearningPlayerPredictionService {
   // Additional helper methods for features, predictions, and analysis...
   
   private async getRecentPerformance(playerId: string, games: number): Promise<number[]> {
-}
     // Mock implementation - would fetch from database
     return Array.from({ length: games }, () => Math.random() * 20 + 5);
   }
 
   private async getMatchupAnalysis(_player: NFLPlayer, _week: number, _season: number): Promise<unknown> {
-}
     // Mock implementation - would use enhanced matchup analytics service
     return {
-}
       difficulty: Math.random() * 10,
       positionRank: Math.floor(Math.random() * 32) + 1,
       targetShare: Math.random() * 0.3 + 0.1,
@@ -928,42 +825,38 @@ class MachineLearningPlayerPredictionService {
       teamOffensiveRank: Math.floor(Math.random() * 32) + 1,
       teamPaceRank: Math.floor(Math.random() * 32) + 1,
       passingRatio: Math.random() * 0.3 + 0.5,
-      gameScript: [&apos;positive&apos;, &apos;neutral&apos;, &apos;negative&apos;][Math.floor(Math.random() * 3)] as &apos;positive&apos; | &apos;neutral&apos; | &apos;negative&apos;,
-      venue: Math.random() > 0.5 ? &apos;home&apos; : &apos;away&apos; as &apos;home&apos; | &apos;away&apos;,
+      gameScript: ['positive', 'neutral', 'negative'][Math.floor(Math.random() * 3)] as 'positive' | 'neutral' | 'negative',
+      venue: Math.random() > 0.5 ? 'home' : 'away' as 'home' | 'away',
       restDays: Math.floor(Math.random() * 10) + 3,
       altitude: 0
     };
   }
 
   private async getWeatherImpact(team: string, _week: number, _season: number): Promise<WeatherImpact> {
-}
     // Mock implementation - would fetch weather data
     return {
-}
       temperature: Math.random() * 40 + 40,
       windSpeed: Math.random() * 20,
       precipitation: Math.random() * 0.5,
-      dome: [&apos;NO&apos;, &apos;ATL&apos;, &apos;MIN&apos;, &apos;DET&apos;, &apos;IND&apos;, &apos;ARI&apos;, &apos;LV&apos;, &apos;LAR&apos;].includes(team),
-      expectedImpact: [&apos;positive&apos;, &apos;neutral&apos;, &apos;negative&apos;][Math.floor(Math.random() * 3)] as &apos;positive&apos; | &apos;neutral&apos; | &apos;negative&apos;
+      dome: ['NO', 'ATL', 'MIN', 'DET', 'IND', 'ARI', 'LV', 'LAR'].includes(team),
+      expectedImpact: ['positive', 'neutral', 'negative'][Math.floor(Math.random() * 3)] as 'positive' | 'neutral' | 'negative'
     };
   }
 
-  private calculateTrendDirection(performance: number[]): &apos;improving&apos; | &apos;declining&apos; | &apos;stable&apos; {
-}
-    if (performance.length < 3) return &apos;stable&apos;;
+  private calculateTrendDirection(performance: number[]): 'improving' | 'declining' | 'stable' {
+    if (performance.length < 3) return 'stable';
     
     const recent = performance.slice(-3).reduce((a, b) => a + b, 0) / 3;
     const earlier = performance.slice(0, -3).reduce((a, b) => a + b, 0) / (performance.length - 3);
     
     const improvement = (recent - earlier) / earlier;
     
-    if (improvement > 0.15) return &apos;improving&apos;;
-    if (improvement < -0.15) return &apos;declining&apos;;
-    return &apos;stable&apos;;
+    if (improvement > 0.15) return 'improving';
+    if (improvement < -0.15) return 'declining';
+    return 'stable';
   }
 
   private calculateConsistency(performance: number[]): number {
-}
     if (performance.length === 0) return 0.5;
     
     const mean = performance.reduce((a, b) => a + b, 0) / performance.length;
@@ -979,7 +872,6 @@ class MachineLearningPlayerPredictionService {
     consistency: number,
     matchupDifficulty: number
   ): { ceiling: number; floor: number } {
-}
     const baseVolatility = expectedPoints * 0.3; // 30% base volatility
     const consistencyMultiplier = 2 - consistency; // Less consistent = more volatile
     const matchupMultiplier = 1 + (matchupDifficulty - 5) * 0.1; // Harder matchups = more volatile
@@ -987,14 +879,12 @@ class MachineLearningPlayerPredictionService {
     const totalVolatility = baseVolatility * consistencyMultiplier * matchupMultiplier;
     
     return {
-}
       ceiling: expectedPoints + totalVolatility * 1.5, // 90th percentile
       floor: Math.max(0, expectedPoints - totalVolatility) // 10th percentile
     };
   }
 
   private calculateVolatility(features: PlayerPredictionFeatures): number {
-}
     let volatility = 1 - features.consistencyScore;
     
     // Adjust for matchup difficulty
@@ -1004,8 +894,7 @@ class MachineLearningPlayerPredictionService {
     volatility *= (1 + features.injuryRisk * 0.5);
     
     // Adjust for weather
-    if (features.weather.expectedImpact === &apos;negative&apos;) {
-}
+    if (features.weather.expectedImpact === 'negative') {
       volatility *= 1.2;
     }
     
@@ -1015,7 +904,6 @@ class MachineLearningPlayerPredictionService {
   // Position-specific prediction methods
 
   private predictPassingYards(features: PlayerPredictionFeatures, basePrediction: number): MLPredictionRange {
-}
     const baseYards = basePrediction * 20; // Rough conversion from fantasy points
     const weatherAdjustment = features.weather.windSpeed > 15 ? 0.9 : 1.0;
     const matchupAdjustment = 1 + (5 - features.matchupDifficulty) * 0.05;
@@ -1023,7 +911,6 @@ class MachineLearningPlayerPredictionService {
     const expected = baseYards * weatherAdjustment * matchupAdjustment;
     
     return {
-}
       expected: Math.round(expected),
       low: Math.round(expected * 0.8),
       high: Math.round(expected * 1.2),
@@ -1032,14 +919,12 @@ class MachineLearningPlayerPredictionService {
   }
 
   private predictPassingTDs(features: PlayerPredictionFeatures, basePrediction: number): MLPredictionRange {
-}
     const baseTDs = basePrediction * 0.15; // Rough conversion
     const redZoneAdjustment = 1 + features.redZoneTargets * 0.1;
     
     const expected = baseTDs * redZoneAdjustment;
     
     return {
-}
       expected: Math.round(expected * 10) / 10,
       low: Math.floor(expected),
       high: Math.ceil(expected * 1.5),
@@ -1048,15 +933,13 @@ class MachineLearningPlayerPredictionService {
   }
 
   private predictRushingYards(features: PlayerPredictionFeatures, basePrediction: number, position: string): MLPredictionRange {
-}
-    const multiplier = position === &apos;RB&apos; ? 6 : 2; // RBs get more rushing yards per fantasy point
+    const multiplier = position === 'RB' ? 6 : 2; // RBs get more rushing yards per fantasy point
     const baseYards = basePrediction * multiplier;
     const matchupAdjustment = 1 + (5 - features.matchupDifficulty) * 0.08;
     
     const expected = baseYards * matchupAdjustment;
     
     return {
-}
       expected: Math.round(expected),
       low: Math.round(expected * 0.7),
       high: Math.round(expected * 1.3),
@@ -1065,15 +948,13 @@ class MachineLearningPlayerPredictionService {
   }
 
   private predictRushingTDs(features: PlayerPredictionFeatures, basePrediction: number, position: string): MLPredictionRange {
-}
-    const multiplier = position === &apos;RB&apos; ? 0.08 : 0.02;
+    const multiplier = position === 'RB' ? 0.08 : 0.02;
     const baseTDs = basePrediction * multiplier;
     const redZoneAdjustment = 1 + features.redZoneTargets * 0.15;
     
     const expected = baseTDs * redZoneAdjustment;
     
     return {
-}
       expected: Math.round(expected * 10) / 10,
       low: 0,
       high: Math.ceil(expected * 2),
@@ -1082,16 +963,12 @@ class MachineLearningPlayerPredictionService {
   }
 
   private predictReceivingYards(features: PlayerPredictionFeatures, basePrediction: number, position: string): MLPredictionRange {
-}
     let multiplier: number;
-    if (position === &apos;WR&apos;) {
-}
+    if (position === 'WR') {
       multiplier = 7;
-    } else if (position === &apos;TE&apos;) {
-}
+    } else if (position === 'TE') {
       multiplier = 5;
     } else {
-}
       multiplier = 3;
     }
     
@@ -1102,7 +979,6 @@ class MachineLearningPlayerPredictionService {
     const expected = baseYards * targetShareAdjustment * weatherAdjustment;
     
     return {
-}
       expected: Math.round(expected),
       low: Math.round(expected * 0.75),
       high: Math.round(expected * 1.25),
@@ -1111,16 +987,12 @@ class MachineLearningPlayerPredictionService {
   }
 
   private predictReceivingTDs(features: PlayerPredictionFeatures, basePrediction: number, position: string): MLPredictionRange {
-}
     let multiplier: number;
-    if (position === &apos;WR&apos;) {
-}
+    if (position === 'WR') {
       multiplier = 0.06;
-    } else if (position === &apos;TE&apos;) {
-}
+    } else if (position === 'TE') {
       multiplier = 0.08;
     } else {
-}
       multiplier = 0.03;
     }
     
@@ -1130,7 +1002,6 @@ class MachineLearningPlayerPredictionService {
     const expected = baseTDs * redZoneAdjustment;
     
     return {
-}
       expected: Math.round(expected * 10) / 10,
       low: 0,
       high: Math.ceil(expected * 2),
@@ -1139,16 +1010,12 @@ class MachineLearningPlayerPredictionService {
   }
 
   private predictReceptions(features: PlayerPredictionFeatures, basePrediction: number, position: string): MLPredictionRange {
-}
     let multiplier: number;
-    if (position === &apos;WR&apos;) {
-}
+    if (position === 'WR') {
       multiplier = 0.8;
-    } else if (position === &apos;TE&apos;) {
-}
+    } else if (position === 'TE') {
       multiplier = 0.6;
     } else {
-}
       multiplier = 0.4;
     }
     
@@ -1158,7 +1025,6 @@ class MachineLearningPlayerPredictionService {
     const expected = baseReceptions * targetShareAdjustment;
     
     return {
-}
       expected: Math.round(expected),
       low: Math.round(expected * 0.8),
       high: Math.round(expected * 1.2),
@@ -1169,33 +1035,28 @@ class MachineLearningPlayerPredictionService {
   // Utility methods
 
   private async getPlayersByPosition(position: string): Promise<{ id: string; name: string }[]> {
-}
     // Mock implementation - would fetch from database
     return Array.from({ length: 100 }, (_, i) => ({
-}
       id: `${position}_${i}`,
       name: `${position} Player ${i}`
     }));
   }
 
   private async getCareerAverage(_playerId: string): Promise<number> {
-}
     // Mock implementation
     return Math.random() * 10 + 8;
   }
 
   private calculateInjuryRisk(injuryData: unknown): number {
-}
     const injury = injuryData as {status?: string} | undefined;
     if (!injury?.status) return 0.1;
     
     switch (injury.status) {
-}
-      case &apos;out&apos;:
+      case 'out':
         return 0.8;
-      case &apos;questionable&apos;:
+      case 'questionable':
         return 0.4;
-      case &apos;doubtful&apos;:
+      case 'doubtful':
         return 0.6;
       default:
         return 0.1;
@@ -1203,14 +1064,12 @@ class MachineLearningPlayerPredictionService {
   }
 
   private getDefaultFeatures(player: NFLPlayer): PlayerPredictionFeatures {
-}
     return {
-}
       recentPerformance: [12, 15, 10, 18, 14],
       seasonAverage: player.stats.fantasyPoints || 12,
       carreerAverage: 12,
       consistencyScore: 0.7,
-      trendDirection: &apos;stable&apos;,
+      trendDirection: 'stable',
       matchupDifficulty: 5,
       positionRank: 16,
       targetShare: 0.2,
@@ -1219,20 +1078,19 @@ class MachineLearningPlayerPredictionService {
       teamOffensiveRank: 16,
       teamPaceRank: 16,
       teamPassingRatio: 0.6,
-      gameScript: &apos;neutral&apos;,
+      gameScript: 'neutral',
       weather: {
-}
         temperature: 70,
         windSpeed: 5,
         precipitation: 0,
         dome: false,
-        expectedImpact: &apos;neutral&apos;
+        expectedImpact: 'neutral'
       },
-      venue: &apos;home&apos;,
+      venue: 'home',
       restDays: 7,
       altitude: 0,
       injuryRisk: 0.1,
-      recoveryStatus: &apos;healthy&apos;,
+      recoveryStatus: 'healthy',
       airYards: 0,
       separationScore: 0,
       pressureRate: 0,
@@ -1240,31 +1098,25 @@ class MachineLearningPlayerPredictionService {
     };
   }
 
-  private mapInjuryStatus(status?: string): &apos;healthy&apos; | &apos;limited&apos; | &apos;questionable&apos; {
-}
-    if (!status || status === &apos;healthy&apos;) return &apos;healthy&apos;;
-    if (status === &apos;questionable&apos;) return &apos;questionable&apos;;
-    return &apos;limited&apos;;
+  private mapInjuryStatus(status?: string): 'healthy' | 'limited' | 'questionable' {
+    if (!status || status === 'healthy') return 'healthy';
+    if (status === 'questionable') return 'questionable';
+    return 'limited';
   }
 
   private prepareModelInput(features: PlayerPredictionFeatures, _position: string): unknown {
-}
     const recentAvg = features.recentPerformance.reduce((a, b) => a + b, 0) / features.recentPerformance.length;
     
     let weatherScore: number;
-    if (features.weather.expectedImpact === &apos;positive&apos;) {
-}
+    if (features.weather.expectedImpact === 'positive') {
       weatherScore = 1;
-    } else if (features.weather.expectedImpact === &apos;negative&apos;) {
-}
+    } else if (features.weather.expectedImpact === 'negative') {
       weatherScore = -1;
     } else {
-}
       weatherScore = 0;
     }
     
     return {
-}
       recentPerformance: recentAvg,
       seasonAverage: features.seasonAverage,
       matchup: 10 - features.matchupDifficulty, // Invert so higher is better
@@ -1274,7 +1126,6 @@ class MachineLearningPlayerPredictionService {
   }
 
   private calculateRankingConfidence(predictions: PlayerPredictionResult[]): number {
-}
     const avgConfidence = predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length;
     const confidenceVariance = predictions.reduce((sum, p) => sum + Math.pow(p.confidence - avgConfidence, 2), 0) / predictions.length;
     
@@ -1283,41 +1134,32 @@ class MachineLearningPlayerPredictionService {
   }
 
   private analyzePlayerComparison(p1: PlayerPredictionResult, p2: PlayerPredictionResult): unknown {
-}
     const pointDiff = p1.fantasyPoints.expected - p2.fantasyPoints.expected;
     const confidenceDiff = p1.confidence - p2.confidence;
     
-    let recommendation: &apos;player1&apos; | &apos;player2&apos; | &apos;toss_up&apos;;
+    let recommendation: 'player1' | 'player2' | 'toss_up';
     
     if (Math.abs(pointDiff) < 1 && Math.abs(confidenceDiff) < 0.1) {
-}
-      recommendation = &apos;toss_up&apos;;
+      recommendation = 'toss_up';
     } else if (pointDiff > 0) {
-}
-      recommendation = &apos;player1&apos;;
+      recommendation = 'player1';
     } else {
-}
-      recommendation = &apos;player2&apos;;
+      recommendation = 'player2';
     }
     
     let recommendedPlayerName: string;
-    if (recommendation === &apos;player1&apos;) {
-}
+    if (recommendation === 'player1') {
       recommendedPlayerName = p1.playerName;
-    } else if (recommendation === &apos;player2&apos;) {
-}
+    } else if (recommendation === 'player2') {
       recommendedPlayerName = p2.playerName;
     } else {
-}
-      recommendedPlayerName = &apos;Close projection&apos;;
+      recommendedPlayerName = 'Close projection';
     }
     
     return {
-}
       recommendation,
-      reasoning: `${recommendedPlayerName} ${recommendation !== &apos;toss_up&apos; ? &apos;has the edge&apos; : &apos;between both players&apos;}`,
+      reasoning: `${recommendedPlayerName} ${recommendation !== 'toss_up' ? 'has the edge' : 'between both players'}`,
       advantages: {
-}
         player1: p1.keyFactors.slice(0, 2),
         player2: p2.keyFactors.slice(0, 2)
       },
@@ -1326,7 +1168,6 @@ class MachineLearningPlayerPredictionService {
   }
 
   private calculateModelVariance(models: ModelConsensus): number {
-}
     const predictions = [
       models.linearRegression.prediction,
       models.randomForest.prediction,
@@ -1347,31 +1188,27 @@ class MachineLearningPlayerPredictionService {
     player: NFLPlayer,
     analysis: any
   ): string {
-}
     const prediction = models.ensemble.prediction;
     const confidence = Math.round(models.ensemble.confidence * 100);
     
-    const riskFactorText = analysis.riskFactors.length > 0 ? `Monitor ${analysis.riskFactors[0]}.` : &apos;&apos;;
-    const upsideText = analysis.upside.length > 0 ? analysis.upside[0] + &apos;.&apos; : &apos;&apos;;
+    const riskFactorText = analysis.riskFactors.length > 0 ? `Monitor ${analysis.riskFactors[0]}.` : '';
+    const upsideText = analysis.upside.length > 0 ? analysis.upside[0] + '.' : '';
     
     return `${player.name} projects for ${prediction.toFixed(1)} fantasy points with ${confidence}% confidence. ` +
-           `Key factors include ${analysis.keyFactors.slice(0, 2).join(&apos; and &apos;)}. ` +
+           `Key factors include ${analysis.keyFactors.slice(0, 2).join(' and ')}. ` +
            `${riskFactorText} ` +
            `${upsideText}`;
   }
 
   private async backtestWeek(week: number, _season: number): Promise<BacktestResult[]> {
-}
     // Mock implementation for backtesting
     const results: BacktestResult[] = [];
     
     for (let i = 0; i < 50; i++) { // Mock 50 players
-}
       const predicted = Math.random() * 20 + 5;
       const actual = predicted + (Math.random() - 0.5) * 8; // Add noise
       
       results.push({
-}
         playerId: `player_${i}`,
         week,
         predicted,
@@ -1388,7 +1225,6 @@ class MachineLearningPlayerPredictionService {
   }
 
   private calculatePerformanceMetrics(results: BacktestResult[]): ModelPerformanceMetrics {
-}
     const mae = results.reduce((sum, r) => sum + r.absoluteError, 0) / results.length;
     const rmse = Math.sqrt(results.reduce((sum, r) => sum + Math.pow(r.error, 2), 0) / results.length);
     const mape = results.reduce((sum, r) => sum + r.percentageError, 0) / results.length;
@@ -1402,7 +1238,6 @@ class MachineLearningPlayerPredictionService {
     const accuracy = results.filter((r: any) => r.percentageError <= 20).length / results.length;
     
     return {
-}
       meanAbsoluteError: mae,
       rootMeanSquareError: rmse,
       meanAbsolutePercentageError: mape,
@@ -1415,9 +1250,7 @@ class MachineLearningPlayerPredictionService {
   }
 
   private convertToFeatureVector(features: PlayerPredictionFeatures): FeatureVector {
-}
     return {
-}
       playerRecentPerformance: features.recentPerformance,
       playerPositionRank: features.positionRank,
       playerInjuryRisk: features.injuryRisk,
@@ -1425,7 +1258,7 @@ class MachineLearningPlayerPredictionService {
       playerTargetShare: features.targetShare,
       teamOffensiveRank: features.teamOffensiveRank,
       teamDefensiveRank: 20, // Mock value
-      teamHomeAdvantage: features.venue === &apos;home&apos; ? 1 : 0,
+      teamHomeAdvantage: features.venue === 'home' ? 1 : 0,
       teamRecentForm: [0.6, 0.7, 0.8], // Mock recent form
       weatherConditions: [features.weather.temperature, features.weather.windSpeed, features.weather.precipitation],
       gameImportance: 5, // Mock game importance
@@ -1435,26 +1268,22 @@ class MachineLearningPlayerPredictionService {
       seasonalTrends: [0.1, 0.2, 0.15], // Mock seasonal trends
       venuePerformance: [features.seasonAverage], // Mock venue performance
       timeOfSeason: 0.5, // Mock time of season
-      weekType: &apos;REGULAR&apos;,
+      weekType: 'REGULAR',
       marketConfidence: features.consistencyScore
     };
   }
 
   // Cache management
   private getCached(key: string): any {
-}
     const cached = this.cache.get(key);
     if (cached && Date.now() < cached.expires) {
-}
       return cached.data;
     }
     return null;
   }
 
   private setCached(key: string, data: any, ttl: number = this.CACHE_TTL): void {
-}
     this.cache.set(key, {
-}
       data,
       expires: Date.now() + ttl
     });
@@ -1464,20 +1293,17 @@ class MachineLearningPlayerPredictionService {
    * Get service status and performance metrics
    */
   getServiceStatus(): {
-}
     isActive: boolean;
     modelsLoaded: number;
     cacheSize: number;
     lastPrediction: string;
     performanceMetrics: ModelPerformanceMetrics | null;
   } {
-}
     const latestMetrics = Array.from(this.modelPerformance.values()).sort(
       (a, b) => new Date(b.lastValidated).getTime() - new Date(a.lastValidated).getTime()
     )[0];
 
     return {
-}
       isActive: true,
       modelsLoaded: Object.keys(this.MODEL_WEIGHTS).length,
       cacheSize: this.cache.size,
@@ -1485,7 +1311,6 @@ class MachineLearningPlayerPredictionService {
       performanceMetrics: latestMetrics || null
     };
   }
-}
 
 // Export singleton instance
 export const machineLearningPlayerPredictionService = new MachineLearningPlayerPredictionService();

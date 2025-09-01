@@ -1,17 +1,14 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import type { Team } from &apos;../../types&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import type { Team } from '../../types';
+import { Avatar } from '../ui/Avatar';
 
 interface TeamBrandingCardProps {
-}
     team: Team;
     slogan: string;
 
-}
 
 const TeamBrandingCard: React.FC<TeamBrandingCardProps> = ({ team, slogan }: any) => {
-}
     const { name, avatar, record } = team;
     return (
         <div className="w-full max-w-sm aspect-[2/1] bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 flex flex-col justify-between shadow-lg border border-cyan-400/30 relative overflow-hidden sm:px-4 md:px-6 lg:px-8">

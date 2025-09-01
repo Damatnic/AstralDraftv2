@@ -1,39 +1,32 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { Team, League, PlayerAwardType, Player } from &apos;../../types&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { AwardIcon } from &apos;../icons/AwardIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import type { Team, League, PlayerAwardType, Player } from '../../types';
+import { Modal } from '../ui/Modal';
+import { AwardIcon } from '../icons/AwardIcon';
 
 interface AssignAwardsModalProps {
-}
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
     onClose: () => void;
 
-}
 
 const awardTypes: { type: PlayerAwardType, label: string, description: string }[] = [
-    { type: &apos;MVP&apos;, label: &apos;Team MVP&apos;, description: &apos;The most valuable player on your squad.&apos; },
-    { type: &apos;DRAFT_GEM&apos;, label: &apos;Draft Gem&apos;, description: &apos;The player who provided the most value relative to their draft position.&apos; },
-    { type: &apos;WAIVER_HERO&apos;, label: &apos;Waiver Wire Hero&apos;, description: &apos;The best player you picked up from the waiver wire.&apos; },
-    { type: &apos;BIGGEST_BUST&apos;, label: &apos;Biggest Bust&apos;, description: &apos;The player who most disappointed relative to their expectations.&apos; },
+    { type: 'MVP', label: 'Team MVP', description: 'The most valuable player on your squad.' },
+    { type: 'DRAFT_GEM', label: 'Draft Gem', description: 'The player who provided the most value relative to their draft position.' },
+    { type: 'WAIVER_HERO', label: 'Waiver Wire Hero', description: 'The best player you picked up from the waiver wire.' },
+    { type: 'BIGGEST_BUST', label: 'Biggest Bust', description: 'The player who most disappointed relative to their expectations.' },
 ];
 
 const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dispatch, onClose }: any) => {
-}
     const [selectedAwards, setSelectedAwards] = React.useState<Record<PlayerAwardType, number | null>>(() => {
-}
         const initialState: Record<PlayerAwardType, number | null> = {
-}
             MVP: null, DRAFT_GEM: null, WAIVER_HERO: null, BIGGEST_BUST: null
         };
         const currentSeason = new Date().getFullYear();
         (league.playerAwards || []).forEach((award: any) => {
-}
             if (award.awardedByTeamId === team.id && award.season === currentSeason && award.awardType in initialState) {
-}
                 initialState[award.awardType as PlayerAwardType] = award.playerId;
             }
         });
@@ -41,28 +34,23 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
     });
 
     const handleSelect = (awardType: PlayerAwardType, playerId: string) => {
-}
         setSelectedAwards(prev => ({
-}
             ...prev,
             [awardType]: playerId ? Number(playerId) : null
         }));
     };
 
     const handleSave = () => {
-}
         const awardsPayload = Object.entries(selectedAwards).map(([awardType, playerId]) => ({
-}
             awardType: awardType as PlayerAwardType,
             playerId,
         }));
         
         dispatch({
-}
-            type: &apos;ASSIGN_PLAYER_AWARDS&apos;,
+            type: 'ASSIGN_PLAYER_AWARDS',
             payload: { leagueId: league.id, teamId: team.id, awards: awardsPayload }
         });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Player awards have been saved!&apos;, type: &apos;SYSTEM&apos; } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Player awards have been saved!', type: 'SYSTEM' } });
         onClose();
     };
 
@@ -88,12 +76,11 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
                             <p className="text-xs text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">{description}</p>
                             <select
                                 id={`award-${type}`}
-                                value={selectedAwards[type] || &apos;&apos;}
+                                value={selectedAwards[type] || ''}
                                 onChange={e => handleSelect(type, e.target.value)}
                             >
                                 <option value="">-- Select a Player --</option>
                                 {team.roster.map((player: any) => (
-}
                                     <option key={player.id} value={player.id}>
                                         {player.name} ({player.position})
                                     </option>

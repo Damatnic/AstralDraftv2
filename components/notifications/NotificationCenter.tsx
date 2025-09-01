@@ -3,13 +3,12 @@
  * Comprehensive notification display and management interface with real-time updates
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useNotifications } from &apos;../../contexts/NotificationContext&apos;;
-import { realtimeNotificationService, RealtimeNotification } from &apos;../../services/realtimeNotificationService&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { realtimeNotificationService, RealtimeNotification } from '../../services/realtimeNotificationService';
 import { 
-}
     BellIcon, 
     CheckIcon, 
     ArchiveIcon, 
@@ -23,25 +22,20 @@ import {
     Zap,
     AlertCircle,
 //     Info
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 interface NotificationCenterProps {
-}
     isOpen: boolean;
     onClose: () => void;
     className?: string;
 
-}
 
 const NotificationCenter: React.FC<NotificationCenterProps> = ({ 
-}
     isOpen, 
     onClose, 
-    className = &apos;&apos; 
+    className = '' 
 }: any) => {
-}
     const {
-}
         notifications,
         unreadCount,
         preferences,
@@ -53,79 +47,67 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 //         refreshNotifications
     } = useNotifications();
 
-    const [filter, setFilter] = useState<&apos;all&apos; | &apos;unread&apos; | &apos;draft&apos; | &apos;oracle&apos; | &apos;league&apos;>(&apos;all&apos;);
+    const [filter, setFilter] = useState<'all' | 'unread' | 'draft' | 'oracle' | 'league'>('all');
     const [showSettings, setShowSettings] = useState(false);
 
     // Refresh notifications when opened
     useEffect(() => {
-}
         if (isOpen) {
-}
             refreshNotifications();
     }
   }, [isOpen, refreshNotifications]);
 
     // Setup real-time notification listener
     useEffect(() => {
-}
         const handleRealtimeNotification = (notification: any) => {
-}
             // Trigger refresh to get new notifications
             refreshNotifications();
             
             // Show sound notification if enabled
             if (preferences?.enableSoundNotifications) {
-}
-                const audio = new Audio(&apos;/notification-sound.mp3&apos;);
+                const audio = new Audio('/notification-sound.mp3');
                 audio.play().catch(() => {}); // Ignore errors if sound file not found
 
         };
 
-        realtimeNotificationService.on(&apos;notification_received&apos;, handleRealtimeNotification);
+        realtimeNotificationService.on('notification_received', handleRealtimeNotification);
 
         return () => {
-}
-            realtimeNotificationService.off(&apos;notification_received&apos;, handleRealtimeNotification);
+            realtimeNotificationService.off('notification_received', handleRealtimeNotification);
         };
     }, [refreshNotifications, preferences]);
 
     const filteredNotifications = notifications.filter((notification: any) => {
-}
-        if (filter === &apos;unread&apos;) return !notification.isRead;
-        if (filter === &apos;draft&apos;) return notification.category === &apos;draft&apos;;
-        if (filter === &apos;oracle&apos;) return notification.category === &apos;oracle&apos;;
-        if (filter === &apos;league&apos;) return notification.category === &apos;league&apos;;
+        if (filter === 'unread') return !notification.isRead;
+        if (filter === 'draft') return notification.category === 'draft';
+        if (filter === 'oracle') return notification.category === 'oracle';
+        if (filter === 'league') return notification.category === 'league';
         return true;
     });
 
     const getNotificationIcon = (type: string) => {
-}
         switch (type) {
-}
-            case &apos;DRAFT_PICK&apos;: return &apos;🏈&apos;;
-            case &apos;DRAFT_START&apos;: return &apos;🚀&apos;;
-            case &apos;ORACLE_PREDICTION&apos;: return &apos;🔮&apos;;
-            case &apos;ORACLE_RESULT&apos;: return &apos;🎯&apos;;
-            case &apos;TRADE&apos;: return &apos;🔄&apos;;
-            case &apos;LEAGUE_UPDATE&apos;: return &apos;📢&apos;;
-            case &apos;ACHIEVEMENT&apos;: return &apos;🏆&apos;;
-            default: return &apos;📱&apos;;
+            case 'DRAFT_PICK': return '🏈';
+            case 'DRAFT_START': return '🚀';
+            case 'ORACLE_PREDICTION': return '🔮';
+            case 'ORACLE_RESULT': return '🎯';
+            case 'TRADE': return '🔄';
+            case 'LEAGUE_UPDATE': return '📢';
+            case 'ACHIEVEMENT': return '🏆';
+            default: return '📱';
 
     };
 
     const getPriorityColor = (priority: string) => {
-}
         switch (priority) {
-}
-            case &apos;urgent&apos;: return &apos;border-red-500 bg-red-500/10&apos;;
-            case &apos;high&apos;: return &apos;border-orange-500 bg-orange-500/10&apos;;
-            case &apos;medium&apos;: return &apos;border-blue-500 bg-blue-500/10&apos;;
-            default: return &apos;border-gray-500 bg-gray-500/10&apos;;
+            case 'urgent': return 'border-red-500 bg-red-500/10';
+            case 'high': return 'border-orange-500 bg-orange-500/10';
+            case 'medium': return 'border-blue-500 bg-blue-500/10';
+            default: return 'border-gray-500 bg-gray-500/10';
 
     };
 
     const formatTimeAgo = (date: Date) => {
-}
         const now = new Date();
         const diff = now.getTime() - date.getTime();
         const minutes = Math.floor(diff / 60000);
@@ -135,12 +117,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
         if (days > 0) return `${days}d ago`;
         if (hours > 0) return `${hours}h ago`;
         if (minutes > 0) return `${minutes}m ago`;
-        return &apos;Just now&apos;;
+        return 'Just now';
     };
 
     const getNoNotificationsMessage = (currentFilter: string) => {
-}
-        if (currentFilter === &apos;all&apos;) return &apos;No notifications yet.&apos;;
+        if (currentFilter === 'all') return 'No notifications yet.';
         return `No ${currentFilter} notifications yet.`;
     };
 
@@ -160,7 +141,6 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                     <h2 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">
 //                         Notifications
                         {unreadCount > 0 && (
-}
                             <span className="ml-2 px-2 py-1 bg-red-500 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                                 {unreadCount}
                             </span>
@@ -201,9 +181,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 </div>
                 
                 {unreadCount > 0 && (
-}
                     <button
-                        onClick={() => markAllAsRead(filter === &apos;all&apos; ? undefined : filter)}
+                        onClick={() => markAllAsRead(filter === 'all' ? undefined : filter)}
                         title="Mark all as read"
                     >
                         <CheckCheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -215,10 +194,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             {/* Settings Panel */}
             <AnimatePresence>
                 {showSettings && (
-}
                     <motion.div
                         initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: &apos;auto&apos;, opacity: 1 }}
+                        animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         className="border-b border-gray-700 overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     >
@@ -233,7 +211,6 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             {/* Notifications List */}
             <div className="flex-1 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 {loading && (
-}
                     <div className="flex items-center justify-center p-8 sm:px-4 md:px-6 lg:px-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 sm:px-4 md:px-6 lg:px-8"></div>
                         <span className="ml-2 text-gray-400 sm:px-4 md:px-6 lg:px-8">Loading notifications...</span>
@@ -241,16 +218,14 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 )}
                 
                 {!loading && filteredNotifications.length === 0 && (
-}
                     <div className="flex flex-col items-center justify-center p-8 text-center sm:px-4 md:px-6 lg:px-8">
                         <BellIcon className="w-12 h-12 text-gray-600 mb-4 sm:px-4 md:px-6 lg:px-8" />
                         <h3 className="text-lg font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">
                             No notifications
                         </h3>
                         <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">
-                            {filter === &apos;unread&apos; 
-}
-                                ? "You&apos;re all caught up!" 
+                            {filter === 'unread' 
+                                ? "You're all caught up!" 
                                 : getNoNotificationsMessage(filter)
 
                         </p>
@@ -258,11 +233,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 )}
                 
                 {!loading && filteredNotifications.length > 0 && (
-}
                     <div className="p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
                         <AnimatePresence>
                             {filteredNotifications.map((notification: any) => (
-}
                                 <NotificationItem>
                                     key={notification.id}
                                     notification={notification}
@@ -284,7 +257,6 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
 // Notification Item Component
 interface NotificationItemProps {
-}
     notification: any;
     onMarkAsRead: (id: string) => void;
     onArchive: (id: string) => void;
@@ -293,10 +265,8 @@ interface NotificationItemProps {
     getPriorityColor: (priority: string) => string;
     formatTimeAgo: (date: Date) => string;
 
-}
 
 const NotificationItem: React.FC<NotificationItemProps> = ({
-}
     notification,
     onMarkAsRead,
     onArchive,
@@ -305,11 +275,9 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     getPriorityColor,
 //     formatTimeAgo
 }: any) => {
-}
     const [showActions, setShowActions] = useState(false);
 
     const handleAction = (actionFn: () => void) => {
-}
         actionFn();
         setShowActions(false);
     };
@@ -320,8 +288,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className={`relative p-3 rounded-lg border ${getPriorityColor(notification.priority)} ${
-}
-                notification.isRead ? &apos;opacity-75&apos; : &apos;&apos;
+                notification.isRead ? 'opacity-75' : ''
             } hover:bg-gray-800/50 transition-all group`}
             onMouseEnter={() => setShowActions(true)}
             onMouseLeave={() => setShowActions(false)}
@@ -334,8 +301,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                 <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
                         <h4 className={`text-sm font-semibold ${
-}
-                            notification.isRead ? &apos;text-gray-300&apos; : &apos;text-white&apos;
+                            notification.isRead ? 'text-gray-300' : 'text-white'
                         }`}>
                             {notification.title}
                         </h4>
@@ -345,25 +311,22 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                     </div>
                     
                     <p className={`text-sm ${
-}
-                        notification.isRead ? &apos;text-gray-400&apos; : &apos;text-gray-300&apos;
+                        notification.isRead ? 'text-gray-400' : 'text-gray-300'
                     } line-clamp-2`}>
                         {notification.message}
                     </p>
                     
                     {notification.actionUrl && (
-}
                         <a
                             href={notification.actionUrl}
                             className="inline-block mt-2 text-xs text-blue-400 hover:text-blue-300 transition-colors sm:px-4 md:px-6 lg:px-8"
                         >
-                            {notification.actionText || &apos;View Details&apos;} →
+                            {notification.actionText || 'View Details'} →
                         </a>
                     )}
                 </div>
                 
                 {!notification.isRead && (
-}
                     <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2 sm:px-4 md:px-6 lg:px-8"></div>
                 )}
             </div>
@@ -371,7 +334,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             {/* Action Buttons */}
             <AnimatePresence>
                 {showActions && (
-}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -379,7 +341,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                         className="absolute top-2 right-2 flex space-x-1 bg-gray-800 rounded-lg p-1 shadow-lg sm:px-4 md:px-6 lg:px-8"
                     >
                         {!notification.isRead && (
-}
                             <button
                                 onClick={() => handleAction(() => onMarkAsRead(notification.id))}
                                 title="Mark as read"
@@ -408,25 +369,20 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 
 // Notification Settings Component
 interface NotificationSettingsProps {
-}
     preferences: any;
     onClose: () => void;
 
-}
 
 const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }: any) => {
-}
     const { updatePreferences } = useNotifications();
     const [localPreferences, setLocalPreferences] = useState(preferences || {});
 
     const handleToggle = (path: string, value: boolean) => {
-}
-        const keys = path.split(&apos;.&apos;);
+        const keys = path.split('.');
         const updated = { ...localPreferences };
         let current = updated;
         
         for (let i = 0; i < keys.length - 1; i++) {
-}
             current = current[keys[i]];
 
         current[keys[keys.length - 1]] = value;
@@ -436,7 +392,6 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
     };
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -462,7 +417,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.enablePushNotifications || false}
-                        onChange={(e: any) => handleToggle(&apos;enablePushNotifications&apos;, e.target.checked)}
+                        onChange={(e: any) => handleToggle('enablePushNotifications', e.target.checked)}
                     />
                 </div>
                 
@@ -471,7 +426,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.enableSoundNotifications || false}
-                        onChange={(e: any) => handleToggle(&apos;enableSoundNotifications&apos;, e.target.checked)}
+                        onChange={(e: any) => handleToggle('enableSoundNotifications', e.target.checked)}
                     />
                 </div>
                 
@@ -486,7 +441,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.draft?.enabled || false}
-                        onChange={(e: any) => handleToggle(&apos;categories.draft.enabled&apos;, e.target.checked)}
+                        onChange={(e: any) => handleToggle('categories.draft.enabled', e.target.checked)}
                     />
                 </div>
                 
@@ -495,7 +450,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.oracle?.enabled || false}
-                        onChange={(e: any) => handleToggle(&apos;categories.oracle.enabled&apos;, e.target.checked)}
+                        onChange={(e: any) => handleToggle('categories.oracle.enabled', e.target.checked)}
                     />
                 </div>
                 
@@ -504,7 +459,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.league?.enabled || false}
-                        onChange={(e: any) => handleToggle(&apos;categories.league.enabled&apos;, e.target.checked)}
+                        onChange={(e: any) => handleToggle('categories.league.enabled', e.target.checked)}
                     />
                 </div>
             </div>

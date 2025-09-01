@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import EnhancedCreateLeagueModal from &apos;./EnhancedCreateLeagueModal&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import EnhancedCreateLeagueModal from './EnhancedCreateLeagueModal';
 
-describe(&apos;EnhancedCreateLeagueModal&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('EnhancedCreateLeagueModal', () => {
+  it('renders without crashing', () => {
     render(<EnhancedCreateLeagueModal />);
-    expect(screen.getByTestId(&apos;enhancedcreateleaguemodal&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('enhancedcreateleaguemodal')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<EnhancedCreateLeagueModal />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<EnhancedCreateLeagueModal />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

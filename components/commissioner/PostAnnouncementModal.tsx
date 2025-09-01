@@ -1,39 +1,33 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { MegaphoneIcon } from &apos;../icons/MegaphoneIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { Modal } from '../ui/Modal';
+import { MegaphoneIcon } from '../icons/MegaphoneIcon';
 
 interface PostAnnouncementModalProps {
-}
     leagueId: string;
     onClose: () => void;
 
-}
 
 const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId, onClose }: any) => {
-}
     const { dispatch } = useAppState();
-    const [title, setTitle] = React.useState(&apos;&apos;);
-    const [content, setContent] = React.useState(&apos;&apos;);
+    const [title, setTitle] = React.useState('');
+    const [content, setContent] = React.useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
-}
         e.preventDefault();
         if (!title.trim() || !content.trim()) {
-}
-            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Title and content must be filled out.", type: &apos;SYSTEM&apos; } });
+            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Title and content must be filled out.", type: 'SYSTEM' } });
             return;
 
         dispatch({
-}
-            type: &apos;POST_ANNOUNCEMENT&apos;,
+            type: 'POST_ANNOUNCEMENT',
             payload: { leagueId, announcement: { title, content } },
         });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Announcement posted!", type: &apos;SYSTEM&apos; } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Announcement posted!", type: 'SYSTEM' } });
         onClose();
     };
     

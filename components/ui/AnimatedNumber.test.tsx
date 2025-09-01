@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import AnimatedNumber from &apos;./AnimatedNumber&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AnimatedNumber from './AnimatedNumber';
 
-describe(&apos;AnimatedNumber&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('AnimatedNumber', () => {
+  it('renders without crashing', () => {
     render(<AnimatedNumber />);
-    expect(screen.getByTestId(&apos;animatednumber&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('animatednumber')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<AnimatedNumber />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<AnimatedNumber />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

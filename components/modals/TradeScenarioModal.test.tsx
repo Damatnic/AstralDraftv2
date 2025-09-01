@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import TradeScenarioModal from &apos;./TradeScenarioModal&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TradeScenarioModal from './TradeScenarioModal';
 
-describe(&apos;TradeScenarioModal&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('TradeScenarioModal', () => {
+  it('renders without crashing', () => {
     render(<TradeScenarioModal />);
-    expect(screen.getByTestId(&apos;tradescenariomodal&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('tradescenariomodal')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<TradeScenarioModal />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<TradeScenarioModal />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

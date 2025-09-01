@@ -1,12 +1,11 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import &apos;./OracleDataIngestionSection.css&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import './OracleDataIngestionSection.css';
 
 interface DataSource {
-}
   id: string;
   name: string;
-  type: &apos;api&apos; | &apos;websocket&apos; | &apos;database&apos; | &apos;scraper&apos;;
+  type: 'api' | 'websocket' | 'database' | 'scraper';
   updateFrequency: string;
   reliability: number;
   latency: string;
@@ -14,10 +13,8 @@ interface DataSource {
   dataTypes: string[];
   validationRules: string[];
 
-}
 
 interface IngestionStage {
-}
   id: string;
   name: string;
   description: string;
@@ -27,19 +24,16 @@ interface IngestionStage {
   timing: string;
 
 interface ValidationRule {
-}
   id: string;
   name: string;
-  category: &apos;integrity&apos; | &apos;consistency&apos; | &apos;completeness&apos; | &apos;timeliness&apos; | &apos;accuracy&apos;;
+  category: 'integrity' | 'consistency' | 'completeness' | 'timeliness' | 'accuracy';
   description: string;
   examples: string[];
   failureHandling: string;
-  criticalLevel: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos; | &apos;critical&apos;;
+  criticalLevel: 'low' | 'medium' | 'high' | 'critical';
 
-}
 
 interface DataQualityMetric {
-}
   id: string;
   name: string;
   description: string;
@@ -48,7 +42,6 @@ interface DataQualityMetric {
   impact: string;
 
 interface ProcessingPipeline {
-}
   id: string;
   name: string;
   stages: string[];
@@ -56,315 +49,287 @@ interface ProcessingPipeline {
   throughput: string;
   errorRecovery: string[];
 
-}
 
 const OracleDataIngestionSection: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-  const [activeDataSource, setActiveDataSource] = useState<string>(&apos;sportsio&apos;);
-  const [activeStage, setActiveStage] = useState<string>(&apos;acquisition&apos;);
-  const [activeValidation, setActiveValidation] = useState<string>(&apos;integrity&apos;);
-  const [activeMetric, setActiveMetric] = useState<string>(&apos;completeness&apos;);
-  const [activePipeline, setActivePipeline] = useState<string>(&apos;realtime&apos;);
+  const [activeDataSource, setActiveDataSource] = useState<string>('sportsio');
+  const [activeStage, setActiveStage] = useState<string>('acquisition');
+  const [activeValidation, setActiveValidation] = useState<string>('integrity');
+  const [activeMetric, setActiveMetric] = useState<string>('completeness');
+  const [activePipeline, setActivePipeline] = useState<string>('realtime');
   const [isProcessingDemo, setIsProcessingDemo] = useState<boolean>(false);
   const [demoStage, setDemoStage] = useState<number>(0);
 
   const dataSources: DataSource[] = [
     {
-}
-      id: &apos;sportsio&apos;,
-      name: &apos;SportsIO API&apos;,
-      type: &apos;api&apos;,
-      updateFrequency: &apos;Real-time (30-second intervals)&apos;,
+      id: 'sportsio',
+      name: 'SportsIO API',
+      type: 'api',
+      updateFrequency: 'Real-time (30-second intervals)',
       reliability: 99.2,
-      latency: &apos;< 500ms&apos;,
-      description: &apos;Primary live sports data feed providing player stats, game scores, injury reports, and weather conditions&apos;,
-      dataTypes: [&apos;Player Statistics&apos;, &apos;Game Scores&apos;, &apos;Team Metrics&apos;, &apos;Injury Reports&apos;, &apos;Weather Data&apos;, &apos;Vegas Lines&apos;],
-      validationRules: [&apos;Schema Validation&apos;, &apos;Data Freshness&apos;, &apos;Statistical Consistency&apos;, &apos;Cross-Reference Checks&apos;]
+      latency: '< 500ms',
+      description: 'Primary live sports data feed providing player stats, game scores, injury reports, and weather conditions',
+      dataTypes: ['Player Statistics', 'Game Scores', 'Team Metrics', 'Injury Reports', 'Weather Data', 'Vegas Lines'],
+      validationRules: ['Schema Validation', 'Data Freshness', 'Statistical Consistency', 'Cross-Reference Checks']
     },
     {
-}
-      id: &apos;websocket&apos;,
-      name: &apos;Real-Time WebSocket Feeds&apos;,
-      type: &apos;websocket&apos;,
-      updateFrequency: &apos;Continuous (< 1-second)&apos;,
+      id: 'websocket',
+      name: 'Real-Time WebSocket Feeds',
+      type: 'websocket',
+      updateFrequency: 'Continuous (< 1-second)',
       reliability: 97.8,
-      latency: &apos;< 100ms&apos;,
-      description: &apos;Ultra-low latency feeds for live game events, score updates, and breaking news&apos;,
-      dataTypes: [&apos;Live Scores&apos;, &apos;Play-by-Play&apos;, &apos;Breaking News&apos;, &apos;Lineup Changes&apos;, &apos;In-Game Events&apos;],
-      validationRules: [&apos;Message Ordering&apos;, &apos;Duplicate Detection&apos;, &apos;Timestamp Validation&apos;, &apos;Event Sequencing&apos;]
+      latency: '< 100ms',
+      description: 'Ultra-low latency feeds for live game events, score updates, and breaking news',
+      dataTypes: ['Live Scores', 'Play-by-Play', 'Breaking News', 'Lineup Changes', 'In-Game Events'],
+      validationRules: ['Message Ordering', 'Duplicate Detection', 'Timestamp Validation', 'Event Sequencing']
     },
     {
-}
-      id: &apos;market&apos;,
-      name: &apos;Market Data Sources&apos;,
-      type: &apos;api&apos;,
-      updateFrequency: &apos;Every 5 minutes&apos;,
+      id: 'market',
+      name: 'Market Data Sources',
+      type: 'api',
+      updateFrequency: 'Every 5 minutes',
       reliability: 98.5,
-      latency: &apos;< 2 seconds&apos;,
-      description: &apos;Fantasy market data including ownership percentages, salary trends, and expert consensus&apos;,
-      dataTypes: [&apos;Ownership %&apos;, &apos;Salary Data&apos;, &apos;Expert Rankings&apos;, &apos;DFS Trends&apos;, &apos;Market Sentiment&apos;],
-      validationRules: [&apos;Range Validation&apos;, &apos;Trend Analysis&apos;, &apos;Outlier Detection&apos;, &apos;Historical Comparison&apos;]
+      latency: '< 2 seconds',
+      description: 'Fantasy market data including ownership percentages, salary trends, and expert consensus',
+      dataTypes: ['Ownership %', 'Salary Data', 'Expert Rankings', 'DFS Trends', 'Market Sentiment'],
+      validationRules: ['Range Validation', 'Trend Analysis', 'Outlier Detection', 'Historical Comparison']
     },
     {
-}
-      id: &apos;historical&apos;,
-      name: &apos;Historical Database&apos;,
-      type: &apos;database&apos;,
-      updateFrequency: &apos;Daily batch updates&apos;,
+      id: 'historical',
+      name: 'Historical Database',
+      type: 'database',
+      updateFrequency: 'Daily batch updates',
       reliability: 99.8,
-      latency: &apos;< 50ms&apos;,
-      description: &apos;Comprehensive historical data warehouse with multi-year player and team statistics&apos;,
-      dataTypes: [&apos;Historical Stats&apos;, &apos;Season Trends&apos;, &apos;Career Data&apos;, &apos;Team History&apos;, &apos;Coaching Records&apos;],
-      validationRules: [&apos;Referential Integrity&apos;, &apos;Data Completeness&apos;, &apos;Statistical Accuracy&apos;, &apos;Version Control&apos;]
+      latency: '< 50ms',
+      description: 'Comprehensive historical data warehouse with multi-year player and team statistics',
+      dataTypes: ['Historical Stats', 'Season Trends', 'Career Data', 'Team History', 'Coaching Records'],
+      validationRules: ['Referential Integrity', 'Data Completeness', 'Statistical Accuracy', 'Version Control']
 
   ];
 
   const ingestionStages: IngestionStage[] = [
     {
-}
-      id: &apos;acquisition&apos;,
-      name: &apos;Data Acquisition&apos;,
-      description: &apos;Initial data collection from multiple sources with parallel processing and load balancing&apos;,
+      id: 'acquisition',
+      name: 'Data Acquisition',
+      description: 'Initial data collection from multiple sources with parallel processing and load balancing',
       processes: [
-        &apos;API Request Management&apos;,
-        &apos;WebSocket Connection Handling&apos;,
-        &apos;Rate Limiting & Throttling&apos;,
-        &apos;Connection Pool Management&apos;,
-        &apos;Failover & Retry Logic&apos;,
-        &apos;Load Balancing Across Sources&apos;
+        'API Request Management',
+        'WebSocket Connection Handling',
+        'Rate Limiting & Throttling',
+        'Connection Pool Management',
+        'Failover & Retry Logic',
+        'Load Balancing Across Sources'
       ],
-      outputFormat: &apos;Raw JSON/XML streams&apos;,
-      validationChecks: [&apos;Source Authentication&apos;, &apos;Response Format&apos;, &apos;Data Availability&apos;, &apos;Connection Status&apos;],
-      timing: &apos;< 1 second for critical data&apos;
+      outputFormat: 'Raw JSON/XML streams',
+      validationChecks: ['Source Authentication', 'Response Format', 'Data Availability', 'Connection Status'],
+      timing: '< 1 second for critical data'
     },
     {
-}
-      id: &apos;parsing&apos;,
-      name: &apos;Data Parsing & Normalization&apos;,
-      description: &apos;Transform raw data into standardized formats with schema validation and type conversion&apos;,
+      id: 'parsing',
+      name: 'Data Parsing & Normalization',
+      description: 'Transform raw data into standardized formats with schema validation and type conversion',
       processes: [
-        &apos;Schema Validation&apos;,
-        &apos;Data Type Conversion&apos;,
-        &apos;Format Standardization&apos;,
-        &apos;Encoding Normalization&apos;,
-        &apos;Field Mapping & Translation&apos;,
-        &apos;Error Detection & Logging&apos;
+        'Schema Validation',
+        'Data Type Conversion',
+        'Format Standardization',
+        'Encoding Normalization',
+        'Field Mapping & Translation',
+        'Error Detection & Logging'
       ],
-      outputFormat: &apos;Structured JSON objects&apos;,
-      validationChecks: [&apos;Schema Compliance&apos;, &apos;Type Validation&apos;, &apos;Required Fields&apos;, &apos;Format Consistency&apos;],
-      timing: &apos;< 500ms per record batch&apos;
+      outputFormat: 'Structured JSON objects',
+      validationChecks: ['Schema Compliance', 'Type Validation', 'Required Fields', 'Format Consistency'],
+      timing: '< 500ms per record batch'
     },
     {
-}
-      id: &apos;validation&apos;,
-      name: &apos;Data Validation & Quality Control&apos;,
-      description: &apos;Comprehensive validation using business rules, statistical checks, and cross-reference verification&apos;,
+      id: 'validation',
+      name: 'Data Validation & Quality Control',
+      description: 'Comprehensive validation using business rules, statistical checks, and cross-reference verification',
       processes: [
-        &apos;Business Rule Validation&apos;,
-        &apos;Statistical Outlier Detection&apos;,
-        &apos;Cross-Source Verification&apos;,
-        &apos;Historical Consistency Checks&apos;,
-        &apos;Completeness Assessment&apos;,
-        &apos;Quality Score Calculation&apos;
+        'Business Rule Validation',
+        'Statistical Outlier Detection',
+        'Cross-Source Verification',
+        'Historical Consistency Checks',
+        'Completeness Assessment',
+        'Quality Score Calculation'
       ],
-      outputFormat: &apos;Validated data with quality metrics&apos;,
-      validationChecks: [&apos;Business Logic&apos;, &apos;Statistical Bounds&apos;, &apos;Data Integrity&apos;, &apos;Completeness Score&apos;],
-      timing: &apos;< 2 seconds for full validation&apos;
+      outputFormat: 'Validated data with quality metrics',
+      validationChecks: ['Business Logic', 'Statistical Bounds', 'Data Integrity', 'Completeness Score'],
+      timing: '< 2 seconds for full validation'
     },
     {
-}
-      id: &apos;enrichment&apos;,
-      name: &apos;Data Enrichment & Enhancement&apos;,
-      description: &apos;Augment core data with calculated metrics, derived features, and contextual information&apos;,
+      id: 'enrichment',
+      name: 'Data Enrichment & Enhancement',
+      description: 'Augment core data with calculated metrics, derived features, and contextual information',
       processes: [
-        &apos;Calculated Field Generation&apos;,
-        &apos;Feature Engineering&apos;,
-        &apos;Contextual Data Addition&apos;,
-        &apos;Trend Calculation&apos;,
-        &apos;Performance Metrics&apos;,
-        &apos;Predictive Indicators&apos;
+        'Calculated Field Generation',
+        'Feature Engineering',
+        'Contextual Data Addition',
+        'Trend Calculation',
+        'Performance Metrics',
+        'Predictive Indicators'
       ],
-      outputFormat: &apos;Enhanced datasets with derived features&apos;,
-      validationChecks: [&apos;Calculation Accuracy&apos;, &apos;Feature Validity&apos;, &apos;Trend Consistency&apos;, &apos;Performance Bounds&apos;],
-      timing: &apos;< 3 seconds for complex enrichment&apos;
+      outputFormat: 'Enhanced datasets with derived features',
+      validationChecks: ['Calculation Accuracy', 'Feature Validity', 'Trend Consistency', 'Performance Bounds'],
+      timing: '< 3 seconds for complex enrichment'
     },
     {
-}
-      id: &apos;storage&apos;,
-      name: &apos;Data Storage & Indexing&apos;,
-      description: &apos;Optimized storage with real-time indexing, partitioning, and accessibility for prediction algorithms&apos;,
+      id: 'storage',
+      name: 'Data Storage & Indexing',
+      description: 'Optimized storage with real-time indexing, partitioning, and accessibility for prediction algorithms',
       processes: [
-        &apos;Data Partitioning by Time/Type&apos;,
-        &apos;Index Creation & Maintenance&apos;,
-        &apos;Cache Layer Management&apos;,
-        &apos;Backup & Replication&apos;,
-        &apos;Performance Optimization&apos;,
-        &apos;Access Pattern Analysis&apos;
+        'Data Partitioning by Time/Type',
+        'Index Creation & Maintenance',
+        'Cache Layer Management',
+        'Backup & Replication',
+        'Performance Optimization',
+        'Access Pattern Analysis'
       ],
-      outputFormat: &apos;Indexed database records&apos;,
-      validationChecks: [&apos;Storage Integrity&apos;, &apos;Index Consistency&apos;, &apos;Access Performance&apos;, &apos;Backup Verification&apos;],
-      timing: &apos;< 1 second for write operations&apos;
+      outputFormat: 'Indexed database records',
+      validationChecks: ['Storage Integrity', 'Index Consistency', 'Access Performance', 'Backup Verification'],
+      timing: '< 1 second for write operations'
 
   ];
 
   const validationRules: ValidationRule[] = [
     {
-}
-      id: &apos;integrity&apos;,
-      name: &apos;Data Integrity Validation&apos;,
-      category: &apos;integrity&apos;,
-      description: &apos;Ensures data structure, relationships, and constraints are maintained throughout the pipeline&apos;,
+      id: 'integrity',
+      name: 'Data Integrity Validation',
+      category: 'integrity',
+      description: 'Ensures data structure, relationships, and constraints are maintained throughout the pipeline',
       examples: [
-        &apos;Player ID consistency across all data sources&apos;,
-        &apos;Game date/time format validation&apos;,
-        &apos;Statistical value ranges (e.g., completion % between 0-100)&apos;,
-        &apos;Referential integrity between players and teams&apos;
+        'Player ID consistency across all data sources',
+        'Game date/time format validation',
+        'Statistical value ranges (e.g., completion % between 0-100)',
+        'Referential integrity between players and teams'
       ],
-      failureHandling: &apos;Flag inconsistencies, attempt auto-correction, escalate critical issues&apos;,
-      criticalLevel: &apos;critical&apos;
+      failureHandling: 'Flag inconsistencies, attempt auto-correction, escalate critical issues',
+      criticalLevel: 'critical'
     },
     {
-}
-      id: &apos;consistency&apos;,
-      name: &apos;Cross-Source Consistency&apos;,
-      category: &apos;consistency&apos;,
-      description: &apos;Validates that the same data points match across different sources and time periods&apos;,
+      id: 'consistency',
+      name: 'Cross-Source Consistency',
+      category: 'consistency',
+      description: 'Validates that the same data points match across different sources and time periods',
       examples: [
-        &apos;Player statistics matching between SportsIO and official league data&apos;,
-        &apos;Game scores consistent across real-time and official sources&apos;,
-        &apos;Injury status alignment between multiple reporting sources&apos;,
-        &apos;Team roster consistency across data feeds&apos;
+        'Player statistics matching between SportsIO and official league data',
+        'Game scores consistent across real-time and official sources',
+        'Injury status alignment between multiple reporting sources',
+        'Team roster consistency across data feeds'
       ],
-      failureHandling: &apos;Compare sources, weight by reliability, flag discrepancies for review&apos;,
-      criticalLevel: &apos;high&apos;
+      failureHandling: 'Compare sources, weight by reliability, flag discrepancies for review',
+      criticalLevel: 'high'
     },
     {
-}
-      id: &apos;completeness&apos;,
-      name: &apos;Data Completeness Assessment&apos;,
-      category: &apos;completeness&apos;,
-      description: &apos;Ensures all required data fields are present and populated for accurate predictions&apos;,
+      id: 'completeness',
+      name: 'Data Completeness Assessment',
+      category: 'completeness',
+      description: 'Ensures all required data fields are present and populated for accurate predictions',
       examples: [
-        &apos;All starting lineup positions filled&apos;,
-        &apos;Complete weather data for outdoor games&apos;,
-        &apos;Full injury report availability&apos;,
-        &apos;Historical data coverage for trend analysis&apos;
+        'All starting lineup positions filled',
+        'Complete weather data for outdoor games',
+        'Full injury report availability',
+        'Historical data coverage for trend analysis'
       ],
-      failureHandling: &apos;Identify missing data, attempt backfill, adjust prediction confidence&apos;,
-      criticalLevel: &apos;medium&apos;
+      failureHandling: 'Identify missing data, attempt backfill, adjust prediction confidence',
+      criticalLevel: 'medium'
     },
     {
-}
-      id: &apos;timeliness&apos;,
-      name: &apos;Data Freshness & Timeliness&apos;,
-      category: &apos;timeliness&apos;,
-      description: &apos;Validates that data is current, relevant, and received within acceptable time windows&apos;,
+      id: 'timeliness',
+      name: 'Data Freshness & Timeliness',
+      category: 'timeliness',
+      description: 'Validates that data is current, relevant, and received within acceptable time windows',
       examples: [
-        &apos;Player stats updated within 30 seconds of game events&apos;,
-        &apos;Injury reports reflecting latest medical evaluations&apos;,
-        &apos;Weather data current within 15 minutes&apos;,
-        &apos;Lineup changes processed within 5 minutes of announcement&apos;
+        'Player stats updated within 30 seconds of game events',
+        'Injury reports reflecting latest medical evaluations',
+        'Weather data current within 15 minutes',
+        'Lineup changes processed within 5 minutes of announcement'
       ],
-      failureHandling: &apos;Timestamp validation, staleness detection, priority refresh triggering&apos;,
-      criticalLevel: &apos;high&apos;
+      failureHandling: 'Timestamp validation, staleness detection, priority refresh triggering',
+      criticalLevel: 'high'
     },
     {
-}
-      id: &apos;accuracy&apos;,
-      name: &apos;Statistical Accuracy Verification&apos;,
-      category: &apos;accuracy&apos;,
-      description: &apos;Validates statistical calculations, derived metrics, and data transformations for mathematical correctness&apos;,
+      id: 'accuracy',
+      name: 'Statistical Accuracy Verification',
+      category: 'accuracy',
+      description: 'Validates statistical calculations, derived metrics, and data transformations for mathematical correctness',
       examples: [
-        &apos;Fantasy point calculations match league scoring rules&apos;,
-        &apos;Player efficiency ratings within statistical bounds&apos;,
-        &apos;Team pace calculations aligned with game duration&apos;,
-        &apos;Weather impact scores properly normalized&apos;
+        'Fantasy point calculations match league scoring rules',
+        'Player efficiency ratings within statistical bounds',
+        'Team pace calculations aligned with game duration',
+        'Weather impact scores properly normalized'
       ],
-      failureHandling: &apos;Recalculate using multiple methods, flag calculation errors, manual review&apos;,
-      criticalLevel: &apos;critical&apos;
+      failureHandling: 'Recalculate using multiple methods, flag calculation errors, manual review',
+      criticalLevel: 'critical'
 
   ];
 
   const qualityMetrics: DataQualityMetric[] = [
     {
-}
-      id: &apos;completeness&apos;,
-      name: &apos;Completeness Score&apos;,
-      description: &apos;Percentage of required data fields that are populated and valid&apos;,
-      formula: &apos;(Populated Fields / Required Fields) × 100&apos;,
-      threshold: &apos;≥ 95% for prediction generation&apos;,
-      impact: &apos;Lower completeness reduces prediction confidence and accuracy&apos;
+      id: 'completeness',
+      name: 'Completeness Score',
+      description: 'Percentage of required data fields that are populated and valid',
+      formula: '(Populated Fields / Required Fields) × 100',
+      threshold: '≥ 95% for prediction generation',
+      impact: 'Lower completeness reduces prediction confidence and accuracy'
     },
     {
-}
-      id: &apos;accuracy&apos;,
-      name: &apos;Accuracy Rate&apos;,
-      description: &apos;Percentage of data points that pass validation checks and consistency tests&apos;,
-      formula: &apos;(Valid Records / Total Records) × 100&apos;,
-      threshold: &apos;≥ 98% for high-confidence predictions&apos;,
-      impact: &apos;Accuracy directly correlates with Oracle prediction reliability&apos;
+      id: 'accuracy',
+      name: 'Accuracy Rate',
+      description: 'Percentage of data points that pass validation checks and consistency tests',
+      formula: '(Valid Records / Total Records) × 100',
+      threshold: '≥ 98% for high-confidence predictions',
+      impact: 'Accuracy directly correlates with Oracle prediction reliability'
     },
     {
-}
-      id: &apos;freshness&apos;,
-      name: &apos;Data Freshness Index&apos;,
-      description: &apos;Measure of how current the data is relative to real-time events&apos;,
-      formula: &apos;1 - (Current Time - Data Timestamp) / Acceptable Lag&apos;,
-      threshold: &apos;≥ 0.9 for real-time predictions&apos;,
-      impact: &apos;Stale data leads to outdated predictions and missed opportunities&apos;
+      id: 'freshness',
+      name: 'Data Freshness Index',
+      description: 'Measure of how current the data is relative to real-time events',
+      formula: '1 - (Current Time - Data Timestamp) / Acceptable Lag',
+      threshold: '≥ 0.9 for real-time predictions',
+      impact: 'Stale data leads to outdated predictions and missed opportunities'
     },
     {
-}
-      id: &apos;consistency&apos;,
-      name: &apos;Consistency Coefficient&apos;,
-      description: &apos;Degree of agreement between multiple data sources for the same information&apos;,
-      formula: &apos;Σ(Source Agreement) / Number of Sources&apos;,
-      threshold: &apos;≥ 0.85 for multi-source validation&apos;,
-      impact: &apos;Inconsistent data triggers manual review and confidence adjustment&apos;
+      id: 'consistency',
+      name: 'Consistency Coefficient',
+      description: 'Degree of agreement between multiple data sources for the same information',
+      formula: 'Σ(Source Agreement) / Number of Sources',
+      threshold: '≥ 0.85 for multi-source validation',
+      impact: 'Inconsistent data triggers manual review and confidence adjustment'
 
   ];
 
   const processingPipelines: ProcessingPipeline[] = [
     {
-}
-      id: &apos;realtime&apos;,
-      name: &apos;Real-Time Processing Pipeline&apos;,
-      stages: [&apos;Immediate Acquisition&apos;, &apos;Stream Processing&apos;, &apos;Live Validation&apos;, &apos;Instant Enrichment&apos;, &apos;Cache Update&apos;],
+      id: 'realtime',
+      name: 'Real-Time Processing Pipeline',
+      stages: ['Immediate Acquisition', 'Stream Processing', 'Live Validation', 'Instant Enrichment', 'Cache Update'],
       parallelization: true,
-      throughput: &apos;10,000+ records/second&apos;,
-      errorRecovery: [&apos;Automatic Retry&apos;, &apos;Fallback Sources&apos;, &apos;Graceful Degradation&apos;, &apos;Alert Generation&apos;]
+      throughput: '10,000+ records/second',
+      errorRecovery: ['Automatic Retry', 'Fallback Sources', 'Graceful Degradation', 'Alert Generation']
     },
     {
-}
-      id: &apos;batch&apos;,
-      name: &apos;Batch Processing Pipeline&apos;,
-      stages: [&apos;Bulk Acquisition&apos;, &apos;Batch Validation&apos;, &apos;Historical Analysis&apos;, &apos;Trend Calculation&apos;, &apos;Database Update&apos;],
+      id: 'batch',
+      name: 'Batch Processing Pipeline',
+      stages: ['Bulk Acquisition', 'Batch Validation', 'Historical Analysis', 'Trend Calculation', 'Database Update'],
       parallelization: true,
-      throughput: &apos;1M+ records/hour&apos;,
-      errorRecovery: [&apos;Checkpoint Recovery&apos;, &apos;Partial Reprocessing&apos;, &apos;Error Quarantine&apos;, &apos;Manual Review Queue&apos;]
+      throughput: '1M+ records/hour',
+      errorRecovery: ['Checkpoint Recovery', 'Partial Reprocessing', 'Error Quarantine', 'Manual Review Queue']
     },
     {
-}
-      id: &apos;prediction&apos;,
-      name: &apos;Prediction-Ready Pipeline&apos;,
-      stages: [&apos;Feature Extraction&apos;, &apos;Model Input Preparation&apos;, &apos;Validation for ML&apos;, &apos;Quality Scoring&apos;, &apos;Algorithm Dispatch&apos;],
+      id: 'prediction',
+      name: 'Prediction-Ready Pipeline',
+      stages: ['Feature Extraction', 'Model Input Preparation', 'Validation for ML', 'Quality Scoring', 'Algorithm Dispatch'],
       parallelization: false,
-      throughput: &apos;5,000+ predictions/minute&apos;,
-      errorRecovery: [&apos;Data Imputation&apos;, &apos;Confidence Adjustment&apos;, &apos;Alternative Models&apos;, &apos;Human Oversight&apos;]
+      throughput: '5,000+ predictions/minute',
+      errorRecovery: ['Data Imputation', 'Confidence Adjustment', 'Alternative Models', 'Human Oversight']
 
   ];
 
   useEffect(() => {
-}
     if (isProcessingDemo) {
-}
       const interval = setInterval(() => {
-}
         setDemoStage((prev: any) => {
-}
           if (prev >= ingestionStages.length - 1) {
-}
             setIsProcessingDemo(false);
             return 0;
 
@@ -377,7 +342,6 @@ const OracleDataIngestionSection: React.FC = () => {
   }, [isProcessingDemo, ingestionStages.length]);
 
   const startProcessingDemo = () => {
-}
     setDemoStage(0);
     setIsProcessingDemo(true);
   };
@@ -392,11 +356,11 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2 className="section-title sm:px-4 md:px-6 lg:px-8">
           <span className="title-icon sm:px-4 md:px-6 lg:px-8">📊</span>
-          {&apos; &apos;}
+          {' '}
           Data Ingestion & Validation Workflows
         </h2>
         <p className="section-description sm:px-4 md:px-6 lg:px-8">
-          Explore Oracle&apos;s sophisticated data pipeline that processes millions of data points from live sports feeds, 
+          Explore Oracle's sophisticated data pipeline that processes millions of data points from live sports feeds, 
           validates information in real-time, and ensures prediction-ready data quality through comprehensive validation workflows.
         </p>
       </div>
@@ -405,7 +369,7 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔌</span>
-          {&apos; &apos;}
+          {' '}
           Data Sources & Feeds
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
@@ -414,10 +378,9 @@ const OracleDataIngestionSection: React.FC = () => {
 
         <div className="data-sources-grid sm:px-4 md:px-6 lg:px-8">
           {dataSources.map((source: any) => (
-}
             <button
               key={source.id}
-              className={`data-source-card ${activeDataSource === source.id ? &apos;active&apos; : &apos;&apos;}`}
+              className={`data-source-card ${activeDataSource === source.id ? 'active' : ''}`}
               onClick={() => setActiveDataSource(source.id)}
               aria-label={`Select ${source.name} data source`}
             >
@@ -440,7 +403,6 @@ const OracleDataIngestionSection: React.FC = () => {
         </div>
 
         {selectedDataSource && (
-}
           <div className="selected-source-details sm:px-4 md:px-6 lg:px-8">
             <div className="source-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedDataSource.name} Details</h4>
@@ -453,7 +415,6 @@ const OracleDataIngestionSection: React.FC = () => {
                 <h5>Data Types</h5>
                 <ul className="data-types-list sm:px-4 md:px-6 lg:px-8">
                   {selectedDataSource.dataTypes.map((type: any) => (
-}
                     <li key={`type-${type}`} className="data-type-item sm:px-4 md:px-6 lg:px-8">{type}</li>
                   ))}
                 </ul>
@@ -463,7 +424,6 @@ const OracleDataIngestionSection: React.FC = () => {
                 <h5>Validation Rules</h5>
                 <ul className="validation-rules-list sm:px-4 md:px-6 lg:px-8">
                   {selectedDataSource.validationRules.map((rule: any) => (
-}
                     <li key={`rule-${rule}`} className="validation-rule-item sm:px-4 md:px-6 lg:px-8">{rule}</li>
                   ))}
                 </ul>
@@ -477,11 +437,11 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">⚡</span>
-          {&apos; &apos;}
+          {' '}
           Data Ingestion Pipeline
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
-          Oracle&apos;s five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
+          Oracle's five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
         </p>
 
         <div className="pipeline-demo-controls sm:px-4 md:px-6 lg:px-8">
@@ -491,19 +451,17 @@ const OracleDataIngestionSection: React.FC = () => {
             disabled={isProcessingDemo}
             aria-label="Start processing pipeline demonstration"
           >
-            {isProcessingDemo ? &apos;Processing...&apos; : &apos;Watch Pipeline Demo&apos;}
+            {isProcessingDemo ? 'Processing...' : 'Watch Pipeline Demo'}
           </button>
         </div>
 
         <div className="pipeline-stages sm:px-4 md:px-6 lg:px-8">
           {ingestionStages.map((stage, index) => (
-}
             <div
               key={stage.id}
-              className={`pipeline-stage ${activeStage === stage.id ? &apos;active&apos; : &apos;&apos;} ${
-}
-                isProcessingDemo && index === demoStage ? &apos;processing&apos; : &apos;&apos;
-              } ${isProcessingDemo && index < demoStage ? &apos;completed&apos; : &apos;&apos;}`}
+              className={`pipeline-stage ${activeStage === stage.id ? 'active' : ''} ${
+                isProcessingDemo && index === demoStage ? 'processing' : ''
+              } ${isProcessingDemo && index < demoStage ? 'completed' : ''}`}
             >
               <button
                 className="stage-header sm:px-4 md:px-6 lg:px-8"
@@ -517,18 +475,15 @@ const OracleDataIngestionSection: React.FC = () => {
                 </div>
                 <div className="stage-status sm:px-4 md:px-6 lg:px-8">
                   {isProcessingDemo && index === demoStage && (
-}
                     <div className="processing-indicator sm:px-4 md:px-6 lg:px-8">Processing...</div>
                   )}
                   {isProcessingDemo && index < demoStage && (
-}
                     <div className="completed-indicator sm:px-4 md:px-6 lg:px-8">✓</div>
                   )}
                 </div>
               </button>
 
               {activeStage === stage.id && (
-}
                 <div className="stage-details sm:px-4 md:px-6 lg:px-8">
                   <p className="stage-description sm:px-4 md:px-6 lg:px-8">{stage.description}</p>
                   
@@ -537,7 +492,6 @@ const OracleDataIngestionSection: React.FC = () => {
                       <h5>Processing Steps</h5>
                       <ul className="processes-list sm:px-4 md:px-6 lg:px-8">
                         {stage.processes.map((process: any) => (
-}
                           <li key={`process-${process}`} className="process-item sm:px-4 md:px-6 lg:px-8">{process}</li>
                         ))}
                       </ul>
@@ -547,7 +501,6 @@ const OracleDataIngestionSection: React.FC = () => {
                       <h5>Validation Checks</h5>
                       <ul className="validation-checks-list sm:px-4 md:px-6 lg:px-8">
                         {stage.validationChecks.map((check: any) => (
-}
                           <li key={`check-${check}`} className="validation-check-item sm:px-4 md:px-6 lg:px-8">{check}</li>
                         ))}
                       </ul>
@@ -569,7 +522,7 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🛡️</span>
-          {&apos; &apos;}
+          {' '}
           Validation Rules & Quality Control
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
@@ -578,10 +531,9 @@ const OracleDataIngestionSection: React.FC = () => {
 
         <div className="validation-categories sm:px-4 md:px-6 lg:px-8">
           {validationRules.map((rule: any) => (
-}
             <button
               key={rule.id}
-              className={`validation-category ${activeValidation === rule.id ? &apos;active&apos; : &apos;&apos;} ${rule.criticalLevel}`}
+              className={`validation-category ${activeValidation === rule.id ? 'active' : ''} ${rule.criticalLevel}`}
               onClick={() => setActiveValidation(rule.id)}
               aria-label={`View ${rule.name} validation details`}
             >
@@ -597,7 +549,6 @@ const OracleDataIngestionSection: React.FC = () => {
         </div>
 
         {selectedValidation && (
-}
           <div className="validation-details sm:px-4 md:px-6 lg:px-8">
             <div className="validation-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedValidation.name}</h4>
@@ -611,7 +562,6 @@ const OracleDataIngestionSection: React.FC = () => {
                 <h5>Validation Examples</h5>
                 <ul className="examples-list sm:px-4 md:px-6 lg:px-8">
                   {selectedValidation.examples.map((example: any) => (
-}
                     <li key={`example-${example.substring(0, 20)}`} className="example-item sm:px-4 md:px-6 lg:px-8">{example}</li>
                   ))}
                 </ul>
@@ -630,7 +580,7 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">📈</span>
-          {&apos; &apos;}
+          {' '}
           Data Quality Metrics
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
@@ -639,10 +589,9 @@ const OracleDataIngestionSection: React.FC = () => {
 
         <div className="quality-metrics-grid sm:px-4 md:px-6 lg:px-8">
           {qualityMetrics.map((metric: any) => (
-}
             <button
               key={metric.id}
-              className={`quality-metric-card ${activeMetric === metric.id ? &apos;active&apos; : &apos;&apos;}`}
+              className={`quality-metric-card ${activeMetric === metric.id ? 'active' : ''}`}
               onClick={() => setActiveMetric(metric.id)}
               aria-label={`View ${metric.name} metric details`}
             >
@@ -653,7 +602,6 @@ const OracleDataIngestionSection: React.FC = () => {
         </div>
 
         {selectedMetric && (
-}
           <div className="metric-details sm:px-4 md:px-6 lg:px-8">
             <div className="metric-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedMetric.name}</h4>
@@ -683,7 +631,7 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔄</span>
-          {&apos; &apos;}
+          {' '}
           Processing Pipelines & Orchestration
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
@@ -692,10 +640,9 @@ const OracleDataIngestionSection: React.FC = () => {
 
         <div className="pipeline-tabs sm:px-4 md:px-6 lg:px-8">
           {processingPipelines.map((pipeline: any) => (
-}
             <button
               key={pipeline.id}
-              className={`pipeline-tab ${activePipeline === pipeline.id ? &apos;active&apos; : &apos;&apos;}`}
+              className={`pipeline-tab ${activePipeline === pipeline.id ? 'active' : ''}`}
               onClick={() => setActivePipeline(pipeline.id)}
               aria-label={`View ${pipeline.name} details`}
             >
@@ -705,7 +652,6 @@ const OracleDataIngestionSection: React.FC = () => {
         </div>
 
         {selectedPipeline && (
-}
           <div className="pipeline-details sm:px-4 md:px-6 lg:px-8">
             <div className="pipeline-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedPipeline.name}</h4>
@@ -714,7 +660,7 @@ const OracleDataIngestionSection: React.FC = () => {
                   <strong>Throughput:</strong> {selectedPipeline.throughput}
                 </span>
                 <span className="spec sm:px-4 md:px-6 lg:px-8">
-                  <strong>Parallelization:</strong> {selectedPipeline.parallelization ? &apos;Enabled&apos; : &apos;Sequential&apos;}
+                  <strong>Parallelization:</strong> {selectedPipeline.parallelization ? 'Enabled' : 'Sequential'}
                 </span>
               </div>
             </div>
@@ -724,11 +670,9 @@ const OracleDataIngestionSection: React.FC = () => {
                 <h5>Processing Stages</h5>
                 <div className="stages-flow sm:px-4 md:px-6 lg:px-8">
                   {selectedPipeline.stages.map((stage: any) => (
-}
                     <div key={`stage-${stage}`} className="flow-stage sm:px-4 md:px-6 lg:px-8">
                       <span className="stage-name sm:px-4 md:px-6 lg:px-8">{stage}</span>
                       {selectedPipeline.stages.indexOf(stage) < selectedPipeline.stages.length - 1 && (
-}
                         <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
                       )}
                     </div>
@@ -740,7 +684,6 @@ const OracleDataIngestionSection: React.FC = () => {
                 <h5>Error Recovery Mechanisms</h5>
                 <ul className="recovery-list sm:px-4 md:px-6 lg:px-8">
                   {selectedPipeline.errorRecovery.map((recovery: any) => (
-}
                     <li key={`recovery-${recovery}`} className="recovery-item sm:px-4 md:px-6 lg:px-8">{recovery}</li>
                   ))}
                 </ul>
@@ -754,7 +697,7 @@ const OracleDataIngestionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">💡</span>
-          {&apos; &apos;}
+          {' '}
           Key Data Ingestion Insights
         </h3>
         

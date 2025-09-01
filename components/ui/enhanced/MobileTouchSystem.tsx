@@ -3,32 +3,28 @@
  * Professional mobile-first design with haptic feedback, gestures, and accessibility
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useRef, useEffect, ReactNode, TouchEvent, MouseEvent } from &apos;react&apos;;
-import { motion, PanInfo, useMotionValue, useTransform, animate } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useRef, useEffect, ReactNode, TouchEvent, MouseEvent } from 'react';
+import { motion, PanInfo, useMotionValue, useTransform, animate } from 'framer-motion';
 
 // =========================================
 // TYPES & INTERFACES
 // =========================================
 
 interface TouchFeedbackOptions {
-}
   haptic?: boolean;
   visual?: boolean;
   audio?: boolean;
-  intensity?: &apos;light&apos; | &apos;medium&apos; | &apos;heavy&apos;;
+  intensity?: 'light' | 'medium' | 'heavy';
 
-}
 
 interface SwipeHandlers {
-}
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
   onSwipeDown?: () => void;
 
 interface GestureConfig {
-}
   threshold?: number;
   velocity?: number;
   preventDefaultTouches?: boolean;
@@ -39,36 +35,28 @@ interface GestureConfig {
 // HAPTIC FEEDBACK SYSTEM
 // =========================================
 
-}
 
 export class HapticManager {
-}
   private static instance: HapticManager;
   private isSupported: boolean;
   private isEnabled: boolean = true;
 
   constructor() {
-}
-    this.isSupported = &apos;vibrate&apos; in navigator;
+    this.isSupported = 'vibrate' in navigator;
 
   static getInstance(): HapticManager {
-}
     if (!HapticManager.instance) {
-}
       HapticManager.instance = new HapticManager();
 
     return HapticManager.instance;
 
   setEnabled(enabled: boolean): void {
-}
     this.isEnabled = enabled;
 
-  trigger(type: &apos;light&apos; | &apos;medium&apos; | &apos;heavy&apos; | &apos;success&apos; | &apos;warning&apos; | &apos;error&apos;): void {
-}
+  trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error'): void {
     if (!this.isSupported || !this.isEnabled) return;
 
     const patterns = {
-}
   const [isLoading, setIsLoading] = React.useState(false);
       light: [10],
       medium: [50],
@@ -81,7 +69,6 @@ export class HapticManager {
     navigator.vibrate(patterns[type]);
 
   async triggerPattern(pattern: number[]): Promise<void> {
-}
     if (!this.isSupported || !this.isEnabled) return;
     navigator.vibrate(pattern);
 
@@ -93,7 +80,6 @@ export const haptic = HapticManager.getInstance();
 // =========================================
 
 interface TouchButtonProps {
-}
   children: ReactNode;
   onPress?: () => void;
   onLongPress?: () => void;
@@ -105,40 +91,34 @@ interface TouchButtonProps {
   pressScale?: number;
   longPressDuration?: number;
 
-}
 
 export const TouchButton: React.FC<TouchButtonProps> = ({
-}
   children,
   onPress,
   onLongPress,
-  feedback = { haptic: true, visual: true, intensity: &apos;medium&apos; },
+  feedback = { haptic: true, visual: true, intensity: 'medium' },
   disabled = false,
-  className = &apos;&apos;,
+  className = '',
   style = {},
-  rippleColor = &apos;rgba(255, 255, 255, 0.3)&apos;,
+  rippleColor = 'rgba(255, 255, 255, 0.3)',
   pressScale = 0.95,
   longPressDuration = 500
 }) => {
-}
   const [isPressed, setIsPressed] = useState(false);
   const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const pressTimer = useRef<NodeJS.Timeout>();
   const longPressTriggered = useRef(false);
 
   const handleTouchStart = (e: TouchEvent) => {
-}
     if (disabled) return;
     
     setIsPressed(true);
     longPressTriggered.current = false;
 
     if (feedback.haptic) {
-}
-      haptic.trigger(feedback.intensity || &apos;medium&apos;);
+      haptic.trigger(feedback.intensity || 'medium');
 
     if (feedback.visual) {
-}
       const touch = e.touches[0];
       const rect = (e.target as HTMLElement).getBoundingClientRect();
       const x = touch.clientX - rect.left;
@@ -147,46 +127,38 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
       setRipples(prev => [...prev, { id, x, y }]);
       setTimeout(() => {
-}
         setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
       }, 600);
 
     if (onLongPress) {
-}
       pressTimer.current = setTimeout(() => {
-}
         longPressTriggered.current = true;
-        haptic.trigger(&apos;heavy&apos;);
+        haptic.trigger('heavy');
         onLongPress();
       }, longPressDuration);
 
   };
 
   const handleTouchEnd = () => {
-}
     if (disabled) return;
     
     setIsPressed(false);
 
     if (pressTimer.current) {
-}
       clearTimeout(pressTimer.current);
 
     if (onPress && !longPressTriggered.current) {
-}
       onPress();
 
   };
 
   const handleMouseDown = (e: MouseEvent) => {
-}
     if (disabled) return;
     
     setIsPressed(true);
     longPressTriggered.current = false;
 
     if (feedback.visual) {
-}
       const rect = (e.target as HTMLElement).getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -194,14 +166,11 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
       setRipples(prev => [...prev, { id, x, y }]);
       setTimeout(() => {
-}
         setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
       }, 600);
 
     if (onLongPress) {
-}
       pressTimer.current = setTimeout(() => {
-}
         longPressTriggered.current = true;
         onLongPress();
       }, longPressDuration);
@@ -209,27 +178,21 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   };
 
   const handleMouseUp = () => {
-}
     if (disabled) return;
     
     setIsPressed(false);
 
     if (pressTimer.current) {
-}
       clearTimeout(pressTimer.current);
 
     if (onPress && !longPressTriggered.current) {
-}
       onPress();
 
   };
 
   useEffect(() => {
-}
     return () => {
-}
       if (pressTimer.current) {
-}
         clearTimeout(pressTimer.current);
 
     };
@@ -238,9 +201,8 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   return (
     <motion.button
       className={`
-}
         relative overflow-hidden outline-none select-none
-        ${disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;}
+        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         ${className}
       `}
       style={style}
@@ -249,11 +211,9 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       animate={{
-}
         scale: isPressed ? pressScale : 1
       }}
       transition={{
-}
         type: "spring",
         stiffness: 400,
         damping: 17
@@ -263,19 +223,16 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       
       {/* Ripple Effects */}
       {ripples.map((ripple: any) => (
-}
         <motion.div
           key={ripple.id}
           className="absolute rounded-full pointer-events-none sm:px-4 md:px-6 lg:px-8"
           style={{
-}
             left: ripple.x,
             top: ripple.y,
             backgroundColor: rippleColor
           }}
           initial={{ width: 0, height: 0, opacity: 0.7 }}
           animate={{ 
-}
             width: 200, 
             height: 200, 
             opacity: 0,
@@ -294,55 +251,43 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 // =========================================
 
 interface SwipeGestureProps {
-}
   children: ReactNode;
   handlers?: SwipeHandlers;
   config?: GestureConfig;
   className?: string;
 
-}
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
-}
   children,
   handlers = {},
   config = {},
-  className = &apos;&apos;
+  className = ''
 }) => {
-}
   const {
-}
     threshold = 50,
     velocity = 0.3,
     preventDefaultTouches = true
   } = config;
 
   const handlePan = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-}
     const { offset, velocity: vel } = info;
 
     // Check if movement meets threshold and velocity requirements
     if (Math.abs(offset.x) > threshold && Math.abs(vel.x) > velocity) {
-}
       if (offset.x > 0 && handlers.onSwipeRight) {
-}
-        haptic.trigger(&apos;light&apos;);
+        haptic.trigger('light');
         handlers.onSwipeRight();
       } else if (offset.x < 0 && handlers.onSwipeLeft) {
-}
-        haptic.trigger(&apos;light&apos;);
+        haptic.trigger('light');
         handlers.onSwipeLeft();
 
 
     if (Math.abs(offset.y) > threshold && Math.abs(vel.y) > velocity) {
-}
       if (offset.y > 0 && handlers.onSwipeDown) {
-}
-        haptic.trigger(&apos;light&apos;);
+        haptic.trigger('light');
         handlers.onSwipeDown();
       } else if (offset.y < 0 && handlers.onSwipeUp) {
-}
-        haptic.trigger(&apos;light&apos;);
+        haptic.trigger('light');
         handlers.onSwipeUp();
 
 
@@ -356,8 +301,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
       dragElastic={0.1}
       onPanEnd={handlePan}
       style={{
-}
-        touchAction: preventDefaultTouches ? &apos;none&apos; : &apos;auto&apos;
+        touchAction: preventDefaultTouches ? 'none' : 'auto'
       }}
     >
       {children}
@@ -370,24 +314,20 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
 // =========================================
 
 interface PullToRefreshProps {
-}
   children: ReactNode;
   onRefresh: () => Promise<void>;
   threshold?: number;
   className?: string;
   refreshIndicator?: ReactNode;
 
-}
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
-}
   children,
   onRefresh,
   threshold = 100,
-  className = &apos;&apos;,
+  className = '',
 //   refreshIndicator
 }: any) => {
-}
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const y = useMotionValue(0);
@@ -395,28 +335,22 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const scale = useTransform(y, [0, threshold], [0.8, 1]);
 
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-}
     if (info.offset.y > 0 && window.scrollY === 0) {
-}
       setPullDistance(info.offset.y);
 
   };
 
   const handleDragEnd = async (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-}
     if (info.offset.y > threshold && !isRefreshing && window.scrollY === 0) {
-}
       setIsRefreshing(true);
-      haptic.trigger(&apos;success&apos;);
+      haptic.trigger('success');
       
       try {
-}
 
         await onRefresh();
       
     `relative ${className}`}>
       {showValue && (
-}
         <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 sm:px-4 md:px-6 lg:px-8">
           <motion.div
             className="bg-dark-800 text-white px-2 py-1 rounded text-xs font-medium sm:px-4 md:px-6 lg:px-8"
@@ -440,10 +374,9 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
         {/* Thumb */}
         <motion.div
           className={`
-}
             absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2
             w-6 h-6 bg-white rounded-full shadow-lg cursor-pointer
-            ${disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;&apos;}
+            ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
             ${thumbClassName}
           `}
           style={{ left: `${percentage}%` }}
@@ -467,33 +400,27 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 // =========================================
 
 interface TouchCardStackProps {
-}
   children: ReactNode[];
-  onSwipe?: (direction: &apos;left&apos; | &apos;right&apos;, index: number) => void;
+  onSwipe?: (direction: 'left' | 'right', index: number) => void;
   className?: string;
 
-}
 
 export const TouchCardStack: React.FC<TouchCardStackProps> = ({
-}
   children,
   onSwipe,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const [cards, setCards] = useState(children.map((child, index) => ({ child, id: index })));
 
-  const handleSwipe = (direction: &apos;left&apos; | &apos;right&apos;, cardId: number) => {
-}
+  const handleSwipe = (direction: 'left' | 'right', cardId: number) => {
     setCards(prev => prev.filter((card: any) => card.id !== cardId));
     onSwipe?.(direction, cardId);
-    haptic.trigger(&apos;medium&apos;);
+    haptic.trigger('medium');
   };
 
   return (
-    <div className={`relative ${className}`} style={{ height: &apos;400px&apos; }}>
+    <div className={`relative ${className}`} style={{ height: '400px' }}>
       {cards.map((card, index) => (
-}
         <motion.div
           key={card.id}
           className="absolute inset-0 sm:px-4 md:px-6 lg:px-8"
@@ -502,18 +429,14 @@ export const TouchCardStack: React.FC<TouchCardStackProps> = ({
           drag="x"
           dragConstraints={{ left: -200, right: 200 }}
           onDragEnd={(event, info) => {
-}
             const threshold = 100;
             if (info.offset.x > threshold) {
-}
-              handleSwipe(&apos;right&apos;, card.id);
+              handleSwipe('right', card.id);
             } else if (info.offset.x < -threshold) {
-}
-              handleSwipe(&apos;left&apos;, card.id);
+              handleSwipe('left', card.id);
 
           }}
           style={{
-}
             zIndex: cards.length - index
           }}
         >
@@ -529,56 +452,46 @@ export const TouchCardStack: React.FC<TouchCardStackProps> = ({
 // =========================================
 
 export const useMobileScroll = () => {
-}
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState<&apos;up&apos; | &apos;down&apos; | null>(null);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
   
   const lastScrollY = useRef(0);
   const scrollTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-}
     const handleScroll = () => {
-}
       const currentScrollY = window.scrollY;
       
       setIsScrolling(true);
       setScrollPosition(currentScrollY);
       
       if (currentScrollY > lastScrollY.current) {
-}
-        setScrollDirection(&apos;down&apos;);
+        setScrollDirection('down');
       } else if (currentScrollY < lastScrollY.current) {
-}
-        setScrollDirection(&apos;up&apos;);
+        setScrollDirection('up');
 
       lastScrollY.current = currentScrollY;
 
       if (scrollTimer.current) {
-}
         clearTimeout(scrollTimer.current);
 
       scrollTimer.current = setTimeout(() => {
-}
         setIsScrolling(false);
         setScrollDirection(null);
       }, 150);
     };
 
-    window.addEventListener(&apos;scroll&apos;, handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-}
-      window.removeEventListener(&apos;scroll&apos;, handleScroll);
+      window.removeEventListener('scroll', handleScroll);
       if (scrollTimer.current) {
-}
         clearTimeout(scrollTimer.current);
 
     };
   }, []);
 
   return {
-}
     isScrolling,
     scrollPosition,
 //     scrollDirection
@@ -590,9 +503,7 @@ export const useMobileScroll = () => {
 // =========================================
 
 export const useSafeArea = () => {
-}
   const [safeArea, setSafeArea] = useState({
-}
     top: 0,
     bottom: 0,
     left: 0,
@@ -600,18 +511,13 @@ export const useSafeArea = () => {
   });
 
   useEffect(() => {
-}
     const updateSafeArea = () => {
-}
-      if (&apos;CSS&apos; in window && &apos;supports&apos; in window.CSS) {
-}
-        const supportsEnv = window.CSS.supports(&apos;top: env(safe-area-inset-top)&apos;);
+      if ('CSS' in window && 'supports' in window.CSS) {
+        const supportsEnv = window.CSS.supports('top: env(safe-area-inset-top)');
         
         if (supportsEnv) {
-}
           const getEnvValue = (property: string) => {
-}
-            const div = document.createElement(&apos;div&apos;);
+            const div = document.createElement('div');
             div.style.cssText = `position: fixed; top: env(${property}); visibility: hidden;`;
             document.body.appendChild(div);
             const value = parseInt(getComputedStyle(div).top) || 0;
@@ -620,22 +526,20 @@ export const useSafeArea = () => {
           };
 
           setSafeArea({
-}
-            top: getEnvValue(&apos;safe-area-inset-top&apos;),
-            bottom: getEnvValue(&apos;safe-area-inset-bottom&apos;),
-            left: getEnvValue(&apos;safe-area-inset-left&apos;),
-            right: getEnvValue(&apos;safe-area-inset-right&apos;)
+            top: getEnvValue('safe-area-inset-top'),
+            bottom: getEnvValue('safe-area-inset-bottom'),
+            left: getEnvValue('safe-area-inset-left'),
+            right: getEnvValue('safe-area-inset-right')
           });
 
 
     };
 
     updateSafeArea();
-    window.addEventListener(&apos;orientationchange&apos;, updateSafeArea);
+    window.addEventListener('orientationchange', updateSafeArea);
     
     return () => {
-}
-      window.removeEventListener(&apos;orientationchange&apos;, updateSafeArea);
+      window.removeEventListener('orientationchange', updateSafeArea);
     };
   }, []);
 
@@ -647,7 +551,6 @@ export const useSafeArea = () => {
 // =========================================
 
 export default {
-}
   TouchButton,
   SwipeGesture,
   PullToRefresh,

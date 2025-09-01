@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import RealtimeUpdatesWidget from &apos;./RealtimeUpdatesWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import RealtimeUpdatesWidget from './RealtimeUpdatesWidget';
 
-describe(&apos;RealtimeUpdatesWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('RealtimeUpdatesWidget', () => {
+  it('renders without crashing', () => {
     render(<RealtimeUpdatesWidget />);
-    expect(screen.getByTestId(&apos;realtimeupdateswidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('realtimeupdateswidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<RealtimeUpdatesWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<RealtimeUpdatesWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

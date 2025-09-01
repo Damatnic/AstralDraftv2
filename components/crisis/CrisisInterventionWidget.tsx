@@ -4,120 +4,107 @@
  * Follows best practices for crisis intervention UI design
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { AlertTriangleIcon } from &apos;../icons/AlertTriangleIcon&apos;;
-import { PhoneIcon } from &apos;../icons/PhoneIcon&apos;;
-import { MessageCircleIcon } from &apos;../icons/MessageCircleIcon&apos;;
-import { HeartIcon } from &apos;../icons/HeartIcon&apos;;
-import { GlobeIcon } from &apos;../icons/GlobeIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
+import { PhoneIcon } from '../icons/PhoneIcon';
+import { MessageCircleIcon } from '../icons/MessageCircleIcon';
+import { HeartIcon } from '../icons/HeartIcon';
+import { GlobeIcon } from '../icons/GlobeIcon';
 
 interface CrisisResource {
-}
   name: string;
   number?: string;
   textNumber?: string;
   website?: string;
   description: string;
   hours: string;
-  type: &apos;phone&apos; | &apos;text&apos; | &apos;both&apos; | &apos;web&apos;;
-  priority: &apos;immediate&apos; | &apos;urgent&apos; | &apos;support&apos;;
+  type: 'phone' | 'text' | 'both' | 'web';
+  priority: 'immediate' | 'urgent' | 'support';
 
-}
 
 const crisisResources: CrisisResource[] = [
   {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-    name: &apos;988 Suicide & Crisis Lifeline&apos;,
-    number: &apos;988&apos;,
-    textNumber: &apos;988&apos;,
-    website: &apos;https://988lifeline.org&apos;,
-    description: &apos;Free, confidential crisis support 24/7 for anyone in suicidal crisis or emotional distress&apos;,
-    hours: &apos;24/7&apos;,
-    type: &apos;both&apos;,
-    priority: &apos;immediate&apos;
+    name: '988 Suicide & Crisis Lifeline',
+    number: '988',
+    textNumber: '988',
+    website: 'https://988lifeline.org',
+    description: 'Free, confidential crisis support 24/7 for anyone in suicidal crisis or emotional distress',
+    hours: '24/7',
+    type: 'both',
+    priority: 'immediate'
   },
   {
-}
-    name: &apos;Crisis Text Line&apos;,
-    textNumber: &apos;741741&apos;,
-    website: &apos;https://www.crisistextline.org&apos;,
-    description: &apos;Text HOME to connect with a crisis counselor&apos;,
-    hours: &apos;24/7&apos;,
-    type: &apos;text&apos;,
-    priority: &apos;immediate&apos;
+    name: 'Crisis Text Line',
+    textNumber: '741741',
+    website: 'https://www.crisistextline.org',
+    description: 'Text HOME to connect with a crisis counselor',
+    hours: '24/7',
+    type: 'text',
+    priority: 'immediate'
   },
   {
-}
-    name: &apos;SAMHSA National Helpline&apos;,
-    number: &apos;1-800-662-4357&apos;,
-    website: &apos;https://www.samhsa.gov/find-help/national-helpline&apos;,
-    description: &apos;Treatment referral and information service for mental health and substance use disorders&apos;,
-    hours: &apos;24/7&apos;,
-    type: &apos;phone&apos;,
-    priority: &apos;urgent&apos;
+    name: 'SAMHSA National Helpline',
+    number: '1-800-662-4357',
+    website: 'https://www.samhsa.gov/find-help/national-helpline',
+    description: 'Treatment referral and information service for mental health and substance use disorders',
+    hours: '24/7',
+    type: 'phone',
+    priority: 'urgent'
   },
   {
-}
-    name: &apos;Veterans Crisis Line&apos;,
-    number: &apos;1-800-273-8255&apos;,
-    textNumber: &apos;838255&apos;,
-    website: &apos;https://www.veteranscrisisline.net&apos;,
-    description: &apos;Support for Veterans and their loved ones&apos;,
-    hours: &apos;24/7&apos;,
-    type: &apos;both&apos;,
-    priority: &apos;immediate&apos;
+    name: 'Veterans Crisis Line',
+    number: '1-800-273-8255',
+    textNumber: '838255',
+    website: 'https://www.veteranscrisisline.net',
+    description: 'Support for Veterans and their loved ones',
+    hours: '24/7',
+    type: 'both',
+    priority: 'immediate'
   },
   {
-}
-    name: &apos;LGBTQ National Hotline&apos;,
-    number: &apos;1-888-843-4564&apos;,
-    website: &apos;https://www.lgbthotline.org&apos;,
-    description: &apos;Support for LGBTQ individuals&apos;,
-    hours: &apos;1pm-9pm PST&apos;,
-    type: &apos;phone&apos;,
-    priority: &apos;support&apos;
+    name: 'LGBTQ National Hotline',
+    number: '1-888-843-4564',
+    website: 'https://www.lgbthotline.org',
+    description: 'Support for LGBTQ individuals',
+    hours: '1pm-9pm PST',
+    type: 'phone',
+    priority: 'support'
   },
   {
-}
-    name: &apos;NAMI HelpLine&apos;,
-    number: &apos;1-800-950-6264&apos;,
-    website: &apos;https://www.nami.org/help&apos;,
-    description: &apos;National Alliance on Mental Illness support and resources&apos;,
-    hours: &apos;Mon-Fri 10am-10pm ET&apos;,
-    type: &apos;phone&apos;,
-    priority: &apos;support&apos;
+    name: 'NAMI HelpLine',
+    number: '1-800-950-6264',
+    website: 'https://www.nami.org/help',
+    description: 'National Alliance on Mental Illness support and resources',
+    hours: 'Mon-Fri 10am-10pm ET',
+    type: 'phone',
+    priority: 'support'
   },
   {
-}
-    name: &apos;International Crisis Lines&apos;,
-    website: &apos;https://findahelpline.com&apos;,
-    description: &apos;Find crisis support in your country&apos;,
-    hours: &apos;Varies by location&apos;,
-    type: &apos;web&apos;,
-    priority: &apos;support&apos;
+    name: 'International Crisis Lines',
+    website: 'https://findahelpline.com',
+    description: 'Find crisis support in your country',
+    hours: 'Varies by location',
+    type: 'web',
+    priority: 'support'
 
 ];
 
 export const CrisisInterventionWidget: React.FC = () => {
-}
   const [isExpanded, setIsExpanded] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [lastInteraction, setLastInteraction] = useState<Date | null>(null);
 
   // Track user interaction for analytics (privacy-focused)
   useEffect(() => {
-}
     if (isExpanded) {
-}
       setLastInteraction(new Date());
       // Log anonymous usage for improvement purposes
     }
   }, [isExpanded]);
 
-  const handleResourceClick = (resource: CrisisResource, action: &apos;call&apos; | &apos;text&apos; | &apos;web&apos;) => {
-}
+  const handleResourceClick = (resource: CrisisResource, action: 'call' | 'text' | 'web') => {
     setShowConfirmation(true);
     setTimeout(() => setShowConfirmation(false), 3000);
 
@@ -125,28 +112,24 @@ export const CrisisInterventionWidget: React.FC = () => {
   };
 
   const getPriorityColor = (priority: string) => {
-}
     switch (priority) {
-}
-      case &apos;immediate&apos;:
-        return &apos;bg-red-50 border-red-200&apos;;
-      case &apos;urgent&apos;:
-        return &apos;bg-orange-50 border-orange-200&apos;;
+      case 'immediate':
+        return 'bg-red-50 border-red-200';
+      case 'urgent':
+        return 'bg-orange-50 border-orange-200';
       default:
-        return &apos;bg-blue-50 border-blue-200&apos;;
+        return 'bg-blue-50 border-blue-200';
 
   };
 
   const getPriorityBadge = (priority: string) => {
-}
     switch (priority) {
-}
-      case &apos;immediate&apos;:
-        return &apos;bg-red-100 text-red-800&apos;;
-      case &apos;urgent&apos;:
-        return &apos;bg-orange-100 text-orange-800&apos;;
+      case 'immediate':
+        return 'bg-red-100 text-red-800';
+      case 'urgent':
+        return 'bg-orange-100 text-orange-800';
       default:
-        return &apos;bg-blue-100 text-blue-800&apos;;
+        return 'bg-blue-100 text-blue-800';
 
   };
 
@@ -168,7 +151,6 @@ export const CrisisInterventionWidget: React.FC = () => {
 
       {/* Crisis Resources Modal */}
       {isExpanded && (
-}
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
@@ -179,7 +161,7 @@ export const CrisisInterventionWidget: React.FC = () => {
                   <div>
                     <h2 className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8">Crisis Support Resources</h2>
                     <p className="text-purple-100 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">
-                      You&apos;re not alone. Help is available 24/7.
+                      You're not alone. Help is available 24/7.
                     </p>
                   </div>
                 </div>
@@ -199,7 +181,7 @@ export const CrisisInterventionWidget: React.FC = () => {
                 <AlertTriangleIcon className="w-5 h-5 text-red-500 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
                 <div>
                   <p className="text-sm font-medium text-red-800 sm:px-4 md:px-6 lg:px-8">
-                    If you&apos;re in immediate danger, call 911 or your local emergency services
+                    If you're in immediate danger, call 911 or your local emergency services
                   </p>
                 </div>
               </div>
@@ -209,7 +191,6 @@ export const CrisisInterventionWidget: React.FC = () => {
             <div className="p-6 overflow-y-auto max-h-[60vh] sm:px-4 md:px-6 lg:px-8">
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {crisisResources.map((resource, index) => (
-}
                   <div
                     key={index}
                     className={`border rounded-lg p-4 ${getPriorityColor(resource.priority)} transition-all duration-200 hover:shadow-md`}
@@ -221,9 +202,8 @@ export const CrisisInterventionWidget: React.FC = () => {
                             {resource.name}
                           </h3>
                           <span className={`text-xs px-2 py-1 rounded-full ${getPriorityBadge(resource.priority)}`}>
-                            {resource.priority === &apos;immediate&apos; ? &apos;24/7 Immediate&apos; : 
-}
-                             resource.priority === &apos;urgent&apos; ? &apos;Urgent&apos; : &apos;Support&apos;}
+                            {resource.priority === 'immediate' ? '24/7 Immediate' : 
+                             resource.priority === 'urgent' ? 'Urgent' : 'Support'}
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 mb-3 sm:px-4 md:px-6 lg:px-8">
@@ -231,10 +211,9 @@ export const CrisisInterventionWidget: React.FC = () => {
                         </p>
                         <div className="flex flex-wrap gap-3 sm:px-4 md:px-6 lg:px-8">
                           {resource.number && (
-}
                             <a
                               href={`tel:${resource.number}`}
-                              onClick={() => handleResourceClick(resource, &apos;call&apos;)}
+                              onClick={() => handleResourceClick(resource, 'call')}
                               className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             >
                               <PhoneIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -242,10 +221,9 @@ export const CrisisInterventionWidget: React.FC = () => {
                             </a>
                           )}
                           {resource.textNumber && (
-}
                             <a
-                              href={`sms:${resource.textNumber}${resource.textNumber === &apos;741741&apos; ? &apos;&body=HOME&apos; : &apos;&apos;}`}
-                              onClick={() => handleResourceClick(resource, &apos;text&apos;)}
+                              href={`sms:${resource.textNumber}${resource.textNumber === '741741' ? '&body=HOME' : ''}`}
+                              onClick={() => handleResourceClick(resource, 'text')}
                               className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             >
                               <MessageCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -253,12 +231,11 @@ export const CrisisInterventionWidget: React.FC = () => {
                             </a>
                           )}
                           {resource.website && (
-}
                             <a
                               href={resource.website}
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => handleResourceClick(resource, &apos;web&apos;)}
+                              onClick={() => handleResourceClick(resource, 'web')}
                               className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             >
                               <GlobeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -301,9 +278,8 @@ export const CrisisInterventionWidget: React.FC = () => {
 
       {/* Confirmation Toast */}
       {showConfirmation && (
-}
         <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in sm:px-4 md:px-6 lg:px-8">
-          <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Resource opened. You&apos;re taking a positive step.</p>
+          <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Resource opened. You're taking a positive step.</p>
         </div>
       )}
     </>

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import SimpleLoginInterface from &apos;./SimpleLoginInterface&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SimpleLoginInterface from './SimpleLoginInterface';
 
-describe(&apos;SimpleLoginInterface&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('SimpleLoginInterface', () => {
+  it('renders without crashing', () => {
     render(<SimpleLoginInterface />);
-    expect(screen.getByTestId(&apos;simplelogininterface&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('simplelogininterface')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<SimpleLoginInterface />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<SimpleLoginInterface />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

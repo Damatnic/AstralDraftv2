@@ -1,29 +1,25 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { ImageIcon } from &apos;../icons/ImageIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { Modal } from '../ui/Modal';
+import { ImageIcon } from '../icons/ImageIcon';
 
 interface EditHeaderModalProps {
-}
     leagueId: string;
     teamId: number;
     currentHeader?: string;
     dispatch: React.Dispatch<any>;
     onClose: () => void;
 
-}
 
 const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, currentHeader, dispatch, onClose }: any) => {
-}
-    const [imageUrl, setImageUrl] = React.useState(currentHeader || &apos;&apos;);
+    const [imageUrl, setImageUrl] = React.useState(currentHeader || '');
 
     const handleSave = () => {
-}
-        dispatch({ type: &apos;UPDATE_TEAM_HEADER&apos;, payload: { leagueId, teamId, imageUrl } });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: &apos;Team header updated!&apos; });
+        dispatch({ type: 'UPDATE_TEAM_HEADER', payload: { leagueId, teamId, imageUrl } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: 'Team header updated!' });
         onClose();
     };
 
@@ -32,7 +28,6 @@ const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, cur
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md sm:px-4 md:px-6 lg:px-8"
                 {...{
-}
                     initial: { opacity: 0, scale: 0.95 },
                     animate: { opacity: 1, scale: 1 },
                 }}

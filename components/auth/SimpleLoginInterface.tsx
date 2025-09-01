@@ -3,76 +3,62 @@
  * 10 player buttons + admin login with PIN authentication
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import SimpleAuthService, { SimpleUser } from &apos;../../services/simpleAuthService&apos;;
-import { SecurePinInput } from &apos;../ui/SecureInput&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import SimpleAuthService, { SimpleUser } from '../../services/simpleAuthService';
+import { SecurePinInput } from '../ui/SecureInput';
 
 interface Props {
-}
     onLogin: (user: SimpleUser) => void;
     className?: string;
 
-}
 
 interface PinInputProps {
-}
     user: SimpleUser;
     onSuccess: (user: SimpleUser) => void;
     onBack: () => void;
-}
 
 const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => {
-}
-    const [pin, setPin] = useState(&apos;&apos;);
-    const [error, setError] = useState(&apos;&apos;);
+    const [pin, setPin] = useState('');
+    const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handlePinSubmit = async (e?: React.FormEvent) => {
-}
         if (e) {
-}
             e.preventDefault();
         }
         
         if (pin.length !== 4) {
-}
-            setError(&apos;PIN must be 4 digits&apos;);
+            setError('PIN must be 4 digits');
             return;
         }
         
         setIsLoading(true);
-        setError(&apos;&apos;);
+        setError('');
 
         try {
-}
             const session = await SimpleAuthService.authenticateUser(user.id, pin);
             if (session) {
-}
                 onSuccess(session.user);
             } else {
-}
-                setError(&apos;Invalid PIN. Please try again.&apos;);
-                setPin(&apos;&apos;);
+                setError('Invalid PIN. Please try again.');
+                setPin('');
             }
         } catch (error) {
-}
-            console.error(&apos;Login error:&apos;, error);
-            setError(&apos;Login failed. Please try again.&apos;);
-            setPin(&apos;&apos;);
+            console.error('Login error:', error);
+            setError('Login failed. Please try again.');
+            setPin('');
         } finally {
-}
             setIsLoading(false);
         }
     };
 
     const handlePinChange = (value: string) => {
-}
         // Only allow numbers and limit to 4 digits
-        const numericValue = value.replace(/\D/g, &apos;&apos;).slice(0, 4);
+        const numericValue = value.replace(/\D/g, '').slice(0, 4);
         setPin(numericValue);
-        setError(&apos;&apos;);
+        setError('');
     };
 
     return (
@@ -124,20 +110,18 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
                         aria-label="Sign in with PIN"
                     >
                         {isLoading ? (
-}
                             <div className="flex items-center justify-center">
                                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                                 Signing In...
                             </div>
                         ) : (
-                            &apos;Sign In&apos;
+                            'Sign In'
                         )}
                     </button>
                 </div>
             </form>
 
-            {user.id !== &apos;admin&apos; && (
-}
+            {user.id !== 'admin' && (
                 <div className="mt-6 pt-6 border-t border-gray-700">
                     <p className="text-xs text-gray-500 text-center">
                         Default PIN is 0000. You can change it after logging in.
@@ -148,13 +132,11 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
     );
 };
 
-const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = &apos;&apos; }: any) => {
-}
+const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any) => {
     const [users, setUsers] = useState<SimpleUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<SimpleUser | null>(null);
 
     useEffect(() => {
-}
         // Initialize auth service and load users
         SimpleAuthService.initialize();
         const allUsers = SimpleAuthService.getAllUsers();
@@ -162,23 +144,19 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = &apos;&apo
     }, []);
 
     const handleUserSelect = (user: SimpleUser) => {
-}
         setSelectedUser(user);
     };
 
     const handleLoginSuccess = (user: SimpleUser) => {
-}
         onLogin(user);
         setSelectedUser(null);
     };
 
     const handleBack = () => {
-}
         setSelectedUser(null);
     };
 
     if (selectedUser) {
-}
         return (
             <div className={`min-h-screen bg-gray-900 flex items-center justify-center p-4 ${className}`}>
                 <PinInput>
@@ -207,7 +185,6 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = &apos;&apo
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
                     {users.filter((user: any) => !user.isAdmin).map((user, index) => (
-}
                         <motion.button
                             key={user.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -233,7 +210,6 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = &apos;&apo
                     </div>
                     
                     {users.filter((user: any) => user.isAdmin).map((admin: any) => (
-}
                         <motion.button
                             key={admin.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -248,7 +224,6 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = &apos;&apo
                                 <div 
                                     className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
                                     style={{ 
-}
                                         backgroundColor: admin.customization.backgroundColor,
                                         color: admin.customization.textColor 
                                     }}

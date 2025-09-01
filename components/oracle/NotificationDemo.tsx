@@ -3,19 +3,17 @@
  * For testing and demonstrating Oracle notification features
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Bell, Target, Clock, Trophy, TrendingUp, Users, Zap } from &apos;lucide-react&apos;;
-import { NotificationCenter } from &apos;../oracle/NotificationCenter&apos;;
-import { NotificationPreferencesComponent } from &apos;../oracle/NotificationPreferences&apos;;
-import { useOracleNotifications } from &apos;../../hooks/useOracleNotifications&apos;;
-import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Bell, Target, Clock, Trophy, TrendingUp, Users, Zap } from 'lucide-react';
+import { NotificationCenter } from '../oracle/NotificationCenter';
+import { NotificationPreferencesComponent } from '../oracle/NotificationPreferences';
+import { useOracleNotifications } from '../../hooks/useOracleNotifications';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 
 export const NotificationDemo: React.FC = () => {
-}
     const {
-}
         addNotification,
         notifyPredictionDeadline,
         notifyPredictionResult,
@@ -30,100 +28,88 @@ export const NotificationDemo: React.FC = () => {
 
     const demoNotifications = [
         {
-}
-            title: &apos;Deadline Warning&apos;,
-            description: &apos;Show a prediction deadline warning&apos;,
+            title: 'Deadline Warning',
+            description: 'Show a prediction deadline warning',
             icon: <Clock className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyPredictionDeadline(
-                &apos;demo-pred-1&apos;,
-                &apos;Will the Chiefs win their next game?&apos;,
+                'demo-pred-1',
+                'Will the Chiefs win their next game?',
 //                 15
             )
         },
         {
-}
-            title: &apos;Correct Prediction&apos;,
-            description: &apos;Celebrate a correct prediction&apos;,
+            title: 'Correct Prediction',
+            description: 'Celebrate a correct prediction',
             icon: <Target className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyPredictionResult(
-                &apos;demo-pred-2&apos;,
-                &apos;Will Patrick Mahomes throw for 300+ yards?&apos;,
+                'demo-pred-2',
+                'Will Patrick Mahomes throw for 300+ yards?',
                 true,
 //                 25
             )
         },
         {
-}
-            title: &apos;Incorrect Prediction&apos;,
-            description: &apos;Show an incorrect prediction result&apos;,
+            title: 'Incorrect Prediction',
+            description: 'Show an incorrect prediction result',
             icon: <Target className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyPredictionResult(
-                &apos;demo-pred-3&apos;,
-                &apos;Will it rain tomorrow?&apos;,
+                'demo-pred-3',
+                'Will it rain tomorrow?',
                 false,
 //                 0
             )
         },
         {
-}
-            title: &apos;Accuracy Improved&apos;,
-            description: &apos;Show accuracy improvement notification&apos;,
+            title: 'Accuracy Improved',
+            description: 'Show accuracy improvement notification',
             icon: <TrendingUp className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyAccuracyUpdate(75.5, 68.2)
         },
         {
-}
-            title: &apos;Accuracy Decreased&apos;,
-            description: &apos;Show accuracy decrease notification&apos;,
+            title: 'Accuracy Decreased',
+            description: 'Show accuracy decrease notification',
             icon: <TrendingUp className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyAccuracyUpdate(62.1, 68.9)
         },
         {
-}
-            title: &apos;Streak Milestone&apos;,
-            description: &apos;Celebrate a 5-prediction streak&apos;,
+            title: 'Streak Milestone',
+            description: 'Celebrate a 5-prediction streak',
             icon: <Zap className="w-5 h-5 text-orange-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyStreakMilestone(5)
         },
         {
-}
-            title: &apos;Ranking Improved&apos;,
-            description: &apos;Show ranking improvement&apos;,
+            title: 'Ranking Improved',
+            description: 'Show ranking improvement',
             icon: <Trophy className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyRankingChange(3, 7)
         },
         {
-}
-            title: &apos;Ranking Dropped&apos;,
-            description: &apos;Show ranking decrease&apos;,
+            title: 'Ranking Dropped',
+            description: 'Show ranking decrease',
             icon: <Trophy className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyRankingChange(12, 8)
         },
         {
-}
-            title: &apos;Custom High Priority&apos;,
-            description: &apos;Show a high priority custom notification&apos;,
+            title: 'Custom High Priority',
+            description: 'Show a high priority custom notification',
             icon: <Bell className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => addNotification({
-}
-                type: &apos;result_announced&apos;,
-                title: &apos;🚨 Critical Update&apos;,
-                message: &apos;This is a high priority notification that requires immediate attention!&apos;,
-                priority: &apos;high&apos;
+                type: 'result_announced',
+                title: '🚨 Critical Update',
+                message: 'This is a high priority notification that requires immediate attention!',
+                priority: 'high'
             })
         },
         {
-}
-            title: &apos;Custom Medium Priority&apos;,
-            description: &apos;Show a medium priority custom notification&apos;,
+            title: 'Custom Medium Priority',
+            description: 'Show a medium priority custom notification',
             icon: <Bell className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => addNotification({
-}
-                type: &apos;accuracy_update&apos;,
-                title: &apos;📊 Weekly Summary&apos;,
-                message: &apos;Your weekly prediction summary is now available. Check your progress!&apos;,
-                priority: &apos;medium&apos;,
-                actionUrl: &apos;/oracle/analytics&apos;
+                type: 'accuracy_update',
+                title: '📊 Weekly Summary',
+                message: 'Your weekly prediction summary is now available. Check your progress!',
+                priority: 'medium',
+                actionUrl: '/oracle/analytics'
             })
 
     ];
@@ -174,7 +160,7 @@ export const NotificationDemo: React.FC = () => {
                     <CardContent className="p-6 text-center sm:px-4 md:px-6 lg:px-8">
                         <Users className="w-8 h-8 mx-auto text-purple-400 mb-2 sm:px-4 md:px-6 lg:px-8" />
                         <p className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
-                            {(&apos;Notification&apos; in window && Notification.permission === &apos;granted&apos;) ? &apos;Enabled&apos; : &apos;Disabled&apos;}
+                            {('Notification' in window && Notification.permission === 'granted') ? 'Enabled' : 'Disabled'}
                         </p>
                         <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Browser Notifications</p>
                     </CardContent>
@@ -183,7 +169,6 @@ export const NotificationDemo: React.FC = () => {
 
             {/* Notification Preferences */}
             {showPreferences && (
-}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -202,7 +187,6 @@ export const NotificationDemo: React.FC = () => {
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {demoNotifications.map((demo, index) => (
-}
                             <motion.button
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}

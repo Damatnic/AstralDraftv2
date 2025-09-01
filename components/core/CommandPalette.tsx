@@ -1,96 +1,81 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { players } from &apos;../../data/players&apos;;
-import type { Player, View } from &apos;../../types&apos;;
-import { HistoryIcon } from &apos;../icons/HistoryIcon&apos;;
-import { useFocusTrap } from &apos;../../utils/accessibility&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { players } from '../../data/players';
+import type { Player, View } from '../../types';
+import { HistoryIcon } from '../icons/HistoryIcon';
+import { useFocusTrap } from '../../utils/accessibility';
 
 interface CommandPaletteProps {
-}
   [key: string]: unknown;
-}
 
 const CommandPalette: React.FC<CommandPaletteProps> = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const { state, dispatch } = useAppState();
-    const [query, setQuery] = React.useState(&apos;&apos;);
+    const [query, setQuery] = React.useState('');
     const { containerRef } = useFocusTrap(state.isCommandPaletteOpen);
 
     const leagues = state.leagues.filter((l: any) => !l.isMock);
 
     React.useEffect(() => {
-}
         const handleKeyDown = (e: KeyboardEvent) => {
-}
             // Enhanced keyboard navigation
-            if ((e.metaKey || e.ctrlKey) && e.key === &apos;k&apos;) {
-}
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
-                dispatch({ type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: !state.isCommandPaletteOpen });
+                dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: !state.isCommandPaletteOpen });
 
-            if (e.key === &apos;Escape&apos;) {
-}
-                dispatch({ type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: false });
-                setQuery(&apos;&apos;); // Clear query on close
+            if (e.key === 'Escape') {
+                dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
+                setQuery(''); // Clear query on close
 
             // Quick navigation shortcuts when palette is open
             if (state.isCommandPaletteOpen) {
-}
-                if (e.key === &apos;ArrowDown&apos; || e.key === &apos;ArrowUp&apos;) {
-}
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                     e.preventDefault();
                     // Handle arrow navigation (implementation would depend on results structure)
 
-                if (e.key === &apos;Enter&apos;) {
-}
+                if (e.key === 'Enter') {
                     e.preventDefault();
                     // Handle selection (implementation would depend on selected item)
 
 
         };
-        window.addEventListener(&apos;keydown&apos;, handleKeyDown);
-        return () => window.removeEventListener(&apos;keydown&apos;, handleKeyDown);
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, [state.isCommandPaletteOpen, dispatch]);
     
     React.useEffect(() => {
-}
         if (!state.isCommandPaletteOpen) {
-}
-            setQuery(&apos;&apos;);
+            setQuery('');
     }
   }, [state.isCommandPaletteOpen]);
 
     const handleSelectLeague = (id: string) => {
-}
-        dispatch({ type: &apos;SET_ACTIVE_LEAGUE&apos;, payload: id });
-        dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; });
-        dispatch({ type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: false });
+        dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: id });
+        dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' });
+        dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
 
     const handleSelectPlayer = (player: Player) => {
-}
-        dispatch({ type: &apos;SET_PLAYER_DETAIL&apos;, payload: { player } });
-        dispatch({ type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: false });
+        dispatch({ type: 'SET_PLAYER_DETAIL', payload: { player } });
+        dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
 
     const handleSelectView = (view: View, name: string) => {
-}
-        dispatch({ type: &apos;SET_VIEW&apos;, payload: view });
-        dispatch({ type: &apos;LOG_COMMAND&apos;, payload: { name, view }});
-        dispatch({ type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: false });
+        dispatch({ type: 'SET_VIEW', payload: view });
+        dispatch({ type: 'LOG_COMMAND', payload: { name, view }});
+        dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
 
     const commandActions = state.activeLeagueId ? [
-        { name: &apos;Go to My Team&apos;, view: &apos;TEAM_HUB&apos; as View },
-        { name: &apos;View Standings&apos;, view: &apos;LEAGUE_STANDINGS&apos; as View },
-        { name: &apos;Waiver Wire&apos;, view: &apos;WAIVER_WIRE&apos; as View },
-        { name: &apos;Power Rankings&apos;, view: &apos;POWER_RANKINGS&apos; as View },
-        { name: &apos;Analytics Hub&apos;, view: &apos;ANALYTICS_HUB&apos; as View },
-        { name: &apos;Historical Analytics&apos;, view: &apos;HISTORICAL_ANALYTICS&apos; as View },
-        { name: &apos;Go to Dashboard&apos;, view: &apos;DASHBOARD&apos; as View },
-    ] : [{ name: &apos;Go to Dashboard&apos;, view: &apos;DASHBOARD&apos; as View }];
+        { name: 'Go to My Team', view: 'TEAM_HUB' as View },
+        { name: 'View Standings', view: 'LEAGUE_STANDINGS' as View },
+        { name: 'Waiver Wire', view: 'WAIVER_WIRE' as View },
+        { name: 'Power Rankings', view: 'POWER_RANKINGS' as View },
+        { name: 'Analytics Hub', view: 'ANALYTICS_HUB' as View },
+        { name: 'Historical Analytics', view: 'HISTORICAL_ANALYTICS' as View },
+        { name: 'Go to Dashboard', view: 'DASHBOARD' as View },
+    ] : [{ name: 'Go to Dashboard', view: 'DASHBOARD' as View }];
 
     const queryLower = query.toLowerCase();
 
@@ -103,17 +88,13 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
         : [];
 
     const renderResults = () => {
-}
         if (query.length === 0) {
-}
             return (
                 <>
                     {state.recentCommands.length > 0 && (
-}
                          <>
                             <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><HistoryIcon className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" /> Recent</h4>
                             {state.recentCommands.map((cmd, i) => (
-}
                                 <button key={i} onClick={() => handleSelectView(cmd.view, cmd.name)}
                                 </button>
                             ))}
@@ -121,7 +102,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
                     )}
                     <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8">My Leagues</h4>
                     {leagues.map((league: any) => (
-}
                         <button key={league.id} onClick={() => handleSelectLeague(league.id)}
                         </button>
                     ))}
@@ -131,29 +111,24 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
         return (
             <>
                 {filteredPlayers.length > 0 && (
-}
                     <>
                         <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8">Players</h4>
                         {filteredPlayers.map((player: any) => (
-}
                             <button key={player.id} onClick={() => handleSelectPlayer(player)} <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">({player.position} - {player.team})</span>
                             </button>
                         ))}
                     </>
                 )}
                 {filteredActions.length > 0 && (
-}
                      <>
                         <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8">Navigation</h4>
                         {filteredActions.map((action: any) => (
-}
                             <button key={action.view} onClick={() => handleSelectView(action.view, action.name)}
                             </button>
                         ))}
                     </>
                 )}
                  {filteredPlayers.length === 0 && filteredActions.length === 0 && (
-}
                     <p className="p-4 text-center text-gray-500 sm:px-4 md:px-6 lg:px-8">No results found.</p>
                  )}
             </>
@@ -163,12 +138,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
     return (
         <AnimatePresence>
             {state.isCommandPaletteOpen && (
-}
                  <motion.div
                     className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-[20vh] sm:px-4 md:px-6 lg:px-8"
-                    onClick={() => dispatch({ type: &apos;SET_COMMAND_PALETTE_OPEN&apos;, payload: false })}
+                    onClick={() => dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false })}
                     {...{
-}
                         initial: { opacity: 0 },
                         animate: { opacity: 1 },
                         exit: { opacity: 0 },

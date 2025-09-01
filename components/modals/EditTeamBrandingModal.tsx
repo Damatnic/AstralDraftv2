@@ -1,61 +1,52 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
 
 interface EditTeamBrandingModalProps {
-}
     team: any;
     leagueId: string;
     dispatch: (action: any) => void;
     onClose: () => void;
 
-}
 
 const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
-}
     team,
     leagueId,
     dispatch,
 //     onClose
 }: any) => {
-}
-    const [teamName, setTeamName] = React.useState(team.name || &apos;&apos;);
-    const [teamLogo, setTeamLogo] = React.useState(team.logo || &apos;&apos;);
-    const [primaryColor, setPrimaryColor] = React.useState(team.primaryColor || &apos;#3B82F6&apos;);
-    const [secondaryColor, setSecondaryColor] = React.useState(team.secondaryColor || &apos;#1E40AF&apos;);
-    const [motto, setMotto] = React.useState(team.motto || &apos;&apos;);
+    const [teamName, setTeamName] = React.useState(team.name || '');
+    const [teamLogo, setTeamLogo] = React.useState(team.logo || '');
+    const [primaryColor, setPrimaryColor] = React.useState(team.primaryColor || '#3B82F6');
+    const [secondaryColor, setSecondaryColor] = React.useState(team.secondaryColor || '#1E40AF');
+    const [motto, setMotto] = React.useState(team.motto || '');
     const [loading, setLoading] = React.useState(false);
 
     const predefinedColors = [
-        &apos;#EF4444&apos;, &apos;#F97316&apos;, &apos;#F59E0B&apos;, &apos;#EAB308&apos;,
-        &apos;#84CC16&apos;, &apos;#22C55E&apos;, &apos;#10B981&apos;, &apos;#14B8A6&apos;,
-        &apos;#06B6D4&apos;, &apos;#0EA5E9&apos;, &apos;#3B82F6&apos;, &apos;#6366F1&apos;,
-        &apos;#8B5CF6&apos;, &apos;#A855F7&apos;, &apos;#D946EF&apos;, &apos;#EC4899&apos;
+        '#EF4444', '#F97316', '#F59E0B', '#EAB308',
+        '#84CC16', '#22C55E', '#10B981', '#14B8A6',
+        '#06B6D4', '#0EA5E9', '#3B82F6', '#6366F1',
+        '#8B5CF6', '#A855F7', '#D946EF', '#EC4899'
     ];
 
     const logoOptions = [
-        &apos;🦅&apos;, &apos;🦁&apos;, &apos;🐻&apos;, &apos;🐺&apos;, &apos;🦈&apos;, &apos;🐅&apos;, &apos;🦏&apos;, &apos;🐎&apos;,
-        &apos;⚡&apos;, &apos;🔥&apos;, &apos;❄️&apos;, &apos;🌟&apos;, &apos;💎&apos;, &apos;👑&apos;, &apos;⚔️&apos;, &apos;🛡️&apos;
+        '🦅', '🦁', '🐻', '🐺', '🦈', '🐅', '🦏', '🐎',
+        '⚡', '🔥', '❄️', '🌟', '💎', '👑', '⚔️', '🛡️'
     ];
 
     const handleSave = async () => {
-}
         setLoading(true);
         
         try {
-}
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             dispatch({
-}
-                type: &apos;UPDATE_TEAM_BRANDING&apos;,
+                type: 'UPDATE_TEAM_BRANDING',
                 payload: {
-}
                     teamId: team.id,
                     leagueId,
                     branding: {
-}
                         name: teamName,
                         logo: teamLogo,
                         primaryColor,
@@ -67,10 +58,8 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
             
             onClose();
         } catch (error) {
-}
-            console.error(&apos;Error updating team branding:&apos;, error);
+            console.error('Error updating team branding:', error);
         } finally {
-}
             setLoading(false);
         }
     };
@@ -118,15 +107,13 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                         </label>
                         <div className="grid grid-cols-8 gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                             {logoOptions.map((emoji: any) => (
-}
                                 <button
                                     key={emoji}
                                     onClick={() => setTeamLogo(emoji)}
                                     className={`p-3 text-2xl rounded-lg border-2 transition-all ${
-}
                                         teamLogo === emoji
-                                            ? &apos;border-blue-500 bg-blue-500/20&apos;
-                                            : &apos;border-gray-600 hover:border-gray-500&apos;
+                                            ? 'border-blue-500 bg-blue-500/20'
+                                            : 'border-gray-600 hover:border-gray-500'
                                     }`}
                                     aria-label={`Select ${emoji} as team logo`}
                                 >
@@ -150,15 +137,13 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                         </label>
                         <div className="grid grid-cols-8 gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                             {predefinedColors.map((color: any) => (
-}
                                 <button
                                     key={color}
                                     onClick={() => setPrimaryColor(color)}
                                     className={`w-8 h-8 rounded-lg border-2 ${
-}
                                         primaryColor === color
-                                            ? &apos;border-white scale-110&apos;
-                                            : &apos;border-gray-600 hover:scale-105&apos;
+                                            ? 'border-white scale-110'
+                                            : 'border-gray-600 hover:scale-105'
                                     }`}
                                     style={{ backgroundColor: color }}
                                     aria-label={`Select ${color} as primary color`}
@@ -179,15 +164,13 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                         </label>
                         <div className="grid grid-cols-8 gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                             {predefinedColors.map((color: any) => (
-}
                                 <button
                                     key={color}
                                     onClick={() => setSecondaryColor(color)}
                                     className={`w-8 h-8 rounded-lg border-2 ${
-}
                                         secondaryColor === color
-                                            ? &apos;border-white scale-110&apos;
-                                            : &apos;border-gray-600 hover:scale-105&apos;
+                                            ? 'border-white scale-110'
+                                            : 'border-gray-600 hover:scale-105'
                                     }`}
                                     style={{ backgroundColor: color }}
                                     aria-label={`Select ${color} as secondary color`}
@@ -228,7 +211,6 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                         <div 
                             className="p-4 rounded-lg border border-gray-600 sm:px-4 md:px-6 lg:px-8"
                             style={{ 
-}
                                 background: `linear-gradient(135deg, ${primaryColor}20, ${secondaryColor}20)`,
                                 borderColor: primaryColor
                             }}
@@ -236,16 +218,16 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                             <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                                 <div 
                                     className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl sm:px-4 md:px-6 lg:px-8"
-                                    style={{ backgroundColor: primaryColor + &apos;40&apos; }}
+                                    style={{ backgroundColor: primaryColor + '40' }}
                                 >
                                     {teamLogo}
                                 </div>
                                 <div>
                                     <div className="font-bold text-white sm:px-4 md:px-6 lg:px-8">
-                                        {teamName || &apos;Team Name&apos;}
+                                        {teamName || 'Team Name'}
                                     </div>
                                     <div className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
-                                        {motto || &apos;Team motto&apos;}
+                                        {motto || 'Team motto'}
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +249,6 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8"
                     >
                         {loading && (
-}
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white sm:px-4 md:px-6 lg:px-8"></div>
                         )}
                         <span>Save Changes</span>

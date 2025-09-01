@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import FairnessAnalysisTab from &apos;./FairnessAnalysisTab&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import FairnessAnalysisTab from './FairnessAnalysisTab';
 
-describe(&apos;FairnessAnalysisTab&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('FairnessAnalysisTab', () => {
+  it('renders without crashing', () => {
     render(<FairnessAnalysisTab />);
-    expect(screen.getByTestId(&apos;fairnessanalysistab&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('fairnessanalysistab')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<FairnessAnalysisTab />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<FairnessAnalysisTab />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,7 +1,6 @@
-import { LazyImage } from &apos;./LazyImage&apos;;
+import { LazyImage } from './LazyImage';
 
 interface OptimizedImageProps {
-}
   src: string;
   alt: string;
   width?: number;
@@ -9,22 +8,18 @@ interface OptimizedImageProps {
   className?: string;
   sizes?: string;
 
-}
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
-}
   src,
   alt,
   width,
   height,
-  className = &apos;&apos;,
-  sizes = &apos;(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw&apos;
+  className = '',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 }) => {
-}
   const generateSrcSet = (baseSrc: string) => {
-}
-    const ext = baseSrc.split(&apos;.&apos;).pop();
-    const base = baseSrc.replace(`.${ext}`, &apos;&apos;);
+    const ext = baseSrc.split('.').pop();
+    const base = baseSrc.replace(`.${ext}`, '');
     
     return [
       `${base}-400w.webp 400w`,
@@ -33,7 +28,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       `${base}-400w.${ext} 400w`,
       `${base}-800w.${ext} 800w`,
       `${base}-1200w.${ext} 1200w`
-    ].join(&apos;, &apos;);
+    ].join(', ');
   };
 
   return (

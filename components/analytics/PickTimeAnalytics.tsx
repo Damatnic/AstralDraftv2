@@ -1,19 +1,15 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import type { League } from &apos;../../types&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import type { League } from '../../types';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
 
 interface PickTimeAnalyticsProps {
-}
     league: League;
 
-}
 
 const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }: any) => {
-}
     const analyticsData = React.useMemo(() => {
-}
         const pickTimes: { [teamId: number]: number[] } = {};
 
         const sortedPicks = [...league.draftPicks]
@@ -21,27 +17,22 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }: any) =>
             .sort((a, b) => a.overall - b.overall);
 
         for (let i = 1; i < sortedPicks.length; i++) {
-}
             const currentPick = sortedPicks[i];
             const prevPick = sortedPicks[i - 1];
             
             if (currentPick.teamId && currentPick.timestamp && prevPick.timestamp) {
-}
                 const timeDiff = (currentPick.timestamp - prevPick.timestamp) / 1000; // in seconds
                 
                 if (!pickTimes[currentPick.teamId]) {
-}
                     pickTimes[currentPick.teamId] = [];
 
                 pickTimes[currentPick.teamId].push(timeDiff);
 
 
         return league.teams.map((team: any) => {
-}
             const times = pickTimes[team.id] || [];
             const avgTime = times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
             return {
-}
                 team,
                 avgTime,
             };
@@ -64,7 +55,7 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }: any) =>
                                 </div>
                             </div>
                             <p className="font-bold text-lg font-mono sm:px-4 md:px-6 lg:px-8">
-                                {avgTime > 0 ? avgTime.toFixed(1) + &apos;s&apos; : &apos;N/A&apos;}
+                                {avgTime > 0 ? avgTime.toFixed(1) + 's' : 'N/A'}
                             </p>
                         </div>
                     ))}

@@ -14,20 +14,18 @@
  * - Real-time injury impact on defenses
  */
 
-import { productionSportsDataService } from &apos;./productionSportsDataService&apos;;
-import { machineLearningPlayerPredictionService } from &apos;./machineLearningPlayerPredictionService&apos;;
-import { logger } from &apos;./loggingService&apos;;
+import { productionSportsDataService } from './productionSportsDataService';
+import { machineLearningPlayerPredictionService } from './machineLearningPlayerPredictionService';
+import { logger } from './loggingService';
 
-export type MatchupDifficulty = &apos;VERY_EASY&apos; | &apos;EASY&apos; | &apos;AVERAGE&apos; | &apos;DIFFICULT&apos; | &apos;VERY_DIFFICULT&apos;;
-export type GameScript = &apos;PASS_HEAVY&apos; | &apos;BALANCED&apos; | &apos;RUN_HEAVY&apos; | &apos;BLOWOUT_SCRIPT&apos; | &apos;COMPETITIVE&apos;;
-export type WeatherCondition = &apos;IDEAL&apos; | &apos;WINDY&apos; | &apos;RAIN&apos; | &apos;SNOW&apos; | &apos;EXTREME_COLD&apos; | &apos;DOME&apos;;
-export type StartSitAdvice = &apos;MUST_START&apos; | &apos;START&apos; | &apos;FLEX&apos; | &apos;SIT&apos; | &apos;AVOID&apos;;
-export type RiskLevel = &apos;LOW&apos; | &apos;MEDIUM&apos; | &apos;HIGH&apos;;
+export type MatchupDifficulty = 'VERY_EASY' | 'EASY' | 'AVERAGE' | 'DIFFICULT' | 'VERY_DIFFICULT';
+export type GameScript = 'PASS_HEAVY' | 'BALANCED' | 'RUN_HEAVY' | 'BLOWOUT_SCRIPT' | 'COMPETITIVE';
+export type WeatherCondition = 'IDEAL' | 'WINDY' | 'RAIN' | 'SNOW' | 'EXTREME_COLD' | 'DOME';
+export type StartSitAdvice = 'MUST_START' | 'START' | 'FLEX' | 'SIT' | 'AVOID';
+export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
 export interface DefensiveRankings {
-}
   againstQB: {
-}
     rank: number;
     fantasyPointsAllowed: number;
     passingYardsAllowed: number;
@@ -38,7 +36,6 @@ export interface DefensiveRankings {
     qbRating: number;
   };
   againstRB: {
-}
     rank: number;
     fantasyPointsAllowed: number;
     rushingYardsAllowed: number;
@@ -49,7 +46,6 @@ export interface DefensiveRankings {
     receivingTDsAllowed: number;
   };
   againstWR: {
-}
     rank: number;
     fantasyPointsAllowed: number;
     receivingYardsAllowed: number;
@@ -60,7 +56,6 @@ export interface DefensiveRankings {
     deepBallDefense: number;
   };
   againstTE: {
-}
     rank: number;
     fantasyPointsAllowed: number;
     receivingYardsAllowed: number;
@@ -69,99 +64,80 @@ export interface DefensiveRankings {
     yardsAfterCatch: number;
     sealingCompletions: number;
   };
-}
 
 export interface SituationalAnalysis {
-}
   redZoneEfficiency: {
-}
     offensiveRate: number;
     defensiveRate: number;
     touchdownRate: number;
     fieldGoalRate: number;
   };
   thirdDownConversions: {
-}
     offensiveRate: number;
     defensiveRate: number;
     averageDistance: number;
   };
   twoMinuteDrill: {
-}
     offensiveSuccess: number;
     defensiveStops: number;
     timeoutUsage: number;
   };
   goalLineStands: {
-}
     offensiveSuccess: number;
     defensiveStops: number;
     playCallTendencies: string[];
   };
-}
 
 export interface GameScriptPrediction {
-}
   script: GameScript;
   confidence: number;
   reasoning: string[];
   implications: {
-}
     passingAttempts: number;
     rushingAttempts: number;
     gameFlow: string;
     clockManagement: string;
   };
   paceFactors: {
-}
     playsPerGame: number;
     secondsPerPlay: number;
     noHuddleFrequency: number;
   };
-}
 
 export interface WeatherImpact {
-}
   condition: WeatherCondition;
   temperature: number;
   windSpeed: number;
   precipitation: number;
   visibility: number;
   impact: {
-}
     passingGame: number; // -1 to 1 scale
     runningGame: number;
     kickingGame: number;
     turnovers: number;
   };
   adjustments: {
-}
     qbProduction: number;
     rbProduction: number;
     wrProduction: number;
     teProduction: number;
   };
-}
 
 export interface VenueFactors {
-}
   homeFieldAdvantage: number;
   domeAdvantage: boolean;
   altitudeImpact: number;
   crowdNoiseLevel: number;
   travelDistance: number;
   timeZoneChange: number;
-  surfaceType: &apos;GRASS&apos; | &apos;TURF&apos;;
+  surfaceType: 'GRASS' | 'TURF';
   venueHistory: {
-}
     averagePointsScored: number;
     offensiveAdvantage: number;
     weatherProtection: boolean;
   };
-}
 
 export interface MatchupAnalysis {
-}
   playerId: string;
   playerName: string;
   position: string;
@@ -181,7 +157,6 @@ export interface MatchupAnalysis {
   venueImpact: VenueFactors;
   
   projectionAdjustments: {
-}
     baseProjection: number;
     adjustedProjection: number;
     adjustment: number;
@@ -189,7 +164,6 @@ export interface MatchupAnalysis {
   };
   
   recommendations: {
-}
     startSitAdvice: StartSitAdvice;
     reasoning: string[];
     alternativeOptions: string[];
@@ -197,16 +171,13 @@ export interface MatchupAnalysis {
   };
   
   historicalTrends: {
-}
     playerVsDefense: number[];
     teamVsDefense: number[];
     positionVsDefense: number[];
     averagePerformance: number;
   };
-}
 
 export class MatchupDifficultyAnalyzer {
-}
   private readonly defensiveRankings: Map<string, DefensiveRankings> = new Map();
   private readonly gameScriptCache: Map<string, GameScriptPrediction> = new Map();
   private readonly weatherCache: Map<string, WeatherImpact> = new Map();
@@ -214,23 +185,19 @@ export class MatchupDifficultyAnalyzer {
   private readonly lastUpdate: number = 0;
   
   constructor() {
-}
     // Initialize synchronously - async initialization will be called separately
-    logger.info(&apos;🔧 Matchup Difficulty Analyzer created&apos;);
+    logger.info('🔧 Matchup Difficulty Analyzer created');
   }
 
   private async initializeAnalyzer(): Promise<void> {
-}
-    logger.info(&apos;🔧 Initializing Matchup Difficulty Analyzer...&apos;);
+    logger.info('🔧 Initializing Matchup Difficulty Analyzer...');
     
     try {
-}
       await this.loadDefensiveRankings();
       await this.loadVenueFactors();
-      logger.info(&apos;✅ Matchup Difficulty Analyzer initialized successfully&apos;);
+      logger.info('✅ Matchup Difficulty Analyzer initialized successfully');
     } catch (error) {
-}
-      logger.error(&apos;❌ Error initializing analyzer:&apos;, error);
+      logger.error('❌ Error initializing analyzer:', error);
     }
   }
 
@@ -242,18 +209,15 @@ export class MatchupDifficultyAnalyzer {
     week: number, 
     season: number = new Date().getFullYear()
   ): Promise<MatchupAnalysis> {
-}
     logger.info(`🔍 Analyzing matchup difficulty for player ${playerId}, Week ${week}`);
     
     try {
-}
       // Get player and game information
       const playerData = await this.getPlayerData(playerId);
       const gameData = await this.getGameData(playerData.team, week, season);
       
       if (!playerData || !gameData) {
-}
-        throw new Error(&apos;Required player or game data not available&apos;);
+        throw new Error('Required player or game data not available');
       }
 
       // Analyze all components
@@ -275,7 +239,6 @@ export class MatchupDifficultyAnalyzer {
 
       // Calculate overall difficulty score
       const difficultyScore = this.calculateDifficultyScore({
-}
         defensiveAnalysis,
         situationalFactors,
         gameScript,
@@ -301,7 +264,6 @@ export class MatchupDifficultyAnalyzer {
       );
 
       const analysis: MatchupAnalysis = {
-}
         playerId,
         playerName: playerData.name,
         position: playerData.position,
@@ -326,21 +288,19 @@ export class MatchupDifficultyAnalyzer {
       return analysis;
       
     } catch (error) {
-}
-      logger.error(&apos;❌ Error analyzing player matchup:&apos;, error);
+      logger.error('❌ Error analyzing player matchup:', error);
       throw error;
     }
   }
 
   /**
-   * Analyze multiple players&apos; matchups for lineup decisions
+   * Analyze multiple players' matchups for lineup decisions
    */
   async analyzeLineupMatchups(
     playerIds: string[], 
     week: number, 
     season: number = new Date().getFullYear()
   ): Promise<MatchupAnalysis[]> {
-}
     logger.info(`🔍 Analyzing lineup matchups for ${playerIds.length} players`);
     
     const analyses = await Promise.all(
@@ -361,24 +321,20 @@ export class MatchupDifficultyAnalyzer {
     week: number, 
     season: number = new Date().getFullYear()
   ): Promise<{
-}
     bestMatchups: { [position: string]: MatchupAnalysis[] };
     worstMatchups: { [position: string]: MatchupAnalysis[] };
     sleepers: MatchupAnalysis[];
     avoids: MatchupAnalysis[];
   }> {
-}
     logger.info(`📊 Generating weekly matchup overview for Week ${week}`);
     
     try {
-}
       // Get all games for the week
       const games = await this.getWeeklyGames(week, season);
       const allAnalyses: MatchupAnalysis[] = [];
       
       // Analyze key players for each game
       for (const game of games) {
-}
         const keyPlayers = await this.getKeyPlayersForTeams(game.homeTeam, game.awayTeam);
         const gameAnalyses = await Promise.all(
           keyPlayers.map((playerId: any) => this.analyzePlayerMatchup(playerId, week, season))
@@ -392,10 +348,9 @@ export class MatchupDifficultyAnalyzer {
       const sleepers: MatchupAnalysis[] = [];
       const avoids: MatchupAnalysis[] = [];
 
-      const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
+      const positions = ['QB', 'RB', 'WR', 'TE'];
       
       positions.forEach((position: any) => {
-}
         const positionAnalyses = allAnalyses.filter((a: any) => a.position === position);
         positionAnalyses.sort((a, b) => a.difficultyScore - b.difficultyScore);
         
@@ -405,13 +360,10 @@ export class MatchupDifficultyAnalyzer {
 
       // Identify sleepers (low ownership, easy matchup)
       allAnalyses.forEach((analysis: any) => {
-}
-        if (analysis.difficultyScore < 30 && analysis.recommendations.startSitAdvice === &apos;FLEX&apos;) {
-}
+        if (analysis.difficultyScore < 30 && analysis.recommendations.startSitAdvice === 'FLEX') {
           sleepers.push(analysis);
         }
-        if (analysis.difficultyScore > 80 || analysis.recommendations.startSitAdvice === &apos;AVOID&apos;) {
-}
+        if (analysis.difficultyScore > 80 || analysis.recommendations.startSitAdvice === 'AVOID') {
           avoids.push(analysis);
         }
       });
@@ -420,8 +372,7 @@ export class MatchupDifficultyAnalyzer {
       return { bestMatchups, worstMatchups, sleepers, avoids };
       
     } catch (error) {
-}
-      logger.error(&apos;❌ Error generating weekly overview:&apos;, error);
+      logger.error('❌ Error generating weekly overview:', error);
       throw error;
     }
   }
@@ -433,15 +384,12 @@ export class MatchupDifficultyAnalyzer {
     position: string, 
     opponent: string
   ): Promise<DefensiveRankings> {
-}
     const cached = this.defensiveRankings.get(opponent);
     if (cached) return cached;
 
     // Mock defensive statistics for now - replace with real API
     const rankings: DefensiveRankings = {
-}
       againstQB: {
-}
         rank: 16,
         fantasyPointsAllowed: 18.5,
         passingYardsAllowed: 240,
@@ -452,7 +400,6 @@ export class MatchupDifficultyAnalyzer {
         qbRating: 92.0
       },
       againstRB: {
-}
         rank: 16,
         fantasyPointsAllowed: 22.0,
         rushingYardsAllowed: 115,
@@ -463,7 +410,6 @@ export class MatchupDifficultyAnalyzer {
         receivingTDsAllowed: 0.4
       },
       againstWR: {
-}
         rank: 16,
         fantasyPointsAllowed: 28.5,
         receivingYardsAllowed: 185,
@@ -474,7 +420,6 @@ export class MatchupDifficultyAnalyzer {
         deepBallDefense: 16
       },
       againstTE: {
-}
         rank: 16,
         fantasyPointsAllowed: 12.5,
         receivingYardsAllowed: 65,
@@ -496,34 +441,28 @@ export class MatchupDifficultyAnalyzer {
     _team: string, 
     _opponent: string
   ): Promise<SituationalAnalysis> {
-}
     // Mock situational statistics for now
     return {
-}
       redZoneEfficiency: {
-}
         offensiveRate: 58.0,
         defensiveRate: 58.0,
         touchdownRate: 62.0,
         fieldGoalRate: 38.0
       },
       thirdDownConversions: {
-}
         offensiveRate: 40.0,
         defensiveRate: 40.0,
         averageDistance: 7.2
       },
       twoMinuteDrill: {
-}
         offensiveSuccess: 45.0,
         defensiveStops: 55.0,
         timeoutUsage: 72.0
       },
       goalLineStands: {
-}
         offensiveSuccess: 78.0,
         defensiveStops: 22.0,
-        playCallTendencies: [&apos;Run Heavy&apos;, &apos;Play Action&apos;, &apos;Quick Slants&apos;]
+        playCallTendencies: ['Run Heavy', 'Play Action', 'Quick Slants']
       }
     };
   }
@@ -536,7 +475,6 @@ export class MatchupDifficultyAnalyzer {
     opponent: string, 
     week: number
   ): Promise<GameScriptPrediction> {
-}
     const cacheKey = `${team}-${opponent}-${week}`;
     const cached = this.gameScriptCache.get(cacheKey);
     if (cached) return cached;
@@ -545,32 +483,27 @@ export class MatchupDifficultyAnalyzer {
     const pointSpread = 0; // Default even game
     const totalPoints = 47.0; // Default total
     
-    let script: GameScript = &apos;BALANCED&apos;;
+    let script: GameScript = 'BALANCED';
     let confidence = 0.7;
     const reasoning: string[] = [];
 
     // Analyze likely game flow based on spread and total
     if (Math.abs(pointSpread) > 7) {
-}
       if (pointSpread > 7) {
-}
-        script = &apos;BLOWOUT_SCRIPT&apos;;
-        reasoning.push(&apos;Large point spread suggests potential blowout&apos;);
+        script = 'BLOWOUT_SCRIPT';
+        reasoning.push('Large point spread suggests potential blowout');
       } else {
-}
-        script = &apos;PASS_HEAVY&apos;;
-        reasoning.push(&apos;Team likely to be trailing, increasing pass volume&apos;);
+        script = 'PASS_HEAVY';
+        reasoning.push('Team likely to be trailing, increasing pass volume');
       }
       confidence = 0.85;
     } else if (totalPoints > 50) {
-}
-      script = &apos;PASS_HEAVY&apos;;
-      reasoning.push(&apos;High total suggests shootout scenario&apos;);
+      script = 'PASS_HEAVY';
+      reasoning.push('High total suggests shootout scenario');
       confidence = 0.8;
     } else if (totalPoints < 42) {
-}
-      script = &apos;RUN_HEAVY&apos;;
-      reasoning.push(&apos;Low total suggests defensive battle&apos;);
+      script = 'RUN_HEAVY';
+      reasoning.push('Low total suggests defensive battle');
       confidence = 0.75;
     }
 
@@ -578,39 +511,32 @@ export class MatchupDifficultyAnalyzer {
     const averagePace = 65; // Default pace
 
     let passingAttempts = 33; // Default balanced
-    if (script === &apos;PASS_HEAVY&apos;) {
-}
+    if (script === 'PASS_HEAVY') {
       passingAttempts = 38;
-    } else if (script === &apos;RUN_HEAVY&apos;) {
-}
+    } else if (script === 'RUN_HEAVY') {
       passingAttempts = 28;
     }
 
     let rushingAttempts = 27; // Default balanced
-    if (script === &apos;RUN_HEAVY&apos;) {
-}
+    if (script === 'RUN_HEAVY') {
       rushingAttempts = 32;
-    } else if (script === &apos;PASS_HEAVY&apos;) {
-}
+    } else if (script === 'PASS_HEAVY') {
       rushingAttempts = 22;
     }
 
     const prediction: GameScriptPrediction = {
-}
       script,
       confidence,
       reasoning,
       implications: {
-}
         passingAttempts,
         rushingAttempts,
         gameFlow: this.getGameFlowDescription(script),
         clockManagement: this.getClockManagementStyle(script)
       },
       paceFactors: {
-}
         playsPerGame: averagePace,
-        secondsPerPlay: script === &apos;PASS_HEAVY&apos; ? 26 : 29,
+        secondsPerPlay: script === 'PASS_HEAVY' ? 26 : 29,
         noHuddleFrequency: 8.0 // Default no-huddle rate
       }
     };
@@ -626,7 +552,6 @@ export class MatchupDifficultyAnalyzer {
     venue: string, 
     gameTime: string
   ): Promise<WeatherImpact> {
-}
     const cacheKey = `${venue}-${gameTime}`;
     const cached = this.weatherCache.get(cacheKey);
     if (cached) return cached;
@@ -634,28 +559,23 @@ export class MatchupDifficultyAnalyzer {
     // Get weather data (mock implementation)
     const weatherData = await this.getWeatherData(venue, gameTime);
     
-    let condition: WeatherCondition = &apos;IDEAL&apos;;
+    let condition: WeatherCondition = 'IDEAL';
     
     // Determine weather condition
-    if (venue.includes(&apos;Dome&apos;) || venue.includes(&apos;Indoor&apos;)) {
-}
-      condition = &apos;DOME&apos;;
+    if (venue.includes('Dome') || venue.includes('Indoor')) {
+      condition = 'DOME';
     } else if (weatherData.windSpeed > 20) {
-}
-      condition = &apos;WINDY&apos;;
+      condition = 'WINDY';
     } else if (weatherData.precipitation > 0.1) {
-}
-      condition = weatherData.temperature < 32 ? &apos;SNOW&apos; : &apos;RAIN&apos;;
+      condition = weatherData.temperature < 32 ? 'SNOW' : 'RAIN';
     } else if (weatherData.temperature < 20) {
-}
-      condition = &apos;EXTREME_COLD&apos;;
+      condition = 'EXTREME_COLD';
     }
 
     // Calculate impact multipliers
     const impact = this.calculateWeatherImpact(condition, weatherData);
     
     const weatherImpact: WeatherImpact = {
-}
       condition,
       temperature: weatherData.temperature,
       windSpeed: weatherData.windSpeed,
@@ -673,7 +593,6 @@ export class MatchupDifficultyAnalyzer {
    * Analyze venue factors and home field advantage
    */
   private async analyzeVenueFactors(venue: string, _team: string): Promise<VenueFactors> {
-}
     const cached = this.venueCache.get(venue);
     if (cached) return cached;
 
@@ -681,16 +600,14 @@ export class MatchupDifficultyAnalyzer {
     const venueData = await this.getVenueData(venue);
     
     const factors: VenueFactors = {
-}
       homeFieldAdvantage: venueData.homeAdvantage || 2.5,
       domeAdvantage: venueData.isDome || false,
       altitudeImpact: venueData.altitude > 3000 ? 1.15 : 1.0,
       crowdNoiseLevel: venueData.crowdNoise || 75,
       travelDistance: venueData.travelDistance || 0,
       timeZoneChange: venueData.timeZoneChange || 0,
-      surfaceType: venueData.surfaceType || &apos;GRASS&apos;,
+      surfaceType: venueData.surfaceType || 'GRASS',
       venueHistory: {
-}
         averagePointsScored: venueData.averagePoints || 23.5,
         offensiveAdvantage: venueData.offensiveBonus || 1.0,
         weatherProtection: venueData.isDome || false
@@ -709,13 +626,11 @@ export class MatchupDifficultyAnalyzer {
     opponent: string, 
     position: string
   ): Promise<{
-}
     playerVsDefense: number[];
     teamVsDefense: number[];
     positionVsDefense: number[];
     averagePerformance: number;
   }> {
-}
     const [playerHistory, teamHistory, positionHistory] = await Promise.all([
       this.getPlayerVsDefenseHistory(playerId, opponent),
       this.getTeamVsDefenseHistory(playerId, opponent),
@@ -723,7 +638,6 @@ export class MatchupDifficultyAnalyzer {
     ]);
 
     return {
-}
       playerVsDefense: playerHistory,
       teamVsDefense: teamHistory,
       positionVsDefense: positionHistory,
@@ -737,14 +651,12 @@ export class MatchupDifficultyAnalyzer {
    * Calculate overall difficulty score
    */
   private calculateDifficultyScore(factors: {
-}
     defensiveAnalysis: DefensiveRankings;
     situationalFactors: SituationalAnalysis;
     gameScript: GameScriptPrediction;
     weatherFactors: WeatherImpact;
     venueImpact: VenueFactors;
   }): number {
-}
     let score = 50; // Base neutral score
     
     // Defensive ranking impact (30% weight)
@@ -779,13 +691,11 @@ export class MatchupDifficultyAnalyzer {
     weatherFactors: WeatherImpact,
     _venueImpact: VenueFactors
   ): Promise<{
-}
     baseProjection: number;
     adjustedProjection: number;
     adjustment: number;
     adjustmentFactors: string[];
   }> {
-}
     // Get base projection from ML service
     const baseProjection = await machineLearningPlayerPredictionService.generatePlayerPrediction(playerId, 1, 2024);
 
@@ -796,24 +706,21 @@ export class MatchupDifficultyAnalyzer {
     const difficultyAdjustment = 1 - (difficultyScore - 50) / 100;
     totalAdjustment *= difficultyAdjustment;
     if (Math.abs(difficultyAdjustment - 1) > 0.05) {
-}
-      adjustmentFactors.push(`Matchup difficulty: ${(difficultyAdjustment - 1) * 100 > 0 ? &apos;+&apos; : &apos;&apos;}${((difficultyAdjustment - 1) * 100).toFixed(1)}%`);
+      adjustmentFactors.push(`Matchup difficulty: ${(difficultyAdjustment - 1) * 100 > 0 ? '+' : ''}${((difficultyAdjustment - 1) * 100).toFixed(1)}%`);
     }
 
     // Weather adjustment
     const weatherAdjustment = weatherFactors.adjustments.qbProduction; // Use position-specific later
     totalAdjustment *= weatherAdjustment;
     if (Math.abs(weatherAdjustment - 1) > 0.03) {
-}
-      adjustmentFactors.push(`Weather impact: ${(weatherAdjustment - 1) * 100 > 0 ? &apos;+&apos; : &apos;&apos;}${((weatherAdjustment - 1) * 100).toFixed(1)}%`);
+      adjustmentFactors.push(`Weather impact: ${(weatherAdjustment - 1) * 100 > 0 ? '+' : ''}${((weatherAdjustment - 1) * 100).toFixed(1)}%`);
     }
 
     // Game script adjustment
     const gameScriptMultiplier = this.getGameScriptMultiplier(gameScript.script);
     totalAdjustment *= gameScriptMultiplier;
     if (Math.abs(gameScriptMultiplier - 1) > 0.03) {
-}
-      adjustmentFactors.push(`Game script: ${(gameScriptMultiplier - 1) * 100 > 0 ? &apos;+&apos; : &apos;&apos;}${((gameScriptMultiplier - 1) * 100).toFixed(1)}%`);
+      adjustmentFactors.push(`Game script: ${(gameScriptMultiplier - 1) * 100 > 0 ? '+' : ''}${((gameScriptMultiplier - 1) * 100).toFixed(1)}%`);
     }
 
     const baseFantasyPoints = baseProjection.fantasyPoints.expected;
@@ -821,7 +728,6 @@ export class MatchupDifficultyAnalyzer {
     const adjustment = adjustedProjection - baseFantasyPoints;
 
     return {
-}
       baseProjection: baseFantasyPoints,
       adjustedProjection,
       adjustment,
@@ -836,7 +742,6 @@ export class MatchupDifficultyAnalyzer {
     playerData: Record<string, unknown>,
     difficultyScore: number,
     projectionAdjustments: {
-}
       baseProjection: number;
       adjustedProjection: number;
       adjustment: number;
@@ -844,61 +749,50 @@ export class MatchupDifficultyAnalyzer {
     },
     gameScript: GameScriptPrediction
   ): {
-}
     startSitAdvice: StartSitAdvice;
     reasoning: string[];
     alternativeOptions: string[];
     riskLevel: RiskLevel;
   } {
-}
     const reasoning: string[] = [];
     let startSitAdvice: StartSitAdvice;
     let riskLevel: RiskLevel;
 
     // Determine advice based on difficulty score and projection
     if (difficultyScore <= 25 && projectionAdjustments.adjustedProjection >= 15) {
-}
-      startSitAdvice = &apos;MUST_START&apos;;
-      riskLevel = &apos;LOW&apos;;
-      reasoning.push(&apos;Excellent matchup with high ceiling&apos;);
+      startSitAdvice = 'MUST_START';
+      riskLevel = 'LOW';
+      reasoning.push('Excellent matchup with high ceiling');
     } else if (difficultyScore <= 40 && projectionAdjustments.adjustedProjection >= 12) {
-}
-      startSitAdvice = &apos;START&apos;;
-      riskLevel = &apos;LOW&apos;;
-      reasoning.push(&apos;Favorable matchup with solid floor&apos;);
+      startSitAdvice = 'START';
+      riskLevel = 'LOW';
+      reasoning.push('Favorable matchup with solid floor');
     } else if (difficultyScore <= 60) {
-}
-      startSitAdvice = &apos;FLEX&apos;;
-      riskLevel = &apos;MEDIUM&apos;;
-      reasoning.push(&apos;Average matchup, position-dependent decision&apos;);
+      startSitAdvice = 'FLEX';
+      riskLevel = 'MEDIUM';
+      reasoning.push('Average matchup, position-dependent decision');
     } else if (difficultyScore <= 80) {
-}
-      startSitAdvice = &apos;SIT&apos;;
-      riskLevel = &apos;HIGH&apos;;
-      reasoning.push(&apos;Difficult matchup with limited upside&apos;);
+      startSitAdvice = 'SIT';
+      riskLevel = 'HIGH';
+      reasoning.push('Difficult matchup with limited upside');
     } else {
-}
-      startSitAdvice = &apos;AVOID&apos;;
-      riskLevel = &apos;HIGH&apos;;
-      reasoning.push(&apos;Extremely difficult matchup, avoid if possible&apos;);
+      startSitAdvice = 'AVOID';
+      riskLevel = 'HIGH';
+      reasoning.push('Extremely difficult matchup, avoid if possible');
     }
 
     // Add specific reasoning based on factors
-    if (gameScript.script === &apos;BLOWOUT_SCRIPT&apos;) {
-}
-      reasoning.push(&apos;Game script concerns due to potential blowout&apos;);
+    if (gameScript.script === 'BLOWOUT_SCRIPT') {
+      reasoning.push('Game script concerns due to potential blowout');
     }
     
     if (projectionAdjustments.adjustment > 2) {
-}
-      reasoning.push(&apos;Positive matchup adjustments boost projection&apos;);
+      reasoning.push('Positive matchup adjustments boost projection');
     } else if (projectionAdjustments.adjustment < -2) {
-}
-      reasoning.push(&apos;Negative matchup factors lower projection&apos;);
+      reasoning.push('Negative matchup factors lower projection');
     }
 
     return {
-}
       startSitAdvice,
       reasoning,
       alternativeOptions: [], // Could add waiver wire suggestions
@@ -908,16 +802,14 @@ export class MatchupDifficultyAnalyzer {
 
   // Helper methods for various calculations
   private scoreToDifficulty(score: number): MatchupDifficulty {
-}
-    if (score <= 20) return &apos;VERY_EASY&apos;;
-    if (score <= 40) return &apos;EASY&apos;;
-    if (score <= 60) return &apos;AVERAGE&apos;;
-    if (score <= 80) return &apos;DIFFICULT&apos;;
-    return &apos;VERY_DIFFICULT&apos;;
+    if (score <= 20) return 'VERY_EASY';
+    if (score <= 40) return 'EASY';
+    if (score <= 60) return 'AVERAGE';
+    if (score <= 80) return 'DIFFICULT';
+    return 'VERY_DIFFICULT';
   }
 
   private calculateConfidenceLevel(_playerData: Record<string, unknown>, _gameData: Record<string, unknown>): number {
-}
     // Base confidence
     const confidence = 0.75;
     
@@ -930,47 +822,40 @@ export class MatchupDifficultyAnalyzer {
   }
 
   private getGameFlowDescription(script: GameScript): string {
-}
     switch (script) {
-}
-      case &apos;PASS_HEAVY&apos;: return &apos;High-volume passing game expected&apos;;
-      case &apos;RUN_HEAVY&apos;: return &apos;Ground game emphasis likely&apos;;
-      case &apos;BLOWOUT_SCRIPT&apos;: return &apos;Potential for garbage time or clock management&apos;;
-      case &apos;COMPETITIVE&apos;: return &apos;Close game with balanced approach&apos;;
-      default: return &apos;Balanced offensive approach expected&apos;;
+      case 'PASS_HEAVY': return 'High-volume passing game expected';
+      case 'RUN_HEAVY': return 'Ground game emphasis likely';
+      case 'BLOWOUT_SCRIPT': return 'Potential for garbage time or clock management';
+      case 'COMPETITIVE': return 'Close game with balanced approach';
+      default: return 'Balanced offensive approach expected';
     }
   }
 
   private getClockManagementStyle(script: GameScript): string {
-}
     switch (script) {
-}
-      case &apos;PASS_HEAVY&apos;: return &apos;Aggressive clock usage&apos;;
-      case &apos;RUN_HEAVY&apos;: return &apos;Conservative clock management&apos;;
-      case &apos;BLOWOUT_SCRIPT&apos;: return &apos;Variable based on game flow&apos;;
-      default: return &apos;Standard clock management&apos;;
+      case 'PASS_HEAVY': return 'Aggressive clock usage';
+      case 'RUN_HEAVY': return 'Conservative clock management';
+      case 'BLOWOUT_SCRIPT': return 'Variable based on game flow';
+      default: return 'Standard clock management';
     }
   }
 
   private calculateWeatherImpact(condition: WeatherCondition, _weatherData: Record<string, unknown>): {
-}
     passingGame: number;
     runningGame: number;
     kickingGame: number;
     turnovers: number;
   } {
-}
     switch (condition) {
-}
-      case &apos;DOME&apos;:
+      case 'DOME':
         return { passingGame: 0.05, runningGame: 0, kickingGame: 0.1, turnovers: -0.1 };
-      case &apos;WINDY&apos;:
+      case 'WINDY':
         return { passingGame: -0.15, runningGame: 0.05, kickingGame: -0.25, turnovers: 0.1 };
-      case &apos;RAIN&apos;:
+      case 'RAIN':
         return { passingGame: -0.1, runningGame: -0.05, kickingGame: -0.15, turnovers: 0.2 };
-      case &apos;SNOW&apos;:
+      case 'SNOW':
         return { passingGame: -0.2, runningGame: -0.1, kickingGame: -0.3, turnovers: 0.25 };
-      case &apos;EXTREME_COLD&apos;:
+      case 'EXTREME_COLD':
         return { passingGame: -0.08, runningGame: 0, kickingGame: -0.2, turnovers: 0.05 };
       default:
         return { passingGame: 0, runningGame: 0, kickingGame: 0, turnovers: 0 };
@@ -978,17 +863,14 @@ export class MatchupDifficultyAnalyzer {
   }
 
   private calculateWeatherAdjustments(condition: WeatherCondition, _weatherData: Record<string, unknown>): {
-}
     qbProduction: number;
     rbProduction: number;
     wrProduction: number;
     teProduction: number;
   } {
-}
     const impact = this.calculateWeatherImpact(condition, _weatherData);
     
     return {
-}
       qbProduction: 1 + impact.passingGame,
       rbProduction: 1 + impact.runningGame + (impact.passingGame * -0.3), // RBs benefit when passing suffers
       wrProduction: 1 + impact.passingGame,
@@ -997,93 +879,78 @@ export class MatchupDifficultyAnalyzer {
   }
 
   private getWeatherPenalty(condition: WeatherCondition): number {
-}
     switch (condition) {
-}
-      case &apos;DOME&apos;: return -5;
-      case &apos;IDEAL&apos;: return 0;
-      case &apos;WINDY&apos;: return 8;
-      case &apos;RAIN&apos;: return 12;
-      case &apos;SNOW&apos;: return 18;
-      case &apos;EXTREME_COLD&apos;: return 6;
+      case 'DOME': return -5;
+      case 'IDEAL': return 0;
+      case 'WINDY': return 8;
+      case 'RAIN': return 12;
+      case 'SNOW': return 18;
+      case 'EXTREME_COLD': return 6;
       default: return 0;
     }
   }
 
   private getGameScriptAdjustment(script: GameScript): number {
-}
     switch (script) {
-}
-      case &apos;PASS_HEAVY&apos;: return -5; // Easier for passing stats
-      case &apos;RUN_HEAVY&apos;: return 5; // Harder for passing stats
-      case &apos;BLOWOUT_SCRIPT&apos;: return 8; // Generally difficult for consistent production
-      case &apos;COMPETITIVE&apos;: return -2; // Slightly easier
+      case 'PASS_HEAVY': return -5; // Easier for passing stats
+      case 'RUN_HEAVY': return 5; // Harder for passing stats
+      case 'BLOWOUT_SCRIPT': return 8; // Generally difficult for consistent production
+      case 'COMPETITIVE': return -2; // Slightly easier
       default: return 0;
     }
   }
 
   private getGameScriptMultiplier(script: GameScript): number {
-}
     switch (script) {
-}
-      case &apos;PASS_HEAVY&apos;: return 1.15;
-      case &apos;RUN_HEAVY&apos;: return 0.9;
-      case &apos;BLOWOUT_SCRIPT&apos;: return 0.85;
-      case &apos;COMPETITIVE&apos;: return 1.05;
+      case 'PASS_HEAVY': return 1.15;
+      case 'RUN_HEAVY': return 0.9;
+      case 'BLOWOUT_SCRIPT': return 0.85;
+      case 'COMPETITIVE': return 1.05;
       default: return 1.0;
     }
   }
 
   // Mock data methods (to be replaced with real API calls)
   private async getPlayerData(playerId: string): Promise<{
-}
     id: string;
     name: string;
     position: string;
     team: string;
     gamesPlayed?: number;
   }> {
-}
     const player = await productionSportsDataService.getPlayerDetails(playerId);
     return player || {
-}
       id: playerId,
-      name: &apos;Mock Player&apos;,
-      position: &apos;RB&apos;,
-      team: &apos;DEN&apos;,
+      name: 'Mock Player',
+      position: 'RB',
+      team: 'DEN',
       gamesPlayed: 12
     };
   }
 
   private async getGameData(_team: string, _week: number, _season: number): Promise<{
-}
     opponent: string;
     venue: string;
     gameTime: string;
     isHome: boolean;
   }> {
-}
     // Mock game data for now
     return {
-}
-      opponent: &apos;OPP&apos;,
-      venue: &apos;Mock Stadium&apos;,
-      gameTime: &apos;2024-01-01T13:00:00Z&apos;,
+      opponent: 'OPP',
+      venue: 'Mock Stadium',
+      gameTime: '2024-01-01T13:00:00Z',
       isHome: true
     };
   }
 
   private async getWeatherData(_venue: string, _gameTime: string): Promise<{
-}
     temperature: number;
     windSpeed: number;
     precipitation: number;
     visibility: number;
   }> {
-}
     // Mock weather data
     return {
-}
       temperature: 72,
       windSpeed: 8,
       precipitation: 0,
@@ -1092,7 +959,6 @@ export class MatchupDifficultyAnalyzer {
   }
 
   private async getVenueData(venue: string): Promise<{
-}
     homeAdvantage: number;
     isDome: boolean;
     altitude: number;
@@ -1104,65 +970,55 @@ export class MatchupDifficultyAnalyzer {
     averagePoints?: number;
     offensiveBonus?: number;
   }> {
-}
     // Mock venue data
     return {
-}
       homeAdvantage: 2.5,
-      isDome: venue.includes(&apos;Dome&apos;),
+      isDome: venue.includes('Dome'),
       altitude: 1000,
       crowdNoise: 78,
       travelDistance: 0,
       timeZoneChange: 0,
-      surfaceType: &apos;GRASS&apos;,
+      surfaceType: 'GRASS',
       averagePoints: 23.5,
       offensiveBonus: 1.0
     };
   }
 
   private async loadDefensiveRankings(): Promise<void> {
-}
     // Load current season defensive rankings
-    logger.info(&apos;📊 Loading defensive rankings...&apos;);
+    logger.info('📊 Loading defensive rankings...');
   }
 
   private async loadVenueFactors(): Promise<void> {
-}
     // Load venue factor data
-    logger.info(&apos;🏟️ Loading venue factors...&apos;);
+    logger.info('🏟️ Loading venue factors...');
   }
 
   private async getWeeklyGames(week: number, season: number): Promise<unknown[]> {
-}
     // Use the existing getCurrentWeekGames method
     const games = await productionSportsDataService.getCurrentWeekGames(week, season);
     return games || [];
   }
 
   private async getKeyPlayersForTeams(_homeTeam: string, _awayTeam: string): Promise<string[]> {
-}
     // Return key fantasy-relevant players for both teams
     return [];
   }
 
   private async getPlayerVsDefenseHistory(_playerId: string, _opponent: string): Promise<number[]> {
-}
     // Get historical performance against specific defense
     return [];
   }
 
   private async getTeamVsDefenseHistory(_playerId: string, _opponent: string): Promise<number[]> {
-}
-    // Get team&apos;s historical performance against defense
+    // Get team's historical performance against defense
     return [];
   }
 
   private async getPositionVsDefenseHistory(_position: string, _opponent: string): Promise<number[]> {
-}
-    // Get position group&apos;s historical performance against defense
+    // Get position group's historical performance against defense
     return [];
   }
-}
 
 // Export singleton instance
 export const matchupDifficultyAnalyzer = new MatchupDifficultyAnalyzer();

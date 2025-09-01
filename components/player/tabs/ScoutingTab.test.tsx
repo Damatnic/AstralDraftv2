@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ScoutingTab from &apos;./ScoutingTab&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ScoutingTab from './ScoutingTab';
 
-describe(&apos;ScoutingTab&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ScoutingTab', () => {
+  it('renders without crashing', () => {
     render(<ScoutingTab />);
-    expect(screen.getByTestId(&apos;scoutingtab&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('scoutingtab')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ScoutingTab />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ScoutingTab />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

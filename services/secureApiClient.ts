@@ -4,36 +4,31 @@
  * No API keys stored in frontend code
  */
 
-import axios, { AxiosInstance } from &apos;axios&apos;;
+import axios, { AxiosInstance } from 'axios';
 
 // Determine backend URL based on environment
 const getBackendUrl = () => {
-}
-  if (typeof window !== &apos;undefined&apos;) {
-}
+  if (typeof window !== 'undefined') {
     // In browser
     const { hostname, protocol } = window.location;
-    if (hostname === &apos;localhost&apos; || hostname === &apos;127.0.0.1&apos;) {
-}
-      return &apos;http://localhost:3001&apos;;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:3001';
     }
     // Production - use same domain with /api prefix
     return `${protocol}//${hostname}`;
   }
   // Server-side or tests
-  return process.env.BACKEND_URL || &apos;http://localhost:3001&apos;;
+  return process.env.BACKEND_URL || 'http://localhost:3001';
 };
 
 const BACKEND_URL = getBackendUrl();
 
 // Create axios instance with default config
 const apiClient: AxiosInstance = axios.create({
-}
   baseURL: `${BACKEND_URL}/api/proxy`,
   timeout: 30000,
   headers: {
-}
-    &apos;Content-Type&apos;: &apos;application/json&apos;,
+    'Content-Type': 'application/json',
   },
   withCredentials: true, // Include cookies for authentication
 });
@@ -41,17 +36,14 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor for auth token
 apiClient.interceptors.request.use(
   (config: any) => {
-}
     // Add auth token if available
-    const token = localStorage.getItem(&apos;authToken&apos;);
+    const token = localStorage.getItem('authToken');
     if (token) {
-}
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error: any) => {
-}
     return Promise.reject(error);
   }
 );
@@ -60,24 +52,21 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response: any) => response,
   (error: any) => {
-}
     if (error.response) {
-}
       // Handle specific error cases
       switch (error.response.status) {
-}
         case 401:
           // Unauthorized - redirect to login
-          localStorage.removeItem(&apos;authToken&apos;);
-          window.location.href = &apos;/login&apos;;
+          localStorage.removeItem('authToken');
+          window.location.href = '/login';
           break;
         case 429:
           // Rate limit exceeded
-          console.warn(&apos;Rate limit exceeded. Please try again later.&apos;);
+          console.warn('Rate limit exceeded. Please try again later.');
           break;
         case 503:
           // Service unavailable
-          console.error(&apos;Service temporarily unavailable&apos;);
+          console.error('Service temporarily unavailable');
           break;
       }
     }
@@ -89,24 +78,19 @@ apiClient.interceptors.response.use(
  * Gemini AI Service - Secure proxy
  */
 export const geminiService = {
-}
   /**
    * Generate content using Gemini AI
    */
-  async generateContent(prompt: string, model: string = &apos;gemini-pro&apos;, config?: any) {
-}
+  async generateContent(prompt: string, model: string = 'gemini-pro', config?: any) {
     try {
-}
-      const response = await apiClient.post(&apos;/gemini/generate&apos;, {
-}
+      const response = await apiClient.post('/gemini/generate', {
         prompt,
         model,// 
         config
       });
       return response.data;
     } catch (error) {
-}
-      console.error(&apos;Gemini generate error:&apos;, error);
+      console.error('Gemini generate error:', error);
       throw error;
     }
   },
@@ -118,15 +102,12 @@ export const geminiService = {
     prompt: string, 
     history: any[] = [], 
     onChunk: (text: string) => void,
-    model: string = &apos;gemini-pro&apos;
+    model: string = 'gemini-pro'
   ) {
-}
     try {
-}
       const eventSource = new EventSource(
         `${BACKEND_URL}/api/proxy/gemini/stream?` + 
         new URLSearchParams({
-}
           prompt,
           model,
           history: JSON.stringify(history)
@@ -134,36 +115,29 @@ export const geminiService = {
       );
 
       eventSource.onmessage = (event: any) => {
-}
-        if (event.data === &apos;[DONE]&apos;) {
-}
+        if (event.data === '[DONE]') {
           eventSource.close();
           return;
         }
         
         try {
-}
           const data = JSON.parse(event.data);
           if (data.text) {
-}
             onChunk(data.text);
           }
         } catch (e) {
-}
-          console.error(&apos;Stream parse error:&apos;, e);
+          console.error('Stream parse error:', e);
         }
       };
 
       eventSource.onerror = (error: any) => {
-}
-        console.error(&apos;Stream error:&apos;, error);
+        console.error('Stream error:', error);
         eventSource.close();
       };
 
       return eventSource;
     } catch (error) {
-}
-      console.error(&apos;Gemini stream error:&apos;, error);
+      console.error('Gemini stream error:', error);
       throw error;
     }
   },
@@ -172,13 +146,10 @@ export const geminiService = {
    * Check if Gemini service is available
    */
   async checkStatus() {
-}
     try {
-}
-      const response = await apiClient.get(&apos;/health&apos;);
+      const response = await apiClient.get('/health');
       return response.data.apis?.gemini || false;
     } catch (error) {
-}
       return false;
     }
   }
@@ -188,22 +159,17 @@ export const geminiService = {
  * Sports Data Service - Secure proxy
  */
 export const sportsDataService = {
-}
   /**
    * Get NFL games for a specific week
    */
   async getNFLGames(week?: number, season?: number) {
-}
     try {
-}
-      const response = await apiClient.get(&apos;/sports/nfl/games&apos;, {
-}
+      const response = await apiClient.get('/sports/nfl/games', {
         params: { week, season }
       });
       return response.data;
     } catch (error) {
-}
-      console.error(&apos;NFL games fetch error:&apos;, error);
+      console.error('NFL games fetch error:', error);
       throw error;
     }
   },
@@ -212,14 +178,11 @@ export const sportsDataService = {
    * Get player details
    */
   async getPlayerDetails(playerId: string) {
-}
     try {
-}
       const response = await apiClient.get(`/sports/nfl/players/${playerId}`);
       return response.data;
     } catch (error) {
-}
-      console.error(&apos;Player details fetch error:&apos;, error);
+      console.error('Player details fetch error:', error);
       throw error;
     }
   },
@@ -228,14 +191,11 @@ export const sportsDataService = {
    * Get betting odds
    */
   async getOdds() {
-}
     try {
-}
-      const response = await apiClient.get(&apos;/sports/odds&apos;);
+      const response = await apiClient.get('/sports/odds');
       return response.data;
     } catch (error) {
-}
-      console.error(&apos;Odds fetch error:&apos;, error);
+      console.error('Odds fetch error:', error);
       throw error;
     }
   },
@@ -244,18 +204,14 @@ export const sportsDataService = {
    * Sports.io API proxy (if configured)
    */
   async sportsIoRequest(endpoint: string, params?: any) {
-}
     try {
-}
-      const response = await apiClient.post(&apos;/sports/sportsio&apos;, {
-}
+      const response = await apiClient.post('/sports/sportsio', {
         endpoint,// 
         params
       });
       return response.data;
     } catch (error) {
-}
-      console.error(&apos;Sports.io request error:&apos;, error);
+      console.error('Sports.io request error:', error);
       throw error;
     }
   },
@@ -264,13 +220,10 @@ export const sportsDataService = {
    * Check sports data service status
    */
   async checkStatus() {
-}
     try {
-}
-      const response = await apiClient.get(&apos;/health&apos;);
+      const response = await apiClient.get('/health');
       return response.data.apis || {};
     } catch (error) {
-}
       return {};
     }
   }
@@ -280,20 +233,16 @@ export const sportsDataService = {
  * Oracle Service - Uses secure backend
  */
 export const oracleService = {
-}
   /**
    * Get Oracle prediction with secure processing
    */
   async getPrediction(data: any) {
-}
     try {
-}
       // This should already be using backend endpoints
       const response = await axios.post(`${BACKEND_URL}/api/oracle/predictions`, data);
       return response.data;
     } catch (error) {
-}
-      console.error(&apos;Oracle prediction error:&apos;, error);
+      console.error('Oracle prediction error:', error);
       throw error;
     }
   },
@@ -302,19 +251,16 @@ export const oracleService = {
    * Stream Oracle response
    */
   async streamResponse(prompt: string, context: any, onChunk: (text: string) => void) {
-}
     try {
-}
       // Use the secure Gemini proxy for Oracle streaming
       return geminiService.streamContent(
         `Oracle Context: ${JSON.stringify(context)}\n\nUser Question: ${prompt}`,
         [],
         onChunk,
-        &apos;gemini-pro&apos;
+        'gemini-pro'
       );
     } catch (error) {
-}
-      console.error(&apos;Oracle stream error:&apos;, error);
+      console.error('Oracle stream error:', error);
       throw error;
     }
   }
@@ -324,24 +270,19 @@ export const oracleService = {
  * Check overall API health
  */
 export const checkApiHealth = async () => {
-}
   try {
-}
-    const response = await apiClient.get(&apos;/health&apos;);
+    const response = await apiClient.get('/health');
     return response.data;
   } catch (error) {
-}
-    console.error(&apos;API health check failed:&apos;, error);
+    console.error('API health check failed:', error);
     return {
-}
-      status: &apos;error&apos;,
-      message: &apos;Unable to connect to backend services&apos;
+      status: 'error',
+      message: 'Unable to connect to backend services'
     };
   }
 };
 
 export default {
-}
   geminiService,
   sportsDataService,
   oracleService,// 

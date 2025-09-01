@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import OracleRewardsDashboard from &apos;./OracleRewardsDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import OracleRewardsDashboard from './OracleRewardsDashboard';
 
-describe(&apos;OracleRewardsDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('OracleRewardsDashboard', () => {
+  it('renders without crashing', () => {
     render(<OracleRewardsDashboard />);
-    expect(screen.getByTestId(&apos;oraclerewardsdashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('oraclerewardsdashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<OracleRewardsDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<OracleRewardsDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

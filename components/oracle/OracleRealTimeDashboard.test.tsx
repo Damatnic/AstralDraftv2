@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import OracleRealTimeDashboard from &apos;./OracleRealTimeDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import OracleRealTimeDashboard from './OracleRealTimeDashboard';
 
-describe(&apos;OracleRealTimeDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('OracleRealTimeDashboard', () => {
+  it('renders without crashing', () => {
     render(<OracleRealTimeDashboard />);
-    expect(screen.getByTestId(&apos;oraclerealtimedashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('oraclerealtimedashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<OracleRealTimeDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<OracleRealTimeDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

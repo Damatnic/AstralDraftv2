@@ -2,36 +2,31 @@
  * Standardized navigation components for consistent UX across views
  */
 
-import React, { useCallback, useMemo } from &apos;react&apos;;
+import React, { useCallback, useMemo } from 'react';
 import { 
-}
   createNavigationHandler, 
   createBackHandler, 
   NAVIGATION_BUTTON_STYLES,
 //   generateBreadcrumbs
-} from &apos;../../utils/navigationUtils&apos;;
+} from '../../utils/navigationUtils';
 
 interface NavigationButtonProps {
-}
   variant?: keyof typeof NAVIGATION_BUTTON_STYLES;
   onClick: () => void;
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
 
-}
 
 export const NavigationButton: React.FC<NavigationButtonProps> = ({
-}
-  variant = &apos;secondary&apos;,
+  variant = 'secondary',
   onClick,
   children,
   disabled = false,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const baseStyle = NAVIGATION_BUTTON_STYLES[variant];
-  const disabledStyle = disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;;
+  const disabledStyle = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
   const combinedClassName = `${baseStyle} ${disabledStyle} ${className}`.trim();
 
   return (
@@ -46,24 +41,20 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
 };
 
 interface BackButtonProps {
-}
   dispatch: React.Dispatch<any>;
   currentRoute: string;
   customBackRoute?: string;
   label?: string;
   className?: string;
 
-}
 
 export const BackButton: React.FC<BackButtonProps> = ({
-}
   dispatch,
   currentRoute,
   customBackRoute,
-  label = &apos;Back&apos;,
-  className = &apos;&apos;
+  label = 'Back',
+  className = ''
 }: any) => {
-}
   const handleBack = createBackHandler(dispatch, currentRoute, customBackRoute);
   
   return (
@@ -78,31 +69,28 @@ export const BackButton: React.FC<BackButtonProps> = ({
 };
 
 interface QuickNavigationProps {
-}
   dispatch: React.Dispatch<any>;
   currentRoute: string;
   showCommonRoutes?: boolean;
   customRoutes?: Array<{ label: string; route: string; variant?: keyof typeof NAVIGATION_BUTTON_STYLES }>;
 
 export const QuickNavigation: React.FC<QuickNavigationProps> = ({
-}
   dispatch,
   currentRoute,
   showCommonRoutes = true,
   customRoutes = []
 }: any) => {
-}
   const commonRoutes = showCommonRoutes ? [
-    { label: &apos;Dashboard&apos;, route: &apos;DASHBOARD&apos;, variant: &apos;secondary&apos; as const },
-    { label: &apos;League Hub&apos;, route: &apos;LEAGUE_HUB&apos;, variant: &apos;secondary&apos; as const },
-    { label: &apos;My Team&apos;, route: &apos;TEAM_HUB&apos;, variant: &apos;secondary&apos; as const },
+    { label: 'Dashboard', route: 'DASHBOARD', variant: 'secondary' as const },
+    { label: 'League Hub', route: 'LEAGUE_HUB', variant: 'secondary' as const },
+    { label: 'My Team', route: 'TEAM_HUB', variant: 'secondary' as const },
   ] : [];
 
   const allRoutes = [...commonRoutes, ...customRoutes];
 
   return (
     <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
-      {allRoutes.map(({ label, route, variant = &apos;secondary&apos; }: any) => (
+      {allRoutes.map(({ label, route, variant = 'secondary' }: any) => (
         <NavigationButton>
           key={route}
           variant={variant}
@@ -117,41 +105,33 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
 };
 
 interface BreadcrumbNavigationProps {
-}
   currentRoute: string;
   dispatch: React.Dispatch<any>;
   leagueName?: string;
   teamName?: string;
   className?: string;
 
-}
 
 export const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
-}
   currentRoute,
   dispatch,
   leagueName,
   teamName,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const breadcrumbs = generateBreadcrumbs(currentRoute, leagueName, teamName);
 
   if (breadcrumbs.length <= 1) {
-}
-    return null; // Don&apos;t show breadcrumbs for single-level navigation
+    return null; // Don't show breadcrumbs for single-level navigation
 
   return (
     <nav className={`flex items-center space-x-2 text-sm ${className}`}>
       {breadcrumbs.map((breadcrumb, index) => (
-}
         <React.Fragment key={breadcrumb.route}>
           {index > 0 && (
-}
             <span className="text-gray-400 mx-2 sm:px-4 md:px-6 lg:px-8">/</span>
           )}
           {breadcrumb.isActive ? (
-}
             <span className="text-[var(--text-primary)] font-medium sm:px-4 md:px-6 lg:px-8">
               {breadcrumb.label}
             </span>
@@ -170,7 +150,6 @@ export const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
 };
 
 interface ViewHeaderProps {
-}
   title: string;
   subtitle?: string;
   dispatch: React.Dispatch<any>;
@@ -183,10 +162,8 @@ interface ViewHeaderProps {
   actions?: React.ReactNode;
   className?: string;
 
-}
 
 export const ViewHeader: React.FC<ViewHeaderProps> = ({
-}
   title,
   subtitle,
   dispatch,
@@ -197,13 +174,11 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({
   leagueName,
   teamName,
   actions,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   return (
     <header className={`flex-shrink-0 mb-6 ${className}`}>
       {showBreadcrumbs && (
-}
         <BreadcrumbNavigation>
           currentRoute={currentRoute}
           dispatch={dispatch}
@@ -219,7 +194,6 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({
             {title}
           </h1>
           {subtitle && (
-}
             <p className="text-sm text-[var(--text-secondary)] tracking-widest mt-2 sm:px-4 md:px-6 lg:px-8">
               {subtitle}
             </p>
@@ -229,7 +203,6 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({
         <div className="flex items-center gap-4 ml-4 sm:px-4 md:px-6 lg:px-8">
           {actions}
           {showBackButton && (
-}
             <BackButton>
               dispatch={dispatch}
               currentRoute={currentRoute}

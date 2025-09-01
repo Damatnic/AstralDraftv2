@@ -1,51 +1,44 @@
 
 interface ProgressProps {
-}
   value: number;
   max?: number;
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
-  variant?: &apos;default&apos; | &apos;success&apos; | &apos;warning&apos; | &apos;error&apos;;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'success' | 'warning' | 'error';
   showLabel?: boolean;
   label?: string;
   className?: string;
 
-}
 
 export const Progress: React.FC<ProgressProps> = ({
-}
   value,
   max = 100,
-  size = &apos;md&apos;,
-  variant = &apos;default&apos;,
+  size = 'md',
+  variant = 'default',
   showLabel = false,
   label,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   const sizeClasses = {
-}
-    sm: &apos;h-2&apos;,
-    md: &apos;h-3&apos;,
-    lg: &apos;h-4&apos;
+    sm: 'h-2',
+    md: 'h-3',
+    lg: 'h-4'
   };
 
   const variantClasses = {
-}
-    default: &apos;bg-[var(--color-primary)]&apos;,
-    success: &apos;bg-green-500&apos;,
-    warning: &apos;bg-yellow-500&apos;,
-    error: &apos;bg-red-500&apos;
+    default: 'bg-[var(--color-primary)]',
+    success: 'bg-green-500',
+    warning: 'bg-yellow-500',
+    error: 'bg-red-500'
   };
 
   return (
     <div className={`w-full ${className}`}>
       {(showLabel || label) && (
-}
         <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
           <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
-            {label || &apos;Progress&apos;}
+            {label || 'Progress'}
           </span>
           <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
             {Math.round(percentage)}%

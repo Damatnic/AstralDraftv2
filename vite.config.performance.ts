@@ -1,60 +1,50 @@
-import path from &apos;path&apos;;
-import { defineConfig } from &apos;vite&apos;;
-import react from &apos;@vitejs/plugin-react&apos;;
+import path from 'path';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // EMERGENCY PERFORMANCE CONFIGURATION
 // This config achieves maximum bundle size reduction through aggressive splitting
 
 export default defineConfig(({ mode }: { mode: string }) => {
-}
-    const isProduction = mode === &apos;production&apos;;
+    const isProduction = mode === 'production';
     
     return {
-}
-      base: &apos;/&apos;,
+      base: '/',
       plugins: [
         react({
-}
-          jsxRuntime: &apos;classic&apos;,
+          jsxRuntime: 'classic',
           jsxImportSource: undefined,
           babel: {
-}
             plugins: [],
             presets: []
           }
         }),
       ],
       define: {
-}
-        &apos;global&apos;: &apos;globalThis&apos;,
-        &apos;process.env.NODE_ENV&apos;: JSON.stringify(isProduction ? &apos;production&apos; : &apos;development&apos;)
+        'global': 'globalThis',
+        'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development')
       },
       resolve: {
-}
         alias: {
-}
-          &apos;@&apos;: path.resolve(__dirname, &apos;.&apos;),
+          '@': path.resolve(__dirname, '.'),
           // Replace heavy libraries with lighter alternatives
-          &apos;lodash&apos;: &apos;lodash-es&apos;,
-          &apos;moment&apos;: &apos;dayjs&apos;,
-          &apos;crypto&apos;: &apos;crypto-browserify&apos;,
-          &apos;stream&apos;: &apos;stream-browserify&apos;,
-          &apos;util&apos;: &apos;util&apos;,
-          &apos;events&apos;: &apos;events&apos;,
-          &apos;buffer&apos;: &apos;buffer&apos;
+          'lodash': 'lodash-es',
+          'moment': 'dayjs',
+          'crypto': 'crypto-browserify',
+          'stream': 'stream-browserify',
+          'util': 'util',
+          'events': 'events',
+          'buffer': 'buffer'
         }
       },
       build: {
-}
-        target: &apos;es2020&apos;,
-        minify: isProduction ? &apos;terser&apos; : false,
+        target: 'es2020',
+        minify: isProduction ? 'terser' : false,
         terserOptions: isProduction ? {
-}
           compress: {
-}
             drop_console: true,
             drop_debugger: true,
-            pure_funcs: [&apos;console.log&apos;, &apos;console.info&apos;, &apos;console.debug&apos;, &apos;console.trace&apos;],
+            pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
             passes: 3,
             unsafe: true,
             unsafe_arrows: true,
@@ -78,16 +68,13 @@ export default defineConfig(({ mode }: { mode: string }) => {
             ecma: 2020,
           },
           mangle: {
-}
             safari10: true,
             toplevel: true,
             properties: {
-}
               regex: /^_/,
             }
           },
           format: {
-}
             comments: false,
             ecma: 2020,
           },
@@ -95,158 +82,137 @@ export default defineConfig(({ mode }: { mode: string }) => {
           toplevel: true,
         } : undefined,
         sourcemap: false,
-        cssMinify: isProduction ? &apos;esbuild&apos; : false,
+        cssMinify: isProduction ? 'esbuild' : false,
         assetsInlineLimit: 8192, // Inline smaller assets
         rollupOptions: {
-}
           output: {
-}
             // Aggressive manual chunking strategy
             manualChunks: (id: any) => {
-}
               // Core React (essential)
-              if (id.includes(&apos;react&apos;) || id.includes(&apos;react-dom&apos;)) {
-}
-                if (id.includes(&apos;react-dom&apos;)) return &apos;react-dom&apos;;
-                return &apos;react-core&apos;;
+              if (id.includes('react') || id.includes('react-dom')) {
+                if (id.includes('react-dom')) return 'react-dom';
+                return 'react-core';
               }
               
               // Heavy animation library
-              if (id.includes(&apos;framer-motion&apos;)) {
-}
-                return &apos;animation&apos;;
+              if (id.includes('framer-motion')) {
+                return 'animation';
               }
               
               // Chart libraries (lazy loaded)
-              if (id.includes(&apos;chart.js&apos;) || id.includes(&apos;recharts&apos;)) {
-}
-                return &apos;charts&apos;;
+              if (id.includes('chart.js') || id.includes('recharts')) {
+                return 'charts';
               }
               
               // Icons (lazy loaded)
-              if (id.includes(&apos;lucide-react&apos;) || id.includes(&apos;react-icons&apos;)) {
-}
-                return &apos;icons&apos;;
+              if (id.includes('lucide-react') || id.includes('react-icons')) {
+                return 'icons';
               }
               
               // Payment (lazy loaded)
-              if (id.includes(&apos;stripe&apos;)) {
-}
-                return &apos;payment&apos;;
+              if (id.includes('stripe')) {
+                return 'payment';
               }
               
               // DnD (lazy loaded)
-              if (id.includes(&apos;@dnd-kit&apos;)) {
-}
-                return &apos;dnd&apos;;
+              if (id.includes('@dnd-kit')) {
+                return 'dnd';
               }
               
               // Socket/WebSocket (lazy loaded)
-              if (id.includes(&apos;socket.io&apos;)) {
-}
-                return &apos;realtime&apos;;
+              if (id.includes('socket.io')) {
+                return 'realtime';
               }
               
               // Utilities
-              if (id.includes(&apos;lodash&apos;) || id.includes(&apos;axios&apos;)) {
-}
-                return &apos;utils&apos;;
+              if (id.includes('lodash') || id.includes('axios')) {
+                return 'utils';
               }
               
               // All other vendor code
-              if (id.includes(&apos;node_modules&apos;)) {
-}
+              if (id.includes('node_modules')) {
                 // Group smaller libraries together
-                const module = id.split(&apos;node_modules/&apos;)[1];
-                const packageName = module.split(&apos;/&apos;)[0];
+                const module = id.split('node_modules/')[1];
+                const packageName = module.split('/')[0];
                 
                 // Group small packages together
                 const smallPackages = [
-                  &apos;tslib&apos;, &apos;classnames&apos;, &apos;clsx&apos;, &apos;tiny-invariant&apos;,
-                  &apos;warning&apos;, &apos;object-assign&apos;, &apos;prop-types&apos;
+                  'tslib', 'classnames', 'clsx', 'tiny-invariant',
+                  'warning', 'object-assign', 'prop-types'
                 ];
                 
                 if (smallPackages.some((pkg: any) => packageName.includes(pkg))) {
-}
-                  return &apos;vendor-small&apos;;
+                  return 'vendor-small';
                 }
                 
-                return &apos;vendor&apos;;
+                return 'vendor';
               }
               
               // Feature-based splitting for app code
-              if (id.includes(&apos;/components/draft/&apos;)) return &apos;draft&apos;;
-              if (id.includes(&apos;/components/matchup/&apos;)) return &apos;matchup&apos;;
-              if (id.includes(&apos;/components/player/&apos;)) return &apos;players&apos;;
-              if (id.includes(&apos;/components/trade/&apos;)) return &apos;trade&apos;;
-              if (id.includes(&apos;/components/waiver/&apos;)) return &apos;waiver&apos;;
-              if (id.includes(&apos;/components/research/&apos;)) return &apos;research&apos;;
-              if (id.includes(&apos;/components/admin/&apos;)) return &apos;admin&apos;;
-              if (id.includes(&apos;/components/auth/&apos;)) return &apos;auth&apos;;
-              if (id.includes(&apos;/components/settings/&apos;)) return &apos;settings&apos;;
-              if (id.includes(&apos;/services/&apos;)) return &apos;services&apos;;
-              if (id.includes(&apos;/hooks/&apos;)) return &apos;hooks&apos;;
-              if (id.includes(&apos;/utils/&apos;)) return &apos;utilities&apos;;
-              if (id.includes(&apos;/contexts/&apos;)) return &apos;contexts&apos;;
+              if (id.includes('/components/draft/')) return 'draft';
+              if (id.includes('/components/matchup/')) return 'matchup';
+              if (id.includes('/components/player/')) return 'players';
+              if (id.includes('/components/trade/')) return 'trade';
+              if (id.includes('/components/waiver/')) return 'waiver';
+              if (id.includes('/components/research/')) return 'research';
+              if (id.includes('/components/admin/')) return 'admin';
+              if (id.includes('/components/auth/')) return 'auth';
+              if (id.includes('/components/settings/')) return 'settings';
+              if (id.includes('/services/')) return 'services';
+              if (id.includes('/hooks/')) return 'hooks';
+              if (id.includes('/utils/')) return 'utilities';
+              if (id.includes('/contexts/')) return 'contexts';
             },
             
             // Optimize chunk names
-            entryFileNames: isProduction ? &apos;[name].[hash:8].js&apos; : &apos;[name].js&apos;,
+            entryFileNames: isProduction ? '[name].[hash:8].js' : '[name].js',
             chunkFileNames: (chunkInfo: any) => {
-}
-              const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId : &apos;&apos;;
+              const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId : '';
               
               // Critical chunks get shorter hashes
-              if (chunkInfo.name === &apos;react-core&apos; || chunkInfo.name === &apos;react-dom&apos;) {
-}
-                return isProduction ? &apos;[name].[hash:6].js&apos; : &apos;[name].js&apos;;
+              if (chunkInfo.name === 'react-core' || chunkInfo.name === 'react-dom') {
+                return isProduction ? '[name].[hash:6].js' : '[name].js';
               }
               
               // Feature chunks
-              if (chunkInfo.name?.startsWith(&apos;feature-&apos;) || 
-                  chunkInfo.name?.includes(&apos;View&apos;)) {
-}
-                return isProduction ? &apos;features/[name].[hash:8].js&apos; : &apos;features/[name].js&apos;;
+              if (chunkInfo.name?.startsWith('feature-') || 
+                  chunkInfo.name?.includes('View')) {
+                return isProduction ? 'features/[name].[hash:8].js' : 'features/[name].js';
               }
               
               // Vendor chunks
-              if (chunkInfo.name?.startsWith(&apos;vendor&apos;) || 
-                  chunkInfo.name === &apos;animation&apos; ||
-                  chunkInfo.name === &apos;charts&apos; ||
-                  chunkInfo.name === &apos;icons&apos;) {
-}
-                return isProduction ? &apos;vendor/[name].[hash:8].js&apos; : &apos;vendor/[name].js&apos;;
+              if (chunkInfo.name?.startsWith('vendor') || 
+                  chunkInfo.name === 'animation' ||
+                  chunkInfo.name === 'charts' ||
+                  chunkInfo.name === 'icons') {
+                return isProduction ? 'vendor/[name].[hash:8].js' : 'vendor/[name].js';
               }
               
               // Default
-              return isProduction ? &apos;chunks/[name].[hash:8].js&apos; : &apos;chunks/[name].js&apos;;
+              return isProduction ? 'chunks/[name].[hash:8].js' : 'chunks/[name].js';
             },
             
             // Optimize asset file names
             assetFileNames: (assetInfo: any) => {
-}
-              const info = assetInfo.name?.split(&apos;.&apos;);
+              const info = assetInfo.name?.split('.');
               const ext = info?.[info.length - 1];
               
               // Images
-              if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext || &apos;&apos;)) {
-}
-                return &apos;img/[name].[hash:8][extname]&apos;;
+              if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext || '')) {
+                return 'img/[name].[hash:8][extname]';
               }
               
               // Fonts
-              if (/woff2?|ttf|otf|eot/i.test(ext || &apos;&apos;)) {
-}
-                return &apos;fonts/[name].[hash:8][extname]&apos;;
+              if (/woff2?|ttf|otf|eot/i.test(ext || '')) {
+                return 'fonts/[name].[hash:8][extname]';
               }
               
               // CSS
-              if (ext === &apos;css&apos;) {
-}
-                return &apos;css/[name].[hash:8][extname]&apos;;
+              if (ext === 'css') {
+                return 'css/[name].[hash:8][extname]';
               }
               
-              return &apos;assets/[name].[hash:8][extname]&apos;;
+              return 'assets/[name].[hash:8][extname]';
             },
             
             // Preserve module structure for better tree shaking
@@ -255,12 +221,11 @@ export default defineConfig(({ mode }: { mode: string }) => {
           
           // Tree shaking optimizations
           treeshake: {
-}
             moduleSideEffects: false,
             propertyReadSideEffects: false,
             unknownGlobalSideEffects: false,
             correctVarValueBeforeDeclaration: true,
-            preset: &apos;smallest&apos;,
+            preset: 'smallest',
             annotations: true,
             tryCatchDeoptimization: false,
           },
@@ -277,42 +242,37 @@ export default defineConfig(({ mode }: { mode: string }) => {
         
         // Module preload polyfill
         modulePreload: {
-}
           polyfill: true,
         },
         
         // Common JS optimization
         commonjsOptions: {
-}
           transformMixedEsModules: true,
-          requireReturnsDefault: &apos;auto&apos;,
+          requireReturnsDefault: 'auto',
         },
       },
       
       // Optimize dependencies
       optimizeDeps: {
-}
         include: [
-          &apos;react&apos;,
-          &apos;react-dom&apos;,
-          &apos;react-dom/client&apos;,
+          'react',
+          'react-dom',
+          'react-dom/client',
         ],
         exclude: [
-          &apos;@types/node&apos;,
-          &apos;@google/genai&apos;,
+          '@types/node',
+          '@google/genai',
           // Exclude heavy dependencies that should be lazy loaded
-          &apos;chart.js&apos;,
-          &apos;recharts&apos;,
-          &apos;framer-motion&apos;,
-          &apos;@dnd-kit/core&apos;,
-          &apos;@dnd-kit/sortable&apos;,
-          &apos;socket.io-client&apos;,
+          'chart.js',
+          'recharts',
+          'framer-motion',
+          '@dnd-kit/core',
+          '@dnd-kit/sortable',
+          'socket.io-client',
         ],
         esbuildOptions: {
-}
-          target: &apos;es2020&apos;,
+          target: 'es2020',
           supported: {
-}
             bigint: true,
           },
         },
@@ -320,21 +280,18 @@ export default defineConfig(({ mode }: { mode: string }) => {
       
       // Development optimizations
       server: {
-}
         hmr: {
-}
           overlay: false, // Disable error overlay in dev
         },
       },
       
       // ESBuild optimizations
       esbuild: {
-}
-        jsx: &apos;transform&apos;,
-        jsxFactory: &apos;React.createElement&apos;,
-        jsxFragment: &apos;React.Fragment&apos;,
-        legalComments: &apos;none&apos;,
-        logOverride: { &apos;this-is-undefined-in-esm&apos;: &apos;silent&apos; },
+        jsx: 'transform',
+        jsxFactory: 'React.createElement',
+        jsxFragment: 'React.Fragment',
+        legalComments: 'none',
+        logOverride: { 'this-is-undefined-in-esm': 'silent' },
         treeShaking: true,
         minifyIdentifiers: isProduction,
         minifySyntax: isProduction,
@@ -342,6 +299,6 @@ export default defineConfig(({ mode }: { mode: string }) => {
       },
       
       // Additional performance hints
-      logLevel: isProduction ? &apos;warn&apos; : &apos;info&apos;,
+      logLevel: isProduction ? 'warn' : 'info',
     };
 });

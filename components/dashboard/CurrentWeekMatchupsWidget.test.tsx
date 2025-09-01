@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import CurrentWeekMatchupsWidget from &apos;./CurrentWeekMatchupsWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import CurrentWeekMatchupsWidget from './CurrentWeekMatchupsWidget';
 
-describe(&apos;CurrentWeekMatchupsWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('CurrentWeekMatchupsWidget', () => {
+  it('renders without crashing', () => {
     render(<CurrentWeekMatchupsWidget />);
-    expect(screen.getByTestId(&apos;currentweekmatchupswidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('currentweekmatchupswidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<CurrentWeekMatchupsWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<CurrentWeekMatchupsWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

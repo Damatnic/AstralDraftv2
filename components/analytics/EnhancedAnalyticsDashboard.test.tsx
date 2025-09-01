@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import EnhancedAnalyticsDashboard from &apos;./EnhancedAnalyticsDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import EnhancedAnalyticsDashboard from './EnhancedAnalyticsDashboard';
 
-describe(&apos;EnhancedAnalyticsDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('EnhancedAnalyticsDashboard', () => {
+  it('renders without crashing', () => {
     render(<EnhancedAnalyticsDashboard />);
-    expect(screen.getByTestId(&apos;enhancedanalyticsdashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('enhancedanalyticsdashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<EnhancedAnalyticsDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<EnhancedAnalyticsDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

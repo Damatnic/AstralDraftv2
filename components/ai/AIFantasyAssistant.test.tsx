@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import AIFantasyAssistant from &apos;./AIFantasyAssistant&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AIFantasyAssistant from './AIFantasyAssistant';
 
-describe(&apos;AIFantasyAssistant&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('AIFantasyAssistant', () => {
+  it('renders without crashing', () => {
     render(<AIFantasyAssistant />);
-    expect(screen.getByTestId(&apos;aifantasyassistant&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('aifantasyassistant')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<AIFantasyAssistant />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<AIFantasyAssistant />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

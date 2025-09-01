@@ -3,11 +3,10 @@
  * Comprehensive interface for managing ML training data, datasets, model training, and performance monitoring
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useState, useEffect, useCallback, useMemo, memo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import { motion } from 'framer-motion';
 import { 
-}
     Database, 
     Brain, 
     TrendingUp, 
@@ -23,51 +22,45 @@ import {
     Save,
     RefreshCw,
 //     Activity
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
 import oracleEnsembleMLService, { 
-}
     TrainingConfiguration, 
     TrainingProgress, 
     TrainingSession,
     ValidationReport,
     DataValidationRule,
 //     EnsembleModel
-} from &apos;../../services/oracleEnsembleMachineLearningService&apos;;
+} from '../../services/oracleEnsembleMachineLearningService';
 
-type TabType = &apos;overview&apos; | &apos;datasets&apos; | &apos;validation&apos; | &apos;training&apos; | &apos;performance&apos; | &apos;config&apos;;
+type TabType = 'overview' | 'datasets' | 'validation' | 'training' | 'performance' | 'config';
 
 interface TrainingMetrics {
-}
     accuracy: number;
     loss: number;
     epoch: number;
     learningRate: number;
     validationAccuracy: number;
 
-}
 
 const TrainingDataManager = memo(() => {
-}
-    const [activeTab, setActiveTab] = useState<TabType>(&apos;overview&apos;);
+    const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [isTraining, setIsTraining] = useState(false);
     const [currentSession, setCurrentSession] = useState<TrainingSession | null>(null);
     const [trainingProgress, setTrainingProgress] = useState<TrainingProgress>({
-}
         currentStep: 0,
         totalSteps: 100,
-        currentModel: &apos;Idle&apos;,
-        phase: &apos;preparation&apos;,
+        currentModel: 'Idle',
+        phase: 'preparation',
         percentage: 0,
-        message: &apos;Initializing training session&apos;,
+        message: 'Initializing training session',
         accuracy: 0.85,
         loss: 0.23,
         epoch: 45
     });
     const [trainingConfig, setTrainingConfig] = useState<TrainingConfiguration>({
-}
-        algorithm: &apos;ENSEMBLE&apos;,
-        modelType: &apos;ensemble&apos;,
+        algorithm: 'ENSEMBLE',
+        modelType: 'ensemble',
         hyperparameters: { learningRate: 0.001 }, // Move learningRate to hyperparameters
         trainingSplit: 0.8,
         validationSplit: 0.2,
@@ -79,7 +72,6 @@ const TrainingDataManager = memo(() => {
     });
     const [trainingHistory, setTrainingHistory] = useState<TrainingSession[]>([]);
     const [datasetStats, setDatasetStats] = useState({
-}
         totalRecords: 0,
         trainingRecords: 0,
         validationRecords: 0,
@@ -89,12 +81,10 @@ const TrainingDataManager = memo(() => {
         duplicates: 0
     });
     const [modelMetrics, setModelMetrics] = useState<{
-}
         models: EnsembleModel[];
         overallAccuracy: number;
         lastTraining: string;
     }>({
-}
         models: [],
         overallAccuracy: 0.85,
         lastTraining: new Date().toISOString()
@@ -103,14 +93,13 @@ const TrainingDataManager = memo(() => {
     const [validationRules, setValidationRules] = useState<DataValidationRule[]>([]);
     const [isValidating, setIsValidating] = useState(false);
     const [systemConfig, setSystemConfig] = useState({
-}
-        ensembleStrategy: &apos;weighted_average&apos;,
+        ensembleStrategy: 'weighted_average',
         predictionThreshold: 0.75,
-        retrainFrequency: &apos;weekly&apos;,
+        retrainFrequency: 'weekly',
         realTimeLearning: true,
         apiRateLimit: 1000,
-        cacheTtl: &apos;15_minutes&apos;,
-        logLevel: &apos;INFO&apos;,
+        cacheTtl: '15_minutes',
+        logLevel: 'INFO',
         enableMonitoring: true,
         autoBackupModels: true,
         alertOnAnomalies: true
@@ -126,7 +115,6 @@ const TrainingDataManager = memo(() => {
     
     // Specific loading states for different operations
     const [loadingStates, setLoadingStates] = useState({
-}
         initialLoad: true,
         trainingData: false,
         validation: false,
@@ -139,7 +127,6 @@ const TrainingDataManager = memo(() => {
     
     // Enhanced error tracking with categorization
     const [errors, setErrors] = useState<{
-}
         general: string | null;
         training: string | null;
         validation: string | null;
@@ -147,7 +134,6 @@ const TrainingDataManager = memo(() => {
         connection: string | null;
         dataLoad: string | null;
     }>({
-}
         general: null,
         training: null,
         validation: null,
@@ -158,13 +144,11 @@ const TrainingDataManager = memo(() => {
     
     // Operation retry counts for resilience
     const [retryAttempts, setRetryAttempts] = useState<{
-}
         dataLoad: number;
         training: number;
         validation: number;
         configuration: number;
     }>({
-}
         dataLoad: 0,
         training: 0,
         validation: 0,
@@ -176,17 +160,13 @@ const TrainingDataManager = memo(() => {
 
     // Enhanced error handling utilities
     const setSpecificError = useCallback((category: keyof typeof errors, message: string | null) => {
-}
         setErrors(prev => ({ ...prev, [category]: message }));
         if (message) {
-}
 
     }, [errors]);
 
     const clearAllErrors = useCallback(() => {
-}
         setErrors({
-}
             general: null,
             training: null,
             validation: null,
@@ -198,17 +178,14 @@ const TrainingDataManager = memo(() => {
     }, []);
 
     const setSpecificLoading = useCallback((operation: keyof typeof loadingStates, loading: boolean) => {
-}
         setLoadingStates(prev => ({ ...prev, [operation]: loading }));
     }, [loadingStates]);
 
     const incrementRetryAttempt = useCallback((operation: keyof typeof retryAttempts) => {
-}
         setRetryAttempts(prev => ({ ...prev, [operation]: prev[operation] + 1 }));
     }, [retryAttempts]);
 
     const resetRetryAttempts = useCallback((operation: keyof typeof retryAttempts) => {
-}
         setRetryAttempts(prev => ({ ...prev, [operation]: 0 }));
     }, [retryAttempts]);
 
@@ -219,29 +196,24 @@ const TrainingDataManager = memo(() => {
         maxRetries: number = 3,
         retryDelay: number = 1000
     ): Promise<T | null> => {
-}
         const currentAttempts = retryAttempts[operationType];
         
         try {
-}
 
             const result = await operation();
             resetRetryAttempts(operationType);
             return result;
         
     } catch (error) {
-}
-            const errorMessage = error instanceof Error ? error.message : &apos;Unknown error occurred&apos;;
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
             
             if (currentAttempts < maxRetries) {
-}
                 incrementRetryAttempt(operationType);
                 
                 await new Promise(resolve => setTimeout(resolve, retryDelay));
                 return executeWithRetry(operation, operationType, maxRetries, retryDelay * 1.5); // Exponential backoff
             } else {
-}
-                setSpecificError(operationType === &apos;dataLoad&apos; ? &apos;dataLoad&apos; : &apos;general&apos;, errorMessage);
+                setSpecificError(operationType === 'dataLoad' ? 'dataLoad' : 'general', errorMessage);
                 resetRetryAttempts(operationType);
                 return null;
 
@@ -250,26 +222,22 @@ const TrainingDataManager = memo(() => {
 
     // Load configuration function (moved up to avoid forward reference)
     const loadConfiguration = useCallback(async () => {
-}
         return await withLoadingState(async () => {
-}
             // FUTURE: Replace with actual service call when configuration API is available
             // const config = await oracleEnsembleMLService.getConfiguration();
             
             // Simulate potential loading failures
             if (Math.random() < 0.05) {
-}
-                throw new Error(&apos;Configuration service temporarily unavailable&apos;);
+                throw new Error('Configuration service temporarily unavailable');
 
             const config = {
-}
-                ensembleStrategy: &apos;weighted_average&apos;,
+                ensembleStrategy: 'weighted_average',
                 predictionThreshold: 0.75,
-                retrainFrequency: &apos;weekly&apos;,
+                retrainFrequency: 'weekly',
                 realTimeLearning: true,
                 apiRateLimit: 1000,
-                cacheTtl: &apos;15_minutes&apos;,
-                logLevel: &apos;INFO&apos;,
+                cacheTtl: '15_minutes',
+                logLevel: 'INFO',
                 enableMonitoring: true,
                 autoBackupModels: true,
                 alertOnAnomalies: true
@@ -278,7 +246,7 @@ const TrainingDataManager = memo(() => {
             setSystemConfig(config);
             setConfigurationChanged(false);
             return config;
-        }, &apos;configuration&apos;, &apos;configuration&apos;);
+        }, 'configuration', 'configuration');
     }, []);
 
     // Enhanced loading state management
@@ -287,73 +255,60 @@ const TrainingDataManager = memo(() => {
         loadingType: keyof typeof loadingStates,
         errorCategory?: keyof typeof errors
     ): Promise<T | null> => {
-}
         try {
-}
 
             setSpecificLoading(loadingType, true);
             if (errorCategory) {
-}
                 setSpecificError(errorCategory, null);
 
             const result = await operation();
             return result;
     
     } catch (error) {
-}
-            const errorMessage = error instanceof Error ? error.message : &apos;Operation failed&apos;;
+            const errorMessage = error instanceof Error ? error.message : 'Operation failed';
             
             if (errorCategory) {
-}
                 setSpecificError(errorCategory, errorMessage);
             } else {
-}
                 setError(errorMessage);
 
             return null;
         } finally {
-}
             setSpecificLoading(loadingType, false);
 
     }, [setSpecificLoading, setSpecificError]);
 
     // Connection health monitoring
     const checkConnectionHealth = useCallback(async (): Promise<boolean> => {
-}
         try {
-}
 
             // Test connection with a lightweight operation
             const testResult = await Promise.race([
                 Promise.resolve(oracleEnsembleMLService.getCurrentModelMetrics()),
-                new Promise((_, reject) => setTimeout(() => reject(new Error(&apos;Connection timeout&apos;)), 5000))
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Connection timeout')), 5000))
             ]);
             
             if (testResult) {
-}
                 setRealtimeConnected(true);
-                setSpecificError(&apos;connection&apos;, null);
+                setSpecificError('connection', null);
                 return true;
 
             return false;
 
     } catch (error) {
-}
             setRealtimeConnected(false);
-            setSpecificError(&apos;connection&apos;, &apos;Connection lost - attempting to reconnect...&apos;);
+            setSpecificError('connection', 'Connection lost - attempting to reconnect...');
             return false;
 
     }, [setSpecificError]);
 
     // Load initial data
     useEffect(() => {
-}
         loadInitialData();
         const interval = setInterval(loadTrainingStatus, 1000);
         setUpdateIntervals(prev => [...prev, interval]);
         
         return () => {
-}
             // Cleanup all intervals
             updateIntervals.forEach(clearInterval);
             clearInterval(interval);
@@ -362,16 +317,12 @@ const TrainingDataManager = memo(() => {
 
     // Initialize real-time monitoring
     const initializeRealtimeMonitoring = useCallback(async () => {
-}
         try {
-}
             // Set up periodic data refresh for live metrics
             const metricsInterval = setInterval(async () => {
-}
                 if (!isTraining) return;
                 
                 try {
-}
 
                     const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                     setModelMetrics(metrics);
@@ -380,29 +331,24 @@ const TrainingDataManager = memo(() => {
                     setDatasetStats(stats);
 
     } catch (error) {
-}
 
             }, 5000); // Refresh every 5 seconds
             
             // Set up training session monitoring
             const sessionInterval = setInterval(() => {
-}
                 loadTrainingStatus();
             }, 1000); // Check training status every second
             
             setUpdateIntervals(prev => [...prev, metricsInterval, sessionInterval]);
     
     } catch (error) {
-}
             throw error;
 
     }, [isTraining]);
 
     // Enhanced data refresh for specific widgets
     const refreshDataSources = useCallback(async () => {
-}
         return await withLoadingState(async () => {
-}
             clearAllErrors();
             
             // Refresh all data sources with individual error handling
@@ -416,135 +362,108 @@ const TrainingDataManager = memo(() => {
             // Process results and handle partial failures
             let hasErrors = false;
             
-            if (stats?.status === &apos;fulfilled&apos;) {
-}
+            if (stats?.status === 'fulfilled') {
                 setDatasetStats(stats.value);
             } else {
-}
-                setSpecificError(&apos;dataLoad&apos;, &apos;Failed to load dataset statistics&apos;);
+                setSpecificError('dataLoad', 'Failed to load dataset statistics');
                 hasErrors = true;
 
-            if (metrics?.status === &apos;fulfilled&apos;) {
-}
+            if (metrics?.status === 'fulfilled') {
                 setModelMetrics(metrics.value);
             } else {
-}
-                setSpecificError(&apos;general&apos;, &apos;Failed to load model metrics&apos;);
+                setSpecificError('general', 'Failed to load model metrics');
                 hasErrors = true;
 
-            if (history?.status === &apos;fulfilled&apos;) {
-}
+            if (history?.status === 'fulfilled') {
                 setTrainingHistory(history.value);
             } else {
-}
 
-            if (report?.status === &apos;fulfilled&apos;) {
-}
+            if (report?.status === 'fulfilled') {
                 setValidationReport(report.value);
             } else {
-}
 
             if (hasErrors) {
-}
-                throw new Error(&apos;Some data sources failed to refresh&apos;);
+                throw new Error('Some data sources failed to refresh');
 
             return true;
-        }, &apos;datasetStats&apos;, &apos;dataLoad&apos;);
+        }, 'datasetStats', 'dataLoad');
     }, [withLoadingState, clearAllErrors, setSpecificError]);
 
     const loadInitialData = useCallback(async () => {
-}
         return await executeWithRetry(async () => {
-}
             setIsLoading(true);
-            setSpecificLoading(&apos;initialLoad&apos;, true);
+            setSpecificLoading('initialLoad', true);
             clearAllErrors();
             
             // Initialize real-time monitoring with error handling
             try {
-}
 
                 await initializeRealtimeMonitoring();
             
     } catch (error) {
-}
-                setSpecificError(&apos;connection&apos;, &apos;Real-time features limited - some data may not auto-refresh&apos;);
+                setSpecificError('connection', 'Real-time features limited - some data may not auto-refresh');
 
             // Load dataset statistics with enhanced error handling
             await withLoadingState(async () => {
-}
                 const stats = await oracleEnsembleMLService.getDatasetStatistics();
                 setDatasetStats(stats);
                 return stats;
-            }, &apos;datasetStats&apos;, &apos;dataLoad&apos;);
+            }, 'datasetStats', 'dataLoad');
 
             // Load model metrics with fallback
             try {
-}
 
-                setSpecificLoading(&apos;modelMetrics&apos;, true);
+                setSpecificLoading('modelMetrics', true);
                 const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                 setModelMetrics(metrics);
             
     } catch (error) {
-}
-                setSpecificError(&apos;general&apos;, &apos;Model metrics temporarily unavailable&apos;);
+                setSpecificError('general', 'Model metrics temporarily unavailable');
             } finally {
-}
-                setSpecificLoading(&apos;modelMetrics&apos;, false);
+                setSpecificLoading('modelMetrics', false);
 
             // Load training history (non-critical)
             try {
-}
 
                 const history = oracleEnsembleMLService.getTrainingHistory();
                 setTrainingHistory(history);
             
     } catch (error) {
-}
-                // Don&apos;t set error for non-critical data
+                // Don't set error for non-critical data
 
             // Load validation rules (non-critical)
             try {
-}
 
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
             
     } catch (error) {
-}
 
             // Load system configuration with enhanced handling
             await withLoadingState(async () => {
-}
                 await loadConfiguration();
                 return true;
-            }, &apos;configuration&apos;, &apos;configuration&apos;);
+            }, 'configuration', 'configuration');
 
             // Load last validation report (non-critical)
             try {
-}
 
                 const lastReport = oracleEnsembleMLService.getLastValidationReport();
                 setValidationReport(lastReport);
             
     } catch (error) {
-}
 
             // Test connection health
             const connectionHealthy = await checkConnectionHealth();
             if (connectionHealthy) {
-}
                 setRealtimeConnected(true);
             } else {
-}
-                setSpecificError(&apos;connection&apos;, &apos;Connection unstable - some features may be limited&apos;);
+                setSpecificError('connection', 'Connection unstable - some features may be limited');
 
             return true;
-        }, &apos;dataLoad&apos;, 3, 2000).finally(() => {
-}
+        }, 'dataLoad', 3, 2000).finally(() => {
             setIsLoading(false);
-            setSpecificLoading(&apos;initialLoad&apos;, false);
+            setSpecificLoading('initialLoad', false);
             setDataLoading(false);
         });
     }, [
@@ -559,86 +478,70 @@ const TrainingDataManager = memo(() => {
     ]);
 
     const loadTrainingStatus = useCallback(async () => {
-}
         return await withLoadingState(async () => {
-}
             // Check for active training sessions with timeout
             const activeSessions = await Promise.race([
                 Promise.resolve(oracleEnsembleMLService.getActiveTrainingSessions()),
                 new Promise<TrainingSession[]>((_, reject) => 
-                    setTimeout(() => reject(new Error(&apos;Training status check timeout&apos;)), 3000)
+                    setTimeout(() => reject(new Error('Training status check timeout')), 3000)
                 )
             ]);
             
             if (Array.isArray(activeSessions) && activeSessions.length > 0) {
-}
                 const session = activeSessions[0];
                 setCurrentSession(session);
-                setIsTraining(session?.status === &apos;running&apos;);
+                setIsTraining(session?.status === 'running');
                 setTrainingProgress(session.progress);
                 
                 // Auto-refresh model metrics during training with error handling
-                if (session?.status === &apos;running&apos;) {
-}
+                if (session?.status === 'running') {
                     try {
-}
 
                         const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                         setModelMetrics(metrics);
 
     } catch (error) {
-}
-                        // Don&apos;t fail the entire operation for metrics refresh
+                        // Don't fail the entire operation for metrics refresh
 
 
             } else if (isTraining) {
-}
                 setIsTraining(false);
                 setCurrentSession(null);
                 // Reload data after training completion with error handling
                 try {
-}
 
                     await refreshDataSources();
 
     } catch (error) {
-}
-                    setSpecificError(&apos;dataLoad&apos;, &apos;Failed to refresh data after training completion&apos;);
+                    setSpecificError('dataLoad', 'Failed to refresh data after training completion');
 
 
             return true;
-        }, &apos;realtimeUpdate&apos;, &apos;general&apos;);
+        }, 'realtimeUpdate', 'general');
     }, [isTraining, refreshDataSources, withLoadingState, setSpecificError]);
 
     const handleTrainModels = useCallback(async () => {
-}
         return await withLoadingState(async () => {
-}
             setIsTraining(true);
             clearAllErrors();
             
             // Validate training prerequisites
             if (!realtimeConnected) {
-}
-                throw new Error(&apos;Cannot start training: Connection to ML service is not available&apos;);
+                throw new Error('Cannot start training: Connection to ML service is not available');
 
             if (datasetStats.totalRecords === 0) {
-}
-                throw new Error(&apos;Cannot start training: No training data available&apos;);
+                throw new Error('Cannot start training: No training data available');
 
             if (!trainingConfig.maxEpochs || trainingConfig.maxEpochs <= 0 || !trainingConfig.batchSize || trainingConfig.batchSize <= 0) {
-}
-                throw new Error(&apos;Cannot start training: Invalid training configuration&apos;);
+                throw new Error('Cannot start training: Invalid training configuration');
 
             // Get real training data from service with retry
             const trainingData = await executeWithRetry(async () => {
-}
                 return await oracleEnsembleMLService.getStoredTrainingData();
-            }, &apos;training&apos;, 2, 1000);
+            }, 'training', 2, 1000);
             
             if (!trainingData) {
-}
-                throw new Error(&apos;Failed to retrieve training data after multiple attempts&apos;);
+                throw new Error('Failed to retrieve training data after multiple attempts');
 
             // Start training session with current configuration
             const sessionId = await oracleEnsembleMLService.startTrainingSession(
@@ -646,25 +549,21 @@ const TrainingDataManager = memo(() => {
                 trainingConfig,
                 `Training Session ${new Date().toLocaleString()}`,
                 (progress: TrainingProgress) => {
-}
                     setTrainingProgress(progress);
 
             );
 
             // Trigger immediate data refresh
             try {
-}
 
                 await refreshDataSources();
             
     } catch (error) {
-}
-                // Don&apos;t fail training start for this
+                // Don't fail training start for this
 
-            resetRetryAttempts(&apos;training&apos;);
+            resetRetryAttempts('training');
             return sessionId;
-        }, &apos;trainingData&apos;, &apos;training&apos;).catch((error: any) => {
-}
+        }, 'trainingData', 'training').catch((error: any) => {
             setIsTraining(false);
             return null;
         });
@@ -680,21 +579,16 @@ const TrainingDataManager = memo(() => {
     ]);
 
     const handleStopTraining = useCallback(async () => {
-}
         return await withLoadingState(async () => {
-}
             if (!currentSession) {
-}
-                throw new Error(&apos;No active training session to stop&apos;);
+                throw new Error('No active training session to stop');
 
             // Attempt to cancel training session
             try {
-}
 
                 oracleEnsembleMLService.cancelTrainingSession(currentSession.id);
             
     } catch (error) {
-}
                 // Force stop the training state even if cancellation fails
 
             setIsTraining(false);
@@ -703,144 +597,118 @@ const TrainingDataManager = memo(() => {
             
             // Refresh data after stopping training
             try {
-}
 
                 await refreshDataSources();
             
     } catch (error) {
-}
         console.error(error);
-    `oracle_training_data_${new Date().toISOString().split(&apos;T&apos;)[0]}.json`;
+    `oracle_training_data_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
                 
                 return true;
 
     } catch (error) {
-}
-                throw new Error(&apos;Failed to create or download export file&apos;);
+                throw new Error('Failed to create or download export file');
 
-        }, &apos;export&apos;, &apos;general&apos;);
+        }, 'export', 'general');
     };
 
     // Update configuration handlers with enhanced error handling
     const updateTrainingConfig = useCallback((updates: Partial<TrainingConfiguration>) => {
-}
         try {
-}
 
             // Validate configuration updates
             if (updates.maxEpochs !== undefined && updates.maxEpochs <= 0) {
-}
-                throw new Error(&apos;Max epochs must be greater than 0&apos;);
+                throw new Error('Max epochs must be greater than 0');
 
             if (updates.batchSize !== undefined && updates.batchSize <= 0) {
-}
-                throw new Error(&apos;Batch size must be greater than 0&apos;);
+                throw new Error('Batch size must be greater than 0');
 
             if (updates.hyperparameters?.learningRate !== undefined && (updates.hyperparameters.learningRate <= 0 || updates.hyperparameters.learningRate >= 1)) {
-}
-                throw new Error(&apos;Learning rate must be between 0 and 1&apos;);
+                throw new Error('Learning rate must be between 0 and 1');
 
             if (updates.trainingSplit !== undefined && (updates.trainingSplit <= 0 || updates.trainingSplit >= 1)) {
-}
-                throw new Error(&apos;Training split must be between 0 and 1&apos;);
+                throw new Error('Training split must be between 0 and 1');
 
             if (updates.validationSplit !== undefined && (updates.validationSplit <= 0 || updates.validationSplit >= 1)) {
-}
-                throw new Error(&apos;Validation split must be between 0 and 1&apos;);
+                throw new Error('Validation split must be between 0 and 1');
 
             setTrainingConfig(prev => ({ ...prev, ...updates }));
             clearAllErrors();
 
     } catch (error) {
-}
-            const errorMessage = error instanceof Error ? error.message : &apos;Invalid configuration update&apos;;
-            setSpecificError(&apos;configuration&apos;, errorMessage);
+            const errorMessage = error instanceof Error ? error.message : 'Invalid configuration update';
+            setSpecificError('configuration', errorMessage);
 
     }, [clearAllErrors, setSpecificError]);
 
     // Memoized computed values for performance optimization
     const trainingProgressPercentage = useMemo(() => {
-}
         return Math.round((trainingProgress.currentStep / trainingProgress.totalSteps) * 100);
     }, [trainingProgress.currentStep, trainingProgress.totalSteps]);
 
     const trainingSplitPercentages = useMemo(() => ({
-}
         training: Math.round((trainingConfig.trainingSplit || 0.8) * 100),
         validation: Math.round((trainingConfig.validationSplit || 0.2) * 100)
     }), [trainingConfig.trainingSplit, trainingConfig.validationSplit]);
 
     const formattedTrainingMetrics = useMemo(() => ({
-}
         accuracy: (trainingProgress.accuracy || 0).toFixed(3),
         loss: (trainingProgress.loss || 0).toFixed(3),
         overallAccuracy: modelMetrics.overallAccuracy.toFixed(3)
     }), [trainingProgress.accuracy, trainingProgress.loss, modelMetrics.overallAccuracy]);
 
     const recentTrainingSessions = useMemo(() => {
-}
         return trainingHistory.slice(0, 4);
     }, [trainingHistory]);
 
     // Enhanced event handlers for better performance
     const handleErrorDismiss = useCallback((errorType?: keyof typeof errors) => {
-}
         if (errorType) {
-}
             setSpecificError(errorType, null);
         } else {
-}
             clearAllErrors();
 
     }, [setSpecificError, clearAllErrors]);
 
     // Enhanced validation handlers
     const handleValidateData = useCallback(async () => {
-}
         return await executeWithRetry(async () => {
-}
-            setSpecificError(&apos;validation&apos;, null);
+            setSpecificError('validation', null);
             
             // Validate prerequisites
             if (!realtimeConnected) {
-}
-                throw new Error(&apos;Cannot validate data: Connection to ML service is not available&apos;);
+                throw new Error('Cannot validate data: Connection to ML service is not available');
 
             if (datasetStats.totalRecords === 0) {
-}
-                throw new Error(&apos;Cannot validate data: No dataset available for validation&apos;);
+                throw new Error('Cannot validate data: No dataset available for validation');
 
             // Get real training data and run validation
             const trainingData = await oracleEnsembleMLService.getStoredTrainingData();
             
             if (!trainingData || (Array.isArray(trainingData) && trainingData.length === 0)) {
-}
-                throw new Error(&apos;No training data available for validation&apos;);
+                throw new Error('No training data available for validation');
 
             const report = await oracleEnsembleMLService.validateDataset(trainingData);
             
             if (!report) {
-}
-                throw new Error(&apos;Validation completed but no report was generated&apos;);
+                throw new Error('Validation completed but no report was generated');
 
             setValidationReport(report);
             
             // Refresh related data with error handling
             try {
-}
 
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
             
     } catch (error) {
-}
-                // Don&apos;t fail the entire validation for this
+                // Don't fail the entire validation for this
 
-            resetRetryAttempts(&apos;validation&apos;);
+            resetRetryAttempts('validation');
             return report;
-        }, &apos;validation&apos;, 3, 1500);
+        }, 'validation', 3, 1500);
     }, [
         executeWithRetry, 
         setSpecificError, 
@@ -851,129 +719,107 @@ const TrainingDataManager = memo(() => {
 
     // Helper functions for styling
     const getSessionStatusClass = (status: string): string => {
-}
         switch (status) {
-}
-            case &apos;completed&apos;:
-                return &apos;bg-green-600 text-green-100&apos;;
-            case &apos;running&apos;:
-                return &apos;bg-blue-600 text-blue-100&apos;;
-            case &apos;failed&apos;:
-                return &apos;bg-red-600 text-red-100&apos;;
+            case 'completed':
+                return 'bg-green-600 text-green-100';
+            case 'running':
+                return 'bg-blue-600 text-blue-100';
+            case 'failed':
+                return 'bg-red-600 text-red-100';
             default:
-                return &apos;bg-gray-600 text-gray-100&apos;;
+                return 'bg-gray-600 text-gray-100';
 
     };
 
     const getQualityScoreClass = (score: number): string => {
-}
-        if (score >= 90) return &apos;text-green-400&apos;;
-        if (score >= 75) return &apos;text-yellow-400&apos;;
-        return &apos;text-red-400&apos;;
+        if (score >= 90) return 'text-green-400';
+        if (score >= 75) return 'text-yellow-400';
+        return 'text-red-400';
     };
 
     const getDatasetQualityClass = (quality: number): string => {
-}
-        if (quality >= 95) return &apos;bg-green-600 text-green-100&apos;;
-        if (quality >= 90) return &apos;bg-yellow-600 text-yellow-100&apos;;
-        return &apos;bg-red-600 text-red-100&apos;;
+        if (quality >= 95) return 'bg-green-600 text-green-100';
+        if (quality >= 90) return 'bg-yellow-600 text-yellow-100';
+        return 'bg-red-600 text-red-100';
     };
 
     const getValidationResultClass = (passed: boolean, severity?: string): string => {
-}
-        if (passed) return &apos;bg-green-600 text-green-100&apos;;
-        return severity === &apos;error&apos; ? &apos;bg-red-600 text-red-100&apos; : &apos;bg-yellow-600 text-yellow-100&apos;;
+        if (passed) return 'bg-green-600 text-green-100';
+        return severity === 'error' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100';
     };
 
     const getValidationResultText = (passed: boolean, severity?: string): string => {
-}
-        if (passed) return &apos;Pass&apos;;
-        return severity === &apos;error&apos; ? &apos;Error&apos; : &apos;Warning&apos;;
+        if (passed) return 'Pass';
+        return severity === 'error' ? 'Error' : 'Warning';
     };
 
     const getTestStatusClass = (status: string): string => {
-}
         switch (status) {
-}
-            case &apos;active&apos;:
-                return &apos;bg-blue-500/20 text-blue-400&apos;;
-            case &apos;completed&apos;:
-                return &apos;bg-green-500/20 text-green-400&apos;;
-            case &apos;paused&apos;:
-                return &apos;bg-yellow-500/20 text-yellow-400&apos;;
+            case 'active':
+                return 'bg-blue-500/20 text-blue-400';
+            case 'completed':
+                return 'bg-green-500/20 text-green-400';
+            case 'paused':
+                return 'bg-yellow-500/20 text-yellow-400';
             default:
-                return &apos;bg-gray-500/20 text-gray-400&apos;;
+                return 'bg-gray-500/20 text-gray-400';
 
     };
 
     const getModelStatusClass = (isActive: boolean, type?: string): string => {
-}
-        if (isActive && type === &apos;STACKED_ENSEMBLE&apos;) return &apos;bg-green-600 text-green-100&apos;;
-        return isActive ? &apos;bg-blue-600 text-blue-100&apos; : &apos;bg-gray-600 text-gray-100&apos;;
+        if (isActive && type === 'STACKED_ENSEMBLE') return 'bg-green-600 text-green-100';
+        return isActive ? 'bg-blue-600 text-blue-100' : 'bg-gray-600 text-gray-100';
     };
 
     const getModelStatusText = (isActive: boolean, type?: string): string => {
-}
-        if (isActive && type === &apos;STACKED_ENSEMBLE&apos;) return &apos;Active Ensemble&apos;;
-        return isActive ? &apos;Active&apos; : &apos;Inactive&apos;;
+        if (isActive && type === 'STACKED_ENSEMBLE') return 'Active Ensemble';
+        return isActive ? 'Active' : 'Inactive';
     };
 
     // Helper function to get loading state message
     const getLoadingStateMessage = useCallback(() => {
-}
-        if (loadingStates.trainingData) return &apos;Processing training data...&apos;;
-        if (loadingStates.validation) return &apos;Running validation...&apos;;
-        return &apos;Refreshing data...&apos;;
+        if (loadingStates.trainingData) return 'Processing training data...';
+        if (loadingStates.validation) return 'Running validation...';
+        return 'Refreshing data...';
     }, [loadingStates]);
 
     // Helper function to get button text based on connection
-    const getConnectionDependentText = useCallback((connectedText: string, disconnectedText: string = &apos;Connection Required&apos;) => {
-}
+    const getConnectionDependentText = useCallback((connectedText: string, disconnectedText: string = 'Connection Required') => {
         return realtimeConnected ? connectedText : disconnectedText;
     }, [realtimeConnected]);
 
     // Enhanced configuration management functions
     const handleConfigurationChange = useCallback((field: string, value: any) => {
-}
         try {
-}
 
             // Validate specific configuration fields
-            if (field === &apos;predictionThreshold&apos; && (value < 0 || value > 1)) {
-}
-                throw new Error(&apos;Prediction threshold must be between 0 and 1&apos;);
+            if (field === 'predictionThreshold' && (value < 0 || value > 1)) {
+                throw new Error('Prediction threshold must be between 0 and 1');
 
-            if (field === &apos;apiRateLimit&apos; && value <= 0) {
-}
-                throw new Error(&apos;API rate limit must be greater than 0&apos;);
+            if (field === 'apiRateLimit' && value <= 0) {
+                throw new Error('API rate limit must be greater than 0');
 
             setSystemConfig(prev => ({ ...prev, [field]: value }));
             setConfigurationChanged(true);
-            setSpecificError(&apos;configuration&apos;, null);
+            setSpecificError('configuration', null);
 
     } catch (error) {
-}
-            const errorMessage = error instanceof Error ? error.message : &apos;Invalid configuration value&apos;;
-            setSpecificError(&apos;configuration&apos;, errorMessage);
+            const errorMessage = error instanceof Error ? error.message : 'Invalid configuration value';
+            setSpecificError('configuration', errorMessage);
 
     }, [setSpecificError]);
 
     const saveConfiguration = useCallback(async () => {
-}
         return await withLoadingState(async () => {
-}
             if (!configurationChanged) {
-}
-                throw new Error(&apos;No configuration changes to save&apos;);
+                throw new Error('No configuration changes to save');
 
             // Validate entire configuration before saving
             if (systemConfig.predictionThreshold < 0 || systemConfig.predictionThreshold > 1) {
-}
-                throw new Error(&apos;Invalid prediction threshold value&apos;);
+                throw new Error('Invalid prediction threshold value');
 
             if (systemConfig.apiRateLimit <= 0) {
-}
-                throw new Error(&apos;Invalid API rate limit value&apos;);
+                throw new Error('Invalid API rate limit value');
 
             // FUTURE: Implement actual service call when configuration API is available
             // const success = await oracleEnsembleMLService.updateConfiguration(systemConfig);
@@ -983,27 +829,23 @@ const TrainingDataManager = memo(() => {
             
             // Simulate occasional failures for testing
             if (Math.random() < 0.1) {
-}
-                throw new Error(&apos;Configuration service temporarily unavailable&apos;);
+                throw new Error('Configuration service temporarily unavailable');
 
             const success = true; 
             
             if (success) {
-}
                 setConfigurationChanged(false);
                 
                 // Refresh data to reflect configuration changes
                 try {
-}
 
                     await refreshDataSources();
                 return true;
             
     `px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
-}
-                                isTraining ? &apos;bg-blue-600 text-blue-100&apos; : &apos;bg-green-600 text-green-100&apos;
+                                isTraining ? 'bg-blue-600 text-blue-100' : 'bg-green-600 text-green-100'
                             }`}>
-                                {isTraining ? &apos;Training&apos; : &apos;Ready&apos;}
+                                {isTraining ? 'Training' : 'Ready'}
                             </span>
                         </div>
                         
@@ -1011,12 +853,11 @@ const TrainingDataManager = memo(() => {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <span className="text-gray-300 text-sm sm:text-base">Connection</span>
                             <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                                <div className={`w-2 h-2 rounded-full ${getAPIStatusClass(realtimeConnected ? &apos;connected&apos; : &apos;error&apos;)}`}></div>
-                                <span className={`text-xs sm:text-sm ${getAPIStatusTextClass(realtimeConnected ? &apos;connected&apos; : &apos;error&apos;)}`}>
-                                    {realtimeConnected ? &apos;Connected&apos; : &apos;Disconnected&apos;}
+                                <div className={`w-2 h-2 rounded-full ${getAPIStatusClass(realtimeConnected ? 'connected' : 'error')}`}></div>
+                                <span className={`text-xs sm:text-sm ${getAPIStatusTextClass(realtimeConnected ? 'connected' : 'error')}`}>
+                                    {realtimeConnected ? 'Connected' : 'Disconnected'}
                                 </span>
                                 {errors.connection && (
-}
                                     <AlertTriangle className="w-3 h-3 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
@@ -1024,16 +865,14 @@ const TrainingDataManager = memo(() => {
                         
                         {/* Enhanced Data Loading Indicators */}
                         {(dataLoading || Object.values(loadingStates).some((loading: any) => loading)) && (
-}
                             <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <RefreshCw className="w-4 h-4 text-blue-400 animate-spin sm:px-4 md:px-6 lg:px-8" />
                                     <span className="text-blue-300 text-sm sm:px-4 md:px-6 lg:px-8">
-                                        {loadingStates.export ? &apos;Exporting data...&apos; : getLoadingStateMessage()}
+                                        {loadingStates.export ? 'Exporting data...' : getLoadingStateMessage()}
                                     </span>
                                 </div>
                                 {retryAttempts.dataLoad > 0 && (
-}
                                     <div className="text-xs text-yellow-300 sm:px-4 md:px-6 lg:px-8">
                                         Retry attempt {retryAttempts.dataLoad}/3
                                     </div>
@@ -1043,7 +882,6 @@ const TrainingDataManager = memo(() => {
                         
                         {/* Training Progress with Error Handling */}
                         {isTraining && (
-}
                             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                     <span className="text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">Progress</span>
@@ -1058,7 +896,6 @@ const TrainingDataManager = memo(() => {
                                 <div className="text-xs sm:text-sm text-gray-400">
                                     {trainingProgress.currentModel} - {trainingProgress.phase}
                                     {errors.training && (
-}
                                         <span className="text-red-400 ml-2 sm:px-4 md:px-6 lg:px-8">(Error occurred)</span>
                                     )}
                                 </div>
@@ -1129,7 +966,6 @@ const TrainingDataManager = memo(() => {
                 <Widget title="Recent Training Sessions" className="bg-gray-900/50 widget-mobile-responsive sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {recentTrainingSessions.map((session: any) => (
-}
                             <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-800/50 rounded-lg gap-3 sm:gap-0 min-h-[80px] sm:min-h-[60px]">
                                 <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                     <div className="font-medium text-white text-sm sm:text-base truncate">{session.name}</div>
@@ -1137,11 +973,9 @@ const TrainingDataManager = memo(() => {
                                 </div>
                                 <div className="flex items-center justify-between sm:justify-end space-x-3 flex-shrink-0">
                                     {Boolean(session.metrics.finalAccuracy) && (
-}
                                         <span className="text-green-400 font-semibold text-sm sm:px-4 md:px-6 lg:px-8">{session.metrics.finalAccuracy.toFixed(3)}</span>
                                     )}
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-}
                                         getSessionStatusClass(session?.status)
                                     }`}>
                                         {session?.status}
@@ -1150,7 +984,6 @@ const TrainingDataManager = memo(() => {
                             </div>
                         ))}
                         {recentTrainingSessions.length === 0 && (
-}
                             <div className="text-center text-gray-400 py-6 sm:py-4">
                                 <Brain className="w-8 h-8 mx-auto mb-2 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                 <p className="text-sm sm:px-4 md:px-6 lg:px-8">No training sessions yet.</p>
@@ -1169,7 +1002,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">73%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
-                                <div className="bg-red-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: &apos;73%&apos; }}></div>
+                                <div className="bg-red-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '73%' }}></div>
                             </div>
                         </div>
                         
@@ -1179,7 +1012,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">45%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
-                                <div className="bg-yellow-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: &apos;45%&apos; }}></div>
+                                <div className="bg-yellow-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '45%' }}></div>
                             </div>
                         </div>
                         
@@ -1189,7 +1022,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">28%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
-                                <div className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: &apos;28%&apos; }}></div>
+                                <div className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '28%' }}></div>
                             </div>
                         </div>
                         
@@ -1216,11 +1049,10 @@ const TrainingDataManager = memo(() => {
                 <Widget title="Data Sources" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {[
-}
-                            { name: &apos;Fantasy API&apos;, status: &apos;active&apos;, records: &apos;1.2M&apos;, lastUpdate: &apos;2 min ago&apos; },
-                            { name: &apos;Historical Stats&apos;, status: &apos;active&apos;, records: &apos;890K&apos;, lastUpdate: &apos;5 min ago&apos; },
-                            { name: &apos;Weather Data&apos;, status: &apos;warning&apos;, records: &apos;145K&apos;, lastUpdate: &apos;1 hour ago&apos; },
-                            { name: &apos;Injury Reports&apos;, status: &apos;active&apos;, records: &apos;23K&apos;, lastUpdate: &apos;30 sec ago&apos; }
+                            { name: 'Fantasy API', status: 'active', records: '1.2M', lastUpdate: '2 min ago' },
+                            { name: 'Historical Stats', status: 'active', records: '890K', lastUpdate: '5 min ago' },
+                            { name: 'Weather Data', status: 'warning', records: '145K', lastUpdate: '1 hour ago' },
+                            { name: 'Injury Reports', status: 'active', records: '23K', lastUpdate: '30 sec ago' }
                         ].map((source: any) => (
                             <div key={source.name} className="flex items-center justify-between p-3 sm:p-4 bg-gray-800/50 rounded-lg min-h-[60px]">
                                 <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
@@ -1230,8 +1062,7 @@ const TrainingDataManager = memo(() => {
                                 <div className="text-right flex-shrink-0 ml-3 sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex items-center justify-end mb-1 sm:px-4 md:px-6 lg:px-8">
                                         <div className={`w-2 h-2 rounded-full ${
-}
-                                            source?.status === &apos;active&apos; ? &apos;bg-green-400&apos; : &apos;bg-yellow-400&apos;
+                                            source?.status === 'active' ? 'bg-green-400' : 'bg-yellow-400'
                                         }`}></div>
                                         <span className="ml-2 text-xs text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">{source?.status}</span>
                                     </div>
@@ -1245,7 +1076,6 @@ const TrainingDataManager = memo(() => {
                 <Widget title="Data Quality Metrics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {validationReport ? (
-}
                             <>
                                 <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Overall Score</span>
@@ -1304,7 +1134,7 @@ const TrainingDataManager = memo(() => {
                                     disabled={isValidating}
                                     className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                                  aria-label="Action button">
-                                    {isValidating ? &apos;Validating...&apos; : &apos;Run Validation&apos;}
+                                    {isValidating ? 'Validating...' : 'Run Validation'}
                                 </button>
                             </div>
                         )}
@@ -1315,11 +1145,10 @@ const TrainingDataManager = memo(() => {
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {/* Error display for dataset actions */}
                         {errors.dataLoad && (
-}
                             <div className="bg-red-900/50 border border-red-500 rounded p-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-red-300 text-sm sm:px-4 md:px-6 lg:px-8">{errors.dataLoad}</div>
                                 <button 
-                                    onClick={() => handleErrorDismiss(&apos;dataLoad&apos;)}
+                                    onClick={() => handleErrorDismiss('dataLoad')}
                                 >
 //                                     Dismiss
                                 </button>
@@ -1339,9 +1168,9 @@ const TrainingDataManager = memo(() => {
                             disabled={loadingStates.datasetStats || !realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm sm:text-base min-h-[48px] touch-target"
                          aria-label="Action button">
-                            <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.datasetStats ? &apos;animate-spin&apos; : &apos;&apos;}`} />
+                            <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.datasetStats ? 'animate-spin' : ''}`} />
                             <span className="truncate sm:px-4 md:px-6 lg:px-8">
-                                {loadingStates.datasetStats ? &apos;Refreshing...&apos; : getConnectionDependentText(&apos;Refresh Data&apos;)}
+                                {loadingStates.datasetStats ? 'Refreshing...' : getConnectionDependentText('Refresh Data')}
                             </span>
                         </button>
                         
@@ -1350,9 +1179,9 @@ const TrainingDataManager = memo(() => {
                             disabled={loadingStates.validation || loadingStates.datasetStats || !realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 text-sm sm:text-base min-h-[48px] touch-target"
                          aria-label="Action button">
-                            <Target className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.validation ? &apos;animate-spin&apos; : &apos;&apos;}`} />
+                            <Target className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.validation ? 'animate-spin' : ''}`} />
                             <span className="truncate sm:px-4 md:px-6 lg:px-8">
-                                {loadingStates.validation ? &apos;Validating...&apos; : getConnectionDependentText(&apos;Validate Quality&apos;)}
+                                {loadingStates.validation ? 'Validating...' : getConnectionDependentText('Validate Quality')}
                             </span>
                         </button>
                         
@@ -1361,15 +1190,14 @@ const TrainingDataManager = memo(() => {
                             disabled={loadingStates.export || !realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 text-sm sm:text-base min-h-[48px] touch-target"
                          aria-label="Action button">
-                            <Download className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.export ? &apos;animate-spin&apos; : &apos;&apos;}`} />
+                            <Download className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.export ? 'animate-spin' : ''}`} />
                             <span className="truncate sm:px-4 md:px-6 lg:px-8">
-                                {loadingStates.export ? &apos;Exporting...&apos; : getConnectionDependentText(&apos;Export Dataset&apos;)}
+                                {loadingStates.export ? 'Exporting...' : getConnectionDependentText('Export Dataset')}
                             </span>
                         </button>
                         
                         {/* Retry attempts indicator */}
                         {(retryAttempts.dataLoad > 0 || retryAttempts.validation > 0) && (
-}
                             <div className="text-xs text-yellow-300 text-center pt-2 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
                                 {retryAttempts.dataLoad > 0 && `Data load retries: ${retryAttempts.dataLoad}/3`}
                                 {retryAttempts.validation > 0 && `Validation retries: ${retryAttempts.validation}/3`}
@@ -1395,13 +1223,12 @@ const TrainingDataManager = memo(() => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
                         {[
-}
-                            { name: &apos;Player Statistics 2024&apos;, size: &apos;245 MB&apos;, records: &apos;1.2M&apos;, format: &apos;CSV&apos;, lastModified: &apos;2 hours ago&apos;, quality: 96.8 },
-                            { name: &apos;Historical Matchups&apos;, size: &apos;156 MB&apos;, records: &apos;890K&apos;, format: &apos;JSON&apos;, lastModified: &apos;5 hours ago&apos;, quality: 94.2 },
-                            { name: &apos;Weather Conditions&apos;, size: &apos;89 MB&apos;, records: &apos;145K&apos;, format: &apos;CSV&apos;, lastModified: &apos;1 day ago&apos;, quality: 87.5 },
-                            { name: &apos;Injury Reports&apos;, size: &apos;12 MB&apos;, records: &apos;23K&apos;, format: &apos;JSON&apos;, lastModified: &apos;3 hours ago&apos;, quality: 98.1 },
-                            { name: &apos;Team Analytics&apos;, size: &apos;198 MB&apos;, records: &apos;567K&apos;, format: &apos;Parquet&apos;, lastModified: &apos;6 hours ago&apos;, quality: 95.7 },
-                            { name: &apos;Draft Results&apos;, size: &apos;34 MB&apos;, records: &apos;78K&apos;, format: &apos;CSV&apos;, lastModified: &apos;12 hours ago&apos;, quality: 93.4 }
+                            { name: 'Player Statistics 2024', size: '245 MB', records: '1.2M', format: 'CSV', lastModified: '2 hours ago', quality: 96.8 },
+                            { name: 'Historical Matchups', size: '156 MB', records: '890K', format: 'JSON', lastModified: '5 hours ago', quality: 94.2 },
+                            { name: 'Weather Conditions', size: '89 MB', records: '145K', format: 'CSV', lastModified: '1 day ago', quality: 87.5 },
+                            { name: 'Injury Reports', size: '12 MB', records: '23K', format: 'JSON', lastModified: '3 hours ago', quality: 98.1 },
+                            { name: 'Team Analytics', size: '198 MB', records: '567K', format: 'Parquet', lastModified: '6 hours ago', quality: 95.7 },
+                            { name: 'Draft Results', size: '34 MB', records: '78K', format: 'CSV', lastModified: '12 hours ago', quality: 93.4 }
                         ].map((dataset: any) => (
                             <div key={dataset.name} className="p-3 sm:p-4 bg-gray-800/50 rounded-lg border border-gray-700 min-h-[200px] flex flex-col">
                                 <div className="flex items-start justify-between mb-2 flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -1450,7 +1277,6 @@ const TrainingDataManager = memo(() => {
                 <Widget title="Validation Overview" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:space-y-4">
                         {validationReport ? (
-}
                             <>
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-3xl sm:text-4xl font-bold mb-2 ${getQualityScoreClass(validationReport.score)}`}>
@@ -1462,10 +1288,9 @@ const TrainingDataManager = memo(() => {
                                 <div className="flex items-center justify-between py-1 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-300 text-sm sm:text-base">Status</span>
                                     <span className={`px-2 py-1 rounded-full text-xs ${
-}
-                                        validationReport.passed ? &apos;bg-green-600 text-green-100&apos; : &apos;bg-red-600 text-red-100&apos;
+                                        validationReport.passed ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100'
                                     }`}>
-                                        {validationReport.passed ? &apos;Passed&apos; : &apos;Failed&apos;}
+                                        {validationReport.passed ? 'Passed' : 'Failed'}
                                     </span>
                                 </div>
                                 
@@ -1492,7 +1317,7 @@ const TrainingDataManager = memo(() => {
                                     disabled={isValidating}
                                     className="px-4 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 min-h-[44px] touch-target text-sm sm:text-base"
                                  aria-label="Action button">
-                                    {isValidating ? &apos;Validating...&apos; : &apos;Run Validation&apos;}
+                                    {isValidating ? 'Validating...' : 'Run Validation'}
                                 </button>
                             </div>
                         )}
@@ -1502,7 +1327,6 @@ const TrainingDataManager = memo(() => {
                 <Widget title="Quality Dimensions" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {validationReport ? (
-}
                             <>
                                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
@@ -1569,7 +1393,7 @@ const TrainingDataManager = memo(() => {
                             className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                          aria-label="Action button">
                             <CheckCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                            <span>{isValidating ? &apos;Running Validation...&apos; : &apos;Run Full Validation&apos;}</span>
+                            <span>{isValidating ? 'Running Validation...' : 'Run Full Validation'}</span>
                         </button>
                         
                         <button className="w-full flex items-center justify-center space-x-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
@@ -1601,7 +1425,6 @@ const TrainingDataManager = memo(() => {
             </div>
 
             {validationReport && (
-}
                 <>
                     <Widget title="Validation Results" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
@@ -1620,7 +1443,6 @@ const TrainingDataManager = memo(() => {
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                 {validationReport.validationResults.map((result: any) => {
-}
                                     const rule = validationRules.find((r: any) => r.id === result.ruleId);
                                     return (
                                         <div key={result.ruleId} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 sm:px-4 md:px-6 lg:px-8">
@@ -1635,7 +1457,6 @@ const TrainingDataManager = memo(() => {
                                             </div>
                                             <div className="text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">{result.message}</div>
                                             {result.affectedRecords > 0 && (
-}
                                                 <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                     Affected records: {result.affectedRecords.toLocaleString()}
                                                 </div>
@@ -1652,7 +1473,6 @@ const TrainingDataManager = memo(() => {
                             <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Data Quality Recommendations</h3>
                             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {validationReport.recommendations.map((recommendation: any) => (
-}
                                     <div key={`rec-${recommendation}`} className="flex items-start space-x-3 p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                         <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
                                         <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
@@ -1678,7 +1498,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="model-type"
                                 value={trainingConfig.modelType}
-                                onChange={(e: any) => updateTrainingConfig({ modelType: e.target.value as TrainingConfiguration[&apos;modelType&apos;] }}
+                                onChange={(e: any) => updateTrainingConfig({ modelType: e.target.value as TrainingConfiguration['modelType'] }}
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value="ensemble">Ensemble (Recommended)</option>
@@ -1698,7 +1518,6 @@ const TrainingDataManager = memo(() => {
                                     type="number" 
                                     value={Math.round((trainingConfig.trainingSplit || 0.8) * 100)}
                                     onChange={(e: any) => updateTrainingConfig({ 
-}
                                         trainingSplit: parseInt(e.target.value) / 100,
                                         validationSplit: 1 - (parseInt(e.target.value) / 100)
                                     }}
@@ -1726,9 +1545,7 @@ const TrainingDataManager = memo(() => {
                                 step="0.0001" 
                                 value={trainingConfig.hyperparameters?.learningRate || 0.001}
                                 onChange={(e: any) => updateTrainingConfig({ 
-}
                                     hyperparameters: {
-}
                                         ...trainingConfig.hyperparameters, 
                                         learningRate: parseFloat(e.target.value) 
                                     }})}
@@ -1807,15 +1624,13 @@ const TrainingDataManager = memo(() => {
                         <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                             <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Current Session</h3>
                             <span className={`px-2 py-1 rounded-full text-xs ${
-}
-                                isTraining ? &apos;bg-blue-600 text-blue-100&apos; : &apos;bg-green-600 text-green-100&apos;
+                                isTraining ? 'bg-blue-600 text-blue-100' : 'bg-green-600 text-green-100'
                             }`}>
-                                {isTraining ? &apos;Training&apos; : &apos;Idle&apos;}
+                                {isTraining ? 'Training' : 'Idle'}
                             </span>
                         </div>
 
                         {isTraining && (
-}
                             <div className="space-y-3 sm:space-y-4">
                                 <div>
                                     <div className="flex justify-between text-xs sm:text-sm mb-2">
@@ -1863,7 +1678,6 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         {!isTraining && (
-}
                             <button 
                                 onClick={handleTrainModels}
                                 className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 min-h-[48px] touch-target text-sm sm:text-base font-medium"
@@ -1874,7 +1688,6 @@ const TrainingDataManager = memo(() => {
                         )}
 
                         {isTraining && (
-}
                             <button 
                                 onClick={handleStopTraining}
                                 className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors min-h-[48px] touch-target text-sm sm:text-base font-medium"
@@ -1898,7 +1711,6 @@ const TrainingDataManager = memo(() => {
 
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {trainingHistory.slice(0, 4).map((session: any) => (
-}
                             <div key={session.id} className="p-3 sm:p-4 bg-gray-800/50 rounded-lg border border-gray-700">
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                                     <h4 className="font-medium text-white text-sm sm:text-base truncate">{session.name}</h4>
@@ -1911,27 +1723,26 @@ const TrainingDataManager = memo(() => {
                                         <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Duration</div>
                                         <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                                             {session.metrics.trainingDuration ? 
-}
                                                 `${Math.round(session.metrics.trainingDuration / 60000)}m` : 
-                                                &apos;N/A&apos;
+                                                'N/A'
 
                                         </div>
                                     </div>
                                     <div>
                                         <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</div>
                                         <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
-                                            {session.metrics.finalAccuracy?.toFixed(3) || &apos;N/A&apos;}
+                                            {session.metrics.finalAccuracy?.toFixed(3) || 'N/A'}
                                         </div>
                                     </div>
                                     <div>
                                         <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Loss</div>
                                         <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
-                                            {session.metrics.finalLoss?.toFixed(3) || &apos;N/A&apos;}
+                                            {session.metrics.finalLoss?.toFixed(3) || 'N/A'}
                                         </div>
                                     </div>
                                     <div>
                                         <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Epochs</div>
-                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{session.metrics.epochs || &apos;N/A&apos;}</div>
+                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{session.metrics.epochs || 'N/A'}</div>
                                     </div>
                                 </div>
                                 <div className="text-xs text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">
@@ -1940,7 +1751,6 @@ const TrainingDataManager = memo(() => {
                             </div>
                         ))}
                         {trainingHistory.length === 0 && (
-}
                             <div className="text-center text-gray-400 py-8 sm:px-4 md:px-6 lg:px-8">
                                 <Brain className="w-12 h-12 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                 <p>No training sessions yet.</p>
@@ -1989,7 +1799,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">+2.3%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
-                                <div className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: &apos;85%&apos; }}></div>
+                                <div className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '85%' }}></div>
                             </div>
                         </div>
                         
@@ -1999,7 +1809,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">+5.7%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
-                                <div className="bg-blue-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: &apos;78%&apos; }}></div>
+                                <div className="bg-blue-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '78%' }}></div>
                             </div>
                         </div>
                         
@@ -2009,7 +1819,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-white sm:px-4 md:px-6 lg:px-8">High</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                <div className="bg-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;92%&apos; }}></div>
+                                <div className="bg-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '92%' }}></div>
                             </div>
                         </div>
                         
@@ -2025,7 +1835,6 @@ const TrainingDataManager = memo(() => {
                 <Widget title="Model Comparison" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {modelMetrics.models.slice(0, 4).map((model, idx) => (
-}
                             <div key={model.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded sm:px-4 md:px-6 lg:px-8">
                                 <div>
                                     <div className="text-white text-sm font-medium sm:px-4 md:px-6 lg:px-8">{model.name}</div>
@@ -2037,7 +1846,6 @@ const TrainingDataManager = memo(() => {
                             </div>
                         ))}
                         {modelMetrics.models.length === 0 && (
-}
                             <div className="text-center text-gray-400 py-4 sm:px-4 md:px-6 lg:px-8">
                                 No trained models yet. Start training to see model comparison.
                             </div>
@@ -2055,13 +1863,12 @@ const TrainingDataManager = memo(() => {
                         
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {[
-}
-                                { category: &apos;Quarterback&apos;, accuracy: 92.4, predictions: 1245 },
-                                { category: &apos;Running Back&apos;, accuracy: 88.7, predictions: 2156 },
-                                { category: &apos;Wide Receiver&apos;, accuracy: 85.3, predictions: 3421 },
-                                { category: &apos;Tight End&apos;, accuracy: 89.1, predictions: 876 },
-                                { category: &apos;Kicker&apos;, accuracy: 94.8, predictions: 543 },
-                                { category: &apos;Defense&apos;, accuracy: 87.2, predictions: 987 }
+                                { category: 'Quarterback', accuracy: 92.4, predictions: 1245 },
+                                { category: 'Running Back', accuracy: 88.7, predictions: 2156 },
+                                { category: 'Wide Receiver', accuracy: 85.3, predictions: 3421 },
+                                { category: 'Tight End', accuracy: 89.1, predictions: 876 },
+                                { category: 'Kicker', accuracy: 94.8, predictions: 543 },
+                                { category: 'Defense', accuracy: 87.2, predictions: 987 }
                             ].map((item: any) => (
                                 <div key={item.category} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
@@ -2108,7 +1915,7 @@ const TrainingDataManager = memo(() => {
                                     <span className="text-white sm:px-4 md:px-6 lg:px-8">98.7%</span>
                                 </div>
                                 <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;98.7%&apos; }}></div>
+                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '98.7%' }}></div>
                                 </div>
                             </div>
                             
@@ -2118,7 +1925,7 @@ const TrainingDataManager = memo(() => {
                                     <span className="text-white sm:px-4 md:px-6 lg:px-8">1.3%</span>
                                 </div>
                                 <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                    <div className="bg-red-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;1.3%&apos; }}></div>
+                                    <div className="bg-red-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '1.3%' }}></div>
                                 </div>
                             </div>
                         </div>
@@ -2163,39 +1970,35 @@ const TrainingDataManager = memo(() => {
 
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {[
-}
                                 {
-}
-                                    id: &apos;test-1&apos;,
-                                    name: &apos;Enhanced Ensemble vs Standard&apos;,
-                                    status: &apos;active&apos;,
-                                    modelA: &apos;Standard Model v2.1&apos;,
-                                    modelB: &apos;Enhanced Ensemble v3.0&apos;,
-                                    improvement: &apos;+2.3%&apos;,
+                                    id: 'test-1',
+                                    name: 'Enhanced Ensemble vs Standard',
+                                    status: 'active',
+                                    modelA: 'Standard Model v2.1',
+                                    modelB: 'Enhanced Ensemble v3.0',
+                                    improvement: '+2.3%',
                                     significance: 0.023,
                                     progress: 67,
                                     sampleSize: 1547
                                 },
                                 {
-}
-                                    id: &apos;test-2&apos;,
-                                    name: &apos;Real-time vs Batch Prediction&apos;,
-                                    status: &apos;active&apos;,
-                                    modelA: &apos;Batch Predictor v1.5&apos;,
-                                    modelB: &apos;Real-time Engine v2.0&apos;,
-                                    improvement: &apos;+1.8%&apos;,
+                                    id: 'test-2',
+                                    name: 'Real-time vs Batch Prediction',
+                                    status: 'active',
+                                    modelA: 'Batch Predictor v1.5',
+                                    modelB: 'Real-time Engine v2.0',
+                                    improvement: '+1.8%',
                                     significance: 0.045,
                                     progress: 89,
                                     sampleSize: 2103
                                 },
                                 {
-}
-                                    id: &apos;test-3&apos;,
-                                    name: &apos;Feature Selection Optimization&apos;,
-                                    status: &apos;completed&apos;,
-                                    modelA: &apos;Full Features v1.0&apos;,
-                                    modelB: &apos;Optimized Features v1.0&apos;,
-                                    improvement: &apos;+4.1%&apos;,
+                                    id: 'test-3',
+                                    name: 'Feature Selection Optimization',
+                                    status: 'completed',
+                                    modelA: 'Full Features v1.0',
+                                    modelB: 'Optimized Features v1.0',
+                                    improvement: '+4.1%',
                                     significance: 0.001,
                                     progress: 100,
                                     sampleSize: 3250
@@ -2224,8 +2027,7 @@ const TrainingDataManager = memo(() => {
                                         <div>
                                             <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Improvement</div>
                                             <div className={`font-medium ${
-}
-                                                test.improvement.startsWith(&apos;+&apos;) ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                                                test.improvement.startsWith('+') ? 'text-green-400' : 'text-red-400'
                                             }`}>
                                                 {test.improvement}
                                             </div>
@@ -2233,8 +2035,7 @@ const TrainingDataManager = memo(() => {
                                         <div>
                                             <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Significance</div>
                                             <div className={`font-medium ${
-}
-                                                test.significance < 0.05 ? &apos;text-green-400&apos; : &apos;text-yellow-400&apos;
+                                                test.significance < 0.05 ? 'text-green-400' : 'text-yellow-400'
                                             }`}>
                                                 p = {test.significance.toFixed(3)}
                                             </div>
@@ -2253,16 +2054,14 @@ const TrainingDataManager = memo(() => {
                                         <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                                             <div 
                                                 className={`h-2 rounded-full ${
-}
-                                                    test?.status === &apos;completed&apos; ? &apos;bg-green-500&apos; : &apos;bg-blue-500&apos;
+                                                    test?.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
                                                 }`}
                                                 style={{ width: `${test.progress}%` }}
                                             ></div>
                                         </div>
                                     </div>
 
-                                    {test?.status === &apos;active&apos; && (
-}
+                                    {test?.status === 'active' && (
                                         <div className="flex justify-end space-x-2 mt-3 sm:px-4 md:px-6 lg:px-8">
                                             <button className="px-3 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-500 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
 //                                                 Pause
@@ -2273,8 +2072,7 @@ const TrainingDataManager = memo(() => {
                                         </div>
                                     )}
 
-                                    {test?.status === &apos;completed&apos; && (
-}
+                                    {test?.status === 'completed' && (
                                         <div className="flex justify-end space-x-2 mt-3 sm:px-4 md:px-6 lg:px-8">
                                             <button className="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 View Results
@@ -2294,7 +2092,7 @@ const TrainingDataManager = memo(() => {
                                 <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">Power: 0.85 (Adequate)</span>
                             </div>
                             <div className="mt-2 w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;85%&apos; }}></div>
+                                <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '85%' }}></div>
                             </div>
                         </div>
                     </div>
@@ -2338,7 +2136,7 @@ const TrainingDataManager = memo(() => {
                                     <span className="text-white sm:px-4 md:px-6 lg:px-8">0.94 (Excellent)</span>
                                 </div>
                                 <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;94%&apos; }}></div>
+                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '94%' }}></div>
                                 </div>
                             </div>
 
@@ -2348,7 +2146,7 @@ const TrainingDataManager = memo(() => {
                                     <span className="text-white sm:px-4 md:px-6 lg:px-8">0.89 (Good)</span>
                                 </div>
                                 <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                    <div className="bg-blue-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;89%&apos; }}></div>
+                                    <div className="bg-blue-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '89%' }}></div>
                                 </div>
                             </div>
 
@@ -2358,7 +2156,7 @@ const TrainingDataManager = memo(() => {
                                     <span className="text-white sm:px-4 md:px-6 lg:px-8">0.12 (Low Risk)</span>
                                 </div>
                                 <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
-                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: &apos;88%&apos; }}></div>
+                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '88%' }}></div>
                                 </div>
                             </div>
                         </div>
@@ -2394,7 +2192,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="ensemble-strategy" 
                                 value={systemConfig.ensembleStrategy}
-                                onChange={(e: any) => handleConfigurationChange(&apos;ensembleStrategy&apos;, e.target.value)}
+                                onChange={(e: any) => handleConfigurationChange('ensembleStrategy', e.target.value)}
                             >
                                 <option value="weighted_average">Weighted Average</option>
                                 <option value="majority_voting">Majority Voting</option>
@@ -2414,7 +2212,7 @@ const TrainingDataManager = memo(() => {
                                 max="0.95" 
                                 step="0.05" 
                                 value={systemConfig.predictionThreshold}
-                                onChange={(e: any) => handleConfigurationChange(&apos;predictionThreshold&apos;, parseFloat(e.target.value))}
+                                onChange={(e: any) => handleConfigurationChange('predictionThreshold', parseFloat(e.target.value))}
                             />
                             <div className="flex justify-between text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 <span>0.5</span>
@@ -2428,7 +2226,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="retrain-frequency" 
                                 value={systemConfig.retrainFrequency}
-                                onChange={(e: any) => handleConfigurationChange(&apos;retrainFrequency&apos;, e.target.value)}
+                                onChange={(e: any) => handleConfigurationChange('retrainFrequency', e.target.value)}
                             >
                                 <option value="daily">Daily</option>
                                 <option value="weekly">Weekly</option>
@@ -2442,7 +2240,7 @@ const TrainingDataManager = memo(() => {
                             <input 
                                 type="checkbox" 
                                 checked={systemConfig.realTimeLearning}
-                                onChange={(e: any) => handleConfigurationChange(&apos;realTimeLearning&apos;, e.target.checked)}
+                                onChange={(e: any) => handleConfigurationChange('realTimeLearning', e.target.checked)}
                             />
                         </div>
                     </div>
@@ -2456,7 +2254,7 @@ const TrainingDataManager = memo(() => {
                                 id="api-rate-limit"
                                 type="number" 
                                 value={systemConfig.apiRateLimit}
-                                onChange={(e: any) => handleConfigurationChange(&apos;apiRateLimit&apos;, parseInt(e.target.value) || 1000)}
+                                onChange={(e: any) => handleConfigurationChange('apiRateLimit', parseInt(e.target.value) || 1000)}
                             />
                             <div className="text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">Requests per hour</div>
                         </div>
@@ -2466,7 +2264,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="cache-ttl" 
                                 value={systemConfig.cacheTtl}
-                                onChange={(e: any) => handleConfigurationChange(&apos;cacheTtl&apos;, e.target.value)}
+                                onChange={(e: any) => handleConfigurationChange('cacheTtl', e.target.value)}
                             >
                                 <option value="5_minutes">5 minutes</option>
                                 <option value="15_minutes">15 minutes</option>
@@ -2480,7 +2278,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="log-level" 
                                 value={systemConfig.logLevel}
-                                onChange={(e: any) => handleConfigurationChange(&apos;logLevel&apos;, e.target.value)}
+                                onChange={(e: any) => handleConfigurationChange('logLevel', e.target.value)}
                             >
                                 <option value="ERROR">ERROR</option>
                                 <option value="WARN">WARN</option>
@@ -2495,7 +2293,7 @@ const TrainingDataManager = memo(() => {
                                 <input 
                                     type="checkbox" 
                                     checked={systemConfig.enableMonitoring}
-                                    onChange={(e: any) => handleConfigurationChange(&apos;enableMonitoring&apos;, e.target.checked)}
+                                    onChange={(e: any) => handleConfigurationChange('enableMonitoring', e.target.checked)}
                                 />
                             </div>
                             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -2503,7 +2301,7 @@ const TrainingDataManager = memo(() => {
                                 <input 
                                     type="checkbox" 
                                     checked={systemConfig.autoBackupModels}
-                                    onChange={(e: any) => handleConfigurationChange(&apos;autoBackupModels&apos;, e.target.checked)}
+                                    onChange={(e: any) => handleConfigurationChange('autoBackupModels', e.target.checked)}
                                 />
                             </div>
                             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -2511,7 +2309,7 @@ const TrainingDataManager = memo(() => {
                                 <input 
                                     type="checkbox" 
                                     checked={systemConfig.alertOnAnomalies}
-                                    onChange={(e: any) => handleConfigurationChange(&apos;alertOnAnomalies&apos;, e.target.checked)}
+                                    onChange={(e: any) => handleConfigurationChange('alertOnAnomalies', e.target.checked)}
                                 />
                             </div>
                         </div>
@@ -2531,11 +2329,10 @@ const TrainingDataManager = memo(() => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         {[
-}
-                            { name: &apos;ESPN Fantasy API&apos;, status: &apos;connected&apos;, latency: &apos;145ms&apos;, lastSync: &apos;2 min ago&apos; },
-                            { name: &apos;Yahoo Sports API&apos;, status: &apos;connected&apos;, latency: &apos;203ms&apos;, lastSync: &apos;5 min ago&apos; },
-                            { name: &apos;Weather Service&apos;, status: &apos;warning&apos;, latency: &apos;1.2s&apos;, lastSync: &apos;1 hour ago&apos; },
-                            { name: &apos;Injury Reports API&apos;, status: &apos;connected&apos;, latency: &apos;89ms&apos;, lastSync: &apos;30 sec ago&apos; }
+                            { name: 'ESPN Fantasy API', status: 'connected', latency: '145ms', lastSync: '2 min ago' },
+                            { name: 'Yahoo Sports API', status: 'connected', latency: '203ms', lastSync: '5 min ago' },
+                            { name: 'Weather Service', status: 'warning', latency: '1.2s', lastSync: '1 hour ago' },
+                            { name: 'Injury Reports API', status: 'connected', latency: '89ms', lastSync: '30 sec ago' }
                         ].map((api: any) => (
                             <div key={api.name} className="p-4 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
@@ -2573,11 +2370,10 @@ const TrainingDataManager = memo(() => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         {[
-}
-                            { name: &apos;Daily Auto-backup&apos;, date: &apos;2025-08-04 03:00&apos;, size: &apos;125 MB&apos;, status: &apos;success&apos; },
-                            { name: &apos;Pre-training Checkpoint&apos;, date: &apos;2025-08-03 14:30&apos;, size: &apos;118 MB&apos;, status: &apos;success&apos; },
-                            { name: &apos;Weekly Archive&apos;, date: &apos;2025-08-01 00:00&apos;, size: &apos;134 MB&apos;, status: &apos;success&apos; },
-                            { name: &apos;Manual Backup&apos;, date: &apos;2025-07-28 16:45&apos;, size: &apos;112 MB&apos;, status: &apos;success&apos; }
+                            { name: 'Daily Auto-backup', date: '2025-08-04 03:00', size: '125 MB', status: 'success' },
+                            { name: 'Pre-training Checkpoint', date: '2025-08-03 14:30', size: '118 MB', status: 'success' },
+                            { name: 'Weekly Archive', date: '2025-08-01 00:00', size: '134 MB', status: 'success' },
+                            { name: 'Manual Backup', date: '2025-07-28 16:45', size: '112 MB', status: 'success' }
                         ].map((backup: any) => (
                             <div key={`${backup.name}-${backup.date}`} className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
@@ -2601,10 +2397,10 @@ const TrainingDataManager = memo(() => {
                         <div className="text-white sm:px-4 md:px-6 lg:px-8">
                             <h3 className="font-semibold sm:px-4 md:px-6 lg:px-8">Configuration Status</h3>
                             <p className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
-                                {configurationChanged ? &apos;You have unsaved changes&apos; : &apos;All changes saved&apos;}
+                                {configurationChanged ? 'You have unsaved changes' : 'All changes saved'}
                             </p>
                         </div>
-                        <div className={`w-3 h-3 rounded-full ${configurationChanged ? &apos;bg-yellow-400&apos; : &apos;bg-green-400&apos;}`}></div>
+                        <div className={`w-3 h-3 rounded-full ${configurationChanged ? 'bg-yellow-400' : 'bg-green-400'}`}></div>
                     </div>
                     
                     <div className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
@@ -2614,7 +2410,6 @@ const TrainingDataManager = memo(() => {
                             className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors sm:px-4 md:px-6 lg:px-8"
                          aria-label="Action button">
                             {savingConfiguration ? (
-}
                                 <>
                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                                     <span>Saving...</span>
@@ -2637,11 +2432,8 @@ const TrainingDataManager = memo(() => {
 
                         <button
                             onClick={() = aria-label="Action button"> {
-}
                                 if (configurationChanged) {
-}
                                     saveConfiguration().then(() => {
-}
                                         // Apply configuration immediately after saving
                                     });
 
@@ -2655,7 +2447,6 @@ const TrainingDataManager = memo(() => {
                     </div>
 
                     {configurationChanged && (
-}
                         <div className="p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                 <AlertTriangle className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
@@ -2698,7 +2489,6 @@ const TrainingDataManager = memo(() => {
                         className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 mobile-touch-target sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
                         {isTraining ? (
-}
                             <>
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                                 <span>Training...</span>
@@ -2716,15 +2506,13 @@ const TrainingDataManager = memo(() => {
             {/* Mobile-responsive tab navigation */}
             <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-lg overflow-x-auto scrollbar-hide sm:px-4 md:px-6 lg:px-8">
                 {[
-}
-                    { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: BarChart3 },
-                    { id: &apos;datasets&apos;, label: &apos;Datasets&apos;, icon: Database },
-                    { id: &apos;validation&apos;, label: &apos;Validation&apos;, icon: CheckCircle },
-                    { id: &apos;training&apos;, label: &apos;Training&apos;, icon: Brain },
-                    { id: &apos;performance&apos;, label: &apos;Performance&apos;, icon: TrendingUp },
-                    { id: &apos;config&apos;, label: &apos;Config&apos;, icon: Settings }
+                    { id: 'overview', label: 'Overview', icon: BarChart3 },
+                    { id: 'datasets', label: 'Datasets', icon: Database },
+                    { id: 'validation', label: 'Validation', icon: CheckCircle },
+                    { id: 'training', label: 'Training', icon: Brain },
+                    { id: 'performance', label: 'Performance', icon: TrendingUp },
+                    { id: 'config', label: 'Config', icon: Settings }
                 ].map((tab: any) => {
-}
                     const IconComponent = tab.icon;
                     return (
                         <button
@@ -2744,18 +2532,18 @@ const TrainingDataManager = memo(() => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
             >
-                {activeTab === &apos;overview&apos; && renderOverviewTab()}
-                {activeTab === &apos;datasets&apos; && renderDatasetsTab()}
-                {activeTab === &apos;validation&apos; && renderValidationTab()}
-                {activeTab === &apos;training&apos; && renderTrainingTab()}
-                {activeTab === &apos;performance&apos; && renderPerformanceTab()}
-                {activeTab === &apos;config&apos; && renderConfigTab()}
+                {activeTab === 'overview' && renderOverviewTab()}
+                {activeTab === 'datasets' && renderDatasetsTab()}
+                {activeTab === 'validation' && renderValidationTab()}
+                {activeTab === 'training' && renderTrainingTab()}
+                {activeTab === 'performance' && renderPerformanceTab()}
+                {activeTab === 'config' && renderConfigTab()}
             </motion.div>
         </div>
     );
 });
 
-TrainingDataManager.displayName = &apos;TrainingDataManager&apos;;
+TrainingDataManager.displayName = 'TrainingDataManager';
 
 export { TrainingDataManager };
 

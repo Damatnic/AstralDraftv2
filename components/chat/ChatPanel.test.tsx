@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ChatPanel from &apos;./ChatPanel&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ChatPanel from './ChatPanel';
 
-describe(&apos;ChatPanel&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ChatPanel', () => {
+  it('renders without crashing', () => {
     render(<ChatPanel />);
-    expect(screen.getByTestId(&apos;chatpanel&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('chatpanel')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ChatPanel />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ChatPanel />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

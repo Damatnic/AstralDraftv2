@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ShadcnTabs from &apos;./ShadcnTabs&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ShadcnTabs from './ShadcnTabs';
 
-describe(&apos;ShadcnTabs&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ShadcnTabs', () => {
+  it('renders without crashing', () => {
     render(<ShadcnTabs />);
-    expect(screen.getByTestId(&apos;shadcntabs&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('shadcntabs')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ShadcnTabs />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ShadcnTabs />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

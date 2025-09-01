@@ -1,13 +1,12 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { useLeague } from &apos;../../hooks/useLeague&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { ClipboardListIcon } from &apos;../icons/ClipboardListIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { useAppState } from '../../contexts/AppContext';
+import { useLeague } from '../../hooks/useLeague';
+import { Widget } from '../ui/Widget';
+import { ClipboardListIcon } from '../icons/ClipboardListIcon';
 
 const WeeklyPollWidget: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     
@@ -18,17 +17,14 @@ const WeeklyPollWidget: React.FC = () => {
     const totalVotes = poll?.options.reduce((acc, opt) => acc + opt.votes.length, 0) || 0;
 
     const handleVote = (optionId: string) => {
-}
         if (!poll) return;
         dispatch({
-}
-            type: &apos;SUBMIT_POLL_VOTE&apos;,
+            type: 'SUBMIT_POLL_VOTE',
             payload: { leagueId: league.id, pollId: poll.id, optionId },
         });
     };
 
     if (!poll) {
-}
         return (
             <Widget title="Weekly Poll" icon={<ClipboardListIcon />}>
                 <div className="p-4 text-center text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -44,13 +40,12 @@ const WeeklyPollWidget: React.FC = () => {
                 <p className="font-semibold text-sm mb-2 sm:px-4 md:px-6 lg:px-8">{poll.question}</p>
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {poll.options.map((option: any) => {
-}
                         const isMyVote = myVote === option.id;
                         const voteCount = option.votes.length;
                         const votePercentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
 
                         return myVote ? (
-                            <div key={option.id} className={`p-2 rounded-md ${isMyVote ? &apos;bg-cyan-500/20&apos; : &apos;bg-black/10&apos;}`}>
+                            <div key={option.id} className={`p-2 rounded-md ${isMyVote ? 'bg-cyan-500/20' : 'bg-black/10'}`}>
                                 <div className="flex justify-between items-center text-xs font-bold sm:px-4 md:px-6 lg:px-8">
                                     <span>{option.text}</span>
                                     <span>{votePercentage.toFixed(0)}% ({voteCount})</span>

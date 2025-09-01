@@ -3,19 +3,17 @@
  * Configures testing environment and global utilities
  */
 
-import &apos;@testing-library/jest-dom&apos;;
-import { configure } from &apos;@testing-library/react&apos;;
-import { jest } from &apos;@jest/globals&apos;;
+import '@testing-library/jest-dom';
+import { configure } from '@testing-library/react';
+import { jest } from '@jest/globals';
 
 // Configure React Testing Library
-configure({ testIdAttribute: &apos;data-testid&apos; });
+configure({ testIdAttribute: 'data-testid' });
 
 // Mock window.matchMedia for responsive hooks
-Object.defineProperty(window, &apos;matchMedia&apos;, {
-}
+Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation(query => ({
-}
     matches: false,
     media: query,
     onchange: null,
@@ -29,7 +27,6 @@ Object.defineProperty(window, &apos;matchMedia&apos;, {
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
-}
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
@@ -37,7 +34,6 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
 
 // Mock ResizeObserver
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
-}
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
@@ -49,7 +45,6 @@ global.cancelAnimationFrame = jest.fn();
 
 // Mock WebSocket for real-time features
 global.WebSocket = jest.fn().mockImplementation(() => ({
-}
   send: jest.fn(),
   close: jest.fn(),
   readyState: WebSocket.OPEN,
@@ -58,18 +53,15 @@ global.WebSocket = jest.fn().mockImplementation(() => ({
 }));
 
 // Mock crypto for security tests
-Object.defineProperty(global, &apos;crypto&apos;, {
-}
+Object.defineProperty(global, 'crypto', {
   value: {
-}
-    randomUUID: jest.fn(() => &apos;mocked-uuid&apos;),
+    randomUUID: jest.fn(() => 'mocked-uuid'),
     getRandomValues: jest.fn((arr: any) => arr.fill(Math.random() * 255)),
   },
 });
 
 // Mock localStorage
 const localStorageMock = {
-}
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
@@ -86,39 +78,34 @@ global.fetch = jest.fn();
 // Setup console error suppression for expected errors
 const originalError = console.error;
 console.error = (...args: unknown[]) => {
-}
-  const message = args.join(&apos; &apos;);
+  const message = args.join(' ');
   // Suppress known React testing warnings
   if (
-    message.includes(&apos;Warning: ReactDOM.render is no longer supported&apos;) ||
-    message.includes(&apos;Warning: An invalid form control&apos;) ||
-    message.includes(&apos;act()&apos;)
+    message.includes('Warning: ReactDOM.render is no longer supported') ||
+    message.includes('Warning: An invalid form control') ||
+    message.includes('act()')
   ) {
-}
     return;
   }
   originalError.call(console, ...args);
 };
 
 // Mock environment variables
-process.env.NODE_ENV = &apos;test&apos;;
-process.env.REACT_APP_API_URL = &apos;http://localhost:3001/api&apos;;
+process.env.NODE_ENV = 'test';
+process.env.REACT_APP_API_URL = 'http://localhost:3001/api';
 
 // Global test utilities
 global.testUtils = {
-}
   mockUser: {
-}
     id: 1,
-    name: &apos;Test User&apos;,
-    email: &apos;test@example.com&apos;,
-    teamName: &apos;Test Team&apos;,
-    avatar: &apos;avatar-url&apos;,
+    name: 'Test User',
+    email: 'test@example.com',
+    teamName: 'Test Team',
+    avatar: 'avatar-url',
     isCommissioner: false,
     isAuthenticated: true,
     preferences: {
-}
-      theme: &apos;dark&apos;,
+      theme: 'dark',
       notifications: true,
       autoRefresh: true,
       draftReminders: true,
@@ -129,25 +116,22 @@ global.testUtils = {
     lastLoginAt: new Date(),
   },
   mockPlayer: {
-}
     id: 1,
-    name: &apos;Josh Allen&apos;,
-    position: &apos;QB&apos;,
-    team: &apos;BUF&apos;,
+    name: 'Josh Allen',
+    position: 'QB',
+    team: 'BUF',
     projectedPoints: 22.5,
     averageDraftPosition: 15.2,
     tier: 1,
     byeWeek: 7,
     injury: {
-}
-      status: &apos;healthy&apos;,
+      status: 'healthy',
     },
   },
   mockTeam: {
-}
     id: 1,
-    name: &apos;Test Team&apos;,
-    owner: &apos;Test Owner&apos;,
+    name: 'Test Team',
+    owner: 'Test Owner',
     roster: [],
     record: { wins: 0, losses: 0, ties: 0 },
     totalPoints: 0,

@@ -1,31 +1,25 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion, useAnimation } from &apos;framer-motion&apos;;
-import type { MatchupPlayer, GamedayEvent } from &apos;../../types&apos;;
-import AnimatedNumber from &apos;../ui/AnimatedNumber&apos;;
-import { FlameIcon } from &apos;../icons/FlameIcon&apos;;
-import { Tooltip } from &apos;../ui/Tooltip&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion, useAnimation } from 'framer-motion';
+import type { MatchupPlayer, GamedayEvent } from '../../types';
+import AnimatedNumber from '../ui/AnimatedNumber';
+import { FlameIcon } from '../icons/FlameIcon';
+import { Tooltip } from '../ui/Tooltip';
 
 interface PlayerRowProps {
-}
     playerData: MatchupPlayer;
     position: string;
     latestEvent: GamedayEvent | null;
 
-}
 
 const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent }: any) => {
-}
     const controls = useAnimation();
     const { player, projectedScore, actualScore, isHot } = playerData;
 
     React.useEffect(() => {
-}
-        if (latestEvent && latestEvent.player.id === player.id && latestEvent.type !== &apos;REDZONE_ENTRY&apos;) {
-}
+        if (latestEvent && latestEvent.player.id === player.id && latestEvent.type !== 'REDZONE_ENTRY') {
             controls.start({
-}
                 backgroundColor: ["#16a34a", "rgba(0,0,0,0.1)"],
                 transition: { duration: 1.5, ease: "easeOut" },
             });
@@ -40,7 +34,6 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent
             <span className="font-bold text-cyan-300 sm:px-4 md:px-6 lg:px-8">{position}</span>
             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                 {isHot && (
-}
                     <Tooltip content={`${player.name} is in the RedZone!`}>
                         <FlameIcon className="h-4 w-4 text-red-500 animate-pulse sm:px-4 md:px-6 lg:px-8" />
                     </Tooltip>

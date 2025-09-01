@@ -3,78 +3,67 @@
  * Displays user Oracle prediction performance stats
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { TrophyIcon, TargetIcon, ZapIcon, TrendingUpIcon } from &apos;lucide-react&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { TrophyIcon, TargetIcon, ZapIcon, TrendingUpIcon } from 'lucide-react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 export interface UserStats {
-}
     totalPredictions: number;
     correctPredictions: number;
     accuracy: number;
     streak: number;
     rank: number;
 
-}
 
 interface UserStatsWidgetProps {
-}
     stats: UserStats;
     className?: string;
     compact?: boolean;
 
 export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({ 
-}
     stats, 
-    className = &apos;&apos;,
+    className = '',
     compact = false 
 }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
     
     const statItems = [
         {
-}
-            label: &apos;Accuracy&apos;,
+            label: 'Accuracy',
             value: `${stats.accuracy.toFixed(1)}%`,
-            color: &apos;text-blue-400&apos;,
-            bgColor: &apos;bg-blue-500/10&apos;,
+            color: 'text-blue-400',
+            bgColor: 'bg-blue-500/10',
             icon: TargetIcon
         },
         {
-}
-            label: &apos;Streak&apos;,
+            label: 'Streak',
             value: stats.streak.toString(),
-            color: &apos;text-green-400&apos;,
-            bgColor: &apos;bg-green-500/10&apos;,
+            color: 'text-green-400',
+            bgColor: 'bg-green-500/10',
             icon: ZapIcon
         },
         {
-}
-            label: &apos;Total&apos;,
+            label: 'Total',
             value: stats.totalPredictions.toString(),
-            color: &apos;text-purple-400&apos;,
-            bgColor: &apos;bg-purple-500/10&apos;,
+            color: 'text-purple-400',
+            bgColor: 'bg-purple-500/10',
             icon: TrendingUpIcon
         },
         {
-}
-            label: &apos;Rank&apos;,
+            label: 'Rank',
             value: `#${stats.rank}`,
-            color: &apos;text-yellow-400&apos;,
-            bgColor: &apos;bg-yellow-500/10&apos;,
+            color: 'text-yellow-400',
+            bgColor: 'bg-yellow-500/10',
             icon: TrophyIcon
 
     ];
 
     if (compact) {
-}
         return (
             <div className={`grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 ${className}`}>
                 {statItems.map((item, index) => (
-}
                     <motion.div
                         key={item.label}
                         initial={{ opacity: 0, y: 10 }}
@@ -94,7 +83,6 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
     return (
         <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 ${className}`}>
             {statItems.map((item, index) => {
-}
                 const Icon = item.icon;
                 return (
                     <motion.div
@@ -113,22 +101,19 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
                         <div className="text-sm sm:text-base text-gray-400">{item.label}</div>
                         
                         {/* Additional context for each stat */}
-                        {item.label === &apos;Accuracy&apos; && stats.totalPredictions > 0 && (
-}
+                        {item.label === 'Accuracy' && stats.totalPredictions > 0 && (
                             <div className="text-xs sm:text-sm text-gray-500 mt-1">
                                 {stats.correctPredictions}/{stats.totalPredictions}
                             </div>
                         )}
                         
-                        {item.label === &apos;Streak&apos; && stats.streak > 0 && (
-}
+                        {item.label === 'Streak' && stats.streak > 0 && (
                             <div className="text-xs sm:text-sm text-gray-500 mt-1">
                                 🔥 On fire!
                             </div>
                         )}
                         
-                        {item.label === &apos;Rank&apos; && stats.rank <= 10 && (
-}
+                        {item.label === 'Rank' && stats.rank <= 10 && (
                             <div className="text-xs text-yellow-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 Top 10!
                             </div>

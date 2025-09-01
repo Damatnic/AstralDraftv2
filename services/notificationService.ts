@@ -4,21 +4,18 @@
  */
 
 export interface OracleNotification {
-}
     id: string;
-    type: &apos;deadline_warning&apos; | &apos;result_announced&apos; | &apos;accuracy_update&apos; | &apos;streak_milestone&apos; | &apos;ranking_change&apos;;
+    type: 'deadline_warning' | 'result_announced' | 'accuracy_update' | 'streak_milestone' | 'ranking_change';
     title: string;
     message: string;
     predictionId?: string;
     timestamp: string;
     isRead: boolean;
-    priority: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
+    priority: 'low' | 'medium' | 'high';
     actionUrl?: string;
     data?: Record<string, any>;
-}
 
 export interface NotificationPreferences {
-}
     browserNotifications: boolean;
     inAppNotifications: boolean;
     emailNotifications: boolean;
@@ -28,36 +25,29 @@ export interface NotificationPreferences {
     streakMilestones: boolean;
     rankingChanges: boolean;
     timeBeforeDeadline: number; // minutes
-}
 
 class NotificationService {
-}
     private static instance: NotificationService;
     private notifications: OracleNotification[] = [];
     private preferences: NotificationPreferences;
     private notificationCallbacks: ((notification: OracleNotification) => void)[] = [];
 
     private constructor() {
-}
         this.preferences = this.loadPreferences();
         this.loadNotifications();
         this.requestNotificationPermission();
     }
 
     static getInstance(): NotificationService {
-}
         if (!NotificationService.instance) {
-}
             NotificationService.instance = new NotificationService();
         }
         return NotificationService.instance;
     }
 
     // Notification Management
-    async addNotification(notification: Omit<OracleNotification, &apos;id&apos; | &apos;timestamp&apos; | &apos;isRead&apos;>): Promise<void> {
-}
+    async addNotification(notification: Omit<OracleNotification, 'id' | 'timestamp' | 'isRead'>): Promise<void> {
         const newNotification: OracleNotification = {
-}
             ...notification,
             id: this.generateId(),
             timestamp: new Date().toISOString(),
@@ -69,137 +59,116 @@ class NotificationService {
 
         // Send browser notification if enabled and permission granted
         if (this.preferences.browserNotifications && this.shouldSendNotification(notification.type)) {
-}
             await this.sendBrowserNotification(newNotification);
         }
 
         // Trigger in-app notification callbacks
         if (this.preferences.inAppNotifications) {
-}
             this.notificationCallbacks.forEach((callback: any) => callback(newNotification));
         }
     }
 
     getNotifications(): OracleNotification[] {
-}
         return [...this.notifications];
     }
 
     getUnreadNotifications(): OracleNotification[] {
-}
         return this.notifications.filter((n: any) => !n.isRead);
     }
 
     markAsRead(notificationId: string): void {
-}
         const notification = this.notifications.find((n: any) => n.id === notificationId);
         if (notification) {
-}
             notification.isRead = true;
             this.saveNotifications();
         }
     }
 
     markAllAsRead(): void {
-}
         this.notifications.forEach((n: any) => n.isRead = true);
         this.saveNotifications();
     }
 
     clearNotifications(): void {
-}
         this.notifications = [];
         this.saveNotifications();
     }
 
     // Prediction-specific notifications
     async notifyPredictionDeadline(predictionId: string, question: string, minutesRemaining: number): Promise<void> {
-}
         if (!this.preferences.deadlineWarnings) return;
 
         await this.addNotification({
-}
-            type: &apos;deadline_warning&apos;,
-            title: &apos;⏰ Prediction Deadline Approaching&apos;,
+            type: 'deadline_warning',
+            title: '⏰ Prediction Deadline Approaching',
             message: `"${question}" expires in ${minutesRemaining} minutes`,
             predictionId,
-            priority: minutesRemaining <= 15 ? &apos;high&apos; : &apos;medium&apos;,
+            priority: minutesRemaining <= 15 ? 'high' : 'medium',
             actionUrl: `/oracle?prediction=${predictionId}`
         });
     }
 
     async notifyPredictionResult(predictionId: string, question: string, isCorrect: boolean, pointsEarned: number): Promise<void> {
-}
         if (!this.preferences.resultAnnouncements) return;
 
         await this.addNotification({
-}
-            type: &apos;result_announced&apos;,
-            title: isCorrect ? &apos;🎉 Correct Prediction!&apos; : &apos;📊 Prediction Result&apos;,
-            message: `"${question}" - You ${isCorrect ? &apos;were correct&apos; : &apos;missed this one&apos;}. ${pointsEarned > 0 ? `+${pointsEarned} points` : &apos;No points earned&apos;}`,
+            type: 'result_announced',
+            title: isCorrect ? '🎉 Correct Prediction!' : '📊 Prediction Result',
+            message: `"${question}" - You ${isCorrect ? 'were correct' : 'missed this one'}. ${pointsEarned > 0 ? `+${pointsEarned} points` : 'No points earned'}`,
             predictionId,
-            priority: isCorrect ? &apos;high&apos; : &apos;medium&apos;,
-            actionUrl: &apos;/oracle/analytics&apos;,
+            priority: isCorrect ? 'high' : 'medium',
+            actionUrl: '/oracle/analytics',
             data: { isCorrect, pointsEarned }
         });
     }
 
     async notifyAccuracyUpdate(newAccuracy: number, previousAccuracy: number): Promise<void> {
-}
         if (!this.preferences.accuracyUpdates) return;
 
         const isImprovement = newAccuracy > previousAccuracy;
         const change = Math.abs(newAccuracy - previousAccuracy);
 
         if (change >= 5) { // Only notify for significant changes
-}
             await this.addNotification({
-}
-                type: &apos;accuracy_update&apos;,
-                title: isImprovement ? &apos;📈 Accuracy Improved!&apos; : &apos;📉 Accuracy Update&apos;,
-                message: `Your prediction accuracy ${isImprovement ? &apos;increased&apos; : &apos;decreased&apos;} to ${newAccuracy.toFixed(1)}%`,
-                priority: isImprovement ? &apos;medium&apos; : &apos;low&apos;,
-                actionUrl: &apos;/oracle/analytics&apos;,
+                type: 'accuracy_update',
+                title: isImprovement ? '📈 Accuracy Improved!' : '📉 Accuracy Update',
+                message: `Your prediction accuracy ${isImprovement ? 'increased' : 'decreased'} to ${newAccuracy.toFixed(1)}%`,
+                priority: isImprovement ? 'medium' : 'low',
+                actionUrl: '/oracle/analytics',
                 data: { newAccuracy, previousAccuracy, change }
             });
         }
     }
 
     async notifyStreakMilestone(streakCount: number): Promise<void> {
-}
         if (!this.preferences.streakMilestones) return;
 
         const milestones = [3, 5, 10, 15, 20, 25];
         if (milestones.includes(streakCount)) {
-}
             await this.addNotification({
-}
-                type: &apos;streak_milestone&apos;,
-                title: &apos;🔥 Streak Milestone!&apos;,
-                message: `You&apos;ve reached a ${streakCount}-prediction winning streak!`,
-                priority: &apos;high&apos;,
-                actionUrl: &apos;/oracle/analytics&apos;,
+                type: 'streak_milestone',
+                title: '🔥 Streak Milestone!',
+                message: `You've reached a ${streakCount}-prediction winning streak!`,
+                priority: 'high',
+                actionUrl: '/oracle/analytics',
                 data: { streakCount }
             });
         }
     }
 
     async notifyRankingChange(newRank: number, previousRank: number): Promise<void> {
-}
         if (!this.preferences.rankingChanges) return;
 
         const isImprovement = newRank < previousRank;
         const change = Math.abs(newRank - previousRank);
 
         if (change >= 1) {
-}
             await this.addNotification({
-}
-                type: &apos;ranking_change&apos;,
-                title: isImprovement ? &apos;🏆 Rank Improved!&apos; : &apos;📊 Ranking Update&apos;,
-                message: `You ${isImprovement ? &apos;climbed&apos; : &apos;dropped&apos;} to rank #${newRank}`,
-                priority: isImprovement ? &apos;medium&apos; : &apos;low&apos;,
-                actionUrl: &apos;/oracle/analytics&apos;,
+                type: 'ranking_change',
+                title: isImprovement ? '🏆 Rank Improved!' : '📊 Ranking Update',
+                message: `You ${isImprovement ? 'climbed' : 'dropped'} to rank #${newRank}`,
+                priority: isImprovement ? 'medium' : 'low',
+                actionUrl: '/oracle/analytics',
                 data: { newRank, previousRank, change }
             });
         }
@@ -207,47 +176,38 @@ class NotificationService {
 
     // Browser Notifications
     private async requestNotificationPermission(): Promise<void> {
-}
-        if (!(&apos;Notification&apos; in window)) {
-}
-            console.warn(&apos;Browser does not support notifications&apos;);
+        if (!('Notification' in window)) {
+            console.warn('Browser does not support notifications');
             return;
         }
 
-        if (Notification.permission === &apos;default&apos;) {
-}
+        if (Notification.permission === 'default') {
             await Notification.requestPermission();
         }
     }
 
     private async sendBrowserNotification(notification: OracleNotification): Promise<void> {
-}
-        if (!(&apos;Notification&apos; in window) || Notification.permission !== &apos;granted&apos;) {
-}
+        if (!('Notification' in window) || Notification.permission !== 'granted') {
             return;
         }
 
         const browserNotification = new Notification(notification.title, {
-}
             body: notification.message,
-            icon: &apos;/favicon.svg&apos;,
-            badge: &apos;/favicon.svg&apos;,
+            icon: '/favicon.svg',
+            badge: '/favicon.svg',
             tag: notification.id,
-            requireInteraction: notification.priority === &apos;high&apos;,
+            requireInteraction: notification.priority === 'high',
             data: {
-}
                 notificationId: notification.id,
                 actionUrl: notification.actionUrl
             }
         });
 
         browserNotification.onclick = () => {
-}
             window.focus();
             this.markAsRead(notification.id);
             
             if (notification.actionUrl) {
-}
                 window.location.href = notification.actionUrl;
             }
             
@@ -255,10 +215,8 @@ class NotificationService {
         };
 
         // Auto-close after 10 seconds for non-high priority notifications
-        if (notification.priority !== &apos;high&apos;) {
-}
+        if (notification.priority !== 'high') {
             setTimeout(() => {
-}
                 browserNotification.close();
             }, 10000);
         }
@@ -266,20 +224,16 @@ class NotificationService {
 
     // Preferences Management
     getPreferences(): NotificationPreferences {
-}
         return { ...this.preferences };
     }
 
     updatePreferences(newPreferences: Partial<NotificationPreferences>): void {
-}
         this.preferences = { ...this.preferences, ...newPreferences };
         this.savePreferences();
     }
 
     private loadPreferences(): NotificationPreferences {
-}
         const defaultPreferences: NotificationPreferences = {
-}
             browserNotifications: true,
             inAppNotifications: true,
             emailNotifications: false,
@@ -292,33 +246,25 @@ class NotificationService {
         };
 
         try {
-}
-            const saved = localStorage.getItem(&apos;oracle_notification_preferences&apos;);
+            const saved = localStorage.getItem('oracle_notification_preferences');
             return saved ? { ...defaultPreferences, ...JSON.parse(saved) } : defaultPreferences;
         } catch {
-}
             return defaultPreferences;
         }
     }
 
     private savePreferences(): void {
-}
         try {
-}
-            localStorage.setItem(&apos;oracle_notification_preferences&apos;, JSON.stringify(this.preferences));
+            localStorage.setItem('oracle_notification_preferences', JSON.stringify(this.preferences));
         } catch (error) {
-}
-            console.warn(&apos;Failed to save notification preferences:&apos;, error);
+            console.warn('Failed to save notification preferences:', error);
         }
     }
 
     private loadNotifications(): void {
-}
         try {
-}
-            const saved = localStorage.getItem(&apos;oracle_notifications&apos;);
+            const saved = localStorage.getItem('oracle_notifications');
             if (saved) {
-}
                 this.notifications = JSON.parse(saved);
                 // Clean up old notifications (older than 7 days)
                 const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -326,38 +272,32 @@ class NotificationService {
                 this.saveNotifications();
             }
         } catch (error) {
-}
-            console.warn(&apos;Failed to load notifications:&apos;, error);
+            console.warn('Failed to load notifications:', error);
             this.notifications = [];
         }
     }
 
     private saveNotifications(): void {
-}
         try {
-}
             // Only keep the most recent 50 notifications
             const toSave = this.notifications.slice(0, 50);
-            localStorage.setItem(&apos;oracle_notifications&apos;, JSON.stringify(toSave));
+            localStorage.setItem('oracle_notifications', JSON.stringify(toSave));
         } catch (error) {
-}
-            console.warn(&apos;Failed to save notifications:&apos;, error);
+            console.warn('Failed to save notifications:', error);
         }
     }
 
-    private shouldSendNotification(type: OracleNotification[&apos;type&apos;]): boolean {
-}
+    private shouldSendNotification(type: OracleNotification['type']): boolean {
         switch (type) {
-}
-            case &apos;deadline_warning&apos;:
+            case 'deadline_warning':
                 return this.preferences.deadlineWarnings;
-            case &apos;result_announced&apos;:
+            case 'result_announced':
                 return this.preferences.resultAnnouncements;
-            case &apos;accuracy_update&apos;:
+            case 'accuracy_update':
                 return this.preferences.accuracyUpdates;
-            case &apos;streak_milestone&apos;:
+            case 'streak_milestone':
                 return this.preferences.streakMilestones;
-            case &apos;ranking_change&apos;:
+            case 'ranking_change':
                 return this.preferences.rankingChanges;
             default:
                 return true;
@@ -365,19 +305,15 @@ class NotificationService {
     }
 
     private generateId(): string {
-}
         return `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
 
     // Callback Management
     onNotification(callback: (notification: OracleNotification) => void): () => void {
-}
         this.notificationCallbacks.push(callback);
         return () => {
-}
             const index = this.notificationCallbacks.indexOf(callback);
             if (index > -1) {
-}
                 this.notificationCallbacks.splice(index, 1);
             }
         };
@@ -385,7 +321,6 @@ class NotificationService {
 
     // Scheduling for deadline notifications
     scheduleDeadlineNotifications(predictionId: string, question: string, expiresAt: string): void {
-}
         const expireTime = new Date(expiresAt).getTime();
         const now = Date.now();
 
@@ -398,20 +333,16 @@ class NotificationService {
         ];
 
         intervals.forEach((interval: any) => {
-}
             const notificationTime = expireTime - interval;
             if (notificationTime > now) {
-}
                 const timeoutDuration = notificationTime - now;
                 setTimeout(() => {
-}
                     const minutesRemaining = Math.floor(interval / (60 * 1000));
                     this.notifyPredictionDeadline(predictionId, question, minutesRemaining);
                 }, timeoutDuration);
             }
         });
     }
-}
 
 export const notificationService = NotificationService.getInstance();
 export default notificationService;

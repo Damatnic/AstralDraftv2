@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import PostAnnouncementModal from &apos;./PostAnnouncementModal&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PostAnnouncementModal from './PostAnnouncementModal';
 
-describe(&apos;PostAnnouncementModal&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('PostAnnouncementModal', () => {
+  it('renders without crashing', () => {
     render(<PostAnnouncementModal />);
-    expect(screen.getByTestId(&apos;postannouncementmodal&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('postannouncementmodal')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<PostAnnouncementModal />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<PostAnnouncementModal />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

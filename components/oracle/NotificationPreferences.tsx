@@ -3,70 +3,57 @@
  * Settings for managing Oracle notification preferences
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Settings, Bell, BellOff, Clock, Trophy, TrendingUp, Target, Users, Mail } from &apos;lucide-react&apos;;
-import { notificationService, NotificationPreferences } from &apos;../../services/notificationService&apos;;
-import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Settings, Bell, BellOff, Clock, Trophy, TrendingUp, Target, Users, Mail } from 'lucide-react';
+import { notificationService, NotificationPreferences } from '../../services/notificationService';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 
 interface NotificationPreferencesProps {
-}
     className?: string;
     onClose?: () => void;
 
-}
 
 export const NotificationPreferencesComponent: React.FC<NotificationPreferencesProps> = ({
-}
-    className = &apos;&apos;,
+    className = '',
 //     onClose
 }: any) => {
-}
     const [preferences, setPreferences] = useState<NotificationPreferences>(
         notificationService.getPreferences()
     );
     const [hasPermission, setHasPermission] = useState(false);
 
     useEffect(() => {
-}
         // Check current notification permission
-        if (&apos;Notification&apos; in window) {
-}
-            setHasPermission(Notification.permission === &apos;granted&apos;);
+        if ('Notification' in window) {
+            setHasPermission(Notification.permission === 'granted');
     }
   }, []);
 
     const handlePreferenceChange = (key: keyof NotificationPreferences, value: boolean | number) => {
-}
         const newPreferences = { ...preferences, [key]: value };
         setPreferences(newPreferences);
         notificationService.updatePreferences(newPreferences);
     };
 
     const requestNotificationPermission = async () => {
-}
     try {
-}
-        if (&apos;Notification&apos; in window) {
-}
+        if ('Notification' in window) {
             const permission = await Notification.requestPermission();
-            setHasPermission(permission === &apos;granted&apos;);
+            setHasPermission(permission === 'granted');
             
-            if (permission === &apos;granted&apos;) {
-}
-                handlePreferenceChange(&apos;browserNotifications&apos;, true);
+            if (permission === 'granted') {
+                handlePreferenceChange('browserNotifications', true);
 
     } catch (error) {
-}
-      console.error(&apos;Error in requestNotificationPermission:&apos;, error);
+      console.error('Error in requestNotificationPermission:', error);
 
 
 
     };
 
     const ToggleSwitch: React.FC<{
-}
         enabled: boolean;
         onChange: (enabled: boolean) => void;
         disabled?: boolean;
@@ -74,21 +61,18 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
         <button
             onClick={() => !disabled && onChange(!enabled)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-}
-                enabled ? &apos;bg-blue-600&apos; : &apos;bg-gray-600&apos;
-            } ${disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;}`}
+                enabled ? 'bg-blue-600' : 'bg-gray-600'
+            } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
         >
             <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-}
-                    enabled ? &apos;translate-x-6&apos; : &apos;translate-x-1&apos;
+                    enabled ? 'translate-x-6' : 'translate-x-1'
                 }`}
             />
         </button>
     );
 
     const PreferenceRow: React.FC<{
-}
         icon: React.ReactNode;
         title: string;
         description: string;
@@ -113,7 +97,6 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
     );
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -135,7 +118,6 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                             <span>Notification Preferences</span>
                         </CardTitle>
                         {onClose && (
-}
                             <button
                                 onClick={onClose}
                                 className="text-gray-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -155,7 +137,6 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                         </h4>
                         
                         {!hasPermission ? (
-}
                             <div className="bg-yellow-900/20 border border-yellow-600/30 rounded-lg p-3 mb-3 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-start space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <BellOff className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
@@ -179,7 +160,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Browser Notifications"
                                 description="Show desktop notifications for Oracle updates"
                                 enabled={preferences.browserNotifications}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;browserNotifications&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('browserNotifications', enabled)}
                         )}
                     </div>
 
@@ -196,35 +177,35 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Deadline Warnings"
                                 description="Get notified when prediction deadlines are approaching"
                                 enabled={preferences.deadlineWarnings}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;deadlineWarnings&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('deadlineWarnings', enabled)}
 
                             <PreferenceRow>
                                 icon={<Target className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Result Announcements"
                                 description="Receive notifications when prediction results are available"
                                 enabled={preferences.resultAnnouncements}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;resultAnnouncements&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('resultAnnouncements', enabled)}
 
                             <PreferenceRow>
                                 icon={<TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Accuracy Updates"
                                 description="Get notified about significant changes in your accuracy"
                                 enabled={preferences.accuracyUpdates}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;accuracyUpdates&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('accuracyUpdates', enabled)}
 
                             <PreferenceRow>
                                 icon={<Trophy className="w-4 h-4 text-orange-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Streak Milestones"
                                 description="Celebrate when you reach prediction streak milestones"
                                 enabled={preferences.streakMilestones}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;streakMilestones&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('streakMilestones', enabled)}
 
                             <PreferenceRow>
                                 icon={<Users className="w-4 h-4 text-purple-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Ranking Changes"
                                 description="Stay informed about changes in your leaderboard position"
                                 enabled={preferences.rankingChanges}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;rankingChanges&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('rankingChanges', enabled)}
                         </div>
                     </div>
 
@@ -244,7 +225,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                             </div>
                             <select
                                 value={preferences.timeBeforeDeadline}
-                                onChange={(e: any) => handlePreferenceChange(&apos;timeBeforeDeadline&apos;, parseInt(e.target.value))}
+                                onChange={(e: any) => handlePreferenceChange('timeBeforeDeadline', parseInt(e.target.value))}
                             >
                                 <option value={5}>5 minutes</option>
                                 <option value={10}>10 minutes</option>
@@ -269,14 +250,14 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="In-App Notifications"
                                 description="Show notification toasts within the application"
                                 enabled={preferences.inAppNotifications}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;inAppNotifications&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('inAppNotifications', enabled)}
 
                             <PreferenceRow>
                                 icon={<Mail className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Email Notifications"
                                 description="Receive email notifications for important updates (coming soon)"
                                 enabled={preferences.emailNotifications}
-                                onChange={(enabled: any) => handlePreferenceChange(&apos;emailNotifications&apos;, enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('emailNotifications', enabled)}
                             />
                         </div>
                     </div>
@@ -285,13 +266,11 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                     <div className="p-4 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
                         <button
                             onClick={() = aria-label="Action button"> {
-}
                                 notificationService.addNotification({
-}
-                                    type: &apos;result_announced&apos;,
-                                    title: &apos;Test Notification&apos;,
-                                    message: &apos;This is a test notification to verify your settings are working correctly.&apos;,
-                                    priority: &apos;medium&apos;
+                                    type: 'result_announced',
+                                    title: 'Test Notification',
+                                    message: 'This is a test notification to verify your settings are working correctly.',
+                                    priority: 'medium'
                                 });
                             }}
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"

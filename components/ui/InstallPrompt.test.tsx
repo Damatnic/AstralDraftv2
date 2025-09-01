@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import InstallPrompt from &apos;./InstallPrompt&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import InstallPrompt from './InstallPrompt';
 
-describe(&apos;InstallPrompt&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('InstallPrompt', () => {
+  it('renders without crashing', () => {
     render(<InstallPrompt />);
-    expect(screen.getByTestId(&apos;installprompt&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('installprompt')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<InstallPrompt />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<InstallPrompt />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

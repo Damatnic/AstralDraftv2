@@ -3,8 +3,8 @@
  * Foundational UI components for historical analytics display
  */
 
-import React, { useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
 
 // Simple SVG Icons
 export const TrendingUpIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
@@ -83,35 +83,29 @@ export const PieChartIcon = ({ className = "w-4 h-4" }: { className?: string }) 
 
 // Stat Card Component
 interface StatCardProps {
-}
     title: string;
     value: string;
     change?: string;
-    changeType?: &apos;positive&apos; | &apos;negative&apos; | &apos;neutral&apos;;
+    changeType?: 'positive' | 'negative' | 'neutral';
     icon: React.ReactNode;
     iconBgColor: string;
     delay?: number;
 
-}
 
 export function StatCard({ 
-}
     title, 
     value, 
     change, 
-    changeType = &apos;neutral&apos;, 
+    changeType = 'neutral', 
     icon, 
     iconBgColor, 
     delay = 0 
 }: Readonly<StatCardProps>) {
-}
-    let changeColorClass = &apos;text-gray-600&apos;;
-    if (changeType === &apos;positive&apos;) {
-}
-        changeColorClass = &apos;text-green-600&apos;;
-    } else if (changeType === &apos;negative&apos;) {
-}
-        changeColorClass = &apos;text-red-600&apos;;
+    let changeColorClass = 'text-gray-600';
+    if (changeType === 'positive') {
+        changeColorClass = 'text-green-600';
+    } else if (changeType === 'negative') {
+        changeColorClass = 'text-red-600';
     }
 
     return (
@@ -131,7 +125,6 @@ export function StatCard({
                 </div>
             </div>
             {change && (
-}
                 <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
                     <span className={`text-sm ${changeColorClass}`}>
                         {change}
@@ -140,20 +133,16 @@ export function StatCard({
             )}
         </motion.div>
     );
-}
 
 // Simple Progress Bar
 interface ProgressBarProps {
-}
     value: number;
     max: number;
     color?: string;
     height?: string;
 
-}
 
 export function ProgressBar({ value, max, color = "bg-purple-600", height = "h-2" }: Readonly<ProgressBarProps>) {
-}
     const percentage = Math.min((value / max) * 100, 100);
     
     return (
@@ -164,35 +153,28 @@ export function ProgressBar({ value, max, color = "bg-purple-600", height = "h-2
             />
         </div>
     );
-}
 
 // Simple Trend Indicator
 interface TrendIndicatorProps {
-}
     value: number;
     label: string;
     showIcon?: boolean;
 
-}
 
 export function TrendIndicator({ value, label, showIcon = true }: Readonly<TrendIndicatorProps>) {
-}
     const isPositive = value > 0;
     const isNegative = value < 0;
     
-    let textColorClass = &apos;text-gray-600&apos;;
+    let textColorClass = 'text-gray-600';
     if (isPositive) {
-}
-        textColorClass = &apos;text-green-600&apos;;
+        textColorClass = 'text-green-600';
     } else if (isNegative) {
-}
-        textColorClass = &apos;text-red-600&apos;;
+        textColorClass = 'text-red-600';
     }
 
     return (
         <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
             {showIcon && (
-}
                 <>
                     {isPositive && <TrendingUpIcon className="w-4 h-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />}
                     {isNegative && <TrendingDownIcon className="w-4 h-4 text-red-500 sm:px-4 md:px-6 lg:px-8" />}
@@ -200,25 +182,20 @@ export function TrendIndicator({ value, label, showIcon = true }: Readonly<Trend
                 </>
             )}
             <span className={`text-sm font-medium ${textColorClass}`}>
-                {value > 0 ? &apos;+&apos; : &apos;&apos;}{(value * 100).toFixed(1)}%
+                {value > 0 ? '+' : ''}{(value * 100).toFixed(1)}%
             </span>
             <span className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">{label}</span>
         </div>
     );
-}
 
 // Simple Line Chart (SVG-based)
 interface SimpleLineChartProps {
-}
     data: { period: string; value: number }[];
     height?: number;
     color?: string;
-}
 
 export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Readonly<SimpleLineChartProps>) {
-}
     if (!data || data.length === 0) {
-}
         return (
             <div className="flex items-center justify-center h-48 text-gray-500 sm:px-4 md:px-6 lg:px-8">
                 No data available
@@ -236,11 +213,10 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
     const chartHeight = height - (padding * 2);
     
     const points = data.map((d, i) => {
-}
         const x = padding + (i / (data.length - 1)) * chartWidth;
         const y = padding + (1 - (d.value - minValue) / range) * chartHeight;
         return `${x},${y}`;
-    }).join(&apos; &apos;);
+    }).join(' ');
 
     return (
         <div className="w-full sm:px-4 md:px-6 lg:px-8">
@@ -263,7 +239,6 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
                 
                 {/* Data points */}
                 {data.map((d, i) => {
-}
                     const x = padding + (i / (data.length - 1)) * chartWidth;
                     const y = padding + (1 - (d.value - minValue) / range) * chartHeight;
                     return (
@@ -281,7 +256,6 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
                 
                 {/* Labels */}
                 {data.map((d, i) => {
-}
                     const x = padding + (i / (data.length - 1)) * chartWidth;
                     return (
                         <text
@@ -298,19 +272,14 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
             </svg>
         </div>
     );
-}
 
 // Simple Bar Chart
 interface SimpleBarChartProps {
-}
     data: { label: string; value: number; color?: string }[];
     height?: number;
-}
 
 export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartProps>) {
-}
     if (!data || data.length === 0) {
-}
         return (
             <div className="flex items-center justify-center h-48 text-gray-500 sm:px-4 md:px-6 lg:px-8">
                 No data available
@@ -323,7 +292,6 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
     return (
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {data.map((item, index) => (
-}
                 <div key={`bar-${item.label}-${index}`} className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                     <div className="w-24 text-sm text-gray-600 text-right sm:px-4 md:px-6 lg:px-8">
                         {item.label}
@@ -333,8 +301,7 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
                             <div className="flex-1 bg-gray-200 rounded-full h-4 sm:px-4 md:px-6 lg:px-8">
                                 <div
                                     className={`h-4 rounded-full transition-all duration-500 ${
-}
-                                        item.color || &apos;bg-purple-600&apos;
+                                        item.color || 'bg-purple-600'
                                     }`}
                                     style={{ width: `${(item.value / maxValue) * 100}%` }}
                                 />
@@ -348,26 +315,20 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
             ))}
         </div>
     );
-}
 
 // Loading Spinner
 export function LoadingSpinner({ size = "h-8 w-8" }: Readonly<{ size?: string }>) {
-}
     return (
         <div className={`animate-spin rounded-full ${size} border-b-2 border-purple-600`} />
     );
-}
 
 // Error Display
 interface ErrorDisplayProps {
-}
     error: string;
     onRetry?: () => void;
 
-}
 
 export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
-}
     return (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center space-x-2 text-red-800 sm:px-4 md:px-6 lg:px-8">
@@ -376,7 +337,6 @@ export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
             </div>
             <p className="text-red-600 mt-1 sm:px-4 md:px-6 lg:px-8">{error}</p>
             {onRetry && (
-}
                 <button
                     onClick={onRetry}
                     className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -386,4 +346,3 @@ export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
             )}
         </div>
     );
-}

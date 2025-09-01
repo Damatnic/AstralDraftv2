@@ -1,9 +1,8 @@
 
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
+import { motion } from 'framer-motion';
 
 interface RadialChartProps {
-}
     value: number;
     maxValue: number;
     label: string;
@@ -11,10 +10,8 @@ interface RadialChartProps {
     size?: number;
     strokeWidth?: number;
 
-}
 
-const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = &apos;&apos;, size = 80, strokeWidth = 8 }: any) => {
-}
+const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = '', size = 80, strokeWidth = 8 }: any) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const progress = value / maxValue;
@@ -43,10 +40,9 @@ const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit 
                         transform={`rotate(-90 ${size / 2} ${size / 2})`}
                         strokeDasharray={circumference}
                         {...{
-}
                             initial: { strokeDashoffset: circumference },
                             animate: { strokeDashoffset },
-                            transition: { duration: 1, ease: &apos;easeOut&apos; },
+                            transition: { duration: 1, ease: 'easeOut' },
                         }}
                     />
                 </svg>

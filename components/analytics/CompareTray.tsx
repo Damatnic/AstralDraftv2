@@ -1,55 +1,48 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, FC, MouseEvent } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import type { Player } from &apos;../../types&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
-import { CompareIcon } from &apos;../icons/CompareIcon&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, FC, MouseEvent } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { Player } from '../../types';
+import { Avatar } from '../ui/Avatar';
+import { CloseIcon } from '../icons/CloseIcon';
+import { CompareIcon } from '../icons/CompareIcon';
+import { useAppState } from '../../contexts/AppContext';
 
 interface CompareTrayProps {
-}
     players: Player[];
     onClear: () => void;
     onCompare: () => void;
 
-}
 
 const CompareTray: FC<CompareTrayProps> = ({ players, onClear, onCompare }: any) => {
-}
     const { dispatch } = useAppState();
 
     const handleRemovePlayer = (e: MouseEvent<HTMLButtonElement>, player: Player) => {
-}
         e.stopPropagation();
         // This is a bit of a hack. Ideally the toggle function would be passed down.
-        // For now, we&apos;ll just show a notification to guide the user.
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Click ${player.name} in the list to remove from comparison.`, type: &apos;SYSTEM&apos; } });
+        // For now, we'll just show a notification to guide the user.
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Click ${player.name} in the list to remove from comparison.`, type: 'SYSTEM' } });
     };
 
     return (
         <AnimatePresence>
             {players.length > 0 && (
-}
                 <motion.div
                     className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl z-30 sm:px-4 md:px-6 lg:px-8"
                     {...{
-}
                         layout: true,
                         initial: { y: 100, opacity: 0 },
                         animate: { y: 0, opacity: 1 },
                         exit: { y: 100, opacity: 0 },
-                        transition: { type: &apos;spring&apos;, stiffness: 200, damping: 30 },
+                        transition: { type: 'spring', stiffness: 200, damping: 30 },
                     }}
                 >
                     <div className="mx-4 mb-4 glass-pane p-2 rounded-xl flex items-center justify-between gap-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                              {players.map((player: any) => (
-}
                                 <div key={player.id} className="relative group sm:px-4 md:px-6 lg:px-8">
-                                    <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(&apos;,&apos;)[0] || &apos;🏈&apos;} className="w-12 h-12 text-2xl rounded-lg sm:px-4 md:px-6 lg:px-8" alt={player.name} />
+                                    <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-12 h-12 text-2xl rounded-lg sm:px-4 md:px-6 lg:px-8" alt={player.name} />
                                     <button onClick={(e: MouseEvent<HTMLButtonElement>) => handleRemovePlayer(e, player)} className="absolute -top-1 -right-1 p-0.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity sm:px-4 md:px-6 lg:px-8" aria-label="Remove player">
                                         <CloseIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                     </button>

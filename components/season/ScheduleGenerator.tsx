@@ -3,14 +3,13 @@
  * Creates 14-week regular season + 3-week playoff schedule
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Team } from &apos;../../types&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { Team } from '../../types';
 
 interface Matchup {
-}
   week: number;
   team1Id: number;
   team2Id: number;
@@ -19,20 +18,15 @@ interface Matchup {
   isPlayoff?: boolean;
   isChampionship?: boolean;
 
-}
 
 interface ScheduleGeneratorProps {
-}
   onScheduleGenerated?: (schedule: Matchup[]) => void;
   isCommissioner?: boolean;
-}
 
 const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
-}
   onScheduleGenerated,
   isCommissioner = false
 }: any) => {
-}
   const { state, dispatch } = useAppState();
   const [schedule, setSchedule] = useState<Matchup[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -43,19 +37,16 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
 
   // Generate regular season schedule (14 weeks)
   const generateRegularSeason = (): Matchup[] => {
-}
     const matchups: Matchup[] = [];
     const teamIds = teams.map((team: any) => team.id);
     
     // Round-robin with some randomization
     for (let week = 1; week <= 14; week++) {
-}
       const weekMatchups: Matchup[] = [];
       const availableTeams = [...teamIds];
       
       // Create 5 matchups per week (10 teams = 5 matchups)
       while (availableTeams.length >= 2) {
-}
         const team1Index = Math.floor(Math.random() * availableTeams.length);
         const team1Id = availableTeams.splice(team1Index, 1)[0];
         
@@ -63,7 +54,6 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
         const team2Id = availableTeams.splice(team2Index, 1)[0];
         
         weekMatchups.push({
-}
           week,
           team1Id,
           team2Id,
@@ -79,21 +69,18 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
 
   // Generate playoff schedule (weeks 15-17)
   const generatePlayoffs = (): Matchup[] => {
-}
     const playoffMatchups: Matchup[] = [];
     
     // Week 15: First round of playoffs (6 teams, top 2 get bye)
     // Teams 3v6 and 4v5
     playoffMatchups.push(
       {
-}
         week: 15,
         team1Id: teams[2]?.id || 3, // 3rd seed
         team2Id: teams[5]?.id || 6, // 6th seed
         isPlayoff: true
       },
       {
-}
         week: 15,
         team1Id: teams[3]?.id || 4, // 4th seed
         team2Id: teams[4]?.id || 5, // 5th seed
@@ -105,14 +92,12 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
     // Winners from week 15 vs top 2 seeds
     playoffMatchups.push(
       {
-}
         week: 16,
         team1Id: teams[0]?.id || 1, // 1st seed
         team2Id: teams[5]?.id || 6, // Winner of 3v6 (placeholder)
         isPlayoff: true
       },
       {
-}
         week: 16,
         team1Id: teams[1]?.id || 2, // 2nd seed
         team2Id: teams[4]?.id || 5, // Winner of 4v5 (placeholder)
@@ -122,7 +107,6 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
     
     // Week 17: Championship
     playoffMatchups.push({
-}
       week: 17,
       team1Id: teams[0]?.id || 1, // Winner of semifinal 1
       team2Id: teams[1]?.id || 2, // Winner of semifinal 2
@@ -134,9 +118,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   };
 
   const handleGenerateSchedule = async () => {
-}
     try {
-}
       if (!isCommissioner) return;
       
       setIsGenerating(true);
@@ -154,46 +136,38 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
       setIsGenerating(false);
       
       dispatch({
-}
-        type: &apos;ADD_NOTIFICATION&apos;,
+        type: 'ADD_NOTIFICATION',
         payload: {
-}
-          message: &apos;Season schedule generated successfully!&apos;,
-          type: &apos;SUCCESS&apos;
+          message: 'Season schedule generated successfully!',
+          type: 'SUCCESS'
         }
       });
     } catch (error) {
-}
-      console.error(&apos;Error in handleGenerateSchedule:&apos;, error);
+      console.error('Error in handleGenerateSchedule:', error);
     }
   };
 
   const getTeamName = (teamId: number): string => {
-}
     return teams.find((team: any) => team.id === teamId)?.name || `Team ${teamId}`;
   };
 
   const getTeamAvatar = (teamId: number): string => {
-}
-    return teams.find((team: any) => team.id === teamId)?.avatar || &apos;🏈&apos;;
+    return teams.find((team: any) => team.id === teamId)?.avatar || '🏈';
   };
 
   const getWeekMatchups = (week: number): Matchup[] => {
-}
     return schedule.filter((matchup: any) => matchup.week === week);
   };
 
   const getWeekType = (week: number): string => {
-}
-    if (week <= 14) return &apos;Regular Season&apos;;
-    if (week === 15) return &apos;Wild Card&apos;;
-    if (week === 16) return &apos;Semifinals&apos;;
-    if (week === 17) return &apos;Championship&apos;;
-    return &apos;Season&apos;;
+    if (week <= 14) return 'Regular Season';
+    if (week === 15) return 'Wild Card';
+    if (week === 16) return 'Semifinals';
+    if (week === 17) return 'Championship';
+    return 'Season';
   };
 
   if (isGenerating) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -214,44 +188,38 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
         </div>
         
         {isCommissioner && (
-}
           <button
             onClick={handleGenerateSchedule}
             disabled={isGenerating}
             className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-}
 //               isGenerating
-                ? &apos;bg-gray-600 text-gray-300 cursor-not-allowed&apos;
-                : &apos;bg-blue-600 hover:bg-blue-700 text-white&apos;
+                ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
            aria-label="Action button">
             {isGenerating ? (
-}
               <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                 Generating...
               </div>
             ) : (
-              &apos;📅 Generate Schedule&apos;
+              '📅 Generate Schedule'
             )}
           </button>
         )}
       </div>
 
       {schedule.length === 0 ? (
-}
         /* No Schedule Generated */
         <div className="bg-slate-800/50 rounded-xl p-8 border border-slate-700 text-center sm:px-4 md:px-6 lg:px-8">
           <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">📅</div>
           <h4 className="text-lg font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">No Schedule Generated</h4>
           <p className="text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">
             {isCommissioner 
-}
-              ? &apos;Generate the season schedule to begin matchups&apos;
-              : &apos;The commissioner will generate the schedule soon&apos;}
+              ? 'Generate the season schedule to begin matchups'
+              : 'The commissioner will generate the schedule soon'}
           </p>
           {!isCommissioner && (
-}
             <p className="text-sm text-slate-500 sm:px-4 md:px-6 lg:px-8">
               Schedule will include 14 regular season weeks + 3 playoff weeks
             </p>
@@ -274,7 +242,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                 Week {currentWeek} - {getWeekType(currentWeek)}
               </h4>
               <p className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
-                {currentWeek <= 14 ? &apos;Regular Season&apos; : &apos;Playoffs&apos;}
+                {currentWeek <= 14 ? 'Regular Season' : 'Playoffs'}
               </p>
             </div>
             
@@ -289,23 +257,20 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
           {/* Week Matchups */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {getWeekMatchups(currentWeek).map((matchup, index) => (
-}
               <motion.div
                 key={`${matchup.week}-${matchup.team1Id}-${matchup.team2Id}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`p-4 rounded-lg border-2 transition-colors ${
-}
                   matchup.isChampionship
-                    ? &apos;border-yellow-500 bg-yellow-900/20&apos;
+                    ? 'border-yellow-500 bg-yellow-900/20'
                     : matchup.isPlayoff
-                    ? &apos;border-blue-500 bg-blue-900/20&apos;
-                    : &apos;border-slate-600 bg-slate-700/50&apos;
+                    ? 'border-blue-500 bg-blue-900/20'
+                    : 'border-slate-600 bg-slate-700/50'
                 }`}
               >
                 {matchup.isChampionship && (
-}
                   <div className="text-center mb-3 sm:px-4 md:px-6 lg:px-8">
                     <span className="px-2 py-1 bg-yellow-600 text-white text-xs font-bold rounded sm:px-4 md:px-6 lg:px-8">
                       🏆 CHAMPIONSHIP
@@ -314,7 +279,6 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                 )}
                 
                 {matchup.isPlayoff && !matchup.isChampionship && (
-}
                   <div className="text-center mb-3 sm:px-4 md:px-6 lg:px-8">
                     <span className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded sm:px-4 md:px-6 lg:px-8">
                       🏈 PLAYOFF
@@ -332,7 +296,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                       </span>
                     </div>
                     <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">
-                      {matchup.team1Score || &apos;-&apos;}
+                      {matchup.team1Score || '-'}
                     </div>
                   </div>
 
@@ -347,7 +311,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                       </span>
                     </div>
                     <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">
-                      {matchup.team2Score || &apos;-&apos;}
+                      {matchup.team2Score || '-'}
                     </div>
                   </div>
                 </div>
@@ -356,13 +320,12 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                 <div className="mt-3 pt-3 border-t border-slate-600 text-center sm:px-4 md:px-6 lg:px-8">
                   <span className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                     {matchup.team1Score && matchup.team2Score 
-}
-                      ? &apos;Final&apos; 
+                      ? 'Final' 
                       : currentWeek === matchup.week 
-                      ? &apos;This Week&apos; 
+                      ? 'This Week' 
                       : currentWeek > matchup.week 
-                      ? &apos;Completed&apos; 
-                      : &apos;Upcoming&apos;}
+                      ? 'Completed' 
+                      : 'Upcoming'}
                   </span>
                 </div>
               </motion.div>

@@ -11,7 +11,7 @@
  * 5. Authentication bypass issues
  */
 
-import crypto from &apos;crypto&apos;;
+import crypto from 'crypto';
 
 // =====================================================
 // SECTION 1: SECURE TOKEN STORAGE
@@ -22,35 +22,30 @@ import crypto from &apos;crypto&apos;;
  * Prevents XSS attacks from accessing authentication tokens
  */
 export class SecureTokenManager {
-}
-  private static readonly TOKEN_NAME = &apos;astral_secure_token&apos;;
-  private static readonly REFRESH_TOKEN_NAME = &apos;astral_refresh_token&apos;;
+  private static readonly TOKEN_NAME = 'astral_secure_token';
+  private static readonly REFRESH_TOKEN_NAME = 'astral_refresh_token';
   
   /**
    * Store token securely (server-side only)
    */
   static setSecureToken(res: any, token: string, refreshToken?: string): void {
-}
     // Main token - httpOnly, secure, sameSite
     res.cookie(this.TOKEN_NAME, token, {
-}
       httpOnly: true,
-      secure: process.env.NODE_ENV === &apos;production&apos;,
-      sameSite: &apos;strict&apos;,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: &apos;/&apos;
+      path: '/'
     });
     
     // Refresh token with longer expiry
     if (refreshToken) {
-}
       res.cookie(this.REFRESH_TOKEN_NAME, refreshToken, {
-}
         httpOnly: true,
-        secure: process.env.NODE_ENV === &apos;production&apos;,
-        sameSite: &apos;strict&apos;,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        path: &apos;/api/auth/refresh&apos;
+        path: '/api/auth/refresh'
       });
     }
   }
@@ -59,11 +54,9 @@ export class SecureTokenManager {
    * Clear all secure tokens
    */
   static clearTokens(res: any): void {
-}
     res.clearCookie(this.TOKEN_NAME);
     res.clearCookie(this.REFRESH_TOKEN_NAME);
   }
-}
 
 // =====================================================
 // SECTION 2: API KEY MANAGEMENT
@@ -74,46 +67,41 @@ export class SecureTokenManager {
  * NEVER store API keys in source code or client-side
  */
 export class SecureAPIKeyManager {
-}
   private static encryptionKey: Buffer;
   
   static initialize(): void {
-}
     const key = process.env.ENCRYPTION_KEY;
     if (!key || key.length !== 32) {
-}
-      throw new Error(&apos;ENCRYPTION_KEY must be exactly 32 characters&apos;);
+      throw new Error('ENCRYPTION_KEY must be exactly 32 characters');
     }
-    this.encryptionKey = Buffer.from(key, &apos;utf-8&apos;);
+    this.encryptionKey = Buffer.from(key, 'utf-8');
   }
   
   /**
    * Encrypt API keys for storage
    */
   static encryptAPIKey(apiKey: string): string {
-}
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv(&apos;aes-256-cbc&apos;, this.encryptionKey, iv);
+    const cipher = crypto.createCipheriv('aes-256-cbc', this.encryptionKey, iv);
     
-    let encrypted = cipher.update(apiKey, &apos;utf8&apos;, &apos;hex&apos;);
-    encrypted += cipher.final(&apos;hex&apos;);
+    let encrypted = cipher.update(apiKey, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
     
-    return iv.toString(&apos;hex&apos;) + &apos;:&apos; + encrypted;
+    return iv.toString('hex') + ':' + encrypted;
   }
   
   /**
    * Decrypt API keys for use
    */
   static decryptAPIKey(encryptedKey: string): string {
-}
-    const parts = encryptedKey.split(&apos;:&apos;);
-    const iv = Buffer.from(parts[0], &apos;hex&apos;);
+    const parts = encryptedKey.split(':');
+    const iv = Buffer.from(parts[0], 'hex');
     const encrypted = parts[1];
     
-    const decipher = crypto.createDecipheriv(&apos;aes-256-cbc&apos;, this.encryptionKey, iv);
+    const decipher = crypto.createDecipheriv('aes-256-cbc', this.encryptionKey, iv);
     
-    let decrypted = decipher.update(encrypted, &apos;hex&apos;, &apos;utf8&apos;);
-    decrypted += decipher.final(&apos;utf8&apos;);
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
     
     return decrypted;
   }
@@ -122,13 +110,11 @@ export class SecureAPIKeyManager {
    * Validate and rotate API keys
    */
   static async rotateAPIKey(service: string): Promise<string> {
-}
     console.warn(`🔄 Rotating API key for service: ${service}`);
     // Implementation would connect to service provider to generate new key
     // This is a placeholder for the actual rotation logic
     return `rotated_${service}_${Date.now()}`;
   }
-}
 
 // =====================================================
 // SECTION 3: SECURITY HEADERS
@@ -138,39 +124,36 @@ export class SecureAPIKeyManager {
  * Comprehensive security headers configuration
  */
 export const SecurityHeaders = {
-}
   /**
    * Content Security Policy - STRICT MODE
    */
   CSP: {
-}
-    &apos;default-src&apos;: ["&apos;self&apos;"],
-    &apos;script-src&apos;: ["&apos;self&apos;", "&apos;sha256-GENERATED_HASH&apos;"], // Replace with actual script hashes
-    &apos;style-src&apos;: ["&apos;self&apos;", "&apos;sha256-GENERATED_HASH&apos;"], // Replace with actual style hashes
-    &apos;img-src&apos;: ["&apos;self&apos;", "data:", "https:"],
-    &apos;font-src&apos;: ["&apos;self&apos;"],
-    &apos;connect-src&apos;: ["&apos;self&apos;", "https://api.sportsdata.io", "wss://astraldraft.netlify.app"],
-    &apos;frame-ancestors&apos;: ["&apos;none&apos;"],
-    &apos;base-uri&apos;: ["&apos;self&apos;"],
-    &apos;form-action&apos;: ["&apos;self&apos;"],
-    &apos;upgrade-insecure-requests&apos;: [],
-    &apos;block-all-mixed-content&apos;: []
+    'default-src': ["'self'"],
+    'script-src': ["'self'", "'sha256-GENERATED_HASH'"], // Replace with actual script hashes
+    'style-src': ["'self'", "'sha256-GENERATED_HASH'"], // Replace with actual style hashes
+    'img-src': ["'self'", "data:", "https:"],
+    'font-src': ["'self'"],
+    'connect-src': ["'self'", "https://api.sportsdata.io", "wss://astraldraft.netlify.app"],
+    'frame-ancestors': ["'none'"],
+    'base-uri': ["'self'"],
+    'form-action': ["'self'"],
+    'upgrade-insecure-requests': [],
+    'block-all-mixed-content': []
   },
   
   /**
    * Other critical security headers
    */
   HEADERS: {
-}
-    &apos;Strict-Transport-Security&apos;: &apos;max-age=31536000; includeSubDomains; preload&apos;,
-    &apos;X-Content-Type-Options&apos;: &apos;nosniff&apos;,
-    &apos;X-Frame-Options&apos;: &apos;DENY&apos;,
-    &apos;X-XSS-Protection&apos;: &apos;1; mode=block&apos;,
-    &apos;Referrer-Policy&apos;: &apos;strict-origin-when-cross-origin&apos;,
-    &apos;Permissions-Policy&apos;: &apos;camera=(), microphone=(), geolocation=()&apos;,
-    &apos;Cross-Origin-Embedder-Policy&apos;: &apos;require-corp&apos;,
-    &apos;Cross-Origin-Opener-Policy&apos;: &apos;same-origin&apos;,
-    &apos;Cross-Origin-Resource-Policy&apos;: &apos;same-origin&apos;
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+    'Cross-Origin-Embedder-Policy': 'require-corp',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Cross-Origin-Resource-Policy': 'same-origin'
   }
 };
 
@@ -182,34 +165,29 @@ export const SecurityHeaders = {
  * Secure CORS configuration
  */
 export const SecureCORSConfig = {
-}
   origin: function(origin: string | undefined, callback: Function) {
-}
     const allowedOrigins = [
-      &apos;https://astraldraft.netlify.app&apos;,
-      &apos;https://astraldraft.com&apos;,
+      'https://astraldraft.netlify.app',
+      'https://astraldraft.com',
       // Add other production domains
     ];
     
     // Development mode
-    if (process.env.NODE_ENV === &apos;development&apos;) {
-}
-      allowedOrigins.push(&apos;http://localhost:3000&apos;, &apos;http://localhost:5173&apos;);
+    if (process.env.NODE_ENV === 'development') {
+      allowedOrigins.push('http://localhost:3000', 'http://localhost:5173');
     }
     
     // Check origin
     if (!origin || allowedOrigins.includes(origin)) {
-}
       callback(null, true);
     } else {
-}
-      callback(new Error(&apos;CORS policy violation&apos;));
+      callback(new Error('CORS policy violation'));
     }
   },
   credentials: true,
-  methods: [&apos;GET&apos;, &apos;POST&apos;, &apos;PUT&apos;, &apos;DELETE&apos;, &apos;OPTIONS&apos;],
-  allowedHeaders: [&apos;Content-Type&apos;, &apos;Authorization&apos;, &apos;X-CSRF-Token&apos;],
-  exposedHeaders: [&apos;X-CSRF-Token&apos;],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+  exposedHeaders: ['X-CSRF-Token'],
   maxAge: 86400 // 24 hours
 };
 
@@ -221,36 +199,32 @@ export const SecureCORSConfig = {
  * Enhanced input validation and sanitization
  */
 export class InputSanitizer {
-}
   /**
    * Sanitize user input to prevent XSS
    */
   static sanitizeHTML(input: string): string {
-}
     return input
-      .replace(/</g, &apos;&lt;&apos;)
-      .replace(/>/g, &apos;&gt;&apos;)
-      .replace(/"/g, &apos;&quot;&apos;)
-      .replace(/&apos;/g, &apos;&#x27;&apos;)
-      .replace(/\//g, &apos;&#x2F;&apos;)
-      .replace(/`/g, &apos;&#96;&apos;)
-      .replace(/=/g, &apos;&#61;&apos;);
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+      .replace(/\//g, '&#x2F;')
+      .replace(/`/g, '&#96;')
+      .replace(/=/g, '&#61;');
   }
   
   /**
    * Validate and sanitize SQL input
    */
   static sanitizeSQL(input: string): string {
-}
     // Use parameterized queries instead
-    return input.replace(/[&apos;";\\]/g, &apos;&apos;);
+    return input.replace(/['";\\]/g, '');
   }
   
   /**
    * Validate email format
    */
   static validateEmail(email: string): boolean {
-}
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email) && email.length < 255;
   }
@@ -259,22 +233,19 @@ export class InputSanitizer {
    * Validate password strength
    */
   static validatePassword(password: string): { valid: boolean; errors: string[] } {
-}
     const errors: string[] = [];
     
-    if (password.length < 12) errors.push(&apos;Password must be at least 12 characters&apos;);
-    if (!/[A-Z]/.test(password)) errors.push(&apos;Password must contain uppercase letters&apos;);
-    if (!/[a-z]/.test(password)) errors.push(&apos;Password must contain lowercase letters&apos;);
-    if (!/[0-9]/.test(password)) errors.push(&apos;Password must contain numbers&apos;);
-    if (!/[^A-Za-z0-9]/.test(password)) errors.push(&apos;Password must contain special characters&apos;);
+    if (password.length < 12) errors.push('Password must be at least 12 characters');
+    if (!/[A-Z]/.test(password)) errors.push('Password must contain uppercase letters');
+    if (!/[a-z]/.test(password)) errors.push('Password must contain lowercase letters');
+    if (!/[0-9]/.test(password)) errors.push('Password must contain numbers');
+    if (!/[^A-Za-z0-9]/.test(password)) errors.push('Password must contain special characters');
     
     return {
-}
       valid: errors.length === 0,
 //       errors
     };
   }
-}
 
 // =====================================================
 // SECTION 6: RATE LIMITING
@@ -284,7 +255,6 @@ export class InputSanitizer {
  * Rate limiting configuration for authentication endpoints
  */
 export class RateLimiter {
-}
   private static attempts = new Map<string, number[]>();
   private static readonly MAX_ATTEMPTS = 5;
   private static readonly WINDOW_MS = 15 * 60 * 1000; // 15 minutes
@@ -293,7 +263,6 @@ export class RateLimiter {
    * Check if IP is rate limited
    */
   static isRateLimited(identifier: string): boolean {
-}
     const now = Date.now();
     const attempts = this.attempts.get(identifier) || [];
     
@@ -301,7 +270,6 @@ export class RateLimiter {
     const recentAttempts = attempts.filter((time: any) => now - time < this.WINDOW_MS);
     
     if (recentAttempts.length >= this.MAX_ATTEMPTS) {
-}
       return true;
     }
     
@@ -316,10 +284,8 @@ export class RateLimiter {
    * Reset rate limit for identifier
    */
   static reset(identifier: string): void {
-}
     this.attempts.delete(identifier);
   }
-}
 
 // =====================================================
 // SECTION 7: CSRF PROTECTION
@@ -329,15 +295,13 @@ export class RateLimiter {
  * CSRF token generation and validation
  */
 export class CSRFProtection {
-}
   private static tokens = new Map<string, string>();
   
   /**
    * Generate CSRF token for session
    */
   static generateToken(sessionId: string): string {
-}
-    const token = crypto.randomBytes(32).toString(&apos;hex&apos;);
+    const token = crypto.randomBytes(32).toString('hex');
     this.tokens.set(sessionId, token);
     return token;
   }
@@ -346,11 +310,9 @@ export class CSRFProtection {
    * Validate CSRF token
    */
   static validateToken(sessionId: string, token: string): boolean {
-}
     const storedToken = this.tokens.get(sessionId);
     return storedToken === token && token !== undefined;
   }
-}
 
 // =====================================================
 // SECTION 8: AUDIT LOGGING
@@ -360,32 +322,26 @@ export class CSRFProtection {
  * Security audit logging
  */
 export class SecurityAuditLogger {
-}
   static log(event: {
-}
-    type: &apos;AUTH_ATTEMPT&apos; | &apos;AUTH_SUCCESS&apos; | &apos;AUTH_FAILURE&apos; | &apos;API_ACCESS&apos; | &apos;SUSPICIOUS_ACTIVITY&apos;;
+    type: 'AUTH_ATTEMPT' | 'AUTH_SUCCESS' | 'AUTH_FAILURE' | 'API_ACCESS' | 'SUSPICIOUS_ACTIVITY';
     userId?: string;
     ip: string;
     userAgent: string;
     details?: any;
   }): void {
-}
     const logEntry = {
-}
       timestamp: new Date().toISOString(),
       ...event
     };
     
     // In production, send to logging service
-    console.log(&apos;[SECURITY AUDIT]&apos;, JSON.stringify(logEntry));
+    console.log('[SECURITY AUDIT]', JSON.stringify(logEntry));
     
     // Detect suspicious patterns
-    if (event.type === &apos;AUTH_FAILURE&apos;) {
-}
+    if (event.type === 'AUTH_FAILURE') {
       // Track failed attempts for account lockout
     }
   }
-}
 
 // =====================================================
 // SECTION 9: EMERGENCY RESPONSE
@@ -395,13 +351,11 @@ export class SecurityAuditLogger {
  * Emergency security response procedures
  */
 export class EmergencyResponse {
-}
   /**
    * Immediately revoke all active sessions
    */
   static async revokeAllSessions(): Promise<void> {
-}
-    console.warn(&apos;🚨 EMERGENCY: Revoking all active sessions&apos;);
+    console.warn('🚨 EMERGENCY: Revoking all active sessions');
     // Implementation would clear all session tokens from database
   }
   
@@ -409,12 +363,10 @@ export class EmergencyResponse {
    * Rotate all API keys
    */
   static async rotateAllAPIKeys(): Promise<void> {
-}
-    console.warn(&apos;🚨 EMERGENCY: Rotating all API keys&apos;);
-    const services = [&apos;GEMINI&apos;, &apos;SPORTSDATA&apos;, &apos;STRIPE&apos;];
+    console.warn('🚨 EMERGENCY: Rotating all API keys');
+    const services = ['GEMINI', 'SPORTSDATA', 'STRIPE'];
     
     for (const service of services) {
-}
       await SecureAPIKeyManager.rotateAPIKey(service);
     }
   }
@@ -423,12 +375,10 @@ export class EmergencyResponse {
    * Enable lockdown mode
    */
   static enableLockdown(): void {
-}
-    console.warn(&apos;🚨 EMERGENCY: Enabling lockdown mode&apos;);
+    console.warn('🚨 EMERGENCY: Enabling lockdown mode');
     // Restrict all non-essential operations
-    process.env.LOCKDOWN_MODE = &apos;true&apos;;
+    process.env.LOCKDOWN_MODE = 'true';
   }
-}
 
 // =====================================================
 // DEPLOYMENT INSTRUCTIONS
@@ -471,7 +421,6 @@ export class EmergencyResponse {
  */
 
 export default {
-}
   SecureTokenManager,
   SecureAPIKeyManager,
   SecurityHeaders,

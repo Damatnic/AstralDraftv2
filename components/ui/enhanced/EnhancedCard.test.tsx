@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import EnhancedCard from &apos;./EnhancedCard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import EnhancedCard from './EnhancedCard';
 
-describe(&apos;EnhancedCard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('EnhancedCard', () => {
+  it('renders without crashing', () => {
     render(<EnhancedCard />);
-    expect(screen.getByTestId(&apos;enhancedcard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('enhancedcard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<EnhancedCard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<EnhancedCard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

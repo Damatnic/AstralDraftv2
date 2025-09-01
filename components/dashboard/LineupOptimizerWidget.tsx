@@ -3,63 +3,56 @@
  * Provides quick lineup optimization with ML-powered recommendations
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useCallback, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
-import { Button } from &apos;../ui/Button&apos;;
-import { lineupOptimizer } from &apos;../../services/lineupOptimizerEngine&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { getUserTeam } from &apos;../../data/leagueData&apos;;
-import type { Player, Team } from &apos;../../types&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { lineupOptimizer } from '../../services/lineupOptimizerEngine';
+import { useAppState } from '../../contexts/AppContext';
+import { getUserTeam } from '../../data/leagueData';
+import type { Player, Team } from '../../types';
 
 interface OptimizationStrategy {
-}
   id: string;
   name: string;
   description: string;
   icon: string;
   color: string;
 
-}
 
 const strategies: OptimizationStrategy[] = [
   {
-}
-    id: &apos;optimal&apos;,
-    name: &apos;Optimal&apos;,
-    description: &apos;Best projected points&apos;,
-    icon: &apos;🎯&apos;,
-    color: &apos;from-blue-500 to-blue-600&apos;
+    id: 'optimal',
+    name: 'Optimal',
+    description: 'Best projected points',
+    icon: '🎯',
+    color: 'from-blue-500 to-blue-600'
   },
   {
-}
-    id: &apos;ceiling&apos;,
-    name: &apos;Ceiling&apos;,
-    description: &apos;Maximum upside&apos;,
-    icon: &apos;🚀&apos;,
-    color: &apos;from-purple-500 to-purple-600&apos;
+    id: 'ceiling',
+    name: 'Ceiling',
+    description: 'Maximum upside',
+    icon: '🚀',
+    color: 'from-purple-500 to-purple-600'
   },
   {
-}
-    id: &apos;floor&apos;,
-    name: &apos;Safe Floor&apos;,
-    description: &apos;Consistent points&apos;,
-    icon: &apos;🛡️&apos;,
-    color: &apos;from-green-500 to-green-600&apos;
+    id: 'floor',
+    name: 'Safe Floor',
+    description: 'Consistent points',
+    icon: '🛡️',
+    color: 'from-green-500 to-green-600'
   },
   {
-}
-    id: &apos;contrarian&apos;,
-    name: &apos;Contrarian&apos;,
-    description: &apos;Tournament play&apos;,
-    icon: &apos;🎲&apos;,
-    color: &apos;from-orange-500 to-orange-600&apos;
+    id: 'contrarian',
+    name: 'Contrarian',
+    description: 'Tournament play',
+    icon: '🎲',
+    color: 'from-orange-500 to-orange-600'
   }
 ];
 
 const LineupOptimizerWidget: React.FC = () => {
-}
   const { state } = useAppState();
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [selectedStrategy, setSelectedStrategy] = useState<OptimizationStrategy>(strategies[0]);
@@ -72,26 +65,21 @@ const LineupOptimizerWidget: React.FC = () => {
   const currentWeek = state.currentWeek || 1;
 
   const optimizeLineup = useCallback(async () => {
-}
     if (!userTeam || !userTeam.roster) return;
 
     setIsOptimizing(true);
     try {
-}
       // Simulate optimization with mock data
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Mock optimization result
       const mockResult = {
-}
         optimal: {
-}
           starters: userTeam?.roster?.slice(0, 9) || [],
           bench: userTeam?.roster?.slice(9, 15) || [],
           totalProjected: 125.5
         },
         analysis: {
-}
           totalProjected: 125.5,
           floor: 98.2,
           ceiling: 158.3,
@@ -100,12 +88,12 @@ const LineupOptimizerWidget: React.FC = () => {
           bustProbability: 0.18,
           stackingBonus: 1.05,
           positionStrength: new Map([
-            [&apos;QB&apos;, 1.15],
-            [&apos;RB&apos;, 0.95],
-            [&apos;WR&apos;, 1.08],
-            [&apos;TE&apos;, 0.88],
-            [&apos;K&apos;, 1.02],
-            [&apos;DEF&apos;, 0.92]
+            ['QB', 1.15],
+            ['RB', 0.95],
+            ['WR', 1.08],
+            ['TE', 0.88],
+            ['K', 1.02],
+            ['DEF', 0.92]
           ])
         },
         confidence: 0.85
@@ -115,35 +103,29 @@ const LineupOptimizerWidget: React.FC = () => {
       setConfidenceScore(mockResult.confidence);
       setLineupChanges(Math.floor(Math.random() * 3) + 1);
     } catch (error) {
-}
-      console.error(&apos;Failed to optimize lineup:&apos;, error);
+      console.error('Failed to optimize lineup:', error);
     } finally {
-}
       setIsOptimizing(false);
     }
   }, [userTeam]);
 
   // Auto-optimize on widget mount
   useEffect(() => {
-}
     if (userTeam && !optimizedLineup) {
-}
       optimizeLineup();
     }
   }, [userTeam, optimizedLineup, optimizeLineup]);
 
   const getConfidenceColor = (confidence: number) => {
-}
-    if (confidence >= 0.8) return &apos;text-green-400&apos;;
-    if (confidence >= 0.6) return &apos;text-yellow-400&apos;;
-    return &apos;text-orange-400&apos;;
+    if (confidence >= 0.8) return 'text-green-400';
+    if (confidence >= 0.6) return 'text-yellow-400';
+    return 'text-orange-400';
   };
 
   const getPositionStrengthIndicator = (strength: number) => {
-}
-    if (strength >= 1.1) return { icon: &apos;🔥&apos;, color: &apos;text-green-400&apos; };
-    if (strength >= 0.9) return { icon: &apos;✓&apos;, color: &apos;text-gray-400&apos; };
-    return { icon: &apos;⚠️&apos;, color: &apos;text-orange-400&apos; };
+    if (strength >= 1.1) return { icon: '🔥', color: 'text-green-400' };
+    if (strength >= 0.9) return { icon: '✓', color: 'text-gray-400' };
+    return { icon: '⚠️', color: 'text-orange-400' };
   };
 
   return (
@@ -168,7 +150,7 @@ const LineupOptimizerWidget: React.FC = () => {
             onClick={() => setShowDetails(!showDetails)}
             className="text-xs sm:px-4 md:px-6 lg:px-8"
           >
-            {showDetails ? &apos;Hide&apos; : &apos;Details&apos;}
+            {showDetails ? 'Hide' : 'Details'}
           </Button>
         </div>
       </CardHeader>
@@ -177,17 +159,15 @@ const LineupOptimizerWidget: React.FC = () => {
         {/* Strategy Selection */}
         <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
           {strategies.map((strategy: any) => (
-}
             <motion.button
               key={strategy.id}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedStrategy(strategy)}
               className={`relative p-2 rounded-lg border transition-all ${
-}
                 selectedStrategy.id === strategy.id
-                  ? &apos;border-primary-500 bg-primary-500/10&apos;
-                  : &apos;border-gray-700 bg-dark-800/50 hover:border-gray-600&apos;
+                  ? 'border-primary-500 bg-primary-500/10'
+                  : 'border-gray-700 bg-dark-800/50 hover:border-gray-600'
               }`}
             >
               <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -203,7 +183,6 @@ const LineupOptimizerWidget: React.FC = () => {
 
         {/* Optimization Results */}
         {optimizedLineup && (
-}
           <AnimatePresence mode="wait">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -274,17 +253,15 @@ const LineupOptimizerWidget: React.FC = () => {
 
               {/* Position Strength Analysis */}
               {showDetails && (
-}
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: &apos;auto&apos; }}
+                  animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   className="bg-dark-800/50 rounded-lg p-3 border border-gray-800 sm:px-4 md:px-6 lg:px-8"
                 >
                   <p className="text-xs font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Position Strength</p>
                   <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
                     {Array.from(optimizedLineup.analysis.positionStrength.entries()).map(([pos, strength]) => {
-}
                       const indicator = getPositionStrengthIndicator(strength);
                       return (
                         <div key={pos} className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
@@ -298,7 +275,6 @@ const LineupOptimizerWidget: React.FC = () => {
                     })}
                   </div>
                   {optimizedLineup.analysis.stackingBonus > 1 && (
-}
                     <div className="mt-2 pt-2 border-t border-gray-800 sm:px-4 md:px-6 lg:px-8">
                       <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-xs sm:px-4 md:px-6 lg:px-8">🔗</span>
@@ -322,7 +298,6 @@ const LineupOptimizerWidget: React.FC = () => {
                   className="flex-1 sm:px-4 md:px-6 lg:px-8"
                 >
                   {isOptimizing ? (
-}
                     <>
                       <span className="animate-spin mr-2 sm:px-4 md:px-6 lg:px-8">⚡</span>
                       Optimizing...
@@ -338,9 +313,8 @@ const LineupOptimizerWidget: React.FC = () => {
                   variant="success"
                   size="sm"
                   onClick={() => {
-}
                     // Apply the optimized lineup
-                    console.log(&apos;Applying optimized lineup&apos;);
+                    console.log('Applying optimized lineup');
                   }}
                   className="flex-1 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -354,7 +328,6 @@ const LineupOptimizerWidget: React.FC = () => {
 
         {/* Loading State */}
         {isOptimizing && !optimizedLineup && (
-}
           <div className="flex flex-col items-center justify-center py-8 sm:px-4 md:px-6 lg:px-8">
             <div className="relative sm:px-4 md:px-6 lg:px-8">
               <div className="w-12 h-12 border-4 border-primary-500/20 rounded-full sm:px-4 md:px-6 lg:px-8"></div>

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import OverviewTab from &apos;./OverviewTab&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import OverviewTab from './OverviewTab';
 
-describe(&apos;OverviewTab&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('OverviewTab', () => {
+  it('renders without crashing', () => {
     render(<OverviewTab />);
-    expect(screen.getByTestId(&apos;overviewtab&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('overviewtab')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<OverviewTab />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<OverviewTab />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

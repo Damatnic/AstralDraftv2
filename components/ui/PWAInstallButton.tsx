@@ -1,50 +1,41 @@
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
-import React, { useCallback, useState, useEffect } from &apos;react&apos;;
-import { Button } from &apos;./Button&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Button } from './Button';
 
 interface BeforeInstallPromptEvent extends Event {
-}
   prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: &apos;accepted&apos; | &apos;dismissed&apos; }>;
-}
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 
 export const PWAInstallButton: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstall, setShowInstall] = useState(false);
 
   useEffect(() => {
-}
     const handler = (e: Event) => {
-}
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setShowInstall(true);
     };
 
-    window.addEventListener(&apos;beforeinstallprompt&apos;, handler);
-    return () => window.removeEventListener(&apos;beforeinstallprompt&apos;, handler);
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstall = async () => {
-}
     try {
-}
 
       if (!deferredPrompt) return;
 
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       
-      if (outcome === &apos;accepted&apos;) {
-}
+      if (outcome === 'accepted') {
         setDeferredPrompt(null);
         setShowInstall(false);
       }
     } catch (error) {
-}
-      console.error(&apos;Error in handleInstall:&apos;, error);
+      console.error('Error in handleInstall:', error);
     }
   };
 

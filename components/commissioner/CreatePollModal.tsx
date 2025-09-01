@@ -1,74 +1,61 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { ClipboardListIcon } from &apos;../icons/ClipboardListIcon&apos;;
-import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
-import { PlusCircleIcon } from &apos;../icons/PlusCircleIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { Modal } from '../ui/Modal';
+import { ClipboardListIcon } from '../icons/ClipboardListIcon';
+import { CloseIcon } from '../icons/CloseIcon';
+import { PlusCircleIcon } from '../icons/PlusCircleIcon';
 
 interface CreatePollModalProps {
-}
     leagueId: string;
     onClose: () => void;
 
-}
 
 const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: any) => {
-}
     const { state, dispatch } = useAppState();
-    const [question, setQuestion] = React.useState(&apos;&apos;);
-    const [options, setOptions] = React.useState([&apos;&apos;, &apos;&apos;]);
+    const [question, setQuestion] = React.useState('');
+    const [options, setOptions] = React.useState(['', '']);
 
     const handleOptionChange = (index: number, value: string) => {
-}
         const newOptions = [...options];
         newOptions[index] = value;
         setOptions(newOptions);
     };
 
     const addOption = () => {
-}
         if (options.length < 5) {
-}
-            setOptions([...options, &apos;&apos;]);
+            setOptions([...options, '']);
 
     };
     
     const removeOption = (index: number) => {
-}
         if (options.length > 2) {
-}
             setOptions(options.filter((_, i) => i !== index));
 
     };
 
     const handleSubmit = (e: React.FormEvent) => {
-}
         e.preventDefault();
         if (!question.trim() || options.some((opt: any) => !opt.trim())) {
-}
-            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Question and all options must be filled out.", type: &apos;SYSTEM&apos; } });
+            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Question and all options must be filled out.", type: 'SYSTEM' } });
             return;
 
         dispatch({
-}
-            type: &apos;CREATE_POLL&apos;,
+            type: 'CREATE_POLL',
             payload: {
-}
                 leagueId,
                 poll: {
-}
                     question,
                     options: options.map((opt: any) => ({ id: `opt_${Math.random()}`, text: opt, votes: [] })),
-                    createdBy: state.user?.id || &apos;guest&apos;,
+                    createdBy: state.user?.id || 'guest',
                     closesAt: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
                 },
             },
         });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Poll created successfully!", type: &apos;SYSTEM&apos; } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Poll created successfully!", type: 'SYSTEM' } });
         onClose();
     };
 
@@ -100,7 +87,6 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: 
                         <label className="block text-sm font-medium text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Options</label>
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {options.map((opt, index) => (
-}
                                 <div key={index} className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <input
                                         type="text"
@@ -109,14 +95,12 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: 
                                         placeholder={`Option ${index + 1}`}
                                     />
                                     {options.length > 2 && (
-}
                                         <button type="button" onClick={() => removeOption(index)} className="mobile-touch-target p-3 text-red-400 hover:bg-red-500/10 rounded-full sm:px-4 md:px-6 lg:px-8" aria-label="Remove option"><CloseIcon /></button>
                                     )}
                                 </div>
                             ))}
                         </div>
                          {options.length < 5 && (
-}
                             <button type="button" onClick={addOption} className="mt-2 flex items-center gap-1 text-xs text-cyan-300 hover:text-cyan-200 sm:px-4 md:px-6 lg:px-8">
                                 <PlusCircleIcon /> Add Option
                             </button>

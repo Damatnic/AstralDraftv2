@@ -1,34 +1,27 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { LeagueHistoryEntry, Team } from &apos;../../types&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { Tooltip } from &apos;../ui/Tooltip&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion } from 'framer-motion';
+import type { LeagueHistoryEntry, Team } from '../../types';
+import { Avatar } from '../ui/Avatar';
+import { Tooltip } from '../ui/Tooltip';
 
 interface ChampionChartProps {
-}
     history: LeagueHistoryEntry[];
     teams: Team[];
 
-}
 
 const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) => {
-}
     const championCounts = React.useMemo(() => {
-}
         const counts: { [teamId: number]: number } = {};
         history.forEach((entry: any) => {
-}
             counts[entry.championTeamId] = (counts[entry.championTeamId] || 0) + 1;
         });
 
         return Object.entries(counts)
             .map(([teamId, count]) => {
-}
                 const team = teams.find((t: any) => t.id === Number(teamId));
                 return {
-}
                     team,
 //                     count
                 };
@@ -38,7 +31,6 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) =>
     }, [history, teams]);
 
     if (championCounts.length === 0) {
-}
         return null;
 
     const maxCount = Math.max(...championCounts.map((c: any) => c.count), 1);
@@ -50,13 +42,12 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) =>
                     key={team!.id}
                     className="w-16 flex flex-col items-center gap-2 sm:px-4 md:px-6 lg:px-8"
                     {...{
-}
                         initial: { opacity: 0, y: 30 },
                         animate: { opacity: 1, y: 0 },
-                        transition: { delay: index * 0.1, type: &apos;spring&apos; },
+                        transition: { delay: index * 0.1, type: 'spring' },
                     }}
                 >
-                    <Tooltip content={`${count} championship${count > 1 ? &apos;s&apos; : &apos;&apos;}`}>
+                    <Tooltip content={`${count} championship${count > 1 ? 's' : ''}`}>
                         <div
                             className="w-full bg-gradient-to-t from-yellow-500 to-yellow-300 rounded-t-md hover:shadow-lg hover:shadow-yellow-400/30 transition-shadow sm:px-4 md:px-6 lg:px-8"
                             style={{ height: `${(count / maxCount) * 100}%` }}

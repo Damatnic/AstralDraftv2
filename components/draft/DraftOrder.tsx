@@ -3,25 +3,21 @@
  * Display and manage draft order for the league
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Team } from &apos;../../types&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../../contexts/AppContext';
+import { Team } from '../../types';
 
 interface DraftOrderProps {
-}
   showRandomizeButton?: boolean;
   isCommissioner?: boolean;
 
-}
 
 const DraftOrder: React.FC<DraftOrderProps> = ({ 
-}
   showRandomizeButton = false, 
   isCommissioner = false 
 }: any) => {
-}
   const { state, dispatch } = useAppState();
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
@@ -30,18 +26,14 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
   
   // Initialize draft order if not set
   React.useEffect(() => {
-}
     if (draftOrder.length === 0 && league?.teams) {
-}
       // Use existing order or randomize
       setDraftOrder([...league.teams]);
     }
   }, [league?.teams, draftOrder.length]);
 
   const randomizeDraftOrder = async () => {
-}
     try {
-}
       if (!league?.teams) return;
       
       setIsRandomizing(true);
@@ -51,7 +43,6 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       
       // Show shuffling animation
       for (let i = 0; i < 10; i++) {
-}
         await new Promise(resolve => setTimeout(resolve, 100));
         const shuffled = [...teams].sort(() => Math.random() - 0.5);
         setDraftOrder(shuffled);
@@ -64,36 +55,28 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       setIsRandomizing(false);
       
       dispatch({
-}
-        type: &apos;ADD_NOTIFICATION&apos;,
+        type: 'ADD_NOTIFICATION',
         payload: {
-}
-          message: &apos;Draft order has been randomized!&apos;,
-          type: &apos;SUCCESS&apos;
+          message: 'Draft order has been randomized!',
+          type: 'SUCCESS'
         }
       });
     } catch (error) {
-}
-      console.error(&apos;Error in randomizeDraftOrder:&apos;, error);
+      console.error('Error in randomizeDraftOrder:', error);
     }
   };
 
   const getDraftPosition = (teamId: number): number => {
-}
     return draftOrder.findIndex(team => team.id === teamId) + 1;
   };
 
   const getSnakePickNumbers = (position: number, totalRounds: number = 16): number[] => {
-}
     const picks: number[] = [];
     for (let round = 1; round <= totalRounds; round++) {
-}
       if (round % 2 === 1) {
-}
         // Odd rounds: normal order
         picks.push((round - 1) * 10 + position);
       } else {
-}
         // Even rounds: reverse order (snake)
         picks.push((round - 1) * 10 + (11 - position));
       }
@@ -113,25 +96,22 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
         </div>
         
         {showRandomizeButton && isCommissioner && (
-}
           <button
             onClick={randomizeDraftOrder}
             disabled={isRandomizing}
             className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-}
 //               isRandomizing
-                ? &apos;bg-gray-600 text-gray-300 cursor-not-allowed&apos;
-                : &apos;bg-blue-600 hover:bg-blue-700 text-white&apos;
+                ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
            aria-label="Action button">
             {isRandomizing ? (
-}
               <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                 Randomizing...
               </div>
             ) : (
-              &apos;🎲 Randomize Order&apos;
+              '🎲 Randomize Order'
             )}
           </button>
         )}
@@ -141,7 +121,6 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <AnimatePresence>
           {draftOrder.map((team, index) => {
-}
             const position = index + 1;
             const snakePicks = getSnakePickNumbers(position);
 
@@ -154,18 +133,16 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
                 className={`p-4 rounded-lg border-2 transition-all ${
-}
 //                   isRandomizing
-                    ? &apos;border-blue-400 bg-blue-900/20&apos;
-                    : &apos;border-slate-600 bg-slate-700/50 hover:border-slate-500&apos;
+                    ? 'border-blue-400 bg-blue-900/20'
+                    : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
                 }`}
               >
                 <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                   <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
-}
-                      position <= 3 ? &apos;bg-yellow-600&apos; : 
-                      position <= 6 ? &apos;bg-blue-600&apos; : &apos;bg-slate-600&apos;
+                      position <= 3 ? 'bg-yellow-600' : 
+                      position <= 6 ? 'bg-blue-600' : 'bg-slate-600'
                     }`}>
                       {position}
                     </div>
@@ -182,21 +159,18 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                   <p className="text-xs text-slate-400 mb-2 sm:px-4 md:px-6 lg:px-8">Pick Numbers (Snake):</p>
                   <div className="flex flex-wrap gap-1 sm:px-4 md:px-6 lg:px-8">
                     {snakePicks.slice(0, 8).map((pickNum, pickIndex) => (
-}
                       <span
                         key={pickIndex}
                         className={`px-2 py-1 text-xs rounded ${
-}
                           pickIndex < 3
-                            ? &apos;bg-green-600/20 text-green-400 border border-green-600/30&apos;
-                            : &apos;bg-slate-600/20 text-slate-400 border border-slate-600/30&apos;
+                            ? 'bg-green-600/20 text-green-400 border border-green-600/30'
+                            : 'bg-slate-600/20 text-slate-400 border border-slate-600/30'
                         }`}
                       >
                         {pickNum}
                       </span>
                     ))}
                     {snakePicks.length > 8 && (
-}
                       <span className="px-2 py-1 text-xs rounded bg-slate-600/20 text-slate-400 border border-slate-600/30 sm:px-4 md:px-6 lg:px-8">
                         +{snakePicks.length - 8} more
                       </span>

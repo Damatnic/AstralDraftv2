@@ -1,36 +1,29 @@
-import React, { useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface TooltipProps {
-}
   content: string;
   children: React.ReactNode;
-  position?: &apos;top&apos; | &apos;bottom&apos; | &apos;left&apos; | &apos;right&apos;;
+  position?: 'top' | 'bottom' | 'left' | 'right';
   delay?: number;
 
-}
 
 export const Tooltip: React.FC<TooltipProps> = ({
-}
   content,
   children,
-  position = &apos;top&apos;,
+  position = 'top',
   delay = 500
 }: any) => {
-}
   const [isVisible, setIsVisible] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const showTooltip = () => {
-}
     const id = setTimeout(() => setIsVisible(true), delay);
     setTimeoutId(id);
   };
 
   const hideTooltip = () => {
-}
     if (timeoutId) {
-}
       clearTimeout(timeoutId);
       setTimeoutId(null);
     }
@@ -38,11 +31,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
   };
 
   const positionClasses = {
-}
-    top: &apos;bottom-full left-1/2 transform -translate-x-1/2 mb-2&apos;,
-    bottom: &apos;top-full left-1/2 transform -translate-x-1/2 mt-2&apos;,
-    left: &apos;right-full top-1/2 transform -translate-y-1/2 mr-2&apos;,
-    right: &apos;left-full top-1/2 transform -translate-y-1/2 ml-2&apos;
+    top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
+    bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-2',
+    left: 'right-full top-1/2 transform -translate-y-1/2 mr-2',
+    right: 'left-full top-1/2 transform -translate-y-1/2 ml-2'
   };
 
   return (
@@ -56,7 +48,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
       
       <AnimatePresence>
         {isVisible && (
-}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

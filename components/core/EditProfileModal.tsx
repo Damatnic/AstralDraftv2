@@ -1,41 +1,35 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { User } from &apos;../../types&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { PencilIcon } from &apos;../icons/PencilIcon&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
+import type { User } from '../../types';
+import { Modal } from '../ui/Modal';
+import { PencilIcon } from '../icons/PencilIcon';
+import { Avatar } from '../ui/Avatar';
 
 interface EditProfileModalProps {
-}
   user: User;
   dispatch: React.Dispatch<any>;
   onClose: () => void;
 
-}
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [name, setName] = React.useState(user.name);
   const [avatar, setAvatar] = React.useState(user.avatar);
-  const [bio, setBio] = React.useState(user.bio || &apos;&apos;);
+  const [bio, setBio] = React.useState(user.bio || '');
   const [isDirty, setIsDirty] = React.useState(false);
 
   React.useEffect(() => {
-}
-    setIsDirty(name !== user.name || avatar !== user.avatar || bio !== (user.bio || &apos;&apos;));
+    setIsDirty(name !== user.name || avatar !== user.avatar || bio !== (user.bio || ''));
   }, [name, avatar, bio, user]);
 
   const handleSave = () => {
-}
     dispatch({
-}
-      type: &apos;UPDATE_USER_PROFILE&apos;,
+      type: 'UPDATE_USER_PROFILE',
       payload: { name, avatar, bio },
     });
-    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Profile updated!&apos;, type: &apos;SYSTEM&apos; } });
+    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Profile updated!', type: 'SYSTEM' } });
     onClose();
   };
   

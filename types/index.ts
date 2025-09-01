@@ -4,7 +4,6 @@
 
 // Player Types
 export interface Player {
-}
   id: string;
   name: string;
   position: string;
@@ -16,7 +15,7 @@ export interface Player {
   weight?: number;
   college?: string;
   imageUrl?: string;
-  injuryStatus?: &apos;Healthy&apos; | &apos;Questionable&apos; | &apos;Doubtful&apos; | &apos;Out&apos; | &apos;IR&apos;;
+  injuryStatus?: 'Healthy' | 'Questionable' | 'Doubtful' | 'Out' | 'IR';
   isSuspended?: boolean;
   byeWeek?: number;
   
@@ -29,10 +28,8 @@ export interface Player {
   // DFS specific
   salary?: number;
   ownership?: number;
-}
 
 export interface PlayerStats {
-}
   gamesPlayed: number;
   gamesStarted: number;
   fantasyPoints: number;
@@ -60,11 +57,9 @@ export interface PlayerStats {
   fieldGoalsAttempted?: number;
   extraPointsMade?: number;
   extraPointsAttempted?: number;
-}
 
 // Team Types
 export interface Team {
-}
   id: string;
   ownerId: string;
   name: string;
@@ -80,20 +75,16 @@ export interface Team {
   isPlayoffTeam?: boolean;
   roster?: Roster;
   draftPicks?: DraftPick[];
-}
 
 export interface Roster {
-}
   starters: Player[];
   bench: Player[];
   injured?: Player[];
   taxi?: Player[];
   maxSize: number;
-}
 
 // League Types
 export interface League {
-}
   id: string;
   name: string;
   commissionerId: string;
@@ -107,11 +98,9 @@ export interface League {
   season: number;
   currentWeek: number;
   isActive: boolean;
-  leagueType: &apos;redraft&apos; | &apos;keeper&apos; | &apos;dynasty&apos;;
-}
+  leagueType: 'redraft' | 'keeper' | 'dynasty';
 
 export interface ScoringSettings {
-}
   // Passing
   passingYards: number;
   passingTD: number;
@@ -149,10 +138,8 @@ export interface ScoringSettings {
   pointsAllowed21to27?: number;
   pointsAllowed28to34?: number;
   pointsAllowed35Plus?: number;
-}
 
 export interface RosterSettings {
-}
   qb: number;
   rb: number;
   wr: number;
@@ -164,56 +151,44 @@ export interface RosterSettings {
   ir?: number;
   taxi?: number;
   totalSize: number;
-}
 
 export interface DraftSettings {
-}
-  type: &apos;snake&apos; | &apos;auction&apos; | &apos;linear&apos;;
+  type: 'snake' | 'auction' | 'linear';
   rounds: number;
   timePerPick: number;
   auctionBudget?: number;
   draftDate?: Date;
   draftOrder?: string[];
-}
 
 export interface WaiverSettings {
-}
-  type: &apos;priority&apos; | &apos;faab&apos; | &apos;continuous&apos;;
+  type: 'priority' | 'faab' | 'continuous';
   waiverPeriod: number; // days
   faabBudget?: number;
   waiverDay?: string;
   waiverTime?: string;
-}
 
 export interface TradeSettings {
-}
   reviewPeriod: number; // hours
   votesRequired?: number;
   vetoVotes?: number;
   tradeDeadline?: Date;
   allowTradePicks?: boolean;
-}
 
 export interface PlayoffSettings {
-}
   playoffTeams: number;
   playoffWeeks: number[];
   twoWeekMatchups?: boolean;
   reseedAfterRound?: boolean;
-}
 
 // Lineup Types
 export interface LineupSlot {
-}
   position: string;
   player?: Player;
   isLocked: boolean;
   projectedPoints: number;
   actualPoints?: number;
-}
 
 export interface Lineup {
-}
   teamId: string;
   week: number;
   slots: LineupSlot[];
@@ -221,11 +196,9 @@ export interface Lineup {
   totalActualPoints?: number;
   isSubmitted: boolean;
   lastUpdated: Date;
-}
 
 // Draft Types
 export interface DraftPick {
-}
   pickNumber: number;
   round: number;
   teamId: string;
@@ -234,22 +207,18 @@ export interface DraftPick {
   timestamp?: Date;
   isKeeper?: boolean;
   value?: number; // For auction drafts
-}
 
 export interface Draft {
-}
   id: string;
   leagueId: string;
-  status: &apos;pre_draft&apos; | &apos;in_progress&apos; | &apos;completed&apos;;
+  status: 'pre_draft' | 'in_progress' | 'completed';
   currentPick?: number;
   picks: DraftPick[];
   startTime?: Date;
   endTime?: Date;
-}
 
 // Trade Types
 export interface Trade {
-}
   id: string;
   proposingTeamId: string;
   receivingTeamId: string;
@@ -257,28 +226,24 @@ export interface Trade {
   receivingPlayers: Player[];
   proposingPicks?: DraftPick[];
   receivingPicks?: DraftPick[];
-  status: &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;vetoed&apos; | &apos;expired&apos;;
+  status: 'pending' | 'accepted' | 'rejected' | 'vetoed' | 'expired';
   proposedDate: Date;
   responseDate?: Date;
   notes?: string;
-}
 
 // Waiver Types
 export interface WaiverClaim {
-}
   id: string;
   teamId: string;
   playerId: string;
   dropPlayerId?: string;
   priority: number;
   bidAmount?: number; // For FAAB
-  status: &apos;pending&apos; | &apos;successful&apos; | &apos;failed&apos;;
+  status: 'pending' | 'successful' | 'failed';
   processDate?: Date;
-}
 
 // Game/Matchup Types
 export interface Matchup {
-}
   id: string;
   week: number;
   homeTeamId: string;
@@ -288,10 +253,8 @@ export interface Matchup {
   isComplete: boolean;
   isPlayoff?: boolean;
   winnerTeamId?: string;
-}
 
 export interface NFLGame {
-}
   id: string;
   week: number;
   homeTeam: string;
@@ -303,32 +266,26 @@ export interface NFLGame {
   quarter?: string;
   timeRemaining?: string;
   weather?: WeatherConditions;
-}
 
 export interface WeatherConditions {
-}
   temperature: number;
   windSpeed: number;
   precipitation: number;
-  condition: &apos;clear&apos; | &apos;cloudy&apos; | &apos;rain&apos; | &apos;snow&apos; | &apos;dome&apos;;
-}
+  condition: 'clear' | 'cloudy' | 'rain' | 'snow' | 'dome';
 
 // Notification Types
 export interface Notification {
-}
   id: string;
   userId: string;
-  type: &apos;trade&apos; | &apos;waiver&apos; | &apos;injury&apos; | &apos;lineup&apos; | &apos;score&apos; | &apos;news&apos;;
+  type: 'trade' | 'waiver' | 'injury' | 'lineup' | 'score' | 'news';
   title: string;
   message: string;
   timestamp: Date;
   isRead: boolean;
   actionUrl?: string;
-}
 
 // User Types
 export interface User {
-}
   id: string;
   email: string;
   username: string;
@@ -338,22 +295,18 @@ export interface User {
   leagues?: League[];
   notifications?: Notification[];
   preferences?: UserPreferences;
-}
 
 export interface UserPreferences {
-}
   emailNotifications: boolean;
   pushNotifications: boolean;
   tradeNotifications: boolean;
   injuryNotifications: boolean;
   lineupReminders: boolean;
-  theme: &apos;light&apos; | &apos;dark&apos; | &apos;auto&apos;;
+  theme: 'light' | 'dark' | 'auto';
   timezone: string;
-}
 
 // Analytics Types
 export interface PlayerProjection {
-}
   playerId: string;
   week: number;
   projectedPoints: number;
@@ -362,10 +315,8 @@ export interface PlayerProjection {
   ceiling: number;
   source: string;
   lastUpdated: Date;
-}
 
 export interface TeamAnalytics {
-}
   teamId: string;
   powerRanking: number;
   playoffProbability: number;
@@ -374,11 +325,9 @@ export interface TeamAnalytics {
   projectedLosses: number;
   strengthOfSchedule: number;
   remainingDifficulty: number;
-}
 
 // News/Update Types
 export interface NewsItem {
-}
   id: string;
   playerId?: string;
   teamId?: string;
@@ -386,9 +335,8 @@ export interface NewsItem {
   content: string;
   source: string;
   publishedAt: Date;
-  impact: &apos;positive&apos; | &apos;negative&apos; | &apos;neutral&apos;;
+  impact: 'positive' | 'negative' | 'neutral';
   tags: string[];
-}
 
 // Export all types
-export * from &apos;./viewTypes&apos;;
+export * from './viewTypes';

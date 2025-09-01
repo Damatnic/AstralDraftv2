@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import TeamBrandingCard from &apos;./TeamBrandingCard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TeamBrandingCard from './TeamBrandingCard';
 
-describe(&apos;TeamBrandingCard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('TeamBrandingCard', () => {
+  it('renders without crashing', () => {
     render(<TeamBrandingCard />);
-    expect(screen.getByTestId(&apos;teambrandingcard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('teambrandingcard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<TeamBrandingCard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<TeamBrandingCard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

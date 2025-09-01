@@ -3,13 +3,12 @@
  * Individual prediction display with interaction capabilities
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { ClockIcon, UsersIcon, BrainIcon } from &apos;lucide-react&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion } from 'framer-motion';
+import { ClockIcon, UsersIcon, BrainIcon } from 'lucide-react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 export interface LivePrediction {
-}
     id: string;
     question: string;
     options: Array<{ text: string; probability: number }>;
@@ -25,36 +24,30 @@ export interface LivePrediction {
     consensusConfidence?: number;
 
 interface PredictionCardProps {
-}
     prediction: LivePrediction;
     isSelected: boolean;
     onClick: () => void;
     className?: string;
     compact?: boolean;
 
-}
 
 export const PredictionCard: React.FC<PredictionCardProps> = ({
-}
     prediction,
     isSelected,
     onClick,
-    className = &apos;&apos;,
+    className = '',
     compact = false
 }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Format time remaining
     const formatTimeRemaining = (ms?: number) => {
-}
-        if (!ms) return &apos;Time expired&apos;;
+        if (!ms) return 'Time expired';
         
         const minutes = Math.floor(ms / 60000);
         const hours = Math.floor(minutes / 60);
         
         if (hours > 0) {
-}
             return `${hours}h ${minutes % 60}m left`;
 
         return `${minutes}m left`;
@@ -62,58 +55,48 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
 
     // Get time remaining color based on urgency
     const getTimeColor = (ms?: number) => {
-}
-        if (!ms) return &apos;text-red-400&apos;;
+        if (!ms) return 'text-red-400';
         
         const minutes = Math.floor(ms / 60000);
         
-        if (minutes < 15) return &apos;text-red-400&apos;;
-        if (minutes < 60) return &apos;text-yellow-400&apos;;
-        return &apos;text-green-400&apos;;
+        if (minutes < 15) return 'text-red-400';
+        if (minutes < 60) return 'text-yellow-400';
+        return 'text-green-400';
     };
 
     // Get status badge styling
     const getStatusBadge = () => {
-}
         if (prediction.isSubmitted) {
-}
             return {
-}
-                text: &apos;Submitted&apos;,
-                className: &apos;bg-green-500/20 text-green-400&apos;
+                text: 'Submitted',
+                className: 'bg-green-500/20 text-green-400'
             };
 
         if (!prediction.timeRemaining || prediction.timeRemaining <= 0) {
-}
             return {
-}
-                text: &apos;Expired&apos;,
-                className: &apos;bg-red-500/20 text-red-400&apos;
+                text: 'Expired',
+                className: 'bg-red-500/20 text-red-400'
             };
 
         return {
-}
-            text: &apos;Open&apos;,
-            className: &apos;bg-blue-500/20 text-blue-400&apos;
+            text: 'Open',
+            className: 'bg-blue-500/20 text-blue-400'
         };
     };
 
     const statusBadge = getStatusBadge();
 
     if (compact) {
-}
         return (
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={{ y: -2 }}
                 className={`
-}
                     cursor-pointer transition-all duration-200 p-3 sm:p-4 rounded-lg border min-h-[120px] sm:min-h-[100px]
                     ${isSelected 
-}
-                        ? &apos;bg-blue-600/20 border-blue-500 shadow-lg shadow-blue-500/20&apos; 
-                        : &apos;bg-gray-800/30 border-gray-700/50 hover:bg-gray-800/50 hover:border-gray-600&apos;
+                        ? 'bg-blue-600/20 border-blue-500 shadow-lg shadow-blue-500/20' 
+                        : 'bg-gray-800/30 border-gray-700/50 hover:bg-gray-800/50 hover:border-gray-600'
 
                     ${className}
                 `}
@@ -122,9 +105,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 tabIndex={0}
                 aria-label={`Select prediction: ${prediction.question}`}
                 onKeyDown={(e: any) => {
-}
-                    if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+                    if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         onClick();
 
@@ -161,12 +142,10 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
             whileHover={{ y: -4, scale: isMobile ? 1 : 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={`
-}
                 cursor-pointer transition-all duration-300 p-4 sm:p-5 rounded-xl border backdrop-blur-sm relative
                 ${isSelected 
-}
-                    ? &apos;bg-blue-600/20 border-blue-500 shadow-xl shadow-blue-500/25 ring-1 ring-blue-500/50&apos; 
-                    : &apos;bg-gray-800/40 border-gray-700/50 hover:bg-gray-800/60 hover:border-gray-600 hover:shadow-lg&apos;
+                    ? 'bg-blue-600/20 border-blue-500 shadow-xl shadow-blue-500/25 ring-1 ring-blue-500/50' 
+                    : 'bg-gray-800/40 border-gray-700/50 hover:bg-gray-800/60 hover:border-gray-600 hover:shadow-lg'
 
                 ${className}
             `}
@@ -175,9 +154,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
             tabIndex={0}
             aria-label={`View details for prediction: ${prediction.question}`}
             onKeyDown={(e: any) => {
-}
-                if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+                if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     onClick();
 
@@ -192,7 +169,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 </div>
             </div>
             
-            {/* Oracle&apos;s prediction preview */}
+            {/* Oracle's prediction preview */}
             <div className="mb-3 p-3 bg-blue-900/20 rounded-lg border border-blue-800/30 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center space-x-2 mb-2 sm:px-4 md:px-6 lg:px-8">
                     <BrainIcon className="w-4 h-4 text-blue-400 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
@@ -200,13 +177,12 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                     <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{prediction.confidence}%</span>
                 </div>
                 <div className="text-sm text-white break-words sm:px-4 md:px-6 lg:px-8">
-                    {prediction.options[prediction.oracleChoice]?.text || &apos;Unknown&apos;}
+                    {prediction.options[prediction.oracleChoice]?.text || 'Unknown'}
                 </div>
             </div>
             
-            {/* User&apos;s prediction if submitted */}
+            {/* User's prediction if submitted */}
             {prediction.isSubmitted && prediction.userChoice !== undefined && (
-}
                 <div className="mb-3 p-3 bg-green-900/20 rounded-lg border border-green-800/30 sm:px-4 md:px-6 lg:px-8">
                     <div className="text-sm font-medium text-green-400 mb-2 sm:px-4 md:px-6 lg:px-8">Your Choice</div>
                     <div className="text-sm text-white break-words sm:px-4 md:px-6 lg:px-8">
@@ -243,13 +219,12 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 
                 {/* Consensus choice */}
                 <div className="text-xs text-gray-400 mt-2 break-words sm:px-4 md:px-6 lg:px-8">
-                    Community choice: {prediction.options[prediction.consensusChoice || 0]?.text || &apos;Unknown&apos;}
+                    Community choice: {prediction.options[prediction.consensusChoice || 0]?.text || 'Unknown'}
                 </div>
             </div>
             
             {/* Selection indicator */}
             {isSelected && (
-}
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}

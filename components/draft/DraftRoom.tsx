@@ -1,19 +1,16 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect, useRef, FC, MouseEvent } from &apos;react&apos;;
-import { useDraftRoom } from &apos;../../hooks/useDraftRoom&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect, useRef, FC, MouseEvent } from 'react';
+import { useDraftRoom } from '../../hooks/useDraftRoom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface DraftRoomProps {
-}
   leagueId: string;
   userId: string;
   teamId: number;
   onExitDraft?: () => void;
 
-}
 
 interface Player {
-}
   id: number;
   name: string;
   position: string;
@@ -21,18 +18,14 @@ interface Player {
   adp: number;
   projectedPoints: number;
   tier: number;
-}
 
 const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
-}
   userId,
   teamId,
 //   onExitDraft
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const {
-}
     isConnected,
     connectionStatus,
     participants,
@@ -53,15 +46,15 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
   } = useDraftRoom({ leagueId, userId, teamId });
 
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [chatInput, setChatInput] = useState(&apos;&apos;);
-  const [filterPosition, setFilterPosition] = useState<string>(&apos;ALL&apos;);
+  const [chatInput, setChatInput] = useState('');
+  const [filterPosition, setFilterPosition] = useState<string>('ALL');
   const [availablePlayers] = useState<Player[]>([
     // Mock available players - replace with real data
-    { id: 1, name: &apos;Christian McCaffrey&apos;, position: &apos;RB&apos;, team: &apos;SF&apos;, adp: 1.2, projectedPoints: 320, tier: 1 },
-    { id: 2, name: &apos;Austin Ekeler&apos;, position: &apos;RB&apos;, team: &apos;LAC&apos;, adp: 2.1, projectedPoints: 305, tier: 1 },
-    { id: 3, name: &apos;Cooper Kupp&apos;, position: &apos;WR&apos;, team: &apos;LAR&apos;, adp: 3.5, projectedPoints: 295, tier: 1 },
-    { id: 4, name: &apos;Derrick Henry&apos;, position: &apos;RB&apos;, team: &apos;TEN&apos;, adp: 4.2, projectedPoints: 285, tier: 2 },
-    { id: 5, name: &apos;Davante Adams&apos;, position: &apos;WR&apos;, team: &apos;LV&apos;, adp: 5.1, projectedPoints: 280, tier: 2 }
+    { id: 1, name: 'Christian McCaffrey', position: 'RB', team: 'SF', adp: 1.2, projectedPoints: 320, tier: 1 },
+    { id: 2, name: 'Austin Ekeler', position: 'RB', team: 'LAC', adp: 2.1, projectedPoints: 305, tier: 1 },
+    { id: 3, name: 'Cooper Kupp', position: 'WR', team: 'LAR', adp: 3.5, projectedPoints: 295, tier: 1 },
+    { id: 4, name: 'Derrick Henry', position: 'RB', team: 'TEN', adp: 4.2, projectedPoints: 285, tier: 2 },
+    { id: 5, name: 'Davante Adams', position: 'WR', team: 'LV', adp: 5.1, projectedPoints: 280, tier: 2 }
   ]);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -69,84 +62,68 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
 
   // Auto-scroll chat to bottom
   useEffect(() => {
-}
     if (chatContainerRef.current) {
-}
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatMessages]);
 
   // Timer animation effect
   useEffect(() => {
-}
     if (timerRef.current && timeRemaining <= 30 && isMyTurn) {
-}
-      timerRef.current.classList.add(&apos;timer-warning&apos;);
+      timerRef.current.classList.add('timer-warning');
     } else if (timerRef.current) {
-}
-      timerRef.current.classList.remove(&apos;timer-warning&apos;);
+      timerRef.current.classList.remove('timer-warning');
     }
   }, [timeRemaining, isMyTurn]);
 
   const handleMakePick = () => {
-}
     if (selectedPlayer && isMyTurn) {
-}
       makePick(selectedPlayer.id);
       setSelectedPlayer(null);
     }
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
-}
     e.preventDefault();
     if (chatInput.trim()) {
-}
       sendChatMessage(chatInput.trim());
-      setChatInput(&apos;&apos;);
+      setChatInput('');
     }
   };
 
   const formatTime = (seconds: number): string => {
-}
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, &apos;0&apos;)}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const getPositionColor = (position: string): string => {
-}
     switch (position) {
-}
-      case &apos;QB&apos;: return &apos;text-red-600&apos;;
-      case &apos;RB&apos;: return &apos;text-green-600&apos;;
-      case &apos;WR&apos;: return &apos;text-blue-600&apos;;
-      case &apos;TE&apos;: return &apos;text-orange-600&apos;;
-      case &apos;DEF&apos;: return &apos;text-purple-600&apos;;
-      case &apos;K&apos;: return &apos;text-yellow-600&apos;;
-      default: return &apos;text-gray-600&apos;;
+      case 'QB': return 'text-red-600';
+      case 'RB': return 'text-green-600';
+      case 'WR': return 'text-blue-600';
+      case 'TE': return 'text-orange-600';
+      case 'DEF': return 'text-purple-600';
+      case 'K': return 'text-yellow-600';
+      default: return 'text-gray-600';
     }
   };
 
   const getTierColor = (tier: number): string => {
-}
     switch (tier) {
-}
-      case 1: return &apos;bg-yellow-100 border-yellow-400&apos;;
-      case 2: return &apos;bg-blue-100 border-blue-400&apos;;
-      case 3: return &apos;bg-green-100 border-green-400&apos;;
-      default: return &apos;bg-gray-100 border-gray-400&apos;;
+      case 1: return 'bg-yellow-100 border-yellow-400';
+      case 2: return 'bg-blue-100 border-blue-400';
+      case 3: return 'bg-green-100 border-green-400';
+      default: return 'bg-gray-100 border-gray-400';
     }
   };
 
   const filteredPlayers = availablePlayers.filter((player: any) => {
-}
-    if (filterPosition === &apos;ALL&apos;) return true;
+    if (filterPosition === 'ALL') return true;
     return player.position === filterPosition;
   });
 
-  if (!isConnected && connectionStatus !== &apos;CONNECTING&apos;) {
-}
+  if (!isConnected && connectionStatus !== 'CONNECTING') {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
@@ -164,7 +141,6 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
               Retry Connection
             </button>
             {onExitDraft && (
-}
               <button
                 type="button"
                 onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); onExitDraft(); }}
@@ -192,10 +168,9 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
               <span className="text-sm text-gray-400">Pick {currentPick}</span>
               <div className="flex items-center space-x-2">
                 <div className={`w-2 h-2 rounded-full ${
-}
-                  connectionStatus === &apos;CONNECTED&apos; ? &apos;bg-green-400&apos; :
-                  connectionStatus === &apos;CONNECTING&apos; ? &apos;bg-yellow-400&apos; : 
-                  &apos;bg-red-400&apos;
+                  connectionStatus === 'CONNECTED' ? 'bg-green-400' :
+                  connectionStatus === 'CONNECTING' ? 'bg-yellow-400' : 
+                  'bg-red-400'
                 }`} />
                 <span className="text-sm text-gray-400 capitalize">{connectionStatus.toLowerCase()}</span>
               </div>
@@ -207,10 +182,9 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
             <div
               ref={timerRef}
               className={`text-2xl font-mono px-4 py-2 rounded-lg border-2 transition-all duration-300 ${
-}
-                isPaused ? &apos;bg-yellow-600 border-yellow-400&apos; :
-                timeRemaining <= 30 ? &apos;bg-red-600 border-red-400 animate-pulse&apos; :
-                &apos;bg-gray-700 border-gray-600&apos;
+                isPaused ? 'bg-yellow-600 border-yellow-400' :
+                timeRemaining <= 30 ? 'bg-red-600 border-red-400 animate-pulse' :
+                'bg-gray-700 border-gray-600'
               }`}
             >
               {formatTime(timeRemaining)}
@@ -221,13 +195,12 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
               type="button"
               onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); toggleTimer(); }}
               className="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-              aria-label={isPaused ? &apos;Resume draft timer&apos; : &apos;Pause draft timer&apos;}
+              aria-label={isPaused ? 'Resume draft timer' : 'Pause draft timer'}
             >
-              {isPaused ? &apos;Resume&apos; : &apos;Pause&apos;}
+              {isPaused ? 'Resume' : 'Pause'}
             </button>
             
             {onExitDraft && (
-}
               <button
                 type="button"
                 onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); onExitDraft(); }}
@@ -244,7 +217,6 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
       {/* Error Display */}
       <AnimatePresence>
         {error && (
-}
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -286,21 +258,17 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
             
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {filteredPlayers.map((player: any) => (
-}
                 <motion.div
                   key={player.id}
                   whileHover={{ scale: 1.02 }}
                   className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-}
                     selectedPlayer?.id === player.id
-                      ? &apos;border-blue-400 bg-blue-900/30&apos;
+                      ? 'border-blue-400 bg-blue-900/30'
                       : `${getTierColor(player?.tier)} bg-gray-700 border-gray-600 hover:border-gray-500`
                   }`}
                   onClick={() => setSelectedPlayer(player)}
                   onKeyDown={(e: any) => {
-}
-                    if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+                    if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       setSelectedPlayer(player);
                     }
@@ -335,18 +303,15 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
                 onClick={handleMakePick}
                 disabled={!selectedPlayer || !isMyTurn}
                 className={`w-full py-3 rounded-lg font-semibold transition-colors min-h-[44px] ${
-}
                   selectedPlayer && isMyTurn
-                    ? &apos;bg-green-600 hover:bg-green-700 text-white&apos;
-                    : &apos;bg-gray-600 text-gray-400 cursor-not-allowed&apos;
+                    ? 'bg-green-600 hover:bg-green-700 text-white'
+                    : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 }`}
                 aria-label={!isMyTurn ? "Waiting for your turn" : 
-}
                            !selectedPlayer ? "Select a player to draft" : 
                            `Draft ${selectedPlayer.name}`}
               >
                 {!isMyTurn ? "Not Your Turn" : 
-}
                  !selectedPlayer ? "Select a Player" : 
                  `Draft ${selectedPlayer.name}`}
               </button>
@@ -361,7 +326,6 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
             <h2 className="text-xl font-semibold mb-4">Recent Picks</h2>
             <div className="space-y-2 max-h-64 overflow-y-auto mobile-scroll custom-scrollbar">
               {picks.slice(-10).reverse().map((pick, index) => (
-}
                 <motion.div
                   key={`${pick.pickNumber}-${pick.timestamp}`}
                   initial={{ opacity: 0, x: 20 }}
@@ -385,24 +349,21 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
             <h2 className="text-xl font-semibold mb-4">Participants</h2>
             <div className="space-y-2">
               {participants.map((participant: any) => (
-}
                 <div
                   key={participant.userId}
                   className="flex items-center justify-between p-2 bg-gray-700 rounded-lg"
                 >
                   <div className="flex items-center space-x-2">
                     <div className={`w-2 h-2 rounded-full ${
-}
-                      participant.isOnline ? &apos;bg-green-400&apos; : &apos;bg-gray-400&apos;
+                      participant.isOnline ? 'bg-green-400' : 'bg-gray-400'
                     }`} />
                     <span>Team {participant.teamId}</span>
                     {participant.userId === userId && (
-}
                       <span className="text-xs bg-blue-600 px-2 py-1 rounded">You</span>
                     )}
                   </div>
                   <span className="text-sm text-gray-400">
-                    {participant.isOnline ? &apos;Online&apos; : &apos;Offline&apos;}
+                    {participant.isOnline ? 'Online' : 'Offline'}
                   </span>
                 </div>
               ))}
@@ -417,12 +378,10 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
               className="space-y-2 max-h-48 overflow-y-auto mb-4 mobile-scroll custom-scrollbar"
             >
               {chatMessages.map((message, index) => (
-}
                 <div
                   key={`${message.timestamp}-${index}`}
                   className={`p-2 rounded-lg ${
-}
-                    message.isTradeProposal ? &apos;bg-orange-900/30 border border-orange-600&apos; : &apos;bg-gray-700&apos;
+                    message.isTradeProposal ? 'bg-orange-900/30 border border-orange-600' : 'bg-gray-700'
                   }`}
                 >
                   <div className="flex items-center space-x-2">
@@ -430,7 +389,6 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
                       User {message.userId}
                     </span>
                     {message.isTradeProposal && (
-}
                       <span className="text-xs bg-orange-600 px-2 py-1 rounded">Trade</span>
                     )}
                     <span className="text-xs text-gray-400">

@@ -3,12 +3,11 @@
  * Bottom sheets, swipe gestures, and mobile-first navigation components
  */
 
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
-import { AccessibleButton } from &apos;./AccessibleButton&apos;;
+import React, { useCallback, useMemo } from 'react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { AccessibleButton } from './AccessibleButton';
 
 interface BottomSheetProps {
-}
   isOpen: boolean;
   onClose: () => void;
   title?: string;
@@ -21,55 +20,44 @@ interface BottomSheetProps {
  * Bottom Sheet Modal for Mobile
  * Provides native mobile app-like modal experience
  */
-}
 
 export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
-}
   onClose,
   title,
   children,
-  className = &apos;&apos;,
+  className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
   const [startY, setStartY] = React.useState(0);
   const [currentY, setCurrentY] = React.useState(0);
   const sheetRef = React.useRef<HTMLDialogElement>(null);
-  const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   React.useEffect(() => {
-}
     const handleKeydown = (e: KeyboardEvent) => {
-}
-      if (e.key === &apos;Escape&apos; && isOpen) {
-}
+      if (e.key === 'Escape' && isOpen) {
         onClose();
 
     };
 
     if (isOpen) {
-}
-      document.addEventListener(&apos;keydown&apos;, handleKeydown);
+      document.addEventListener('keydown', handleKeydown);
       if (sheetRef.current) {
-}
         sheetRef.current.showModal();
 
     } else if (sheetRef.current) {
-}
       sheetRef.current.close();
 
     return () => {
-}
-      document.removeEventListener(&apos;keydown&apos;, handleKeydown);
+      document.removeEventListener('keydown', handleKeydown);
     };
   }, [isOpen, onClose]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-}
     if (!isMobile) return;
     setIsDragging(true);
     setStartY(e.touches[0].clientY);
@@ -77,29 +65,23 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-}
     if (!isDragging || !isMobile) return;
     setCurrentY(e.touches[0].clientY);
   };
 
   const handleTouchEnd = () => {
-}
     if (!isDragging || !isMobile) return;
     
     const deltaY = currentY - startY;
     const threshold = 100;
 
     if (deltaY > threshold) {
-}
       if (currentSnap === 0) {
-}
         onClose();
       } else {
-}
         setCurrentSnap(Math.max(0, currentSnap - 1));
 
     } else if (deltaY < -threshold) {
-}
       setCurrentSnap(Math.min(snapPoints.length - 1, currentSnap + 1));
 
     setIsDragging(false);
@@ -108,14 +90,12 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   };
 
   const getTransform = () => {
-}
-    if (!isOpen) return &apos;translateY(100%)&apos;;
+    if (!isOpen) return 'translateY(100%)';
     
     const snapPoint = snapPoints[currentSnap];
     const baseTransform = `translateY(${(1 - snapPoint) * 100}%)`;
     
     if (isDragging && currentY > startY) {
-}
       const dragOffset = Math.min(currentY - startY, 200);
       return `translateY(calc(${(1 - snapPoint) * 100}% + ${dragOffset}px))`;
 
@@ -137,14 +117,13 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
         style={{ transform: getTransform() }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        aria-labelledby={title ? &apos;bottom-sheet-title&apos; : undefined}
+        aria-labelledby={title ? 'bottom-sheet-title' : undefined}
       >
         <div className="flex justify-center py-3 sm:px-4 md:px-6 lg:px-8">
           <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full sm:px-4 md:px-6 lg:px-8" />
         </div>
         
         {title && (
-}
           <div className="flex items-center justify-between px-6 pb-4 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
             <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
               {title}
@@ -168,7 +147,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
 };
 
 interface SwipeGestureProps {
-}
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
@@ -177,43 +155,35 @@ interface SwipeGestureProps {
   children: React.ReactNode;
   className?: string;
 
-}
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
-}
   onSwipeLeft,
   onSwipeRight,
   onSwipeUp,
   onSwipeDown,
   threshold = 50,
   children,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-}
     setTouchEnd(null);
     setTouchStart({
-}
       x: e.targetTouches[0].clientX,
       y: e.targetTouches[0].clientY
     });
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-}
     setTouchEnd({
-}
       x: e.targetTouches[0].clientX,
       y: e.targetTouches[0].clientY
     });
   };
 
   const handleTouchEnd = () => {
-}
     if (!touchStart || !touchEnd) return;
 
     const distanceX = touchStart.x - touchEnd.x;
@@ -224,19 +194,14 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
     const isDownSwipe = distanceY < -threshold;
 
     if (Math.abs(distanceX) > Math.abs(distanceY)) {
-}
       if (isLeftSwipe && onSwipeLeft) {
-}
         onSwipeLeft();
       } else if (isRightSwipe && onSwipeRight) {
-}
         onSwipeRight();
 
     } else if (isUpSwipe && onSwipeUp) {
-}
       onSwipeUp();
     } else if (isDownSwipe && onSwipeDown) {
-}
       onSwipeDown();
 
   };
@@ -253,9 +218,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
 };
 
 interface MobileTabsProps {
-}
   tabs: Array<{
-}
     id: string;
     label: string;
     icon?: React.ReactNode;
@@ -266,17 +229,13 @@ interface MobileTabsProps {
   className?: string;
 
 export const MobileTabs: React.FC<MobileTabsProps> = ({
-}
   tabs,
   activeTab,
   onTabChange,
-  className = &apos;&apos;
+  className = ''
 }: any) => {
-}
   const handleKeyDown = (e: React.KeyboardEvent, tabId: string) => {
-}
-    if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
-}
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onTabChange(tabId);
 
@@ -288,7 +247,6 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
       role="tablist"
     >
       {tabs.map((tab: any) => (
-}
         <button
           key={tab.id}
           role="tab"
@@ -296,21 +254,18 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}
           className={`
-}
             relative flex-1 min-w-0 px-4 py-3 text-sm font-medium rounded-md transition-all duration-200 touch-manipulation
             ${activeTab === tab.id
-}
-              ? &apos;bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm&apos;
-              : &apos;text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white/50 dark:hover:bg-gray-700/50&apos;
+              ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white/50 dark:hover:bg-gray-700/50'
 
           `}
-          style={{ minHeight: &apos;44px&apos; }}
+          style={{ minHeight: '44px' }}
         >
           <span className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
             {tab.icon}
             <span className="truncate sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
             {tab.badge && (
-}
               <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                 {tab.badge}
               </span>

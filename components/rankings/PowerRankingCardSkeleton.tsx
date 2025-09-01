@@ -1,9 +1,8 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import SkeletonLoader from &apos;../SkeletonLoader&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import SkeletonLoader from '../SkeletonLoader';
 
 const PowerRankingCardSkeleton: React.FC = () => {
-}
     return (
         <div className="p-4 bg-white/5 rounded-lg flex gap-4 sm:px-4 md:px-6 lg:px-8">
             <div className="flex flex-col items-center flex-shrink-0 sm:px-4 md:px-6 lg:px-8">

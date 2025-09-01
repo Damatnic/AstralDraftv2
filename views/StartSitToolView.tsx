@@ -1,39 +1,35 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { getStartSitAdvice } from &apos;../services/geminiService&apos;;
-import type { League, Player, StartSitAdvice, Team } from &apos;../types&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import { AnimatePresence, motion } from &apos;framer-motion&apos;;
-import { SparklesIcon } from &apos;../components/icons/SparklesIcon&apos;;
-import { ArrowRightLeftIcon } from &apos;../components/icons/ArrowRightLeftIcon&apos;;
-import { Avatar } from &apos;../components/ui/Avatar&apos;;
-import { CloseIcon } from &apos;../components/icons/CloseIcon&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
-import { useResponsiveBreakpoint } from &apos;../utils/mobileOptimizationUtils&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { getStartSitAdvice } from '../services/geminiService';
+import type { League, Player, StartSitAdvice, Team } from '../types';
+import { Widget } from '../components/ui/Widget';
+import { AnimatePresence, motion } from 'framer-motion';
+import { SparklesIcon } from '../components/icons/SparklesIcon';
+import { ArrowRightLeftIcon } from '../components/icons/ArrowRightLeftIcon';
+import { Avatar } from '../components/ui/Avatar';
+import { CloseIcon } from '../components/icons/CloseIcon';
+import { useLeague } from '../hooks/useLeague';
+import ErrorDisplay from '../components/core/ErrorDisplay';
+import { useResponsiveBreakpoint } from '../utils/mobileOptimizationUtils';
 
 const PlayerList: React.FC<{
-}
     roster: Player[];
     onSelect: (id: number) => void;
     selectedId: number | null;
     disabledId: number | null;
 }> = ({ roster, onSelect, selectedId, disabledId }: any) => {
-}
     return (
         <div className="space-y-2 h-96 overflow-y-auto pr-2">
             {roster.map((p: any) => (
-}
                 <button
                     key={p.id}
                     onClick={() => onSelect(p.id)}
                     className={`w-full p-2 rounded-lg flex items-center gap-3 text-left transition-all duration-200
-}
-                        ${p.id === selectedId ? &apos;bg-cyan-500/30 ring-2 ring-cyan-400&apos; : &apos;bg-black/10 hover:bg-black/20&apos;}
-                        ${p.id === disabledId ? &apos;opacity-40 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;}
+                        ${p.id === selectedId ? 'bg-cyan-500/30 ring-2 ring-cyan-400' : 'bg-black/10 hover:bg-black/20'}
+                        ${p.id === disabledId ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
                     `}
                 >
-                    <Avatar avatar={p.astralIntelligence?.spiritAnimal?.split(&apos;,&apos;)[0] || &apos;🏈&apos;} className="w-10 h-10 text-2xl rounded-md flex-shrink-0" />
+                    <Avatar avatar={p.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-10 h-10 text-2xl rounded-md flex-shrink-0" />
                     <div>
                         <p className="font-bold text-sm">{p.name}</p>
                         <p className="text-xs text-gray-400">{p.position} - {p.team}</p>
@@ -47,16 +43,14 @@ const PlayerList: React.FC<{
 const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () => void; label: string; weeklyProjection: number | undefined }> = ({ player, onClear, label, weeklyProjection }: any) => (
      <div className="glass-pane rounded-xl p-4 flex flex-col items-center justify-center h-48">
         {player ? (
-}
             <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
                 <button onClick={onClear}
                     <CloseIcon className="h-3 w-3" />
                 </button>
-                <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(&apos;,&apos;)[0] || &apos;🏈&apos;} className="w-16 h-16 text-4xl rounded-lg" />
+                <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-16 h-16 text-4xl rounded-lg" />
                 <p className="font-bold mt-2">{player.name}</p>
                 <p className="text-xs text-gray-400">{player.position} - {player.team}</p>
                  {weeklyProjection !== undefined && (
-}
                      <p className="text-xs text-cyan-300 mt-1">Proj: <span className="font-bold">{weeklyProjection.toFixed(2)}</span></p>
                  )}
             </div>
@@ -70,14 +64,13 @@ const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () =>
 );
 
 const RecommendedPlayerCard: React.FC<{ player: Player; isRecommended: boolean; weeklyProjection: number | undefined; }> = ({ player, isRecommended, weeklyProjection }: any) => (
-    <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${isRecommended ? &apos;border-green-400 bg-green-500/10 shadow-lg shadow-green-500/20&apos; : &apos;border-gray-600/50 opacity-60&apos;}`}>
+    <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${isRecommended ? 'border-green-400 bg-green-500/10 shadow-lg shadow-green-500/20' : 'border-gray-600/50 opacity-60'}`}>
         {isRecommended && <div className="absolute top-2 right-2 px-2 py-0.5 text-xs font-bold bg-green-400 text-black rounded-full">RECOMMENDED</div>}
         <div className="flex flex-col items-center text-center">
-            <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(&apos;,&apos;)[0] || &apos;🏈&apos;} className="w-20 h-20 text-5xl rounded-lg" />
+            <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-20 h-20 text-5xl rounded-lg" />
             <p className="font-bold mt-2 text-lg">{player.name}</p>
             <p className="text-sm text-gray-400">{player.position} - {player.team}</p>
             {weeklyProjection !== undefined && (
-}
                 <p className="text-sm text-cyan-300 mt-1">Proj: <span className="font-bold">{weeklyProjection.toFixed(2)}</span></p>
             )}
         </div>
@@ -85,14 +78,12 @@ const RecommendedPlayerCard: React.FC<{ player: Player; isRecommended: boolean; 
 );
 
 const AdviceDisplay: React.FC<{
-}
     advice: StartSitAdvice;
     playerA: Player;
     playerB: Player;
     playerAProj: number | undefined;
     playerBProj: number | undefined;
 }> = ({ advice, playerA, playerB, playerAProj, playerBProj }: any) => {
-}
     const { isMobile } = useResponsiveBreakpoint();
     const isPlayerARecommended = advice.recommendedPlayerId === playerA.id;
     
@@ -100,18 +91,16 @@ const AdviceDisplay: React.FC<{
         <motion.div
             className="mt-6"
             {...{
-}
                 initial: { opacity: 0, y: 10 },
                 animate: { opacity: 1, y: 0 },
             }}
         >
-            <Widget title="Oracle&apos;s Recommendation">
+            <Widget title="Oracle's Recommendation">
                 <div className="p-4">
-                    <div className={`grid ${isMobile ? &apos;grid-cols-1 gap-6&apos; : &apos;grid-cols-[1fr_auto_1fr]&apos;} items-center gap-4`}>
+                    <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-[1fr_auto_1fr]'} items-center gap-4`}>
                         <RecommendedPlayerCard player={playerA} isRecommended={isPlayerARecommended} weeklyProjection={playerAProj}/>
                         {!isMobile && <div className="font-bold text-gray-400 text-2xl">VS</div>}
                         {isMobile && (
-}
                             <div className="flex justify-center">
                                 <div className="font-bold text-gray-400 text-xl">VS</div>
                             </div>
@@ -126,7 +115,6 @@ const AdviceDisplay: React.FC<{
 };
 
 const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
-}
     const { isMobile } = useResponsiveBreakpoint();
     const [playerAId, setPlayerAId] = React.useState<number | null>(null);
     const [playerBId, setPlayerBId] = React.useState<number | null>(null);
@@ -134,7 +122,6 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handleGetAdvice = async () => {
-}
         if (!playerAId || !playerBId) return;
         const playerA = myTeam.roster.find((p: any) => p.id === playerAId);
         const playerB = myTeam.roster.find((p: any) => p.id === playerBId);
@@ -143,19 +130,16 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
         setIsLoading(true);
         setAdvice(null);
         try {
-}
 
             const result = await getStartSitAdvice(playerA, playerB, league);
             setAdvice(result);
         
     } catch (error) {
-}
         console.error(error);
-    `grid ${isMobile ? &apos;grid-cols-1 gap-6&apos; : &apos;grid-cols-[1fr_auto_1fr]&apos;} items-center gap-4 mb-6`}>
+    `grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-[1fr_auto_1fr]'} items-center gap-4 mb-6`}>
                      <PlayerSelectionSlot player={playerA} onClear={() => setPlayerAId(null)} label="Player A" weeklyProjection={playerAProj} />
                      {!isMobile && <ArrowRightLeftIcon className="w-8 h-8 text-cyan-400 mx-auto" />}
                      {isMobile && (
-}
                          <div className="flex justify-center">
                              <ArrowRightLeftIcon className="w-8 h-8 text-cyan-400 rotate-90" />
                          </div>
@@ -164,12 +148,12 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                 </div>
 
                 <Widget title="Select Players From Your Roster">
-                     <div className={`p-4 grid ${isMobile ? &apos;grid-cols-1 gap-6&apos; : &apos;grid-cols-2&apos;} gap-4`}>
-                        <div className={isMobile ? &apos;order-1&apos; : &apos;&apos;}>
+                     <div className={`p-4 grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-2'} gap-4`}>
+                        <div className={isMobile ? 'order-1' : ''}>
                             <div className="text-sm font-semibold text-cyan-300 mb-2">Player A Selection</div>
                             <PlayerList roster={myTeam.roster} onSelect={setPlayerAId} selectedId={playerAId} disabledId={playerBId} />
                         </div>
-                        <div className={isMobile ? &apos;order-2&apos; : &apos;&apos;}>
+                        <div className={isMobile ? 'order-2' : ''}>
                             <div className="text-sm font-semibold text-cyan-300 mb-2">Player B Selection</div>
                             <PlayerList roster={myTeam.roster} onSelect={setPlayerBId} selectedId={playerBId} disabledId={playerAId} />
                         </div>
@@ -182,7 +166,6 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                         className="glass-button-primary w-full sm:w-auto px-8 py-3 flex items-center gap-2 mx-auto min-h-[44px] justify-center"
                     >
                         {isLoading ? (
-}
                             <>
                                 <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
                                 Analyzing...
@@ -198,7 +181,6 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                 
                 <AnimatePresence>
                     {advice && playerA && playerB && (
-}
                         <AdviceDisplay advice={advice} playerA={playerA} playerB={playerB} playerAProj={playerAProj} playerBProj={playerBProj}/>
                     )}
                 </AnimatePresence>
@@ -208,24 +190,21 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
 };
 
 const StartSitToolView: React.FC = () => {
-}
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
 
     if (!league || !myTeam) {
-}
         return (
             <div className="w-full h-full flex items-center justify-center p-4">
                 <p>Could not load tool. Please select a league with an active season first.</p>
-                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="glass-button-primary ml-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="glass-button-primary ml-4">
                     Back to Dashboard
                 </button>
             </div>
         );
 
-    if (league.settings.aiAssistanceLevel === &apos;BASIC&apos;) {
-}
-        return <ErrorDisplay title="Feature Disabled" message="The Start/Sit Tool is disabled in leagues with Basic AI Assistance." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; })} />;
+    if (league.settings.aiAssistanceLevel === 'BASIC') {
+        return <ErrorDisplay title="Feature Disabled" message="The Start/Sit Tool is disabled in leagues with Basic AI Assistance." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
 
     return <StartSitToolContent league={league} myTeam={myTeam} dispatch={dispatch} />;
 };

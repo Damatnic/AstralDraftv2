@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import ScheduleGenerator from &apos;./ScheduleGenerator&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ScheduleGenerator from './ScheduleGenerator';
 
-describe(&apos;ScheduleGenerator&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('ScheduleGenerator', () => {
+  it('renders without crashing', () => {
     render(<ScheduleGenerator />);
-    expect(screen.getByTestId(&apos;schedulegenerator&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('schedulegenerator')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<ScheduleGenerator />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<ScheduleGenerator />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

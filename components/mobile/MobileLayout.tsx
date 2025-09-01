@@ -3,15 +3,14 @@
  * Responsive layout with safe area support and mobile optimizations
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import MobileNavigation from &apos;./MobileNavigation&apos;;
-import PWAInstallPrompt from &apos;./PWAInstallPrompt&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import MobileNavigation from './MobileNavigation';
+import PWAInstallPrompt from './PWAInstallPrompt';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface Props {
-}
   children: React.ReactNode;
   activeView: string;
   onViewChange: (view: string) => void;
@@ -20,30 +19,25 @@ interface Props {
   notificationCount?: number;
   className?: string;
 
-}
 
 const MobileLayout: React.FC<Props> = ({ children,
-}
   activeView,
   onViewChange,
   showNavigation = true,
   showPWAPrompt = true,
   notificationCount = 0,
-  className = &apos;&apos;
+  className = ''
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-  const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
-  const isTablet = useMediaQuery(&apos;(min-width: 769px) and (max-width: 1023px)&apos;);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1023px)');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   // Handle virtual keyboard on mobile
   useEffect(() => {
-}
     if (!isMobile) return;
 
     const handleResize = () => {
-}
       // Detect virtual keyboard by comparing viewport height
       const windowHeight = window.innerHeight;
       const screenHeight = window.screen.height;
@@ -53,64 +47,52 @@ const MobileLayout: React.FC<Props> = ({ children,
     };
 
     const handleVisualViewport = () => {
-}
-      if (&apos;visualViewport&apos; in window) {
-}
+      if ('visualViewport' in window) {
         const viewport = window.visualViewport as any;
         const initialHeight = window.innerHeight;
         setIsKeyboardOpen(viewport.height < initialHeight * 0.75);
     }
   };
 
-    window.addEventListener(&apos;resize&apos;, handleResize);
-    if (&apos;visualViewport&apos; in window && window.visualViewport) {
-}
-      window.visualViewport.addEventListener(&apos;resize&apos;, handleVisualViewport);
+    window.addEventListener('resize', handleResize);
+    if ('visualViewport' in window && window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleVisualViewport);
 
     return () => {
-}
-      window.removeEventListener(&apos;resize&apos;, handleResize);
-      if (&apos;visualViewport&apos; in window && window.visualViewport) {
-}
-        window.visualViewport.removeEventListener(&apos;resize&apos;, handleVisualViewport);
+      window.removeEventListener('resize', handleResize);
+      if ('visualViewport' in window && window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleVisualViewport);
 
     };
   }, [isMobile]);
 
   // Add viewport meta tag for better mobile support
   useEffect(() => {
-}
-    const viewportMeta = document.querySelector(&apos;meta[name="viewport"]&apos;);
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
     if (viewportMeta) {
-}
       viewportMeta.setAttribute(
-        &apos;content&apos;,
-        &apos;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover&apos;
+        'content',
+        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
       );
     }
   }, []);
 
   const getLayoutClasses = () => {
-}
-    const baseClasses = &apos;min-h-screen bg-gray-900 text-white relative&apos;;
+    const baseClasses = 'min-h-screen bg-gray-900 text-white relative';
     
     if (isMobile) {
-}
-      return `${baseClasses} ${showNavigation ? &apos;pb-20&apos; : &apos;&apos;} ${isKeyboardOpen ? &apos;keyboard-open&apos; : &apos;&apos;}`;
+      return `${baseClasses} ${showNavigation ? 'pb-20' : ''} ${isKeyboardOpen ? 'keyboard-open' : ''}`;
 
     if (isTablet) {
-}
-      return `${baseClasses} ${showNavigation ? &apos;pt-16&apos; : &apos;&apos;}`;
+      return `${baseClasses} ${showNavigation ? 'pt-16' : ''}`;
 
     return baseClasses;
   };
 
   const getContentClasses = () => {
-}
-    const baseClasses = &apos;relative z-10&apos;;
+    const baseClasses = 'relative z-10';
     
     if (isMobile) {
-}
       return `${baseClasses} safe-area-content mobile-content`;
 
     return baseClasses;
@@ -120,10 +102,9 @@ const MobileLayout: React.FC<Props> = ({ children,
     <div className={`${getLayoutClasses()} ${className}`}>
       {/* Safe area top spacing for mobile devices */}
       {isMobile && (
-}
         <div 
           className="safe-area-top bg-gray-900 sm:px-4 md:px-6 lg:px-8" 
-          style={{ height: &apos;env(safe-area-inset-top)&apos; }}
+          style={{ height: 'env(safe-area-inset-top)' }}
         />
       )}
 
@@ -131,10 +112,9 @@ const MobileLayout: React.FC<Props> = ({ children,
       <motion.main
         className={getContentClasses()}
         style={{
-}
-          paddingLeft: isMobile ? &apos;env(safe-area-inset-left)&apos; : undefined,
-          paddingRight: isMobile ? &apos;env(safe-area-inset-right)&apos; : undefined,
-          minHeight: isMobile ? &apos;calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))&apos; : &apos;100vh&apos;
+          paddingLeft: isMobile ? 'env(safe-area-inset-left)' : undefined,
+          paddingRight: isMobile ? 'env(safe-area-inset-right)' : undefined,
+          minHeight: isMobile ? 'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))' : '100vh'
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -145,20 +125,18 @@ const MobileLayout: React.FC<Props> = ({ children,
 
       {/* Mobile Navigation */}
       {showNavigation && (isMobile || isTablet) && (
-}
         <MobileNavigation>
           activeView={activeView}
           onViewChange={onViewChange}
           notificationCount={notificationCount}
-          className={isKeyboardOpen ? &apos;hidden&apos; : &apos;&apos;}
+          className={isKeyboardOpen ? 'hidden' : ''}
         />
       )}
 
       {/* PWA Install Prompt */}
       {showPWAPrompt && isMobile && (
-}
         <PWAInstallPrompt>
-          className={isKeyboardOpen ? &apos;hidden&apos; : &apos;&apos;}
+          className={isKeyboardOpen ? 'hidden' : ''}
         />
       )}
     </div>

@@ -3,14 +3,13 @@
  * Compact analytics view optimized for mobile devices with touch interactions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Player, Team } from &apos;../../types&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
-import MobilePullToRefresh from &apos;./MobilePullToRefresh&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Player, Team } from '../../types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import MobilePullToRefresh from './MobilePullToRefresh';
 import { 
-}
     BarChart3Icon, 
     TrendingUpIcon, 
     TrendingDownIcon,
@@ -19,153 +18,133 @@ import {
     FilterIcon,
     InfoIcon,
 //     ZapIcon
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 interface MobileAnalyticsDashboardProps {
-}
     team: Team;
     players: Player[];
     leagueStats?: any;
     onRefresh?: () => Promise<void>;
     className?: string;
 
-}
 
 interface MetricCard {
-}
     id: string;
     title: string;
     value: string | number;
     change?: number;
-    trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+    trend?: 'up' | 'down' | 'stable';
     color: string;
     icon: React.ReactNode;
     description?: string;
 
 interface ChartData {
-}
     label: string;
     value: number;
     color: string;
 
-}
 
 const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
-}
     team,
     players,
     leagueStats,
     onRefresh,
-    className = &apos;&apos;
+    className = ''
 }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
-    const [activeTab, setActiveTab] = React.useState<&apos;overview&apos; | &apos;performance&apos; | &apos;trends&apos; | &apos;roster&apos;>(&apos;overview&apos;);
-    const [selectedTimeframe, setSelectedTimeframe] = React.useState<&apos;week&apos; | &apos;month&apos; | &apos;season&apos;>(&apos;week&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const [activeTab, setActiveTab] = React.useState<'overview' | 'performance' | 'trends' | 'roster'>('overview');
+    const [selectedTimeframe, setSelectedTimeframe] = React.useState<'week' | 'month' | 'season'>('week');
     const [showFilters, setShowFilters] = React.useState(false);
     const [expandedCard, setExpandedCard] = React.useState<string | null>(null);
 
     // Mock analytics data
     const overviewMetrics: MetricCard[] = [
         {
-}
-            id: &apos;total_points&apos;,
-            title: &apos;Total Points&apos;,
-            value: &apos;1,247.6&apos;,
+            id: 'total_points',
+            title: 'Total Points',
+            value: '1,247.6',
             change: 8.2,
-            trend: &apos;up&apos;,
-            color: &apos;text-blue-400&apos;,
+            trend: 'up',
+            color: 'text-blue-400',
             icon: <TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Season total fantasy points&apos;
+            description: 'Season total fantasy points'
         },
         {
-}
-            id: &apos;avg_points&apos;,
-            title: &apos;Avg/Week&apos;,
-            value: &apos;89.1&apos;,
+            id: 'avg_points',
+            title: 'Avg/Week',
+            value: '89.1',
             change: -2.3,
-            trend: &apos;down&apos;,
-            color: &apos;text-green-400&apos;,
+            trend: 'down',
+            color: 'text-green-400',
             icon: <BarChart3Icon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Average points per week&apos;
+            description: 'Average points per week'
         },
         {
-}
-            id: &apos;league_rank&apos;,
-            title: &apos;League Rank&apos;,
-            value: &apos;3rd&apos;,
-            trend: &apos;stable&apos;,
-            color: &apos;text-purple-400&apos;,
+            id: 'league_rank',
+            title: 'League Rank',
+            value: '3rd',
+            trend: 'stable',
+            color: 'text-purple-400',
             icon: <UsersIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Current standings position&apos;
+            description: 'Current standings position'
         },
         {
-}
-            id: &apos;weekly_high&apos;,
-            title: &apos;Weekly High&apos;,
-            value: &apos;156.8&apos;,
+            id: 'weekly_high',
+            title: 'Weekly High',
+            value: '156.8',
             change: 12.5,
-            trend: &apos;up&apos;,
-            color: &apos;text-yellow-400&apos;,
+            trend: 'up',
+            color: 'text-yellow-400',
             icon: <ZapIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
-            description: &apos;Highest weekly score&apos;
+            description: 'Highest weekly score'
 
     ];
 
     const performanceData: ChartData[] = [
-        { label: &apos;QB&apos;, value: 89.2, color: &apos;bg-red-400&apos; },
-        { label: &apos;RB&apos;, value: 76.5, color: &apos;bg-green-400&apos; },
-        { label: &apos;WR&apos;, value: 82.1, color: &apos;bg-blue-400&apos; },
-        { label: &apos;TE&apos;, value: 45.3, color: &apos;bg-yellow-400&apos; },
-        { label: &apos;K&apos;, value: 32.1, color: &apos;bg-purple-400&apos; },
-        { label: &apos;DST&apos;, value: 28.7, color: &apos;bg-gray-400&apos; }
+        { label: 'QB', value: 89.2, color: 'bg-red-400' },
+        { label: 'RB', value: 76.5, color: 'bg-green-400' },
+        { label: 'WR', value: 82.1, color: 'bg-blue-400' },
+        { label: 'TE', value: 45.3, color: 'bg-yellow-400' },
+        { label: 'K', value: 32.1, color: 'bg-purple-400' },
+        { label: 'DST', value: 28.7, color: 'bg-gray-400' }
     ];
 
     const rosterStrengths = [
-        { position: &apos;WR&apos;, strength: 92, weakness: false },
-        { position: &apos;QB&apos;, strength: 85, weakness: false },
-        { position: &apos;RB&apos;, strength: 78, weakness: false },
-        { position: &apos;TE&apos;, strength: 45, weakness: true },
-        { position: &apos;K&apos;, strength: 62, weakness: false },
-        { position: &apos;DST&apos;, strength: 38, weakness: true }
+        { position: 'WR', strength: 92, weakness: false },
+        { position: 'QB', strength: 85, weakness: false },
+        { position: 'RB', strength: 78, weakness: false },
+        { position: 'TE', strength: 45, weakness: true },
+        { position: 'K', strength: 62, weakness: false },
+        { position: 'DST', strength: 38, weakness: true }
     ];
 
     const handleRefresh = async () => {
-}
     try {
-}
 
         if (onRefresh) {
-}
             await onRefresh();
         
     } catch (error) {
-}
-      console.error(&apos;Error in handleRefresh:&apos;, error);
+      console.error('Error in handleRefresh:', error);
 
     } catch (error) {
-}
         console.error(error);
     }else {
-}
             // Simulate refresh
             await new Promise(resolve => setTimeout(resolve, 1500));
 
     };
 
-    const formatTrend = (trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;, change?: number) => {
-}
-        if (!trend || trend === &apos;stable&apos;) return null;
+    const formatTrend = (trend?: 'up' | 'down' | 'stable', change?: number) => {
+        if (!trend || trend === 'stable') return null;
         
         return (
-            <div className={`flex items-center gap-1 ${trend === &apos;up&apos; ? &apos;text-green-400&apos; : &apos;text-red-400&apos;}`}>
-                {trend === &apos;up&apos; ? 
-}
+            <div className={`flex items-center gap-1 ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
+                {trend === 'up' ? 
                     <TrendingUpIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" /> : 
                     <TrendingDownIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
 
                 {change && Boolean(change) && (
-}
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">
                         {Math.abs(change).toFixed(1)}%
                     </span>
@@ -175,7 +154,6 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     };
 
     const renderMetricCard = (metric: MetricCard) => {
-}
         const isExpanded = expandedCard === metric.id;
         
         return (
@@ -198,7 +176,6 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         {formatTrend(metric.trend, metric.change)}
                         {metric.description && (
-}
                             <InfoIcon className="w-3 h-3 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         )}
                     </div>
@@ -210,10 +187,9 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                 
                 <AnimatePresence>
                     {isExpanded && metric.description && (
-}
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: &apos;auto&apos; }}
+                            animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             className="text-sm text-[var(--text-secondary)] mt-2 pt-2 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                         >
@@ -234,7 +210,6 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             
             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                 {performanceData.map((item, index) => {
-}
                     const maxValue = Math.max(...performanceData.map((d: any) => d.value));
                     const percentage = (item.value / maxValue) * 100;
                     
@@ -272,14 +247,12 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {rosterStrengths.map((item: any) => (
-}
                     <div key={item.position} className="flex items-center justify-between p-2 rounded sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {item.position}
                             </span>
                             {item.weakness && (
-}
                                 <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs sm:px-4 md:px-6 lg:px-8">
 //                                     Weak
                                 </span>
@@ -289,7 +262,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <div className="w-16 h-2 bg-gray-500/20 rounded overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                 <div
-                                    className={`h-full ${item.weakness ? &apos;bg-red-400&apos; : &apos;bg-green-400&apos;}`}
+                                    className={`h-full ${item.weakness ? 'bg-red-400' : 'bg-green-400'}`}
                                     style={{ width: `${item.strength}%` }}
                                 />
                             </div>
@@ -326,20 +299,17 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                 <h3 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">Matchup Difficulty</h3>
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
-                    {[&apos;Week 15&apos;, &apos;Week 16&apos;, &apos;Week 17&apos;].map((week, index) => {
-}
+                    {['Week 15', 'Week 16', 'Week 17'].map((week, index) => {
                         const getDifficultyColor = (idx: number) => {
-}
-                            if (idx === 0) return &apos;bg-green-400&apos;;
-                            if (idx === 1) return &apos;bg-yellow-400&apos;;
-                            return &apos;bg-red-400&apos;;
+                            if (idx === 0) return 'bg-green-400';
+                            if (idx === 1) return 'bg-yellow-400';
+                            return 'bg-red-400';
                         };
                         
                         const getDifficultyLabel = (idx: number) => {
-}
-                            if (idx === 0) return &apos;Easy&apos;;
-                            if (idx === 1) return &apos;Medium&apos;;
-                            return &apos;Hard&apos;;
+                            if (idx === 0) return 'Easy';
+                            if (idx === 1) return 'Medium';
+                            return 'Hard';
                         };
                         
                         return (
@@ -360,7 +330,6 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     );
 
     if (!isMobile) {
-}
         return null; // Desktop analytics should use the full component
 
     return (
@@ -390,11 +359,10 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                     {/* Tab Navigation */}
                     <div className="flex sm:px-4 md:px-6 lg:px-8">
                         {[
-}
-                            { id: &apos;overview&apos;, label: &apos;Overview&apos; },
-                            { id: &apos;performance&apos;, label: &apos;Performance&apos; },
-                            { id: &apos;trends&apos;, label: &apos;Trends&apos; },
-                            { id: &apos;roster&apos;, label: &apos;Roster&apos; }
+                            { id: 'overview', label: 'Overview' },
+                            { id: 'performance', label: 'Performance' },
+                            { id: 'trends', label: 'Trends' },
+                            { id: 'roster', label: 'Roster' }
                         ].map((tab: any) => (
                             <button
                                 key={tab.id}
@@ -418,24 +386,21 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                             >
-                                {activeTab === &apos;overview&apos; && (
-}
+                                {activeTab === 'overview' && (
                                     <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                                         {overviewMetrics.map((metric: any) => renderMetricCard(metric))}
                                     </div>
                                 )}
 
-                                {activeTab === &apos;performance&apos; && (
-}
+                                {activeTab === 'performance' && (
                                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {renderPositionChart()}
                                     </div>
                                 )}
 
-                                {activeTab === &apos;trends&apos; && renderTrendsView()}
+                                {activeTab === 'trends' && renderTrendsView()}
 
-                                {activeTab === &apos;roster&apos; && (
-}
+                                {activeTab === 'roster' && (
                                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {renderRosterAnalysis()}
                                     </div>

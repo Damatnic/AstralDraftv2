@@ -2,37 +2,32 @@
  * Victory Celebration & Achievement System - Make wins legendary and memorable
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Trophy, Crown, Star, Zap, Target, Award, Medal, Sparkles, Flame, TrendingUp } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Trophy, Crown, Star, Zap, Target, Award, Medal, Sparkles, Flame, TrendingUp } from 'lucide-react';
 
 interface Achievement {
-}
   id: string;
   name: string;
   description: string;
   icon: string;
-  category: &apos;weekly&apos; | &apos;season&apos; | &apos;career&apos; | &apos;special&apos;;
-  rarity: &apos;common&apos; | &apos;rare&apos; | &apos;epic&apos; | &apos;legendary&apos;;
+  category: 'weekly' | 'season' | 'career' | 'special';
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
   points: number;
   unlockedAt?: Date;
   progress?: {
-}
     current: number;
     required: number;
   };
 
 interface VictoryType {
-}
-  type: &apos;weekly_win&apos; | &apos;blowout&apos; | &apos;comeback&apos; | &apos;perfect_lineup&apos; | &apos;highest_score&apos; | &apos;playoff_berth&apos; | &apos;championship&apos;;
+  type: 'weekly_win' | 'blowout' | 'comeback' | 'perfect_lineup' | 'highest_score' | 'playoff_berth' | 'championship';
   intensity: 1 | 2 | 3 | 4 | 5;
   duration: number; // seconds
 
-}
 
 interface VictoryCelebrationProps {
-}
   userId: string;
   userName: string;
   teamName: string;
@@ -40,14 +35,12 @@ interface VictoryCelebrationProps {
   onCelebrationComplete?: () => void;}
 
 const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
-}
   userId,
   userName,
   teamName,
   leagueId,
 //   onCelebrationComplete
 }: any) => {
-}
   const [activeAchievements, setActiveAchievements] = useState<Achievement[]>([]);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationType, setCelebrationType] = useState<VictoryType | null>(null);
@@ -57,190 +50,169 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   const achievementDefinitions: Achievement[] = [
     // Weekly Achievements
     {
-}
-      id: &apos;first_win&apos;,
-      name: &apos;Welcome to Victory Lane&apos;,
-      description: &apos;Win your first game of the season&apos;,
-      icon: &apos;🏆&apos;,
-      category: &apos;weekly&apos;,
-      rarity: &apos;common&apos;,
+      id: 'first_win',
+      name: 'Welcome to Victory Lane',
+      description: 'Win your first game of the season',
+      icon: '🏆',
+      category: 'weekly',
+      rarity: 'common',
       points: 10
     },
     {
-}
-      id: &apos;blowout_victory&apos;,
-      name: &apos;Absolute Domination&apos;,
-      description: &apos;Win by 50+ points&apos;,
-      icon: &apos;💥&apos;,
-      category: &apos;weekly&apos;,
-      rarity: &apos;rare&apos;,
+      id: 'blowout_victory',
+      name: 'Absolute Domination',
+      description: 'Win by 50+ points',
+      icon: '💥',
+      category: 'weekly',
+      rarity: 'rare',
       points: 25
     },
     {
-}
-      id: &apos;comeback_king&apos;,
-      name: &apos;Monday Night Miracle&apos;,
-      description: &apos;Win after being down 20+ points going into Monday&apos;,
-      icon: &apos;🌙&apos;,
-      category: &apos;weekly&apos;,
-      rarity: &apos;epic&apos;,
+      id: 'comeback_king',
+      name: 'Monday Night Miracle',
+      description: 'Win after being down 20+ points going into Monday',
+      icon: '🌙',
+      category: 'weekly',
+      rarity: 'epic',
       points: 50
     },
     {
-}
-      id: &apos;perfect_lineup&apos;,
-      name: &apos;Crystal Ball Manager&apos;,
-      description: &apos;Start the optimal lineup (all players score season-high)&apos;,
-      icon: &apos;🔮&apos;,
-      category: &apos;weekly&apos;,
-      rarity: &apos;legendary&apos;,
+      id: 'perfect_lineup',
+      name: 'Crystal Ball Manager',
+      description: 'Start the optimal lineup (all players score season-high)',
+      icon: '🔮',
+      category: 'weekly',
+      rarity: 'legendary',
       points: 100
     },
     
     // Season-Long Achievements
     {
-}
-      id: &apos;undefeated_streak&apos;,
-      name: &apos;Unstoppable Force&apos;,
-      description: &apos;Win 5 games in a row&apos;,
-      icon: &apos;🔥&apos;,
-      category: &apos;season&apos;,
-      rarity: &apos;epic&apos;,
+      id: 'undefeated_streak',
+      name: 'Unstoppable Force',
+      description: 'Win 5 games in a row',
+      icon: '🔥',
+      category: 'season',
+      rarity: 'epic',
       points: 75
     },
     {
-}
-      id: &apos;waiver_wire_wizard&apos;,
-      name: &apos;Diamond in the Rough&apos;,
-      description: &apos;Pick up and start a waiver player who scores 25+ points&apos;,
-      icon: &apos;💎&apos;,
-      category: &apos;season&apos;,
-      rarity: &apos;rare&apos;,
+      id: 'waiver_wire_wizard',
+      name: 'Diamond in the Rough',
+      description: 'Pick up and start a waiver player who scores 25+ points',
+      icon: '💎',
+      category: 'season',
+      rarity: 'rare',
       points: 30
     },
     {
-}
-      id: &apos;trade_master&apos;,
-      name: &apos;Art of the Deal&apos;,
-      description: &apos;Complete 3 successful trades that improve your team&apos;,
-      icon: &apos;🤝&apos;,
-      category: &apos;season&apos;,
-      rarity: &apos;rare&apos;,
+      id: 'trade_master',
+      name: 'Art of the Deal',
+      description: 'Complete 3 successful trades that improve your team',
+      icon: '🤝',
+      category: 'season',
+      rarity: 'rare',
       points: 40
     },
     {
-}
-      id: &apos;playoff_berth&apos;,
-      name: &apos;Dance Card Secured&apos;,
-      description: &apos;Clinch a playoff spot&apos;,
-      icon: &apos;🎟️&apos;,
-      category: &apos;season&apos;,
-      rarity: &apos;common&apos;,
+      id: 'playoff_berth',
+      name: 'Dance Card Secured',
+      description: 'Clinch a playoff spot',
+      icon: '🎟️',
+      category: 'season',
+      rarity: 'common',
       points: 20
     },
     
     // Special/Fun Achievements
     {
-}
-      id: &apos;trash_talk_legend&apos;,
-      name: &apos;Master of Banter&apos;,
-      description: &apos;Send 50 trash talk messages&apos;,
-      icon: &apos;🗣️&apos;,
-      category: &apos;special&apos;,
-      rarity: &apos;rare&apos;,
+      id: 'trash_talk_legend',
+      name: 'Master of Banter',
+      description: 'Send 50 trash talk messages',
+      icon: '🗣️',
+      category: 'special',
+      rarity: 'rare',
       points: 15
     },
     {
-}
-      id: &apos;loyalty_badge&apos;,
-      name: &apos;Ride or Die&apos;,
-      description: &apos;Keep the same QB all season (min 10 starts)&apos;,
-      icon: &apos;🛡️&apos;,
-      category: &apos;special&apos;,
-      rarity: &apos;rare&apos;,
+      id: 'loyalty_badge',
+      name: 'Ride or Die',
+      description: 'Keep the same QB all season (min 10 starts)',
+      icon: '🛡️',
+      category: 'special',
+      rarity: 'rare',
       points: 25
     },
     {
-}
-      id: &apos;glass_house&apos;,
-      name: &apos;Living Dangerously&apos;,
-      description: &apos;Start 5 rookies in one week&apos;,
-      icon: &apos;🏠&apos;,
-      category: &apos;special&apos;,
-      rarity: &apos;epic&apos;,
+      id: 'glass_house',
+      name: 'Living Dangerously',
+      description: 'Start 5 rookies in one week',
+      icon: '🏠',
+      category: 'special',
+      rarity: 'epic',
       points: 60
 
   ];
 
   // Victory celebration animations and effects
   const celebrationEffects = {
-}
     weekly_win: {
-}
       confetti: true,
       duration: 3000,
-      message: &apos;Victory is Yours!&apos;,
-      animation: &apos;bounce&apos;,
-      color: &apos;text-green-400&apos;
+      message: 'Victory is Yours!',
+      animation: 'bounce',
+      color: 'text-green-400'
     },
     blowout: {
-}
       confetti: true,
       duration: 4000,
-      message: &apos;TOTAL DOMINATION!&apos;,
-      animation: &apos;explode&apos;,
-      color: &apos;text-red-400&apos;
+      message: 'TOTAL DOMINATION!',
+      animation: 'explode',
+      color: 'text-red-400'
     },
     comeback: {
-}
       confetti: true,
       duration: 5000,
-      message: &apos;MIRACLE COMEBACK!&apos;,
-      animation: &apos;dramatic&apos;,
-      color: &apos;text-purple-400&apos;
+      message: 'MIRACLE COMEBACK!',
+      animation: 'dramatic',
+      color: 'text-purple-400'
     },
     perfect_lineup: {
-}
       confetti: true,
       duration: 6000,
-      message: &apos;PERFECT LINEUP!&apos;,
-      animation: &apos;legendary&apos;,
-      color: &apos;text-yellow-400&apos;
+      message: 'PERFECT LINEUP!',
+      animation: 'legendary',
+      color: 'text-yellow-400'
     },
     highest_score: {
-}
       confetti: true,
       duration: 4000,
-      message: &apos;WEEKLY HIGH SCORE!&apos;,
-      animation: &apos;fire&apos;,
-      color: &apos;text-orange-400&apos;
+      message: 'WEEKLY HIGH SCORE!',
+      animation: 'fire',
+      color: 'text-orange-400'
     },
     playoff_berth: {
-}
       confetti: true,
       duration: 5000,
-      message: &apos;PLAYOFFS BABY!&apos;,
-      animation: &apos;championship&apos;,
-      color: &apos;text-blue-400&apos;
+      message: 'PLAYOFFS BABY!',
+      animation: 'championship',
+      color: 'text-blue-400'
     },
     championship: {
-}
       confetti: true,
       duration: 10000,
-      message: &apos;LEAGUE CHAMPION!&apos;,
-      animation: &apos;ultimate&apos;,
-      color: &apos;text-gold-400&apos;
+      message: 'LEAGUE CHAMPION!',
+      animation: 'ultimate',
+      color: 'text-gold-400'
 
   };
 
   // Trigger celebration based on game results
-  const triggerCelebration = (type: VictoryType[&apos;type&apos;], gameData?: any) => {
-}
+  const triggerCelebration = (type: VictoryType['type'], gameData?: any) => {
     const celebration = celebrationEffects[type];
     setCelebrationType({
-}
       type,
-      intensity: Math.min(5, Math.max(1, Math.floor(Math.random() * 5) + 1)) as VictoryType[&apos;intensity&apos;],
+      intensity: Math.min(5, Math.max(1, Math.floor(Math.random() * 5) + 1)) as VictoryType['intensity'],
       duration: celebration.duration
     });
     setShowCelebration(true);
@@ -251,7 +223,6 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
 
     // Auto-hide after duration
     setTimeout(() => {
-}
       setShowCelebration(false);
       setConfettiActive(false);
       onCelebrationComplete?.();
@@ -259,17 +230,13 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   };
 
   const checkForNewAchievements = (victoryType: string, gameData?: any) => {
-}
     const newAchievements: Achievement[] = [];
     
     // Mock achievement checking logic
     achievementDefinitions.forEach((achievement: any) => {
-}
       // In real implementation, check actual game data and user stats
       if (Math.random() > 0.8) { // Mock 20% chance of unlocking
-}
         newAchievements.push({
-}
           ...achievement,
           unlockedAt: new Date()
         });
@@ -279,30 +246,25 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
     setActiveAchievements(newAchievements);
   };
 
-  const getRarityColor = (rarity: Achievement[&apos;rarity&apos;]) => {
-}
+  const getRarityColor = (rarity: Achievement['rarity']) => {
     switch (rarity) {
-}
-      case &apos;common&apos;: return &apos;text-gray-400 border-gray-500&apos;;
-      case &apos;rare&apos;: return &apos;text-blue-400 border-blue-500&apos;;
-      case &apos;epic&apos;: return &apos;text-purple-400 border-purple-500&apos;;
-      case &apos;legendary&apos;: return &apos;text-yellow-400 border-yellow-500&apos;;
+      case 'common': return 'text-gray-400 border-gray-500';
+      case 'rare': return 'text-blue-400 border-blue-500';
+      case 'epic': return 'text-purple-400 border-purple-500';
+      case 'legendary': return 'text-yellow-400 border-yellow-500';
 
   };
 
-  const getRarityGlow = (rarity: Achievement[&apos;rarity&apos;]) => {
-}
+  const getRarityGlow = (rarity: Achievement['rarity']) => {
     switch (rarity) {
-}
-      case &apos;common&apos;: return &apos;shadow-lg&apos;;
-      case &apos;rare&apos;: return &apos;shadow-blue-500/50 shadow-lg&apos;;
-      case &apos;epic&apos;: return &apos;shadow-purple-500/50 shadow-xl&apos;;
-      case &apos;legendary&apos;: return &apos;shadow-yellow-500/50 shadow-2xl&apos;;
+      case 'common': return 'shadow-lg';
+      case 'rare': return 'shadow-blue-500/50 shadow-lg';
+      case 'epic': return 'shadow-purple-500/50 shadow-xl';
+      case 'legendary': return 'shadow-yellow-500/50 shadow-2xl';
 
   };
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -314,29 +276,23 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
     <>
       {/* Confetti Effect */}
       {confettiActive && (
-}
         <div className="fixed inset-0 pointer-events-none z-[1090] sm:px-4 md:px-6 lg:px-8">
           {[...Array(50)].map((_, i) => (
-}
             <motion.div
               key={i}
               className={`absolute w-3 h-3 ${
-}
-                [&apos;bg-red-400&apos;, &apos;bg-blue-400&apos;, &apos;bg-green-400&apos;, &apos;bg-yellow-400&apos;, &apos;bg-purple-400&apos;][i % 5]
+                ['bg-red-400', 'bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-purple-400'][i % 5]
               }`}
               style={{
-}
                 left: `${Math.random() * 100}%`,
-                top: &apos;-5%&apos;
+                top: '-5%'
               }}
               animate={{
-}
                 y: [0, window.innerHeight + 50],
                 rotate: [0, 360, 720],
                 opacity: [1, 1, 0]
               }}
               transition={{
-}
                 duration: Math.random() * 3 + 2,
                 ease: "easeOut",
                 delay: Math.random() * 2
@@ -349,7 +305,6 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       {/* Victory Celebration Modal */}
       <AnimatePresence>
         {showCelebration && celebrationType && (
-}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -359,14 +314,12 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ 
-}
                 scale: [0.5, 1.1, 1], 
                 opacity: 1,
                 rotate: [0, 5, -5, 0]
               }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ 
-}
                 type: "spring", 
                 stiffness: 200, 
                 damping: 20,
@@ -377,12 +330,10 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
               {/* Victory Icon */}
               <motion.div
                 animate={{ 
-}
                   rotate: [0, 15, -15, 0],
                   scale: [1, 1.1, 1]
                 }}
                 transition={{ 
-}
                   repeat: Infinity,
                   duration: 2
                 }}
@@ -396,11 +347,9 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
               {/* Victory Message */}
               <motion.h2
                 animate={{ 
-}
                   scale: [1, 1.05, 1]
                 }}
                 transition={{ 
-}
                   repeat: Infinity,
                   duration: 1.5
                 }}
@@ -415,22 +364,18 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
               {/* Sparkle Effects */}
               <div className="relative sm:px-4 md:px-6 lg:px-8">
                 {[...Array(8)].map((_, i) => (
-}
                   <motion.div
                     key={i}
                     className="absolute sm:px-4 md:px-6 lg:px-8"
                     style={{
-}
                       left: `${20 + (i * 10)}%`,
                       top: `${20 + (i % 2 * 40)}%`
                     }}
                     animate={{
-}
                       scale: [0, 1, 0],
                       opacity: [0, 1, 0]
                     }}
                     transition={{
-}
                       duration: 2,
                       repeat: Infinity,
                       delay: i * 0.2
@@ -448,7 +393,6 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       {/* Achievement Unlocked Notifications */}
       <AnimatePresence>
         {activeAchievements.map((achievement, index) => (
-}
           <motion.div
             key={achievement.id}
             initial={{ x: 400, opacity: 0 }}
@@ -487,17 +431,17 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       {/* Test Celebration Buttons (for development/testing) */}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 sm:px-4 md:px-6 lg:px-8">
         <button
-          onClick={() => triggerCelebration(&apos;weekly_win&apos;)}
+          onClick={() => triggerCelebration('weekly_win')}
         >
           🏆 Victory
         </button>
         <button
-          onClick={() => triggerCelebration(&apos;blowout&apos;)}
+          onClick={() => triggerCelebration('blowout')}
         >
           💥 Blowout
         </button>
         <button
-          onClick={() => triggerCelebration(&apos;championship&apos;)}
+          onClick={() => triggerCelebration('championship')}
         >
           👑 Championship
         </button>

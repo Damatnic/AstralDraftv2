@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import OracleErrorBoundary from &apos;./OracleErrorBoundary&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import OracleErrorBoundary from './OracleErrorBoundary';
 
-describe(&apos;OracleErrorBoundary&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('OracleErrorBoundary', () => {
+  it('renders without crashing', () => {
     render(<OracleErrorBoundary />);
-    expect(screen.getByTestId(&apos;oracleerrorboundary&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('oracleerrorboundary')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<OracleErrorBoundary />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<OracleErrorBoundary />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

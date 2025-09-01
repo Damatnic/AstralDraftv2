@@ -3,11 +3,10 @@
  * Manages leagues, group predictions, debates, and social interactions for Oracle challenges
  */
 
-export type DebateSide = &apos;SIDE_A&apos; | &apos;SIDE_B&apos; | &apos;NEUTRAL&apos;;
-export type GroupPredictionType = &apos;CONSENSUS&apos; | &apos;MAJORITY_VOTE&apos; | &apos;WEIGHTED_AVERAGE&apos;;
+export type DebateSide = 'SIDE_A' | 'SIDE_B' | 'NEUTRAL';
+export type GroupPredictionType = 'CONSENSUS' | 'MAJORITY_VOTE' | 'WEIGHTED_AVERAGE';
 
 export interface OracleLeague {
-}
     id: string;
     name: string;
     description: string;
@@ -22,25 +21,21 @@ export interface OracleLeague {
     createdAt: string;
     seasonStartDate: string;
     seasonEndDate: string;
-    status: &apos;ACTIVE&apos; | &apos;ENDED&apos; | &apos;PENDING&apos;;
+    status: 'ACTIVE' | 'ENDED' | 'PENDING';
     tags: string[];
     joinCode?: string;
-}
 
 export interface LeagueMember {
-}
     userId: string;
     username: string;
     avatar: string;
-    role: &apos;CREATOR&apos; | &apos;ADMIN&apos; | &apos;MEMBER&apos;;
+    role: 'CREATOR' | 'ADMIN' | 'MEMBER';
     joinedAt: string;
     stats: LeagueMemberStats;
     isActive: boolean;
     lastActivity: string;
-}
 
 export interface LeagueMemberStats {
-}
     totalPoints: number;
     weeklyPoints: number;
     wins: number;
@@ -52,50 +47,42 @@ export interface LeagueMemberStats {
     weeklyRank: number;
     achievements: number;
     badges: number;
-}
 
 export interface LeagueSettings {
-}
-    challengeFrequency: &apos;DAILY&apos; | &apos;WEEKLY&apos; | &apos;BI_WEEKLY&apos;;
-    pointsSystem: &apos;STANDARD&apos; | &apos;BOOSTED&apos; | &apos;CUSTOM&apos;;
+    challengeFrequency: 'DAILY' | 'WEEKLY' | 'BI_WEEKLY';
+    pointsSystem: 'STANDARD' | 'BOOSTED' | 'CUSTOM';
     allowDebates: boolean;
     allowGroupPredictions: boolean;
     autoStartChallenges: boolean;
     minimumParticipants: number;
     enableTrashtalk: boolean;
-    moderationLevel: &apos;OPEN&apos; | &apos;MODERATED&apos; | &apos;STRICT&apos;;
+    moderationLevel: 'OPEN' | 'MODERATED' | 'STRICT';
     customRules: string[];
-}
 
 export interface GroupPrediction {
-}
     id: string;
     leagueId: string;
     challengeId: string;
     title: string;
     description: string;
     type: GroupPredictionType;
-    status: &apos;OPEN&apos; | &apos;CLOSED&apos; | &apos;COMPLETED&apos;;
+    status: 'OPEN' | 'CLOSED' | 'COMPLETED';
     createdBy: string;
     createdAt: string;
     closesAt: string;
     participants: GroupPredictionParticipant[];
     result?: {
-}
         prediction: number;
         confidence: number;
         accuracy?: boolean;
         participantCount: number;
     };
     rewards: {
-}
         winnerPoints: number;
         participationPoints: number;
     };
-}
 
 export interface GroupPredictionParticipant {
-}
     userId: string;
     username: string;
     avatar: string;
@@ -104,10 +91,8 @@ export interface GroupPredictionParticipant {
     reasoning?: string;
     submittedAt: string;
     weight?: number; // For weighted average calculations
-}
 
 export interface Debate {
-}
     id: string;
     leagueId: string;
     challengeId?: string;
@@ -116,23 +101,20 @@ export interface Debate {
     description: string;
     createdBy: string;
     createdAt: string;
-    status: &apos;ACTIVE&apos; | &apos;CLOSED&apos; | &apos;RESOLVED&apos;;
+    status: 'ACTIVE' | 'CLOSED' | 'RESOLVED';
     participants: DebateParticipant[];
     posts: DebatePost[];
     votes: DebateVote[];
     tags: string[];
     moderatorActions: ModeratorAction[];
     resolution?: {
-}
-        winner: &apos;SIDE_A&apos; | &apos;SIDE_B&apos; | &apos;DRAW&apos;;
+        winner: 'SIDE_A' | 'SIDE_B' | 'DRAW';
         resolvedBy: string;
         resolvedAt: string;
         reasoning: string;
     };
-}
 
 export interface DebateParticipant {
-}
     userId: string;
     username: string;
     avatar: string;
@@ -140,10 +122,8 @@ export interface DebateParticipant {
     joinedAt: string;
     reputation: number;
     badges: string[];
-}
 
 export interface DebatePost {
-}
     id: string;
     debateId: string;
     userId: string;
@@ -157,10 +137,8 @@ export interface DebatePost {
     replies: DebateReply[];
     isModerated: boolean;
     isPinned: boolean;
-}
 
 export interface DebateReply {
-}
     id: string;
     postId: string;
     userId: string;
@@ -169,50 +147,40 @@ export interface DebateReply {
     content: string;
     postedAt: string;
     reactions: PostReaction[];
-}
 
 export interface PostReaction {
-}
     userId: string;
-    type: &apos;👍&apos; | &apos;👎&apos; | &apos;🔥&apos; | &apos;💯&apos; | &apos;🤔&apos; | &apos;😂&apos;;
+    type: '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂';
     timestamp: string;
-}
 
 export interface DebateVote {
-}
     userId: string;
-    side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos;;
+    side: 'SIDE_A' | 'SIDE_B';
     timestamp: string;
     reasoning?: string;
-}
 
 export interface ModeratorAction {
-}
     id: string;
     moderatorId: string;
     moderatorName: string;
-    action: &apos;DELETE_POST&apos; | &apos;EDIT_POST&apos; | &apos;WARN_USER&apos; | &apos;TIMEOUT_USER&apos; | &apos;PIN_POST&apos;;
+    action: 'DELETE_POST' | 'EDIT_POST' | 'WARN_USER' | 'TIMEOUT_USER' | 'PIN_POST';
     targetId: string;
-    targetType: &apos;POST&apos; | &apos;REPLY&apos; | &apos;USER&apos;;
+    targetType: 'POST' | 'REPLY' | 'USER';
     reason: string;
     timestamp: string;
-}
 
 export interface SocialNotification {
-}
     id: string;
     userId: string;
-    type: &apos;LEAGUE_INVITE&apos; | &apos;GROUP_PREDICTION&apos; | &apos;DEBATE_MENTION&apos; | &apos;CHALLENGE_RESULT&apos; | &apos;LEAGUE_UPDATE&apos;;
+    type: 'LEAGUE_INVITE' | 'GROUP_PREDICTION' | 'DEBATE_MENTION' | 'CHALLENGE_RESULT' | 'LEAGUE_UPDATE';
     title: string;
     message: string;
     data: any;
     isRead: boolean;
     createdAt: string;
     expiresAt?: string;
-}
 
 export interface LeagueInvitation {
-}
     id: string;
     leagueId: string;
     leagueName: string;
@@ -221,51 +189,44 @@ export interface LeagueInvitation {
     toUserId: string;
     toUsername: string;
     message?: string;
-    status: &apos;PENDING&apos; | &apos;ACCEPTED&apos; | &apos;DECLINED&apos; | &apos;EXPIRED&apos;;
+    status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'EXPIRED';
     createdAt: string;
     expiresAt: string;
-}
 
 export interface SocialChallenge {
-}
     id: string;
     leagueId: string;
-    type: &apos;HEAD_TO_HEAD&apos; | &apos;MINI_TOURNAMENT&apos; | &apos;SPEED_ROUND&apos;;
+    type: 'HEAD_TO_HEAD' | 'MINI_TOURNAMENT' | 'SPEED_ROUND';
     title: string;
     description: string;
     participants: string[];
     settings: {
-}
         duration: number; // minutes
         questionCount: number;
-        difficultyLevel: &apos;EASY&apos; | &apos;MEDIUM&apos; | &apos;HARD&apos; | &apos;EXPERT&apos;;
+        difficultyLevel: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
         categories: string[];
     };
-    status: &apos;SCHEDULED&apos; | &apos;ACTIVE&apos; | &apos;COMPLETED&apos;;
+    status: 'SCHEDULED' | 'ACTIVE' | 'COMPLETED';
     startTime: string;
     endTime: string;
     results?: {
-}
         winner: string;
         scores: Record<string, number>;
         leaderboard: Array<{
-}
             userId: string;
             username: string;
             score: number;
             rank: number;
         }>;
     };
-}
 
 class OracleSocialService {
-}
-    private readonly LEAGUES_KEY = &apos;oracleLeagues&apos;;
-    private readonly USER_LEAGUES_KEY = &apos;oracleUserLeagues&apos;;
-    private readonly GROUP_PREDICTIONS_KEY = &apos;oracleGroupPredictions&apos;;
-    private readonly DEBATES_KEY = &apos;oracleDebates&apos;;
-    private readonly NOTIFICATIONS_KEY = &apos;oracleSocialNotifications&apos;;
-    private readonly INVITATIONS_KEY = &apos;oracleInvitations&apos;;
+    private readonly LEAGUES_KEY = 'oracleLeagues';
+    private readonly USER_LEAGUES_KEY = 'oracleUserLeagues';
+    private readonly GROUP_PREDICTIONS_KEY = 'oracleGroupPredictions';
+    private readonly DEBATES_KEY = 'oracleDebates';
+    private readonly NOTIFICATIONS_KEY = 'oracleSocialNotifications';
+    private readonly INVITATIONS_KEY = 'oracleInvitations';
 
     // League Management
     /**
@@ -278,27 +239,23 @@ class OracleSocialService {
         isPublic: boolean = true,
         maxMembers: number = 50
     ): Promise<OracleLeague> {
-}
         const league: OracleLeague = {
-}
             id: `league-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             name,
             description,
-            creatorId: &apos;current-user&apos;, // Would be actual user ID
-            creatorName: &apos;You&apos;,
-            avatar: &apos;👤&apos;,
+            creatorId: 'current-user', // Would be actual user ID
+            creatorName: 'You',
+            avatar: '👤',
             isPublic,
             maxMembers,
             currentMembers: 1,
             members: [{
-}
-                userId: &apos;current-user&apos;,
-                username: &apos;You&apos;,
-                avatar: &apos;👤&apos;,
-                role: &apos;CREATOR&apos;,
+                userId: 'current-user',
+                username: 'You',
+                avatar: '👤',
+                role: 'CREATOR',
                 joinedAt: new Date().toISOString(),
                 stats: {
-}
                     totalPoints: 0,
                     weeklyPoints: 0,
                     wins: 0,
@@ -318,7 +275,7 @@ class OracleSocialService {
             createdAt: new Date().toISOString(),
             seasonStartDate: new Date().toISOString(),
             seasonEndDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(), // 6 months
-            status: &apos;ACTIVE&apos;,
+            status: 'ACTIVE',
             tags: this.generateLeagueTags(name, description),
             joinCode: this.generateJoinCode()
         };
@@ -328,7 +285,7 @@ class OracleSocialService {
         leagues.push(league);
         this.storeLeagues(leagues);
 
-        // Add to user&apos;s leagues
+        // Add to user's leagues
         const userLeagues = this.getUserLeagueIds();
         userLeagues.push(league.id);
         this.storeUserLeagues(userLeagues);
@@ -340,32 +297,27 @@ class OracleSocialService {
      * Join a league by ID or join code
      */
     async joinLeague(leagueId: string, joinCode?: string): Promise<boolean> {
-}
         const leagues = this.getStoredLeagues();
         const league = leagues.find((l: any) => l.id === leagueId || l.joinCode === joinCode);
         
         if (!league || league.currentMembers >= league.maxMembers) {
-}
             return false;
         }
 
         // Check if user is already a member
-        const isAlreadyMember = league.members.some((m: any) => m.userId === &apos;current-user&apos;);
+        const isAlreadyMember = league.members.some((m: any) => m.userId === 'current-user');
         if (isAlreadyMember) {
-}
             return false;
         }
 
         // Add user as member
         const newMember: LeagueMember = {
-}
-            userId: &apos;current-user&apos;,
-            username: &apos;You&apos;,
-            avatar: &apos;👤&apos;,
-            role: &apos;MEMBER&apos;,
+            userId: 'current-user',
+            username: 'You',
+            avatar: '👤',
+            role: 'MEMBER',
             joinedAt: new Date().toISOString(),
             stats: {
-}
                 totalPoints: 0,
                 weeklyPoints: 0,
                 wins: 0,
@@ -388,7 +340,7 @@ class OracleSocialService {
         // Update stored leagues
         this.storeLeagues(leagues);
 
-        // Add to user&apos;s leagues
+        // Add to user's leagues
         const userLeagues = this.getUserLeagueIds();
         userLeagues.push(league.id);
         this.storeUserLeagues(userLeagues);
@@ -397,10 +349,9 @@ class OracleSocialService {
     }
 
     /**
-     * Get user&apos;s leagues
+     * Get user's leagues
      */
     async getUserLeagues(): Promise<OracleLeague[]> {
-}
         const userLeagueIds = this.getUserLeagueIds();
         const allLeagues = this.getStoredLeagues();
         return allLeagues.filter((league: any) => userLeagueIds.includes(league.id));
@@ -410,7 +361,6 @@ class OracleSocialService {
      * Get public leagues available to join
      */
     async getPublicLeagues(limit: number = 20): Promise<OracleLeague[]> {
-}
         const allLeagues = this.getStoredLeagues();
         return allLeagues
             .filter((league: any) => league.isPublic && league.currentMembers < league.maxMembers)
@@ -426,25 +376,22 @@ class OracleSocialService {
         challengeId: string,
         title: string,
         description: string,
-        type: GroupPrediction[&apos;type&apos;] = &apos;MAJORITY_VOTE&apos;,
+        type: GroupPrediction['type'] = 'MAJORITY_VOTE',
         closesInHours: number = 24
     ): Promise<GroupPrediction> {
-}
         const groupPrediction: GroupPrediction = {
-}
             id: `group-pred-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             leagueId,
             challengeId,
             title,
             description,
             type,
-            status: &apos;OPEN&apos;,
-            createdBy: &apos;current-user&apos;,
+            status: 'OPEN',
+            createdBy: 'current-user',
             createdAt: new Date().toISOString(),
             closesAt: new Date(Date.now() + closesInHours * 60 * 60 * 1000).toISOString(),
             participants: [],
             rewards: {
-}
                 winnerPoints: 100,
                 participationPoints: 25
             }
@@ -466,32 +413,27 @@ class OracleSocialService {
         confidence: number,
         reasoning?: string
     ): Promise<boolean> {
-}
         const groupPredictions = this.getStoredGroupPredictions();
         const groupPred = groupPredictions.find((gp: any) => gp.id === groupPredictionId);
 
-        if (!groupPred || groupPred.status !== &apos;OPEN&apos;) {
-}
+        if (!groupPred || groupPred.status !== 'OPEN') {
             return false;
         }
 
         // Check if user already participated
-        const existingParticipant = groupPred.participants.find((p: any) => p.userId === &apos;current-user&apos;);
+        const existingParticipant = groupPred.participants.find((p: any) => p.userId === 'current-user');
         if (existingParticipant) {
-}
             // Update existing prediction
             existingParticipant.prediction = prediction;
             existingParticipant.confidence = confidence;
             existingParticipant.reasoning = reasoning;
             existingParticipant.submittedAt = new Date().toISOString();
         } else {
-}
             // Add new participant
             groupPred.participants.push({
-}
-                userId: &apos;current-user&apos;,
-                username: &apos;You&apos;,
-                avatar: &apos;👤&apos;,
+                userId: 'current-user',
+                username: 'You',
+                avatar: '👤',
                 prediction,
                 confidence,
                 reasoning,
@@ -508,7 +450,6 @@ class OracleSocialService {
      * Get group predictions for a league
      */
     async getLeagueGroupPredictions(leagueId: string): Promise<GroupPrediction[]> {
-}
         const groupPredictions = this.getStoredGroupPredictions();
         return groupPredictions.filter((gp: any) => gp.leagueId === leagueId);
     }
@@ -524,18 +465,16 @@ class OracleSocialService {
         description: string,
         challengeId?: string
     ): Promise<Debate> {
-}
         const debate: Debate = {
-}
             id: `debate-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             leagueId,
             challengeId,
             title,
             topic,
             description,
-            createdBy: &apos;current-user&apos;,
+            createdBy: 'current-user',
             createdAt: new Date().toISOString(),
-            status: &apos;ACTIVE&apos;,
+            status: 'ACTIVE',
             participants: [],
             posts: [],
             votes: [],
@@ -553,28 +492,23 @@ class OracleSocialService {
     /**
      * Join a debate
      */
-    async joinDebate(debateId: string, side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos; | &apos;NEUTRAL&apos;): Promise<boolean> {
-}
+    async joinDebate(debateId: string, side: 'SIDE_A' | 'SIDE_B' | 'NEUTRAL'): Promise<boolean> {
         const debates = this.getStoredDebates();
         const debate = debates.find((d: any) => d.id === debateId);
 
-        if (!debate || debate.status !== &apos;ACTIVE&apos;) {
-}
+        if (!debate || debate.status !== 'ACTIVE') {
             return false;
         }
 
         // Check if user is already participating
-        const existingParticipant = debate.participants.find((p: any) => p.userId === &apos;current-user&apos;);
+        const existingParticipant = debate.participants.find((p: any) => p.userId === 'current-user');
         if (existingParticipant) {
-}
             existingParticipant.side = side;
         } else {
-}
             debate.participants.push({
-}
-                userId: &apos;current-user&apos;,
-                username: &apos;You&apos;,
-                avatar: &apos;👤&apos;,
+                userId: 'current-user',
+                username: 'You',
+                avatar: '👤',
                 side,
                 joinedAt: new Date().toISOString(),
                 reputation: 100, // Default reputation
@@ -592,24 +526,21 @@ class OracleSocialService {
     async postInDebate(
         debateId: string,
         content: string,
-        side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos; | &apos;NEUTRAL&apos;
+        side: 'SIDE_A' | 'SIDE_B' | 'NEUTRAL'
     ): Promise<DebatePost | null> {
-}
         const debates = this.getStoredDebates();
         const debate = debates.find((d: any) => d.id === debateId);
 
-        if (!debate || debate.status !== &apos;ACTIVE&apos;) {
-}
+        if (!debate || debate.status !== 'ACTIVE') {
             return null;
         }
 
         const post: DebatePost = {
-}
             id: `post-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             debateId,
-            userId: &apos;current-user&apos;,
-            username: &apos;You&apos;,
-            avatar: &apos;👤&apos;,
+            userId: 'current-user',
+            username: 'You',
+            avatar: '👤',
             content,
             side,
             postedAt: new Date().toISOString(),
@@ -629,7 +560,6 @@ class OracleSocialService {
      * Get debates for a league
      */
     async getLeagueDebates(leagueId: string): Promise<Debate[]> {
-}
         const debates = this.getStoredDebates();
         return debates.filter((d: any) => d.leagueId === leagueId);
     }
@@ -637,23 +567,20 @@ class OracleSocialService {
     /**
      * Vote in a debate
      */
-    async voteInDebate(debateId: string, side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos;, reasoning?: string): Promise<boolean> {
-}
+    async voteInDebate(debateId: string, side: 'SIDE_A' | 'SIDE_B', reasoning?: string): Promise<boolean> {
         const debates = this.getStoredDebates();
         const debate = debates.find((d: any) => d.id === debateId);
 
-        if (!debate || debate.status !== &apos;ACTIVE&apos;) {
-}
+        if (!debate || debate.status !== 'ACTIVE') {
             return false;
         }
 
         // Remove existing vote if any
-        debate.votes = debate.votes.filter((v: any) => v.userId !== &apos;current-user&apos;);
+        debate.votes = debate.votes.filter((v: any) => v.userId !== 'current-user');
 
         // Add new vote
         debate.votes.push({
-}
-            userId: &apos;current-user&apos;,
+            userId: 'current-user',
             side,
             timestamp: new Date().toISOString(),
 //             reasoning
@@ -667,21 +594,17 @@ class OracleSocialService {
      * Reply to a debate post
      */
     async replyToPost(postId: string, content: string): Promise<DebateReply | null> {
-}
         const debates = this.getStoredDebates();
         
         for (const debate of debates) {
-}
             const post = debate.posts.find((p: any) => p.id === postId);
             if (post) {
-}
                 const reply: DebateReply = {
-}
                     id: `reply-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
                     postId,
-                    userId: &apos;current-user&apos;,
-                    username: &apos;You&apos;,
-                    avatar: &apos;👤&apos;,
+                    userId: 'current-user',
+                    username: 'You',
+                    avatar: '👤',
                     content,
                     postedAt: new Date().toISOString(),
                     reactions: []
@@ -699,22 +622,18 @@ class OracleSocialService {
     /**
      * Add reaction to a post
      */
-    async addReaction(postId: string, reactionType: &apos;👍&apos; | &apos;👎&apos; | &apos;🔥&apos; | &apos;💯&apos; | &apos;🤔&apos; | &apos;😂&apos;): Promise<boolean> {
-}
+    async addReaction(postId: string, reactionType: '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂'): Promise<boolean> {
         const debates = this.getStoredDebates();
         
         for (const debate of debates) {
-}
             const post = debate.posts.find((p: any) => p.id === postId);
             if (post) {
-}
                 // Remove existing reaction from this user
-                post.reactions = post.reactions.filter((r: any) => r.userId !== &apos;current-user&apos;);
+                post.reactions = post.reactions.filter((r: any) => r.userId !== 'current-user');
                 
                 // Add new reaction
                 post.reactions.push({
-}
-                    userId: &apos;current-user&apos;,
+                    userId: 'current-user',
                     type: reactionType,
                     timestamp: new Date().toISOString()
                 });
@@ -732,26 +651,22 @@ class OracleSocialService {
      */
     async moderatePost(
         postId: string, 
-        action: &apos;DELETE_POST&apos; | &apos;EDIT_POST&apos; | &apos;WARN_USER&apos; | &apos;TIMEOUT_USER&apos; | &apos;PIN_POST&apos;,
+        action: 'DELETE_POST' | 'EDIT_POST' | 'WARN_USER' | 'TIMEOUT_USER' | 'PIN_POST',
         reason?: string
     ): Promise<boolean> {
-}
         const debates = this.getStoredDebates();
         
         for (const debate of debates) {
-}
             const post = debate.posts.find((p: any) => p.id === postId);
             if (post) {
-}
                 const moderatorAction: ModeratorAction = {
-}
                     id: `mod-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
-                    moderatorId: &apos;current-user&apos;,
-                    moderatorName: &apos;You&apos;,
+                    moderatorId: 'current-user',
+                    moderatorName: 'You',
                     action,
                     targetId: postId,
-                    targetType: &apos;POST&apos;,
-                    reason: reason || &apos;&apos;,
+                    targetType: 'POST',
+                    reason: reason || '',
                     timestamp: new Date().toISOString()
                 };
 
@@ -759,14 +674,13 @@ class OracleSocialService {
 
                 // Apply the moderation action
                 switch (action) {
-}
-                    case &apos;DELETE_POST&apos;:
+                    case 'DELETE_POST':
                         debate.posts = debate.posts.filter((p: any) => p.id !== postId);
                         break;
-                    case &apos;PIN_POST&apos;:
+                    case 'PIN_POST':
                         post.isPinned = true;
                         break;
-                    case &apos;EDIT_POST&apos;:
+                    case 'EDIT_POST':
                         post.isModerated = true;
                         break;
                 }
@@ -784,23 +698,20 @@ class OracleSocialService {
      */
     async resolveDebate(
         debateId: string, 
-        winner: &apos;SIDE_A&apos; | &apos;SIDE_B&apos; | &apos;DRAW&apos;, 
+        winner: 'SIDE_A' | 'SIDE_B' | 'DRAW', 
         reasoning: string
     ): Promise<boolean> {
-}
         const debates = this.getStoredDebates();
         const debate = debates.find((d: any) => d.id === debateId);
 
         if (!debate) {
-}
             return false;
         }
 
-        debate.status = &apos;RESOLVED&apos;;
+        debate.status = 'RESOLVED';
         debate.resolution = {
-}
             winner,
-            resolvedBy: &apos;current-user&apos;,
+            resolvedBy: 'current-user',
             resolvedAt: new Date().toISOString(),
 //             reasoning
         };
@@ -818,18 +729,16 @@ class OracleSocialService {
         toUsername: string,
         message?: string
     ): Promise<LeagueInvitation> {
-}
         const invitation: LeagueInvitation = {
-}
             id: `invite-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             leagueId,
-            leagueName: this.getStoredLeagues().find((l: any) => l.id === leagueId)?.name || &apos;Unknown League&apos;,
-            fromUserId: &apos;current-user&apos;,
-            fromUsername: &apos;You&apos;,
-            toUserId: &apos;target-user&apos;,
+            leagueName: this.getStoredLeagues().find((l: any) => l.id === leagueId)?.name || 'Unknown League',
+            fromUserId: 'current-user',
+            fromUsername: 'You',
+            toUserId: 'target-user',
             toUsername: toUsername,
             message,
-            status: &apos;PENDING&apos;,
+            status: 'PENDING',
             createdAt: new Date().toISOString(),
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
         };
@@ -845,7 +754,6 @@ class OracleSocialService {
      * Get league leaderboard
      */
     async getLeagueLeaderboard(leagueId: string): Promise<LeagueMember[]> {
-}
         const leagues = this.getStoredLeagues();
         const league = leagues.find((l: any) => l.id === leagueId);
         
@@ -856,161 +764,127 @@ class OracleSocialService {
 
     // Helper Methods
     private generateJoinCode(): string {
-}
         return Math.random().toString(36).substring(2, 10).toUpperCase();
     }
 
     private generateLeagueTags(name: string, description: string): string[] {
-}
         const tags: string[] = [];
         const text = `${name} ${description}`.toLowerCase();
         
-        if (text.includes(&apos;fantasy&apos;)) tags.push(&apos;fantasy&apos;);
-        if (text.includes(&apos;nfl&apos;)) tags.push(&apos;nfl&apos;);
-        if (text.includes(&apos;competitive&apos;)) tags.push(&apos;competitive&apos;);
-        if (text.includes(&apos;casual&apos;)) tags.push(&apos;casual&apos;);
-        if (text.includes(&apos;friends&apos;)) tags.push(&apos;friends&apos;);
-        if (text.includes(&apos;expert&apos;)) tags.push(&apos;expert&apos;);
+        if (text.includes('fantasy')) tags.push('fantasy');
+        if (text.includes('nfl')) tags.push('nfl');
+        if (text.includes('competitive')) tags.push('competitive');
+        if (text.includes('casual')) tags.push('casual');
+        if (text.includes('friends')) tags.push('friends');
+        if (text.includes('expert')) tags.push('expert');
         
         return tags;
     }
 
     private generateDebateTags(title: string, topic: string, description: string): string[] {
-}
         const tags: string[] = [];
         const text = `${title} ${topic} ${description}`.toLowerCase();
         
-        if (text.includes(&apos;trade&apos;)) tags.push(&apos;trades&apos;);
-        if (text.includes(&apos;draft&apos;)) tags.push(&apos;draft&apos;);
-        if (text.includes(&apos;waiver&apos;)) tags.push(&apos;waivers&apos;);
-        if (text.includes(&apos;lineup&apos;)) tags.push(&apos;lineups&apos;);
-        if (text.includes(&apos;injury&apos;)) tags.push(&apos;injuries&apos;);
-        if (text.includes(&apos;prediction&apos;)) tags.push(&apos;predictions&apos;);
+        if (text.includes('trade')) tags.push('trades');
+        if (text.includes('draft')) tags.push('draft');
+        if (text.includes('waiver')) tags.push('waivers');
+        if (text.includes('lineup')) tags.push('lineups');
+        if (text.includes('injury')) tags.push('injuries');
+        if (text.includes('prediction')) tags.push('predictions');
         
         return tags;
     }
 
     // Storage Methods
     private getStoredLeagues(): OracleLeague[] {
-}
         try {
-}
             const stored = localStorage.getItem(this.LEAGUES_KEY);
             return stored ? JSON.parse(stored) : [];
         } catch (error) {
-}
-            console.error(&apos;Failed to load leagues:&apos;, error);
+            console.error('Failed to load leagues:', error);
             return [];
         }
     }
 
     private storeLeagues(leagues: OracleLeague[]): void {
-}
         try {
-}
             localStorage.setItem(this.LEAGUES_KEY, JSON.stringify(leagues));
         } catch (error) {
-}
-            console.error(&apos;Failed to store leagues:&apos;, error);
+            console.error('Failed to store leagues:', error);
         }
     }
 
     private getUserLeagueIds(): string[] {
-}
         try {
-}
             const stored = localStorage.getItem(this.USER_LEAGUES_KEY);
             return stored ? JSON.parse(stored) : [];
         } catch (error) {
-}
-            console.error(&apos;Failed to load user leagues:&apos;, error);
+            console.error('Failed to load user leagues:', error);
             return [];
         }
     }
 
     private storeUserLeagues(leagueIds: string[]): void {
-}
         try {
-}
             localStorage.setItem(this.USER_LEAGUES_KEY, JSON.stringify(leagueIds));
         } catch (error) {
-}
-            console.error(&apos;Failed to store user leagues:&apos;, error);
+            console.error('Failed to store user leagues:', error);
         }
     }
 
     private getStoredGroupPredictions(): GroupPrediction[] {
-}
         try {
-}
             const stored = localStorage.getItem(this.GROUP_PREDICTIONS_KEY);
             return stored ? JSON.parse(stored) : [];
         } catch (error) {
-}
-            console.error(&apos;Failed to load group predictions:&apos;, error);
+            console.error('Failed to load group predictions:', error);
             return [];
         }
     }
 
     private storeGroupPredictions(predictions: GroupPrediction[]): void {
-}
         try {
-}
             localStorage.setItem(this.GROUP_PREDICTIONS_KEY, JSON.stringify(predictions));
         } catch (error) {
-}
-            console.error(&apos;Failed to store group predictions:&apos;, error);
+            console.error('Failed to store group predictions:', error);
         }
     }
 
     private getStoredDebates(): Debate[] {
-}
         try {
-}
             const stored = localStorage.getItem(this.DEBATES_KEY);
             return stored ? JSON.parse(stored) : [];
         } catch (error) {
-}
-            console.error(&apos;Failed to load debates:&apos;, error);
+            console.error('Failed to load debates:', error);
             return [];
         }
     }
 
     private storeDebates(debates: Debate[]): void {
-}
         try {
-}
             localStorage.setItem(this.DEBATES_KEY, JSON.stringify(debates));
         } catch (error) {
-}
-            console.error(&apos;Failed to store debates:&apos;, error);
+            console.error('Failed to store debates:', error);
         }
     }
 
     private getStoredInvitations(): LeagueInvitation[] {
-}
         try {
-}
             const stored = localStorage.getItem(this.INVITATIONS_KEY);
             return stored ? JSON.parse(stored) : [];
         } catch (error) {
-}
-            console.error(&apos;Failed to load invitations:&apos;, error);
+            console.error('Failed to load invitations:', error);
             return [];
         }
     }
 
     private storeInvitations(invitations: LeagueInvitation[]): void {
-}
         try {
-}
             localStorage.setItem(this.INVITATIONS_KEY, JSON.stringify(invitations));
         } catch (error) {
-}
-            console.error(&apos;Failed to store invitations:&apos;, error);
+            console.error('Failed to store invitations:', error);
         }
     }
-}
 
 // Export singleton instance
 export const oracleSocialService = new OracleSocialService();

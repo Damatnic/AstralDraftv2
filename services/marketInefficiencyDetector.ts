@@ -3,13 +3,12 @@
  * Identifies undervalued players, market trends, and timing opportunities
  */
 
-import { Player, League } from &apos;../types&apos;;
+import { Player, League } from '../types';
 
 export interface MarketInefficiency {
-}
     id: string;
-    type: &apos;undervalued&apos; | &apos;overvalued&apos; | &apos;run_opportunity&apos; | &apos;tier_break&apos; | &apos;positional_scarcity&apos; | &apos;bye_week_value&apos;;
-    severity: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos; | &apos;critical&apos;;
+    type: 'undervalued' | 'overvalued' | 'run_opportunity' | 'tier_break' | 'positional_scarcity' | 'bye_week_value';
+    severity: 'low' | 'medium' | 'high' | 'critical';
     player?: Player;
     position?: string;
     description: string;
@@ -19,42 +18,33 @@ export interface MarketInefficiency {
     reasoning: string[];
     actionRequired: string;
     potentialImpact: number; // Expected point/value impact
-}
 
 export interface PositionTrend {
-}
     position: string;
     averagePickPosition: number;
     recentAveragePickPosition: number; // Last 5 picks
-    trend: &apos;accelerating&apos; | &apos;stable&apos; | &apos;declining&apos;;
+    trend: 'accelerating' | 'stable' | 'declining';
     scarcityLevel: number; // 0-1, where 1 is very scarce
     nextTierBreak: number; // Picks until next tier break
-}
 
 export interface ValueOpportunity {
-}
     player: Player;
     expectedPick: number;
     currentPosition: number;
     valueDifference: number;
     confidence: number;
     reasons: string[];
-}
 
 export interface RunAnalysis {
-}
     position: string;
     runLength: number;
     intensity: number; // How compressed the run is
     likelyToContinue: boolean;
     nextTargets: Player[];
     counterStrategy: string[];
-}
 
 class MarketInefficiencyDetector {
-}
     private recentPicks: Array<{
-}
         pickNumber: number;
         player: Player;
         adpDifference: number;
@@ -69,13 +59,11 @@ class MarketInefficiencyDetector {
         currentPick: number,
         recentPicks: Record<string, unknown>[],
         context: {
-}
             currentRound: number;
             league: League;
             draftedPlayers: Player[];
         }
     ): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
 
         // Update internal state
@@ -94,7 +82,6 @@ class MarketInefficiencyDetector {
     }
 
     private updateMarketState(recentPicks: Record<string, unknown>[], availablePlayers: Player[]): void {
-}
         // Update recent picks history
         this.recentPicks = (recentPicks as unknown as { pickNumber: number; player: Player; adpDifference: number; timestamp: number; }[]).slice(-10); // Keep last 10 picks
 
@@ -103,11 +90,9 @@ class MarketInefficiencyDetector {
     }
 
     private updatePositionTrends(availablePlayers: Player[]): void {
-}
-        const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;];
+        const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
         positions.forEach((position: any) => {
-}
             const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
             const draftedInPosition = this.recentPicks
                 .filter((pick: any) => pick.player.position === position)
@@ -121,12 +106,11 @@ class MarketInefficiencyDetector {
             const scarcityLevel = this.calculateScarcityLevel(position, positionPlayers);
             const nextTierBreak = this.calculateNextTierBreak(positionPlayers);
 
-            let trend: &apos;accelerating&apos; | &apos;stable&apos; | &apos;declining&apos; = &apos;stable&apos;;
-            if (recentAveragePickPosition < averagePickPosition - 5) trend = &apos;accelerating&apos;;
-            else if (recentAveragePickPosition > averagePickPosition + 5) trend = &apos;declining&apos;;
+            let trend: 'accelerating' | 'stable' | 'declining' = 'stable';
+            if (recentAveragePickPosition < averagePickPosition - 5) trend = 'accelerating';
+            else if (recentAveragePickPosition > averagePickPosition + 5) trend = 'declining';
 
             this.positionTrends.set(position, {
-}
                 position,
                 averagePickPosition,
                 recentAveragePickPosition,
@@ -138,24 +122,20 @@ class MarketInefficiencyDetector {
     }
 
     private detectUndervaluedPlayers(availablePlayers: Player[], currentPick: number): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
         const topPlayers = availablePlayers.slice(0, 20); // Look at top 20 available
 
         topPlayers.forEach((player: any) => {
-}
             const adpDifference = (player.adp || 999) - currentPick;
             
             // Significant value if player is available 10+ picks after ADP
             if (adpDifference >= 10) {
-}
                 const severity = this.determineSeverity(adpDifference, [10, 20, 30]);
                 const confidence = Math.min(95, 60 + adpDifference * 2);
 
                 inefficiencies.push({
-}
                     id: `undervalued-${player.id}`,
-                    type: &apos;undervalued&apos;,
+                    type: 'undervalued',
                     severity,
                     player,
                     description: `${player.name} falling significantly below ADP`,
@@ -178,23 +158,19 @@ class MarketInefficiencyDetector {
     }
 
     private detectPositionalRuns(_availablePlayers: Player[], _currentPick: number, _context: Record<string, unknown>): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
-        const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
+        const positions = ['QB', 'RB', 'WR', 'TE'];
 
         positions.forEach((position: any) => {
-}
             const runAnalysis = this.analyzePositionalRun(position);
             
             if (runAnalysis.runLength >= 3) {
-}
                 const severity = this.determineSeverity(runAnalysis.runLength, [3, 4, 6]);
                 const confidence = Math.min(90, 50 + runAnalysis.runLength * 10);
 
                 inefficiencies.push({
-}
                     id: `run-${position}`,
-                    type: &apos;run_opportunity&apos;,
+                    type: 'run_opportunity',
                     severity,
                     position,
                     description: `${position} run detected - ${runAnalysis.runLength} consecutive picks`,
@@ -204,8 +180,8 @@ class MarketInefficiencyDetector {
                     reasoning: [
                         `${runAnalysis.runLength} ${position}s taken in recent picks`,
                         `Run intensity: ${(runAnalysis.intensity * 100).toFixed(1)}%`,
-                        runAnalysis.likelyToContinue ? &apos;Trend likely to continue&apos; : &apos;Run may be ending&apos;,
-                        `Next targets: ${runAnalysis.nextTargets.slice(0, 2).map((p: any) => p.name).join(&apos;, &apos;)}`
+                        runAnalysis.likelyToContinue ? 'Trend likely to continue' : 'Run may be ending',
+                        `Next targets: ${runAnalysis.nextTargets.slice(0, 2).map((p: any) => p.name).join(', ')}`
                     ],
                     actionRequired: runAnalysis.likelyToContinue 
                         ? `Jump on ${position} run before value disappears`
@@ -219,12 +195,10 @@ class MarketInefficiencyDetector {
     }
 
     private detectTierBreaks(availablePlayers: Player[], _currentPick: number): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
-        const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
+        const positions = ['QB', 'RB', 'WR', 'TE'];
 
         positions.forEach((position: any) => {
-}
             const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
             if (positionPlayers.length < 2) return;
 
@@ -237,14 +211,12 @@ class MarketInefficiencyDetector {
             const significantGap = projectionGap > 20; // 20+ point projection difference
 
             if (tierBreak || significantGap) {
-}
-                const severity = significantGap && tierBreak ? &apos;critical&apos; : &apos;high&apos;;
+                const severity = significantGap && tierBreak ? 'critical' : 'high';
                 const confidence = tierBreak ? 90 : 75;
 
                 inefficiencies.push({
-}
                     id: `tier-break-${position}`,
-                    type: &apos;tier_break&apos;,
+                    type: 'tier_break',
                     severity,
                     player: topPlayer,
                     position,
@@ -255,8 +227,8 @@ class MarketInefficiencyDetector {
                     reasoning: [
                         `${topPlayer.name} is Tier ${topPlayer.tier}`,
                         `Next ${position} (${nextPlayer.name}) is Tier ${nextPlayer.tier}`,
-                        projectionGap > 0 ? `${projectionGap.toFixed(1)} point projection gap` : &apos;&apos;,
-                        &apos;Significant drop-off in quality after this pick&apos;
+                        projectionGap > 0 ? `${projectionGap.toFixed(1)} point projection gap` : '',
+                        'Significant drop-off in quality after this pick'
                     ].filter(Boolean),
                     actionRequired: `Secure ${topPlayer.name} before tier drop`,
                     potentialImpact: projectionGap || 25
@@ -268,28 +240,23 @@ class MarketInefficiencyDetector {
     }
 
     private detectPositionalScarcity(availablePlayers: Player[], _context: Record<string, unknown>): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
-        const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
+        const positions = ['QB', 'RB', 'WR', 'TE'];
 
         positions.forEach((position: any) => {
-}
             const trend = this.positionTrends.get(position);
             if (!trend) return;
 
             if (trend.scarcityLevel > 0.7) { // High scarcity
-}
                 const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
                 const elitePlayers = positionPlayers.filter((p: any) => (p.tier || 10) <= 2);
 
                 if (elitePlayers.length <= 2) {
-}
-                    const severity = elitePlayers.length === 1 ? &apos;critical&apos; : &apos;high&apos;;
+                    const severity = elitePlayers.length === 1 ? 'critical' : 'high';
                     
                     inefficiencies.push({
-}
                         id: `scarcity-${position}`,
-                        type: &apos;positional_scarcity&apos;,
+                        type: 'positional_scarcity',
                         severity,
                         position,
                         description: `Critical ${position} scarcity - only ${elitePlayers.length} elite options left`,
@@ -299,7 +266,7 @@ class MarketInefficiencyDetector {
                         reasoning: [
                             `Only ${elitePlayers.length} Tier 1-2 ${position}s remaining`,
                             `Position scarcity level: ${(trend.scarcityLevel * 100).toFixed(1)}%`,
-                            trend.trend === &apos;accelerating&apos; ? &apos;Position being drafted earlier than usual&apos; : &apos;&apos;,
+                            trend.trend === 'accelerating' ? 'Position being drafted earlier than usual' : '',
                             `Next ${position} tier break in ${trend.nextTierBreak} picks`
                         ].filter(Boolean),
                         actionRequired: `Prioritize ${position} before scarcity drives reaching`,
@@ -313,27 +280,22 @@ class MarketInefficiencyDetector {
     }
 
     private detectByeWeekOpportunities(availablePlayers: Player[], currentPick: number, _context: Record<string, unknown>): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
 
         // Late round strategy - target players with favorable bye weeks
         if (((_context as Record<string, unknown>)?.currentRound as number) >= 8) {
-}
             const byeWeekCounts = this.analyzeByeWeekDistribution(availablePlayers);
             const optimalByeWeeks = this.findOptimalByeWeeks(byeWeekCounts);
 
             optimalByeWeeks.forEach((byeWeek: any) => {
-}
                 const playersWithBye = availablePlayers.filter((p: any) => p.bye === byeWeek);
                 const valuePlayers = playersWithBye.filter((p: any) => (p.adp || 999) > currentPick);
 
                 if (valuePlayers.length > 0) {
-}
                     inefficiencies.push({
-}
                         id: `bye-week-${byeWeek}`,
-                        type: &apos;bye_week_value&apos;,
-                        severity: &apos;low&apos;,
+                        type: 'bye_week_value',
+                        severity: 'low',
                         description: `Bye week ${byeWeek} value opportunities`,
                         value: valuePlayers.length * 5,
                         confidence: 70,
@@ -341,7 +303,7 @@ class MarketInefficiencyDetector {
                         reasoning: [
                             `Week ${byeWeek} bye players undervalued`,
                             `${valuePlayers.length} value options available`,
-                            &apos;Late-round bye week optimization opportunity&apos;
+                            'Late-round bye week optimization opportunity'
                         ],
                         actionRequired: `Target players with Week ${byeWeek} bye for roster balance`,
                         potentialImpact: 10
@@ -354,32 +316,29 @@ class MarketInefficiencyDetector {
     }
 
     private detectMarketPanic(_availablePlayers: Player[], _currentPick: number): MarketInefficiency[] {
-}
         const inefficiencies: MarketInefficiency[] = [];
 
         // Detect if recent picks show panic (multiple reaches in a row)
         const recentReaches = this.recentPicks.slice(-3).filter((pick: any) => pick.adpDifference > 10);
         
         if (recentReaches.length >= 2) {
-}
             const averageReach = recentReaches.reduce((sum, pick) => sum + pick.adpDifference, 0) / recentReaches.length;
             
             inefficiencies.push({
-}
-                id: &apos;market-panic&apos;,
-                type: &apos;overvalued&apos;,
-                severity: &apos;medium&apos;,
-                description: &apos;Market showing panic behavior - multiple reaches detected&apos;,
+                id: 'market-panic',
+                type: 'overvalued',
+                severity: 'medium',
+                description: 'Market showing panic behavior - multiple reaches detected',
                 value: averageReach,
                 confidence: 80,
                 timeWindow: 3,
                 reasoning: [
                     `${recentReaches.length} reaches in last 3 picks`,
                     `Average reach: ${averageReach.toFixed(1)} picks`,
-                    &apos;Market may be overreacting to positional scarcity&apos;,
-                    &apos;Contrarian value opportunities emerging&apos;
+                    'Market may be overreacting to positional scarcity',
+                    'Contrarian value opportunities emerging'
                 ],
-                actionRequired: &apos;Stay disciplined - avoid panic picks and target falling players&apos;,
+                actionRequired: 'Stay disciplined - avoid panic picks and target falling players',
                 potentialImpact: 15
             });
         }
@@ -388,19 +347,15 @@ class MarketInefficiencyDetector {
     }
 
     private analyzePositionalRun(position: string): RunAnalysis {
-}
         const positionPicks = this.recentPicks.filter((pick: any) => pick.player.position === position);
         const recentPositionPicks = positionPicks.slice(-5);
 
         // Calculate run metrics
         let consecutiveCount = 0;
         for (let i = this.recentPicks.length - 1; i >= 0; i--) {
-}
             if (this.recentPicks[i].player.position === position) {
-}
                 consecutiveCount++;
             } else {
-}
                 break;
             }
         }
@@ -409,7 +364,6 @@ class MarketInefficiencyDetector {
         const likelyToContinue = intensity > 0.4 && consecutiveCount >= 2;
 
         return {
-}
             position,
             runLength: consecutiveCount,
             intensity,
@@ -420,17 +374,14 @@ class MarketInefficiencyDetector {
     }
 
     private generateCounterStrategy(position: string, runLength: number): string[] {
-}
         const strategies: string[] = [];
 
         if (runLength >= 3) {
-}
             strategies.push(`Consider joining ${position} run before tier drop`);
             strategies.push(`Alternative: Target complementary positions being ignored`);
         }
 
         if (runLength >= 5) {
-}
             strategies.push(`Heavy ${position} run may signal market inefficiency`);
             strategies.push(`Contrarian approach: Target other premium positions`);
         }
@@ -439,17 +390,14 @@ class MarketInefficiencyDetector {
     }
 
     private calculateAveragePickPosition(position: string): number {
-}
         // Simplified - would use historical data
         const baseADP: Record<string, number> = {
-}
-            &apos;QB&apos;: 60, &apos;RB&apos;: 25, &apos;WR&apos;: 30, &apos;TE&apos;: 70, &apos;K&apos;: 140, &apos;DST&apos;: 130
+            'QB': 60, 'RB': 25, 'WR': 30, 'TE': 70, 'K': 140, 'DST': 130
         };
         return baseADP[position] || 100;
     }
 
     private calculateScarcityLevel(position: string, availablePlayers: Player[]): number {
-}
         const elitePlayers = availablePlayers.filter((p: any) => (p.tier || 10) <= 2);
         const totalEliteExpected = this.getExpectedEliteCount(position);
         
@@ -457,22 +405,17 @@ class MarketInefficiencyDetector {
     }
 
     private getExpectedEliteCount(position: string): number {
-}
         const expected: Record<string, number> = {
-}
-            &apos;QB&apos;: 12, &apos;RB&apos;: 24, &apos;WR&apos;: 30, &apos;TE&apos;: 12, &apos;K&apos;: 5, &apos;DST&apos;: 5
+            'QB': 12, 'RB': 24, 'WR': 30, 'TE': 12, 'K': 5, 'DST': 5
         };
         return expected[position] || 10;
     }
 
     private calculateNextTierBreak(players: Player[]): number {
-}
         if (players.length < 2) return 999;
         
         for (let i = 0; i < players.length - 1; i++) {
-}
             if ((players[i].tier || 10) !== (players[i + 1].tier || 10)) {
-}
                 return i + 1;
             }
         }
@@ -480,28 +423,25 @@ class MarketInefficiencyDetector {
     }
 
     private analyzeWhyFalling(_player: Player): string {
-}
         // Simplified analysis - would be more sophisticated
         const reasons = [
-            &apos;Market overreaction to recent performance&apos;,
-            &apos;Positional run affecting draft flow&apos;,
-            &apos;Injury concerns creating value opportunity&apos;,
-            &apos;Age/situation creating artificial discount&apos;
+            'Market overreaction to recent performance',
+            'Positional run affecting draft flow',
+            'Injury concerns creating value opportunity',
+            'Age/situation creating artificial discount'
         ];
         
         return reasons[Math.floor(Math.random() * reasons.length)];
     }
 
-    private determineSeverity(value: number, thresholds: number[]): &apos;low&apos; | &apos;medium&apos; | &apos;high&apos; | &apos;critical&apos; {
-}
-        if (value >= thresholds[2]) return &apos;critical&apos;;
-        if (value >= thresholds[1]) return &apos;high&apos;;
-        if (value >= thresholds[0]) return &apos;medium&apos;;
-        return &apos;low&apos;;
+    private determineSeverity(value: number, thresholds: number[]): 'low' | 'medium' | 'high' | 'critical' {
+        if (value >= thresholds[2]) return 'critical';
+        if (value >= thresholds[1]) return 'high';
+        if (value >= thresholds[0]) return 'medium';
+        return 'low';
     }
 
     private calculatePriority(inefficiency: MarketInefficiency): number {
-}
         const severityWeights = { low: 1, medium: 2, high: 3, critical: 4 };
         const timeUrgency = Math.max(0, 10 - inefficiency.timeWindow);
         
@@ -512,13 +452,10 @@ class MarketInefficiencyDetector {
     }
 
     private analyzeByeWeekDistribution(availablePlayers: Player[]): Record<number, number> {
-}
         const byeWeeks: Record<number, number> = {};
         
         availablePlayers.forEach((player: any) => {
-}
             if (player.bye) {
-}
                 byeWeeks[player.bye] = (byeWeeks[player.bye] || 0) + 1;
             }
         });
@@ -527,7 +464,6 @@ class MarketInefficiencyDetector {
     }
 
     private findOptimalByeWeeks(byeWeekCounts: Record<number, number>): number[] {
-}
         // Find bye weeks with more available players (potential value)
         const avgCount = Object.values(byeWeekCounts).reduce((sum, count) => sum + count, 0) / Object.keys(byeWeekCounts).length;
         
@@ -535,6 +471,5 @@ class MarketInefficiencyDetector {
             .filter(([_week, count]) => count > avgCount * 1.2)
             .map(([week]) => parseInt(week));
     }
-}
 
 export default MarketInefficiencyDetector;

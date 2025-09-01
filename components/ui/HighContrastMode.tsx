@@ -1,34 +1,28 @@
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
-import React, { useState, useEffect } from &apos;react&apos;;
-import { Button } from &apos;./Button&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
+import React, { useState, useEffect } from 'react';
+import { Button } from './Button';
 
 export const HighContrastMode: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
-}
-    const saved = localStorage.getItem(&apos;high-contrast&apos;) === &apos;true&apos;;
+    const saved = localStorage.getItem('high-contrast') === 'true';
     setHighContrast(saved);
     if (saved) {
-}
-      document.documentElement.classList.add(&apos;high-contrast&apos;);
+      document.documentElement.classList.add('high-contrast');
     }
   }, []);
 
   const toggleHighContrast = () => {
-}
     const newValue = !highContrast;
     setHighContrast(newValue);
-    localStorage.setItem(&apos;high-contrast&apos;, newValue.toString());
+    localStorage.setItem('high-contrast', newValue.toString());
     
     if (newValue) {
-}
-      document.documentElement.classList.add(&apos;high-contrast&apos;);
+      document.documentElement.classList.add('high-contrast');
     } else {
-}
-      document.documentElement.classList.remove(&apos;high-contrast&apos;);
+      document.documentElement.classList.remove('high-contrast');
     }
   };
 
@@ -37,9 +31,9 @@ export const HighContrastMode: React.FC = () => {
       variant="default"
       size="sm"
       onClick={toggleHighContrast}
-      aria-label={`${highContrast ? &apos;Disable&apos; : &apos;Enable&apos;} high contrast mode`}
+      aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast mode`}
     >
-      {highContrast ? &apos;🔆&apos; : &apos;🌓&apos;} Contrast
+      {highContrast ? '🔆' : '🌓'} Contrast
     </Button>
   );
 };

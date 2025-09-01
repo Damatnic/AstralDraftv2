@@ -1,15 +1,15 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import { UserIcon } from &apos;../components/icons/UserIcon&apos;;
-import { Avatar } from &apos;../components/ui/Avatar&apos;;
-import { PencilIcon } from &apos;../components/icons/PencilIcon&apos;;
-import { AnimatePresence } from &apos;framer-motion&apos;;
-import EditProfileModal from &apos;../components/core/EditProfileModal&apos;;
-import { BookOpenIcon } from &apos;../components/icons/BookOpenIcon&apos;;
-import { calculateManagerStats, calculateCareerHistory } from &apos;../utils/careerStats&apos;;
-import AchievementsWidget from &apos;../components/profile/AchievementsWidget&apos;;
-import { LogOutIcon } from &apos;../components/icons/LogOutIcon&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { Widget } from '../components/ui/Widget';
+import { UserIcon } from '../components/icons/UserIcon';
+import { Avatar } from '../components/ui/Avatar';
+import { PencilIcon } from '../components/icons/PencilIcon';
+import { AnimatePresence } from 'framer-motion';
+import EditProfileModal from '../components/core/EditProfileModal';
+import { BookOpenIcon } from '../components/icons/BookOpenIcon';
+import { calculateManagerStats, calculateCareerHistory } from '../utils/careerStats';
+import AchievementsWidget from '../components/profile/AchievementsWidget';
+import { LogOutIcon } from '../components/icons/LogOutIcon';
 
 const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center">
@@ -19,33 +19,29 @@ const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, 
 );
 
 const ProfileView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
 
     const stats = React.useMemo(() => {
-}
         return state.user ? calculateManagerStats(state.user, state.leagues) : { championships: 0, leaguesJoined: 0 };
     }, [state.leagues, state.user]);
 
     const careerHistory = React.useMemo(() => {
-}
         return state.user ? calculateCareerHistory(state.user?.id, state.leagues) : [];
     }, [state.leagues, state.user]);
 
     const memberSinceDate = state.user?.memberSince
-        ? new Date(state.user.memberSince).toLocaleDateString(&apos;en-US&apos;, { year: &apos;numeric&apos;, month: &apos;long&apos; })
-        : &apos;a long time ago&apos;;
+        ? new Date(state.user.memberSince).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+        : 'a long time ago';
     
     // Early return if no user
     if (!state.user) {
-}
         return (
             <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">
                     <p className="text-xl text-gray-400 mb-4">Please log in to view your profile</p>
                     <button
-                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;AUTH&apos; })}
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'AUTH' })}
                         className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600"
                     >
                         Go to Login
@@ -62,7 +58,7 @@ const ProfileView: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <h1>Manager Profile</h1>
                     <button 
-                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} 
                         className="back-btn"
                     >
                         Back to Dashboard
@@ -80,7 +76,7 @@ const ProfileView: React.FC = () => {
                                     <Avatar avatar={state.user.avatar} className="w-28 h-28 text-7xl rounded-full mb-4 ring-4 ring-cyan-400/50" />
                                     <h2 className="text-2xl font-bold font-display">{state.user.name}</h2>
                                     <p className="text-xs text-secondary">Member since {memberSinceDate}</p>
-                                    <p className="text-sm text-secondary mt-3 italic">"{state.user.bio || &apos;No bio set.&apos;}"</p>
+                                    <p className="text-sm text-secondary mt-3 italic">"{state.user.bio || 'No bio set.'}"</p>
                                     <div className="flex gap-2 mt-4">
                                         <button
                                             onClick={() => setIsEditModalOpen(true)}
@@ -89,7 +85,7 @@ const ProfileView: React.FC = () => {
                                             Edit Profile
                                         </button>
                                          <button
-                                            onClick={() => dispatch({ type: &apos;LOGOUT&apos; })}
+                                            onClick={() => dispatch({ type: 'LOGOUT' })}
                                             className="btn btn-danger flex items-center gap-2 text-xs"
                                         >
                                             <LogOutIcon />
@@ -118,14 +114,12 @@ const ProfileView: React.FC = () => {
                             <Widget title="League History" icon={<BookOpenIcon />}>
                                  <div className="p-4 space-y-3">
                                     {careerHistory.map((entry: any) => {
-}
                                         const league = state.leagues.find((l: any) => l.id === entry.leagueId);
                                         return (
                                             <div key={entry.key} className="bg-slate-700/30 p-3 rounded-lg flex items-center justify-between hover:bg-slate-600/30 transition-colors">
                                                 <div>
                                                     <p className="font-bold text-white">{entry.season} Season - <span className="text-cyan-300">{entry.leagueName}</span></p>
                                                     {entry.isComplete ? (
-}
                                                         <p className="text-sm text-secondary">
                                                             Finished <span className="font-bold">{entry.rank}</span> / {league?.teams.length} ({entry.record.wins}-{entry.record.losses}-{entry.record.ties})
                                                             {entry.isChampion && <span className="ml-2">🏆</span>}
@@ -136,20 +130,17 @@ const ProfileView: React.FC = () => {
                                                 </div>
                                                 <button 
                                                     onClick={() => {
-}
-                                                        dispatch({type: &apos;SET_ACTIVE_LEAGUE&apos;, payload: entry.leagueId});
+                                                        dispatch({type: 'SET_ACTIVE_LEAGUE', payload: entry.leagueId});
                                                         if (entry.isComplete) {
-}
-                                                            dispatch({type: &apos;SET_SEASON_REVIEW_YEAR&apos;, payload: entry.season});
-                                                            dispatch({type: &apos;SET_VIEW&apos;, payload: &apos;SEASON_REVIEW&apos;});
+                                                            dispatch({type: 'SET_SEASON_REVIEW_YEAR', payload: entry.season});
+                                                            dispatch({type: 'SET_VIEW', payload: 'SEASON_REVIEW'});
                                                         } else {
-}
-                                                            dispatch({type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos;});
+                                                            dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'});
                                                         }
                                                     }}
                                                     className="btn btn-secondary text-xs"
                                                 >
-                                                    {entry.isComplete ? &apos;Season Review&apos; : &apos;Go to Hub&apos;}
+                                                    {entry.isComplete ? 'Season Review' : 'Go to Hub'}
                                                 </button>
                                             </div>
                                         )
@@ -163,7 +154,6 @@ const ProfileView: React.FC = () => {
                 
                 <AnimatePresence>
                     {isEditModalOpen && state.user && (
-}
                         <EditProfileModal user={state.user} dispatch={dispatch} onClose={() => setIsEditModalOpen(false)} />
                     )}
                 </AnimatePresence>

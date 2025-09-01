@@ -2,12 +2,11 @@
  * Enhanced Trades View - Complete trade management interface
  */
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import TradingSystem from &apos;../components/season/TradingSystem&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { motion } from 'framer-motion';
+import TradingSystem from '../components/season/TradingSystem';
 
 const TradesView: React.FC = () => {
-}
   const { state, dispatch } = useAppState();
   const league = state.leagues[0];
 
@@ -18,7 +17,7 @@ const TradesView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               className="back-btn"
             >
               ← Back to Dashboard
@@ -107,7 +106,7 @@ const TradesView: React.FC = () => {
                 <li>• Look for win-win scenarios</li>
                 <li>• Consider playoff schedules</li>
                 <li>• Trade from strength to address weaknesses</li>
-                <li>• Don&apos;t trade just to trade</li>
+                <li>• Don't trade just to trade</li>
                 <li>• Include a personal message explaining your reasoning</li>
               </ul>
             </div>

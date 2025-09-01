@@ -1,21 +1,18 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { useLeague } from &apos;../../hooks/useLeague&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { BotMessageSquareIcon } from &apos;../icons/BotMessageSquareIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { useLeague } from '../../hooks/useLeague';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BotMessageSquareIcon } from '../icons/BotMessageSquareIcon';
 
 const AiCoPilotPanel: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const { league } = useLeague();
     const commentary = league?.draftCommentary || [];
     const scrollRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
-}
         if (scrollRef.current) {
-}
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [commentary]);
@@ -30,12 +27,10 @@ const AiCoPilotPanel: React.FC = () => {
             <div ref={scrollRef} className="flex-grow p-2 space-y-3 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence>
                     {commentary.map((item, index) => (
-}
                         <motion.div
                             key={item.pickNumber}
                             className="flex items-start gap-2 text-sm sm:px-4 md:px-6 lg:px-8"
                             {...{
-}
                                 initial: { opacity: 0, y: 10 },
                                 animate: { opacity: 1, y: 0 },
                                 transition: { delay: index > commentary.length - 2 ? 0.2 : 0 },
@@ -47,7 +42,6 @@ const AiCoPilotPanel: React.FC = () => {
                     ))}
                 </AnimatePresence>
                 {commentary.length === 0 && (
-}
                     <div className="text-center text-xs text-gray-400 p-4 h-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                         <p>The Oracle is standing by... Commentary will appear here as picks are made.</p>
                     </div>

@@ -1,7 +1,6 @@
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
 
 export const SkipLink: React.FC = () => {
-}
   return (
     <a
       href="#main-content"

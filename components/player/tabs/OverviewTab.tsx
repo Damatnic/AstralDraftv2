@@ -1,17 +1,15 @@
-import { ErrorBoundary } from &apos;../../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { Player } from &apos;../../../types&apos;;
-import { SparklesIcon } from &apos;../../icons/SparklesIcon&apos;;
-import { AwardIcon } from &apos;../../icons/AwardIcon&apos;;
-import { useLeague } from &apos;../../../hooks/useLeague&apos;;
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import type { Player } from '../../../types';
+import { SparklesIcon } from '../../icons/SparklesIcon';
+import { AwardIcon } from '../../icons/AwardIcon';
+import { useLeague } from '../../../hooks/useLeague';
 
 interface OverviewTabProps {
-}
   player: Player;
   onFindSimilar: () => void;
 
-}
 
 const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
@@ -21,7 +19,6 @@ const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, 
 );
 
 const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }: any) => {
-}
   const { league } = useLeague();
   const awards = (league?.playerAwards || []).filter((a: any) => a.playerId === player.id);
   const teamMap = new Map(league?.teams.map((t: any) => [t.id, t.name]));
@@ -30,7 +27,6 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }: any)
     <motion.div
       className="space-y-6 sm:px-4 md:px-6 lg:px-8"
       {...{
-}
         initial: { opacity: 0, x: -10 },
         animate: { opacity: 1, x: 0 },
         transition: { duration: 0.3 },
@@ -43,15 +39,13 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }: any)
                     <p className="text-gray-300 text-sm leading-relaxed sm:px-4 md:px-6 lg:px-8">{player.bio || "No biography available."}</p>
                 </div>
                  {awards.length > 0 && (
-}
                     <div>
                         <h3 className="font-bold text-lg text-yellow-300 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><AwardIcon /> Season Awards</h3>
                         <div className="mt-2 space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {awards.map((award, i) => (
-}
                                 <div key={i} className="bg-yellow-500/10 p-2 rounded-md text-sm sm:px-4 md:px-6 lg:px-8">
-                                    <p className="font-bold text-yellow-300 sm:px-4 md:px-6 lg:px-8">{award.awardType.replace(&apos;_&apos;, &apos; &apos;)} ({award.season})</p>
-                                    <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Awarded by: {teamMap.get(award.awardedByTeamId) || &apos;Unknown&apos;}</p>
+                                    <p className="font-bold text-yellow-300 sm:px-4 md:px-6 lg:px-8">{award.awardType.replace('_', ' ')} ({award.season})</p>
+                                    <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Awarded by: {teamMap.get(award.awardedByTeamId) || 'Unknown'}</p>
                                 </div>
                             ))}
                         </div>
@@ -71,8 +65,8 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }: any)
                 <h3 className="font-bold text-lg text-cyan-300 sm:px-4 md:px-6 lg:px-8">Key Stats</h3>
                 <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
                     <StatCard label="Rank" value={player.rank} />
-                    <StatCard label="ADP" value={player?.adp ?? &apos;N/A&apos;} />
-                    <StatCard label="Tier" value={player?.tier ?? &apos;N/A&apos;} />
+                    <StatCard label="ADP" value={player?.adp ?? 'N/A'} />
+                    <StatCard label="Tier" value={player?.tier ?? 'N/A'} />
                     <StatCard label="Bye" value={player.bye} />
                     <StatCard label="Projection" value={player.stats.projection} />
                     <StatCard label="Last Year" value={player.stats.lastYear} />

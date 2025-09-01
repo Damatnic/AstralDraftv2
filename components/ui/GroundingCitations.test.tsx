@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import GroundingCitations from &apos;./GroundingCitations&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import GroundingCitations from './GroundingCitations';
 
-describe(&apos;GroundingCitations&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('GroundingCitations', () => {
+  it('renders without crashing', () => {
     render(<GroundingCitations />);
-    expect(screen.getByTestId(&apos;groundingcitations&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('groundingcitations')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<GroundingCitations />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<GroundingCitations />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

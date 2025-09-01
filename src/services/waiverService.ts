@@ -3,26 +3,23 @@
  * Handles waiver wire claims, FAAB bidding, and waiver management
  */
 
-import { apiService } from &apos;./apiService&apos;;
+import { apiService } from './apiService';
 
 export interface WaiverClaim {
-}
   id: string;
   leagueId: string;
   teamId: string;
   week: number;
   season: number;
-  type: &apos;ADD&apos; | &apos;DROP&apos; | &apos;ADD_DROP&apos;;
-  status: &apos;PENDING&apos; | &apos;SUCCESSFUL&apos; | &apos;FAILED&apos; | &apos;CANCELLED&apos;;
+  type: 'ADD' | 'DROP' | 'ADD_DROP';
+  status: 'PENDING' | 'SUCCESSFUL' | 'FAILED' | 'CANCELLED';
   addPlayer?: {
-}
     playerId: string;
     playerName: string;
     position: string;
     team: string;
   };
   dropPlayer?: {
-}
     playerId: string;
     playerName: string;
     position: string;
@@ -31,14 +28,12 @@ export interface WaiverClaim {
   bidAmount: number;
   priority?: number;
   claimDetails: {
-}
     submittedAt: string;
     expiresAt: string;
     notes: string;
     isBlindBid: boolean;
   };
   processingResults?: {
-}
     finalBidAmount?: number;
     winningBid: boolean;
     competingClaims: number;
@@ -49,34 +44,27 @@ export interface WaiverClaim {
   processedAt?: string;
   createdAt: string;
   updatedAt: string;
-}
 
 export interface WaiverBudget {
-}
   total: number;
   remaining: number;
   spent: number;
   pendingBids: number;
   available: number;
-}
 
 export interface ProcessingTime {
-}
   nextProcessing: string;
   timeUntilProcessing: number;
   hoursUntilProcessing: number;
   pendingClaims: number;
   waiverSettings: {
-}
-    type: &apos;faab&apos; | &apos;priority&apos;;
+    type: 'faab' | 'priority';
     budget?: number;
     minBid?: number;
     processDay: string;
   };
-}
 
 export interface AvailablePlayer {
-}
   id: string;
   name: string;
   firstName: string;
@@ -86,22 +74,17 @@ export interface AvailablePlayer {
   jerseyNumber?: number;
   status: string;
   injuryStatus: {
-}
     designation: string;
     description?: string;
   };
   rankings: {
-}
     overall?: number;
     position?: number;
   };
   projections?: {
-}
     weekly?: Array<{
-}
       week: number;
       fantasyPoints: {
-}
         standard: number;
         ppr: number;
         halfPpr: number;
@@ -110,53 +93,44 @@ export interface AvailablePlayer {
   };
   photoUrl?: string;
   pendingClaims: number;
-}
 
 export interface WaiverReport {
-}
   claims: WaiverClaim[];
   summary: {
-}
     totalClaims: number;
     successful: number;
     failed: number;
     totalFaabSpent: number;
     averageBid: number;
     topBids: Array<{
-}
       playerName: string;
       teamName: string;
       bidAmount: number;
     }>;
   };
   week?: number;
-}
 
 class WaiverService {
-}
   /**
    * Submit a waiver claim
    */
   async submitClaim(claimData: {
-}
-    type: &apos;ADD&apos; | &apos;DROP&apos; | &apos;ADD_DROP&apos;;
+    type: 'ADD' | 'DROP' | 'ADD_DROP';
     addPlayerId?: string;
     dropPlayerId?: string;
     bidAmount: number;
     notes?: string;
   }): Promise<{ waiver: WaiverClaim; processingTime: string }> {
-}
-    const response = await apiService.post(&apos;/waivers/claim&apos;, claimData);
+    const response = await apiService.post('/waivers/claim', claimData);
     return response.data;
   }
 
   /**
-   * Get user&apos;s waiver claims
+   * Get user's waiver claims
    */
-  async getMyClaims(status?: &apos;PENDING&apos; | &apos;SUCCESSFUL&apos; | &apos;FAILED&apos; | &apos;CANCELLED&apos;): Promise<WaiverClaim[]> {
-}
+  async getMyClaims(status?: 'PENDING' | 'SUCCESSFUL' | 'FAILED' | 'CANCELLED'): Promise<WaiverClaim[]> {
     const params = status ? { status } : {};
-    const response = await apiService.get(&apos;/waivers/my-claims&apos;, { params });
+    const response = await apiService.get('/waivers/my-claims', { params });
     return response.data.claims;
   }
 
@@ -164,7 +138,6 @@ class WaiverService {
    * Get all waiver claims for a league
    */
   async getLeagueClaims(leagueId: string, status?: string): Promise<WaiverClaim[]> {
-}
     const params = status ? { status } : {};
     const response = await apiService.get(`/waivers/league/${leagueId}`, { params });
     return response.data.claims;
@@ -174,7 +147,6 @@ class WaiverService {
    * Cancel a pending waiver claim
    */
   async cancelClaim(waiverClaimId: string): Promise<void> {
-}
     await apiService.post(`/waivers/${waiverClaimId}/cancel`);
   }
 
@@ -184,15 +156,12 @@ class WaiverService {
   async getAvailablePlayers(
     leagueId: string,
     options: {
-}
       position?: string;
       limit?: number;
       search?: string;
     } = {}
   ): Promise<AvailablePlayer[]> {
-}
     const params = {
-}
       position: options.position,
       limit: options.limit || 50,
       search: options.search
@@ -206,7 +175,6 @@ class WaiverService {
    * Get next waiver processing time
    */
   async getProcessingTime(leagueId: string): Promise<ProcessingTime> {
-}
     const response = await apiService.get(`/waivers/processing-time/${leagueId}`);
     return response.data;
   }
@@ -215,12 +183,10 @@ class WaiverService {
    * Process waivers for a league (commissioner only)
    */
   async processWaivers(leagueId: string): Promise<{
-}
     processed: number;
     successful: number;
     failed: number;
   }> {
-}
     const response = await apiService.post(`/waivers/process/${leagueId}`);
     return response.data.results;
   }
@@ -229,21 +195,18 @@ class WaiverService {
    * Get waiver processing report
    */
   async getWaiverReport(leagueId: string, week?: number): Promise<WaiverReport> {
-}
     const params = week ? { week } : {};
     const response = await apiService.get(`/waivers/report/${leagueId}`, { params });
     return response.data;
   }
 
   /**
-   * Get team&apos;s FAAB budget information
+   * Get team's FAAB budget information
    */
   async getFaabBudget(teamId: string): Promise<{
-}
     budget: WaiverBudget;
     pendingClaims: number;
   }> {
-}
     const response = await apiService.get(`/waivers/budget/${teamId}`);
     return response.data;
   }
@@ -252,15 +215,12 @@ class WaiverService {
    * Get waiver wire recommendations (AI-powered)
    */
   async getWaiverRecommendations(leagueId: string, limit: number = 10): Promise<{
-}
     success: boolean;
     recommendations: {
-}
       type: string;
       analysis: string;
       week: number;
       topTargets: Array<{
-}
         name: string;
         priority: string;
       }>;
@@ -268,9 +228,7 @@ class WaiverService {
       source: string;
     };
   }> {
-}
-    const response = await apiService.post(&apos;/oracle/waiver-recommendations&apos;, {
-}
+    const response = await apiService.post('/oracle/waiver-recommendations', {
       leagueId,
 //       limit
     });
@@ -285,13 +243,11 @@ class WaiverService {
     budget: WaiverBudget,
     competingClaims: number = 0
   ): {
-}
     conservative: number;
     aggressive: number;
     recommended: number;
     reasoning: string;
   } {
-}
     const available = budget.available;
     const playerRank = player.rankings.overall || 999;
     
@@ -316,13 +272,11 @@ class WaiverService {
     
     let reasoning = `Based on player ranking (#${playerRank})`;
     if (competingClaims > 0) {
-}
       reasoning += ` and ${competingClaims} competing claims`;
     }
     reasoning += `. Conservative: $${conservative}, Aggressive: $${aggressive}`;
     
     return {
-}
       conservative: Math.max(conservative, 1),
       aggressive: Math.min(aggressive, available),
       recommended: Math.min(recommended, available),
@@ -334,22 +288,18 @@ class WaiverService {
    * Format time until processing
    */
   formatTimeUntilProcessing(timeUntilProcessing: number): string {
-}
-    if (timeUntilProcessing <= 0) return &apos;Processing now&apos;;
+    if (timeUntilProcessing <= 0) return 'Processing now';
     
     const hours = Math.floor(timeUntilProcessing / (1000 * 60 * 60));
     const minutes = Math.floor((timeUntilProcessing % (1000 * 60 * 60)) / (1000 * 60));
     
     if (hours > 24) {
-}
       const days = Math.floor(hours / 24);
       const remainingHours = hours % 24;
       return `${days}d ${remainingHours}h`;
     } else if (hours > 0) {
-}
       return `${hours}h ${minutes}m`;
     } else {
-}
       return `${minutes}m`;
     }
   }
@@ -357,14 +307,11 @@ class WaiverService {
   /**
    * Get waiver priority explanation
    */
-  getWaiverPriorityExplanation(type: &apos;faab&apos; | &apos;priority&apos;): string {
-}
-    if (type === &apos;faab&apos;) {
-}
-      return &apos;FAAB (Free Agent Acquisition Budget) - Highest bid wins. Ties go to earlier submission time.&apos;;
+  getWaiverPriorityExplanation(type: 'faab' | 'priority'): string {
+    if (type === 'faab') {
+      return 'FAAB (Free Agent Acquisition Budget) - Highest bid wins. Ties go to earlier submission time.';
     } else {
-}
-      return &apos;Priority-based - Claims processed in waiver priority order. Priority resets weekly based on standings.&apos;;
+      return 'Priority-based - Claims processed in waiver priority order. Priority resets weekly based on standings.';
     }
   }
 
@@ -372,45 +319,37 @@ class WaiverService {
    * Validate waiver claim
    */
   validateClaim(claimData: {
-}
-    type: &apos;ADD&apos; | &apos;DROP&apos; | &apos;ADD_DROP&apos;;
+    type: 'ADD' | 'DROP' | 'ADD_DROP';
     addPlayerId?: string;
     dropPlayerId?: string;
     bidAmount: number;
     availableBudget: number;
     minBid: number;
   }): { isValid: boolean; errors: string[] } {
-}
     const errors: string[] = [];
 
     // Check bid amount
     if (claimData.bidAmount < claimData.minBid) {
-}
       errors.push(`Minimum bid is $${claimData.minBid}`);
     }
 
     if (claimData.bidAmount > claimData.availableBudget) {
-}
       errors.push(`Insufficient FAAB budget. Available: $${claimData.availableBudget}`);
     }
 
     // Check required players
-    if ((claimData.type === &apos;ADD&apos; || claimData.type === &apos;ADD_DROP&apos;) && !claimData.addPlayerId) {
-}
-      errors.push(&apos;Player to add is required&apos;);
+    if ((claimData.type === 'ADD' || claimData.type === 'ADD_DROP') && !claimData.addPlayerId) {
+      errors.push('Player to add is required');
     }
 
-    if ((claimData.type === &apos;DROP&apos; || claimData.type === &apos;ADD_DROP&apos;) && !claimData.dropPlayerId) {
-}
-      errors.push(&apos;Player to drop is required&apos;);
+    if ((claimData.type === 'DROP' || claimData.type === 'ADD_DROP') && !claimData.dropPlayerId) {
+      errors.push('Player to drop is required');
     }
 
     return {
-}
       isValid: errors.length === 0,
 //       errors
     };
   }
-}
 
 export const waiverService = new WaiverService();

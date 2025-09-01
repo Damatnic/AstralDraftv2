@@ -1,20 +1,16 @@
-import { motion } from &apos;framer-motion&apos;;
+import { motion } from 'framer-motion';
 
 interface TouchFeedbackProps {
-}
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
 
-}
 
 export const TouchFeedback: React.FC<TouchFeedbackProps> = ({
-}
   children,
-  className = &apos;&apos;,
+  className = '',
   disabled = false
 }: any) => {
-}
   return (
     <motion.div
       className={className}

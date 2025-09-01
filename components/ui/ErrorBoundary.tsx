@@ -1,48 +1,40 @@
 
 interface ErrorBoundaryProps {
-}
   children: React.ReactNode;
   fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
   isolateError?: boolean;
-}
 
 interface ErrorBoundaryState {
-}
   hasError: boolean;
   error?: Error;
   errorId?: string;
-}
 
 // ZERO-ERROR Authentication-Aware Fallback
 const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const errorMessage = error.message.toLowerCase();
-  const isAuthError = errorMessage.includes(&apos;authentication&apos;) ||
-                     errorMessage.includes(&apos;login&apos;) ||
-                     errorMessage.includes(&apos;session&apos;) ||
-                     errorMessage.includes(&apos;unauthorized&apos;);
+  const isAuthError = errorMessage.includes('authentication') ||
+                     errorMessage.includes('login') ||
+                     errorMessage.includes('session') ||
+                     errorMessage.includes('unauthorized');
 
-  const isExtensionError = errorMessage.includes(&apos;extension&apos;) ||
-                          errorMessage.includes(&apos;chrome&apos;) ||
-                          errorMessage.includes(&apos;firefox&apos;) ||
-                          errorMessage.includes(&apos;adblock&apos;) ||
-                          errorMessage.includes(&apos;devtools&apos;) ||
-                          errorMessage.includes(&apos;ublock&apos;);
+  const isExtensionError = errorMessage.includes('extension') ||
+                          errorMessage.includes('chrome') ||
+                          errorMessage.includes('firefox') ||
+                          errorMessage.includes('adblock') ||
+                          errorMessage.includes('devtools') ||
+                          errorMessage.includes('ublock');
 
   const handleRetry = () => {
-}
     setIsLoading(true);
     setTimeout(() => {
-}
       retry();
       setIsLoading(false);
     }, 500);
   };
 
   if (isLoading) {
-}
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
         <div className="text-center">
@@ -56,13 +48,12 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-4">
       <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-lg p-8 max-w-md w-full text-center">
-        <div className="text-6xl mb-4">{isAuthError ? &apos;🔐&apos; : &apos;⚠️&apos;}</div>
+        <div className="text-6xl mb-4">{isAuthError ? '🔐' : '⚠️'}</div>
         <h2 className="text-2xl font-bold mb-4 text-white">
-          {isAuthError ? &apos;Login System Issue&apos; : &apos;Application Error&apos;}
+          {isAuthError ? 'Login System Issue' : 'Application Error'}
         </h2>
         
         {isAuthError ? (
-}
           <div>
             <p className="text-gray-300 mb-6">
               There seems to be an issue with the authentication system. This could be due to a browser extension or network settings.
@@ -70,11 +61,10 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
             <div className="space-y-3">
               <button
                 onClick={() => {
-}
                   // Clear all storage and reload in demo mode
                   localStorage.clear();
                   sessionStorage.clear();
-                  window.location.href = window.location.origin + &apos;?demo=true&apos;;
+                  window.location.href = window.location.origin + '?demo=true';
                 }}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors"
               >
@@ -86,9 +76,8 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
           <div>
             <p className="text-gray-300 mb-6">
               {isExtensionError 
-}
-                ? &apos;A browser extension might be interfering with the app. Try disabling extensions or using incognito mode.&apos;
-                : &apos;Something went wrong. This might be a temporary issue.&apos;}
+                ? 'A browser extension might be interfering with the app. Try disabling extensions or using incognito mode.'
+                : 'Something went wrong. This might be a temporary issue.'}
             </p>
             <div className="space-y-3">
               <button
@@ -114,22 +103,18 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
 };
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-}
   private retryTimeoutId: number | null = null;
 
   constructor(props: ErrorBoundaryProps) {
-}
     super(props);
     this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-}
     // Generate unique error ID for tracking
     const errorId = `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     return { 
-}
       hasError: true, 
       error,
 //       errorId
@@ -137,23 +122,22 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-}
     const errorMessage = error.message.toLowerCase();
-    const errorStack = (error.stack || &apos;&apos;).toLowerCase();
+    const errorStack = (error.stack || '').toLowerCase();
     
     // Comprehensive error pattern matching for suppression
     const suppressibleErrorPatterns = [
       // Browser extension errors
-      &apos;extension&apos;, &apos;chrome-extension&apos;, &apos;moz-extension&apos;, &apos;safari-extension&apos;,
-      &apos;adblock&apos;, &apos;ublock&apos;, &apos;ghostery&apos;, &apos;privacy badger&apos;,
+      'extension', 'chrome-extension', 'moz-extension', 'safari-extension',
+      'adblock', 'ublock', 'ghostery', 'privacy badger',
       // DevTools related
-      &apos;devtools&apos;, &apos;chrome devtools&apos;, &apos;firefox devtools&apos;,
+      'devtools', 'chrome devtools', 'firefox devtools',
       // Network/Connection issues that auto-resolve
-      &apos;network error&apos;, &apos;failed to fetch&apos;, &apos;load failed&apos;,
+      'network error', 'failed to fetch', 'load failed',
       // Common non-critical React warnings
-      &apos;validateproperties&apos;, &apos;unknown event handler&apos;, &apos;unknown prop&apos;,
+      'validateproperties', 'unknown event handler', 'unknown prop',
       // Browser compatibility edge cases
-      &apos;non-configurable&apos;, &apos;illegal constructor&apos;
+      'non-configurable', 'illegal constructor'
     ];
 
     const isSuppressible = suppressibleErrorPatterns.some((pattern: any) => 
@@ -161,96 +145,77 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     );
 
     if (isSuppressible) {
-}
       // Auto-recover from suppressible errors
       setTimeout(() => {
-}
         this.setState({ hasError: false, error: undefined, errorId: undefined });
       }, 100);
       
       // Log in dev mode for debugging
       if (import.meta.env.DEV) {
-}
-        console.log(&apos;📝 Error boundary: Auto-recovering from suppressible error:&apos;, errorMessage);
+        console.log('📝 Error boundary: Auto-recovering from suppressible error:', errorMessage);
       }
       return;
     }
 
     // Enhanced error logging for real application errors
     const errorDetails = {
-}
       error: {
-}
         message: error.message,
         stack: error.stack,
         name: error.name
       },
       errorInfo: {
-}
         componentStack: errorInfo.componentStack
       },
       errorId: this.state.errorId,
       timestamp: new Date().toISOString(),
       url: window.location.href,
       userAgent: navigator.userAgent,
-      props: this.props.isolateError ? &apos;isolated&apos; : &apos;full-app&apos;
+      props: this.props.isolateError ? 'isolated' : 'full-app'
     };
 
     // Log to console in development
     if (import.meta.env.DEV) {
-}
-      console.group(&apos;🚨 React Error Boundary (Non-Extension Error)&apos;);
-      console.error(&apos;Error caught by ErrorBoundary:&apos;, error);
-      console.error(&apos;Component Stack:&apos;, errorInfo.componentStack);
-      console.error(&apos;Error Details:&apos;, errorDetails);
+      console.group('🚨 React Error Boundary (Non-Extension Error)');
+      console.error('Error caught by ErrorBoundary:', error);
+      console.error('Component Stack:', errorInfo.componentStack);
+      console.error('Error Details:', errorDetails);
       console.groupEnd();
     }
 
     // Call custom error handler
     if (this.props.onError) {
-}
       try {
-}
         this.props.onError(error, errorInfo);
       } catch (handlerError) {
-}
-        console.error(&apos;Error in custom error handler:&apos;, handlerError);
+        console.error('Error in custom error handler:', handlerError);
       }
     }
 
     // Log to production monitoring service (only for non-extension errors)
     if (import.meta.env.PROD) {
-}
       try {
-}
         if ((window as any).loggingService) {
-}
-          (window as any).loggingService.error(&apos;React Error Boundary&apos;, errorDetails, &apos;react-error&apos;);
+          (window as any).loggingService.error('React Error Boundary', errorDetails, 'react-error');
         }
       } catch (error) {
-}
-        console.error(&apos;Failed to log error to monitoring service:&apos;, error);
+        console.error('Failed to log error to monitoring service:', error);
       }
     }
   }
 
   componentWillUnmount() {
-}
     if (this.retryTimeoutId) {
-}
       clearTimeout(this.retryTimeoutId);
     }
   }
 
   handleRetry = () => {
-}
     this.setState({ hasError: false, error: undefined, errorId: undefined });
   }
 
   render() {
-}
     if (this.state.hasError) {
-}
       const FallbackComponent = this.props.fallback || DefaultErrorFallback;
       return (
         <FallbackComponent>
@@ -262,14 +227,12 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     return this.props.children;
   }
-}
 
 // HOC for wrapping components with ErrorBoundary
 export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<ErrorBoundaryProps, &apos;children&apos;>
+  errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
 ) => {
-}
   const WrappedComponent: React.FC<P> = (props: any) => (
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
@@ -282,9 +245,7 @@ export const withErrorBoundary = <P extends object>(
 
 // Hook for programmatic error reporting
 export const useErrorHandler = () => {
-}
   return React.useCallback((error: Error, errorInfo?: { [key: string]: any }) => {
-}
     // Manually trigger error boundary by throwing
     throw Object.assign(error, { errorInfo });
   }, []);

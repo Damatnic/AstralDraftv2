@@ -4,17 +4,16 @@
  */
 
 // Request types
-export * from &apos;./requests&apos;;
+export * from './requests';
 
 // Response types
-export * from &apos;./responses&apos;;
+export * from './responses';
 
 // Endpoint types
-export * from &apos;./endpoints&apos;;
+export * from './endpoints';
 
 // Re-export commonly used types
 export type {
-}
   // Base types
   BaseRequest,
   PaginatedRequest,
@@ -68,21 +67,19 @@ export type {
   CreateResponse,
   UpdateResponse,
 //   DeleteResponse
-} from &apos;./requests&apos;;
+} from './requests';
 
 export type {
-}
   // Endpoints
   EndpointConfig,
   TypedEndpoint,
   ApiEndpoint,
   EndpointMethod,
 //   EndpointPath
-} from &apos;./endpoints&apos;;
+} from './endpoints';
 
 // Endpoint collections
 export {
-}
   AuthEndpoints,
   UserEndpoints,
   LeagueEndpoints,
@@ -97,4 +94,4 @@ export {
   CommissionerEndpoints,
   SystemEndpoints,
 //   AllEndpoints
-} from &apos;./endpoints&apos;;
+} from './endpoints';

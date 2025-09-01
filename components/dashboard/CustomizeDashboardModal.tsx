@@ -1,39 +1,34 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion, Reorder } from &apos;framer-motion&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { LayoutIcon } from &apos;../icons/LayoutIcon&apos;;
-import { DragHandleIcon } from &apos;../icons/DragHandleIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion, Reorder } from 'framer-motion';
+import { Modal } from '../ui/Modal';
+import { useAppState } from '../../contexts/AppContext';
+import { LayoutIcon } from '../icons/LayoutIcon';
+import { DragHandleIcon } from '../icons/DragHandleIcon';
 
 interface CustomizeDashboardModalProps {
-}
     onClose: () => void;
 
-}
 
 const widgetLabels: { [key: string]: string } = {
-}
-    whatsNext: "What&apos;s Next",
-    leagues: &apos;My Leagues&apos;,
-    mockDrafts: &apos;Mock Drafts&apos;,
-    watchlist: &apos;My Watchlist&apos;,
-    power: &apos;Power Balance&apos;,
-    news: &apos;News Ticker&apos;,
-    assistant: &apos;AI Assistant&apos;,
+    whatsNext: "What's Next",
+    leagues: 'My Leagues',
+    mockDrafts: 'Mock Drafts',
+    watchlist: 'My Watchlist',
+    power: 'Power Balance',
+    news: 'News Ticker',
+    assistant: 'AI Assistant',
 };
 
 const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClose }: any) => {
-}
     const { state, dispatch } = useAppState();
     const [layout, setLayout] = React.useState(state.dashboardLayout);
 
     const handleSave = () => {
-}
-        dispatch({ type: &apos;UPDATE_DASHBOARD_LAYOUT&apos;, payload: layout });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Dashboard layout updated!&apos;, type: &apos;SYSTEM&apos; } });
+        dispatch({ type: 'UPDATE_DASHBOARD_LAYOUT', payload: layout });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Dashboard layout updated!', type: 'SYSTEM' } });
         onClose();
     };
 
@@ -42,7 +37,6 @@ const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClo
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md sm:px-4 md:px-6 lg:px-8"
                 {...{
-}
                     initial: { opacity: 0, scale: 0.95 },
                     animate: { opacity: 1, scale: 1 },
                 }}
@@ -57,7 +51,6 @@ const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClo
                     <p className="text-xs text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Drag and drop to reorder your dashboard widgets.</p>
                     <Reorder.Group axis="y" values={layout} onReorder={setLayout} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                         {layout.map((widgetId: any) => (
-}
                             <Reorder.Item 
                                 key={widgetId} 
                                 value={widgetId}

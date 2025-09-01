@@ -3,11 +3,10 @@
  * Showcases the AI-powered draft simulation functionality
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
-}
     RocketIcon, 
     BrainIcon, 
     ZapIcon, 
@@ -15,57 +14,48 @@ import {
     TrophyIcon,
     StarIcon,
 //     CheckCircleIcon
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import DraftSimulationInterface from &apos;./DraftSimulationInterface&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
+import DraftSimulationInterface from './DraftSimulationInterface';
 
 interface DemoFeature {
-}
     icon: React.ReactNode;
     title: string;
     description: string;
     isHighlight?: boolean;
 
-}
 
 const DraftSimulationDemo: React.FC = () => {
-}
     const [showDemo, setShowDemo] = useState(false);
 
     const features: DemoFeature[] = [
         {
-}
             icon: <BrainIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />,
             title: "AI Opponent Modeling",
             description: "Each AI opponent has unique personalities (Scholar, Gambler, Safe Pick) with different decision-making patterns and draft strategies.",
             isHighlight: true
         },
         {
-}
             icon: <TargetIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />,
             title: "Advanced Player Evaluation",
             description: "AI evaluates players based on position scarcity, team needs, strategy fit, and situational factors for realistic draft behavior."
         },
         {
-}
             icon: <ZapIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />,
             title: "Multiple Draft Strategies",
             description: "Choose from Balanced, RB Heavy, WR Heavy, Zero RB, Hero RB, and Best Available strategies for diverse draft experiences."
         },
         {
-}
             icon: <TrophyIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />,
             title: "Real-time Analytics",
             description: "Get instant feedback on team performance, strengths, weaknesses, and draft grade as the simulation progresses."
         },
         {
-}
             icon: <StarIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />,
             title: "Customizable Settings",
             description: "Adjust team count, scoring system, AI difficulty, simulation speed, and other parameters for tailored experiences."
         },
         {
-}
             icon: <RocketIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />,
             title: "Post-Draft Analysis",
             description: "Comprehensive team comparisons, value picks analysis, and strategic insights to improve future draft performance."
@@ -74,7 +64,6 @@ const DraftSimulationDemo: React.FC = () => {
 
     const aiPersonalities = [
         {
-}
             name: "The Scholar",
             icon: "🎓",
             description: "Methodical researcher who analyzes every pick carefully",
@@ -83,7 +72,6 @@ const DraftSimulationDemo: React.FC = () => {
             style: "Conservative, data-driven"
         },
         {
-}
             name: "The Gambler", 
             icon: "🎲",
             description: "High-risk, high-reward player who takes bold chances",
@@ -92,7 +80,6 @@ const DraftSimulationDemo: React.FC = () => {
             style: "Aggressive, intuitive"
         },
         {
-}
             name: "The Safe Pick",
             icon: "🛡️", 
             description: "Risk-averse manager focused on consistent performance",
@@ -104,28 +91,24 @@ const DraftSimulationDemo: React.FC = () => {
 
     const draftStrategies = [
         {
-}
             name: "Balanced",
             description: "Well-rounded approach filling all positions evenly",
             focus: "Positional balance",
             earlyRounds: "BPA with positional needs"
         },
         {
-}
             name: "RB Heavy",
             description: "Early and frequent running back selections",
             focus: "Running back depth",
             earlyRounds: "Target top RBs first"
         },
         {
-}
             name: "Zero RB",
             description: "Avoid RBs early, focus on WR/TE value",
             focus: "WR/TE in early rounds",
             earlyRounds: "Skip RBs for skill players"
         },
         {
-}
             name: "Hero RB",
             description: "Draft one elite RB, then avoid position",
             focus: "One top RB only",
@@ -136,7 +119,6 @@ const DraftSimulationDemo: React.FC = () => {
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {!showDemo ? (
-}
                 <div className="space-y-8 sm:px-4 md:px-6 lg:px-8">
                     {/* Header */}
                     <Widget title="🚀 AI Draft Simulation Engine" className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 sm:px-4 md:px-6 lg:px-8">
@@ -173,23 +155,20 @@ const DraftSimulationDemo: React.FC = () => {
                             {/* Key Features */}
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {features.map((feature, index) => (
-}
                                     <motion.div
                                         key={feature.title}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: index * 0.1 }}
                                         className={`p-4 rounded-lg ${
-}
                                             feature.isHighlight 
-                                                ? &apos;bg-gradient-to-br from-purple-800/30 to-blue-800/30 border border-purple-500/30&apos; 
-                                                : &apos;bg-gray-800/30&apos;
+                                                ? 'bg-gradient-to-br from-purple-800/30 to-blue-800/30 border border-purple-500/30' 
+                                                : 'bg-gray-800/30'
                                         }`}
                                     >
                                         <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
                                             <div className={`flex-shrink-0 p-2 rounded-lg ${
-}
-                                                feature.isHighlight ? &apos;bg-purple-600/20 text-purple-400&apos; : &apos;bg-gray-700/50 text-gray-400&apos;
+                                                feature.isHighlight ? 'bg-purple-600/20 text-purple-400' : 'bg-gray-700/50 text-gray-400'
                                             }`}>
                                                 {feature.icon}
                                             </div>
@@ -208,7 +187,6 @@ const DraftSimulationDemo: React.FC = () => {
                     <Widget title="🤖 AI Opponent Personalities" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid md:grid-cols-3 gap-6">
                             {aiPersonalities.map((personality, index) => (
-}
                                 <motion.div
                                     key={personality.name}
                                     initial={{ opacity: 0, scale: 0.9 }}
@@ -237,7 +215,6 @@ const DraftSimulationDemo: React.FC = () => {
                                     <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                         <div className="text-xs font-medium text-gray-400 sm:px-4 md:px-6 lg:px-8">Key Traits:</div>
                                         {personality.traits.map((trait: any) => (
-}
                                             <div key={trait} className="flex items-center space-x-1 text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">
                                                 <CheckCircleIcon className="w-3 h-3 text-green-500 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{trait}</span>
@@ -253,7 +230,6 @@ const DraftSimulationDemo: React.FC = () => {
                     <Widget title="📋 Draft Strategies" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {draftStrategies.map((strategy, index) => (
-}
                                 <motion.div
                                     key={strategy.name}
                                     initial={{ opacity: 0, y: 20 }}

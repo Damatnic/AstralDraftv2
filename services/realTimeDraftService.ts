@@ -4,13 +4,12 @@
  * live updates, pick notifications, and synchronized state management
  */
 
-import { io, Socket } from &apos;socket.io-client&apos;;
-import { DraftPick } from &apos;../types&apos;;
-import { authService } from &apos;./authService&apos;;
-import { dataPersistenceService } from &apos;./dataPersistenceService&apos;;
+import { io, Socket } from 'socket.io-client';
+import { DraftPick } from '../types';
+import { authService } from './authService';
+import { dataPersistenceService } from './dataPersistenceService';
 
 export interface DraftParticipant {
-}
   userId: number;
   username: string;
   pickOrder: number;
@@ -18,15 +17,12 @@ export interface DraftParticipant {
   roster: DraftPick[];
   isOnline: boolean;
   lastActivity?: string;
-}
 
 export interface DraftRoom {
-}
   id: string;
   leagueId: string;
-  status: &apos;pending&apos; | &apos;active&apos; | &apos;paused&apos; | &apos;completed&apos;;
+  status: 'pending' | 'active' | 'paused' | 'completed';
   currentPick: {
-}
     round: number;
     pickNumber: number;
     teamId: number;
@@ -35,46 +31,37 @@ export interface DraftRoom {
   participants: DraftParticipant[];
   picks: DraftPick[];
   settings: {
-}
     rounds: number;
     timePerPick: number;
-    draftType: &apos;snake&apos; | &apos;auction&apos;;
+    draftType: 'snake' | 'auction';
     pauseOnDisconnect: boolean;
     autoPickEnabled: boolean;
   };
   createdAt: string;
   startedAt?: string;
   completedAt?: string;
-}
 
 export interface DraftEvent {
-}
-  type: &apos;pick_made&apos; | &apos;timer_update&apos; | &apos;participant_joined&apos; | &apos;participant_left&apos; | &apos;draft_paused&apos; | &apos;draft_resumed&apos; | &apos;chat_message&apos;;
+  type: 'pick_made' | 'timer_update' | 'participant_joined' | 'participant_left' | 'draft_paused' | 'draft_resumed' | 'chat_message';
   data: any;
   timestamp: string;
   userId?: number;
-}
 
 export interface DraftPickRequest {
-}
   playerId: string;
   playerName: string;
   position: string;
   team: string;
-}
 
 export interface ChatMessage {
-}
   id: string;
   userId: number;
   username: string;
   message: string;
   timestamp: string;
-  type: &apos;message&apos; | &apos;system&apos; | &apos;pick_announcement&apos;;
-}
+  type: 'message' | 'system' | 'pick_announcement';
 
 class RealTimeDraftService {
-}
   private socket: Socket | null = null;
   private currentDraftRoom: DraftRoom | null = null;
   private connectionAttempts = 0;
@@ -84,7 +71,6 @@ class RealTimeDraftService {
   private reconnectTimeout: NodeJS.Timeout | null = null;
 
   constructor() {
-}
     this.setupEventHandlers();
   }
 
@@ -92,74 +78,61 @@ class RealTimeDraftService {
    * Initialize connection to draft server
    */
   async connect(): Promise<void> {
-}
     if (this.socket?.connected || this.isConnecting) {
-}
       return;
     }
 
     const sessionToken = authService.getSessionToken();
     if (!sessionToken) {
-}
-      throw new Error(&apos;User not authenticated&apos;);
+      throw new Error('User not authenticated');
     }
 
     this.isConnecting = true;
 
     try {
-}
-      const serverUrl = (import.meta as any).env?.VITE_WEBSOCKET_URL || &apos;ws://localhost:3001&apos;;
+      const serverUrl = (import.meta as any).env?.VITE_WEBSOCKET_URL || 'ws://localhost:3001';
       
       this.socket = io(serverUrl, {
-}
         auth: {
-}
           token: sessionToken
         },
-        transports: [&apos;websocket&apos;, &apos;polling&apos;],
+        transports: ['websocket', 'polling'],
         timeout: 10000,
         retries: 3
       });
 
       await new Promise<void>((resolve, reject) => {
-}
         const timeout = setTimeout(() => {
-}
-          reject(new Error(&apos;Connection timeout&apos;));
+          reject(new Error('Connection timeout'));
         }, 10000);
 
-        this.socket!.on(&apos;connect&apos;, () => {
-}
+        this.socket!.on('connect', () => {
           clearTimeout(timeout);
           this.connectionAttempts = 0;
           this.isConnecting = false;
-          console.log(&apos;✅ Connected to draft server&apos;);
-          this.emit(&apos;connection_established&apos;);
+          console.log('✅ Connected to draft server');
+          this.emit('connection_established');
           resolve();
         });
 
-        this.socket!.on(&apos;connect_error&apos;, (error: any) => {
-}
+        this.socket!.on('connect_error', (error: any) => {
           clearTimeout(timeout);
           this.isConnecting = false;
-          console.error(&apos;❌ Draft server connection failed:&apos;, error);
-          reject(new Error(error instanceof Error ? error.message : &apos;Connection failed&apos;));
+          console.error('❌ Draft server connection failed:', error);
+          reject(new Error(error instanceof Error ? error.message : 'Connection failed'));
         });
       });
 
       this.setupSocketEventHandlers();
     } catch (error) {
-}
       this.isConnecting = false;
       this.connectionAttempts++;
       
       if (this.connectionAttempts < this.maxConnectionAttempts) {
-}
         console.log(`Retrying connection (${this.connectionAttempts}/${this.maxConnectionAttempts})...`);
         this.reconnectTimeout = setTimeout(() => this.connect(), 2000 * this.connectionAttempts);
       } else {
-}
-        console.error(&apos;Max connection attempts reached&apos;);
+        console.error('Max connection attempts reached');
         throw error;
       }
     }
@@ -169,15 +142,12 @@ class RealTimeDraftService {
    * Disconnect from draft server
    */
   disconnect(): void {
-}
     if (this.reconnectTimeout) {
-}
       clearTimeout(this.reconnectTimeout);
       this.reconnectTimeout = null;
     }
 
     if (this.socket) {
-}
       this.socket.disconnect();
       this.socket = null;
     }
@@ -185,38 +155,31 @@ class RealTimeDraftService {
     this.currentDraftRoom = null;
     this.connectionAttempts = 0;
     this.isConnecting = false;
-    this.emit(&apos;connection_lost&apos;);
+    this.emit('connection_lost');
   }
 
   /**
    * Join a draft room
    */
   async joinDraftRoom(draftRoomId: string): Promise<DraftRoom> {
-}
     if (!this.socket?.connected) {
-}
       await this.connect();
     }
 
     return new Promise((resolve, reject) => {
-}
       const timeout = setTimeout(() => {
-}
-        reject(new Error(&apos;Join room timeout&apos;));
+        reject(new Error('Join room timeout'));
       }, 5000);
 
-      this.socket!.emit(&apos;join_draft_room&apos;, { draftRoomId }, (response: any) => {
-}
+      this.socket!.emit('join_draft_room', { draftRoomId }, (response: any) => {
         clearTimeout(timeout);
         
         if (response.success) {
-}
           this.currentDraftRoom = response.room;
-          this.emit(&apos;room_joined&apos;, response.room);
+          this.emit('room_joined', response.room);
           resolve(response.room);
         } else {
-}
-          reject(new Error(response.error || &apos;Failed to join draft room&apos;));
+          reject(new Error(response.error || 'Failed to join draft room'));
         }
       });
     });
@@ -226,35 +189,27 @@ class RealTimeDraftService {
    * Leave current draft room
    */
   async leaveDraftRoom(): Promise<void> {
-}
     if (!this.socket?.connected || !this.currentDraftRoom) {
-}
       return;
     }
 
     return new Promise((resolve, reject) => {
-}
       const timeout = setTimeout(() => {
-}
-        reject(new Error(&apos;Leave room timeout&apos;));
+        reject(new Error('Leave room timeout'));
       }, 3000);
 
       if (!this.currentDraftRoom) {
-}
-        return reject(new Error(&apos;Not in a draft room.&apos;));
+        return reject(new Error('Not in a draft room.'));
       }
-      this.socket?.emit(&apos;leave_draft_room&apos;, { draftRoomId: this.currentDraftRoom.id }, (response: any) => {
-}
+      this.socket?.emit('leave_draft_room', { draftRoomId: this.currentDraftRoom.id }, (response: any) => {
         clearTimeout(timeout);
         
         if (response.success) {
-}
           this.currentDraftRoom = null;
-          this.emit(&apos;room_left&apos;);
+          this.emit('room_left');
           resolve();
         } else {
-}
-          reject(new Error(response.error || &apos;Failed to leave draft room&apos;));
+          reject(new Error(response.error || 'Failed to leave draft room'));
         }
       });
     });
@@ -264,39 +219,30 @@ class RealTimeDraftService {
    * Make a draft pick
    */
   async makePick(pickRequest: DraftPickRequest): Promise<void> {
-}
     if (!this.socket?.connected || !this.currentDraftRoom) {
-}
-      throw new Error(&apos;Not connected to draft room&apos;);
+      throw new Error('Not connected to draft room');
     }
 
     return new Promise((resolve, reject) => {
-}
       const timeout = setTimeout(() => {
-}
-        reject(new Error(&apos;Pick timeout&apos;));
+        reject(new Error('Pick timeout'));
       }, 5000);
 
       if (!this.currentDraftRoom) {
-}
-        return reject(new Error(&apos;Not in a draft room.&apos;));
+        return reject(new Error('Not in a draft room.'));
       }
-      this.socket?.emit(&apos;make_pick&apos;, {
-}
+      this.socket?.emit('make_pick', {
         draftRoomId: this.currentDraftRoom.id,
         pick: pickRequest
       }, (response: any) => {
-}
         clearTimeout(timeout);
         
         if (response.success) {
-}
           // Save pick to local storage
           this.saveDraftPickLocally(response.pick);
           resolve();
         } else {
-}
-          reject(new Error(response.error || &apos;Failed to make pick&apos;));
+          reject(new Error(response.error || 'Failed to make pick'));
         }
       });
     });
@@ -306,31 +252,23 @@ class RealTimeDraftService {
    * Set auto-pick preferences
    */
   async setAutoPick(enabled: boolean, playerQueue: string[] = []): Promise<void> {
-}
     if (!this.socket?.connected || !this.currentDraftRoom) {
-}
-      throw new Error(&apos;Not connected to draft room&apos;);
+      throw new Error('Not connected to draft room');
     }
 
     return new Promise((resolve, reject) => {
-}
       if (!this.currentDraftRoom) {
-}
-        return reject(new Error(&apos;Not in a draft room.&apos;));
+        return reject(new Error('Not in a draft room.'));
       }
-      this.socket?.emit(&apos;set_auto_pick&apos;, {
-}
+      this.socket?.emit('set_auto_pick', {
         draftRoomId: this.currentDraftRoom.id,
         enabled,
 //         playerQueue
       }, (response: any) => {
-}
         if (response.success) {
-}
           resolve();
         } else {
-}
-          reject(new Error(response.error || &apos;Failed to set auto pick&apos;));
+          reject(new Error(response.error || 'Failed to set auto pick'));
         }
       });
     });
@@ -340,18 +278,14 @@ class RealTimeDraftService {
    * Send chat message
    */
   async sendChatMessage(message: string): Promise<void> {
-}
     if (!this.socket?.connected || !this.currentDraftRoom) {
-}
-      throw new Error(&apos;Not connected to draft room&apos;);
+      throw new Error('Not connected to draft room');
     }
 
     if (!this.currentDraftRoom) {
-}
-      throw new Error(&apos;Not in a draft room.&apos;);
+      throw new Error('Not in a draft room.');
     }
-    this.socket.emit(&apos;chat_message&apos;, {
-}
+    this.socket.emit('chat_message', {
       draftRoomId: this.currentDraftRoom.id,
 //       message
     });
@@ -361,30 +295,22 @@ class RealTimeDraftService {
    * Pause/Resume draft (commissioners only)
    */
   async pauseDraft(paused: boolean): Promise<void> {
-}
     if (!this.socket?.connected || !this.currentDraftRoom) {
-}
-      throw new Error(&apos;Not connected to draft room&apos;);
+      throw new Error('Not connected to draft room');
     }
 
     return new Promise((resolve, reject) => {
-}
       if (!this.currentDraftRoom) {
-}
-        return reject(new Error(&apos;Not in a draft room.&apos;));
+        return reject(new Error('Not in a draft room.'));
       }
-      this.socket?.emit(&apos;pause_draft&apos;, {
-}
+      this.socket?.emit('pause_draft', {
         draftRoomId: this.currentDraftRoom.id,
 //         paused
       }, (response: any) => {
-}
         if (response.success) {
-}
           resolve();
         } else {
-}
-          reject(new Error(response.error || &apos;Failed to pause/resume draft&apos;));
+          reject(new Error(response.error || 'Failed to pause/resume draft'));
         }
       });
     });
@@ -394,7 +320,6 @@ class RealTimeDraftService {
    * Get current draft room state
    */
   getCurrentDraftRoom(): DraftRoom | null {
-}
     return this.currentDraftRoom;
   }
 
@@ -402,90 +327,76 @@ class RealTimeDraftService {
    * Check if connected to a draft room
    */
   isInDraftRoom(): boolean {
-}
     return this.currentDraftRoom !== null && this.socket?.connected === true;
   }
 
   /**
    * Get connection status
    */
-  getConnectionStatus(): &apos;connected&apos; | &apos;connecting&apos; | &apos;disconnected&apos; {
-}
-    if (this.socket?.connected) return &apos;connected&apos;;
-    if (this.isConnecting) return &apos;connecting&apos;;
-    return &apos;disconnected&apos;;
+  getConnectionStatus(): 'connected' | 'connecting' | 'disconnected' {
+    if (this.socket?.connected) return 'connected';
+    if (this.isConnecting) return 'connecting';
+    return 'disconnected';
   }
 
   /**
    * Setup socket event handlers
    */
   private setupSocketEventHandlers(): void {
-}
     if (!this.socket) return;
 
     // Draft events
-    this.socket.on(&apos;draft_event&apos;, (event: DraftEvent) => {
-}
+    this.socket.on('draft_event', (event: DraftEvent) => {
       this.handleDraftEvent(event);
     });
 
     // Pick made
-    this.socket.on(&apos;pick_made&apos;, (data: { pick: DraftPick; room: DraftRoom }) => {
-}
+    this.socket.on('pick_made', (data: { pick: DraftPick; room: DraftRoom }) => {
       this.currentDraftRoom = data.room;
       this.saveDraftPickLocally(data.pick);
-      this.emit(&apos;pick_made&apos;, data);
+      this.emit('pick_made', data);
     });
 
     // Timer updates
-    this.socket.on(&apos;timer_update&apos;, (data: { timeRemaining: number }) => {
-}
+    this.socket.on('timer_update', (data: { timeRemaining: number }) => {
       if (this.currentDraftRoom) {
-}
         this.currentDraftRoom.currentPick.timeRemaining = data.timeRemaining;
-        this.emit(&apos;timer_update&apos;, data);
+        this.emit('timer_update', data);
       }
     });
 
     // Participant updates
-    this.socket.on(&apos;participant_update&apos;, (data: { participants: DraftParticipant[] }) => {
-}
+    this.socket.on('participant_update', (data: { participants: DraftParticipant[] }) => {
       if (this.currentDraftRoom) {
-}
         this.currentDraftRoom.participants = data.participants;
-        this.emit(&apos;participants_updated&apos;, data);
+        this.emit('participants_updated', data);
       }
     });
 
     // Chat messages
-    this.socket.on(&apos;chat_message&apos;, (message: ChatMessage) => {
-}
-      this.emit(&apos;chat_message&apos;, message);
+    this.socket.on('chat_message', (message: ChatMessage) => {
+      this.emit('chat_message', message);
     });
 
     // Draft status changes
-    this.socket.on(&apos;draft_status_changed&apos;, (data: { status: DraftRoom[&apos;status&apos;]; room: DraftRoom }) => {
-}
+    this.socket.on('draft_status_changed', (data: { status: DraftRoom['status']; room: DraftRoom }) => {
       this.currentDraftRoom = data.room;
-      this.emit(&apos;draft_status_changed&apos;, data);
+      this.emit('draft_status_changed', data);
     });
 
     // Error handling
-    this.socket.on(&apos;error&apos;, (error: any) => {
-}
-      console.error(&apos;Draft socket error:&apos;, error);
-      this.emit(&apos;error&apos;, error);
+    this.socket.on('error', (error: any) => {
+      console.error('Draft socket error:', error);
+      this.emit('error', error);
     });
 
     // Disconnection handling
-    this.socket.on(&apos;disconnect&apos;, (reason: string) => {
-}
-      console.log(&apos;Disconnected from draft server:&apos;, reason);
-      this.emit(&apos;disconnected&apos;, { reason });
+    this.socket.on('disconnect', (reason: string) => {
+      console.log('Disconnected from draft server:', reason);
+      this.emit('disconnected', { reason });
       
       // Attempt to reconnect if not intentional
-      if (reason === &apos;io server disconnect&apos;) {
-}
+      if (reason === 'io server disconnect') {
         setTimeout(() => this.connect(), 2000);
       }
     });
@@ -495,43 +406,36 @@ class RealTimeDraftService {
    * Handle incoming draft events
    */
   private handleDraftEvent(event: DraftEvent): void {
-}
-    console.log(&apos;Draft event received:&apos;, event);
+    console.log('Draft event received:', event);
     
     switch (event.type) {
-}
-      case &apos;pick_made&apos;:
+      case 'pick_made':
         this.saveDraftPickLocally(event.data.pick);
         break;
-      case &apos;draft_paused&apos;:
-      case &apos;draft_resumed&apos;:
+      case 'draft_paused':
+      case 'draft_resumed':
         if (this.currentDraftRoom) {
-}
           this.currentDraftRoom.status = event.data.status;
         }
         break;
     }
 
-    this.emit(&apos;draft_event&apos;, event);
+    this.emit('draft_event', event);
   }
 
   /**
    * Save draft pick to local storage
    */
   private async saveDraftPickLocally(pick: DraftPick): Promise<void> {
-}
     try {
-}
       const service = await dataPersistenceService;
       
       // Save individual pick analytics data
       const analyticsData = {
-}
         id: `pick_${pick.playerId}_${Date.now()}`,
         userId: authService.getCurrentUser()?.id || 0,
-        type: &apos;draft_performance&apos; as const,
+        type: 'draft_performance' as const,
         data: {
-}
           pick,
           draftRoomId: this.currentDraftRoom?.id,
           timestamp: new Date().toISOString()
@@ -541,10 +445,9 @@ class RealTimeDraftService {
       };
 
       await service.saveAnalyticsData(analyticsData);
-      console.log(&apos;✅ Draft pick saved locally:&apos;, pick);
+      console.log('✅ Draft pick saved locally:', pick);
     } catch (error) {
-}
-      console.error(&apos;Failed to save draft pick locally:&apos;, error);
+      console.error('Failed to save draft pick locally:', error);
     }
   }
 
@@ -552,22 +455,17 @@ class RealTimeDraftService {
    * Setup general event handlers
    */
   private setupEventHandlers(): void {
-}
     // Handle browser visibility changes
-    document.addEventListener(&apos;visibilitychange&apos;, () => {
-}
-      if (document.visibilityState === &apos;visible&apos; && this.currentDraftRoom && !this.socket?.connected) {
-}
-        console.log(&apos;Tab became visible, reconnecting to draft...&apos;);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && this.currentDraftRoom && !this.socket?.connected) {
+        console.log('Tab became visible, reconnecting to draft...');
         this.connect();
       }
     });
 
     // Handle before unload
-    window.addEventListener(&apos;beforeunload&apos;, () => {
-}
+    window.addEventListener('beforeunload', () => {
       if (this.currentDraftRoom) {
-}
         this.leaveDraftRoom();
       }
     });
@@ -577,36 +475,28 @@ class RealTimeDraftService {
    * Event emitter functionality
    */
   on(event: string, callback: Function): void {
-}
     if (!this.listeners.has(event)) {
-}
       this.listeners.set(event, []);
     }
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
-}
       eventListeners.push(callback);
     }
   }
 
   off(event: string, callback: Function): void {
-}
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
-}
       const index = eventListeners.indexOf(callback);
       if (index > -1) {
-}
         eventListeners.splice(index, 1);
       }
     }
   }
 
   private emit(event: string, data?: any): void {
-}
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
-}
       eventListeners.forEach((callback: any) => callback(data));
     }
   }
@@ -615,15 +505,13 @@ class RealTimeDraftService {
    * Cleanup resources
    */
   destroy(): void {
-}
     this.disconnect();
     this.listeners.clear();
     
     // Remove event listeners
-    document.removeEventListener(&apos;visibilitychange&apos;, this.setupEventHandlers);
-    window.removeEventListener(&apos;beforeunload&apos;, this.setupEventHandlers);
+    document.removeEventListener('visibilitychange', this.setupEventHandlers);
+    window.removeEventListener('beforeunload', this.setupEventHandlers);
   }
-}
 
 export const realTimeDraftService = new RealTimeDraftService();
 export default realTimeDraftService;

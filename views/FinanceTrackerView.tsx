@@ -1,15 +1,13 @@
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { DollarSignIcon } from &apos;../components/icons/DollarSignIcon&apos;;
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import ErrorDisplay from '../components/core/ErrorDisplay';
+import { motion } from 'framer-motion';
+import { DollarSignIcon } from '../components/icons/DollarSignIcon';
 
 const FinanceTrackerView: React.FC = () => {
-}
     const { league } = useLeague();
 
     if (!league) {
-}
         return <ErrorDisplay message="No league selected" />;
 
     return (
@@ -29,7 +27,7 @@ const FinanceTrackerView: React.FC = () => {
                         <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 p-6 rounded-lg">
                             <h3 className="text-lg font-semibold mb-2">League Financial Summary</h3>
                             <p className="text-gray-300 mb-4">
-                                Track your league&apos;s financial health and budget allocations.
+                                Track your league's financial health and budget allocations.
                             </p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="text-center">

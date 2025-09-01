@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import OnboardingGuide from &apos;./OnboardingGuide&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import OnboardingGuide from './OnboardingGuide';
 
-describe(&apos;OnboardingGuide&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('OnboardingGuide', () => {
+  it('renders without crashing', () => {
     render(<OnboardingGuide />);
-    expect(screen.getByTestId(&apos;onboardingguide&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('onboardingguide')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<OnboardingGuide />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<OnboardingGuide />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,27 +1,24 @@
 
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import type { Team, League } from &apos;../types&apos;;
-import { Avatar } from &apos;../components/ui/Avatar&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { calculateStreak } from &apos;../utils/streaks&apos;;
-import { FlameIcon } from &apos;../components/icons/FlameIcon&apos;;
-import { SnowflakeIcon } from &apos;../components/icons/SnowflakeIcon&apos;;
-import { CompareIcon } from &apos;../components/icons/CompareIcon&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { TrendingUpIcon } from &apos;../components/icons/TrendingUpIcon&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { Widget } from '../components/ui/Widget';
+import type { Team, League } from '../types';
+import { Avatar } from '../components/ui/Avatar';
+import { useLeague } from '../hooks/useLeague';
+import { calculateStreak } from '../utils/streaks';
+import { FlameIcon } from '../components/icons/FlameIcon';
+import { SnowflakeIcon } from '../components/icons/SnowflakeIcon';
+import { CompareIcon } from '../components/icons/CompareIcon';
+import { motion, AnimatePresence } from 'framer-motion';
+import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
 
 const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUserId: string; dispatch: React.Dispatch<any> }> = ({ league, myTeamId, myUserId, dispatch }: any) => {
-}
     const [selectedTeams, setSelectedTeams] = React.useState<Set<number>>(new Set());
     
     const sortedTeams = [...league.teams].sort((a, b) => {
-}
         const aWinPct = a.record.wins + a.record.ties * 0.5;
         const bWinPct = b.record.wins + b.record.ties * 0.5;
         if (aWinPct !== bWinPct) {
-}
             return bWinPct - aWinPct;
 
         // Could add points for as a tie-breaker
@@ -29,17 +26,12 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
     });
 
     const handleSelectTeam = (teamId: number) => {
-}
         setSelectedTeams(prev => {
-}
             const newSet = new Set(prev);
             if (newSet.has(teamId)) {
-}
                 newSet.delete(teamId);
             } else {
-}
                 if (newSet.size < 2) {
-}
                     newSet.add(teamId);
 
 
@@ -48,11 +40,9 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
     };
 
     const handleCompare = () => {
-}
         if (selectedTeams.size === 2) {
-}
             const [teamAId, teamBId] = Array.from(selectedTeams);
-            dispatch({ type: &apos;SET_TEAMS_TO_COMPARE&apos;, payload: [teamAId, teamBId] });
+            dispatch({ type: 'SET_TEAMS_TO_COMPARE', payload: [teamAId, teamBId] });
 
     };
 
@@ -67,14 +57,13 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                     </div>
                     <div className="flex items-center gap-2">
                         <button 
-                            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;PROJECTED_STANDINGS&apos; })
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECTED_STANDINGS' })
                             className="btn btn-secondary flex items-center gap-2"
                         >
                             <TrendingUpIcon /> View Projections
                         </button>
                         <AnimatePresence>
                             {selectedTeams.size === 2 && (
-}
                                 <motion.button
                                     onClick={handleCompare},
                                         animate: { opacity: 1, scale: 1 },
@@ -86,7 +75,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                             )}
                         </AnimatePresence>
                         <button 
-                            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; }) 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) 
                             className="back-btn"
                         >
                             Back to My Team
@@ -113,11 +102,10 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                                 </thead>
                                 <tbody>
                                     {sortedTeams.map((team, i) => {
-}
                                         const streak = calculateStreak(team.id, league.schedule, league.currentWeek);
                                         const isSelected = selectedTeams.has(team.id);
                                         return (
-                                            <tr key={team.id} className={`border-t border-white/5 ${team.id === myTeamId ? &apos;bg-cyan-500/10&apos; : &apos;&apos;} ${isSelected ? &apos;bg-cyan-500/20&apos; : &apos;&apos;}`}>
+                                            <tr key={team.id} className={`border-t border-white/5 ${team.id === myTeamId ? 'bg-cyan-500/10' : ''} ${isSelected ? 'bg-cyan-500/20' : ''}`}>
                                                 <td className="p-3 text-center">
                                                     <input
                                                         type="checkbox"
@@ -133,13 +121,10 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                                                         <div>
                                                             <button 
                                                                 onClick={() => {
-}
                                                                     if (team.owner.id === myUserId) {
-}
-                                                                        dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;PROFILE&apos; }
+                                                                        dispatch({ type: 'SET_VIEW', payload: 'PROFILE' }
                                                                     } else {
-}
-                                                                        dispatch({ type: &apos;SET_MANAGER_PROFILE&apos;, payload: team.owner.id });
+                                                                        dispatch({ type: 'SET_MANAGER_PROFILE', payload: team.owner.id });
 
                                                                 }}
                                                                 className="font-semibold text-white text-left hover:underline"
@@ -155,12 +140,11 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                                                 <td className="p-3 font-mono text-center">{team.record.ties}</td>
                                                 <td className="p-3 font-mono text-center">
                                                     {streak ? (
-}
-                                                        <span className={`flex items-center justify-center gap-1 ${streak.type === &apos;W&apos; ? &apos;text-orange-400&apos; : &apos;text-blue-400&apos;}`}>
-                                                            {streak.type === &apos;W&apos; ? <FlameIcon /> : <SnowflakeIcon />}
+                                                        <span className={`flex items-center justify-center gap-1 ${streak.type === 'W' ? 'text-orange-400' : 'text-blue-400'}`}>
+                                                            {streak.type === 'W' ? <FlameIcon /> : <SnowflakeIcon />}
                                                             {streak.count}
                                                         </span>
-                                                    ) : &apos;-&apos;}
+                                                    ) : '-'}
                                                 </td>
                                             </tr>
                                         );
@@ -176,17 +160,15 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
 };
 
 const LeagueStandingsView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     
     return (
         <div className="w-full h-full">
             {!league || !myTeam || !state.user ? (
-}
                 <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                     <p>Select a league to view standings.</p>
-                     <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                         Back to Dashboard
                     </button>
                 </div>

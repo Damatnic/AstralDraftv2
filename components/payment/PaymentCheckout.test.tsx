@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import PaymentCheckout from &apos;./PaymentCheckout&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PaymentCheckout from './PaymentCheckout';
 
-describe(&apos;PaymentCheckout&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('PaymentCheckout', () => {
+  it('renders without crashing', () => {
     render(<PaymentCheckout />);
-    expect(screen.getByTestId(&apos;paymentcheckout&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('paymentcheckout')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<PaymentCheckout />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<PaymentCheckout />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

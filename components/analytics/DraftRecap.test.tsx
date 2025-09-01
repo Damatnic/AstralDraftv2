@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import DraftRecap from &apos;./DraftRecap&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import DraftRecap from './DraftRecap';
 
-describe(&apos;DraftRecap&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('DraftRecap', () => {
+  it('renders without crashing', () => {
     render(<DraftRecap />);
-    expect(screen.getByTestId(&apos;draftrecap&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('draftrecap')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<DraftRecap />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<DraftRecap />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

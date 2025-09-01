@@ -2,14 +2,13 @@
  * League data with NFL players integrated
  */
 
-import { MAIN_LEAGUE, TEAMS_2025 } from &apos;./leagueData&apos;;
-import { NFL_PLAYERS_2024 } from &apos;./nflPlayers&apos;;
-import { League } from &apos;../types&apos;;
-import { generateRegularSeasonSchedule, generatePlayoffSchedule } from &apos;../services/scheduleGeneratorService&apos;;
+import { MAIN_LEAGUE, TEAMS_2025 } from './leagueData';
+import { NFL_PLAYERS_2024 } from './nflPlayers';
+import { League } from '../types';
+import { generateRegularSeasonSchedule, generatePlayoffSchedule } from '../services/scheduleGeneratorService';
 
 // Generate the full season schedule
 const regularSeasonMatchups = generateRegularSeasonSchedule({
-}
   teams: TEAMS_2025,
   regularSeasonWeeks: 14,
   playoffWeeks: 3,
@@ -18,7 +17,6 @@ const regularSeasonMatchups = generateRegularSeasonSchedule({
 
 const playoffMatchups = generatePlayoffSchedule(
   {
-}
     teams: TEAMS_2025,
     regularSeasonWeeks: 14,
     playoffWeeks: 3,
@@ -34,7 +32,6 @@ const fullSchedule = [...regularSeasonMatchups, ...playoffMatchups];
 const mockDraftLog = generateMockDraftLog();
 
 function generateMockDraftLog(): any[] {
-}
   const draftLog: any[] = [];
   const playersPerTeam = 16;
   const topPlayers = NFL_PLAYERS_2024
@@ -46,17 +43,13 @@ function generateMockDraftLog(): any[] {
 
   // Snake draft simulation
   for (let round = 1; round <= playersPerTeam; round++) {
-}
     const isEvenRound = round % 2 === 0;
     const teamOrder = isEvenRound ? [...TEAMS_2025].reverse() : TEAMS_2025;
 
     teamOrder.forEach((team: any) => {
-}
       if (playerIndex < topPlayers.length) {
-}
         const player = topPlayers[playerIndex];
         draftLog.push({
-}
           pickNumber,
           round,
           teamId: team.id,
@@ -76,16 +69,14 @@ function generateMockDraftLog(): any[] {
   }
 
   return draftLog;
-}
 
 // Create league with NFL players and schedule
 export const LEAGUE_WITH_PLAYERS: League = {
-}
   ...MAIN_LEAGUE,
   allPlayers: NFL_PLAYERS_2024,
   schedule: fullSchedule,
   draftLog: mockDraftLog,
-  status: &apos;IN_SEASON&apos;, // Override to IN_SEASON
+  status: 'IN_SEASON', // Override to IN_SEASON
   currentWeek: 1 // Start at week 1
 };
 

@@ -6,43 +6,34 @@
 
 // Web Vitals types (define locally since package may not be installed)
 interface WebVitalMetric {
-}
     name: string;
     value: number;
     delta: number;
     id: string;
-    rating: &apos;good&apos; | &apos;needs-improvement&apos; | &apos;poor&apos;;
+    rating: 'good' | 'needs-improvement' | 'poor';
     navigationType?: string;
-}
 
 export interface PerformanceMetric {
-}
     name: string;
     value: number;
     delta: number;
     id: string;
-    rating: &apos;good&apos; | &apos;needs-improvement&apos; | &apos;poor&apos;;
+    rating: 'good' | 'needs-improvement' | 'poor';
     navigationType: string;
-}
 
 export interface PerformanceConfig {
-}
     enableLogging?: boolean;
     enableReporting?: boolean;
     sampleRate?: number;
     apiEndpoint?: string;
-}
 
 class MobilePerformanceMonitor {
-}
     private readonly config: PerformanceConfig;
     private readonly metrics: Map<string, PerformanceMetric> = new Map();
     private readonly startTime: number = performance.now();
 
     constructor(config: PerformanceConfig = {}) {
-}
         this.config = {
-}
             enableLogging: true,
             enableReporting: false,
             sampleRate: 1,
@@ -55,217 +46,173 @@ class MobilePerformanceMonitor {
     }
 
     private initializeWebVitals() {
-}
         // Manual Web Vitals implementation
         this.observeBasicMetrics();
     }
 
     private observeBasicMetrics() {
-}
         // Observe paint timing
-        if (&apos;PerformanceObserver&apos; in window) {
-}
+        if ('PerformanceObserver' in window) {
             const paintObserver = new PerformanceObserver((list: any) => {
-}
                 list.getEntries().forEach((entry: any) => {
-}
-                    if (entry.name === &apos;first-contentful-paint&apos;) {
-}
+                    if (entry.name === 'first-contentful-paint') {
                         this.handleMetric({
-}
-                            name: &apos;FCP&apos;,
+                            name: 'FCP',
                             value: entry.startTime,
                             delta: entry.startTime,
-                            id: &apos;fcp&apos;,
-                            rating: entry.startTime < 1800 ? &apos;good&apos; : entry.startTime < 3000 ? &apos;needs-improvement&apos; : &apos;poor&apos;
+                            id: 'fcp',
+                            rating: entry.startTime < 1800 ? 'good' : entry.startTime < 3000 ? 'needs-improvement' : 'poor'
                         });
                     }
                 });
             });
-            paintObserver.observe({ entryTypes: [&apos;paint&apos;] });
+            paintObserver.observe({ entryTypes: ['paint'] });
 
             // Observe largest contentful paint
             const lcpObserver = new PerformanceObserver((list: any) => {
-}
                 const entries = list.getEntries();
                 const lastEntry = entries[entries.length - 1];
                 if (lastEntry) {
-}
                     this.handleMetric({
-}
-                        name: &apos;LCP&apos;,
+                        name: 'LCP',
                         value: lastEntry.startTime,
                         delta: lastEntry.startTime,
-                        id: &apos;lcp&apos;,
-                        rating: lastEntry.startTime < 2500 ? &apos;good&apos; : lastEntry.startTime < 4000 ? &apos;needs-improvement&apos; : &apos;poor&apos;
+                        id: 'lcp',
+                        rating: lastEntry.startTime < 2500 ? 'good' : lastEntry.startTime < 4000 ? 'needs-improvement' : 'poor'
                     });
                 }
             });
-            lcpObserver.observe({ entryTypes: [&apos;largest-contentful-paint&apos;] });
+            lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 
             // Observe layout shifts
             const clsObserver = new PerformanceObserver((list: any) => {
-}
                 let clsValue = 0;
                 list.getEntries().forEach((entry: any) => {
-}
                     if (!entry.hadRecentInput) {
-}
                         clsValue += entry.value;
                     }
                 });
                 if (clsValue > 0) {
-}
                     this.handleMetric({
-}
-                        name: &apos;CLS&apos;,
+                        name: 'CLS',
                         value: clsValue,
                         delta: clsValue,
-                        id: &apos;cls&apos;,
-                        rating: clsValue < 0.1 ? &apos;good&apos; : clsValue < 0.25 ? &apos;needs-improvement&apos; : &apos;poor&apos;
+                        id: 'cls',
+                        rating: clsValue < 0.1 ? 'good' : clsValue < 0.25 ? 'needs-improvement' : 'poor'
                     });
                 }
             });
-            clsObserver.observe({ entryTypes: [&apos;layout-shift&apos;] });
+            clsObserver.observe({ entryTypes: ['layout-shift'] });
         }
 
         // TTFB calculation
-        window.addEventListener(&apos;load&apos;, () => {
-}
-            const navTiming = performance.getEntriesByType(&apos;navigation&apos;)[0] as PerformanceNavigationTiming;
+        window.addEventListener('load', () => {
+            const navTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
             if (navTiming) {
-}
                 const ttfb = navTiming.responseStart - navTiming.requestStart;
                 this.handleMetric({
-}
-                    name: &apos;TTFB&apos;,
+                    name: 'TTFB',
                     value: ttfb,
                     delta: ttfb,
-                    id: &apos;ttfb&apos;,
-                    rating: ttfb < 800 ? &apos;good&apos; : ttfb < 1800 ? &apos;needs-improvement&apos; : &apos;poor&apos;
+                    id: 'ttfb',
+                    rating: ttfb < 800 ? 'good' : ttfb < 1800 ? 'needs-improvement' : 'poor'
                 });
             }
         });
     }
 
     private handleMetric(metric: any) {
-}
         const performanceMetric: PerformanceMetric = {
-}
             name: metric.name,
             value: metric.value,
             delta: metric.delta,
             id: metric.id,
             rating: metric.rating,
-            navigationType: metric.navigationType || &apos;unknown&apos;
+            navigationType: metric.navigationType || 'unknown'
         };
 
         this.metrics.set(metric.name, performanceMetric);
 
         if (this.config.enableLogging) {
-}
             console.log(`Performance Metric: ${metric.name}`, performanceMetric);
         }
 
         if (this.config.enableReporting && Math.random() < (this.config.sampleRate || 1)) {
-}
             this.reportMetric(performanceMetric);
         }
 
         // Trigger custom events for app-level handling
-        window.dispatchEvent(new CustomEvent(&apos;performance-metric&apos;, {
-}
+        window.dispatchEvent(new CustomEvent('performance-metric', {
             detail: performanceMetric
         }));
     }
 
     private setupResourceObserver() {
-}
-        if (&apos;PerformanceObserver&apos; in window) {
-}
+        if ('PerformanceObserver' in window) {
             const observer = new PerformanceObserver((list: any) => {
-}
                 list.getEntries().forEach((entry: any) => {
-}
-                    if (entry.entryType === &apos;resource&apos;) {
-}
+                    if (entry.entryType === 'resource') {
                         this.trackResourceLoading(entry as PerformanceResourceTiming);
                     }
                 });
             });
 
-            observer.observe({ entryTypes: [&apos;resource&apos;] });
+            observer.observe({ entryTypes: ['resource'] });
         }
     }
 
     private setupNavigationObserver() {
-}
-        if (&apos;PerformanceObserver&apos; in window) {
-}
+        if ('PerformanceObserver' in window) {
             const observer = new PerformanceObserver((list: any) => {
-}
                 list.getEntries().forEach((entry: any) => {
-}
-                    if (entry.entryType === &apos;navigation&apos;) {
-}
+                    if (entry.entryType === 'navigation') {
                         this.trackNavigation(entry as PerformanceNavigationTiming);
                     }
                 });
             });
 
-            observer.observe({ entryTypes: [&apos;navigation&apos;] });
+            observer.observe({ entryTypes: ['navigation'] });
         }
     }
 
     private trackResourceLoading(entry: PerformanceResourceTiming) {
-}
         const duration = entry.responseEnd - entry.requestStart;
         
         if (this.config.enableLogging && duration > 100) {
-}
             console.log(`Slow resource: ${entry.name} took ${duration}ms`);
         }
 
         // Track large resources
         if (entry.transferSize && entry.transferSize > 100000) { // 100KB
-}
             console.warn(`Large resource: ${entry.name} (${Math.round(entry.transferSize / 1024)}KB)`);
         }
     }
 
     private trackNavigation(entry: PerformanceNavigationTiming) {
-}
         const metrics = {
-}
-            &apos;DNS Lookup&apos;: entry.domainLookupEnd - entry.domainLookupStart,
-            &apos;TCP Connect&apos;: entry.connectEnd - entry.connectStart,
-            &apos;Request&apos;: entry.responseStart - entry.requestStart,
-            &apos;Response&apos;: entry.responseEnd - entry.responseStart,
-            &apos;DOM Processing&apos;: entry.domContentLoadedEventStart - entry.responseEnd,
-            &apos;Load Complete&apos;: entry.loadEventEnd - entry.loadEventStart
+            'DNS Lookup': entry.domainLookupEnd - entry.domainLookupStart,
+            'TCP Connect': entry.connectEnd - entry.connectStart,
+            'Request': entry.responseStart - entry.requestStart,
+            'Response': entry.responseEnd - entry.responseStart,
+            'DOM Processing': entry.domContentLoadedEventStart - entry.responseEnd,
+            'Load Complete': entry.loadEventEnd - entry.loadEventStart
         };
 
         if (this.config.enableLogging) {
-}
-            console.log(&apos;Navigation Timing:&apos;, metrics);
+            console.log('Navigation Timing:', metrics);
         }
     }
 
     private async reportMetric(metric: PerformanceMetric) {
-}
         if (!this.config.apiEndpoint) return;
 
         try {
-}
             await fetch(this.config.apiEndpoint, {
-}
-                method: &apos;POST&apos;,
+                method: 'POST',
                 headers: {
-}
-                    &apos;Content-Type&apos;: &apos;application/json&apos;,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-}
                     metric,
                     userAgent: navigator.userAgent,
                     timestamp: Date.now(),
@@ -277,13 +224,11 @@ class MobilePerformanceMonitor {
     }
 
     public endMeasure(name: string) {
-}
         performance.mark(`${name}-end`);
         performance.measure(name, `${name}-start`, `${name}-end`);
         
-        const measure = performance.getEntriesByName(name, &apos;measure&apos;)[0];
+        const measure = performance.getEntriesByName(name, 'measure')[0];
         if (measure && this.config.enableLogging) {
-}
             console.log(`Custom Metric: ${name} took ${measure.duration}ms`);
         }
         
@@ -292,12 +237,9 @@ class MobilePerformanceMonitor {
 
     // Memory usage monitoring
     public getMemoryUsage() {
-}
-        if (&apos;memory&apos; in performance) {
-}
+        if ('memory' in performance) {
             const memory = (performance as any).memory;
             return {
-}
                 used: Math.round(memory.usedJSHeapSize / 1048576), // MB
                 total: Math.round(memory.totalJSHeapSize / 1048576), // MB
                 limit: Math.round(memory.jsHeapSizeLimit / 1048576) // MB
@@ -308,12 +250,9 @@ class MobilePerformanceMonitor {
 
     // Network information
     public getNetworkInfo() {
-}
-        if (&apos;connection&apos; in navigator) {
-}
+        if ('connection' in navigator) {
             const connection = (navigator as any).connection;
             return {
-}
                 effectiveType: connection.effectiveType,
                 downlink: connection.downlink,
                 rtt: connection.rtt,
@@ -325,15 +264,11 @@ class MobilePerformanceMonitor {
 
     // Battery API for mobile
     public async getBatteryInfo() {
-}
-        if (&apos;getBattery&apos; in navigator) {
-}
+        if ('getBattery' in navigator) {
             try {
-}
 
                 const battery = await (navigator as any).getBattery();
                 return {
-}
                     level: Math.round(battery.level * 100),
                     charging: battery.charging,
                     chargingTime: battery.chargingTime,
@@ -341,11 +276,9 @@ class MobilePerformanceMonitor {
                 };
 
     } catch (error) {
-}
         console.error(error);
     } catch (error) {
-}
-                console.error(&apos;Battery API not available:&apos;, error);
+                console.error('Battery API not available:', error);
                 return null;
             }
         }
@@ -354,24 +287,20 @@ class MobilePerformanceMonitor {
 
     // Get all collected metrics
     public getMetrics() {
-}
         return Array.from(this.metrics.values());
     }
 
     // Performance score calculation
     public getPerformanceScore() {
-}
         const metrics = this.getMetrics();
         let score = 100;
 
         metrics.forEach((metric: any) => {
-}
             switch (metric.rating) {
-}
-                case &apos;poor&apos;:
+                case 'poor':
                     score -= 20;
                     break;
-                case &apos;needs-improvement&apos;:
+                case 'needs-improvement':
                     score -= 10;
                     break;
                 default:
@@ -384,57 +313,47 @@ class MobilePerformanceMonitor {
 
     // Device and environment info
     public getDeviceInfo() {
-}
         return {
-}
             userAgent: navigator.userAgent,
             language: navigator.language,
             cookieEnabled: navigator.cookieEnabled,
             onLine: navigator.onLine,
-            deviceMemory: (navigator as any).deviceMemory || &apos;unknown&apos;,
-            hardwareConcurrency: navigator.hardwareConcurrency || &apos;unknown&apos;,
+            deviceMemory: (navigator as any).deviceMemory || 'unknown',
+            hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
             viewport: {
-}
                 width: window.innerWidth,
                 height: window.innerHeight
             },
             screen: {
-}
                 width: screen.width,
                 height: screen.height,
                 pixelRatio: window.devicePixelRatio
             }
         };
     }
-}
 
 // Singleton instance
 export const performanceMonitor = new MobilePerformanceMonitor();
 
 // React hook for performance monitoring
 export const usePerformanceMonitor = () => {
-}
     const [metrics, setMetrics] = React.useState<PerformanceMetric[]>([]);
     const [score, setScore] = React.useState<number>(100);
 
     React.useEffect(() => {
-}
         const handleMetric = (event: CustomEvent) => {
-}
             setMetrics(prev => [...prev, event.detail]);
             setScore(performanceMonitor.getPerformanceScore());
         };
 
-        window.addEventListener(&apos;performance-metric&apos;, handleMetric as EventListener);
+        window.addEventListener('performance-metric', handleMetric as EventListener);
         
         return () => {
-}
-            window.removeEventListener(&apos;performance-metric&apos;, handleMetric as EventListener);
+            window.removeEventListener('performance-metric', handleMetric as EventListener);
         };
     }, []);
 
     return {
-}
         metrics,
         score,
         startMeasure: performanceMonitor.startMeasure.bind(performanceMonitor),

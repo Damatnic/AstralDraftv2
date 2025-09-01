@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import PlayerResearchInterface from &apos;./PlayerResearchInterface&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PlayerResearchInterface from './PlayerResearchInterface';
 
-describe(&apos;PlayerResearchInterface&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('PlayerResearchInterface', () => {
+  it('renders without crashing', () => {
     render(<PlayerResearchInterface />);
-    expect(screen.getByTestId(&apos;playerresearchinterface&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('playerresearchinterface')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<PlayerResearchInterface />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<PlayerResearchInterface />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

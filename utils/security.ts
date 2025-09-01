@@ -6,107 +6,98 @@
 // Define comprehensive noise patterns
 const EXTENSION_NOISE_PATTERNS = [
   // React DevTools specific
-  &apos;react devtools&apos;,
-  &apos;react_devtools&apos;,
-  &apos;reactdevtools&apos;,
-  &apos;__react&apos;,
-  &apos;react-devtools&apos;,
-  &apos;duplicate welcome&apos;,
-  &apos;welcome "message"&apos;,
-  &apos;content script&apos;,
-  &apos;devtools detected&apos;,
-  &apos;devtools extension&apos;,
+  'react devtools',
+  'react_devtools',
+  'reactdevtools',
+  '__react',
+  'react-devtools',
+  'duplicate welcome',
+  'welcome "message"',
+  'content script',
+  'devtools detected',
+  'devtools extension',
   
   // Chrome/Firefox extension errors
-  &apos;message port closed&apos;,
-  &apos;runtime.lasterror&apos;,
-  &apos;could not establish connection&apos;,
-  &apos;receiving end does not exist&apos;,
-  &apos;extension context&apos;,
-  &apos;chrome-extension&apos;,
-  &apos;moz-extension&apos;,
-  &apos;browser extension&apos;,
-  &apos;extension error&apos;,
+  'message port closed',
+  'runtime.lasterror',
+  'could not establish connection',
+  'receiving end does not exist',
+  'extension context',
+  'chrome-extension',
+  'moz-extension',
+  'browser extension',
+  'extension error',
   
   // Property access errors
-  &apos;cannot read properties of undefined&apos;,
-  &apos;reading \&apos;length\&apos;&apos;,
-  &apos;undefined.length&apos;,
-  &apos;of undefined&apos;,
-  &apos;of null&apos;,
+  'cannot read properties of undefined',
+  'reading \'length\'',
+  'undefined.length',
+  'of undefined',
+  'of null',
   
   // PostMessage related
-  &apos;postmessage&apos;,
-  &apos;message event&apos;,
-  &apos;message handler&apos;,
+  'postmessage',
+  'message event',
+  'message handler',
   
   // General extension noise
-  &apos;uncaught (in promise)&apos;,
-  &apos;unchecked runtime.lasterror&apos;,
-  &apos;non-existent content script&apos;,
-  &apos;extension runtime&apos;,
+  'uncaught (in promise)',
+  'unchecked runtime.lasterror',
+  'non-existent content script',
+  'extension runtime',
   
   // Development tool messages
-  &apos;download the react devtools&apos;,
-  &apos;react hook&apos;,
-  &apos;react fiber&apos;,
-  &apos;react dom&apos;,
+  'download the react devtools',
+  'react hook',
+  'react fiber',
+  'react dom',
   
   // Browser specific
-  &apos;non-passive event listener&apos;,
-  &apos;passive event listener&apos;,
-  &apos;blocked a frame&apos;,
-  &apos;cross-origin&apos;,
-  &apos;cors&apos;,
+  'non-passive event listener',
+  'passive event listener',
+  'blocked a frame',
+  'cross-origin',
+  'cors',
   
   // Network related extension errors
-  &apos;failed to fetch&apos;,
-  &apos;network error&apos;,
-  &apos;load resource&apos;,
+  'failed to fetch',
+  'network error',
+  'load resource',
   
   // Other common extension noise
-  &apos;grammarly&apos;,
-  &apos;lastpass&apos;,
-  &apos;adblock&apos;,
-  &apos;honey&apos;,
-  &apos;metamask&apos;,
-  &apos;bitwarden&apos;
+  'grammarly',
+  'lastpass',
+  'adblock',
+  'honey',
+  'metamask',
+  'bitwarden'
 ];
 
 /**
  * Ultra-aggressive message filtering
  */
 export function isExtensionNoise(message: any): boolean {
-}
   try {
-}
     // Convert message to string for pattern matching
-    let msgStr = &apos;&apos;;
-    if (typeof message === &apos;string&apos;) {
-}
+    let msgStr = '';
+    if (typeof message === 'string') {
       msgStr = message.toLowerCase();
-    } else if (message && typeof message === &apos;object&apos;) {
-}
+    } else if (message && typeof message === 'object') {
       // Handle Error objects
       if (message instanceof Error) {
-}
         msgStr = (message.message || message.toString()).toLowerCase();
       } else {
-}
         try {
-}
           msgStr = JSON.stringify(message).toLowerCase();
         } catch {
-}
           msgStr = String(message).toLowerCase();
         }
       }
     } else if (message !== null && message !== undefined) {
-}
       msgStr = String(message).toLowerCase();
     }
     
-    // If we can&apos;t parse the message, assume it&apos;s noise
+    // If we can't parse the message, assume it's noise
     if (!msgStr) return true;
     
     // Check against all patterns
@@ -114,74 +105,57 @@ export function isExtensionNoise(message: any): boolean {
       msgStr.includes(pattern.toLowerCase())
     );
   } catch {
-}
     // If any error occurs during filtering, silence the message
     return true;
   }
-}
 
 /**
  * Safe stringify function that handles all edge cases
  */
 export function safeStringify(obj: any): string {
-}
   const seen = new WeakSet();
   
   try {
-}
     return JSON.stringify(obj, (key, value) => {
-}
       // Handle circular references
-      if (typeof value === &apos;object&apos; && value !== null) {
-}
+      if (typeof value === 'object' && value !== null) {
         if (seen.has(value)) {
-}
-          return &apos;[Circular]&apos;;
+          return '[Circular]';
         }
         seen.add(value);
       }
       
       // Handle special types
       if (value instanceof Error) {
-}
         return `[Error: ${value.message}]`;
       }
-      if (typeof value === &apos;function&apos;) {
-}
-        return &apos;[Function]&apos;;
+      if (typeof value === 'function') {
+        return '[Function]';
       }
-      if (typeof value === &apos;symbol&apos;) {
-}
+      if (typeof value === 'symbol') {
         return value.toString();
       }
       if (value === undefined) {
-}
-        return &apos;[undefined]&apos;;
+        return '[undefined]';
       }
       
       return value;
     });
   } catch {
-}
     // Fallback for completely unparseable objects
     try {
-}
       return String(obj);
     } catch {
-}
-      return &apos;[Unparseable]&apos;;
+      return '[Unparseable]';
     }
   }
-}
 
 /**
  * Initialize comprehensive console protection
  */
 export function initializeConsoleProtection(): void {
-}
   // Store original console methods
   const originalConsole = {
-}
     log: console.log,
     warn: console.warn,
     error: console.error,
@@ -191,32 +165,25 @@ export function initializeConsoleProtection(): void {
   
   // Create filtered console wrapper
   const createFilteredMethod = (originalMethod: Function) => {
-}
     return function(...args: any[]) {
-}
       try {
-}
         // Check if any argument contains extension noise
         const hasNoise = args.some((arg: any) => isExtensionNoise(arg));
         
         if (!hasNoise) {
-}
           // Also check the combined message
           const combinedMessage = args.map((arg: any) => {
-}
-            if (typeof arg === &apos;string&apos;) return arg;
+            if (typeof arg === 'string') return arg;
             if (arg instanceof Error) return arg.message;
             return safeStringify(arg);
-          }).join(&apos; &apos;);
+          }).join(' ');
           
           if (!isExtensionNoise(combinedMessage)) {
-}
             // Safe to log
             originalMethod.apply(console, args);
           }
         }
       } catch {
-}
         // Silently ignore any errors in the filtering process
       }
     };
@@ -230,12 +197,10 @@ export function initializeConsoleProtection(): void {
   console.debug = createFilteredMethod(originalConsole.debug);
   
   // Intercept window error events
-  window.addEventListener(&apos;error&apos;, (event: any) => {
-}
+  window.addEventListener('error', (event: any) => {
     if (isExtensionNoise(event.message) || 
         isExtensionNoise(event.error) ||
-        (event.filename && event.filename.includes(&apos;extension://&apos;))) {
-}
+        (event.filename && event.filename.includes('extension://'))) {
       event.preventDefault();
       event.stopImmediatePropagation();
       return false;
@@ -243,182 +208,147 @@ export function initializeConsoleProtection(): void {
   }, true);
   
   // Intercept unhandled promise rejections
-  window.addEventListener(&apos;unhandledrejection&apos;, (event: any) => {
-}
+  window.addEventListener('unhandledrejection', (event: any) => {
     if (isExtensionNoise(event.reason)) {
-}
       event.preventDefault();
       event.stopImmediatePropagation();
       return false;
     }
   }, true);
-}
 
 /**
  * Block React DevTools communication entirely
  */
 export function blockReactDevTools(): void {
-}
   // Override postMessage to filter React DevTools messages
   const originalPostMessage = window.postMessage.bind(window);
   
   window.postMessage = function(message: any, targetOrigin: string, transfer?: Transferable[]) {
-}
     try {
-}
-      const msgStr = typeof message === &apos;string&apos; 
+      const msgStr = typeof message === 'string' 
         ? message 
         : safeStringify(message);
       
       // Block React DevTools specific messages
-      if (msgStr.toLowerCase().includes(&apos;react&apos;) || 
-          msgStr.toLowerCase().includes(&apos;devtools&apos;) ||
-          msgStr.toLowerCase().includes(&apos;__react&apos;)) {
-}
+      if (msgStr.toLowerCase().includes('react') || 
+          msgStr.toLowerCase().includes('devtools') ||
+          msgStr.toLowerCase().includes('__react')) {
         return; // Silently drop the message
       }
       
       // Allow other messages through
       return originalPostMessage(message, targetOrigin, transfer);
     } catch {
-}
       // Drop any problematic messages
       return;
     }
   };
   
   // Also filter incoming messages
-  window.addEventListener(&apos;message&apos;, (event: any) => {
-}
+  window.addEventListener('message', (event: any) => {
     try {
-}
-      const dataStr = typeof event.data === &apos;string&apos;
+      const dataStr = typeof event.data === 'string'
         ? event.data
         : safeStringify(event.data);
       
-      if (dataStr.toLowerCase().includes(&apos;react&apos;) || 
-          dataStr.toLowerCase().includes(&apos;devtools&apos;)) {
-}
+      if (dataStr.toLowerCase().includes('react') || 
+          dataStr.toLowerCase().includes('devtools')) {
         event.stopImmediatePropagation();
         event.preventDefault();
         return false;
       }
     } catch {
-}
       // Ignore errors
     }
   }, true);
   
   // Remove React DevTools global hooks if they exist
   try {
-}
-    if (&apos;__REACT_DEVTOOLS_GLOBAL_HOOK__&apos; in window) {
-}
+    if ('__REACT_DEVTOOLS_GLOBAL_HOOK__' in window) {
       delete (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__;
     }
   } catch {
-}
-    // Ignore if we can&apos;t delete
+    // Ignore if we can't delete
   }
   
   // Prevent React DevTools from being defined
-  Object.defineProperty(window, &apos;__REACT_DEVTOOLS_GLOBAL_HOOK__&apos;, {
-}
+  Object.defineProperty(window, '__REACT_DEVTOOLS_GLOBAL_HOOK__', {
     value: undefined,
     writable: false,
     configurable: false,
     enumerable: false
   });
-}
 
 /**
  * Initialize all security measures
  */
 export function initializeSecurity(): void {
-}
   // Must be called as early as possible
   initializeConsoleProtection();
   blockReactDevTools();
   
   // Additional security hardening
-  if (process.env.NODE_ENV === &apos;production&apos;) {
-}
+  if (process.env.NODE_ENV === 'production') {
     // Disable right-click in production
-    document.addEventListener(&apos;contextmenu&apos;, (e: any) => {
-}
+    document.addEventListener('contextmenu', (e: any) => {
       e.preventDefault();
       return false;
     });
     
     // Disable dev tools shortcuts
-    document.addEventListener(&apos;keydown&apos;, (e: any) => {
-}
+    document.addEventListener('keydown', (e: any) => {
       // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-      if (e.key === &apos;F12&apos; || 
-          (e.ctrlKey && e.shiftKey && [&apos;I&apos;, &apos;J&apos;, &apos;C&apos;].includes(e.key))) {
-}
+      if (e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key))) {
         e.preventDefault();
         return false;
       }
     });
   }
-}
 
 // Auto-initialize on import in browser environment
-if (typeof window !== &apos;undefined&apos;) {
-}
+if (typeof window !== 'undefined') {
   // Initialize immediately
   initializeSecurity();
   
   // Also initialize on DOMContentLoaded to catch late-loading extensions
-  if (document.readyState === &apos;loading&apos;) {
-}
-    document.addEventListener(&apos;DOMContentLoaded&apos;, initializeSecurity);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSecurity);
   } else {
-}
     // DOM already loaded, initialize again to be safe
     setTimeout(initializeSecurity, 0);
   }
-}
 
 /**
  * Security validators for input sanitization
  */
 export const SecurityValidators = {
-}
   email: (value: string): boolean => {
-}
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(value);
   },
   
   alphanumeric: (value: string): boolean => {
-}
     const alphanumericRegex = /^[a-zA-Z0-9]+$/;
     return alphanumericRegex.test(value);
   },
   
   numeric: (value: string): boolean => {
-}
     const numericRegex = /^\d+$/;
     return numericRegex.test(value);
   },
   
   safeText: (value: string): boolean => {
-}
     // Allow letters, numbers, spaces, and common punctuation
-    const safeTextRegex = /^[a-zA-Z0-9\s.,!?&apos;"-]+$/;
+    const safeTextRegex = /^[a-zA-Z0-9\s.,!?'"-]+$/;
     return safeTextRegex.test(value);
   },
   
   url: (value: string): boolean => {
-}
     try {
-}
       new URL(value);
       return true;
     } catch {
-}
       return false;
     }
   }
@@ -427,46 +357,42 @@ export const SecurityValidators = {
 /**
  * Sanitize user input to prevent XSS and injection attacks
  */
-export function sanitizeInput(input: string, type: &apos;text&apos; | &apos;email&apos; | &apos;numeric&apos; | &apos;alphanumeric&apos; = &apos;text&apos;): string {
-}
-  if (!input) return &apos;&apos;;
+export function sanitizeInput(input: string, type: 'text' | 'email' | 'numeric' | 'alphanumeric' = 'text'): string {
+  if (!input) return '';
   
   // Remove any script tags or dangerous HTML
   let sanitized = input
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, &apos;&apos;)
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, &apos;&apos;)
-    .replace(/javascript:/gi, &apos;&apos;)
-    .replace(/on\w+\s*=/gi, &apos;&apos;);
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '');
   
   // Apply type-specific sanitization
   switch (type) {
-}
-    case &apos;email&apos;:
+    case 'email':
       sanitized = sanitized.toLowerCase().trim();
       break;
-    case &apos;numeric&apos;:
-      sanitized = sanitized.replace(/[^\d]/g, &apos;&apos;);
+    case 'numeric':
+      sanitized = sanitized.replace(/[^\d]/g, '');
       break;
-    case &apos;alphanumeric&apos;:
-      sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, &apos;&apos;);
+    case 'alphanumeric':
+      sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, '');
       break;
-    case &apos;text&apos;:
+    case 'text':
     default:
       // Allow common text characters but escape HTML entities
       sanitized = sanitized
-        .replace(/&/g, &apos;&amp;&apos;)
-        .replace(/</g, &apos;&lt;&apos;)
-        .replace(/>/g, &apos;&gt;&apos;)
-        .replace(/"/g, &apos;&quot;&apos;)
-        .replace(/&apos;/g, &apos;&#039;&apos;);
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
       break;
   }
   
   return sanitized;
-}
 
 export default {
-}
   initializeSecurity,
   initializeConsoleProtection,
   blockReactDevTools,

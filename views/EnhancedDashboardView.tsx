@@ -3,13 +3,12 @@
  * Mobile-responsive dashboard with touch-friendly components
  */
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useMediaQuery } from &apos;../hooks/useMediaQuery&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { View } from &apos;../types&apos;;
-import MobilePullToRefresh from &apos;../components/mobile/MobilePullToRefresh&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import { motion } from 'framer-motion';
+import { View } from '../types';
+import MobilePullToRefresh from '../components/mobile/MobilePullToRefresh';
 import { 
-}
     TrophyIcon,
     BarChart3Icon,
     UsersIcon,
@@ -18,22 +17,19 @@ import {
     BellIcon,
     PlusIcon,
 //     SearchIcon
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 interface MobileDashboardWidgetProps {
-}
     title: string;
     icon: React.ReactNode;
     value: string | number;
     subtitle?: string;
-    trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
+    trend?: 'up' | 'down' | 'stable';
     color: string;
     onClick?: () => void;
 
-}
 
 const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
-}
     title,
     icon,
     value,
@@ -42,14 +38,11 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
     color,
 //     onClick
 }: any) => {
-}
-    const getTrendColor = (trendType: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;) => {
-}
+    const getTrendColor = (trendType: 'up' | 'down' | 'stable') => {
         switch (trendType) {
-}
-            case &apos;up&apos;: return &apos;text-green-400&apos;;
-            case &apos;down&apos;: return &apos;text-red-400&apos;;
-            default: return &apos;text-gray-400&apos;;
+            case 'up': return 'text-green-400';
+            case 'down': return 'text-red-400';
+            default: return 'text-gray-400';
 
     };
 
@@ -63,9 +56,8 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
                     {icon}
                 </div>
                 {trend && (
-}
                     <div className={`text-xs ${getTrendColor(trend)}`}>
-                        <TrendingUpIcon className={`w-3 h-3 ${trend === &apos;down&apos; ? &apos;rotate-180&apos; : &apos;&apos;}`} />
+                        <TrendingUpIcon className={`w-3 h-3 ${trend === 'down' ? 'rotate-180' : ''}`} />
                     </div>
                 )}
             </div>
@@ -79,7 +71,6 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
             </div>
             
             {subtitle && (
-}
                 <div className="text-xs text-[var(--text-tertiary)] mt-1">
                     {subtitle}
                 </div>
@@ -89,13 +80,11 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
 };
 
 interface QuickActionProps {
-}
     icon: React.ReactNode;
     label: string;
     color: string;
     onClick: () => void;
 
-}
 
 const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }: any) => (
     <motion.button
@@ -112,34 +101,29 @@ const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }
 );
 
 const EnhancedDashboardView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
     const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
 
     const handleRefresh = async () => {
-}
         // Simulate data refresh
         await new Promise(resolve => setTimeout(resolve, 1500));
         // Here you would typically trigger actual data fetching
     };
 
     const handleViewChange = (view: View) => {
-}
-        dispatch({ type: &apos;SET_VIEW&apos;, payload: view });
+        dispatch({ type: 'SET_VIEW', payload: view });
     };
 
     const mockData = {
-}
-        totalPoints: &apos;1,247.6&apos;,
-        weeklyRank: &apos;3rd&apos;,
+        totalPoints: '1,247.6',
+        weeklyRank: '3rd',
         leagueCount: state.leagues.length,
         activeMatchups: 2,
         notifications: 5
     };
 
     if (isMobile) {
-}
         return (
             <div className="h-full bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
                 <MobilePullToRefresh onRefresh={handleRefresh}>
@@ -151,7 +135,7 @@ const EnhancedDashboardView: React.FC = () => {
 //                                     Dashboard
                                 </h1>
                                 <p className="text-sm text-[var(--text-secondary)]">
-                                    Welcome back, {state.user?.name || &apos;User&apos;}
+                                    Welcome back, {state.user?.name || 'User'}
                                 </p>
                             </div>
                             <div className="flex items-center gap-2">
@@ -161,7 +145,6 @@ const EnhancedDashboardView: React.FC = () => {
                                 <button className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
                                     <BellIcon className="w-5 h-5" />
                                     {mockData.notifications > 0 && (
-}
                                         <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                             {mockData.notifications}
                                         </span>
@@ -179,7 +162,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 subtitle="Season total"
                                 trend="up"
                                 color="bg-blue-500"
-                                onClick={() => handleViewChange(&apos;ANALYTICS_HUB&apos;)}
+                                onClick={() => handleViewChange('ANALYTICS_HUB')}
                             
                             <MobileDashboardWidget>
                                 title="Weekly Rank"
@@ -188,7 +171,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 subtitle="This week"
                                 trend="stable"
                                 color="bg-green-500"
-                                onClick={() => handleViewChange(&apos;LEAGUE_STANDINGS&apos;)}
+                                onClick={() => handleViewChange('LEAGUE_STANDINGS')}
                             
                             <MobileDashboardWidget>
                                 title="My Leagues"
@@ -196,7 +179,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 value={mockData.leagueCount}
                                 subtitle="Active leagues"
                                 color="bg-purple-500"
-                                onClick={() => handleViewChange(&apos;LEAGUE_HUB&apos;)}
+                                onClick={() => handleViewChange('LEAGUE_HUB')}
                             
                             <MobileDashboardWidget>
                                 title="Matchups"
@@ -204,7 +187,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 value={mockData.activeMatchups}
                                 subtitle="This week"
                                 color="bg-orange-500"
-                                onClick={() => handleViewChange(&apos;MATCHUP&apos;)}
+                                onClick={() => handleViewChange('MATCHUP')}
                         </div>
 
                         {/* Quick Actions */}
@@ -217,38 +200,37 @@ const EnhancedDashboardView: React.FC = () => {
                                     icon={<PlusIcon className="w-5 h-5 text-blue-400" />}
                                     label="Create League"
                                     color="bg-blue-500/10"
-                                    onClick={() => handleViewChange(&apos;CREATE_LEAGUE&apos;)}
+                                    onClick={() => handleViewChange('CREATE_LEAGUE')}
                                 
                                 <QuickAction>
                                     icon={<TrophyIcon className="w-5 h-5 text-green-400" />}
                                     label="Draft Room"
                                     color="bg-green-500/10"
-                                    onClick={() => handleViewChange(&apos;DRAFT_ROOM&apos;)}
+                                    onClick={() => handleViewChange('DRAFT_ROOM')}
                                 
                                 <QuickAction>
                                     icon={<BarChart3Icon className="w-5 h-5 text-purple-400" />}
                                     label="Analytics"
                                     color="bg-purple-500/10"
-                                    onClick={() => handleViewChange(&apos;ANALYTICS_HUB&apos;)}
+                                    onClick={() => handleViewChange('ANALYTICS_HUB')}
                                 
                                 <QuickAction>
                                     icon={<UsersIcon className="w-5 h-5 text-orange-400" />}
                                     label="Teams"
                                     color="bg-orange-500/10"
-                                    onClick={() => handleViewChange(&apos;TEAM_HUB&apos;)}
+                                    onClick={() => handleViewChange('TEAM_HUB')}
                             </div>
                         </div>
 
                         {/* Active League Summary */}
                         {activeLeague && (
-}
                             <div>
                                 <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                                     Current League
                                 </h2>
                                 <motion.div
                                     whileTap={{ scale: 0.98 }}
-                                    onClick={() => handleViewChange(&apos;LEAGUE_HUB&apos;)}
+                                    onClick={() => handleViewChange('LEAGUE_HUB')}
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <h3 className="font-medium text-[var(--text-primary)]">
@@ -298,7 +280,6 @@ const EnhancedDashboardView: React.FC = () => {
                             </h2>
                             <div className="space-y-2">
                                 {[
-}
                                     { text: "John drafted Patrick Mahomes", time: "2 minutes ago", type: "draft" },
                                     { text: "Trade proposal received", time: "1 hour ago", type: "trade" },
                                     { text: "Waiver claim processed", time: "3 hours ago", type: "waiver" }

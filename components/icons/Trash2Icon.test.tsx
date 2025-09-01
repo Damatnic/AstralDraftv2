@@ -1,44 +1,36 @@
 
 interface IconProps {
-}
   size?: number | string;
-}
 
   className?: string;
   color?: string;
-  &apos;aria-label&apos;?: string;
+  'aria-label'?: string;
 
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import Trash2Icon from &apos;./Trash2Icon&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Trash2Icon from './Trash2Icon';
 
-describe(&apos;Trash2Icon&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('Trash2Icon', () => {
+  it('renders without crashing', () => {
     render(<Trash2Icon />);
-    expect(screen.getByTestId(&apos;trash2icon&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('trash2icon')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<Trash2Icon />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<Trash2Icon />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

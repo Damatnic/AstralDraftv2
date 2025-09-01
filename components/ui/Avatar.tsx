@@ -1,21 +1,17 @@
 
-import { LazyImage } from &apos;./LazyImage&apos;;
+import { LazyImage } from './LazyImage';
 
 interface AvatarProps {
-}
   avatar: string;
   className?: string;
   alt?: string;
   generatedAvatarUrl?: string;
 
-}
 
-export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = &apos;Team avatar&apos;, generatedAvatarUrl }: any) => {
-}
-  const isImageUrl = generatedAvatarUrl || (avatar && (avatar.startsWith(&apos;data:image&apos;) || avatar.startsWith(&apos;https&apos;)));
+export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team avatar', generatedAvatarUrl }: any) => {
+  const isImageUrl = generatedAvatarUrl || (avatar && (avatar.startsWith('data:image') || avatar.startsWith('https')));
 
   if (isImageUrl) {
-}
     return (
       <LazyImage>
         src={generatedAvatarUrl || avatar}
@@ -27,7 +23,7 @@ export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = &apos;T
     );
   }
 
-  // It&apos;s an emoji
+  // It's an emoji
   return (
       <span className={`flex items-center justify-center bg-black/10 ${className}`}>
           {avatar}

@@ -3,28 +3,25 @@
  * Sophisticated fairness evaluation with detailed metrics and visualizations
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Player, League } from &apos;../../types&apos;;
-import { TradeProposal, TradeAnalysis } from &apos;./TradeAnalyzerView&apos;;
-import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
-import { CheckIcon } from &apos;../icons/CheckIcon&apos;;
-import { AlertTriangleIcon } from &apos;../icons/AlertTriangleIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Player, League } from '../../types';
+import { TradeProposal, TradeAnalysis } from './TradeAnalyzerView';
+import { BarChartIcon } from '../icons/BarChartIcon';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { CheckIcon } from '../icons/CheckIcon';
+import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
 
 interface FairnessAnalysisTabProps {
-}
     proposal: TradeProposal | null;
     analysis: TradeAnalysis | null;
     league: League;
     dispatch: React.Dispatch<any>;
 
-}
 
 interface ValueMetric {
-}
     name: string;
     yourValue: number;
     theirValue: number;
@@ -33,66 +30,57 @@ interface ValueMetric {
     description: string;}
 
 const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
-}
     proposal,
     analysis,
     league,
 //     dispatch
 }: any) => {
-}
     const valueMetrics: ValueMetric[] = React.useMemo(() => {
-}
         if (!analysis) return [];
         
         return [
             {
-}
-                name: &apos;Current Value&apos;,
+                name: 'Current Value',
                 yourValue: proposal?.fromPlayers.reduce((sum, p) => sum + p.auctionValue, 0) || 0,
                 theirValue: proposal?.toPlayers.reduce((sum, p) => sum + p.auctionValue, 0) || 0,
                 difference: analysis.currentValueDiff,
-                unit: &apos;$&apos;,
-                description: &apos;Auction draft value of players&apos;
+                unit: '$',
+                description: 'Auction draft value of players'
             },
             {
-}
-                name: &apos;Projected Points&apos;,
+                name: 'Projected Points',
                 yourValue: proposal?.fromPlayers.reduce((sum, p) => sum + p.stats.projection, 0) || 0,
                 theirValue: proposal?.toPlayers.reduce((sum, p) => sum + p.stats.projection, 0) || 0,
                 difference: analysis.projectedValueDiff,
-                unit: &apos;pts&apos;,
-                description: &apos;Rest of season projected points&apos;
+                unit: 'pts',
+                description: 'Rest of season projected points'
             },
             {
-}
-                name: &apos;Season End Value&apos;,
+                name: 'Season End Value',
                 yourValue: (proposal?.fromPlayers.reduce((sum, p) => sum + p.auctionValue, 0) || 0) * 0.9,
                 theirValue: (proposal?.toPlayers.reduce((sum, p) => sum + p.auctionValue, 0) || 0) * 0.9,
                 difference: analysis.seasonEndValueDiff,
-                unit: &apos;$&apos;,
-                description: &apos;Estimated keeper/dynasty value&apos;
+                unit: '$',
+                description: 'Estimated keeper/dynasty value'
 
         ];
     }, [proposal, analysis]);
 
     const getFairnessLevel = (score: number) => {
-}
-        if (score >= 80) return { level: &apos;Excellent&apos;, color: &apos;text-green-400&apos;, bg: &apos;bg-green-500/20&apos; };
-        if (score >= 60) return { level: &apos;Good&apos;, color: &apos;text-blue-400&apos;, bg: &apos;bg-blue-500/20&apos; };
-        if (score >= 40) return { level: &apos;Fair&apos;, color: &apos;text-yellow-400&apos;, bg: &apos;bg-yellow-500/20&apos; };
-        if (score >= 20) return { level: &apos;Poor&apos;, color: &apos;text-orange-400&apos;, bg: &apos;bg-orange-500/20&apos; };
-        return { level: &apos;Very Poor&apos;, color: &apos;text-red-400&apos;, bg: &apos;bg-red-500/20&apos; };
+        if (score >= 80) return { level: 'Excellent', color: 'text-green-400', bg: 'bg-green-500/20' };
+        if (score >= 60) return { level: 'Good', color: 'text-blue-400', bg: 'bg-blue-500/20' };
+        if (score >= 40) return { level: 'Fair', color: 'text-yellow-400', bg: 'bg-yellow-500/20' };
+        if (score >= 20) return { level: 'Poor', color: 'text-orange-400', bg: 'bg-orange-500/20' };
+        return { level: 'Very Poor', color: 'text-red-400', bg: 'bg-red-500/20' };
     };
 
     const getValueDifferenceColor = (diff: number) => {
-}
-        if (Math.abs(diff) <= 5) return &apos;text-green-400&apos;;
-        if (Math.abs(diff) <= 15) return &apos;text-yellow-400&apos;;
-        return &apos;text-red-400&apos;;
+        if (Math.abs(diff) <= 5) return 'text-green-400';
+        if (Math.abs(diff) <= 15) return 'text-yellow-400';
+        return 'text-red-400';
     };
 
     if (!proposal || !analysis) {
-}
         return (
             <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                 <BarChartIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
@@ -152,17 +140,16 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                 <Widget title="Recommendation" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                     <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
                         <div className="mb-3 sm:px-4 md:px-6 lg:px-8">
-                            {analysis.recommendation.includes(&apos;accept&apos;) ? (
-}
+                            {analysis.recommendation.includes('accept') ? (
                                 <CheckIcon className="w-12 h-12 mx-auto text-green-400 sm:px-4 md:px-6 lg:px-8" />
-                            ) : analysis.recommendation === &apos;consider&apos; ? (
+                            ) : analysis.recommendation === 'consider' ? (
                                 <AlertTriangleIcon className="w-12 h-12 mx-auto text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
                             ) : (
                                 <TrendingDownIcon className="w-12 h-12 mx-auto text-red-400 sm:px-4 md:px-6 lg:px-8" />
                             )}
                         </div>
                         <div className="font-bold text-lg text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
-                            {analysis.recommendation.replace(&apos;_&apos;, &apos; &apos;).toUpperCase()}
+                            {analysis.recommendation.replace('_', ' ').toUpperCase()}
                         </div>
                         <div className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                             Confidence: {analysis.confidence}%
@@ -177,11 +164,10 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                     <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
                         <div className="text-4xl font-bold mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span className={`${
-}
-                                analysis.overallGrade.startsWith(&apos;A&apos;) ? &apos;text-green-400&apos; :
-                                analysis.overallGrade.startsWith(&apos;B&apos;) ? &apos;text-blue-400&apos; :
-                                analysis.overallGrade.startsWith(&apos;C&apos;) ? &apos;text-yellow-400&apos; :
-                                &apos;text-red-400&apos;
+                                analysis.overallGrade.startsWith('A') ? 'text-green-400' :
+                                analysis.overallGrade.startsWith('B') ? 'text-blue-400' :
+                                analysis.overallGrade.startsWith('C') ? 'text-yellow-400' :
+                                'text-red-400'
                             }`}>
                                 {analysis.overallGrade}
                             </span>
@@ -200,7 +186,6 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
             <Widget title="Value Analysis" icon={<BarChartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />} className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                 <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {valueMetrics.map((metric, index) => (
-}
                         <motion.div
                             key={metric.name}
                             initial={{ opacity: 0, y: 20 }}
@@ -214,7 +199,7 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                                     <p className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{metric.description}</p>
                                 </div>
                                 <div className={`text-lg font-bold ${getValueDifferenceColor(metric.difference)}`}>
-                                    {metric.difference > 0 ? &apos;+&apos; : &apos;&apos;}{metric.difference}{metric.unit}
+                                    {metric.difference > 0 ? '+' : ''}{metric.difference}{metric.unit}
                                 </div>
                             </div>
                             
@@ -255,10 +240,8 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                 <Widget title="Trade Strengths" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         {analysis.strengths.length > 0 ? (
-}
                             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {analysis.strengths.map((strength, index) => (
-}
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, x: -20 }}
@@ -283,10 +266,8 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                 <Widget title="Trade Concerns" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         {analysis.weaknesses.length > 0 ? (
-}
                             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {analysis.weaknesses.map((weakness, index) => (
-}
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, x: 20 }}
@@ -310,12 +291,10 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
 
             {/* Warnings */}
             {analysis.warnings.length > 0 && (
-}
                 <Widget title="Important Warnings" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {analysis.warnings.map((warning, index) => (
-}
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, y: 20 }}
@@ -347,9 +326,8 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                         </div>
                         <div className="text-center p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="text-lg font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
-                                {analysis.riskAssessment.overallRisk === &apos;low&apos; ? &apos;85%&apos; : 
-}
-                                 analysis.riskAssessment.overallRisk === &apos;medium&apos; ? &apos;65%&apos; : &apos;45%&apos;}
+                                {analysis.riskAssessment.overallRisk === 'low' ? '85%' : 
+                                 analysis.riskAssessment.overallRisk === 'medium' ? '65%' : '45%'}
                             </div>
                             <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Risk Score</div>
                         </div>

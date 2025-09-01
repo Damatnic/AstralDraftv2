@@ -4,11 +4,10 @@
  * registration, password reset, and email verification
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-}
   MailIcon, 
   LockIcon, 
   UserIcon, 
@@ -18,14 +17,13 @@ import {
   CheckCircleIcon,
   LoaderIcon,
 //   ArrowLeftIcon
-} from &apos;lucide-react&apos;;
-import { useProductionAuth, LoginCredentials, RegisterData } from &apos;../../contexts/ProductionAuthContext&apos;;
-import { SecurePasswordInput } from &apos;../ui/SecureInput&apos;;
+} from 'lucide-react';
+import { useProductionAuth, LoginCredentials, RegisterData } from '../../contexts/ProductionAuthContext';
+import { SecurePasswordInput } from '../ui/SecureInput';
 
-type ViewType = &apos;login&apos; | &apos;register&apos; | &apos;forgot-password&apos; | &apos;verify-email&apos;;
+type ViewType = 'login' | 'register' | 'forgot-password' | 'verify-email';
 
 interface FormErrors {
-}
   email?: string;
   password?: string;
   confirmPassword?: string;
@@ -33,145 +31,120 @@ interface FormErrors {
   displayName?: string;
   general?: string;
 
-}
 
 const ProductionLoginInterface: React.FC = () => {
-}
-  const [currentView, setCurrentView] = useState<ViewType>(&apos;login&apos;);
+  const [currentView, setCurrentView] = useState<ViewType>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [successMessage, setSuccessMessage] = useState(&apos;&apos;);
+  const [successMessage, setSuccessMessage] = useState('');
   
   // Form data states
   const [loginData, setLoginData] = useState<LoginCredentials>({
-}
-    email: &apos;&apos;,
-    password: &apos;&apos;,
+    email: '',
+    password: '',
     rememberMe: false
   });
   
   const [registerData, setRegisterData] = useState<RegisterData>({
-}
-    email: &apos;&apos;,
-    username: &apos;&apos;,
-    displayName: &apos;&apos;,
-    password: &apos;&apos;,
-    confirmPassword: &apos;&apos;,
+    email: '',
+    username: '',
+    displayName: '',
+    password: '',
+    confirmPassword: '',
     acceptTerms: false
   });
   
-  const [forgotEmail, setForgotEmail] = useState(&apos;&apos;);
-  const [verificationToken, setVerificationToken] = useState(&apos;&apos;);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [verificationToken, setVerificationToken] = useState('');
 
   const { login, register, resetPassword, verifyEmail, resendVerification } = useProductionAuth();
 
   // Clear messages when view changes
   useEffect(() => {
-}
     setErrors({});
-    setSuccessMessage(&apos;&apos;);
+    setSuccessMessage('');
   }, [currentView]);
 
   // Validation functions
   const validateEmail = (email: string): string | undefined => {
-}
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return &apos;Email is required&apos;;
-    if (!emailRegex.test(email)) return &apos;Please enter a valid email address&apos;;
+    if (!email) return 'Email is required';
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
     return undefined;
   };
 
   const validatePassword = (password: string): string | undefined => {
-}
-    if (!password) return &apos;Password is required&apos;;
-    if (password.length < 8) return &apos;Password must be at least 8 characters&apos;;
+    if (!password) return 'Password is required';
+    if (password.length < 8) return 'Password must be at least 8 characters';
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)) {
-}
-      return &apos;Password must contain uppercase, lowercase, number, and special character&apos;;
+      return 'Password must contain uppercase, lowercase, number, and special character';
 
     return undefined;
   };
 
   const validateUsername = (username: string): string | undefined => {
-}
-    if (!username) return &apos;Username is required&apos;;
-    if (username.length < 3 || username.length > 20) return &apos;Username must be 3-20 characters&apos;;
-    if (!/^[a-zA-Z0-9_-]+$/.test(username)) return &apos;Username can only contain letters, numbers, underscore, or dash&apos;;
+    if (!username) return 'Username is required';
+    if (username.length < 3 || username.length > 20) return 'Username must be 3-20 characters';
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)) return 'Username can only contain letters, numbers, underscore, or dash';
     return undefined;
   };
 
   const validateDisplayName = (displayName: string): string | undefined => {
-}
-    if (!displayName) return &apos;Display name is required&apos;;
-    if (displayName.trim().length < 2 || displayName.trim().length > 30) return &apos;Display name must be 2-30 characters&apos;;
+    if (!displayName) return 'Display name is required';
+    if (displayName.trim().length < 2 || displayName.trim().length > 30) return 'Display name must be 2-30 characters';
     return undefined;
   };
 
   // Handle login
   const handleLogin = async () => {
-}
     try {
-}
 
     e.preventDefault();
     setIsLoading(true);
     setErrors({
-}
     } catch (error) {
-}
-      console.error(&apos;Error in handleLogin:&apos;, error);
+      console.error('Error in handleLogin:', error);
 
     } catch (error) {
-}
         console.error(error);
     });
 
     // Validate form
     const emailError = validateEmail(loginData.email);
     if (emailError) {
-}
       setErrors({ email: emailError });
       setIsLoading(false);
       return;
 
     if (!loginData.password) {
-}
-      setErrors({ password: &apos;Password is required&apos; });
+      setErrors({ password: 'Password is required' });
       setIsLoading(false);
       return;
 
     try {
-}
       const result = await login(loginData);
       if (!result.success) {
-}
-        setErrors({ general: result.error || &apos;Login failed&apos; });
+        setErrors({ general: result.error || 'Login failed' });
 
     } catch (error) {
-}
-      setErrors({ general: &apos;An unexpected error occurred&apos; });
+      setErrors({ general: 'An unexpected error occurred' });
 
     setIsLoading(false);
   };
 
   // Handle registration
   const handleRegister = async () => {
-}
     try {
-}
 
     e.preventDefault();
     setIsLoading(true);
     setErrors({
-}
     } catch (error) {
-}
-      console.error(&apos;Error in handleRegister:&apos;, error);
+      console.error('Error in handleRegister:', error);
 
     } catch (error) {
-}
         console.error(error);
     });
 
@@ -191,161 +164,124 @@ const ProductionLoginInterface: React.FC = () => {
     if (passwordError) validationErrors.password = passwordError;
     
     if (registerData.password !== registerData.confirmPassword) {
-}
-      validationErrors.confirmPassword = &apos;Passwords do not match&apos;;
+      validationErrors.confirmPassword = 'Passwords do not match';
 
     if (!registerData.acceptTerms) {
-}
-      validationErrors.general = &apos;You must accept the terms and conditions&apos;;
+      validationErrors.general = 'You must accept the terms and conditions';
 
     if (Object.keys(validationErrors).length > 0) {
-}
       setErrors(validationErrors);
       setIsLoading(false);
       return;
 
     try {
-}
       const result = await register(registerData);
       if (result.success) {
-}
-        setSuccessMessage(&apos;Registration successful! Please check your email to verify your account.&apos;);
-        setCurrentView(&apos;verify-email&apos;);
+        setSuccessMessage('Registration successful! Please check your email to verify your account.');
+        setCurrentView('verify-email');
       } else {
-}
-        setErrors({ general: result.error || &apos;Registration failed&apos; });
+        setErrors({ general: result.error || 'Registration failed' });
 
     } catch (error) {
-}
-      setErrors({ general: &apos;An unexpected error occurred&apos; });
+      setErrors({ general: 'An unexpected error occurred' });
 
     setIsLoading(false);
   };
 
   // Handle forgot password
   const handleForgotPassword = async () => {
-}
     try {
-}
 
     e.preventDefault();
     setIsLoading(true);
     setErrors({
-}
     } catch (error) {
-}
-      console.error(&apos;Error in handleForgotPassword:&apos;, error);
+      console.error('Error in handleForgotPassword:', error);
 
     } catch (error) {
-}
         console.error(error);
     });
 
     const emailError = validateEmail(forgotEmail);
     if (emailError) {
-}
       setErrors({ email: emailError });
       setIsLoading(false);
       return;
 
     try {
-}
       const result = await resetPassword({ email: forgotEmail });
       if (result.success) {
-}
-        setSuccessMessage(&apos;Password reset link sent to your email&apos;);
+        setSuccessMessage('Password reset link sent to your email');
       } else {
-}
-        setErrors({ general: result.error || &apos;Failed to send reset email&apos; });
+        setErrors({ general: result.error || 'Failed to send reset email' });
 
     } catch (error) {
-}
-      setErrors({ general: &apos;An unexpected error occurred&apos; });
+      setErrors({ general: 'An unexpected error occurred' });
 
     setIsLoading(false);
   };
 
   // Handle email verification
   const handleVerifyEmail = async () => {
-}
     try {
-}
 
     e.preventDefault();
     setIsLoading(true);
     setErrors({
-}
     } catch (error) {
-}
-      console.error(&apos;Error in handleVerifyEmail:&apos;, error);
+      console.error('Error in handleVerifyEmail:', error);
 
     } catch (error) {
-}
         console.error(error);
     });
 
     if (!verificationToken) {
-}
-      setErrors({ general: &apos;Verification token is required&apos; });
+      setErrors({ general: 'Verification token is required' });
       setIsLoading(false);
       return;
 
     try {
-}
       const result = await verifyEmail(verificationToken);
       if (result.success) {
-}
-        setSuccessMessage(&apos;Email verified successfully! You can now log in.&apos;);
-        setCurrentView(&apos;login&apos;);
+        setSuccessMessage('Email verified successfully! You can now log in.');
+        setCurrentView('login');
       } else {
-}
-        setErrors({ general: result.error || &apos;Verification failed&apos; });
+        setErrors({ general: result.error || 'Verification failed' });
 
     } catch (error) {
-}
-      setErrors({ general: &apos;An unexpected error occurred&apos; });
+      setErrors({ general: 'An unexpected error occurred' });
 
     setIsLoading(false);
   };
 
   // Handle resend verification
   const handleResendVerification = async () => {
-}
     try {
-}
 
     setIsLoading(true);
     setErrors({
-}
     } catch (error) {
-}
-      console.error(&apos;Error in handleResendVerification:&apos;, error);
+      console.error('Error in handleResendVerification:', error);
 
     } catch (error) {
-}
         console.error(error);
     });
 
     try {
-}
       const result = await resendVerification();
       if (result.success) {
-}
-        setSuccessMessage(&apos;Verification email sent! Please check your inbox.&apos;);
+        setSuccessMessage('Verification email sent! Please check your inbox.');
       } else {
-}
-        setErrors({ general: result.error || &apos;Failed to resend verification&apos; });
+        setErrors({ general: result.error || 'Failed to resend verification' });
 
     } catch (error) {
-}
-      setErrors({ general: &apos;An unexpected error occurred&apos; });
+      setErrors({ general: 'An unexpected error occurred' });
 
     setIsLoading(false);
   };
 
   // Input component with error handling
   const InputField: React.FC<{
-}
     type: string;
     placeholder: string;
     value: string;
@@ -362,24 +298,22 @@ const ProductionLoginInterface: React.FC = () => {
           <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8" aria-hidden="true">{icon}</div>
         </div>
         <input
-          type={showPasswordToggle ? (showPassword ? &apos;text&apos; : &apos;password&apos;) : type}
+          type={showPasswordToggle ? (showPassword ? 'text' : 'password') : type}
           placeholder={placeholder}
           value={value}
           onChange={(e: any) => onChange(e.target.value)}
           aria-label={placeholder}
           aria-invalid={!!error}
-          aria-describedby={error ? `${placeholder.toLowerCase().replace(/\s+/g, &apos;-&apos;)}-error` : undefined}
-          className={`w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 pl-10 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${showPasswordToggle ? &apos;pr-12&apos; : &apos;pr-4&apos;}`}
+          aria-describedby={error ? `${placeholder.toLowerCase().replace(/\s+/g, '-')}-error` : undefined}
+          className={`w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 pl-10 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${showPasswordToggle ? 'pr-12' : 'pr-4'}`}
         />
         {showPasswordToggle && (
-}
           <button
             type="button"
             onClick={onTogglePassword}
             className="absolute inset-y-0 right-0 pr-3 flex items-center sm:px-4 md:px-6 lg:px-8"
-            aria-label={showPassword ? &apos;Hide password&apos; : &apos;Show password&apos;}>
+            aria-label={showPassword ? 'Hide password' : 'Show password'}>
             {showPassword ? (
-}
               <EyeOffIcon className="w-5 h-5 text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             ) : (
               <EyeIcon className="w-5 h-5 text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
@@ -388,9 +322,8 @@ const ProductionLoginInterface: React.FC = () => {
         )}
       </div>
       {error && (
-}
         <div 
-          id={`${placeholder.toLowerCase().replace(/\s+/g, &apos;-&apos;)}-error`}
+          id={`${placeholder.toLowerCase().replace(/\s+/g, '-')}-error`}
           role="alert"
           aria-live="polite"
           className="flex items-center space-x-1 text-red-400 text-sm sm:px-4 md:px-6 lg:px-8"
@@ -445,14 +378,13 @@ const ProductionLoginInterface: React.FC = () => {
         </label>
         <button
           type="button"
-          onClick={() => setCurrentView(&apos;forgot-password&apos;)}
+          onClick={() => setCurrentView('forgot-password')}
         >
           Forgot password?
         </button>
       </div>
 
       {errors.general && (
-}
         <div 
           role="alert"
           aria-live="assertive"
@@ -469,7 +401,6 @@ const ProductionLoginInterface: React.FC = () => {
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
        aria-label="Submit">
         {isLoading ? (
-}
           <>
             <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             <span>Signing in...</span>
@@ -480,10 +411,10 @@ const ProductionLoginInterface: React.FC = () => {
       </button>
 
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
-        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Don&apos;t have an account? </span>
+        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Don't have an account? </span>
         <button
           type="button"
-          onClick={() => setCurrentView(&apos;register&apos;)}
+          onClick={() => setCurrentView('register')}
         >
           Sign up
         </button>
@@ -497,7 +428,7 @@ const ProductionLoginInterface: React.FC = () => {
       <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
         <button
           type="button"
-          onClick={() => setCurrentView(&apos;login&apos;)}
+          onClick={() => setCurrentView('login')}
         >
           <ArrowLeftIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
           <span>Back to login</span>
@@ -568,15 +499,14 @@ const ProductionLoginInterface: React.FC = () => {
           className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800 mt-1 sm:px-4 md:px-6 lg:px-8"
         />
         <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-          I accept the{&apos; &apos;}
+          I accept the{' '}
           <a href="/terms" className="text-blue-400 hover:text-blue-300 sm:px-4 md:px-6 lg:px-8">Terms of Service</a>
-          {&apos; &apos;}and{&apos; &apos;}
+          {' '}and{' '}
           <a href="/privacy" className="text-blue-400 hover:text-blue-300 sm:px-4 md:px-6 lg:px-8">Privacy Policy</a>
         </span>
       </label>
 
       {errors.general && (
-}
         <div 
           role="alert"
           aria-live="assertive"
@@ -593,7 +523,6 @@ const ProductionLoginInterface: React.FC = () => {
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
        aria-label="Submit">
         {isLoading ? (
-}
           <>
             <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             <span>Creating account...</span>
@@ -611,7 +540,7 @@ const ProductionLoginInterface: React.FC = () => {
       <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
         <button
           type="button"
-          onClick={() => setCurrentView(&apos;login&apos;)}
+          onClick={() => setCurrentView('login')}
         >
           <ArrowLeftIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
           <span>Back to login</span>
@@ -629,7 +558,6 @@ const ProductionLoginInterface: React.FC = () => {
       />
 
       {errors.general && (
-}
         <div 
           role="alert"
           aria-live="assertive"
@@ -641,7 +569,6 @@ const ProductionLoginInterface: React.FC = () => {
       )}
 
       {successMessage && (
-}
         <div className="flex items-center space-x-2 text-green-400 text-sm bg-green-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
           <CheckCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
           <span>{successMessage}</span>
@@ -654,7 +581,6 @@ const ProductionLoginInterface: React.FC = () => {
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
        aria-label="Submit">
         {isLoading ? (
-}
           <>
             <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             <span>Sending reset link...</span>
@@ -684,7 +610,6 @@ const ProductionLoginInterface: React.FC = () => {
         />
 
         {successMessage && (
-}
           <div className="flex items-center space-x-2 text-green-400 text-sm bg-green-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
             <CheckCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             <span>{successMessage}</span>
@@ -697,7 +622,6 @@ const ProductionLoginInterface: React.FC = () => {
           className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
          aria-label="Submit">
           {isLoading ? (
-}
             <>
               <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
               <span>Verifying...</span>
@@ -709,7 +633,7 @@ const ProductionLoginInterface: React.FC = () => {
       </form>
 
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
-        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Didn&apos;t receive the email? </span>
+        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Didn't receive the email? </span>
         <button
           type="button"
           onClick={handleResendVerification}
@@ -723,7 +647,7 @@ const ProductionLoginInterface: React.FC = () => {
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
         <button
           type="button"
-          onClick={() => setCurrentView(&apos;login&apos;)}
+          onClick={() => setCurrentView('login')}
         >
           Back to login
         </button>
@@ -747,10 +671,10 @@ const ProductionLoginInterface: React.FC = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.2 }}
             >
-              {currentView === &apos;login&apos; && <LoginView />}
-              {currentView === &apos;register&apos; && <RegisterView />}
-              {currentView === &apos;forgot-password&apos; && <ForgotPasswordView />}
-              {currentView === &apos;verify-email&apos; && <VerifyEmailView />}
+              {currentView === 'login' && <LoginView />}
+              {currentView === 'register' && <RegisterView />}
+              {currentView === 'forgot-password' && <ForgotPasswordView />}
+              {currentView === 'verify-email' && <VerifyEmailView />}
             </motion.div>
           </AnimatePresence>
         </motion.div>

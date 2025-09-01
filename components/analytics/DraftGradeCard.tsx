@@ -1,40 +1,32 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import type { Team, DraftGrade, League } from &apos;../../types&apos;;
-import { generateDraftGrade } from &apos;../../services/geminiService&apos;;
-import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import type { Team, DraftGrade, League } from '../../types';
+import { generateDraftGrade } from '../../services/geminiService';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 interface DraftGradeCardProps {
-}
     team: Team;
     league: League;
 
-}
 
 const gradeColor = (grade: string) => {
-}
-    if ([&apos;A+&apos;, &apos;A&apos;, &apos;A-&apos;].includes(grade)) return &apos;text-green-400 border-green-400/50&apos;;
-    if ([&apos;B+&apos;, &apos;B&apos;, &apos;B-&apos;].includes(grade)) return &apos;text-yellow-400 border-yellow-400/50&apos;;
-    return &apos;text-red-400 border-red-400/50&apos;;
+    if (['A+', 'A', 'A-'].includes(grade)) return 'text-green-400 border-green-400/50';
+    if (['B+', 'B', 'B-'].includes(grade)) return 'text-yellow-400 border-yellow-400/50';
+    return 'text-red-400 border-red-400/50';
 };
 
 const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }: any) => {
-}
     const [grade, setGrade] = React.useState<DraftGrade | null>(team.draftGrade || null);
     const [isLoading, setIsLoading] = React.useState(!team.draftGrade);
 
     React.useEffect(() => {
-}
         // Only fetch if no grade exists. A real app might save this to state.
         if (!team.draftGrade) {
-}
             setIsLoading(true);
             generateDraftGrade(team, league)
                 .then(fetchedGrade => {
-}
                     if (fetchedGrade) {
-}
                         setGrade(fetchedGrade);
                     }
                 })
@@ -43,7 +35,6 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }: any) =>
     }, [team, league]);
 
     if (isLoading) {
-}
         return (
             <div className="glass-pane p-4 rounded-xl flex items-center justify-center h-full sm:px-4 md:px-6 lg:px-8">
                 <LoadingSpinner size="sm" text="Grading..." />
@@ -52,7 +43,6 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }: any) =>
     }
 
     if (!grade) {
-}
         return (
             <div className="glass-pane p-4 rounded-xl flex flex-col gap-3 text-center text-red-400 sm:px-4 md:px-6 lg:px-8">
                 <p>Could not load draft grade.</p>

@@ -3,12 +3,11 @@
  * Real-time injury alert notifications with configurable preferences
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { Card, CardContent } from &apos;../ui/Card&apos;;
-import { Badge } from &apos;../ui/Badge&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { Card, CardContent } from '../ui/Card';
+import { Badge } from '../ui/Badge';
 import {
-}
   AlertTriangle,
   X,
   Settings,
@@ -17,45 +16,38 @@ import {
   TrendingDown,
   Activity,
 //   ExternalLink
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 import {
-}
   injuryTrackingService,
 //   InjuryAlert
-} from &apos;../../services/injuryTrackingService&apos;;
+} from '../../services/injuryTrackingService';
 
 interface InjuryAlertNotificationProps {
-}
   className?: string;
   maxAlerts?: number;
   showSettings?: boolean;
   onDismiss?: (alertId: string) => void;
 
-}
 
 interface NotificationSettings {
-}
-  position: &apos;top-right&apos; | &apos;top-left&apos; | &apos;bottom-right&apos; | &apos;bottom-left&apos;;
+  position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   autoHide: boolean;
   autoHideDuration: number; // seconds
   showRecommendations: boolean;
   groupSimilar: boolean;
   soundEnabled: boolean;}
 
-const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ className = &apos;&apos;,
-}
+const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ className = '',
   maxAlerts = 5,
   showSettings = true,
 //   onDismiss
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [alerts, setAlerts] = useState<InjuryAlert[]>([]);
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
   const [settings, setSettings] = useState<NotificationSettings>({
-}
-    position: &apos;top-right&apos;,
+    position: 'top-right',
     autoHide: true,
     autoHideDuration: 10,
     showRecommendations: true,
@@ -64,17 +56,13 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
   });
 
   useEffect(() => {
-}
     loadSettings();
     setupAlertSubscription();
   }, []);
 
   useEffect(() => {
-}
     if (settings.autoHide) {
-}
       const timer = setTimeout(() => {
-}
         setAlerts(prev => prev.slice(0, -1));
     }
   }, settings.autoHideDuration * 1000);
@@ -84,48 +72,37 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
   }, [alerts, settings.autoHide, settings.autoHideDuration]);
 
   const loadSettings = () => {
-}
     try {
-}
-      const saved = localStorage.getItem(&apos;injury_notification_settings&apos;);
+      const saved = localStorage.getItem('injury_notification_settings');
       if (saved) {
-}
         setSettings({ ...settings, ...JSON.parse(saved) });
 
     } catch (error) {
-}
 
   };
 
   const saveSettings = (newSettings: NotificationSettings) => {
-}
     try {
-}
 
-      localStorage.setItem(&apos;injury_notification_settings&apos;, JSON.stringify(newSettings));
+      localStorage.setItem('injury_notification_settings', JSON.stringify(newSettings));
       setSettings(newSettings);
 
     } catch (error) {
-}
 
   };
 
   const getNotificationFrequency = (severity: string): number => {
-}
     switch (severity) {
-}
-      case &apos;CRITICAL&apos;: return 800;
-      case &apos;HIGH&apos;: return 600;
+      case 'CRITICAL': return 800;
+      case 'HIGH': return 600;
       default: return 400;
 
   };
 
   const addAlert = (alert: InjuryAlert) => {
-}
     if (dismissedAlerts.has(alert.id)) return;
 
     setAlerts(prev => {
-}
       const filtered = settings.groupSimilar 
         ? prev.filter((a: any) => a.playerId !== alert.playerId)
         : prev;
@@ -133,20 +110,16 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
     });
 
     if (settings.soundEnabled) {
-}
       playNotificationSound(alert.severity);
 
   };
 
   const setupAlertSubscription = () => {
-}
     injuryTrackingService.onInjuryAlert(addAlert);
   };
 
   const playNotificationSound = (severity: string) => {
-}
     try {
-}
 
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
@@ -158,7 +131,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
       // Different frequencies for different severities
       const frequency = getNotificationFrequency(severity);
       oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-      oscillator.type = &apos;sine&apos;;
+      oscillator.type = 'sine';
 
       gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
@@ -167,21 +140,17 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
       oscillator.stop(audioContext.currentTime + 0.5);
 
     } catch (error) {
-}
 
   };
 
   const handleDismissAlert = (alertId: string) => {
-}
     setAlerts(prev => prev.filter((alert: any) => alert.id !== alertId));
     setDismissedAlerts(prev => new Set([...prev, alertId]));
     onDismiss?.(alertId);
   };
 
   const handleDismissAll = () => {
-}
     alerts.forEach((alert: any) => {
-}
       setDismissedAlerts(prev => new Set([...prev, alert.id]));
       onDismiss?.(alert.id);
     });
@@ -189,51 +158,43 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
   };
 
   const getSeverityIcon = (severity: string) => {
-}
     switch (severity) {
-}
-      case &apos;CRITICAL&apos;: return <AlertTriangle className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;HIGH&apos;: return <TrendingDown className="h-4 w-4 text-orange-600 sm:px-4 md:px-6 lg:px-8" />;
-      case &apos;MEDIUM&apos;: return <Activity className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'CRITICAL': return <AlertTriangle className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'HIGH': return <TrendingDown className="h-4 w-4 text-orange-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'MEDIUM': return <Activity className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
       default: return <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
   const getSeverityColor = (severity: string) => {
-}
     switch (severity) {
-}
-      case &apos;CRITICAL&apos;: return &apos;border-red-500 bg-red-50&apos;;
-      case &apos;HIGH&apos;: return &apos;border-orange-500 bg-orange-50&apos;;
-      case &apos;MEDIUM&apos;: return &apos;border-yellow-500 bg-yellow-50&apos;;
-      default: return &apos;border-green-500 bg-green-50&apos;;
+      case 'CRITICAL': return 'border-red-500 bg-red-50';
+      case 'HIGH': return 'border-orange-500 bg-orange-50';
+      case 'MEDIUM': return 'border-yellow-500 bg-yellow-50';
+      default: return 'border-green-500 bg-green-50';
 
   };
 
   const getPositionClasses = (position: string) => {
-}
     switch (position) {
-}
-      case &apos;top-left&apos;: return &apos;top-4 left-4&apos;;
-      case &apos;bottom-right&apos;: return &apos;bottom-4 right-4&apos;;
-      case &apos;bottom-left&apos;: return &apos;bottom-4 left-4&apos;;
-      default: return &apos;top-4 right-4&apos;;
+      case 'top-left': return 'top-4 left-4';
+      case 'bottom-right': return 'bottom-4 right-4';
+      case 'bottom-left': return 'bottom-4 left-4';
+      default: return 'top-4 right-4';
 
   };
 
   const formatTimeAgo = (timestamp: string) => {
-}
     const diff = Date.now() - new Date(timestamp).getTime();
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     
     if (hours > 0) return `${hours}h ago`;
     if (minutes > 0) return `${minutes}m ago`;
-    return &apos;Just now&apos;;
+    return 'Just now';
   };
 
   if (alerts.length === 0 && !showSettingsPanel) {
-}
     return null;
 
   return (
@@ -242,7 +203,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
       <div className={`fixed ${getPositionClasses(settings.position)} z-50 w-96 space-y-3 ${className}`}>
         {/* Settings button */}
         {showSettings && (
-}
           <div className="flex justify-end sm:px-4 md:px-6 lg:px-8">
             <button
               onClick={() => setShowSettingsPanel(!showSettingsPanel)}
@@ -254,7 +214,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
 
         {/* Settings panel */}
         {showSettingsPanel && (
-}
           <Card className="border-blue-200 bg-blue-50 sm:px-4 md:px-6 lg:px-8">
             <CardContent className="pt-4 sm:px-4 md:px-6 lg:px-8">
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
@@ -295,7 +254,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
                   </div>
 
                   {settings.autoHide && (
-}
                     <div>
                       <label htmlFor="duration-slider" className="block text-sm font-medium mb-1 sm:px-4 md:px-6 lg:px-8">
                         Auto Hide Duration: {settings.autoHideDuration}s
@@ -341,11 +299,9 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
 
         {/* Alert notifications */}
         {alerts.length > 0 && (
-}
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {/* Dismiss all button */}
             {alerts.length > 1 && (
-}
               <div className="flex justify-end sm:px-4 md:px-6 lg:px-8">
                 <button
                   onClick={handleDismissAll}
@@ -358,7 +314,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
 
             {/* Individual alerts */}
             {alerts.map((alert: any) => (
-}
               <Card>
                 key={alert.id}
                 className={`border-l-4 shadow-lg animate-slide-in ${getSeverityColor(alert.severity)}`}
@@ -370,7 +325,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
                       <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
                           <span className="font-medium text-sm sm:px-4 md:px-6 lg:px-8">
-                            {alert.alertType.replace(&apos;_&apos;, &apos; &apos;)}
+                            {alert.alertType.replace('_', ' ')}
                           </span>
                           <Badge variant="outline" className="text-xs sm:px-4 md:px-6 lg:px-8">
                             {alert.severity}
@@ -383,12 +338,10 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
                         </p>
 
                         {settings.showRecommendations && alert.fantasyActions.length > 0 && (
-}
                           <div className="mt-2 sm:px-4 md:px-6 lg:px-8">
                             <p className="text-xs font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">Quick Actions:</p>
                             <ul className="text-xs text-gray-600 space-y-1 sm:px-4 md:px-6 lg:px-8">
                               {alert.fantasyActions.slice(0, 2).map((action: any) => (
-}
                                 <li key={action} className="flex items-start gap-1 sm:px-4 md:px-6 lg:px-8">
                                   <span className="text-blue-600 sm:px-4 md:px-6 lg:px-8">•</span>
                                   {action}
@@ -399,7 +352,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
                         )}
 
                         {alert.actionRequired && (
-}
                           <div className="mt-2 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <ExternalLink className="h-3 w-3 text-blue-600 sm:px-4 md:px-6 lg:px-8" />
                             <span className="text-xs text-blue-600 font-medium sm:px-4 md:px-6 lg:px-8">Action Required</span>
@@ -410,7 +362,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
                     
                     <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                       {settings.autoHide && (
-}
                         <div className="flex items-center gap-1 text-gray-400 sm:px-4 md:px-6 lg:px-8">
                           <Clock className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                           <span className="text-xs sm:px-4 md:px-6 lg:px-8">{settings.autoHideDuration}s</span>
@@ -433,22 +384,17 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
       {/* Custom styles for animations */}
       <style>
         {`
-}
           @keyframes slide-in {
-}
             from {
-}
               transform: translateX(100%);
               opacity: 0;
 
             to {
-}
               transform: translateX(0);
               opacity: 1;
 
 
           .animate-slide-in {
-}
             animation: slide-in 0.3s ease-out;
 
         `}

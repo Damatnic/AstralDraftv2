@@ -3,14 +3,12 @@
  * Execute comprehensive mobile testing and generate report
  */
 
-import { mobileTestingSuite } from &apos;./mobileTestingSuite&apos;;
+import { mobileTestingSuite } from './mobileTestingSuite';
 
 export async function runMobileTests() {
-}
-  console.log(&apos;🚀 Starting comprehensive mobile responsiveness testing...&apos;);
+  console.log('🚀 Starting comprehensive mobile responsiveness testing...');
   
   try {
-}
     // Run full mobile test suite
     const results = await mobileTestingSuite.runFullMobileSuite();
     
@@ -18,7 +16,7 @@ export async function runMobileTests() {
     const report = mobileTestingSuite.generateMobileReport(results);
     
     // Log summary to console
-    console.log(&apos;\n📊 Mobile Testing Summary:&apos;);
+    console.log('\n📊 Mobile Testing Summary:');
     console.log(`✅ Passed: ${results.summary.passed}/${results.summary.totalTests}`);
     console.log(`❌ Failed: ${results.summary.failed}/${results.summary.totalTests}`);
     console.log(`🚨 Critical Issues: ${results.summary.criticalIssues}`);
@@ -27,22 +25,19 @@ export async function runMobileTests() {
     const criticalIssues = [
       ...results.touchTargets.filter((t: any) => !t.passed),
       ...results.accessibility.filter((a: any) => !a.passed),
-      ...results.usability.filter((u: any) => !u.passed && u.testType === &apos;usability&apos;)
+      ...results.usability.filter((u: any) => !u.passed && u.testType === 'usability')
     ];
     
     if (criticalIssues.length > 0) {
-}
-      console.log(&apos;\n🔥 Critical Issues Requiring Immediate Attention:&apos;);
+      console.log('\n🔥 Critical Issues Requiring Immediate Attention:');
       criticalIssues.forEach((issue, index) => {
-}
-        const name = &apos;element&apos; in issue ? issue.element : issue.component;
+        const name = 'element' in issue ? issue.element : issue.component;
         console.log(`${index + 1}. ${name}`);
       });
     }
     
     // Return results for further processing
     return {
-}
       results,
       report,
       criticalIssues,
@@ -50,32 +45,24 @@ export async function runMobileTests() {
     };
 
     } catch (error) {
-}
-    console.error(&apos;❌ Mobile testing failed:&apos;, error);
+    console.error('❌ Mobile testing failed:', error);
     throw error;
   }
-}
 
 // Auto-run if called directly
 if (require.main === module) {
-}
   runMobileTests()
     .then(({ report, needsImmediateAttention }: any) => {
-}
-      console.log(&apos;\n📄 Full Report:&apos;);
+      console.log('\n📄 Full Report:');
       console.log(report);
       
       if (needsImmediateAttention) {
-}
-        console.log(&apos;\n⚠️  Mobile optimization required before production deployment!&apos;);
+        console.log('\n⚠️  Mobile optimization required before production deployment!');
       } else {
-}
-        console.log(&apos;\n✨ Mobile responsiveness looks good! Ready for production.&apos;);
+        console.log('\n✨ Mobile responsiveness looks good! Ready for production.');
       }
     })
     .catch(error => {
-}
-      console.error(&apos;Fatal error during mobile testing:&apos;, error);
+      console.error('Fatal error during mobile testing:', error);
       process.exit(1);
     });
-}

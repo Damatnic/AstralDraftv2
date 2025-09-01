@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import OnTheHotSeatWidget from &apos;./OnTheHotSeatWidget&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import OnTheHotSeatWidget from './OnTheHotSeatWidget';
 
-describe(&apos;OnTheHotSeatWidget&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('OnTheHotSeatWidget', () => {
+  it('renders without crashing', () => {
     render(<OnTheHotSeatWidget />);
-    expect(screen.getByTestId(&apos;onthehotseatwidget&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('onthehotseatwidget')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<OnTheHotSeatWidget />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<OnTheHotSeatWidget />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

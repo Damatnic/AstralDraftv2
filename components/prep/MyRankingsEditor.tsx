@@ -1,34 +1,30 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { DndContext, closestCenter, DragEndEvent, useSensor, useSensors, PointerSensor } from &apos;@dnd-kit/core&apos;;
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from &apos;@dnd-kit/sortable&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { players as allPlayers } from &apos;../../data/players&apos;;
-import type { Player, PlayerPosition, CustomRanking } from &apos;../../types&apos;;
-import { DragHandleIcon } from &apos;../icons/DragHandleIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { DndContext, closestCenter, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useAppState } from '../../contexts/AppContext';
+import { players as allPlayers } from '../../data/players';
+import type { Player, PlayerPosition, CustomRanking } from '../../types';
+import { DragHandleIcon } from '../icons/DragHandleIcon';
 
-const positionOrder: PlayerPosition[] = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;];
+const positionOrder: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
 interface SortableItemProps {
-}
     player: Player;
     rank: number;
 
-}
 
 const SortableItem: React.FC<SortableItemProps> = ({ player, rank }: any) => {
-}
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
     const style = {
-}
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
         transition,
-        zIndex: isDragging ? 100 : &apos;auto&apos;,
+        zIndex: isDragging ? 100 : 'auto',
     };
 
     return (
-        <div ref={setNodeRef} style={style} className={`p-1.5 bg-white/5 rounded-md flex items-center gap-2 ${isDragging ? &apos;shadow-lg&apos; : &apos;&apos;}`}>
+        <div ref={setNodeRef} style={style} className={`p-1.5 bg-white/5 rounded-md flex items-center gap-2 ${isDragging ? 'shadow-lg' : ''}`}>
             <div {...attributes} {...listeners} className="p-1 cursor-grab active:cursor-grabbing text-gray-500 sm:px-4 md:px-6 lg:px-8">
                 <DragHandleIcon />
             </div>
@@ -40,18 +36,15 @@ const SortableItem: React.FC<SortableItemProps> = ({ player, rank }: any) => {
 };
 
 const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => {
-}
     const { state, dispatch } = useAppState();
-    const [activePosition, setActivePosition] = React.useState<PlayerPosition>(&apos;RB&apos;);
+    const [activePosition, setActivePosition] = React.useState<PlayerPosition>('RB');
     const [rankedPlayers, setRankedPlayers] = React.useState<Player[]>([]);
     
     const customRanks = state.customRankings[leagueId] || {};
 
     React.useEffect(() => {
-}
         const playersForPosition = allPlayers.filter((p: any) => p.position === activePosition);
         playersForPosition.sort((a, b) => {
-}
             const rankA = customRanks[a.id] ?? a.rank;
             const rankB = customRanks[b.id] ?? b.rank;
             if(rankA !== rankB) return rankA - rankB;
@@ -61,10 +54,8 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => 
     }, [activePosition, customRanks]);
 
     const handleDragEnd = (event: DragEndEvent) => {
-}
         const { active, over } = event;
         if (over && active.id !== over.id) {
-}
             const oldIndex = rankedPlayers.findIndex((p: any) => p.id === active.id);
             const newIndex = rankedPlayers.findIndex((p: any) => p.id === over.id);
             const newOrder = arrayMove(rankedPlayers, oldIndex, newIndex);
@@ -72,13 +63,11 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => 
 
             const newCustomRanks: CustomRanking = { ...customRanks };
             newOrder.forEach((player, index) => {
-}
                 newCustomRanks[player.id] = index + 1;
             });
 
             dispatch({
-}
-                type: &apos;UPDATE_CUSTOM_RANKINGS&apos;,
+                type: 'UPDATE_CUSTOM_RANKINGS',
                 payload: { leagueId, rankings: newCustomRanks },
             });
 
@@ -87,7 +76,6 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => 
     const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -101,7 +89,6 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => 
                 <h3 className="font-bold mb-2 sm:px-4 md:px-6 lg:px-8">Positions</h3>
                 <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                     {positionOrder.map((pos: any) => (
-}
                         <button
                             key={pos}
                             onClick={() => setActivePosition(pos)}`}
@@ -119,7 +106,6 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => 
                         <SortableContext items={rankedPlayers.map((p: any) => p.id)} strategy={verticalListSortingStrategy}>
                             <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                 {rankedPlayers.map((player, index) => (
-}
                                     <SortableItem key={player.id} player={player} rank={index + 1} />
                                 ))}
                             </div>

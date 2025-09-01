@@ -3,12 +3,11 @@
  * Simplified overview component for historical analytics without external dependencies
  */
 
-import React, { useState } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useHistoricalAnalytics, TimeframeType } from &apos;../hooks/useHistoricalAnalytics&apos;;
-import { PredictionType } from &apos;../services/oraclePredictionService&apos;;
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useHistoricalAnalytics, TimeframeType } from '../hooks/useHistoricalAnalytics';
+import { PredictionType } from '../services/oraclePredictionService';
 import {
-}
     StatCard,
     SimpleLineChart,
     SimpleBarChart,
@@ -23,28 +22,23 @@ import {
     TrendingUpIcon,
     DownloadIcon,
 //     RefreshIcon
-} from &apos;../components/analytics/AnalyticsComponents&apos;;
+} from '../components/analytics/AnalyticsComponents';
 
 const PREDICTION_TYPE_COLORS: Record<PredictionType, string> = {
-}
-    &apos;PLAYER_PERFORMANCE&apos;: &apos;bg-purple-600&apos;,
-    &apos;GAME_OUTCOME&apos;: &apos;bg-blue-600&apos;,
-    &apos;WEEKLY_SCORING&apos;: &apos;bg-green-600&apos;,
-    &apos;WEATHER_IMPACT&apos;: &apos;bg-yellow-600&apos;,
-    &apos;INJURY_IMPACT&apos;: &apos;bg-red-600&apos;,
-    &apos;TEAM_PERFORMANCE&apos;: &apos;bg-indigo-600&apos;
+    'PLAYER_PERFORMANCE': 'bg-purple-600',
+    'GAME_OUTCOME': 'bg-blue-600',
+    'WEEKLY_SCORING': 'bg-green-600',
+    'WEATHER_IMPACT': 'bg-yellow-600',
+    'INJURY_IMPACT': 'bg-red-600',
+    'TEAM_PERFORMANCE': 'bg-indigo-600'
 };
 
 interface HistoricalAnalyticsOverviewProps {
-}
     className?: string;
 
-}
 
-export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readonly<HistoricalAnalyticsOverviewProps>) {
-}
+export function HistoricalAnalyticsOverview({ className = '' }: Readonly<HistoricalAnalyticsOverviewProps>) {
     const {
-}
         trendAnalysis,
         advancedInsights,
         isLoading,
@@ -59,51 +53,45 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
 //         getRecentPerformance
     } = useHistoricalAnalytics();
 
-    const [selectedTimeframe, setSelectedTimeframe] = useState<TimeframeType>(&apos;monthly&apos;);
-    const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;trends&apos; | &apos;insights&apos;>(&apos;overview&apos;);
+    const [selectedTimeframe, setSelectedTimeframe] = useState<TimeframeType>('monthly');
+    const [activeTab, setActiveTab] = useState<'overview' | 'trends' | 'insights'>('overview');
 
     const overallStats = getOverallStats();
     const typePerformance = getTypePerformance();
     const recentPerformance = getRecentPerformance(30);
 
     const handleTimeframeChange = async (timeframe: TimeframeType) => {
-}
         setSelectedTimeframe(timeframe);
         await analyzeTimeframe(timeframe);
     };
 
     const handleExport = async () => {
-}
         try {
-}
 
-            const data = await exportData(&apos;json&apos;);
-            const blob = new Blob([data], { type: &apos;application/json&apos; });
+            const data = await exportData('json');
+            const blob = new Blob([data], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement(&apos;a&apos;);
+            const a = document.createElement('a');
             a.href = url;
-            a.download = `oracle-analytics-${new Date().toISOString().split(&apos;T&apos;)[0]}.json`;
+            a.download = `oracle-analytics-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
 
     } catch (error) {
-}
         console.error(error);
     `${(accuracy * 100).toFixed(1)}%`;
     const formatChange = (change: number) => {
-}
-        const prefix = change > 0 ? &apos;+&apos; : &apos;&apos;;
+        const prefix = change > 0 ? '+' : '';
         return `${prefix}${(change * 100).toFixed(1)}%`;
     };
 
     const tabs = [
-        { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: BarChartIcon },
-        { id: &apos;trends&apos;, label: &apos;Trends&apos;, icon: TrendingUpIcon },
-        { id: &apos;insights&apos;, label: &apos;Insights&apos;, icon: BrainIcon }
+        { id: 'overview', label: 'Overview', icon: BarChartIcon },
+        { id: 'trends', label: 'Trends', icon: TrendingUpIcon },
+        { id: 'insights', label: 'Insights', icon: BrainIcon }
     ];
 
     if (error) {
-}
         return (
             <div className={`p-6 ${className}`}>
                 <ErrorDisplay error={error} onRetry={refreshAnalytics} />
@@ -143,7 +131,7 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                         onClick={refreshAnalytics}
                         className="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
                     >
-                        <RefreshIcon className={isLoading ? &apos;animate-spin&apos; : &apos;&apos;} />
+                        <RefreshIcon className={isLoading ? 'animate-spin' : ''} />
                         <span>Refresh</span>
                     </button>
                 </div>
@@ -155,7 +143,7 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                     title="Overall Accuracy"
                     value={formatAccuracy(overallStats.overallAccuracy)}
                     change={formatChange(recentPerformance.improvement) + " from last 30 days"}
-                    changeType={recentPerformance.improvement >= 0 ? &apos;positive&apos; : &apos;negative&apos;}
+                    changeType={recentPerformance.improvement >= 0 ? 'positive' : 'negative'}
                     icon={<TargetIcon className="h-6 w-6 text-purple-600" />}
                     iconBgColor="bg-purple-100"
                     delay={0}
@@ -196,7 +184,6 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
             <div className="border-b border-gray-200">
                 <nav className="-mb-px flex space-x-8">
                     {tabs.map((tab: any) => {
-}
                         const Icon = tab.icon;
                         return (
                             <button
@@ -213,8 +200,7 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
 
             {/* Tab Content */}
             <div className="space-y-6">
-                {activeTab === &apos;overview&apos; && (
-}
+                {activeTab === 'overview' && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Accuracy Trend Chart */}
                         <motion.div
@@ -224,14 +210,12 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                         >
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Accuracy Trend</h3>
                             {isLoadingTrends ? (
-}
                                 <div className="h-64 flex items-center justify-center">
                                     <LoadingSpinner />
                                 </div>
                             ) : (
                                 <>
                                     {trendAnalysis ? (
-}
                                         <SimpleLineChart>
                                             data={trendAnalysis.accuracyTrend}
                                             height={250}
@@ -256,8 +240,7 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance by Type</h3>
                             <SimpleBarChart>
                                 data={Object.entries(typePerformance).map(([type, stats]) => ({
-}
-                                    label: type.replace(&apos;_&apos;, &apos; &apos;),
+                                    label: type.replace('_', ' '),
                                     value: stats.accuracy,
                                     color: PREDICTION_TYPE_COLORS[type as PredictionType]
                                 )}}
@@ -267,8 +250,7 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                     </div>
                 )}
 
-                {activeTab === &apos;trends&apos; && trendAnalysis && (
-}
+                {activeTab === 'trends' && trendAnalysis && (
                     <div className="space-y-6">
                         {/* Confidence Trend */}
                         <motion.div
@@ -294,11 +276,10 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Type Performance Trends</h3>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                 {trendAnalysis.typesPerformance.map((typeData: any) => (
-}
                                     <div key={typeData.type} className="p-4 border border-gray-200 rounded-lg">
                                         <div className="flex items-center justify-between mb-3">
                                             <h4 className="font-medium text-gray-900">
-                                                {typeData.type.replace(&apos;_&apos;, &apos; &apos;)}
+                                                {typeData.type.replace('_', ' ')}
                                             </h4>
                                             <TrendIndicator>
                                                 value={typeData.trendStrength}
@@ -318,18 +299,15 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                     </div>
                 )}
 
-                {activeTab === &apos;insights&apos; && (
-}
+                {activeTab === 'insights' && (
                     <div className="space-y-6">
                         {isLoadingInsights ? (
-}
                             <div className="flex items-center justify-center h-64">
                                 <LoadingSpinner />
                             </div>
                         ) : (
                             <>
                                 {advancedInsights ? (
-}
                             <>
                                 {/* Recommendations */}
                                 <motion.div
@@ -340,33 +318,30 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Recommendations</h3>
                                     <div className="space-y-4">
                                         {advancedInsights.recommendations.map((rec, index) => {
-}
                                             let recBgClass: string;
                                             switch (rec.type) {
-}
-                                                case &apos;WARNING&apos;:
-                                                    recBgClass = &apos;bg-red-50 border-red-400&apos;;
+                                                case 'WARNING':
+                                                    recBgClass = 'bg-red-50 border-red-400';
                                                     break;
-                                                case &apos;OPPORTUNITY&apos;:
-                                                    recBgClass = &apos;bg-green-50 border-green-400&apos;;
+                                                case 'OPPORTUNITY':
+                                                    recBgClass = 'bg-green-50 border-green-400';
                                                     break;
-                                                case &apos;IMPROVEMENT&apos;:
-                                                    recBgClass = &apos;bg-blue-50 border-blue-400&apos;;
+                                                case 'IMPROVEMENT':
+                                                    recBgClass = 'bg-blue-50 border-blue-400';
                                                     break;
                                                 default:
-                                                    recBgClass = &apos;bg-purple-50 border-purple-400&apos;;
+                                                    recBgClass = 'bg-purple-50 border-purple-400';
 
                                             let priorityClass: string;
                                             switch (rec.priority) {
-}
-                                                case &apos;high&apos;:
-                                                    priorityClass = &apos;bg-red-100 text-red-800&apos;;
+                                                case 'high':
+                                                    priorityClass = 'bg-red-100 text-red-800';
                                                     break;
-                                                case &apos;medium&apos;:
-                                                    priorityClass = &apos;bg-yellow-100 text-yellow-800&apos;;
+                                                case 'medium':
+                                                    priorityClass = 'bg-yellow-100 text-yellow-800';
                                                     break;
                                                 default:
-                                                    priorityClass = &apos;bg-gray-100 text-gray-800&apos;;
+                                                    priorityClass = 'bg-gray-100 text-gray-800';
 
                                             return (
                                                 <div 
@@ -393,12 +368,10 @@ export function HistoricalAnalyticsOverview({ className = &apos;&apos; }: Readon
                                                         </div>
                                                     </div>
                                                     {rec.actionItems.length > 0 && (
-}
                                                         <div className="mt-3">
                                                             <p className="text-sm font-medium text-gray-700 mb-1">Action Items:</p>
                                                             <ul className="list-disc list-inside space-y-1">
                                                                 {rec.actionItems.map((item, itemIndex) => (
-}
                                                                     <li key={`action-${rec.title}-${itemIndex}`} className="text-sm text-gray-600">{item}</li>
                                                                 ))}
                                                             </ul>

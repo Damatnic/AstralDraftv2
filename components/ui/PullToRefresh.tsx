@@ -3,13 +3,12 @@
  * Provides native-like pull-to-refresh functionality for mobile devices
  */
 
-import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
-import React, { useCallback, useRef, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { usePullToRefresh } from &apos;../../hooks/useAdvancedTouch&apos;;
+import { ErrorBoundary } from './ErrorBoundary';
+import React, { useCallback, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePullToRefresh } from '../../hooks/useAdvancedTouch';
 
 interface PullToRefreshProps {
-}
   onRefresh: () => Promise<void>;
   threshold?: number;
   children: React.ReactNode;
@@ -19,22 +18,18 @@ interface PullToRefreshProps {
   pullText?: string;
   releaseText?: string;
 
-}
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
-}
   threshold = 100,
   children,
-  className = &apos;&apos;,
+  className = '',
   disabled = false,
-  refreshingText = &apos;Refreshing...&apos;,
-  pullText = &apos;Pull to refresh&apos;,
-  releaseText = &apos;Release to refresh&apos;
+  refreshingText = 'Refreshing...',
+  pullText = 'Pull to refresh',
+  releaseText = 'Release to refresh'
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const {
-}
     containerRef,
     isPulling,
     isRefreshing,
@@ -44,35 +39,29 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
 
   // Prevent scroll when pulling on mobile
   useEffect(() => {
-}
     const container = containerRef.current;
     if (!container || disabled) return;
 
     const handleTouchMove = (e: TouchEvent) => {
-}
       if (isPulling && pullDistance > 10) {
-}
         e.preventDefault();
 
     };
 
-    container.addEventListener(&apos;touchmove&apos;, handleTouchMove, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
     
     return () => {
-}
-      container.removeEventListener(&apos;touchmove&apos;, handleTouchMove);
+      container.removeEventListener('touchmove', handleTouchMove);
     };
   }, [isPulling, pullDistance, disabled]);
 
   const getStatusText = () => {
-}
     if (isRefreshing) return refreshingText;
     if (pullProgress >= 1) return releaseText;
     return pullText;
   };
 
   const getIconRotation = () => {
-}
     if (isRefreshing) return 360;
     if (pullProgress >= 1) return 180;
     return pullProgress * 180;
@@ -83,19 +72,16 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
       ref={containerRef as React.RefObject<HTMLDivElement>}
       className={`relative overflow-hidden ${className}`}
       style={{ 
-}
-        transform: isPulling ? `translateY(${Math.min(pullDistance * 0.5, 60)}px)` : &apos;translateY(0)&apos;,
-        transition: isPulling ? &apos;none&apos; : &apos;transform 0.3s ease-out&apos;
+        transform: isPulling ? `translateY(${Math.min(pullDistance * 0.5, 60)}px)` : 'translateY(0)',
+        transition: isPulling ? 'none' : 'transform 0.3s ease-out'
       }}
     >
       {/* Pull-to-refresh indicator */}
       <AnimatePresence>
         {(isPulling || isRefreshing) && (
-}
           <motion.div
             className="absolute top-0 left-0 right-0 flex flex-col items-center justify-center z-10 sm:px-4 md:px-6 lg:px-8"
             style={{
-}
               height: Math.min(pullDistance, 80),
               transform: `translateY(-${Math.max(0, 80 - pullDistance)}px)`
             }}
@@ -108,7 +94,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
               <motion.div
                 className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8"
                 animate={{ rotate: isRefreshing ? 360 : getIconRotation() }}
-                transition={isRefreshing ? { repeat: Infinity, duration: 1, ease: &apos;linear&apos; } : { duration: 0.3 }}
+                transition={isRefreshing ? { repeat: Infinity, duration: 1, ease: 'linear' } : { duration: 0.3 }}
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -154,7 +140,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
       </AnimatePresence>
 
       {/* Content */}
-      <div className={`${disabled ? &apos;pointer-events-none opacity-50&apos; : &apos;&apos;}`}>
+      <div className={`${disabled ? 'pointer-events-none opacity-50' : ''}`}>
         {children}
       </div>
     </div>

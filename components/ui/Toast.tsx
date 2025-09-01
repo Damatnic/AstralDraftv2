@@ -1,52 +1,43 @@
-import React, { useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ToastProps {
-}
   message: string;
-  type?: &apos;success&apos; | &apos;error&apos; | &apos;warning&apos; | &apos;info&apos;;
+  type?: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
   onClose: () => void;
   visible: boolean;
 
-}
 
 export const Toast: React.FC<ToastProps> = ({
-}
   message,
-  type = &apos;info&apos;,
+  type = 'info',
   duration = 4000,
   onClose,
 //   visible
 }: any) => {
-}
   useEffect(() => {
-}
     if (visible && duration > 0) {
-}
       const timer = setTimeout(onClose, duration);
       return () => clearTimeout(timer);
     }
   }, [visible, duration, onClose]);
 
   const typeStyles = {
-}
-    success: &apos;border-green-500 bg-green-500/20&apos;,
-    error: &apos;border-red-500 bg-red-500/20&apos;,
-    warning: &apos;border-yellow-500 bg-yellow-500/20&apos;,
-    info: &apos;border-blue-500 bg-blue-500/20&apos;
+    success: 'border-green-500 bg-green-500/20',
+    error: 'border-red-500 bg-red-500/20',
+    warning: 'border-yellow-500 bg-yellow-500/20',
+    info: 'border-blue-500 bg-blue-500/20'
   };
 
   const icons = {
-}
-    success: &apos;✅&apos;,
-    error: &apos;❌&apos;,
-    warning: &apos;⚠️&apos;,
-    info: &apos;ℹ️&apos;
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️'
   };
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -57,7 +48,6 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <AnimatePresence>
       {visible && (
-}
         <motion.div
           initial={{ opacity: 0, y: -50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}

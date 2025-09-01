@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import VirtualizedList from &apos;./VirtualizedList&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import VirtualizedList from './VirtualizedList';
 
-describe(&apos;VirtualizedList&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('VirtualizedList', () => {
+  it('renders without crashing', () => {
     render(<VirtualizedList />);
-    expect(screen.getByTestId(&apos;virtualizedlist&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('virtualizedlist')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<VirtualizedList />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<VirtualizedList />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

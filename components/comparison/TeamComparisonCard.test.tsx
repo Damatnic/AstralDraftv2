@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import TeamComparisonCard from &apos;./TeamComparisonCard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TeamComparisonCard from './TeamComparisonCard';
 
-describe(&apos;TeamComparisonCard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('TeamComparisonCard', () => {
+  it('renders without crashing', () => {
     render(<TeamComparisonCard />);
-    expect(screen.getByTestId(&apos;teamcomparisoncard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('teamcomparisoncard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<TeamComparisonCard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<TeamComparisonCard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

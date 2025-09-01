@@ -3,22 +3,18 @@
  * Connects real-time notification service with the existing notification system
  */
 
-import { useEffect, useCallback } from &apos;react&apos;;
-import { realtimeNotificationService, RealtimeNotification } from &apos;../services/realtimeNotificationService&apos;;
-import { useNotifications } from &apos;../contexts/NotificationContext&apos;;
+import { useEffect, useCallback } from 'react';
+import { realtimeNotificationService, RealtimeNotification } from '../services/realtimeNotificationService';
+import { useNotifications } from '../contexts/NotificationContext';
 
 export interface RealtimeNotificationHookOptions {
-}
   enableToasts?: boolean;
   enableSounds?: boolean;
   highPriorityOnly?: boolean;
   maxToastDuration?: number;
-}
 
 export const useRealtimeNotifications = (options: RealtimeNotificationHookOptions = {}) => {
-}
   const {
-}
     enableToasts = true,
     enableSounds = true,
     highPriorityOnly = false,
@@ -29,16 +25,13 @@ export const useRealtimeNotifications = (options: RealtimeNotificationHookOption
 
   // Convert real-time notification to display format
   const convertToDisplayFormat = useCallback((notification: RealtimeNotification) => {
-}
     const getCategory = (source: string) => {
-}
-      if (source === &apos;oracle&apos;) return &apos;oracle&apos;;
-      if (source === &apos;contest&apos; || source === &apos;social&apos;) return &apos;league&apos;;
-      return &apos;draft&apos;;
+      if (source === 'oracle') return 'oracle';
+      if (source === 'contest' || source === 'social') return 'league';
+      return 'draft';
     };
 
     return {
-}
       id: notification.id,
       type: notification.type.toUpperCase(),
       title: notification.title,
@@ -54,17 +47,14 @@ export const useRealtimeNotifications = (options: RealtimeNotificationHookOption
 
   // Show toast notification
   const showToast = useCallback((notification: RealtimeNotification) => {
-}
     if (!enableToasts) return;
 
     // Check if we should show this notification based on settings
-    if (highPriorityOnly && notification.priority !== &apos;high&apos;) return;
+    if (highPriorityOnly && notification.priority !== 'high') return;
 
     // Create a toast notification event
-    const toastEvent = new CustomEvent(&apos;showNotificationToast&apos;, {
-}
+    const toastEvent = new CustomEvent('showNotificationToast', {
       detail: {
-}
         notification: convertToDisplayFormat(notification),
         duration: maxToastDuration
       }
@@ -75,45 +65,39 @@ export const useRealtimeNotifications = (options: RealtimeNotificationHookOption
 
   // Play notification sound
   const playNotificationSound = useCallback((notification: RealtimeNotification) => {
-}
     if (!enableSounds || !preferences?.enableSoundNotifications) return;
 
     // Different sounds for different priorities
-    let soundFile = &apos;/sounds/notification.mp3&apos;;
-    if (notification.priority === &apos;high&apos;) {
-}
-      soundFile = &apos;/sounds/high-priority.mp3&apos;;
-    } else if (notification.type === &apos;prediction&apos;) {
-}
-      soundFile = &apos;/sounds/oracle.mp3&apos;;
+    let soundFile = '/sounds/notification.mp3';
+    if (notification.priority === 'high') {
+      soundFile = '/sounds/high-priority.mp3';
+    } else if (notification.type === 'prediction') {
+      soundFile = '/sounds/oracle.mp3';
     }
 
     const audio = new Audio(soundFile);
     audio.volume = 0.3; // Keep it subtle
     audio.play().catch(() => {
-}
       // Fallback to default notification sound
-      const fallbackAudio = new Audio(&apos;data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj&apos;);
+      const fallbackAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj');
       fallbackAudio.play().catch(() => {}); // Ignore if this fails too
     });
   }, [enableSounds, preferences]);
 
   // Handle incoming real-time notifications
   const handleRealtimeNotification = useCallback((notification: RealtimeNotification) => {
-}
     // Always refresh the notification list
     refreshNotifications();
 
     // Show toast for important notifications
     const shouldShowToast = 
-      notification.priority === &apos;high&apos; ||
-      notification.type === &apos;prediction&apos; ||
-      notification.type === &apos;result&apos; ||
-      notification.type === &apos;achievement&apos; ||
-      notification.type === &apos;system&apos;;
+      notification.priority === 'high' ||
+      notification.type === 'prediction' ||
+      notification.type === 'result' ||
+      notification.type === 'achievement' ||
+      notification.type === 'system';
 
     if (shouldShowToast) {
-}
       showToast(notification);
     }
 
@@ -121,206 +105,177 @@ export const useRealtimeNotifications = (options: RealtimeNotificationHookOption
     playNotificationSound(notification);
 
     // Log for debugging
-    console.log(&apos;Real-time notification received:&apos;, notification.title);
+    console.log('Real-time notification received:', notification.title);
   }, [refreshNotifications, showToast, playNotificationSound]);
 
   // Setup real-time notification listener
   useEffect(() => {
-}
-    realtimeNotificationService.on(&apos;notification_received&apos;, handleRealtimeNotification);
+    realtimeNotificationService.on('notification_received', handleRealtimeNotification);
     
     return () => {
-}
-      realtimeNotificationService.off(&apos;notification_received&apos;, handleRealtimeNotification);
+      realtimeNotificationService.off('notification_received', handleRealtimeNotification);
     };
   }, [handleRealtimeNotification]);
 
   // API methods for triggering notifications programmatically
   const triggerPredictionDeadlineWarning = useCallback((data: {
-}
     predictionId: string;
     question: string;
     minutesRemaining: number;
     userId?: string;
   }) => {
-}
     // Create a notification for deadline warning
     const notification: RealtimeNotification = {
-}
       id: `deadline-${Date.now()}`,
-      type: &apos;prediction&apos;,
-      title: &apos;Prediction Deadline Warning&apos;,
+      type: 'prediction',
+      title: 'Prediction Deadline Warning',
       message: `Deadline approaching for: ${data.question}`,
       timestamp: new Date(),
-      priority: &apos;high&apos;,
+      priority: 'high',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerPredictionResult = useCallback((data: {
-}
     predictionId: string;
     question: string;
     isCorrect: boolean;
     pointsEarned: number;
     userId?: string;
   }) => {
-}
     // Create a notification for result
     const notification: RealtimeNotification = {
-}
       id: `result-${Date.now()}`,
-      type: &apos;result&apos;,
-      title: &apos;Prediction Result Available&apos;,
+      type: 'result',
+      title: 'Prediction Result Available',
       message: `Result for: ${data.question}`,
       timestamp: new Date(),
-      priority: &apos;high&apos;,
+      priority: 'high',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerAccuracyUpdate = useCallback((data: {
-}
     newAccuracy: number;
     previousAccuracy: number;
     userId?: string;
   }) => {
-}
     // Create a notification for accuracy update
     const notification: RealtimeNotification = {
-}
       id: `accuracy-${Date.now()}`,
-      type: &apos;result&apos;,
-      title: &apos;Oracle Accuracy Update&apos;,
+      type: 'result',
+      title: 'Oracle Accuracy Update',
       message: `Current accuracy: ${data.newAccuracy}%`,
       timestamp: new Date(),
-      priority: &apos;low&apos;,
+      priority: 'low',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerStreakMilestone = useCallback((data: {
-}
     streakCount: number;
     userId?: string;
   }) => {
-}
     // Create a notification for streak
     const notification: RealtimeNotification = {
-}
       id: `streak-${Date.now()}`,
-      type: &apos;achievement&apos;,
-      title: &apos;Streak Milestone&apos;,
+      type: 'achievement',
+      title: 'Streak Milestone',
       message: `${data.streakCount} day streak!`,
       timestamp: new Date(),
-      priority: &apos;medium&apos;,
+      priority: 'medium',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerContestUpdate = useCallback((data: {
-}
     contestId: string;
     contestName: string;
     participants: string[];
   }) => {
-}
     // Create a notification for contest
     const notification: RealtimeNotification = {
-}
       id: `contest-${Date.now()}`,
-      type: &apos;challenge&apos;,
-      title: &apos;Contest Started&apos;,
+      type: 'challenge',
+      title: 'Contest Started',
       message: data.contestName,
       timestamp: new Date(),
-      priority: &apos;high&apos;,
+      priority: 'high',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerGameScoreUpdate = useCallback((data: {
-}
     gameId: string;
     homeTeam: string;
     awayTeam: string;
     homeScore: number;
     awayScore: number;
   }) => {
-}
     // Create a notification for game score
     const notification: RealtimeNotification = {
-}
       id: `score-${Date.now()}`,
-      type: &apos;result&apos;,
-      title: &apos;Game Score Update&apos;,
+      type: 'result',
+      title: 'Game Score Update',
       message: `${data.homeTeam} ${data.homeScore} - ${data.awayScore} ${data.awayTeam}`,
       timestamp: new Date(),
-      priority: &apos;low&apos;,
+      priority: 'low',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerPlayerInjuryUpdate = useCallback((data: {
-}
     playerId: string;
     playerName: string;
     team: string;
     injuryStatus: string;
   }) => {
-}
     // Create a notification for injury
     const notification: RealtimeNotification = {
-}
       id: `injury-${Date.now()}`,
-      type: &apos;system&apos;,
-      title: &apos;Player Injury Update&apos;,
+      type: 'system',
+      title: 'Player Injury Update',
       message: `${data.playerName}: ${data.injuryStatus}`,
       timestamp: new Date(),
-      priority: data.injuryStatus.toLowerCase().includes(&apos;out&apos;) ? &apos;high&apos; : &apos;medium&apos;,
+      priority: data.injuryStatus.toLowerCase().includes('out') ? 'high' : 'medium',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const triggerAdminAnnouncement = useCallback((data: {
-}
     title: string;
     message: string;
-    priority: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
+    priority: 'low' | 'medium' | 'high';
   }) => {
-}
     // Create a notification for admin announcement
     const notification: RealtimeNotification = {
-}
       id: `admin-${Date.now()}`,
-      type: &apos;system&apos;,
-      title: &apos;Admin Announcement&apos;,
+      type: 'system',
+      title: 'Admin Announcement',
       message: data.message,
       timestamp: new Date(),
-      priority: &apos;high&apos;,
+      priority: 'high',
       metadata: data
     };
     handleRealtimeNotification(notification);
   }, []);
 
   const testNotification = useCallback(() => {
-}
     realtimeNotificationService.sendTestNotification();
   }, []);
 
   // Get real-time service metrics
   const getMetrics = useCallback(() => {
-}
     // Metrics not directly available from service
     const allNotifications = realtimeNotificationService.getNotifications();
     return {
-}
       totalNotifications: allNotifications.length,
       unreadCount: realtimeNotificationService.getUnreadCount(),
       connected: realtimeNotificationService.isConnectedToService()
@@ -328,13 +283,11 @@ export const useRealtimeNotifications = (options: RealtimeNotificationHookOption
   }, []);
 
   const getActiveConnections = useCallback(() => {
-}
     // Return connection status
     return realtimeNotificationService.getConnectionStatus();
   }, []);
 
   return {
-}
     // Trigger methods for different notification types
     triggerPredictionDeadlineWarning,
     triggerPredictionResult,
@@ -356,4 +309,4 @@ export const useRealtimeNotifications = (options: RealtimeNotificationHookOption
 };
 
 // Export types for external use
-export type { RealtimeNotification } from &apos;../services/realtimeNotificationService&apos;;
+export type { RealtimeNotification } from '../services/realtimeNotificationService';

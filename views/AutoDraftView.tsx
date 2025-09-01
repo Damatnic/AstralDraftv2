@@ -3,69 +3,62 @@
  * Main view for the auto-draft functionality
  */
 
-import React, { useState } from &apos;react&apos;;
-import AutoDraftInterface from &apos;../components/draft/AutoDraftInterface&apos;;
-import { TeamDraftResult } from &apos;../services/autoDraftService&apos;;
-import { useNavigate } from &apos;react-router-dom&apos;;
+import React, { useState } from 'react';
+import AutoDraftInterface from '../components/draft/AutoDraftInterface';
+import { TeamDraftResult } from '../services/autoDraftService';
+import { useNavigate } from 'react-router-dom';
 import { 
-}
   ArrowLeft, Trophy, Users, BarChart3, Zap, 
   ChevronRight, Info, Target, Brain 
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 const AutoDraftView: React.FC = () => {
-}
   const navigate = useNavigate();
   const [draftResults, setDraftResults] = useState<TeamDraftResult[] | null>(null);
   const [showIntro, setShowIntro] = useState(true);
 
   const handleDraftComplete = (results: TeamDraftResult[]) => {
-}
     setDraftResults(results);
     setShowIntro(false);
     
     // Could navigate to team view or show results
-    console.log(&apos;Draft completed with&apos;, results.length, &apos;teams&apos;);
+    console.log('Draft completed with', results.length, 'teams');
   };
 
   const features = [
     {
-}
       icon: Brain,
-      title: &apos;AI-Powered Strategy&apos;,
-      description: &apos;Advanced algorithms analyze player value, scarcity, and team needs&apos;,
-      color: &apos;text-blue-500&apos;
+      title: 'AI-Powered Strategy',
+      description: 'Advanced algorithms analyze player value, scarcity, and team needs',
+      color: 'text-blue-500'
     },
     {
-}
       icon: Target,
-      title: &apos;Optimal Team Building&apos;,
-      description: &apos;Generates the best possible team based on your strategy preferences&apos;,
-      color: &apos;text-green-500&apos;
+      title: 'Optimal Team Building',
+      description: 'Generates the best possible team based on your strategy preferences',
+      color: 'text-green-500'
     },
     {
-}
       icon: Users,
-      title: &apos;Full League Simulation&apos;,
-      description: &apos;Simulates all 10 teams with diverse strategies and personalities&apos;,
-      color: &apos;text-purple-500&apos;
+      title: 'Full League Simulation',
+      description: 'Simulates all 10 teams with diverse strategies and personalities',
+      color: 'text-purple-500'
     },
     {
-}
       icon: BarChart3,
-      title: &apos;Deep Analytics&apos;,
-      description: &apos;Comprehensive analysis of strengths, weaknesses, and value picks&apos;,
-      color: &apos;text-orange-500&apos;
+      title: 'Deep Analytics',
+      description: 'Comprehensive analysis of strengths, weaknesses, and value picks',
+      color: 'text-orange-500'
 
   ];
 
   const strategies = [
-    { name: &apos;Balanced&apos;, description: &apos;Mix of RB/WR with value picks&apos;, emoji: &apos;⚖️&apos; },
-    { name: &apos;RB Heavy&apos;, description: &apos;Prioritize elite running backs&apos;, emoji: &apos;🏃&apos; },
-    { name: &apos;WR Heavy&apos;, description: &apos;Load up on wide receivers&apos;, emoji: &apos;🎯&apos; },
-    { name: &apos;Zero RB&apos;, description: &apos;Skip RBs early for WR/TE&apos;, emoji: &apos;🚫&apos; },
-    { name: &apos;Hero RB&apos;, description: &apos;One elite RB, then receivers&apos;, emoji: &apos;🦸&apos; },
-    { name: &apos;Best Available&apos;, description: &apos;Pure value-based drafting&apos;, emoji: &apos;📊&apos; }
+    { name: 'Balanced', description: 'Mix of RB/WR with value picks', emoji: '⚖️' },
+    { name: 'RB Heavy', description: 'Prioritize elite running backs', emoji: '🏃' },
+    { name: 'WR Heavy', description: 'Load up on wide receivers', emoji: '🎯' },
+    { name: 'Zero RB', description: 'Skip RBs early for WR/TE', emoji: '🚫' },
+    { name: 'Hero RB', description: 'One elite RB, then receivers', emoji: '🦸' },
+    { name: 'Best Available', description: 'Pure value-based drafting', emoji: '📊' }
   ];
 
   return (
@@ -96,7 +89,7 @@ const AutoDraftView: React.FC = () => {
                            transition-colors flex items-center gap-2"
               >
                 <Info className="w-4 h-4" />
-                {showIntro ? &apos;Hide Intro&apos; : &apos;Show Intro&apos;}
+                {showIntro ? 'Hide Intro' : 'Show Intro'}
               </button>
             </div>
           </div>
@@ -105,7 +98,6 @@ const AutoDraftView: React.FC = () => {
 
       {/* Intro Section */}
       {showIntro && !draftResults && (
-}
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 mb-8">
             <div className="text-center mb-8">
@@ -122,7 +114,6 @@ const AutoDraftView: React.FC = () => {
             {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {features.map((feature, idx) => (
-}
                 <div 
                   key={idx}
                   className="bg-gray-900/50 rounded-lg p-6 border border-gray-700
@@ -143,7 +134,6 @@ const AutoDraftView: React.FC = () => {
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {strategies.map((strategy, idx) => (
-}
                   <div 
                     key={idx}
                     className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg
@@ -176,7 +166,7 @@ const AutoDraftView: React.FC = () => {
       )}
 
       {/* Main Interface */}
-      <div className={showIntro ? &apos;hidden&apos; : &apos;&apos;}>
+      <div className={showIntro ? 'hidden' : ''}>
         <AutoDraftInterface>
           onDraftComplete={handleDraftComplete}
           userId={1}
@@ -185,7 +175,6 @@ const AutoDraftView: React.FC = () => {
 
       {/* Results Summary */}
       {draftResults && (
-}
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8">
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
@@ -211,7 +200,6 @@ const AutoDraftView: React.FC = () => {
               <div className="bg-gray-900/50 rounded-lg p-6 text-center">
                 <div className="text-3xl font-bold text-purple-400">
                   {Math.round(
-}
                     draftResults.reduce((sum, r) => sum + r.analytics.projectedPoints, 0) / 
                     draftResults.length
                   )}
@@ -222,7 +210,7 @@ const AutoDraftView: React.FC = () => {
 
             <div className="mt-6 flex gap-4 justify-center">
               <button
-                onClick={() => navigate(&apos;/teams&apos;)}
+                onClick={() => navigate('/teams')}
                            font-medium transition-colors"
               >
                 View Teams

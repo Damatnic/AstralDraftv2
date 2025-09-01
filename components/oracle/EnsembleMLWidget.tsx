@@ -3,31 +3,26 @@
  * Displays key ensemble prediction metrics in a compact format
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Widget } from '../ui/Widget';
 import oracleEnsembleMachineLearningService, { 
-}
     EnsemblePredictionDetail,
 //     FeatureVector 
-} from &apos;../../services/oracleEnsembleMachineLearningService&apos;;
+} from '../../services/oracleEnsembleMachineLearningService';
 
 interface Props {
-}
     playerId?: string;
     compact?: boolean;
 
-}
 
 const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) => {
-}
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);
     const [loading, setLoading] = useState(false);
 
     // Sample features for demonstration
     const sampleFeatures: FeatureVector = {
-}
         playerRecentPerformance: [18.5, 16.2, 20.1, 14.8, 19.3],
         playerPositionRank: 8,
         playerInjuryRisk: 0.15,
@@ -45,43 +40,35 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
         seasonalTrends: [0.15],
         venuePerformance: [0.1],
         timeOfSeason: 0.65,
-        weekType: &apos;REGULAR&apos;,
+        weekType: 'REGULAR',
         marketConfidence: 0.85
     };
 
     useEffect(() => {
-}
         if (playerId) {
-}
             generateQuickPrediction();
     }
   }, [playerId]);
 
     const generateQuickPrediction = async () => {
-}
         setLoading(true);
         try {
-}
 
             const result = await oracleEnsembleMachineLearningService
-                .generateEnsemblePrediction(sampleFeatures, &apos;fantasy_points&apos;);
+                .generateEnsemblePrediction(sampleFeatures, 'fantasy_points');
             setPrediction(result);
         
     } catch (error) {
-}
         } finally {
-}
             setLoading(false);
 
     };
 
     if (compact) {
-}
         return (
             <Widget title="🧠 AI Ensemble Prediction" className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {loading && (
-}
                         <div className="flex items-center justify-center py-6 sm:px-4 md:px-6 lg:px-8">
                             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400 sm:px-4 md:px-6 lg:px-8"></div>
                             <span className="ml-2 text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">Computing...</span>
@@ -89,7 +76,6 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
                     )}
                     
                     {!loading && prediction && (
-}
                         <>
                             {/* Main Prediction */}
                             <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
@@ -136,17 +122,15 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
                                 <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Key Factors</div>
                                 <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {prediction.featureContributions.slice(0, 3).map((feature: any) => (
-}
                                         <div
                                             key={feature.feature}
                                             className="flex items-center space-x-1 bg-gray-800/30 rounded px-2 py-1 sm:px-4 md:px-6 lg:px-8"
                                         >
                                             <span className={`w-2 h-2 rounded-full ${
-}
-                                                feature.direction === &apos;POSITIVE&apos; ? &apos;bg-green-400&apos; : &apos;bg-red-400&apos;
+                                                feature.direction === 'POSITIVE' ? 'bg-green-400' : 'bg-red-400'
                                             }`}></span>
                                             <span className="text-xs text-gray-300 capitalize sm:px-4 md:px-6 lg:px-8">
-                                                {feature.feature.replace(/([A-Z])/g, &apos; $1&apos;).trim().toLowerCase()}
+                                                {feature.feature.replace(/([A-Z])/g, ' $1').trim().toLowerCase()}
                                             </span>
                                             <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                                 ({(feature.importance * 100).toFixed(0)}%)
@@ -167,7 +151,6 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
                     )}
                     
                     {!loading && !prediction && (
-}
                         <div className="text-center py-6 sm:px-4 md:px-6 lg:px-8">
                             <div className="text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">🧠 AI Ensemble Ready</div>
                             <button
@@ -185,7 +168,6 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
     // Full widget view (non-compact)
     
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -197,7 +179,6 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
         <Widget title="🧠 Advanced Ensemble Machine Learning" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 {prediction && (
-}
                     <>
                         {/* Main Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -241,7 +222,6 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
                         {/* Model Breakdown */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             {prediction.modelPredictions.map((model: any) => (
-}
                                 <motion.div
                                     key={model.modelId}
                                     initial={{ opacity: 0, scale: 0.95 }}
@@ -280,7 +260,7 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) =>
                         disabled={loading}
                         className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
-                        {loading ? &apos;Generating...&apos; : &apos;🔄 Generate New Prediction&apos;}
+                        {loading ? 'Generating...' : '🔄 Generate New Prediction'}
                     </button>
                 </div>
             </div>

@@ -4,12 +4,11 @@
  * Integrates with comprehensive injury tracking system
  */
 
-import { apiClient } from &apos;./apiClient&apos;;
-import { oraclePredictionService } from &apos;./oraclePredictionService&apos;;
-import { injuryTrackingService } from &apos;./injuryTrackingService&apos;;
+import { apiClient } from './apiClient';
+import { oraclePredictionService } from './oraclePredictionService';
+import { injuryTrackingService } from './injuryTrackingService';
 
 export interface LiveGameUpdate {
-}
     gameId: string;
     homeTeam: string;
     awayTeam: string;
@@ -17,12 +16,10 @@ export interface LiveGameUpdate {
     awayScore: number;
     quarter: number;
     timeRemaining: string;
-    status: &apos;PRE_GAME&apos; | &apos;IN_PROGRESS&apos; | &apos;HALFTIME&apos; | &apos;FINAL&apos; | &apos;POSTPONED&apos;;
+    status: 'PRE_GAME' | 'IN_PROGRESS' | 'HALFTIME' | 'FINAL' | 'POSTPONED';
     lastUpdate: string;
-}
 
 export interface LivePlayerUpdate {
-}
     playerId: string;
     name: string;
     position: string;
@@ -31,33 +28,27 @@ export interface LivePlayerUpdate {
     isActive: boolean;
     injuryStatus?: string;
     lastUpdate: string;
-}
 
 export interface InjuryAlert {
-}
     playerId: string;
     playerName: string;
     team: string;
     injuryType: string;
-    severity: &apos;MINOR&apos; | &apos;MODERATE&apos; | &apos;SEVERE&apos; | &apos;SEASON_ENDING&apos;;
+    severity: 'MINOR' | 'MODERATE' | 'SEVERE' | 'SEASON_ENDING';
     expectedReturn?: string;
     timestamp: string;
-    gameImpact: &apos;NONE&apos; | &apos;LIMITED&apos; | &apos;OUT&apos; | &apos;DOUBTFUL&apos;;
-}
+    gameImpact: 'NONE' | 'LIMITED' | 'OUT' | 'DOUBTFUL';
 
 export interface PredictionUpdate {
-}
     predictionId: string;
     newConfidence: number;
     updatedReasoning: string;
     triggerEvent: string;
     timestamp: string;
-}
 
 export type UpdateCallback = (update: any) => void;
 
 class RealTimeDataService {
-}
     private isActive = false;
     private readonly updateInterval: number = 30000; // 30 seconds default
     private readonly gameTimeInterval: number = 10000; // 10 seconds during games
@@ -77,15 +68,13 @@ class RealTimeDataService {
      * Start real-time data monitoring
      */
     async startRealTimeUpdates(): Promise<void> {
-}
         if (this.isActive) {
-}
-            console.log(&apos;Real-time updates already active&apos;);
+            console.log('Real-time updates already active');
             return;
         }
 
         this.isActive = true;
-        console.log(&apos;🚀 Starting real-time sports data monitoring...&apos;);
+        console.log('🚀 Starting real-time sports data monitoring...');
 
         // Initialize with current game state
         await this.initializeGameState();
@@ -99,14 +88,13 @@ class RealTimeDataService {
         // Start comprehensive injury tracking
         injuryTrackingService.startMonitoring();
 
-        console.log(&apos;✅ Real-time monitoring active&apos;);
+        console.log('✅ Real-time monitoring active');
     }
 
     /**
      * Stop all real-time updates
      */
     stopRealTimeUpdates(): void {
-}
         this.isActive = false;
         this.intervals.forEach((interval: any) => clearInterval(interval));
         this.intervals = [];
@@ -114,29 +102,25 @@ class RealTimeDataService {
         // Stop injury tracking
         injuryTrackingService.stopMonitoring();
         
-        console.log(&apos;🛑 Real-time updates stopped&apos;);
+        console.log('🛑 Real-time updates stopped');
     }
 
     /**
      * Register callbacks for different update types
      */
     onGameUpdate(callback: UpdateCallback): void {
-}
         this.gameUpdateCallbacks.push(callback);
     }
 
     onPlayerUpdate(callback: UpdateCallback): void {
-}
         this.playerUpdateCallbacks.push(callback);
     }
 
     onInjuryAlert(callback: UpdateCallback): void {
-}
         this.injuryAlertCallbacks.push(callback);
     }
 
     onPredictionUpdate(callback: UpdateCallback): void {
-}
         this.predictionUpdateCallbacks.push(callback);
     }
 
@@ -144,25 +128,20 @@ class RealTimeDataService {
      * Initialize current game state
      */
     private async initializeGameState(): Promise<void> {
-}
         try {
-}
             const currentWeek = this.getCurrentNFLWeek();
             const games = await apiClient.getSportsIOGames(currentWeek);
 
             // Track active games using correct API structure
             games.forEach((game: any) => {
-}
-                if (game.status === &apos;in_progress&apos;) {
-}
+                if (game.status === 'in_progress') {
                     this.activeGames.add(game.game_id);
                 }
             });
 
             console.log(`📊 Initialized with ${games.length} games, ${this.activeGames.size} active`);
         } catch (error) {
-}
-            console.error(&apos;Failed to initialize game state:&apos;, error);
+            console.error('Failed to initialize game state:', error);
         }
     }
 
@@ -170,32 +149,26 @@ class RealTimeDataService {
      * Set up game score updates
      */
     private setupGameUpdates(): void {
-}
         const updateGames = async () => {
-}
             if (!this.isActive) return;
 
             try {
-}
                 const currentWeek = this.getCurrentNFLWeek();
                 const games = await apiClient.getSportsIOGames(currentWeek);
                 
                 for (const game of games) {
-}
                     const lastUpdate = this.lastGameUpdates.get(game.game_id);
                     
                     // Check if game has meaningful updates
                     if (this.hasGameChanged(game, lastUpdate)) {
-}
                         const liveUpdate: LiveGameUpdate = {
-}
                             gameId: game.game_id,
                             homeTeam: game.home_team,
                             awayTeam: game.away_team,
                             homeScore: game.home_score || 0,
                             awayScore: game.away_score || 0,
                             quarter: game.quarter || 0,
-                            timeRemaining: game.time_remaining || &apos;&apos;,
+                            timeRemaining: game.time_remaining || '',
                             status: this.mapGameStatus(game.status),
                             lastUpdate: new Date().toISOString()
                         };
@@ -204,18 +177,15 @@ class RealTimeDataService {
                         this.notifyGameUpdateCallbacks(liveUpdate);
 
                         // Update active games tracking
-                        if (liveUpdate.status === &apos;IN_PROGRESS&apos;) {
-}
+                        if (liveUpdate.status === 'IN_PROGRESS') {
                             this.activeGames.add(game.game_id);
-                        } else if (liveUpdate.status === &apos;FINAL&apos;) {
-}
+                        } else if (liveUpdate.status === 'FINAL') {
                             this.activeGames.delete(game.game_id);
                         }
                     }
                 }
             } catch (error) {
-}
-                console.error(&apos;Game update failed:&apos;, error);
+                console.error('Game update failed:', error);
             }
         };
 
@@ -232,29 +202,23 @@ class RealTimeDataService {
      * Set up player performance updates
      */
     private setupPlayerUpdates(): void {
-}
         const updatePlayers = async () => {
-}
             if (!this.isActive) return;
 
             try {
-}
                 const players = await apiClient.getPlayerUpdates();
                 
                 for (const player of players) {
-}
                     const lastUpdate = this.lastPlayerUpdates.get(player.id.toString());
                     
                     if (this.hasPlayerChanged(player, lastUpdate)) {
-}
                         const liveUpdate: LivePlayerUpdate = {
-}
                             playerId: player.id.toString(),
                             name: player.name,
                             position: player.position,
                             team: player.team,
                             fantasyPoints: this.calculateFantasyPoints(player),
-                            isActive: !player.injuryStatus || player.injuryStatus === &apos;healthy&apos;,
+                            isActive: !player.injuryStatus || player.injuryStatus === 'healthy',
                             injuryStatus: player.injuryStatus,
                             lastUpdate: new Date().toISOString()
                         };
@@ -264,8 +228,7 @@ class RealTimeDataService {
                     }
                 }
             } catch (error) {
-}
-                console.error(&apos;Player update failed:&apos;, error);
+                console.error('Player update failed:', error);
             }
         };
 
@@ -278,44 +241,36 @@ class RealTimeDataService {
      * Set up injury monitoring
      */
     private setupInjuryMonitoring(): void {
-}
         const checkInjuries = async () => {
-}
             if (!this.isActive) return;
 
             try {
-}
                 // Simulate injury monitoring - in production, integrate with injury API
                 const players = await apiClient.getPlayerUpdates();
-                const injuredPlayers = players.filter((p: any) => p.injuryStatus && p.injuryStatus !== &apos;healthy&apos;);
+                const injuredPlayers = players.filter((p: any) => p.injuryStatus && p.injuryStatus !== 'healthy');
                 
                 for (const player of injuredPlayers) {
-}
                     if (this.isNewInjury(player)) {
-}
                         const alert: InjuryAlert = {
-}
                             playerId: player.id.toString(),
                             playerName: player.name,
                             team: player.team,
-                            injuryType: player.injuryStatus || &apos;Unknown&apos;,
-                            severity: this.mapInjurySeverity(player.injuryStatus || &apos;&apos;),
+                            injuryType: player.injuryStatus || 'Unknown',
+                            severity: this.mapInjurySeverity(player.injuryStatus || ''),
                             timestamp: new Date().toISOString(),
-                            gameImpact: this.assessGameImpact(player.injuryStatus || &apos;&apos;)
+                            gameImpact: this.assessGameImpact(player.injuryStatus || '')
                         };
 
                         this.notifyInjuryAlertCallbacks(alert);
                         
                         // Trigger prediction updates for significant injuries
-                        if (alert.severity === &apos;SEVERE&apos; || alert.severity === &apos;SEASON_ENDING&apos;) {
-}
+                        if (alert.severity === 'SEVERE' || alert.severity === 'SEASON_ENDING') {
                             await this.triggerPredictionUpdate(`Major injury: ${alert.playerName}`, alert);
                         }
                     }
                 }
             } catch (error) {
-}
-                console.error(&apos;Injury monitoring failed:&apos;, error);
+                console.error('Injury monitoring failed:', error);
             }
         };
 
@@ -328,24 +283,18 @@ class RealTimeDataService {
      * Set up prediction refresh based on live events
      */
     private setupPredictionRefresh(): void {
-}
         const refreshPredictions = async () => {
-}
             if (!this.isActive) return;
 
             try {
-}
                 const currentWeek = this.getCurrentNFLWeek();
                 const predictions = await oraclePredictionService.generateWeeklyPredictions(currentWeek);
                 
                 // Check if any predictions need confidence adjustments
                 for (const prediction of predictions) {
-}
                     const shouldUpdate = await this.shouldUpdatePrediction(prediction);
                     if (shouldUpdate.update) {
-}
                         const update: PredictionUpdate = {
-}
                             predictionId: prediction.id,
                             newConfidence: shouldUpdate.newConfidence,
                             updatedReasoning: shouldUpdate.reasoning,
@@ -357,8 +306,7 @@ class RealTimeDataService {
                     }
                 }
             } catch (error) {
-}
-                console.error(&apos;Prediction refresh failed:&apos;, error);
+                console.error('Prediction refresh failed:', error);
             }
         };
 
@@ -368,7 +316,6 @@ class RealTimeDataService {
 
     // Helper methods
     private hasGameChanged(current: any, last?: LiveGameUpdate): boolean {
-}
         if (!last) return true;
         
         return (
@@ -381,11 +328,10 @@ class RealTimeDataService {
     }
 
     private hasPlayerChanged(current: any, last?: LivePlayerUpdate): boolean {
-}
         if (!last) return true;
         
         const currentFantasyPoints = this.calculateFantasyPoints(current);
-        const currentIsActive = !current.injuryStatus || current.injuryStatus === &apos;healthy&apos;;
+        const currentIsActive = !current.injuryStatus || current.injuryStatus === 'healthy';
         
         return (
             currentFantasyPoints !== last.fantasyPoints ||
@@ -395,7 +341,6 @@ class RealTimeDataService {
     }
 
     private calculateFantasyPoints(player: any): number {
-}
         const stats = player.stats || {};
         let points = 0;
         
@@ -411,81 +356,69 @@ class RealTimeDataService {
         return Math.round(points * 10) / 10; // Round to 1 decimal
     }
 
-    private mapGameStatus(status: string): LiveGameUpdate[&apos;status&apos;] {
-}
-        const statusMap: Record<string, LiveGameUpdate[&apos;status&apos;]> = {
-}
-            &apos;scheduled&apos;: &apos;PRE_GAME&apos;,
-            &apos;in_progress&apos;: &apos;IN_PROGRESS&apos;,
-            &apos;completed&apos;: &apos;FINAL&apos;
+    private mapGameStatus(status: string): LiveGameUpdate['status'] {
+        const statusMap: Record<string, LiveGameUpdate['status']> = {
+            'scheduled': 'PRE_GAME',
+            'in_progress': 'IN_PROGRESS',
+            'completed': 'FINAL'
         };
-        return statusMap[status] || &apos;PRE_GAME&apos;;
+        return statusMap[status] || 'PRE_GAME';
     }
 
-    private mapGameStatusReverse(status: LiveGameUpdate[&apos;status&apos;]): string {
-}
-        const statusMap: Record<LiveGameUpdate[&apos;status&apos;], string> = {
-}
-            &apos;PRE_GAME&apos;: &apos;scheduled&apos;,
-            &apos;IN_PROGRESS&apos;: &apos;in_progress&apos;,
-            &apos;HALFTIME&apos;: &apos;in_progress&apos;,
-            &apos;FINAL&apos;: &apos;completed&apos;,
-            &apos;POSTPONED&apos;: &apos;scheduled&apos;
+    private mapGameStatusReverse(status: LiveGameUpdate['status']): string {
+        const statusMap: Record<LiveGameUpdate['status'], string> = {
+            'PRE_GAME': 'scheduled',
+            'IN_PROGRESS': 'in_progress',
+            'HALFTIME': 'in_progress',
+            'FINAL': 'completed',
+            'POSTPONED': 'scheduled'
         };
-        return statusMap[status] || &apos;scheduled&apos;;
+        return statusMap[status] || 'scheduled';
     }
 
-    private mapInjurySeverity(injuryStatus: string): InjuryAlert[&apos;severity&apos;] {
-}
+    private mapInjurySeverity(injuryStatus: string): InjuryAlert['severity'] {
         const lowerStatus = injuryStatus.toLowerCase();
-        if (lowerStatus.includes(&apos;out&apos;) || lowerStatus.includes(&apos;ir&apos;)) return &apos;SEASON_ENDING&apos;;
-        if (lowerStatus.includes(&apos;doubtful&apos;)) return &apos;SEVERE&apos;;
-        if (lowerStatus.includes(&apos;questionable&apos;)) return &apos;MODERATE&apos;;
-        return &apos;MINOR&apos;;
+        if (lowerStatus.includes('out') || lowerStatus.includes('ir')) return 'SEASON_ENDING';
+        if (lowerStatus.includes('doubtful')) return 'SEVERE';
+        if (lowerStatus.includes('questionable')) return 'MODERATE';
+        return 'MINOR';
     }
 
-    private assessGameImpact(injuryStatus: string): InjuryAlert[&apos;gameImpact&apos;] {
-}
+    private assessGameImpact(injuryStatus: string): InjuryAlert['gameImpact'] {
         const lowerStatus = injuryStatus.toLowerCase();
-        if (lowerStatus.includes(&apos;out&apos;)) return &apos;OUT&apos;;
-        if (lowerStatus.includes(&apos;doubtful&apos;)) return &apos;DOUBTFUL&apos;;
-        if (lowerStatus.includes(&apos;questionable&apos;)) return &apos;LIMITED&apos;;
-        return &apos;NONE&apos;;
+        if (lowerStatus.includes('out')) return 'OUT';
+        if (lowerStatus.includes('doubtful')) return 'DOUBTFUL';
+        if (lowerStatus.includes('questionable')) return 'LIMITED';
+        return 'NONE';
     }
 
     private isNewInjury(player: any): boolean {
-}
         // Simple check - in production, maintain injury history
         const lastUpdate = this.lastPlayerUpdates.get(player.id.toString());
         return !lastUpdate || lastUpdate.injuryStatus !== player.injuryStatus;
     }
 
     private async shouldUpdatePrediction(prediction: any): Promise<{
-}
         update: boolean;
         newConfidence: number;
         reasoning: string;
         trigger: string;
     }> {
-}
         // Simplified logic - in production, implement sophisticated analysis
         return {
-}
             update: false,
             newConfidence: prediction.confidence,
             reasoning: prediction.reasoning,
-            trigger: &apos;&apos;
+            trigger: ''
         };
     }
 
     private async triggerPredictionUpdate(trigger: string, data: any): Promise<void> {
-}
         console.log(`🔄 Prediction update triggered: ${trigger}`, data);
         // Could regenerate specific predictions here
     }
 
     private getCurrentNFLWeek(): number {
-}
         // Calculate current NFL week based on season schedule
         const now = new Date();
         const seasonStart = new Date(now.getFullYear(), 8, 1); // September 1st
@@ -496,61 +429,44 @@ class RealTimeDataService {
 
     // Callback notification methods
     private notifyGameUpdateCallbacks(update: LiveGameUpdate): void {
-}
         this.gameUpdateCallbacks.forEach((callback: any) => {
-}
             try {
-}
                 callback(update);
             } catch (error) {
-}
-                console.error(&apos;Game update callback error:&apos;, error);
+                console.error('Game update callback error:', error);
             }
         });
     }
 
     private notifyPlayerUpdateCallbacks(update: LivePlayerUpdate): void {
-}
         this.playerUpdateCallbacks.forEach((callback: any) => {
-}
             try {
-}
                 callback(update);
             } catch (error) {
-}
-                console.error(&apos;Player update callback error:&apos;, error);
+                console.error('Player update callback error:', error);
             }
         });
     }
 
     private notifyInjuryAlertCallbacks(alert: InjuryAlert): void {
-}
         this.injuryAlertCallbacks.forEach((callback: any) => {
-}
             try {
-}
                 callback(alert);
             } catch (error) {
-}
-                console.error(&apos;Injury alert callback error:&apos;, error);
+                console.error('Injury alert callback error:', error);
             }
         });
     }
 
     private notifyPredictionUpdateCallbacks(update: PredictionUpdate): void {
-}
         this.predictionUpdateCallbacks.forEach((callback: any) => {
-}
             try {
-}
                 callback(update);
             } catch (error) {
-}
-                console.error(&apos;Prediction update callback error:&apos;, error);
+                console.error('Prediction update callback error:', error);
             }
         });
     }
-}
 
 // Export singleton instance
 export const realTimeDataService = new RealTimeDataService();

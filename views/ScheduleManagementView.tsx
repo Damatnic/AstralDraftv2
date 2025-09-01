@@ -1,11 +1,10 @@
-import React, { useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppState } from '../contexts/AppContext';
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import ErrorDisplay from '../components/core/ErrorDisplay';
 import { 
-}
     CalendarIcon, 
     RefreshCwIcon, 
     ChevronLeftIcon, 
@@ -14,18 +13,16 @@ import {
     ShuffleIcon,
     SaveIcon,
 //     AlertCircleIcon
-} from &apos;lucide-react&apos;;
-import type { Matchup } from &apos;../types&apos;;
-import { Avatar } from &apos;../components/ui/Avatar&apos;;
+} from 'lucide-react';
+import type { Matchup } from '../types';
+import { Avatar } from '../components/ui/Avatar';
 
 const MatchupCard: React.FC<{ 
-}
     matchup: Matchup, 
-    league: ReturnType<typeof useLeague>[&apos;league&apos;],
+    league: ReturnType<typeof useLeague>['league'],
     onSwap?: () => void,
     isPlayoffs?: boolean 
 }> = ({ matchup, league, onSwap, isPlayoffs }: any) => {
-}
     const teamA = league?.teams.find((t: any) => t.id === matchup.teamA.teamId);
     const teamB = league?.teams.find((t: any) => t.id === matchup.teamB.teamId);
 
@@ -36,8 +33,7 @@ const MatchupCard: React.FC<{
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className={`p-4 rounded-lg flex items-center justify-between transition-all ${
-}
-                isPlayoffs ? &apos;bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30&apos; : &apos;bg-white/5 hover:bg-white/10&apos;
+                isPlayoffs ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30' : 'bg-white/5 hover:bg-white/10'
             }`}
         >
             <div className="flex items-center gap-3 flex-1">
@@ -49,7 +45,7 @@ const MatchupCard: React.FC<{
             </div>
             
             <div className="px-4">
-                <span className={`font-bold ${isPlayoffs ? &apos;text-yellow-400&apos; : &apos;text-red-400&apos;}`}>VS</span>
+                <span className={`font-bold ${isPlayoffs ? 'text-yellow-400' : 'text-red-400'}`}>VS</span>
             </div>
             
             <div className="flex items-center gap-3 flex-1 justify-end">
@@ -61,7 +57,6 @@ const MatchupCard: React.FC<{
             </div>
 
             {onSwap && (
-}
                 <button
                     onClick={onSwap}
                     title="Swap matchup"
@@ -74,7 +69,6 @@ const MatchupCard: React.FC<{
 };
 
 const ScheduleManagementView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [selectedWeek, setSelectedWeek] = useState(1);
@@ -82,11 +76,9 @@ const ScheduleManagementView: React.FC = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     if (!league || state.user?.id !== league.commissionerId) {
-}
-        return <ErrorDisplay title="Access Denied" message="You are not the commissioner of this league." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
+        return <ErrorDisplay title="Access Denied" message="You are not the commissioner of this league." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
 
     if (league.schedule.length === 0) {
-}
         return (
             <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 p-8">
                 <div className="max-w-2xl mx-auto">
@@ -101,7 +93,7 @@ const ScheduleManagementView: React.FC = () => {
                             The league schedule will be automatically generated after the draft is complete.
                         </p>
                         <button
-                            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;COMMISSIONER_TOOLS&apos; })
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })
                             className="glass-button-primary px-6 py-3"
                         >
                             Back to Commissioner Tools
@@ -116,23 +108,19 @@ const ScheduleManagementView: React.FC = () => {
     const isPlayoffWeek = selectedWeek >= 15; // Weeks 15-17 are playoffs
 
     const handleRegenerate = () => {
-}
         setShowConfirmation(true);
     };
 
     const confirmRegenerate = () => {
-}
-        dispatch({ type: &apos;EDIT_MATCHUPS&apos;, payload: { leagueId: league.id, week: selectedWeek } });
-        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: {
-}
+        dispatch({ type: 'EDIT_MATCHUPS', payload: { leagueId: league.id, week: selectedWeek } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: {
             message: `Matchups for Week ${selectedWeek} have been regenerated.`, 
-            type: &apos;SYSTEM&apos; 
+            type: 'SYSTEM' 
         }});
         setShowConfirmation(false);
     };
 
     const handleSwapMatchup = (index: number) => {
-}
         // Logic to swap teams in a matchup
     };
 
@@ -147,7 +135,7 @@ const ScheduleManagementView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;COMMISSIONER_TOOLS&apos; }) 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }) 
                     className="glass-button"
                 >
                     Back to Tools
@@ -184,7 +172,7 @@ const ScheduleManagementView: React.FC = () => {
 
                 {/* Week Navigation */}
                 <Widget>
-                    title={`Week ${selectedWeek} Schedule ${isPlayoffWeek ? &apos;🏆&apos; : &apos;&apos;}`} 
+                    title={`Week ${selectedWeek} Schedule ${isPlayoffWeek ? '🏆' : ''}`} 
                     icon={<CalendarIcon />}
                     className="glass-pane"
                 >
@@ -204,7 +192,7 @@ const ScheduleManagementView: React.FC = () => {
                                 >
                                     {Array.from({ length: maxWeek }, (_, i) => i + 1).map((week: any) => (
                                         <option key={week} value={week}>
-                                            Week {week} {week >= 15 ? &apos;(Playoffs)&apos; : &apos;&apos;}
+                                            Week {week} {week >= 15 ? '(Playoffs)' : ''}
                                         </option>
                                     ))}
                                 </select>
@@ -221,7 +209,7 @@ const ScheduleManagementView: React.FC = () => {
                                 <button
                                     onClick={() => setEditMode(!editMode)}`}
                                 >
-                                    {editMode ? &apos;Done Editing&apos; : &apos;Edit Mode&apos;}
+                                    {editMode ? 'Done Editing' : 'Edit Mode'}
                                 </button>
                                 
                                 <button 
@@ -234,7 +222,6 @@ const ScheduleManagementView: React.FC = () => {
                         </div>
 
                         {isPlayoffWeek && (
-}
                             <div className="mt-4 p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
                                 <p className="text-sm text-yellow-300 flex items-center gap-2">
                                     <TrophyIcon className="w-4 h-4" />
@@ -248,7 +235,6 @@ const ScheduleManagementView: React.FC = () => {
                     <div className="p-4 space-y-3">
                         <AnimatePresence mode="wait">
                             {weeklyMatchups.map((matchup, index) => (
-}
                                 <MatchupCard>
                                     key={`${matchup.week}-${index}`}
                                     matchup={matchup} 
@@ -260,7 +246,6 @@ const ScheduleManagementView: React.FC = () => {
                         </AnimatePresence>
 
                         {weeklyMatchups.length === 0 && (
-}
                             <div className="text-center py-8 text-[var(--text-secondary)]">
                                 <AlertCircleIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
                                 <p>No matchups scheduled for this week</p>
@@ -270,7 +255,6 @@ const ScheduleManagementView: React.FC = () => {
 
                     {/* Actions */}
                     {editMode && (
-}
                         <div className="p-4 border-t border-white/10">
                             <div className="flex justify-end gap-2">
                                 <button
@@ -280,13 +264,11 @@ const ScheduleManagementView: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={() => {
-}
                                         // Save changes logic
                                         setEditMode(false);
-                                        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: {
-}
-                                            message: &apos;Schedule changes saved!&apos;, 
-                                            type: &apos;SYSTEM&apos; 
+                                        dispatch({ type: 'ADD_NOTIFICATION', payload: {
+                                            message: 'Schedule changes saved!', 
+                                            type: 'SYSTEM' 
                                         }});
                                     }}
                                     className="glass-button-primary px-4 py-2 flex items-center gap-2"
@@ -301,7 +283,6 @@ const ScheduleManagementView: React.FC = () => {
 
                 {/* Confirmation Modal */}
                 {showConfirmation && (
-}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

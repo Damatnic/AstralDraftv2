@@ -3,25 +3,22 @@
  * Shows current NFL week, game times, and scoring period status
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useEffect, useState } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { CalendarIcon } from &apos;../icons/CalendarIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { CalendarIcon } from '../icons/CalendarIcon';
 import { 
-}
   getCurrentNFLWeek, 
 //   SEASON_DATES_2025 
-} from &apos;../../data/leagueData&apos;;
+} from '../../data/leagueData';
 import {
-}
   getTimeUntilNextGameSlate,
   areGamesLive,
 //   getScoringPeriodStatus
-} from &apos;../../services/seasonSyncService&apos;;
+} from '../../services/seasonSyncService';
 
 const GameWeekStatusWidget: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [nextGameInfo, setNextGameInfo] = useState(getTimeUntilNextGameSlate());
@@ -31,9 +28,7 @@ const GameWeekStatusWidget: React.FC = () => {
   const scoringStatus = getScoringPeriodStatus(currentWeek);
   
   useEffect(() => {
-}
     const timer = setInterval(() => {
-}
       setCurrentTime(new Date());
       setNextGameInfo(getTimeUntilNextGameSlate());
       setGamesLive(areGamesLive());
@@ -43,7 +38,6 @@ const GameWeekStatusWidget: React.FC = () => {
   }, []);
   
   const getWeekDateRange = (week: number): string => {
-}
     const seasonStart = SEASON_DATES_2025.seasonStart;
     const weekStart = new Date(seasonStart);
     weekStart.setDate(seasonStart.getDate() + (week - 1) * 7);
@@ -52,21 +46,19 @@ const GameWeekStatusWidget: React.FC = () => {
     weekEnd.setDate(weekStart.getDate() + 6);
     
     const formatDate = (date: Date) => {
-}
-      return date.toLocaleDateString(&apos;en-US&apos;, { month: &apos;short&apos;, day: &apos;numeric&apos; });
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
     
     return `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
   };
   
   const getGameSlateSchedule = () => {
-}
     const schedule = [
-      { day: &apos;THU&apos;, time: &apos;8:20 PM ET&apos;, active: nextGameInfo.slateType === &apos;Thursday&apos; },
-      { day: &apos;SUN&apos;, time: &apos;1:00 PM ET&apos;, active: nextGameInfo.slateType === &apos;Sunday Early&apos; },
-      { day: &apos;SUN&apos;, time: &apos;4:25 PM ET&apos;, active: nextGameInfo.slateType === &apos;Sunday Late&apos; },
-      { day: &apos;SUN&apos;, time: &apos;8:20 PM ET&apos;, active: nextGameInfo.slateType === &apos;Sunday Night&apos; },
-      { day: &apos;MON&apos;, time: &apos;8:15 PM ET&apos;, active: nextGameInfo.slateType === &apos;Monday&apos; }
+      { day: 'THU', time: '8:20 PM ET', active: nextGameInfo.slateType === 'Thursday' },
+      { day: 'SUN', time: '1:00 PM ET', active: nextGameInfo.slateType === 'Sunday Early' },
+      { day: 'SUN', time: '4:25 PM ET', active: nextGameInfo.slateType === 'Sunday Late' },
+      { day: 'SUN', time: '8:20 PM ET', active: nextGameInfo.slateType === 'Sunday Night' },
+      { day: 'MON', time: '8:15 PM ET', active: nextGameInfo.slateType === 'Monday' }
     ];
     
     return schedule;
@@ -91,7 +83,6 @@ const GameWeekStatusWidget: React.FC = () => {
         
         {/* Live Indicator */}
         {gamesLive && (
-}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -116,12 +107,11 @@ const GameWeekStatusWidget: React.FC = () => {
               animate={{ width: `${scoringStatus.percentComplete}%` }}
               transition={{ duration: 0.5 }}
               className={`h-2 rounded-full ${
-}
                 scoringStatus.isComplete 
-                  ? &apos;bg-green-500&apos; 
+                  ? 'bg-green-500' 
                   : scoringStatus.isActive 
-                  ? &apos;bg-yellow-500&apos; 
-                  : &apos;bg-blue-500&apos;
+                  ? 'bg-yellow-500' 
+                  : 'bg-blue-500'
               }`}
             />
           </div>
@@ -129,7 +119,6 @@ const GameWeekStatusWidget: React.FC = () => {
         
         {/* Next Game Countdown */}
         {!gamesLive && (
-}
           <div className="bg-gray-800/50 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
             <div className="text-xs text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Next Games</div>
             <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -146,14 +135,14 @@ const GameWeekStatusWidget: React.FC = () => {
                 <div className="text-gray-500 sm:px-4 md:px-6 lg:px-8">:</div>
                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
                   <div className="text-2xl font-mono font-bold text-cyan-400 sm:px-4 md:px-6 lg:px-8">
-                    {nextGameInfo.hours.toString().padStart(2, &apos;0&apos;)}
+                    {nextGameInfo.hours.toString().padStart(2, '0')}
                   </div>
                   <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">hours</div>
                 </div>
                 <div className="text-gray-500 sm:px-4 md:px-6 lg:px-8">:</div>
                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
                   <div className="text-2xl font-mono font-bold text-cyan-400 sm:px-4 md:px-6 lg:px-8">
-                    {nextGameInfo.minutes.toString().padStart(2, &apos;0&apos;)}
+                    {nextGameInfo.minutes.toString().padStart(2, '0')}
                   </div>
                   <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">mins</div>
                 </div>
@@ -166,25 +155,21 @@ const GameWeekStatusWidget: React.FC = () => {
         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
           <div className="text-xs text-gray-400 font-medium sm:px-4 md:px-6 lg:px-8">WEEK SCHEDULE</div>
           {getGameSlateSchedule().map((slate, index) => (
-}
             <div
               key={index}
               className={`flex items-center justify-between px-3 py-2 rounded ${
-}
                 slate.active 
-                  ? &apos;bg-blue-500/20 border border-blue-500/30&apos; 
-                  : &apos;bg-gray-800/30&apos;
+                  ? 'bg-blue-500/20 border border-blue-500/30' 
+                  : 'bg-gray-800/30'
               }`}
             >
               <span className={`text-sm font-medium ${
-}
-                slate.active ? &apos;text-blue-400&apos; : &apos;text-gray-400&apos;
+                slate.active ? 'text-blue-400' : 'text-gray-400'
               }`}>
                 {slate.day}
               </span>
               <span className={`text-xs ${
-}
-                slate.active ? &apos;text-blue-300&apos; : &apos;text-gray-500&apos;
+                slate.active ? 'text-blue-300' : 'text-gray-500'
               }`}>
                 {slate.time}
               </span>

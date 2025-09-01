@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import EnhancedMobileOracleInterface from &apos;./EnhancedMobileOracleInterface&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import EnhancedMobileOracleInterface from './EnhancedMobileOracleInterface';
 
-describe(&apos;EnhancedMobileOracleInterface&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('EnhancedMobileOracleInterface', () => {
+  it('renders without crashing', () => {
     render(<EnhancedMobileOracleInterface />);
-    expect(screen.getByTestId(&apos;enhancedmobileoracleinterface&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('enhancedmobileoracleinterface')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<EnhancedMobileOracleInterface />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<EnhancedMobileOracleInterface />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,9 +1,8 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import &apos;./OracleFeatureExtractionSection.css&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import './OracleFeatureExtractionSection.css';
 
 interface FeatureCategory {
-}
   id: string;
   name: string;
   description: string;
@@ -11,13 +10,11 @@ interface FeatureCategory {
   color: string;
   icon: string;
 
-}
 
 interface FeatureDetail {
-}
   id: string;
   name: string;
-  type: &apos;numeric&apos; | &apos;categorical&apos; | &apos;boolean&apos; | &apos;array&apos;;
+  type: 'numeric' | 'categorical' | 'boolean' | 'array';
   description: string;
   example: string;
   preprocessing: string[];
@@ -26,7 +23,6 @@ interface FeatureDetail {
   normalization?: string;
 
 interface PreprocessingStage {
-}
   id: string;
   name: string;
   description: string;
@@ -36,10 +32,8 @@ interface PreprocessingStage {
   timing: string;
   dependencies: string[];
 
-}
 
 interface TransformationExample {
-}
   id: string;
   name: string;
   rawData: Record<string, any>;
@@ -48,377 +42,342 @@ interface TransformationExample {
   explanation: string;
 
 interface FeatureEngineeringMethod {
-}
   id: string;
   name: string;
-  category: &apos;aggregation&apos; | &apos;derivation&apos; | &apos;interaction&apos; | &apos;temporal&apos; | &apos;statistical&apos;;
+  category: 'aggregation' | 'derivation' | 'interaction' | 'temporal' | 'statistical';
   description: string;
   formula: string;
   examples: string[];
   benefits: string[];
 
-}
 
 const OracleFeatureExtractionSection: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-  const [activeCategory, setActiveCategory] = useState<string>(&apos;player-metrics&apos;);
-  const [activeStage, setActiveStage] = useState<string>(&apos;extraction&apos;);
-  const [activeExample, setActiveExample] = useState<string>(&apos;player-transform&apos;);
-  const [activeMethod, setActiveMethod] = useState<string>(&apos;moving-averages&apos;);
+  const [activeCategory, setActiveCategory] = useState<string>('player-metrics');
+  const [activeStage, setActiveStage] = useState<string>('extraction');
+  const [activeExample, setActiveExample] = useState<string>('player-transform');
+  const [activeMethod, setActiveMethod] = useState<string>('moving-averages');
   const [isTransformDemo, setIsTransformDemo] = useState<boolean>(false);
   const [demoStep, setDemoStep] = useState<number>(0);
 
   const featureCategories: FeatureCategory[] = [
     {
-}
-      id: &apos;player-metrics&apos;,
-      name: &apos;Player Performance Metrics&apos;,
-      description: &apos;Individual player statistics and performance indicators extracted from recent games and historical data&apos;,
-      color: &apos;#3b82f6&apos;,
-      icon: &apos;🏈&apos;,
+      id: 'player-metrics',
+      name: 'Player Performance Metrics',
+      description: 'Individual player statistics and performance indicators extracted from recent games and historical data',
+      color: '#3b82f6',
+      icon: '🏈',
       features: [
         {
-}
-          id: &apos;recent-performance&apos;,
-          name: &apos;Recent Performance Array&apos;,
-          type: &apos;array&apos;,
-          description: &apos;Last 5 games fantasy point scores with exponential weighting&apos;,
-          example: &apos;[18.2, 24.7, 11.5, 31.2, 19.8]&apos;,
-          preprocessing: [&apos;Missing value imputation&apos;, &apos;Exponential smoothing&apos;, &apos;Outlier detection&apos;],
+          id: 'recent-performance',
+          name: 'Recent Performance Array',
+          type: 'array',
+          description: 'Last 5 games fantasy point scores with exponential weighting',
+          example: '[18.2, 24.7, 11.5, 31.2, 19.8]',
+          preprocessing: ['Missing value imputation', 'Exponential smoothing', 'Outlier detection'],
           importance: 85,
-          range: &apos;0-50 points per game&apos;,
-          normalization: &apos;Min-max scaling (0-1)&apos;
+          range: '0-50 points per game',
+          normalization: 'Min-max scaling (0-1)'
         },
         {
-}
-          id: &apos;position-rank&apos;,
-          name: &apos;Position Ranking&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Current rank among players at the same position based on season performance&apos;,
-          example: &apos;8 (8th best RB)&apos;,
-          preprocessing: [&apos;Rank calculation&apos;, &apos;Positional normalization&apos;],
+          id: 'position-rank',
+          name: 'Position Ranking',
+          type: 'numeric',
+          description: 'Current rank among players at the same position based on season performance',
+          example: '8 (8th best RB)',
+          preprocessing: ['Rank calculation', 'Positional normalization'],
           importance: 75,
-          range: &apos;1-150 rank&apos;,
-          normalization: &apos;Log scaling for rank distribution&apos;
+          range: '1-150 rank',
+          normalization: 'Log scaling for rank distribution'
         },
         {
-}
-          id: &apos;injury-risk&apos;,
-          name: &apos;Injury Risk Score&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Calculated probability of injury impact based on status and historical patterns&apos;,
-          example: &apos;0.25 (25% impact risk)&apos;,
-          preprocessing: [&apos;Categorical encoding&apos;, &apos;Risk modeling&apos;, &apos;Historical correlation&apos;],
+          id: 'injury-risk',
+          name: 'Injury Risk Score',
+          type: 'numeric',
+          description: 'Calculated probability of injury impact based on status and historical patterns',
+          example: '0.25 (25% impact risk)',
+          preprocessing: ['Categorical encoding', 'Risk modeling', 'Historical correlation'],
           importance: 90,
-          range: &apos;0.0-1.0 probability&apos;,
-          normalization: &apos;Sigmoid transformation&apos;
+          range: '0.0-1.0 probability',
+          normalization: 'Sigmoid transformation'
         },
         {
-}
-          id: &apos;target-share&apos;,
-          name: &apos;Target Share Percentage&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Percentage of team targets/touches directed to this player over recent weeks&apos;,
-          example: &apos;0.28 (28% of targets)&apos;,
-          preprocessing: [&apos;Percentage calculation&apos;, &apos;Moving average&apos;, &apos;Team context adjustment&apos;],
+          id: 'target-share',
+          name: 'Target Share Percentage',
+          type: 'numeric',
+          description: 'Percentage of team targets/touches directed to this player over recent weeks',
+          example: '0.28 (28% of targets)',
+          preprocessing: ['Percentage calculation', 'Moving average', 'Team context adjustment'],
           importance: 80,
-          range: &apos;0.0-1.0 percentage&apos;,
-          normalization: &apos;Beta distribution fitting&apos;
+          range: '0.0-1.0 percentage',
+          normalization: 'Beta distribution fitting'
         },
         {
-}
-          id: &apos;matchup-difficulty&apos;,
-          name: &apos;Matchup Difficulty Index&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Opponent defense strength against player position with situational adjustments&apos;,
-          example: &apos;7.2 (tough matchup)&apos;,
-          preprocessing: [&apos;Defense ranking&apos;, &apos;Situational adjustments&apos;, &apos;Weather factors&apos;],
+          id: 'matchup-difficulty',
+          name: 'Matchup Difficulty Index',
+          type: 'numeric',
+          description: 'Opponent defense strength against player position with situational adjustments',
+          example: '7.2 (tough matchup)',
+          preprocessing: ['Defense ranking', 'Situational adjustments', 'Weather factors'],
           importance: 70,
-          range: &apos;1-10 difficulty scale&apos;,
-          normalization: &apos;Z-score standardization&apos;
+          range: '1-10 difficulty scale',
+          normalization: 'Z-score standardization'
 
     },
     {
-}
-      id: &apos;team-metrics&apos;,
-      name: &apos;Team Performance Metrics&apos;,
-      description: &apos;Team-level statistics including offensive efficiency, defensive strength, and situational factors&apos;,
-      color: &apos;#10b981&apos;,
-      icon: &apos;👥&apos;,
+      id: 'team-metrics',
+      name: 'Team Performance Metrics',
+      description: 'Team-level statistics including offensive efficiency, defensive strength, and situational factors',
+      color: '#10b981',
+      icon: '👥',
       features: [
         {
-}
-          id: &apos;offensive-rank&apos;,
-          name: &apos;Offensive Efficiency Rank&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Team ranking in total offensive production and efficiency metrics&apos;,
-          example: &apos;12 (12th ranked offense)&apos;,
-          preprocessing: [&apos;Efficiency calculations&apos;, &apos;Positional adjustments&apos;, &apos;Recent form weighting&apos;],
+          id: 'offensive-rank',
+          name: 'Offensive Efficiency Rank',
+          type: 'numeric',
+          description: 'Team ranking in total offensive production and efficiency metrics',
+          example: '12 (12th ranked offense)',
+          preprocessing: ['Efficiency calculations', 'Positional adjustments', 'Recent form weighting'],
           importance: 65,
-          range: &apos;1-32 team ranking&apos;,
-          normalization: &apos;Inverse rank transformation&apos;
+          range: '1-32 team ranking',
+          normalization: 'Inverse rank transformation'
         },
         {
-}
-          id: &apos;defensive-rank&apos;,
-          name: &apos;Defensive Strength Rank&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Opponent defensive ranking against specific positions and play types&apos;,
-          example: &apos;5 (5th best run defense)&apos;,
-          preprocessing: [&apos;Position-specific metrics&apos;, &apos;Situational defense&apos;, &apos;Injury adjustments&apos;],
+          id: 'defensive-rank',
+          name: 'Defensive Strength Rank',
+          type: 'numeric',
+          description: 'Opponent defensive ranking against specific positions and play types',
+          example: '5 (5th best run defense)',
+          preprocessing: ['Position-specific metrics', 'Situational defense', 'Injury adjustments'],
           importance: 70,
-          range: &apos;1-32 team ranking&apos;,
-          normalization: &apos;Inverse rank transformation&apos;
+          range: '1-32 team ranking',
+          normalization: 'Inverse rank transformation'
         },
         {
-}
-          id: &apos;home-advantage&apos;,
-          name: &apos;Home Field Advantage&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Quantified home field advantage including crowd, travel, and venue factors&apos;,
-          example: &apos;2.1 (moderate home advantage)&apos;,
-          preprocessing: [&apos;Venue analysis&apos;, &apos;Travel distance&apos;, &apos;Crowd impact modeling&apos;],
+          id: 'home-advantage',
+          name: 'Home Field Advantage',
+          type: 'numeric',
+          description: 'Quantified home field advantage including crowd, travel, and venue factors',
+          example: '2.1 (moderate home advantage)',
+          preprocessing: ['Venue analysis', 'Travel distance', 'Crowd impact modeling'],
           importance: 45,
-          range: &apos;0-5 advantage points&apos;,
-          normalization: &apos;Linear scaling&apos;
+          range: '0-5 advantage points',
+          normalization: 'Linear scaling'
         },
         {
-}
-          id: &apos;recent-form&apos;,
-          name: &apos;Recent Team Form&apos;,
-          type: &apos;array&apos;,
-          description: &apos;Team performance trend over last 4 weeks with momentum indicators&apos;,
-          example: &apos;[1.2, 0.8, 1.5, 1.1]&apos;,
-          preprocessing: [&apos;Performance indexing&apos;, &apos;Momentum calculation&apos;, &apos;Opponent adjustment&apos;],
+          id: 'recent-form',
+          name: 'Recent Team Form',
+          type: 'array',
+          description: 'Team performance trend over last 4 weeks with momentum indicators',
+          example: '[1.2, 0.8, 1.5, 1.1]',
+          preprocessing: ['Performance indexing', 'Momentum calculation', 'Opponent adjustment'],
           importance: 60,
-          range: &apos;0.5-2.0 performance index&apos;,
-          normalization: &apos;Centered around 1.0&apos;
+          range: '0.5-2.0 performance index',
+          normalization: 'Centered around 1.0'
 
     },
     {
-}
-      id: &apos;game-conditions&apos;,
-      name: &apos;Game Condition Features&apos;,
-      description: &apos;Environmental and situational factors that influence game dynamics and player performance&apos;,
-      color: &apos;#f59e0b&apos;,
-      icon: &apos;🌤️&apos;,
+      id: 'game-conditions',
+      name: 'Game Condition Features',
+      description: 'Environmental and situational factors that influence game dynamics and player performance',
+      color: '#f59e0b',
+      icon: '🌤️',
       features: [
         {
-}
-          id: &apos;weather-conditions&apos;,
-          name: &apos;Weather Impact Vector&apos;,
-          type: &apos;array&apos;,
-          description: &apos;Multi-dimensional weather impact including wind, precipitation, and temperature effects&apos;,
-          example: &apos;[15.2, 0.1, 0.8] (wind, rain, visibility)&apos;,
-          preprocessing: [&apos;Weather data aggregation&apos;, &apos;Impact modeling&apos;, &apos;Position-specific effects&apos;],
+          id: 'weather-conditions',
+          name: 'Weather Impact Vector',
+          type: 'array',
+          description: 'Multi-dimensional weather impact including wind, precipitation, and temperature effects',
+          example: '[15.2, 0.1, 0.8] (wind, rain, visibility)',
+          preprocessing: ['Weather data aggregation', 'Impact modeling', 'Position-specific effects'],
           importance: 55,
-          range: &apos;Various units per dimension&apos;,
-          normalization: &apos;Feature-specific scaling&apos;
+          range: 'Various units per dimension',
+          normalization: 'Feature-specific scaling'
         },
         {
-}
-          id: &apos;game-importance&apos;,
-          name: &apos;Game Importance Score&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Calculated importance based on playoff implications, divisional matchups, and season timing&apos;,
-          example: &apos;7.8 (high importance)&apos;,
-          preprocessing: [&apos;Playoff probability&apos;, &apos;Divisional weighting&apos;, &apos;Season context&apos;],
+          id: 'game-importance',
+          name: 'Game Importance Score',
+          type: 'numeric',
+          description: 'Calculated importance based on playoff implications, divisional matchups, and season timing',
+          example: '7.8 (high importance)',
+          preprocessing: ['Playoff probability', 'Divisional weighting', 'Season context'],
           importance: 40,
-          range: &apos;1-10 importance scale&apos;,
-          normalization: &apos;Exponential scaling&apos;
+          range: '1-10 importance scale',
+          normalization: 'Exponential scaling'
         },
         {
-}
-          id: &apos;rest-days&apos;,
-          name: &apos;Rest Days Count&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Number of days between games with fatigue and recovery modeling&apos;,
-          example: &apos;6 (standard week)&apos;,
-          preprocessing: [&apos;Rest calculation&apos;, &apos;Fatigue modeling&apos;, &apos;Travel adjustment&apos;],
+          id: 'rest-days',
+          name: 'Rest Days Count',
+          type: 'numeric',
+          description: 'Number of days between games with fatigue and recovery modeling',
+          example: '6 (standard week)',
+          preprocessing: ['Rest calculation', 'Fatigue modeling', 'Travel adjustment'],
           importance: 35,
-          range: &apos;3-14 days&apos;,
-          normalization: &apos;Optimal rest curve fitting&apos;
+          range: '3-14 days',
+          normalization: 'Optimal rest curve fitting'
         },
         {
-}
-          id: &apos;travel-distance&apos;,
-          name: &apos;Travel Distance&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Miles traveled for away games with jet lag and fatigue considerations&apos;,
-          example: &apos;1247 (cross-country)&apos;,
-          preprocessing: [&apos;Distance calculation&apos;, &apos;Time zone adjustment&apos;, &apos;Fatigue correlation&apos;],
+          id: 'travel-distance',
+          name: 'Travel Distance',
+          type: 'numeric',
+          description: 'Miles traveled for away games with jet lag and fatigue considerations',
+          example: '1247 (cross-country)',
+          preprocessing: ['Distance calculation', 'Time zone adjustment', 'Fatigue correlation'],
           importance: 25,
-          range: &apos;0-3000 miles&apos;,
-          normalization: &apos;Logarithmic scaling&apos;
+          range: '0-3000 miles',
+          normalization: 'Logarithmic scaling'
 
     },
     {
-}
-      id: &apos;historical-patterns&apos;,
-      name: &apos;Historical Pattern Features&apos;,
-      description: &apos;Long-term trends, seasonal patterns, and historical performance indicators&apos;,
-      color: &apos;#8b5cf6&apos;,
-      icon: &apos;📊&apos;,
+      id: 'historical-patterns',
+      name: 'Historical Pattern Features',
+      description: 'Long-term trends, seasonal patterns, and historical performance indicators',
+      color: '#8b5cf6',
+      icon: '📊',
       features: [
         {
-}
-          id: &apos;head-to-head&apos;,
-          name: &apos;Head-to-Head Record&apos;,
-          type: &apos;array&apos;,
-          description: &apos;Historical performance in similar matchups and opponent-specific trends&apos;,
-          example: &apos;[0.85, 0.72] (win rate, performance index)&apos;,
-          preprocessing: [&apos;Historical lookup&apos;, &apos;Performance indexing&apos;, &apos;Recency weighting&apos;],
+          id: 'head-to-head',
+          name: 'Head-to-Head Record',
+          type: 'array',
+          description: 'Historical performance in similar matchups and opponent-specific trends',
+          example: '[0.85, 0.72] (win rate, performance index)',
+          preprocessing: ['Historical lookup', 'Performance indexing', 'Recency weighting'],
           importance: 50,
-          range: &apos;0.0-1.0 for rates, 0.5-2.0 for index&apos;,
-          normalization: &apos;Historical distribution fitting&apos;
+          range: '0.0-1.0 for rates, 0.5-2.0 for index',
+          normalization: 'Historical distribution fitting'
         },
         {
-}
-          id: &apos;seasonal-trends&apos;,
-          name: &apos;Seasonal Performance Trends&apos;,
-          type: &apos;array&apos;,
-          description: &apos;Performance patterns across different parts of the season and weather conditions&apos;,
-          example: &apos;[1.1, 0.9, 1.2] (early, mid, late season)&apos;,
-          preprocessing: [&apos;Seasonal decomposition&apos;, &apos;Trend analysis&apos;, &apos;Weather correlation&apos;],
+          id: 'seasonal-trends',
+          name: 'Seasonal Performance Trends',
+          type: 'array',
+          description: 'Performance patterns across different parts of the season and weather conditions',
+          example: '[1.1, 0.9, 1.2] (early, mid, late season)',
+          preprocessing: ['Seasonal decomposition', 'Trend analysis', 'Weather correlation'],
           importance: 45,
-          range: &apos;0.5-2.0 performance multiplier&apos;,
-          normalization: &apos;Seasonal curve normalization&apos;
+          range: '0.5-2.0 performance multiplier',
+          normalization: 'Seasonal curve normalization'
         },
         {
-}
-          id: &apos;venue-performance&apos;,
-          name: &apos;Venue-Specific Performance&apos;,
-          type: &apos;array&apos;,
-          description: &apos;Historical performance at specific venues with environmental and psychological factors&apos;,
-          example: &apos;[22.4] (avg points at venue)&apos;,
-          preprocessing: [&apos;Venue lookup&apos;, &apos;Sample size weighting&apos;, &apos;Confidence intervals&apos;],
+          id: 'venue-performance',
+          name: 'Venue-Specific Performance',
+          type: 'array',
+          description: 'Historical performance at specific venues with environmental and psychological factors',
+          example: '[22.4] (avg points at venue)',
+          preprocessing: ['Venue lookup', 'Sample size weighting', 'Confidence intervals'],
           importance: 30,
-          range: &apos;0-50 average points&apos;,
-          normalization: &apos;Venue-specific z-scores&apos;
+          range: '0-50 average points',
+          normalization: 'Venue-specific z-scores'
 
     },
     {
-}
-      id: &apos;contextual-factors&apos;,
-      name: &apos;Contextual & Market Features&apos;,
-      description: &apos;Advanced contextual information including market sentiment, coaching tendencies, and meta-factors&apos;,
-      color: &apos;#ef4444&apos;,
-      icon: &apos;🎯&apos;,
+      id: 'contextual-factors',
+      name: 'Contextual & Market Features',
+      description: 'Advanced contextual information including market sentiment, coaching tendencies, and meta-factors',
+      color: '#ef4444',
+      icon: '🎯',
       features: [
         {
-}
-          id: &apos;time-of-season&apos;,
-          name: &apos;Season Progress Factor&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Normalized season progress with playoff and late-season adjustment factors&apos;,
-          example: &apos;0.67 (week 12 of 18)&apos;,
-          preprocessing: [&apos;Week normalization&apos;, &apos;Playoff weighting&apos;, &apos;Motivation factors&apos;],
+          id: 'time-of-season',
+          name: 'Season Progress Factor',
+          type: 'numeric',
+          description: 'Normalized season progress with playoff and late-season adjustment factors',
+          example: '0.67 (week 12 of 18)',
+          preprocessing: ['Week normalization', 'Playoff weighting', 'Motivation factors'],
           importance: 35,
-          range: &apos;0.0-1.0 season progress&apos;,
-          normalization: &apos;Linear with playoff adjustment&apos;
+          range: '0.0-1.0 season progress',
+          normalization: 'Linear with playoff adjustment'
         },
         {
-}
-          id: &apos;week-type&apos;,
-          name: &apos;Week Type Classification&apos;,
-          type: &apos;categorical&apos;,
-          description: &apos;Type of week (regular, playoff, championship) with performance pattern adjustments&apos;,
-          example: &apos;REGULAR (regular season)&apos;,
-          preprocessing: [&apos;Categorical encoding&apos;, &apos;One-hot encoding&apos;, &apos;Performance pattern lookup&apos;],
+          id: 'week-type',
+          name: 'Week Type Classification',
+          type: 'categorical',
+          description: 'Type of week (regular, playoff, championship) with performance pattern adjustments',
+          example: 'REGULAR (regular season)',
+          preprocessing: ['Categorical encoding', 'One-hot encoding', 'Performance pattern lookup'],
           importance: 40,
-          range: &apos;REGULAR, PLAYOFF, CHAMPIONSHIP&apos;,
-          normalization: &apos;Binary encoding vector&apos;
+          range: 'REGULAR, PLAYOFF, CHAMPIONSHIP',
+          normalization: 'Binary encoding vector'
         },
         {
-}
-          id: &apos;market-confidence&apos;,
-          name: &apos;Market Confidence Index&apos;,
-          type: &apos;numeric&apos;,
-          description: &apos;Aggregated market sentiment and expert consensus confidence in player performance&apos;,
-          example: &apos;0.78 (high confidence)&apos;,
-          preprocessing: [&apos;Sentiment aggregation&apos;, &apos;Expert weighting&apos;, &apos;Confidence calibration&apos;],
+          id: 'market-confidence',
+          name: 'Market Confidence Index',
+          type: 'numeric',
+          description: 'Aggregated market sentiment and expert consensus confidence in player performance',
+          example: '0.78 (high confidence)',
+          preprocessing: ['Sentiment aggregation', 'Expert weighting', 'Confidence calibration'],
           importance: 60,
-          range: &apos;0.0-1.0 confidence&apos;,
-          normalization: &apos;Sigmoid calibration&apos;
+          range: '0.0-1.0 confidence',
+          normalization: 'Sigmoid calibration'
 
   ];
 
   const preprocessingStages: PreprocessingStage[] = [
     {
-}
-      id: &apos;extraction&apos;,
-      name: &apos;Raw Data Extraction&apos;,
-      description: &apos;Extract relevant features from validated sports data using domain-specific algorithms&apos;,
-      techniques: [&apos;Statistical aggregation&apos;, &apos;Time-series analysis&apos;, &apos;Pattern recognition&apos;, &apos;Domain calculations&apos;],
-      inputFormat: &apos;Validated sports data (JSON/structured)&apos;,
-      outputFormat: &apos;Raw feature values (numeric/categorical)&apos;,
-      timing: &apos;< 500ms per player/game&apos;,
-      dependencies: [&apos;Data validation&apos;, &apos;Historical database&apos;, &apos;Real-time feeds&apos;]
+      id: 'extraction',
+      name: 'Raw Data Extraction',
+      description: 'Extract relevant features from validated sports data using domain-specific algorithms',
+      techniques: ['Statistical aggregation', 'Time-series analysis', 'Pattern recognition', 'Domain calculations'],
+      inputFormat: 'Validated sports data (JSON/structured)',
+      outputFormat: 'Raw feature values (numeric/categorical)',
+      timing: '< 500ms per player/game',
+      dependencies: ['Data validation', 'Historical database', 'Real-time feeds']
     },
     {
-}
-      id: &apos;cleaning&apos;,
-      name: &apos;Data Cleaning & Validation&apos;,
-      description: &apos;Clean extracted features, handle missing values, and validate data quality&apos;,
-      techniques: [&apos;Missing value imputation&apos;, &apos;Outlier detection&apos;, &apos;Data type validation&apos;, &apos;Range checking&apos;],
-      inputFormat: &apos;Raw feature values&apos;,
-      outputFormat: &apos;Clean feature vectors&apos;,
-      timing: &apos;< 200ms per feature set&apos;,
-      dependencies: [&apos;Feature extraction&apos;, &apos;Quality thresholds&apos;]
+      id: 'cleaning',
+      name: 'Data Cleaning & Validation',
+      description: 'Clean extracted features, handle missing values, and validate data quality',
+      techniques: ['Missing value imputation', 'Outlier detection', 'Data type validation', 'Range checking'],
+      inputFormat: 'Raw feature values',
+      outputFormat: 'Clean feature vectors',
+      timing: '< 200ms per feature set',
+      dependencies: ['Feature extraction', 'Quality thresholds']
     },
     {
-}
-      id: &apos;engineering&apos;,
-      name: &apos;Feature Engineering&apos;,
-      description: &apos;Create derived features, interactions, and advanced statistical measures&apos;,
-      techniques: [&apos;Feature derivation&apos;, &apos;Interaction terms&apos;, &apos;Statistical aggregation&apos;, &apos;Domain transformations&apos;],
-      inputFormat: &apos;Clean feature vectors&apos;,
-      outputFormat: &apos;Engineered feature space&apos;,
-      timing: &apos;< 1 second per feature set&apos;,
-      dependencies: [&apos;Clean data&apos;, &apos;Domain knowledge&apos;, &apos;Historical patterns&apos;]
+      id: 'engineering',
+      name: 'Feature Engineering',
+      description: 'Create derived features, interactions, and advanced statistical measures',
+      techniques: ['Feature derivation', 'Interaction terms', 'Statistical aggregation', 'Domain transformations'],
+      inputFormat: 'Clean feature vectors',
+      outputFormat: 'Engineered feature space',
+      timing: '< 1 second per feature set',
+      dependencies: ['Clean data', 'Domain knowledge', 'Historical patterns']
     },
     {
-}
-      id: &apos;normalization&apos;,
-      name: &apos;Normalization & Scaling&apos;,
-      description: &apos;Apply mathematical transformations to ensure optimal ML algorithm performance&apos;,
-      techniques: [&apos;Min-max scaling&apos;, &apos;Z-score standardization&apos;, &apos;Robust scaling&apos;, &apos;Feature-specific transforms&apos;],
-      inputFormat: &apos;Engineered features&apos;,
-      outputFormat: &apos;Normalized feature vectors&apos;,
-      timing: &apos;< 100ms per feature set&apos;,
-      dependencies: [&apos;Feature engineering&apos;, &apos;Scaling parameters&apos;, &apos;Distribution analysis&apos;]
+      id: 'normalization',
+      name: 'Normalization & Scaling',
+      description: 'Apply mathematical transformations to ensure optimal ML algorithm performance',
+      techniques: ['Min-max scaling', 'Z-score standardization', 'Robust scaling', 'Feature-specific transforms'],
+      inputFormat: 'Engineered features',
+      outputFormat: 'Normalized feature vectors',
+      timing: '< 100ms per feature set',
+      dependencies: ['Feature engineering', 'Scaling parameters', 'Distribution analysis']
     },
     {
-}
-      id: &apos;vectorization&apos;,
-      name: &apos;Vector Assembly&apos;,
-      description: &apos;Combine all features into final 18-dimensional vectors ready for ML algorithms&apos;,
-      techniques: [&apos;Vector concatenation&apos;, &apos;Dimensionality verification&apos;, &apos;Quality assurance&apos;, &apos;Format standardization&apos;],
-      inputFormat: &apos;Normalized features&apos;,
-      outputFormat: &apos;18-dimensional feature vectors&apos;,
-      timing: &apos;< 50ms per vector&apos;,
-      dependencies: [&apos;All preprocessing stages&apos;, &apos;ML model requirements&apos;]
+      id: 'vectorization',
+      name: 'Vector Assembly',
+      description: 'Combine all features into final 18-dimensional vectors ready for ML algorithms',
+      techniques: ['Vector concatenation', 'Dimensionality verification', 'Quality assurance', 'Format standardization'],
+      inputFormat: 'Normalized features',
+      outputFormat: '18-dimensional feature vectors',
+      timing: '< 50ms per vector',
+      dependencies: ['All preprocessing stages', 'ML model requirements']
 
   ];
 
   const transformationExamples: TransformationExample[] = [
     {
-}
-      id: &apos;player-transform&apos;,
-      name: &apos;Player Performance Transformation&apos;,
+      id: 'player-transform',
+      name: 'Player Performance Transformation',
       rawData: {
-}
-        name: &apos;Josh Allen&apos;,
-        position: &apos;QB&apos;,
+        name: 'Josh Allen',
+        position: 'QB',
         recent_games: [24.7, 31.2, 18.4, 42.1, 28.5],
-        injury_status: &apos;questionable&apos;,
+        injury_status: 'questionable',
         targets: 42,
         team_targets: 156,
         opponent_rank: 18
       },
       transformedData: {
-}
         playerRecentPerformance: [0.494, 0.624, 0.368, 0.842, 0.570],
         playerPositionRank: 0.97,
         playerInjuryRisk: 0.35,
@@ -426,133 +385,117 @@ const OracleFeatureExtractionSection: React.FC = () => {
         playerMatchupDifficulty: 6.2
       },
       steps: [
-        &apos;Normalize recent performance using min-max scaling (0-50 range)&apos;,
-        &apos;Calculate position rank percentile (top 3% of QBs)&apos;,
-        &apos;Convert injury status to risk probability (questionable = 35%)&apos;,
-        &apos;Calculate target share percentage (42/156 = 26.9%)&apos;,
-        &apos;Assess matchup difficulty based on opponent ranking&apos;
+        'Normalize recent performance using min-max scaling (0-50 range)',
+        'Calculate position rank percentile (top 3% of QBs)',
+        'Convert injury status to risk probability (questionable = 35%)',
+        'Calculate target share percentage (42/156 = 26.9%)',
+        'Assess matchup difficulty based on opponent ranking'
         ],
-      explanation: &apos;Player statistics are transformed into normalized values that ML algorithms can process effectively. Each transformation preserves the relative importance while ensuring consistent scaling.&apos;
+      explanation: 'Player statistics are transformed into normalized values that ML algorithms can process effectively. Each transformation preserves the relative importance while ensuring consistent scaling.'
     },
     {
-}
-      id: &apos;team-transform&apos;,
-      name: &apos;Team Metrics Transformation&apos;,
+      id: 'team-transform',
+      name: 'Team Metrics Transformation',
       rawData: {
-}
-        team: &apos;Buffalo Bills&apos;,
+        team: 'Buffalo Bills',
         offensive_rank: 5,
         defensive_opponent_rank: 22,
         home_game: true,
-        recent_form: [&apos;W&apos;, &apos;W&apos;, &apos;L&apos;, &apos;W&apos;],
-        venue: &apos;Highmark Stadium&apos;
+        recent_form: ['W', 'W', 'L', 'W'],
+        venue: 'Highmark Stadium'
       },
       transformedData: {
-}
         teamOffensiveRank: 0.844,
         teamDefensiveRank: 0.344,
         teamHomeAdvantage: 2.1,
         teamRecentForm: [1.3, 1.3, 0.7, 1.3]
       },
       steps: [
-        &apos;Convert offensive rank to percentile score (5th = 84.4%)&apos;,
-        &apos;Convert opponent defensive rank (22nd = 34.4%)&apos;,
-        &apos;Apply home field advantage based on venue characteristics&apos;,
-        &apos;Transform W/L record to performance index values&apos;
+        'Convert offensive rank to percentile score (5th = 84.4%)',
+        'Convert opponent defensive rank (22nd = 34.4%)',
+        'Apply home field advantage based on venue characteristics',
+        'Transform W/L record to performance index values'
       ],
-      explanation: &apos;Team metrics are converted to performance indicators that capture relative strength and situational advantages in a format suitable for mathematical modeling.&apos;
+      explanation: 'Team metrics are converted to performance indicators that capture relative strength and situational advantages in a format suitable for mathematical modeling.'
     },
     {
-}
-      id: &apos;weather-transform&apos;,
-      name: &apos;Environmental Conditions Transformation&apos;,
+      id: 'weather-transform',
+      name: 'Environmental Conditions Transformation',
       rawData: {
-}
         temperature: 45,
         wind_speed: 12,
         precipitation: 0.2,
         visibility: 8,
         dome: false,
-        game_time: &apos;1:00 PM&apos;
+        game_time: '1:00 PM'
       },
       transformedData: {
-}
         weatherConditions: [12.0, 0.2, 0.8],
         gameImportance: 6.5,
         restDays: 7
       },
       steps: [
-        &apos;Extract weather vector [wind_speed, precipitation, visibility_factor]&apos;,
-        &apos;Calculate game importance based on timing and context&apos;,
-        &apos;Determine rest days from previous game&apos;
+        'Extract weather vector [wind_speed, precipitation, visibility_factor]',
+        'Calculate game importance based on timing and context',
+        'Determine rest days from previous game'
       ],
-      explanation: &apos;Environmental factors are quantified into numerical representations that capture their impact on player performance and game dynamics.&apos;
+      explanation: 'Environmental factors are quantified into numerical representations that capture their impact on player performance and game dynamics.'
 
   ];
 
   const engineeringMethods: FeatureEngineeringMethod[] = [
     {
-}
-      id: &apos;moving-averages&apos;,
-      name: &apos;Exponential Moving Averages&apos;,
-      category: &apos;temporal&apos;,
-      description: &apos;Weight recent performances more heavily using exponential decay for trend analysis&apos;,
-      formula: &apos;EMA(t) = α × Value(t) + (1-α) × EMA(t-1)&apos;,
-      examples: [&apos;Recent performance trends&apos;, &apos;Target share evolution&apos;, &apos;Team efficiency progression&apos;],
-      benefits: [&apos;Captures momentum&apos;, &apos;Reduces noise&apos;, &apos;Emphasizes recent form&apos;]
+      id: 'moving-averages',
+      name: 'Exponential Moving Averages',
+      category: 'temporal',
+      description: 'Weight recent performances more heavily using exponential decay for trend analysis',
+      formula: 'EMA(t) = α × Value(t) + (1-α) × EMA(t-1)',
+      examples: ['Recent performance trends', 'Target share evolution', 'Team efficiency progression'],
+      benefits: ['Captures momentum', 'Reduces noise', 'Emphasizes recent form']
     },
     {
-}
-      id: &apos;interaction-terms&apos;,
-      name: &apos;Feature Interactions&apos;,
-      category: &apos;interaction&apos;,
-      description: &apos;Create new features by combining existing ones to capture complex relationships&apos;,
-      formula: &apos;Interaction = Feature_A × Feature_B × Weight_Factor&apos;,
-      examples: [&apos;Player efficiency × Matchup difficulty&apos;, &apos;Weather impact × Home advantage&apos;, &apos;Rest days × Travel distance&apos;],
-      benefits: [&apos;Captures non-linear relationships&apos;, &apos;Improves model accuracy&apos;, &apos;Reveals hidden patterns&apos;]
+      id: 'interaction-terms',
+      name: 'Feature Interactions',
+      category: 'interaction',
+      description: 'Create new features by combining existing ones to capture complex relationships',
+      formula: 'Interaction = Feature_A × Feature_B × Weight_Factor',
+      examples: ['Player efficiency × Matchup difficulty', 'Weather impact × Home advantage', 'Rest days × Travel distance'],
+      benefits: ['Captures non-linear relationships', 'Improves model accuracy', 'Reveals hidden patterns']
     },
     {
-}
-      id: &apos;statistical-aggregation&apos;,
-      name: &apos;Statistical Aggregations&apos;,
-      category: &apos;statistical&apos;,
-      description: &apos;Derive statistical measures from time series and multi-dimensional data&apos;,
-      formula: &apos;Aggregation = f(mean, std, percentiles, trends)&apos;,
-      examples: [&apos;Performance consistency scores&apos;, &apos;Volatility indicators&apos;, &apos;Trend momentum metrics&apos;],
-      benefits: [&apos;Quantifies uncertainty&apos;, &apos;Measures consistency&apos;, &apos;Captures distribution shape&apos;]
+      id: 'statistical-aggregation',
+      name: 'Statistical Aggregations',
+      category: 'statistical',
+      description: 'Derive statistical measures from time series and multi-dimensional data',
+      formula: 'Aggregation = f(mean, std, percentiles, trends)',
+      examples: ['Performance consistency scores', 'Volatility indicators', 'Trend momentum metrics'],
+      benefits: ['Quantifies uncertainty', 'Measures consistency', 'Captures distribution shape']
     },
     {
-}
-      id: &apos;domain-specific&apos;,
-      name: &apos;Domain-Specific Calculations&apos;,
-      category: &apos;derivation&apos;,
-      description: &apos;Apply football-specific knowledge to create meaningful derived features&apos;,
-      formula: &apos;Domain_Feature = Sport_Specific_Formula(inputs)&apos;,
-      examples: [&apos;Red zone efficiency&apos;, &apos;Garbage time adjustment&apos;, &apos;Strength of schedule&apos;],
-      benefits: [&apos;Incorporates expertise&apos;, &apos;Sport-specific insights&apos;, &apos;Contextual understanding&apos;]
+      id: 'domain-specific',
+      name: 'Domain-Specific Calculations',
+      category: 'derivation',
+      description: 'Apply football-specific knowledge to create meaningful derived features',
+      formula: 'Domain_Feature = Sport_Specific_Formula(inputs)',
+      examples: ['Red zone efficiency', 'Garbage time adjustment', 'Strength of schedule'],
+      benefits: ['Incorporates expertise', 'Sport-specific insights', 'Contextual understanding']
     },
     {
-}
-      id: &apos;temporal-patterns&apos;,
-      name: &apos;Temporal Pattern Detection&apos;,
-      category: &apos;temporal&apos;,
-      description: &apos;Identify and quantify time-based patterns in player and team performance&apos;,
-      formula: &apos;Pattern_Score = Correlation(performance, time_factors)&apos;,
-      examples: [&apos;Prime time performance&apos;, &apos;Divisional game patterns&apos;, &apos;Season progression trends&apos;],
-      benefits: [&apos;Captures timing effects&apos;, &apos;Seasonal adjustments&apos;, &apos;Situational performance&apos;]
+      id: 'temporal-patterns',
+      name: 'Temporal Pattern Detection',
+      category: 'temporal',
+      description: 'Identify and quantify time-based patterns in player and team performance',
+      formula: 'Pattern_Score = Correlation(performance, time_factors)',
+      examples: ['Prime time performance', 'Divisional game patterns', 'Season progression trends'],
+      benefits: ['Captures timing effects', 'Seasonal adjustments', 'Situational performance']
 
   ];
 
   useEffect(() => {
-}
     if (isTransformDemo) {
-}
       const interval = setInterval(() => {
-}
         setDemoStep((prev: any) => {
-}
           if (prev >= preprocessingStages.length - 1) {
-}
             setIsTransformDemo(false);
             return 0;
 
@@ -565,7 +508,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
   }, [isTransformDemo, preprocessingStages.length]);
 
   const startTransformDemo = () => {
-}
     setDemoStep(0);
     setIsTransformDemo(true);
   };
@@ -579,7 +521,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
       <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2 className="section-title sm:px-4 md:px-6 lg:px-8">
           <span className="title-icon sm:px-4 md:px-6 lg:px-8">🔧</span>
-          {&apos; &apos;}
+          {' '}
           Feature Extraction & Preprocessing
         </h2>
         <p className="section-description sm:px-4 md:px-6 lg:px-8">
@@ -593,20 +535,19 @@ const OracleFeatureExtractionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">📁</span>
-          {&apos; &apos;}
+          {' '}
           Feature Categories & Dimensions
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
-          Oracle&apos;s 18-dimensional feature space encompasses 5 major categories, each contributing critical 
+          Oracle's 18-dimensional feature space encompasses 5 major categories, each contributing critical 
           information for prediction accuracy and model performance.
         </p>
 
         <div className="feature-categories-grid sm:px-4 md:px-6 lg:px-8">
           {featureCategories.map((category: any) => (
-}
             <button
               key={category.id}
-              className={`category-card ${activeCategory === category.id ? &apos;active&apos; : &apos;&apos;}`}
+              className={`category-card ${activeCategory === category.id ? 'active' : ''}`}
               onClick={() => setActiveCategory(category.id)}
               style={{ borderLeftColor: category.color }}
               aria-label={`Explore ${category.name} features`}
@@ -627,7 +568,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </div>
 
         {selectedCategory && (
-}
           <div className="category-details sm:px-4 md:px-6 lg:px-8">
             <div className="category-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedCategory.name}</h4>
@@ -636,7 +576,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
             
             <div className="features-list sm:px-4 md:px-6 lg:px-8">
               {selectedCategory.features.map((feature: any) => (
-}
                 <div key={feature.id} className="feature-item sm:px-4 md:px-6 lg:px-8">
                   <div className="feature-header sm:px-4 md:px-6 lg:px-8">
                     <div className="feature-info sm:px-4 md:px-6 lg:px-8">
@@ -678,7 +617,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
                     <h6>Preprocessing Steps</h6>
                     <ul className="preprocessing-list sm:px-4 md:px-6 lg:px-8">
                       {feature.preprocessing.map((step: any) => (
-}
                         <li key={`${feature.id}-${step}`} className="preprocessing-step sm:px-4 md:px-6 lg:px-8">{step}</li>
                       ))}
                     </ul>
@@ -694,11 +632,11 @@ const OracleFeatureExtractionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">⚙️</span>
-          {&apos; &apos;}
+          {' '}
           Preprocessing Pipeline
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
-          Oracle&apos;s five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
+          Oracle's five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
           through systematic cleaning, engineering, and normalization processes.
         </p>
 
@@ -709,19 +647,17 @@ const OracleFeatureExtractionSection: React.FC = () => {
             disabled={isTransformDemo}
             aria-label="Start preprocessing pipeline demonstration"
           >
-            {isTransformDemo ? &apos;Processing...&apos; : &apos;Watch Transformation Demo&apos;}
+            {isTransformDemo ? 'Processing...' : 'Watch Transformation Demo'}
           </button>
         </div>
 
         <div className="preprocessing-pipeline sm:px-4 md:px-6 lg:px-8">
           {preprocessingStages.map((stage, index) => (
-}
             <div
               key={stage.id}
-              className={`pipeline-stage ${activeStage === stage.id ? &apos;active&apos; : &apos;&apos;} ${
-}
-                isTransformDemo && index === demoStep ? &apos;processing&apos; : &apos;&apos;
-              } ${isTransformDemo && index < demoStep ? &apos;completed&apos; : &apos;&apos;}`}
+              className={`pipeline-stage ${activeStage === stage.id ? 'active' : ''} ${
+                isTransformDemo && index === demoStep ? 'processing' : ''
+              } ${isTransformDemo && index < demoStep ? 'completed' : ''}`}
             >
               <button
                 className="stage-header sm:px-4 md:px-6 lg:px-8"
@@ -735,18 +671,15 @@ const OracleFeatureExtractionSection: React.FC = () => {
                 </div>
                 <div className="stage-status sm:px-4 md:px-6 lg:px-8">
                   {isTransformDemo && index === demoStep && (
-}
                     <div className="processing-indicator sm:px-4 md:px-6 lg:px-8">Transforming...</div>
                   )}
                   {isTransformDemo && index < demoStep && (
-}
                     <div className="completed-indicator sm:px-4 md:px-6 lg:px-8">✓</div>
                   )}
                 </div>
               </button>
 
               {activeStage === stage.id && (
-}
                 <div className="stage-details sm:px-4 md:px-6 lg:px-8">
                   <p className="stage-description sm:px-4 md:px-6 lg:px-8">{stage.description}</p>
                   
@@ -755,7 +688,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
                       <h5>Techniques Applied</h5>
                       <ul className="techniques-list sm:px-4 md:px-6 lg:px-8">
                         {stage.techniques.map((technique: any) => (
-}
                           <li key={`${stage.id}-${technique}`} className="technique-item sm:px-4 md:px-6 lg:px-8">{technique}</li>
                         ))}
                       </ul>
@@ -765,7 +697,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
                       <h5>Dependencies</h5>
                       <ul className="dependencies-list sm:px-4 md:px-6 lg:px-8">
                         {stage.dependencies.map((dependency: any) => (
-}
                           <li key={`${stage.id}-${dependency}`} className="dependency-item sm:px-4 md:px-6 lg:px-8">{dependency}</li>
                         ))}
                       </ul>
@@ -794,7 +725,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔄</span>
-          {&apos; &apos;}
+          {' '}
           Real-World Transformation Examples
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
@@ -804,10 +735,9 @@ const OracleFeatureExtractionSection: React.FC = () => {
 
         <div className="example-tabs sm:px-4 md:px-6 lg:px-8">
           {transformationExamples.map((example: any) => (
-}
             <button
               key={example.id}
-              className={`example-tab ${activeExample === example.id ? &apos;active&apos; : &apos;&apos;}`}
+              className={`example-tab ${activeExample === example.id ? 'active' : ''}`}
               onClick={() => setActiveExample(example.id)}
               aria-label={`View ${example.name} example`}
             >
@@ -817,7 +747,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </div>
 
         {selectedExample && (
-}
           <div className="transformation-example sm:px-4 md:px-6 lg:px-8">
             <div className="example-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedExample.name}</h4>
@@ -828,11 +757,10 @@ const OracleFeatureExtractionSection: React.FC = () => {
                 <h5>Raw Input Data</h5>
                 <div className="data-display sm:px-4 md:px-6 lg:px-8">
                   {Object.entries(selectedExample.rawData).map(([key, value]) => (
-}
                     <div key={key} className="data-item sm:px-4 md:px-6 lg:px-8">
                       <span className="data-key sm:px-4 md:px-6 lg:px-8">{key}:</span>
                       <span className="data-value sm:px-4 md:px-6 lg:px-8">
-                        {Array.isArray(value) ? `[${value.join(&apos;, &apos;)}]` : String(value)}
+                        {Array.isArray(value) ? `[${value.join(', ')}]` : String(value)}
                       </span>
                     </div>
                   ))}
@@ -848,18 +776,14 @@ const OracleFeatureExtractionSection: React.FC = () => {
                 <h5>Processed Feature Vector</h5>
                 <div className="data-display sm:px-4 md:px-6 lg:px-8">
                   {Object.entries(selectedExample.transformedData).map(([key, value]) => (
-}
                     <div key={key} className="data-item sm:px-4 md:px-6 lg:px-8">
                       <span className="data-key sm:px-4 md:px-6 lg:px-8">{key}:</span>
                       <span className="data-value sm:px-4 md:px-6 lg:px-8">
                         {(() => {
-}
                           if (Array.isArray(value)) {
-}
-                            return `[${value.map((v: any) => typeof v === &apos;number&apos; ? v.toFixed(3) : v).join(&apos;, &apos;)}]`;
+                            return `[${value.map((v: any) => typeof v === 'number' ? v.toFixed(3) : v).join(', ')}]`;
 
-                          if (typeof value === &apos;number&apos;) {
-}
+                          if (typeof value === 'number') {
                             return value.toFixed(3);
 
                           return String(value);
@@ -875,7 +799,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
               <h5>Transformation Steps</h5>
               <ol className="steps-list sm:px-4 md:px-6 lg:px-8">
                 {selectedExample.steps.map((step: any) => (
-}
                   <li key={`${selectedExample.id}-step-${step.slice(0, 20)}`} className="step-item sm:px-4 md:px-6 lg:px-8">{step}</li>
                 ))}
               </ol>
@@ -893,7 +816,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🧪</span>
-          {&apos; &apos;}
+          {' '}
           Advanced Feature Engineering
         </h3>
         <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
@@ -903,10 +826,9 @@ const OracleFeatureExtractionSection: React.FC = () => {
 
         <div className="engineering-methods-grid sm:px-4 md:px-6 lg:px-8">
           {engineeringMethods.map((method: any) => (
-}
             <button
               key={method.id}
-              className={`method-card ${activeMethod === method.id ? &apos;active&apos; : &apos;&apos;}`}
+              className={`method-card ${activeMethod === method.id ? 'active' : ''}`}
               onClick={() => setActiveMethod(method.id)}
               aria-label={`Learn about ${method.name}`}
             >
@@ -922,7 +844,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </div>
 
         {selectedMethod && (
-}
           <div className="method-details sm:px-4 md:px-6 lg:px-8">
             <div className="method-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedMethod.name}</h4>
@@ -943,7 +864,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
                 <h5>Application Examples</h5>
                 <ul className="examples-list sm:px-4 md:px-6 lg:px-8">
                   {selectedMethod.examples.map((example: any) => (
-}
                     <li key={`${selectedMethod.id}-${example}`} className="example-item sm:px-4 md:px-6 lg:px-8">{example}</li>
                   ))}
                 </ul>
@@ -953,7 +873,6 @@ const OracleFeatureExtractionSection: React.FC = () => {
                 <h5>Key Benefits</h5>
                 <ul className="benefits-list sm:px-4 md:px-6 lg:px-8">
                   {selectedMethod.benefits.map((benefit: any) => (
-}
                     <li key={`${selectedMethod.id}-${benefit}`} className="benefit-item sm:px-4 md:px-6 lg:px-8">{benefit}</li>
                   ))}
                 </ul>
@@ -967,7 +886,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
       <div className="content-section sm:px-4 md:px-6 lg:px-8">
         <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
           <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">💡</span>
-          {&apos; &apos;}
+          {' '}
           Feature Engineering Insights
         </h3>
         
@@ -975,7 +894,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Dimensional Efficiency</h4>
             <p>
-              Oracle&apos;s 18-dimensional feature space represents an optimal balance between information richness 
+              Oracle's 18-dimensional feature space represents an optimal balance between information richness 
               and computational efficiency, capturing 95%+ of predictive variance in sports data.
             </p>
           </div>

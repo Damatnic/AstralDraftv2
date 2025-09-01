@@ -3,30 +3,26 @@
  * Clean implementation with trade builder and analysis view
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect, useCallback } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-}
     ArrowRightLeftIcon, 
     AlertTriangleIcon,
     CheckCircleIcon,
     XCircleIcon,
     BarChart3Icon,
 //     UsersIcon
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Player } from &apos;../../types&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
+import { Player } from '../../types';
 
 interface SimpleTradeProposal {
-}
     fromPlayers: Player[];
     toPlayers: Player[];
 
-}
 
 interface SimpleTradeAnalysis {
-}
     overallGrade: string;
     fairnessScore: number;
     recommendation: string;
@@ -36,30 +32,25 @@ interface SimpleTradeAnalysis {
     warnings: string[];
 
 export const TradeAnalysisInterface: React.FC<{
-}
     className?: string;
-}> = ({ className = &apos;&apos; }: any) => {
-}
+}> = ({ className = '' }: any) => {
     const [proposal, setProposal] = useState<SimpleTradeProposal>({
-}
         fromPlayers: [],
         toPlayers: []
     });
     const [analysis, setAnalysis] = useState<SimpleTradeAnalysis | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
-    const [activeTab, setActiveTab] = useState<&apos;builder&apos; | &apos;analysis&apos;>(&apos;builder&apos;);
+    const [activeTab, setActiveTab] = useState<'builder' | 'analysis'>('builder');
 
     useEffect(() => {
-}
         // Mock player data
         const mockPlayers: Player[] = [
             { 
-}
                 id: 1, 
-                name: &apos;Josh Allen&apos;, 
-                position: &apos;QB&apos;, 
-                team: &apos;BUF&apos;, 
+                name: 'Josh Allen', 
+                position: 'QB', 
+                team: 'BUF', 
                 adp: 12,
                 rank: 1,
                 bye: 7,
@@ -67,7 +58,6 @@ export const TradeAnalysisInterface: React.FC<{
                 age: 27,
                 auctionValue: 30,
                 stats: {
-}
                     projection: 320,
                     lastYear: 310,
                     vorp: 85,
@@ -75,11 +65,10 @@ export const TradeAnalysisInterface: React.FC<{
 
             },
             { 
-}
                 id: 2, 
-                name: &apos;Christian McCaffrey&apos;, 
-                position: &apos;RB&apos;, 
-                team: &apos;SF&apos;, 
+                name: 'Christian McCaffrey', 
+                position: 'RB', 
+                team: 'SF', 
                 adp: 1,
                 rank: 1,
                 bye: 9,
@@ -87,7 +76,6 @@ export const TradeAnalysisInterface: React.FC<{
                 age: 26,
                 auctionValue: 45,
                 stats: {
-}
                     projection: 380,
                     lastYear: 400,
                     vorp: 120,
@@ -95,11 +83,10 @@ export const TradeAnalysisInterface: React.FC<{
 
             },
             { 
-}
                 id: 3, 
-                name: &apos;Cooper Kupp&apos;, 
-                position: &apos;WR&apos;, 
-                team: &apos;LAR&apos;, 
+                name: 'Cooper Kupp', 
+                position: 'WR', 
+                team: 'LAR', 
                 adp: 8,
                 rank: 1,
                 bye: 6,
@@ -107,7 +94,6 @@ export const TradeAnalysisInterface: React.FC<{
                 age: 29,
                 auctionValue: 35,
                 stats: {
-}
                     projection: 290,
                     lastYear: 320,
                     vorp: 95,
@@ -118,70 +104,60 @@ export const TradeAnalysisInterface: React.FC<{
         setAvailablePlayers(mockPlayers);
     }, []);
 
-    const addPlayer = useCallback((player: Player, side: &apos;from&apos; | &apos;to&apos;) => {
-}
+    const addPlayer = useCallback((player: Player, side: 'from' | 'to') => {
         setProposal(prev => ({
-}
             ...prev,
-            [side === &apos;from&apos; ? &apos;fromPlayers&apos; : &apos;toPlayers&apos;]: [
-                ...prev[side === &apos;from&apos; ? &apos;fromPlayers&apos; : &apos;toPlayers&apos;], 
+            [side === 'from' ? 'fromPlayers' : 'toPlayers']: [
+                ...prev[side === 'from' ? 'fromPlayers' : 'toPlayers'], 
 //                 player
 
         }));
     }, []);
 
-    const removePlayer = useCallback((playerId: number, side: &apos;from&apos; | &apos;to&apos;) => {
-}
+    const removePlayer = useCallback((playerId: number, side: 'from' | 'to') => {
         setProposal(prev => ({
-}
             ...prev,
-            [side === &apos;from&apos; ? &apos;fromPlayers&apos; : &apos;toPlayers&apos;]: 
-                prev[side === &apos;from&apos; ? &apos;fromPlayers&apos; : &apos;toPlayers&apos;].filter((p: any) => p.id !== playerId)
+            [side === 'from' ? 'fromPlayers' : 'toPlayers']: 
+                prev[side === 'from' ? 'fromPlayers' : 'toPlayers'].filter((p: any) => p.id !== playerId)
         }));
     }, []);
 
     const analyzeCurrentTrade = useCallback(async () => {
-}
         if (!proposal.fromPlayers.length || !proposal.toPlayers.length) return;
 
         setIsAnalyzing(true);
         try {
-}
 
             // Mock analysis
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             const mockAnalysis: SimpleTradeAnalysis = {
-}
-                overallGrade: &apos;B+&apos;,
+                overallGrade: 'B+',
                 fairnessScore: 75,
-                recommendation: &apos;accept&apos;,
+                recommendation: 'accept',
                 currentValueDifference: 12,
                 projectedValueDifference: 8,
                 reasoning: [
-                    &apos;Solid value improvement for your team&apos;,
-                    &apos;Addresses positional needs effectively&apos;,
-                    &apos;Good long-term outlook&apos;
+                    'Solid value improvement for your team',
+                    'Addresses positional needs effectively',
+                    'Good long-term outlook'
                 ],
                 warnings: [
-                    &apos;Slightly reduces bench depth&apos;,
-                    &apos;Minor injury risk consideration&apos;
+                    'Slightly reduces bench depth',
+                    'Minor injury risk consideration'
 
             };
             
             setAnalysis(mockAnalysis);
-            setActiveTab(&apos;analysis&apos;);
+            setActiveTab('analysis');
     
     } catch (error) {
-}
         } finally {
-}
             setIsAnalyzing(false);
 
     }, [proposal]);
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -199,12 +175,12 @@ export const TradeAnalysisInterface: React.FC<{
                     </h2>
                     <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <button
-                            onClick={() => setActiveTab(&apos;builder&apos;)}`}
+                            onClick={() => setActiveTab('builder')}`}
                         >
 //                             Builder
                         </button>
                         <button
-                            onClick={() => setActiveTab(&apos;analysis&apos;)}`}
+                            onClick={() => setActiveTab('analysis')}`}
                             disabled={!analysis}
                         >
 //                             Analysis
@@ -213,8 +189,7 @@ export const TradeAnalysisInterface: React.FC<{
                 </div>
 
                 <AnimatePresence mode="wait">
-                    {activeTab === &apos;builder&apos; && (
-}
+                    {activeTab === 'builder' && (
                         <motion.div
                             key="builder"
                             initial={{ opacity: 0, y: 20 }}
@@ -232,14 +207,13 @@ export const TradeAnalysisInterface: React.FC<{
                                     </h3>
                                     <div className="space-y-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                                         {proposal.fromPlayers.map((player: any) => (
-}
                                             <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2 sm:px-4 md:px-6 lg:px-8">
                                                 <div>
                                                     <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
                                                     <span className="text-gray-400 text-sm ml-2 sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</span>
                                                 </div>
                                                 <button
-                                                    onClick={() => removePlayer(player.id, &apos;from&apos;)}
+                                                    onClick={() => removePlayer(player.id, 'from')}
                                                 >
                                                     <XCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
@@ -256,14 +230,13 @@ export const TradeAnalysisInterface: React.FC<{
                                     </h3>
                                     <div className="space-y-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                                         {proposal.toPlayers.map((player: any) => (
-}
                                             <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2 sm:px-4 md:px-6 lg:px-8">
                                                 <div>
                                                     <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
                                                     <span className="text-gray-400 text-sm ml-2 sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</span>
                                                 </div>
                                                 <button
-                                                    onClick={() => removePlayer(player.id, &apos;to&apos;)}
+                                                    onClick={() => removePlayer(player.id, 'to')}
                                                 >
                                                     <XCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
@@ -278,7 +251,6 @@ export const TradeAnalysisInterface: React.FC<{
                                 <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Available Players</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
                                     {availablePlayers.map((player: any) => (
-}
                                         <div key={player.id} className="bg-gray-700/50 rounded p-2 text-sm sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                                 <div>
@@ -287,12 +259,12 @@ export const TradeAnalysisInterface: React.FC<{
                                                 </div>
                                                 <div className="flex space-x-1 sm:px-4 md:px-6 lg:px-8">
                                                     <button
-                                                        onClick={() => addPlayer(player, &apos;from&apos;)}
+                                                        onClick={() => addPlayer(player, 'from')}
                                                     >
 //                                                         Give
                                                     </button>
                                                     <button
-                                                        onClick={() => addPlayer(player, &apos;to&apos;)}
+                                                        onClick={() => addPlayer(player, 'to')}
                                                     >
 //                                                         Get
                                                     </button>
@@ -309,7 +281,6 @@ export const TradeAnalysisInterface: React.FC<{
                                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
                                 {isAnalyzing ? (
-}
                                     <>
                                         <motion.div
                                             animate={{ rotate: 360 }}
@@ -328,8 +299,7 @@ export const TradeAnalysisInterface: React.FC<{
                         </motion.div>
                     )}
 
-                    {activeTab === &apos;analysis&apos; && analysis && (
-}
+                    {activeTab === 'analysis' && analysis && (
                         <motion.div
                             key="analysis"
                             initial={{ opacity: 0, y: 20 }}
@@ -381,7 +351,6 @@ export const TradeAnalysisInterface: React.FC<{
                                     </h4>
                                     <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {analysis.reasoning.map((reason, index) => (
-}
                                             <li key={`reason-${reason.slice(0, 10)}-${index}`} className="text-sm text-gray-300 flex items-start space-x-2 sm:px-4 md:px-6 lg:px-8">
                                                 <CheckCircleIcon className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{reason}</span>
@@ -397,7 +366,6 @@ export const TradeAnalysisInterface: React.FC<{
                                     </h4>
                                     <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {analysis.warnings.map((warning, index) => (
-}
                                             <li key={`warning-${warning.slice(0, 10)}-${index}`} className="text-sm text-yellow-300 flex items-start space-x-2 sm:px-4 md:px-6 lg:px-8">
                                                 <AlertTriangleIcon className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{warning}</span>

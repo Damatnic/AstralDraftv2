@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import AdvancedEnsembleMLDashboard from &apos;./AdvancedEnsembleMLDashboard&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AdvancedEnsembleMLDashboard from './AdvancedEnsembleMLDashboard';
 
-describe(&apos;AdvancedEnsembleMLDashboard&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('AdvancedEnsembleMLDashboard', () => {
+  it('renders without crashing', () => {
     render(<AdvancedEnsembleMLDashboard />);
-    expect(screen.getByTestId(&apos;advancedensemblemldashboard&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('advancedensemblemldashboard')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<AdvancedEnsembleMLDashboard />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<AdvancedEnsembleMLDashboard />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

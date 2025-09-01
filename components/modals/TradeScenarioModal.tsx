@@ -1,33 +1,30 @@
 
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { Team, Player, League, ChampionshipOddsSimulation } from &apos;../../types&apos;;
-import { players } from &apos;../../data/players&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
-import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
-import { simulateTradeImpactOnOdds } from &apos;../../services/geminiService&apos;;
-import { useLeague } from &apos;../../hooks/useLeague&apos;;
-import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
-import { ArrowDownIcon } from &apos;../icons/ArrowDownIcon&apos;;
-import { ArrowUpIcon } from &apos;../icons/ArrowUpIcon&apos;;
-import { MinusIcon } from &apos;../icons/MinusIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import type { Team, Player, League, ChampionshipOddsSimulation } from '../../types';
+import { players } from '../../data/players';
+import { Modal } from '../ui/Modal';
+import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
+import { SparklesIcon } from '../icons/SparklesIcon';
+import { simulateTradeImpactOnOdds } from '../../services/geminiService';
+import { useLeague } from '../../hooks/useLeague';
+import LoadingSpinner from '../ui/LoadingSpinner';
+import { ArrowDownIcon } from '../icons/ArrowDownIcon';
+import { ArrowUpIcon } from '../icons/ArrowUpIcon';
+import { MinusIcon } from '../icons/MinusIcon';
 
 interface TradeScenarioModalProps {
-}
     league: League;
     onClose: () => void;
 
-}
 
 const PlayerSelectItem: React.FC<{ player: Player; isSelected: boolean; onToggle: () => void }> = ({ player, isSelected, onToggle }: any) => (
     <div
         onClick={onToggle}
         className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
-}
-            isSelected ? &apos;bg-cyan-500/30 ring-2 ring-cyan-400&apos; : &apos;bg-black/10 hover:bg-black/20&apos;
+            isSelected ? 'bg-cyan-500/30 ring-2 ring-cyan-400' : 'bg-black/10 hover:bg-black/20'
         }`}
      role="button" tabIndex={0}>
         <div>
@@ -38,13 +35,10 @@ const PlayerSelectItem: React.FC<{ player: Player; isSelected: boolean; onToggle
 );
 
 const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: League, myTeamId: number, opponentTeamId: number }> = ({ result, league, myTeamId, opponentTeamId }: any) => {
-}
     const changes = result.after.map((after: any) => {
-}
         const before = result.before.find((b: any) => b.teamId === after.teamId);
         const change = before ? after.probability - before.probability : 0;
         return {
-}
             team: league.teams.find((t: any) => t.id === after.teamId),
             before: before?.probability,
             after: after.probability,
@@ -53,7 +47,6 @@ const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: L
     }).sort((a,b) => b.change - a.change);
 
     const ChangeIndicator = ({ change }: { change: number }) => {
-}
         if (Math.abs(change) < 0.1) return <MinusIcon className="text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
         if (change > 0) return <ArrowUpIcon className="text-green-400 sm:px-4 md:px-6 lg:px-8" />;
         return <ArrowDownIcon className="text-red-400 sm:px-4 md:px-6 lg:px-8" />;
@@ -64,7 +57,7 @@ const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: L
             <h4 className="font-bold text-lg text-center text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Simulation Results</h4>
             <div className="space-y-2 max-h-64 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 {changes.map(({ team, before, after, change }: any) => (
-                    <div key={team?.id} className={`p-2 rounded-md flex items-center justify-between text-sm ${team?.id === myTeamId || team?.id === opponentTeamId ? &apos;bg-cyan-900/50&apos; : &apos;&apos;}`}>
+                    <div key={team?.id} className={`p-2 rounded-md flex items-center justify-between text-sm ${team?.id === myTeamId || team?.id === opponentTeamId ? 'bg-cyan-900/50' : ''}`}>
                         <span>{team?.name}</span>
                         <div className="flex items-center gap-2 font-mono sm:px-4 md:px-6 lg:px-8">
                             <span>{before?.toFixed(1)}%</span>
@@ -72,8 +65,8 @@ const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: L
                             <span className="font-bold sm:px-4 md:px-6 lg:px-8">{after.toFixed(1)}%</span>
                             <div className="w-16 text-right flex items-center justify-end gap-1 sm:px-4 md:px-6 lg:px-8">
                                 <ChangeIndicator change={change} />
-                                <span className={change > 0 ? &apos;text-green-400&apos; : change < 0 ? &apos;text-red-400&apos; : &apos;text-gray-400&apos;}>
-                                    ({change > 0 && &apos;+&apos;}{change.toFixed(1)}%)
+                                <span className={change > 0 ? 'text-green-400' : change < 0 ? 'text-red-400' : 'text-gray-400'}>
+                                    ({change > 0 && '+'}{change.toFixed(1)}%)
                                 </span>
                             </div>
                         </div>
@@ -85,7 +78,6 @@ const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: L
 };
 
 const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose }: any) => {
-}
     const { myTeam } = useLeague();
     const [opponentId, setOpponentId] = React.useState<number | null>(null);
     const [playersToSend, setPlayersToSend] = React.useState<Set<number>>(new Set());
@@ -95,9 +87,8 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
 
     const opponentTeam = league.teams.find((t: any) => t.id === opponentId);
 
-    const togglePlayer = (playerId: number, list: &apos;send&apos; | &apos;receive&apos;) => {
-}
-        const [state, setState] = list === &apos;send&apos; ? [playersToSend, setPlayersToSend] : [playersToReceive, setPlayersToReceive];
+    const togglePlayer = (playerId: number, list: 'send' | 'receive') => {
+        const [state, setState] = list === 'send' ? [playersToSend, setPlayersToSend] : [playersToReceive, setPlayersToReceive];
         const newSet = new Set(state);
         if (newSet.has(playerId)) newSet.delete(playerId);
         else newSet.add(playerId);
@@ -106,9 +97,7 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
     };
 
     const handleSimulate = async () => {
-}
     try {
-}
         if (!myTeam || !opponentTeam || (playersToSend.size === 0 && playersToReceive.size === 0)) return;
         setIsLoading(true);
         setSimulationResult(null);
@@ -119,9 +108,7 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
         const after = await simulateTradeImpactOnOdds(league, myTeam, opponentTeam, toSend, toReceive);
 
         if (after) {
-}
             const before = league.teams.map((t: any) => ({
-}
                 teamId: t.id,
                 probability: t.championshipProbHistory?.find((h: any) => h.week === league.currentWeek)?.probability || 0,
             
@@ -136,7 +123,6 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col sm:px-4 md:px-6 lg:px-8"
                 {...{
-}
                     initial: { opacity: 0, scale: 0.95 },
                     animate: { opacity: 1, scale: 1 },
                 }}
@@ -149,16 +135,15 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
                     <div className="flex flex-col sm:px-4 md:px-6 lg:px-8">
                         <h3 className="font-semibold text-center mb-2 sm:px-4 md:px-6 lg:px-8">{myTeam?.name} Gives:</h3>
                         <div className="bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-48 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-                            {myTeam?.roster.map((p: any) => <PlayerSelectItem key={p.id} player={p} isSelected={playersToSend.has(p.id)} onToggle={() => togglePlayer(p.id, &apos;send&apos;)} />)}
+                            {myTeam?.roster.map((p: any) => <PlayerSelectItem key={p.id} player={p} isSelected={playersToSend.has(p.id)} onToggle={() => togglePlayer(p.id, 'send')} />)}
                         </div>
                     </div>
                     <div className="flex flex-col sm:px-4 md:px-6 lg:px-8">
                          <label htmlFor="opponent-select" className="block text-sm text-center font-medium text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Trade with:</label>
                         <select
                             id="opponent-select"
-                            value={opponentId || &apos;&apos;}
+                            value={opponentId || ''}
                             onChange={(e: any) => {
-}
                                 setOpponentId(Number(e.target.value));
                                 setPlayersToReceive(new Set());
                                 setSimulationResult(null);
@@ -167,14 +152,12 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
                         >
                             <option value="" disabled>Select a Team</option>
                             {league.teams.filter((t: any) => t.id !== myTeam?.id).map((t: any) => (
-}
                                 <option key={t.id} value={t.id}>{t.name}</option>
                             ))}
                         </select>
-                        <div className={`bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-48 overflow-y-auto ${!opponentTeam ? &apos;flex items-center justify-center text-gray-500&apos; : &apos;&apos;}`}>
+                        <div className={`bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-48 overflow-y-auto ${!opponentTeam ? 'flex items-center justify-center text-gray-500' : ''}`}>
                             {opponentTeam ? 
-}
-                                opponentTeam.roster.map((p: any) => <PlayerSelectItem key={p.id} player={p} isSelected={playersToReceive.has(p.id)} onToggle={() => togglePlayer(p.id, &apos;receive&apos;)} />)
+                                opponentTeam.roster.map((p: any) => <PlayerSelectItem key={p.id} player={p} isSelected={playersToReceive.has(p.id)} onToggle={() => togglePlayer(p.id, 'receive')} />)
                                : <p>Select an opponent to see their roster.</p>
 
                         </div>
@@ -183,7 +166,6 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
 
                 <div className="px-4 pb-4 sm:px-4 md:px-6 lg:px-8">
                      {isLoading ? <LoadingSpinner size="sm" text="Simulating season outcomes..." /> :
-}
                       simulationResult && myTeam && opponentTeam ? <SimulationResult result={simulationResult} league={league} myTeamId={myTeam.id} opponentTeamId={opponentTeam.id} /> : null
 
                 </div>

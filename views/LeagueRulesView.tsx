@@ -1,9 +1,9 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import { BookOpenIcon } from &apos;../components/icons/BookOpenIcon&apos;;
-import type { League } from &apos;../types&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { Widget } from '../components/ui/Widget';
+import { BookOpenIcon } from '../components/icons/BookOpenIcon';
+import type { League } from '../types';
+import { useLeague } from '../hooks/useLeague';
 
 const RuleItem: React.FC<{ label: string, value: string | number }> = ({ label, value }: any) => (
     <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
@@ -13,7 +13,6 @@ const RuleItem: React.FC<{ label: string, value: string | number }> = ({ label, 
 );
 
 const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
-}
     const settings = league.settings;
 
     return (
@@ -25,7 +24,7 @@ const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<an
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; }) className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="glass-button">
                     Back to League Hub
                 </button>
             </header>
@@ -55,7 +54,7 @@ const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<an
                         </Widget>
                          <Widget title="Season & Playoffs" className="md:col-span-1">
                              <div className="p-3 space-y-2">
-                                <RuleItem label="Playoff Teams" value={settings.playoffFormat.replace(&apos;_&apos;, &apos; &apos;)} />
+                                <RuleItem label="Playoff Teams" value={settings.playoffFormat.replace('_', ' ')} />
                                 <RuleItem label="Trade Deadline" value={`Week ${settings.tradeDeadline}`} />
                             </div>
                         </Widget>
@@ -74,16 +73,14 @@ const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<an
 };
 
 const LeagueRulesView: React.FC = () => {
-}
     const { dispatch } = useAppState();
     const { league } = useLeague();
     
     if (!league) {
-}
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view its rules.</p>
-                 <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="glass-button-primary mt-4">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="glass-button-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>

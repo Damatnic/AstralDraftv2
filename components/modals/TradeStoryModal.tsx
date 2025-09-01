@@ -1,31 +1,25 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import type { TradeOffer, League, TradeStory } from &apos;../../types&apos;;
-import { Modal } from &apos;../ui/Modal&apos;;
-import { generateTradeStory } from &apos;../../services/geminiService&apos;;
-import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
-import ReactMarkdown from &apos;react-markdown&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { motion } from 'framer-motion';
+import type { TradeOffer, League, TradeStory } from '../../types';
+import { Modal } from '../ui/Modal';
+import { generateTradeStory } from '../../services/geminiService';
+import LoadingSpinner from '../ui/LoadingSpinner';
+import ReactMarkdown from 'react-markdown';
 
 interface TradeStoryModalProps {
-}
     offer: TradeOffer;
     league: League;
     onClose: () => void;
 
-}
 
 const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClose }: any) => {
-}
     const [story, setStory] = React.useState<TradeStory | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
-}
         const fetchStory = async () => {
-}
     try {
-}
 
             setIsLoading(true);
             const result = await generateTradeStory(offer, league);
@@ -33,8 +27,7 @@ const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClos
             setIsLoading(false);
 
     } catch (error) {
-}
-      console.error(&apos;Error in fetchStory:&apos;, error);
+      console.error('Error in fetchStory:', error);
 
   };
         fetchStory();
@@ -45,7 +38,6 @@ const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClos
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col sm:px-4 md:px-6 lg:px-8"
                 {...{
-}
                     initial: { opacity: 0, scale: 0.95 },
                     animate: { opacity: 1, scale: 1 },
                 }}
@@ -54,8 +46,7 @@ const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClos
                     <h2 className="text-xl font-bold font-display sm:px-4 md:px-6 lg:px-8">The Story of the Trade</h2>
                 </header>
                 <main className="p-6 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-                    {isLoading ? <LoadingSpinner text="Analyzing the trade&apos;s fallout..." /> :
-}
+                    {isLoading ? <LoadingSpinner text="Analyzing the trade's fallout..." /> :
                      story ? (
                         <div className="prose prose-sm prose-invert prose-headings:text-cyan-300 prose-strong:text-yellow-300 sm:px-4 md:px-6 lg:px-8">
                            <h2>{story.title}</h2>

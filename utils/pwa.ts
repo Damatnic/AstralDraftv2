@@ -3,102 +3,85 @@
  * Handles app installation prompts, offline detection, and PWA features
  */
 
-import { useAnnouncer } from &apos;./accessibility&apos;;
+import { useAnnouncer } from './accessibility';
 
 interface BeforeInstallPromptEvent extends Event {
-}
   readonly platforms: string[];
   readonly userChoice: Promise<{
-}
-    outcome: &apos;accepted&apos; | &apos;dismissed&apos;;
+    outcome: 'accepted' | 'dismissed';
     platform: string;
   }>;
   prompt(): Promise<void>;
-}
 
 /**
  * Hook for managing PWA installation
  */
 export const usePWAInstall = () => {
-}
   const [installPrompt, setInstallPrompt] = React.useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = React.useState(false);
   const [isInstalled, setIsInstalled] = React.useState(false);
   const { announce } = useAnnouncer();
 
   React.useEffect(() => {
-}
     // Check if app is already installed
-    if (window.matchMedia && window.matchMedia(&apos;(display-mode: standalone)&apos;).matches) {
-}
+    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
     }
 
     // Listen for install prompt
     const handleBeforeInstallPrompt = (e: Event) => {
-}
       e.preventDefault();
       setInstallPrompt(e as BeforeInstallPromptEvent);
       setIsInstallable(true);
-      announce(&apos;App can be installed for better experience&apos;, &apos;polite&apos;);
+      announce('App can be installed for better experience', 'polite');
     };
 
     // Listen for app installed
     const handleAppInstalled = () => {
-}
       setIsInstalled(true);
       setInstallPrompt(null);
       setIsInstallable(false);
-      announce(&apos;App successfully installed&apos;, &apos;assertive&apos;);
+      announce('App successfully installed', 'assertive');
     };
 
-    window.addEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
-    window.addEventListener(&apos;appinstalled&apos;, handleAppInstalled);
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
-}
-      window.removeEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
-      window.removeEventListener(&apos;appinstalled&apos;, handleAppInstalled);
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, [announce]);
 
   const promptInstall = React.useCallback(async () => {
-}
     if (!installPrompt) return false;
 
     try {
-}
 
       await installPrompt.prompt();
       const choiceResult = await installPrompt.userChoice;
       
-      if (choiceResult.outcome === &apos;accepted&apos;) {
-}
-        announce(&apos;Installing app...&apos;, &apos;assertive&apos;);
+      if (choiceResult.outcome === 'accepted') {
+        announce('Installing app...', 'assertive');
         return true;
       } else {
-}
-        announce(&apos;Installation cancelled&apos;, &apos;polite&apos;);
+        announce('Installation cancelled', 'polite');
         return false;
       }
     
     } catch (error) {
-}
         console.error(error);
     } catch (error) {
-}
-      console.error(&apos;Error during installation:&apos;, error);
-      announce(&apos;Installation failed&apos;, &apos;assertive&apos;);
+      console.error('Error during installation:', error);
+      announce('Installation failed', 'assertive');
       return false;
     } finally {
-}
       setInstallPrompt(null);
       setIsInstallable(false);
     }
   }, [installPrompt, announce]);
 
   return {
-}
     isInstallable,
     isInstalled,
 //     promptInstall
@@ -109,42 +92,35 @@ export const usePWAInstall = () => {
  * Hook for offline detection and management
  */
 export const useOfflineStatus = () => {
-}
   const [isOnline, setIsOnline] = React.useState(navigator.onLine);
   const [wasOffline, setWasOffline] = React.useState(false);
   const { announce } = useAnnouncer();
 
   React.useEffect(() => {
-}
     const handleOnline = () => {
-}
       setIsOnline(true);
       if (wasOffline) {
-}
-        announce(&apos;Connection restored&apos;, &apos;assertive&apos;);
+        announce('Connection restored', 'assertive');
         setWasOffline(false);
       }
     };
 
     const handleOffline = () => {
-}
       setIsOnline(false);
       setWasOffline(true);
-      announce(&apos;You are now offline. Some features may be limited.&apos;, &apos;assertive&apos;);
+      announce('You are now offline. Some features may be limited.', 'assertive');
     };
 
-    window.addEventListener(&apos;online&apos;, handleOnline);
-    window.addEventListener(&apos;offline&apos;, handleOffline);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
-}
-      window.removeEventListener(&apos;online&apos;, handleOnline);
-      window.removeEventListener(&apos;offline&apos;, handleOffline);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, [wasOffline, announce]);
 
   return {
-}
     isOnline,
     isOffline: !isOnline,
 //     wasOffline
@@ -155,52 +131,42 @@ export const useOfflineStatus = () => {
  * Hook for managing push notifications
  */
 export const usePushNotifications = () => {
-}
-  const [permission, setPermission] = React.useState<NotificationPermission>(&apos;default&apos;);
+  const [permission, setPermission] = React.useState<NotificationPermission>('default');
   const [isSupported, setIsSupported] = React.useState(false);
   const { announce } = useAnnouncer();
 
   React.useEffect(() => {
-}
     // Check if notifications are supported
-    if (&apos;Notification&apos; in window && &apos;serviceWorker&apos; in navigator) {
-}
+    if ('Notification' in window && 'serviceWorker' in navigator) {
       setIsSupported(true);
       setPermission(Notification.permission);
     }
   }, []);
 
   const requestPermission = React.useCallback(async () => {
-}
     if (!isSupported) {
-}
-      announce(&apos;Notifications not supported on this device&apos;, &apos;polite&apos;);
+      announce('Notifications not supported on this device', 'polite');
       return false;
     }
 
     try {
-}
 
       const result = await Notification.requestPermission();
       setPermission(result);
       
-      if (result === &apos;granted&apos;) {
-}
-        announce(&apos;Notifications enabled&apos;, &apos;assertive&apos;);
+      if (result === 'granted') {
+        announce('Notifications enabled', 'assertive');
         return true;
       } else {
-}
-        announce(&apos;Notifications denied&apos;, &apos;polite&apos;);
+        announce('Notifications denied', 'polite');
         return false;
       }
 
     } catch (error) {
-}
         console.error(error);
     } catch (error) {
-}
-      console.error(&apos;Error requesting notification permission:&apos;, error);
-      announce(&apos;Failed to enable notifications&apos;, &apos;assertive&apos;);
+      console.error('Error requesting notification permission:', error);
+      announce('Failed to enable notifications', 'assertive');
       return false;
     }
   }, [isSupported, announce]);
@@ -209,52 +175,43 @@ export const usePushNotifications = () => {
     title: string,
     options?: NotificationOptions
   ) => {
-}
-    if (permission !== &apos;granted&apos;) {
-}
+    if (permission !== 'granted') {
       return false;
     }
 
     try {
-}
       // Use service worker to show notification
-      if (&apos;serviceWorker&apos; in navigator) {
-}
+      if ('serviceWorker' in navigator) {
         const registration = await navigator.serviceWorker.ready;
         await registration.showNotification(title, {
-}
-          icon: &apos;/favicon.svg&apos;,
-          badge: &apos;/favicon.svg&apos;,
-          tag: &apos;astral-draft&apos;,
+          icon: '/favicon.svg',
+          badge: '/favicon.svg',
+          tag: 'astral-draft',
           requireInteraction: false,
           ...options
         });
         return true;
       } else {
-}
         // Fallback to regular notification
         new Notification(title, {
-}
-          icon: &apos;/favicon.svg&apos;,
+          icon: '/favicon.svg',
           ...options
         });
         return true;
       }
     
     } catch (error) {
-}
-      console.error(&apos;Error showing notification:&apos;, error);
+      console.error('Error showing notification:', error);
       return false;
     }
   }, [permission]);
 
   return {
-}
     isSupported,
     permission,
     requestPermission,
     showNotification,
-    isEnabled: permission === &apos;granted&apos;
+    isEnabled: permission === 'granted'
   };
 };
 
@@ -262,36 +219,29 @@ export const usePushNotifications = () => {
  * PWA utility functions
  */
 export const pwaUtils = {
-}
   /**
    * Check if running as PWA
    */
   isPWA: (): boolean => {
-}
-    return window.matchMedia(&apos;(display-mode: standalone)&apos;).matches ||
+    return window.matchMedia('(display-mode: standalone)').matches ||
            (window.navigator as any).standalone === true ||
-           document.referrer.includes(&apos;android-app://&apos;);
+           document.referrer.includes('android-app://');
   },
 
   /**
    * Get PWA platform
    */
-  getPlatform: (): &apos;ios&apos; | &apos;android&apos; | &apos;desktop&apos; | &apos;web&apos; => {
-}
+  getPlatform: (): 'ios' | 'android' | 'desktop' | 'web' => {
     const userAgent = navigator.userAgent.toLowerCase();
     
     if (/iphone|ipad|ipod/.test(userAgent)) {
-}
-      return &apos;ios&apos;;
+      return 'ios';
     } else if (/android/.test(userAgent)) {
-}
-      return &apos;android&apos;;
+      return 'android';
     } else if (pwaUtils.isPWA()) {
-}
-      return &apos;desktop&apos;;
+      return 'desktop';
     } else {
-}
-      return &apos;web&apos;;
+      return 'web';
     }
   },
 
@@ -299,29 +249,24 @@ export const pwaUtils = {
    * Show iOS install instructions
    */
   showIOSInstallInstructions: (): string => {
-}
-    return &apos;To install this app on your iOS device, tap the share button and select "Add to Home Screen".&apos;;
+    return 'To install this app on your iOS device, tap the share button and select "Add to Home Screen".';
   },
 
   /**
    * Show Android install instructions  
    */
   showAndroidInstallInstructions: (): string => {
-}
-    return &apos;To install this app on your Android device, tap the menu button and select "Add to Home Screen" or "Install App".&apos;;
+    return 'To install this app on your Android device, tap the menu button and select "Add to Home Screen" or "Install App".';
   },
 
   /**
    * Register for updates
    */
   registerUpdateListener: (callback: () => void) => {
-}
-    if (&apos;serviceWorker&apos; in navigator) {
-}
-      navigator.serviceWorker.addEventListener(&apos;controllerchange&apos;, callback);
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', callback);
       return () => {
-}
-        navigator.serviceWorker.removeEventListener(&apos;controllerchange&apos;, callback);
+        navigator.serviceWorker.removeEventListener('controllerchange', callback);
       };
     }
     return () => {};
@@ -331,22 +276,17 @@ export const pwaUtils = {
    * Force update service worker
    */
   updateServiceWorker: async (): Promise<boolean> => {
-}
-    if (&apos;serviceWorker&apos; in navigator) {
-}
+    if ('serviceWorker' in navigator) {
       try {
-}
 
         const registration = await navigator.serviceWorker.ready;
         await registration.update();
         return true;
 
     } catch (error) {
-}
         console.error(error);
     } catch (error) {
-}
-        console.error(&apos;Error updating service worker:&apos;, error);
+        console.error('Error updating service worker:', error);
         return false;
       }
     }
@@ -358,17 +298,14 @@ export const pwaUtils = {
  * Hook for managing PWA updates
  */
 export const usePWAUpdates = () => {
-}
   const [updateAvailable, setUpdateAvailable] = React.useState(false);
   const [isUpdating, setIsUpdating] = React.useState(false);
   const { announce } = useAnnouncer();
 
   React.useEffect(() => {
-}
     const handleUpdate = () => {
-}
       setUpdateAvailable(true);
-      announce(&apos;App update available&apos;, &apos;polite&apos;);
+      announce('App update available', 'polite');
     };
 
     const cleanup = pwaUtils.registerUpdateListener(handleUpdate);
@@ -376,37 +313,30 @@ export const usePWAUpdates = () => {
   }, [announce]);
 
   const applyUpdate = React.useCallback(async () => {
-}
     setIsUpdating(true);
-    announce(&apos;Updating app...&apos;, &apos;assertive&apos;);
+    announce('Updating app...', 'assertive');
     
     try {
-}
 
       const success = await pwaUtils.updateServiceWorker();
       if (success) {
-}
-        announce(&apos;App updated successfully. Refreshing...&apos;, &apos;assertive&apos;);
+        announce('App updated successfully. Refreshing...', 'assertive');
         setTimeout(() => window.location.reload(), 1000);
       } else {
-}
-        announce(&apos;Update failed&apos;, &apos;assertive&apos;);
+        announce('Update failed', 'assertive');
         setIsUpdating(false);
       }
 
     } catch (error) {
-}
         console.error(error);
     } catch (error) {
-}
-      console.error(&apos;Error applying update:&apos;, error);
-      announce(&apos;Update failed&apos;, &apos;assertive&apos;);
+      console.error('Error applying update:', error);
+      announce('Update failed', 'assertive');
       setIsUpdating(false);
     }
   }, [announce]);
 
   return {
-}
     updateAvailable,
     isUpdating,
 //     applyUpdate

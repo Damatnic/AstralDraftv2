@@ -1,12 +1,10 @@
-import { defineConfig } from &apos;cypress&apos;;
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
-}
   e2e: {
-}
-    baseUrl: &apos;http://localhost:5173&apos;,
-    supportFile: &apos;cypress/support/e2e.ts&apos;,
-    specPattern: &apos;cypress/e2e/**/*.cy.{js,jsx,ts,tsx}&apos;,
+    baseUrl: 'http://localhost:5173',
+    supportFile: 'cypress/support/e2e.ts',
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,
@@ -15,12 +13,9 @@ export default defineConfig({
     requestTimeout: 10000,
     responseTimeout: 10000,
     setupNodeEvents(on, config) {
-}
       // implement node event listeners here
-      on(&apos;task&apos;, {
-}
+      on('task', {
         log(message) {
-}
           console.log(message);
           return null;
         },
@@ -28,12 +23,10 @@ export default defineConfig({
     },
   },
   component: {
-}
     devServer: {
-}
-      framework: &apos;react&apos;,
-      bundler: &apos;vite&apos;,
+      framework: 'react',
+      bundler: 'vite',
     },
-    specPattern: &apos;src/**/*.cy.{js,jsx,ts,tsx}&apos;,
+    specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}',
   },
 });

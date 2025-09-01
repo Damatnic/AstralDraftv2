@@ -3,131 +3,115 @@
  * Comprehensive statistical analysis for player profiles
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Player, League } from &apos;../../types&apos;;
-import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
-import { TargetIcon } from &apos;../icons/TargetIcon&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Player, League } from '../../types';
+import { BarChartIcon } from '../icons/BarChartIcon';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { TargetIcon } from '../icons/TargetIcon';
 
 interface AdvancedStatsTabProps {
-}
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
 
-}
 
 interface StatComparison {
-}
     label: string;
     playerValue: number;
     positionAverage: number;
     rank: number;
     total: number;
-    format: &apos;number&apos; | &apos;percentage&apos; | &apos;decimal&apos;;
+    format: 'number' | 'percentage' | 'decimal';
 
 interface WeeklyProjection {
-}
     week: number;
     projection: number;
-    difficulty: &apos;Easy&apos; | &apos;Medium&apos; | &apos;Hard&apos;;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
     opponent: string;
     confidence: number;
 
-}
 
 const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: any) => {
-}
     // Mock advanced stats - in real app this would come from analytics service
     const statComparisons: StatComparison[] = [
         {
-}
-            label: &apos;Fantasy Points Per Game&apos;,
+            label: 'Fantasy Points Per Game',
             playerValue: player.stats.projection,
-            positionAverage: player.position === &apos;QB&apos; ? 18.5 : player.position === &apos;RB&apos; ? 12.8 : 11.2,
+            positionAverage: player.position === 'QB' ? 18.5 : player.position === 'RB' ? 12.8 : 11.2,
             rank: Math.floor(Math.random() * 50) + 1,
             total: 200,
-            format: &apos;decimal&apos;
+            format: 'decimal'
         },
         {
-}
-            label: &apos;Consistency Rating&apos;,
+            label: 'Consistency Rating',
             playerValue: 8.2,
             positionAverage: 6.5,
             rank: 15,
             total: 200,
-            format: &apos;decimal&apos;
+            format: 'decimal'
         },
         {
-}
-            label: &apos;Ceiling Score&apos;,
+            label: 'Ceiling Score',
             playerValue: player.stats.projection * 1.4,
-            positionAverage: (player.position === &apos;QB&apos; ? 18.5 : player.position === &apos;RB&apos; ? 12.8 : 11.2) * 1.3,
+            positionAverage: (player.position === 'QB' ? 18.5 : player.position === 'RB' ? 12.8 : 11.2) * 1.3,
             rank: 8,
             total: 200,
-            format: &apos;decimal&apos;
+            format: 'decimal'
         },
         {
-}
-            label: &apos;Floor Score&apos;,
+            label: 'Floor Score',
             playerValue: player.stats.projection * 0.7,
-            positionAverage: (player.position === &apos;QB&apos; ? 18.5 : player.position === &apos;RB&apos; ? 12.8 : 11.2) * 0.75,
+            positionAverage: (player.position === 'QB' ? 18.5 : player.position === 'RB' ? 12.8 : 11.2) * 0.75,
             rank: 22,
             total: 200,
-            format: &apos;decimal&apos;
+            format: 'decimal'
 
     ];
 
     const weeklyProjections: WeeklyProjection[] = [
-        { week: 5, projection: 18.5, difficulty: &apos;Easy&apos;, opponent: &apos;vs MIA&apos;, confidence: 85 },
-        { week: 6, projection: 15.2, difficulty: &apos;Hard&apos;, opponent: &apos;@ BUF&apos;, confidence: 65 },
-        { week: 7, projection: 22.1, difficulty: &apos;Easy&apos;, opponent: &apos;vs JAX&apos;, confidence: 90 },
-        { week: 8, projection: 16.8, difficulty: &apos;Medium&apos;, opponent: &apos;@ NYJ&apos;, confidence: 75 }
+        { week: 5, projection: 18.5, difficulty: 'Easy', opponent: 'vs MIA', confidence: 85 },
+        { week: 6, projection: 15.2, difficulty: 'Hard', opponent: '@ BUF', confidence: 65 },
+        { week: 7, projection: 22.1, difficulty: 'Easy', opponent: 'vs JAX', confidence: 90 },
+        { week: 8, projection: 16.8, difficulty: 'Medium', opponent: '@ NYJ', confidence: 75 }
     ];
 
     const getStatColor = (playerValue: number, positionAverage: number) => {
-}
         const ratio = playerValue / positionAverage;
-        if (ratio >= 1.2) return &apos;text-green-400&apos;;
-        if (ratio <= 0.8) return &apos;text-red-400&apos;;
-        return &apos;text-yellow-400&apos;;
+        if (ratio >= 1.2) return 'text-green-400';
+        if (ratio <= 0.8) return 'text-red-400';
+        return 'text-yellow-400';
     };
 
     const getStatIcon = (playerValue: number, positionAverage: number) => {
-}
         const ratio = playerValue / positionAverage;
         if (ratio >= 1.1) return <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
         if (ratio <= 0.9) return <TrendingDownIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
         return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
     };
 
-    const formatStat = (value: number, format: StatComparison[&apos;format&apos;]) => {
-}
+    const formatStat = (value: number, format: StatComparison['format']) => {
         switch (format) {
-}
-            case &apos;percentage&apos;:
+            case 'percentage':
                 return `${value.toFixed(1)}%`;
-            case &apos;decimal&apos;:
+            case 'decimal':
                 return value.toFixed(1);
             default:
                 return Math.round(value).toString();
 
     };
 
-    const getDifficultyColor = (difficulty: WeeklyProjection[&apos;difficulty&apos;]) => {
-}
+    const getDifficultyColor = (difficulty: WeeklyProjection['difficulty']) => {
         switch (difficulty) {
-}
-            case &apos;Easy&apos;:
-                return &apos;text-green-400 bg-green-500/20&apos;;
-            case &apos;Hard&apos;:
-                return &apos;text-red-400 bg-red-500/20&apos;;
+            case 'Easy':
+                return 'text-green-400 bg-green-500/20';
+            case 'Hard':
+                return 'text-red-400 bg-red-500/20';
             default:
-                return &apos;text-yellow-400 bg-yellow-500/20&apos;;
+                return 'text-yellow-400 bg-yellow-500/20';
 
     };
 
@@ -142,7 +126,6 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                 <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {statComparisons.map((stat, index) => (
-}
                             <div key={index} className="p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                     <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{stat.label}</h4>
@@ -176,11 +159,9 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                                         <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                                             <div 
                                                 className={`h-2 rounded-full transition-all ${
-}
-                                                    stat.playerValue > stat.positionAverage ? &apos;bg-green-400&apos; : &apos;bg-red-400&apos;
+                                                    stat.playerValue > stat.positionAverage ? 'bg-green-400' : 'bg-red-400'
                                                 }`}
                                                 style={{ 
-}
                                                     width: `${Math.min(100, (stat.playerValue / stat.positionAverage) * 50)}%` 
                                                 }}
                                             />
@@ -195,7 +176,6 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
 
             {/* Advanced Metrics */}
             {player.advancedMetrics && (
-}
                 <Widget title="Advanced Metrics">
                     <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -206,7 +186,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                                 </div>
                                 <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Snap Count %</div>
                                 <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
-                                    Share of team&apos;s offensive snaps
+                                    Share of team's offensive snaps
                                 </div>
                             </div>
                             
@@ -241,7 +221,6 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                 <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {weeklyProjections.map((week: any) => (
-}
                             <div key={week.week} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-center min-w-[60px] sm:px-4 md:px-6 lg:px-8">

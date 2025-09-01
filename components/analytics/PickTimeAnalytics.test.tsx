@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import PickTimeAnalytics from &apos;./PickTimeAnalytics&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PickTimeAnalytics from './PickTimeAnalytics';
 
-describe(&apos;PickTimeAnalytics&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('PickTimeAnalytics', () => {
+  it('renders without crashing', () => {
     render(<PickTimeAnalytics />);
-    expect(screen.getByTestId(&apos;picktimeanalytics&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('picktimeanalytics')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<PickTimeAnalytics />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<PickTimeAnalytics />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import LeagueSuperlativesSystem from &apos;./LeagueSuperlativesSystem&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import LeagueSuperlativesSystem from './LeagueSuperlativesSystem';
 
-describe(&apos;LeagueSuperlativesSystem&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('LeagueSuperlativesSystem', () => {
+  it('renders without crashing', () => {
     render(<LeagueSuperlativesSystem />);
-    expect(screen.getByTestId(&apos;leaguesuperlativessystem&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('leaguesuperlativessystem')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<LeagueSuperlativesSystem />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<LeagueSuperlativesSystem />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

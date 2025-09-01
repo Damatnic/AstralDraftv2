@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import Checkbox from &apos;./Checkbox&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Checkbox from './Checkbox';
 
-describe(&apos;Checkbox&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('Checkbox', () => {
+  it('renders without crashing', () => {
     render(<Checkbox />);
-    expect(screen.getByTestId(&apos;checkbox&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('checkbox')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<Checkbox />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<Checkbox />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -3,15 +3,14 @@
  * React hook for managing Oracle notifications
  */
 
-import { useState, useEffect, useCallback } from &apos;react&apos;;
-import { notificationService, OracleNotification, NotificationPreferences } from &apos;../services/notificationService&apos;;
+import { useState, useEffect, useCallback } from 'react';
+import { notificationService, OracleNotification, NotificationPreferences } from '../services/notificationService';
 
 export interface UseOracleNotificationsReturn {
-}
     notifications: OracleNotification[];
     unreadCount: number;
     preferences: NotificationPreferences;
-    addNotification: (notification: Omit<OracleNotification, &apos;id&apos; | &apos;timestamp&apos; | &apos;isRead&apos;>) => Promise<void>;
+    addNotification: (notification: Omit<OracleNotification, 'id' | 'timestamp' | 'isRead'>) => Promise<void>;
     markAsRead: (notificationId: string) => void;
     markAllAsRead: () => void;
     clearNotifications: () => void;
@@ -24,10 +23,8 @@ export interface UseOracleNotificationsReturn {
     notifyStreakMilestone: (streakCount: number) => Promise<void>;
     notifyRankingChange: (newRank: number, previousRank: number) => Promise<void>;
     scheduleDeadlineNotifications: (predictionId: string, question: string, expiresAt: string) => void;
-}
 
 export const useOracleNotifications = (): UseOracleNotificationsReturn => {
-}
     const [notifications, setNotifications] = useState<OracleNotification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [preferences, setPreferences] = useState<NotificationPreferences>(
@@ -36,9 +33,7 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
 
     // Load initial data
     useEffect(() => {
-}
         const loadNotifications = () => {
-}
             const existing = notificationService.getNotifications();
             setNotifications(existing);
             setUnreadCount(notificationService.getUnreadNotifications().length);
@@ -48,7 +43,6 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
 
         // Listen for new notifications
         const unsubscribe = notificationService.onNotification((notification: any) => {
-}
             setNotifications(prev => [notification, ...prev]);
             setUnreadCount(prev => prev + 1);
         });
@@ -57,14 +51,12 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
     }, []);
 
     // Add notification
-    const addNotification = useCallback(async (notification: Omit<OracleNotification, &apos;id&apos; | &apos;timestamp&apos; | &apos;isRead&apos;>) => {
-}
+    const addNotification = useCallback(async (notification: Omit<OracleNotification, 'id' | 'timestamp' | 'isRead'>) => {
         await notificationService.addNotification(notification);
     }, []);
 
     // Mark notification as read
     const markAsRead = useCallback((notificationId: string) => {
-}
         notificationService.markAsRead(notificationId);
         setNotifications(prev => 
             prev.map((n: any) => n.id === notificationId ? { ...n, isRead: true } : n)
@@ -74,7 +66,6 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
 
     // Mark all notifications as read
     const markAllAsRead = useCallback(() => {
-}
         notificationService.markAllAsRead();
         setNotifications(prev => prev.map((n: any) => ({ ...n, isRead: true })));
         setUnreadCount(0);
@@ -82,7 +73,6 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
 
     // Clear all notifications
     const clearNotifications = useCallback(() => {
-}
         notificationService.clearNotifications();
         setNotifications([]);
         setUnreadCount(0);
@@ -90,7 +80,6 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
 
     // Update preferences
     const updatePreferences = useCallback((newPreferences: Partial<NotificationPreferences>) => {
-}
         const updated = { ...preferences, ...newPreferences };
         notificationService.updatePreferences(newPreferences);
         setPreferences(updated);
@@ -98,37 +87,30 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
 
     // Oracle-specific notification methods
     const notifyPredictionDeadline = useCallback(async (predictionId: string, question: string, minutesRemaining: number) => {
-}
         await notificationService.notifyPredictionDeadline(predictionId, question, minutesRemaining);
     }, []);
 
     const notifyPredictionResult = useCallback(async (predictionId: string, question: string, isCorrect: boolean, pointsEarned: number) => {
-}
         await notificationService.notifyPredictionResult(predictionId, question, isCorrect, pointsEarned);
     }, []);
 
     const notifyAccuracyUpdate = useCallback(async (newAccuracy: number, previousAccuracy: number) => {
-}
         await notificationService.notifyAccuracyUpdate(newAccuracy, previousAccuracy);
     }, []);
 
     const notifyStreakMilestone = useCallback(async (streakCount: number) => {
-}
         await notificationService.notifyStreakMilestone(streakCount);
     }, []);
 
     const notifyRankingChange = useCallback(async (newRank: number, previousRank: number) => {
-}
         await notificationService.notifyRankingChange(newRank, previousRank);
     }, []);
 
     const scheduleDeadlineNotifications = useCallback((predictionId: string, question: string, expiresAt: string) => {
-}
         notificationService.scheduleDeadlineNotifications(predictionId, question, expiresAt);
     }, []);
 
     return {
-}
         notifications,
         unreadCount,
         preferences,

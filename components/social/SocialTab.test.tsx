@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import SocialTab from &apos;./SocialTab&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SocialTab from './SocialTab';
 
-describe(&apos;SocialTab&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('SocialTab', () => {
+  it('renders without crashing', () => {
     render(<SocialTab />);
-    expect(screen.getByTestId(&apos;socialtab&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('socialtab')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<SocialTab />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<SocialTab />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

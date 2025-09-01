@@ -1,14 +1,13 @@
 
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { generateWeeklyRecapVideoScript } from &apos;../services/geminiService&apos;;
-import type { RecapVideoScene } from &apos;../types&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
-import LoadingSpinner from &apos;../components/ui/LoadingSpinner&apos;;
-import RecapVideoPlayer from &apos;../components/reports/RecapVideoPlayer&apos;;
+import { useAppState } from '../contexts/AppContext';
+import { useLeague } from '../hooks/useLeague';
+import { generateWeeklyRecapVideoScript } from '../services/geminiService';
+import type { RecapVideoScene } from '../types';
+import ErrorDisplay from '../components/core/ErrorDisplay';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import RecapVideoPlayer from '../components/reports/RecapVideoPlayer';
 
 export const WeeklyRecapVideoView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [script, setScript] = React.useState<RecapVideoScene[] | null>(null);
@@ -16,15 +15,13 @@ export const WeeklyRecapVideoView: React.FC = () => {
     const [error, setError] = React.useState<string | null>(null);
 
     const week = league ? (league.currentWeek > 1 ? league.currentWeek - 1 : 1) : 1;
-    const scriptCacheKey = league ? `${league.id}_${week}` : &apos;&apos;;
+    const scriptCacheKey = league ? `${league.id}_${week}` : '';
 
     React.useEffect(() => {
-}
         if (!league || !scriptCacheKey) return;
 
         const cachedScript = state.weeklyRecapScripts[scriptCacheKey];
         if (cachedScript) {
-}
             setScript(cachedScript);
             setIsLoading(false);
             return;
@@ -33,13 +30,10 @@ export const WeeklyRecapVideoView: React.FC = () => {
         setError(null);
         generateWeeklyRecapVideoScript(league, week)
             .then(data => {
-}
                 if (data) {
-}
                     setScript(data);
-                    dispatch({ type: &apos;SET_WEEKLY_RECAP_SCRIPT&apos;, payload: { key: scriptCacheKey, script: data } });
+                    dispatch({ type: 'SET_WEEKLY_RECAP_SCRIPT', payload: { key: scriptCacheKey, script: data } });
                 } else {
-}
                     setError("The Oracle could not produce a video script for this week.");
 
             })
@@ -49,8 +43,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
     }, [league, week, scriptCacheKey, state.weeklyRecapScripts, dispatch]);
 
     if (!league) {
-}
-        return <ErrorDisplay title="Error" message="No active league found." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
+        return <ErrorDisplay title="Error" message="No active league found." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -60,7 +53,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
                 {script && <RecapVideoPlayer script={script} league={league} />}
             </div>
             <button
-                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;WEEKLY_REPORT&apos; })
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' })
                 className="glass-button mt-6"
             >
                 Back to Report

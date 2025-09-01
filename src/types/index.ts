@@ -7,17 +7,16 @@
  * 
  * Usage:
  * ```typescript
- * import { Player, League, DraftState, ApiResponse } from &apos;@/types&apos;;
- * import type { PlayerCardProps, TradeEventHandlers } from &apos;@/types&apos;;
+ * import { Player, League, DraftState, ApiResponse } from '@/types';
+ * import type { PlayerCardProps, TradeEventHandlers } from '@/types';
  * ```
  */
 
 // ==================== MODELS ====================
 // Core business logic types for fantasy football entities
 
-export * from &apos;./models&apos;;
+export * from './models';
 export type {
-}
   // Player types
   Player,
   PlayerStats,
@@ -64,14 +63,13 @@ export type {
   AuctionState,
   MockDraft,
 //   DraftPrep
-} from &apos;./models&apos;;
+} from './models';
 
 // ==================== API ====================
 // Type-safe API layer with requests, responses, and endpoints
 
-export * from &apos;./api&apos;;
+export * from './api';
 export type {
-}
   // Core API types
   ApiResponse,
   ErrorResponse,
@@ -98,11 +96,10 @@ export type {
   DraftStateResponse,
   TradeListResponse,
 //   WaiverListResponse
-} from &apos;./api&apos;;
+} from './api';
 
 // Export endpoint definitions
 export {
-}
   AuthEndpoints,
   UserEndpoints,
   LeagueEndpoints,
@@ -112,14 +109,13 @@ export {
   WaiverEndpoints,
   AnalyticsEndpoints,
 //   AllEndpoints
-} from &apos;./api&apos;;
+} from './api';
 
 // ==================== COMPONENTS ====================
 // React component props and event handler types
 
-export * from &apos;./components&apos;;
+export * from './components';
 export type {
-}
   // Base component types
   BaseComponentProps,
   InteractiveProps,
@@ -149,14 +145,13 @@ export type {
   LeagueWebSocketEvent,
   ScoringWebSocketEvent,
 //   AnyWebSocketEvent
-} from &apos;./components&apos;;
+} from './components';
 
 // ==================== UTILITIES ====================
 // Common utility types, validation, and formatting
 
-export * from &apos;./utils&apos;;
+export * from './utils';
 export type {
-}
   // Common utilities
   Nullable,
   Optional,
@@ -194,7 +189,7 @@ export type {
   FormatOptions,
   NumberFormatOptions,
 //   DateFormatOptions
-} from &apos;./utils&apos;;
+} from './utils';
 
 // ==================== CONVENIENT TYPE ALIASES ====================
 // Frequently used type combinations and shortcuts
@@ -228,44 +223,37 @@ export type ErrorHandler = (error: Error) => void;
 // Re-export useful constants from globals
 
 export type {
-}
   AstralDraftError,
   ValidationErrorDetail,
   APIConfig,
   WebSocketConfig,
 //   ThemeConfig
-} from &apos;./globals&apos;;
+} from './globals';
 
 // ==================== TYPE GUARDS ====================
 // Utility functions for runtime type checking
 
 export const isPlayer = (obj: any): obj is Player => {
-}
-  return obj && typeof obj.id === &apos;string&apos; && typeof obj.name === &apos;string&apos; && obj.position;
+  return obj && typeof obj.id === 'string' && typeof obj.name === 'string' && obj.position;
 };
 
 export const isUser = (obj: any): obj is User => {
-}
-  return obj && typeof obj.id === &apos;string&apos; && typeof obj.username === &apos;string&apos; && obj.profile;
+  return obj && typeof obj.id === 'string' && typeof obj.username === 'string' && obj.profile;
 };
 
 export const isLeague = (obj: any): obj is League => {
-}
-  return obj && typeof obj.id === &apos;string&apos; && typeof obj.name === &apos;string&apos; && obj.teams && obj.settings;
+  return obj && typeof obj.id === 'string' && typeof obj.name === 'string' && obj.teams && obj.settings;
 };
 
 export const isDraftState = (obj: any): obj is DraftState => {
-}
-  return obj && typeof obj.id === &apos;string&apos; && obj.status && obj.picks && obj.draftOrder;
+  return obj && typeof obj.id === 'string' && obj.status && obj.picks && obj.draftOrder;
 };
 
 export const isApiResponse = <T>(obj: any): obj is ApiResponse<T> => {
-}
-  return obj && typeof obj.success === &apos;boolean&apos; && obj.data !== undefined;
+  return obj && typeof obj.success === 'boolean' && obj.data !== undefined;
 };
 
 export const isErrorResponse = (obj: any): obj is ErrorResponse => {
-}
   return obj && obj.success === false && obj.error;
 };
 
@@ -276,7 +264,6 @@ export const isErrorResponse = (obj: any): obj is ErrorResponse => {
  * Creates a type-safe key extractor function
  */
 export const createKeyExtractor = <T, K extends keyof T>(key: K) => {
-}
   return (item: T): T[K] => item[key];
 };
 
@@ -284,7 +271,6 @@ export const createKeyExtractor = <T, K extends keyof T>(key: K) => {
  * Creates a type-safe property selector function
  */
 export const createSelector = <T, R>(selector: (item: T) => R) => {
-}
   return (item: T): R => selector(item);
 };
 
@@ -292,7 +278,6 @@ export const createSelector = <T, R>(selector: (item: T) => R) => {
  * Type-safe object keys function
  */
 export const getTypedKeys = <T extends Record<string, any>>(obj: T): (keyof T)[] => {
-}
   return Object.keys(obj) as (keyof T)[];
 };
 
@@ -300,7 +285,6 @@ export const getTypedKeys = <T extends Record<string, any>>(obj: T): (keyof T)[]
  * Type-safe object entries function
  */
 export const getTypedEntries = <T extends Record<string, any>>(obj: T): [keyof T, T[keyof T]][] => {
-}
   return Object.entries(obj) as [keyof T, T[keyof T]][];
 };
 
@@ -318,7 +302,7 @@ export const getTypedEntries = <T extends Record<string, any>>(obj: T): [keyof T
  * 5. **Global** - Global type definitions and module declarations
  * 
  * The type system is organized to:
- * - Eliminate &apos;any&apos; types throughout the codebase
+ * - Eliminate 'any' types throughout the codebase
  * - Provide compile-time safety for API calls
  * - Standardize component interfaces
  * - Enable proper IntelliSense and autocompletion
@@ -337,19 +321,19 @@ export const getTypedEntries = <T extends Record<string, any>>(obj: T): [keyof T
  * Usage Patterns:
  * ```typescript
  * // Import specific types
- * import type { Player, League } from &apos;@/types&apos;;
+ * import type { Player, League } from '@/types';
  * 
  * // Import component props
- * import type { PlayerCardProps } from &apos;@/types&apos;;
+ * import type { PlayerCardProps } from '@/types';
  * 
  * // Import API types
- * import type { ApiResponse, PlayerListResponse } from &apos;@/types&apos;;
+ * import type { ApiResponse, PlayerListResponse } from '@/types';
  * 
  * // Import utilities
- * import type { Nullable, LoadingState } from &apos;@/types&apos;;
+ * import type { Nullable, LoadingState } from '@/types';
  * 
  * // Import endpoints
- * import { PlayerEndpoints } from &apos;@/types&apos;;
+ * import { PlayerEndpoints } from '@/types';
  * ```
  */
 

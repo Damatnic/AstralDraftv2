@@ -4,17 +4,16 @@
  */
 
 // Common utilities
-export * from &apos;./common&apos;;
+export * from './common';
 
 // Validation utilities
-export * from &apos;./validation&apos;;
+export * from './validation';
 
 // Formatting utilities
-export * from &apos;./formatting&apos;;
+export * from './formatting';
 
 // Re-export commonly used utility types
 export type {
-}
   // Common utilities
   Nullable,
   Optional,
@@ -58,10 +57,9 @@ export type {
   Dictionary,
   LookupTable,
 //   KeyValuePair
-} from &apos;./common&apos;;
+} from './common';
 
 export type {
-}
   // Validation core types
   ValidationResult,
   ValidationError,
@@ -111,10 +109,9 @@ export type {
   ValidationState,
   ValidationActions,
 //   ValidationConfig
-} from &apos;./validation&apos;;
+} from './validation';
 
 export type {
-}
   // Base formatting
   FormatOptions,
   DisplayConfig,
@@ -160,4 +157,4 @@ export type {
   AccessibilityFormatOptions,
   ThemeAwareFormatOptions,
 //   LocalizationFormatOptions
-} from &apos;./formatting&apos;;
+} from './formatting';

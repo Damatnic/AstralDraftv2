@@ -1,8 +1,7 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { memo } from &apos;react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { memo } from 'react';
 
 const TrainingDataManager = memo(() => {
-}
     return (
         <div className="p-4 sm:px-4 md:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Training Data Manager</h2>

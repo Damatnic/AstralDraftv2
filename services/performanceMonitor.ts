@@ -1,81 +1,62 @@
 // Performance monitoring and optimization service
 class PerformanceMonitor {
-}
   private metrics: Map<string, number[]> = new Map();
   private observers: PerformanceObserver[] = [];
 
   constructor() {
-}
     this.initializeObservers();
   }
 
   private initializeObservers() {
-}
     // Monitor navigation timing
-    if (&apos;PerformanceObserver&apos; in window) {
-}
+    if ('PerformanceObserver' in window) {
       // Long task monitoring
       try {
-}
         const longTaskObserver = new PerformanceObserver((list: any) => {
-}
           for (const entry of list.getEntries()) {
-}
-            this.recordMetric(&apos;longTask&apos;, entry.duration);
-            if (entry.duration > 50 && process.env.NODE_ENV === &apos;development&apos;) {
-}
+            this.recordMetric('longTask', entry.duration);
+            if (entry.duration > 50 && process.env.NODE_ENV === 'development') {
               console.warn(`Long task detected: ${entry.duration}ms`, entry);
             }
           }
         });
-        longTaskObserver.observe({ entryTypes: [&apos;longtask&apos;] });
+        longTaskObserver.observe({ entryTypes: ['longtask'] });
         this.observers.push(longTaskObserver);
       } catch (e) {
-}
         // Long task API not supported
       }
 
       // Layout shift monitoring
       try {
-}
         const clsObserver = new PerformanceObserver((list: any) => {
-}
           for (const entry of list.getEntries()) {
-}
             if (!(entry as any).hadRecentInput) {
-}
-              this.recordMetric(&apos;layoutShift&apos;, (entry as any).value);
+              this.recordMetric('layoutShift', (entry as any).value);
             }
           }
         });
-        clsObserver.observe({ entryTypes: [&apos;layout-shift&apos;] });
+        clsObserver.observe({ entryTypes: ['layout-shift'] });
         this.observers.push(clsObserver);
       } catch (e) {
-}
         // Layout shift API not supported
       }
 
       // Resource timing
       try {
-}
         const resourceObserver = new PerformanceObserver((list: any) => {
-}
           for (const entry of list.getEntries()) {
-}
             const resource = entry as PerformanceResourceTiming;
-            this.recordMetric(&apos;resourceLoad&apos;, resource.duration);
+            this.recordMetric('resourceLoad', resource.duration);
             
             // Flag slow resources in development
-            if (resource.duration > 1000 && process.env.NODE_ENV === &apos;development&apos;) {
-}
+            if (resource.duration > 1000 && process.env.NODE_ENV === 'development') {
               console.warn(`Slow resource: ${resource.name} took ${resource.duration}ms`);
             }
           }
         });
-        resourceObserver.observe({ entryTypes: [&apos;resource&apos;] });
+        resourceObserver.observe({ entryTypes: ['resource'] });
         this.observers.push(resourceObserver);
       } catch (e) {
-}
         // Resource timing API not supported
       }
     }
@@ -83,9 +64,7 @@ class PerformanceMonitor {
 
   // Record a performance metric
   recordMetric(name: string, value: number) {
-}
     if (!this.metrics.has(name)) {
-}
       this.metrics.set(name, []);
     }
     const values = this.metrics.get(name)!;
@@ -93,20 +72,17 @@ class PerformanceMonitor {
     
     // Keep only last 100 measurements
     if (values.length > 100) {
-}
       values.shift();
     }
   }
 
   // Get metric statistics
   getMetricStats(name: string) {
-}
     const values = this.metrics.get(name);
     if (!values || values.length === 0) return null;
 
     const sorted = [...values].sort((a, b) => a - b);
     return {
-}
       count: values.length,
       min: Math.min(...values),
       max: Math.max(...values),
@@ -120,10 +96,8 @@ class PerformanceMonitor {
 
   // Get all metrics summary
   getAllMetrics() {
-}
     const summary: { [key: string]: any } = {};
     for (const [name] of this.metrics) {
-}
       summary[name] = this.getMetricStats(name);
     }
     return summary;
@@ -134,17 +108,14 @@ class PerformanceMonitor {
     componentName: string,
     renderFn: (...args: T) => any
   ) {
-}
     return (...args: T) => {
-}
       const start = performance.now();
       const result = renderFn(...args);
       const end = performance.now();
       
       this.recordMetric(`component_${componentName}`, end - start);
       
-      if (end - start > 16 && process.env.NODE_ENV === &apos;development&apos;) { // Warn if render takes longer than one frame
-}
+      if (end - start > 16 && process.env.NODE_ENV === 'development') { // Warn if render takes longer than one frame
         console.warn(`Slow render: ${componentName} took ${(end - start).toFixed(2)}ms`);
       }
       
@@ -154,16 +125,13 @@ class PerformanceMonitor {
 
   // Measure async operations
   async measureAsync<T>(name: string, asyncFn: () => Promise<T>): Promise<T> {
-}
     const start = performance.now();
     try {
-}
       const result = await asyncFn();
       const end = performance.now();
       this.recordMetric(name, end - start);
       return result;
     } catch (error) {
-}
       const end = performance.now();
       this.recordMetric(`${name}_error`, end - start);
       throw error;
@@ -172,9 +140,7 @@ class PerformanceMonitor {
 
   // Get Web Vitals
   getWebVitals() {
-}
     return {
-}
       fcp: this.getFirstContentfulPaint(),
       lcp: this.getLargestContentfulPaint(),
       fid: this.getFirstInputDelay(),
@@ -184,44 +150,37 @@ class PerformanceMonitor {
   }
 
   private getFirstContentfulPaint() {
-}
-    const entries = performance.getEntriesByType(&apos;paint&apos;);
-    const fcp = entries.find((entry: any) => entry.name === &apos;first-contentful-paint&apos;);
+    const entries = performance.getEntriesByType('paint');
+    const fcp = entries.find((entry: any) => entry.name === 'first-contentful-paint');
     return fcp ? fcp.startTime : null;
   }
 
   private getLargestContentfulPaint() {
-}
-    const entries = performance.getEntriesByType(&apos;largest-contentful-paint&apos;);
+    const entries = performance.getEntriesByType('largest-contentful-paint');
     return entries.length > 0 ? entries[entries.length - 1].startTime : null;
   }
 
   private getFirstInputDelay() {
-}
-    const stats = this.getMetricStats(&apos;firstInput&apos;);
+    const stats = this.getMetricStats('firstInput');
     return stats ? stats.max : null;
   }
 
   private getCumulativeLayoutShift() {
-}
-    const stats = this.getMetricStats(&apos;layoutShift&apos;);
+    const stats = this.getMetricStats('layoutShift');
     return stats ? stats.avg : null;
   }
 
   private getTimeToFirstByte() {
-}
-    const navigation = performance.getEntriesByType(&apos;navigation&apos;)[0] as PerformanceNavigationTiming;
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
     return navigation ? navigation.responseStart - navigation.requestStart : null;
   }
 
   // Generate performance report
   generateReport() {
-}
     const webVitals = this.getWebVitals();
     const allMetrics = this.getAllMetrics();
     
     return {
-}
       timestamp: new Date().toISOString(),
       webVitals,
       customMetrics: allMetrics,
@@ -230,27 +189,22 @@ class PerformanceMonitor {
   }
 
   private generateRecommendations(webVitals: any, metrics: any) {
-}
     const recommendations: string[] = [];
 
     if (webVitals.fcp && webVitals.fcp > 2500) {
-}
-      recommendations.push(&apos;First Contentful Paint is slow. Consider optimizing critical rendering path.&apos;);
+      recommendations.push('First Contentful Paint is slow. Consider optimizing critical rendering path.');
     }
 
     if (webVitals.lcp && webVitals.lcp > 2500) {
-}
-      recommendations.push(&apos;Largest Contentful Paint is slow. Optimize largest element loading.&apos;);
+      recommendations.push('Largest Contentful Paint is slow. Optimize largest element loading.');
     }
 
     if (webVitals.cls && webVitals.cls > 0.1) {
-}
-      recommendations.push(&apos;High Cumulative Layout Shift detected. Ensure proper element sizing.&apos;);
+      recommendations.push('High Cumulative Layout Shift detected. Ensure proper element sizing.');
     }
 
     if (metrics.longTask && metrics.longTask.count > 10) {
-}
-      recommendations.push(&apos;Multiple long tasks detected. Consider code splitting and lazy loading.&apos;);
+      recommendations.push('Multiple long tasks detected. Consider code splitting and lazy loading.');
     }
 
     return recommendations;
@@ -258,12 +212,10 @@ class PerformanceMonitor {
 
   // Clean up observers
   destroy() {
-}
     this.observers.forEach((observer: any) => observer.disconnect());
     this.observers = [];
     this.metrics.clear();
   }
-}
 
 export const performanceMonitor = new PerformanceMonitor();
 

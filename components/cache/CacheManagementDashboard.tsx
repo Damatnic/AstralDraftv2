@@ -3,11 +3,10 @@
  * Administrative interface for monitoring and managing cache performance
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { 
-}
     DatabaseIcon, 
     RefreshCwIcon, 
     TrashIcon, 
@@ -16,22 +15,19 @@ import {
     CheckCircleIcon,
     AlertCircleIcon,
 //     SettingsIcon
-} from &apos;lucide-react&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { useCacheStats, useCacheOperations } from &apos;../../hooks/useCache&apos;;
+} from 'lucide-react';
+import { Widget } from '../ui/Widget';
+import { useCacheStats, useCacheOperations } from '../../hooks/useCache';
 
 interface CacheMetrics {
-}
     hitRate: number;
     missRate: number;
     totalSize: string;
     totalItems: number;
     lastCleanup: string;
 
-}
 
 const CacheManagementDashboard: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const stats = useCacheStats();
     const { clearCache, invalidateByTags } = useCacheOperations();
@@ -41,37 +37,32 @@ const CacheManagementDashboard: React.FC = () => {
 
     // Monitor online status
     useEffect(() => {
-}
         const handleOnline = () => setIsOnline(true);
         const handleOffline = () => setIsOnline(false);
 
-        window.addEventListener(&apos;online&apos;, handleOnline);
-        window.addEventListener(&apos;offline&apos;, handleOffline);
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
 
         return () => {
-}
-            window.removeEventListener(&apos;online&apos;, handleOnline);
-            window.removeEventListener(&apos;offline&apos;, handleOffline);
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
         };
     }, []);
 
     // Format cache metrics
     const formatSize = (bytes: number): string => {
-}
-        if (bytes === 0) return &apos;0 B&apos;;
+        if (bytes === 0) return '0 B';
         const k = 1024;
-        const sizes = [&apos;B&apos;, &apos;KB&apos;, &apos;MB&apos;, &apos;GB&apos;];
+        const sizes = ['B', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
     };
 
     const formatDate = (timestamp: number): string => {
-}
         return new Date(timestamp).toLocaleString();
     };
 
     const metrics: CacheMetrics = {
-}
         hitRate: Math.round(stats.hitRate * 100),
         missRate: Math.round(stats.missRate * 100),
         totalSize: formatSize(stats.totalSize),
@@ -81,25 +72,22 @@ const CacheManagementDashboard: React.FC = () => {
 
     // Cache operations
     const handleClearCache = async (type?: string) => {
-}
-        const target = type || &apos;all&apos;;
+        const target = type || 'all';
         setClearing(target);
         try {
-}
 
             await clearCache(type);
             setLastAction(`Cleared ${target} cache`);
         cache`);
         
-    `Invalidated cache for tags: ${tags.join(&apos;, &apos;)}`);
+    `Invalidated cache for tags: ${tags.join(', ')}`);
   } finally {
-}
             setClearing(null);
 
-    `flex items-center space-x-2 ${isOnline ? &apos;text-green-400&apos; : &apos;text-red-400&apos;}`}>
+    `flex items-center space-x-2 ${isOnline ? 'text-green-400' : 'text-red-400'}`}>
                                 {isOnline ? <CheckCircleIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" /> : <WifiOffIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
                                 <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">
-                                    {isOnline ? &apos;Online&apos; : &apos;Offline&apos;}
+                                    {isOnline ? 'Online' : 'Offline'}
                                 </span>
                             </div>
                             <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -108,7 +96,6 @@ const CacheManagementDashboard: React.FC = () => {
                         </div>
                         
                         {lastAction && (
-}
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -151,11 +138,9 @@ const CacheManagementDashboard: React.FC = () => {
                         <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Quick Actions</h3>
                         <div className="grid md:grid-cols-3 gap-3">
                             {quickActions.map((action: any) => {
-}
-                                let buttonClasses = &apos;bg-gray-700/50 hover:bg-gray-700 text-white&apos;;
+                                let buttonClasses = 'bg-gray-700/50 hover:bg-gray-700 text-white';
                                 if (clearing !== null) {
-}
-                                    buttonClasses = &apos;bg-gray-600 text-gray-400 cursor-not-allowed&apos;;
+                                    buttonClasses = 'bg-gray-600 text-gray-400 cursor-not-allowed';
 
                                 return (
                                     <motion.button
@@ -184,14 +169,11 @@ const CacheManagementDashboard: React.FC = () => {
                         <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Cache Types</h3>
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {cacheTypes.map((cacheType: any) => {
-}
-                                let buttonClasses = &apos;bg-red-500 hover:bg-red-600 text-white&apos;;
+                                let buttonClasses = 'bg-red-500 hover:bg-red-600 text-white';
                                 if (clearing === cacheType.type) {
-}
-                                    buttonClasses = &apos;bg-red-600 text-white cursor-not-allowed&apos;;
+                                    buttonClasses = 'bg-red-600 text-white cursor-not-allowed';
                                 } else if (clearing !== null) {
-}
-                                    buttonClasses = &apos;bg-gray-600 text-gray-400 cursor-not-allowed&apos;;
+                                    buttonClasses = 'bg-gray-600 text-gray-400 cursor-not-allowed';
 
                                 return (
                                     <div
@@ -206,7 +188,7 @@ const CacheManagementDashboard: React.FC = () => {
                                             onClick={() => handleClearCache(cacheType.type)}
                                             className={`ml-4 px-3 py-1 rounded text-sm transition-colors ${buttonClasses}`}
                                         >
-                                            {clearing === cacheType.type ? &apos;Clearing...&apos; : &apos;Clear&apos;}
+                                            {clearing === cacheType.type ? 'Clearing...' : 'Clear'}
                                         </button>
                                     </div>
                                 );
@@ -227,7 +209,7 @@ const CacheManagementDashboard: React.FC = () => {
                                 onClick={() => handleClearCache()}
                                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${getClearAllButtonClasses()}`}
                             >
-                                {clearing === &apos;all&apos; ? &apos;Clearing All...&apos; : &apos;Clear All Cache&apos;}
+                                {clearing === 'all' ? 'Clearing All...' : 'Clear All Cache'}
                             </button>
                         </div>
                     </div>

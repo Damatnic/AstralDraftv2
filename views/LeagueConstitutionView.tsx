@@ -1,11 +1,10 @@
-import React, { useState } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { useAppState } from &apos;../contexts/AppContext&apos;;
-import { useLeague } from &apos;../hooks/useLeague&apos;;
-import { Widget } from &apos;../components/ui/Widget&apos;;
-import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useAppState } from '../contexts/AppContext';
+import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
+import ErrorDisplay from '../components/core/ErrorDisplay';
 import { 
-}
     ScrollTextIcon, 
     EditIcon, 
     SaveIcon, 
@@ -14,10 +13,9 @@ import {
     GavelIcon,
     AlertCircleIcon,
 //     CheckCircleIcon
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 const LeagueConstitutionView: React.FC = () => {
-}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [isEditing, setIsEditing] = useState(false);
@@ -27,26 +25,24 @@ const LeagueConstitutionView: React.FC = () => {
     const isCommissioner = state.user?.id === league?.commissionerId;
 
     if (!league) {
-}
-        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
+        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
 
     function getDefaultConstitution() {
-}
         return `
 # LEAGUE CONSTITUTION
 
 ## Article I: League Structure
-- League Name: ${league?.name || &apos;Fantasy Football League&apos;}
+- League Name: ${league?.name || 'Fantasy Football League'}
 - Number of Teams: ${league?.settings.teamCount || 10}
-- Commissioner: ${league?.teams.find((t: any) => t.owner.id === league?.commissionerId)?.owner.name || &apos;TBD&apos;}
+- Commissioner: ${league?.teams.find((t: any) => t.owner.id === league?.commissionerId)?.owner.name || 'TBD'}
 
 ## Article II: Scoring System
-- Scoring Format: ${league?.settings.scoringFormat || &apos;PPR&apos;}
+- Scoring Format: ${league?.settings.scoringFormat || 'PPR'}
 - Passing TD: 6 points
 - Rushing/Receiving TD: 6 points
 - 1 point per 10 yards rushing/receiving
 - 1 point per 25 yards passing
-- ${league?.settings.scoringFormat === &apos;PPR&apos; ? &apos;1 point per reception&apos; : league?.settings.scoringFormat === &apos;HALF_PPR&apos; ? &apos;0.5 points per reception&apos; : &apos;No points per reception&apos;}
+- ${league?.settings.scoringFormat === 'PPR' ? '1 point per reception' : league?.settings.scoringFormat === 'HALF_PPR' ? '0.5 points per reception' : 'No points per reception'}
 
 ## Article III: Roster Format
 - QB: 1
@@ -103,16 +99,13 @@ const LeagueConstitutionView: React.FC = () => {
         `.trim();
 
     const handleSave = () => {
-}
         dispatch({
-}
-            type: &apos;UPDATE_LEAGUE_CONSTITUTION&apos;,
+            type: 'UPDATE_LEAGUE_CONSTITUTION',
             payload: { leagueId: league.id, constitution }
         });
         dispatch({ 
-}
-            type: &apos;ADD_NOTIFICATION&apos;, 
-            payload: { message: &apos;Constitution saved successfully!&apos;, type: &apos;SYSTEM&apos; }
+            type: 'ADD_NOTIFICATION', 
+            payload: { message: 'Constitution saved successfully!', type: 'SYSTEM' }
         });
         setIsEditing(false);
         setShowSaved(true);
@@ -120,7 +113,6 @@ const LeagueConstitutionView: React.FC = () => {
     };
 
     const handleGenerate = () => {
-}
         const newConstitution = getDefaultConstitution();
         setConstitution(newConstitution);
         setIsEditing(true);
@@ -137,7 +129,7 @@ const LeagueConstitutionView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; }) 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) 
                     className="glass-button"
                 >
                     Back to League Hub
@@ -157,10 +149,8 @@ const LeagueConstitutionView: React.FC = () => {
                             <h2 className="text-xl font-bold text-white">Official League Rules</h2>
                         </div>
                         {isCommissioner && (
-}
                             <div className="flex gap-2">
                                 {!isEditing ? (
-}
                                     <>
                                         <button
                                             onClick={handleGenerate}
@@ -179,7 +169,6 @@ const LeagueConstitutionView: React.FC = () => {
                                     <>
                                         <button
                                             onClick={() => {
-}
                                                 setConstitution(league.constitution || getDefaultConstitution());
                                                 setIsEditing(false);
                                             }}
@@ -216,7 +205,6 @@ const LeagueConstitutionView: React.FC = () => {
                 >
                     <div className="p-6">
                         {isEditing ? (
-}
                             <textarea
                                 value={constitution}
                                 onChange={(e: any) => setConstitution(e.target.value)}
@@ -225,44 +213,38 @@ const LeagueConstitutionView: React.FC = () => {
                         ) : (
                             <div className="prose prose-invert max-w-none">
                                 <div className="whitespace-pre-wrap font-sans text-[var(--text-primary)]">
-                                    {constitution.split(&apos;\n&apos;).map((line, index) => {
-}
+                                    {constitution.split('\n').map((line, index) => {
                                         // Style headers
-                                        if (line.startsWith(&apos;# &apos;)) {
-}
+                                        if (line.startsWith('# ')) {
                                             return (
                                                 <h1 key={index} className="text-3xl font-bold text-white mt-6 mb-4">
-                                                    {line.replace(&apos;# &apos;, &apos;&apos;)}
+                                                    {line.replace('# ', '')}
                                                 </h1>
                                             );
 
-                                        if (line.startsWith(&apos;## &apos;)) {
-}
+                                        if (line.startsWith('## ')) {
                                             return (
                                                 <h2 key={index} className="text-xl font-semibold text-blue-400 mt-4 mb-2">
-                                                    {line.replace(&apos;## &apos;, &apos;&apos;)}
+                                                    {line.replace('## ', '')}
                                                 </h2>
                                             );
 
-                                        if (line.startsWith(&apos;### &apos;)) {
-}
+                                        if (line.startsWith('### ')) {
                                             return (
                                                 <h3 key={index} className="text-lg font-medium text-white mt-3 mb-2">
-                                                    {line.replace(&apos;### &apos;, &apos;&apos;)}
+                                                    {line.replace('### ', '')}
                                                 </h3>
                                             );
 
                                         // Style list items
-                                        if (line.startsWith(&apos;- &apos;)) {
-}
+                                        if (line.startsWith('- ')) {
                                             return (
                                                 <li key={index} className="ml-4 text-[var(--text-secondary)] mb-1">
-                                                    {line.replace(&apos;- &apos;, &apos;&apos;)}
+                                                    {line.replace('- ', '')}
                                                 </li>
                                             );
 
                                         if (line.match(/^\d+\. /)) {
-}
                                             return (
                                                 <li key={index} className="ml-4 text-[var(--text-secondary)] mb-1">
                                                     {line}
@@ -285,7 +267,6 @@ const LeagueConstitutionView: React.FC = () => {
 
                     {/* Last Updated */}
                     {!isEditing && (
-}
                         <div className="p-4 border-t border-white/10">
                             <p className="text-sm text-[var(--text-secondary)] text-center">
                                 Last updated: {new Date().toLocaleDateString()}
@@ -296,7 +277,6 @@ const LeagueConstitutionView: React.FC = () => {
 
                 {/* Save Confirmation */}
                 {showSaved && (
-}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

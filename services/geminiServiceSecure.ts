@@ -4,7 +4,6 @@
  */
 
 import type { 
-}
   Player, Team, League, DraftRecapData, TradeAnalysis, WaiverWireAdvice, 
   PowerRanking, StartSitAdvice, WeeklyReportData, AiLineupSuggestion, 
   SeasonReviewData, DailyBriefingItem, User, DraftGrade, Persona, 
@@ -13,58 +12,50 @@ import type {
   TradeStory, SeasonStory, TeamComparison, ProjectedStanding, 
   DraftPickAsset, RecapVideoScene, NewsItem, SideBet, SmartFaabAdvice, 
   TradeSuggestion, NewspaperContent, TopRivalry 
-} from &apos;../types&apos;;
+} from '../types';
 import { players } from "../data/players";
-import { geminiService, checkApiHealth } from &apos;./secureApiClient&apos;;
+import { geminiService, checkApiHealth } from './secureApiClient';
 
 /**
  * Check if Gemini API is properly configured on backend
  */
 export const checkGeminiApiStatus = async (): Promise<{ 
-}
     configured: boolean; 
     available: boolean; 
     message: string;
     apiKeyPresent: boolean;
 }> => {
-}
     try {
-}
         const health = await checkApiHealth();
         const geminiAvailable = health.apis?.gemini || false;
         
         return {
-}
             configured: geminiAvailable,
             available: geminiAvailable,
             message: geminiAvailable 
-                ? &apos;Gemini API is properly configured and ready.&apos;
-                : &apos;Gemini API is not configured on the backend. Contact administrator.&apos;,
+                ? 'Gemini API is properly configured and ready.'
+                : 'Gemini API is not configured on the backend. Contact administrator.',
             apiKeyPresent: geminiAvailable
         };
     } catch (error) {
-}
         return {
-}
             configured: false,
             available: false,
-            message: &apos;Unable to connect to backend services.&apos;,
+            message: 'Unable to connect to backend services.',
             apiKeyPresent: false
         };
     }
 };
 
-const systemInstruction = `You are The Oracle, a hyper-intelligent and slightly mysterious fantasy football expert. You provide concise, insightful, and strategic advice to help users win their fantasy draft. You have access to the current state of the draft, including the user&apos;s current roster and the best players still available. When asked for advice, analyze the user&apos;s team composition and positional needs against the available talent pool. Your responses should be direct, actionable, and in a conversational, expert tone. You can use markdown for formatting like lists or bolding.`;
+const systemInstruction = `You are The Oracle, a hyper-intelligent and slightly mysterious fantasy football expert. You provide concise, insightful, and strategic advice to help users win their fantasy draft. You have access to the current state of the draft, including the user's current roster and the best players still available. When asked for advice, analyze the user's team composition and positional needs against the available talent pool. Your responses should be direct, actionable, and in a conversational, expert tone. You can use markdown for formatting like lists or bolding.`;
 
 type OracleHistoryItem = {
-}
-    sender: &apos;user&apos; | &apos;ai&apos;;
+    sender: 'user' | 'ai';
     text: string;
 };
 
 // Mock implementation helpers (same as before)
 const mockApiCall = <T,>(data: T, delay: number = 800): Promise<T | null> => {
-}
     return new Promise(resolve => setTimeout(() => resolve(data), delay + Math.random() * 500));
 };
 
@@ -79,24 +70,21 @@ export const streamOracleResponse = async (
     myTeam: Team | undefined,
     availablePlayers: Player[]
 ): Promise<AsyncGenerator<any>> => {
-}
     
     const apiStatus = await checkGeminiApiStatus();
     
     if (!apiStatus.available) {
-}
         // Return mock streaming response when API is not configured
         return (async function* () {
-}
             const mockResponse = "The Oracle requires backend configuration. Please ensure the Gemini API is properly configured on the server.";
             yield { text: mockResponse };
         })();
     }
     
-    const rosterList = myTeam?.roster.map((p: any) => `${p.name} (${p.position})`).join(&apos;, &apos;) || &apos;no players yet&apos;;
-    const teamContext = myTeam ? `My current roster consists of: ${rosterList}.` : "I haven&apos;t drafted any players yet.";
+    const rosterList = myTeam?.roster.map((p: any) => `${p.name} (${p.position})`).join(', ') || 'no players yet';
+    const teamContext = myTeam ? `My current roster consists of: ${rosterList}.` : "I haven't drafted any players yet.";
     
-    const availablePlayersList = availablePlayers.slice(0, 20).map((p: any) => `${p.name} (${p.position}, Rank: ${p.rank})`).join(&apos;, &apos;);
+    const availablePlayersList = availablePlayers.slice(0, 20).map((p: any) => `${p.name} (${p.position}, Rank: ${p.rank})`).join(', ');
     const playerContext = `The top available players are: ${availablePlayersList}.`;
     
     const fullPrompt = `
@@ -107,21 +95,19 @@ export const streamOracleResponse = async (
         - ${playerContext}
         
         Conversation History:
-        ${history.map((h: any) => `${h.sender}: ${h.text}`).join(&apos;\n&apos;)}
+        ${history.map((h: any) => `${h.sender}: ${h.text}`).join('\n')}
         
         User Question: ${newPrompt}
     `;
     
     // Create async generator for streaming
     return (async function* () {
-}
-        let fullText = &apos;&apos;;
+        let fullText = '';
         
         await geminiService.streamContent(
             fullPrompt,
             [],
             (chunk: string) => {
-}
                 fullText += chunk;
             }
         );
@@ -137,47 +123,42 @@ export const getAiDraftPick = async (
     aiTeam: Team,
     availablePlayers: Player[]
 ): Promise<string | null> => {
-}
     const apiStatus = await checkGeminiApiStatus();
     
     if (!apiStatus.available) {
-}
         // Fallback to simple logic when API is not available
-        const positionNeeds: PlayerPosition[] = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
+        const positionNeeds: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
         const currentPositions = aiTeam.roster.map((p: any) => p.position);
-        const neededPosition = positionNeeds.find((pos: any) => !currentPositions.includes(pos)) || &apos;RB&apos; as PlayerPosition;
+        const neededPosition = positionNeeds.find((pos: any) => !currentPositions.includes(pos)) || 'RB' as PlayerPosition;
         const bestAvailable = availablePlayers
             .filter((p: any) => p.position === neededPosition)
             .sort((a, b) => a.rank - b.rank)[0];
         return bestAvailable?.name || availablePlayers[0]?.name || null;
     }
     
-    const rosterList = aiTeam.roster.map((p: any) => `${p.name} (${p.position})`).join(&apos;, &apos;) || &apos;empty&apos;;
-    const playersList = availablePlayers.slice(0, 30).map((p: any) => p.name).join(&apos;, &apos;);
+    const rosterList = aiTeam.roster.map((p: any) => `${p.name} (${p.position})`).join(', ') || 'empty';
+    const playersList = availablePlayers.slice(0, 30).map((p: any) => p.name).join(', ');
     
     const prompt = `
         You are drafting for a fantasy football team.
         Current roster: ${rosterList}
         Available players: ${playersList}
         
-        Which ONE player should be drafted next? Return only the player&apos;s full name, nothing else.
+        Which ONE player should be drafted next? Return only the player's full name, nothing else.
     `;
     
     try {
-}
         const response = await geminiService.generateContent(prompt);
         const playerName = response?.data?.text?.trim();
         
         // Validate that the player exists in available list
         if (playerName && availablePlayers.some((p: any) => p.name === playerName)) {
-}
             return playerName;
         }
         
         // Fallback if AI returns invalid player
         return availablePlayers[0]?.name || null;
     } catch (error) {
-}
         console.error("Error getting AI draft pick:", error);
         return availablePlayers[0]?.name || null;
     }
@@ -187,17 +168,15 @@ export const getAiDraftPick = async (
  * Generate player insight using secure backend
  */
 export const generatePlayerInsight = async (player: Player): Promise<string | null> => {
-}
     const apiStatus = await checkGeminiApiStatus();
     
     if (!apiStatus.available) {
-}
         // Return generic insight when API is not available
         const insights = [
             `${player.name} is a solid ${player.position} option with reliable production potential.`,
-            `Consider ${player.name}&apos;s matchup schedule and injury history when evaluating for your roster.`,
+            `Consider ${player.name}'s matchup schedule and injury history when evaluating for your roster.`,
             `${player.name} has shown consistent performance and could be a valuable addition to your lineup.`,
-            `Monitor ${player.name}&apos;s target share and usage trends for optimal deployment in your fantasy lineup.`
+            `Monitor ${player.name}'s target share and usage trends for optimal deployment in your fantasy lineup.`
         ];
         return insights[Math.floor(Math.random() * insights.length)];
     }
@@ -213,11 +192,9 @@ export const generatePlayerInsight = async (player: Player): Promise<string | nu
     `;
     
     try {
-}
         const response = await geminiService.generateContent(prompt);
         return response?.data?.text?.trim() || "Unable to generate insight at this time.";
     } catch (error) {
-}
         console.error("Error generating player insight:", error);
         return "The Oracle is temporarily unavailable. Please try again later.";
     }
@@ -227,22 +204,18 @@ export const generatePlayerInsight = async (player: Player): Promise<string | nu
  * Generate player nickname using secure backend
  */
 export const generatePlayerNickname = async (player: Player): Promise<string | null> => {
-}
     const apiStatus = await checkGeminiApiStatus();
     
     if (!apiStatus.available) {
-}
         return null;
     }
     
     const prompt = `Generate a single, creative, cool nickname for fantasy football player ${player.name} (${player.position}, ${player.team}). Return only the nickname, nothing else.`;
     
     try {
-}
         const response = await geminiService.generateContent(prompt);
         return response?.data?.text?.trim().replace(/"/g, "") || null;
     } catch (error) {
-}
         console.error("Error generating nickname:", error);
         return null;
     }
@@ -256,13 +229,10 @@ export const streamAssistantResponse = async (
     leagues: League[], 
     user: User
 ): Promise<AsyncGenerator<any>> => {
-}
     const apiStatus = await checkGeminiApiStatus();
     
     if (!apiStatus.available) {
-}
         return (async function* () {
-}
             const mockResponse = "Astral assistant requires backend configuration. Please contact your administrator.";
             yield { text: mockResponse };
         })();
@@ -271,20 +241,18 @@ export const streamAssistantResponse = async (
     const context = `
         You are Astral, a helpful fantasy football assistant.
         User: ${user.name}
-        Leagues: ${leagues.map((l: any) => l.name).join(&apos;, &apos;)}
+        Leagues: ${leagues.map((l: any) => l.name).join(', ')}
         
-        User&apos;s question: ${prompt}
+        User's question: ${prompt}
     `;
     
     return (async function* () {
-}
-        let fullText = &apos;&apos;;
+        let fullText = '';
         
         await geminiService.streamContent(
             context,
             [],
             (chunk: string) => {
-}
                 fullText += chunk;
             }
         );
@@ -293,9 +261,8 @@ export const streamAssistantResponse = async (
     })();
 };
 
-// Export all the mock functions as-is (they don&apos;t need API keys)
+// Export all the mock functions as-is (they don't need API keys)
 export { 
-}
     generateNewsHeadlines,
     generateTrashTalk,
     analyzeTrade,
@@ -349,10 +316,9 @@ export {
     getAiBid,
     generateTeamBranding,// 
     generateAiTeamProfile
-} from &apos;./geminiService&apos;;
+} from './geminiService';
 
 export default {
-}
     checkGeminiApiStatus,
     streamOracleResponse,
     getAiDraftPick,

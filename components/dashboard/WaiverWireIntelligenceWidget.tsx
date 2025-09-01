@@ -3,48 +3,41 @@
  * AI-powered waiver wire recommendations with breakout detection
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect, useCallback } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
-import { Button } from &apos;../ui/Button&apos;;
-import { waiverWireEngine } from &apos;../../services/waiverWireEngine&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { getUserTeam } from &apos;../../data/leagueData&apos;;
-import type { Player } from &apos;../../types&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { waiverWireEngine } from '../../services/waiverWireEngine';
+import { useAppState } from '../../contexts/AppContext';
+import { getUserTeam } from '../../data/leagueData';
+import type { Player } from '../../types';
 
 interface WaiverRecommendation {
-}
   player: Player;
   score: number;
-  type: &apos;breakout&apos; | &apos;injury_replacement&apos; | &apos;trending&apos; | &apos;buy_low&apos;;
+  type: 'breakout' | 'injury_replacement' | 'trending' | 'buy_low';
   reasoning: string;
   faabRecommendation: number;
   addDropSuggestion?: {
-}
     drop: Player;
     confidence: number;
   };
   metrics: {
-}
     targetShare: number;
     snapCount: number;
     redZoneTargets: number;
-    trend: &apos;rising&apos; | &apos;falling&apos; | &apos;stable&apos;;
+    trend: 'rising' | 'falling' | 'stable';
   };
-}
 
 interface BreakoutCandidate {
-}
   player: Player;
   probability: number;
   factors: string[];
   nextOpponent: string;
   projectedPoints: number;
-}
 
 const WaiverWireIntelligenceWidget: React.FC = () => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
   const { state } = useAppState();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -52,8 +45,8 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
   const [breakoutCandidates, setBreakoutCandidates] = useState<BreakoutCandidate[]>([]);
   const [faabBudget] = useState(100);
   const [faabSpent] = useState(25);
-  const [viewMode, setViewMode] = useState<&apos;recommendations&apos; | &apos;breakouts&apos; | &apos;trends&apos;>(&apos;recommendations&apos;);
-  const [selectedPosition, setSelectedPosition] = useState<string>(&apos;ALL&apos;);
+  const [viewMode, setViewMode] = useState<'recommendations' | 'breakouts' | 'trends'>('recommendations');
+  const [selectedPosition, setSelectedPosition] = useState<string>('ALL');
 
   const userTeam = state.user ? getUserTeam(state.user.id) : null;
   const currentWeek = state.currentWeek || 1;
@@ -61,51 +54,46 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
   // Mock player data for demonstration
   const mockPlayers: Partial<Player>[] = [
     {
-}
-      id: &apos;1&apos;,
-      name: &apos;Rashee Rice&apos;,
-      position: &apos;WR&apos;,
-      team: &apos;KC&apos;,
+      id: '1',
+      name: 'Rashee Rice',
+      position: 'WR',
+      team: 'KC',
       points: 15.2,
       projectedPoints: 12.5,
       ownership: 42
     },
     {
-}
-      id: &apos;2&apos;,
-      name: &apos;Tank Dell&apos;,
-      position: &apos;WR&apos;,
-      team: &apos;HOU&apos;,
+      id: '2',
+      name: 'Tank Dell',
+      position: 'WR',
+      team: 'HOU',
       points: 13.8,
       projectedPoints: 11.2,
       ownership: 38
     },
     {
-}
-      id: &apos;3&apos;,
-      name: &apos;Chuba Hubbard&apos;,
-      position: &apos;RB&apos;,
-      team: &apos;CAR&apos;,
+      id: '3',
+      name: 'Chuba Hubbard',
+      position: 'RB',
+      team: 'CAR',
       points: 11.5,
       projectedPoints: 10.8,
       ownership: 28
     },
     {
-}
-      id: &apos;4&apos;,
-      name: &apos;Sam LaPorta&apos;,
-      position: &apos;TE&apos;,
-      team: &apos;DET&apos;,
+      id: '4',
+      name: 'Sam LaPorta',
+      position: 'TE',
+      team: 'DET',
       points: 9.2,
       projectedPoints: 8.5,
       ownership: 35
     },
     {
-}
-      id: &apos;5&apos;,
-      name: &apos;Jaylen Warren&apos;,
-      position: &apos;RB&apos;,
-      team: &apos;PIT&apos;,
+      id: '5',
+      name: 'Jaylen Warren',
+      position: 'RB',
+      team: 'PIT',
       points: 10.1,
       projectedPoints: 9.8,
       ownership: 31
@@ -113,122 +101,104 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
   ];
 
   const analyzeWaiverWire = useCallback(async () => {
-}
     setIsAnalyzing(true);
     try {
-}
       // Simulate analysis delay
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Generate mock recommendations
       const mockRecommendations: WaiverRecommendation[] = mockPlayers.map((player, index) => ({
-}
         player: player as Player,
         score: 85 - (index * 5) + Math.random() * 10,
-        type: index === 0 ? &apos;breakout&apos; : index === 1 ? &apos;trending&apos; : index === 2 ? &apos;injury_replacement&apos; : &apos;buy_low&apos;,
+        type: index === 0 ? 'breakout' : index === 1 ? 'trending' : index === 2 ? 'injury_replacement' : 'buy_low',
         reasoning: getReasoningForType(index),
         faabRecommendation: Math.max(5, Math.floor((85 - index * 10) / 2)),
         addDropSuggestion: index < 3 && userTeam?.roster?.length ? {
-}
           drop: userTeam.roster[userTeam.roster.length - 1 - index] || ({} as Player),
           confidence: 0.75 + Math.random() * 0.2
         } : undefined,
         metrics: {
-}
           targetShare: 0.15 + Math.random() * 0.15,
           snapCount: 60 + Math.random() * 30,
           redZoneTargets: Math.floor(Math.random() * 5),
-          trend: Math.random() > 0.6 ? &apos;rising&apos; : Math.random() > 0.3 ? &apos;stable&apos; : &apos;falling&apos;
+          trend: Math.random() > 0.6 ? 'rising' : Math.random() > 0.3 ? 'stable' : 'falling'
         }
       }));
 
       // Generate breakout candidates
       const mockBreakouts: BreakoutCandidate[] = mockPlayers.slice(0, 3).map((player, index) => ({
-}
         player: player as Player,
         probability: 0.65 - (index * 0.15) + Math.random() * 0.1,
         factors: getBreakoutFactors(index),
-        nextOpponent: [&apos;NYG&apos;, &apos;WAS&apos;, &apos;CAR&apos;][index],
+        nextOpponent: ['NYG', 'WAS', 'CAR'][index],
         projectedPoints: (player.projectedPoints || 10) * (1.2 + Math.random() * 0.3)
       }));
 
       setRecommendations(mockRecommendations);
       setBreakoutCandidates(mockBreakouts);
     } catch (error) {
-}
-      console.error(&apos;Failed to analyze waiver wire:&apos;, error);
+      console.error('Failed to analyze waiver wire:', error);
     } finally {
-}
       setIsAnalyzing(false);
     }
   }, [userTeam, mockPlayers]);
 
   // Auto-analyze on mount
   useEffect(() => {
-}
     if (userTeam && recommendations.length === 0) {
-}
       analyzeWaiverWire();
     }
   }, [userTeam, recommendations.length, analyzeWaiverWire]);
 
   const getReasoningForType = (index: number): string => {
-}
     const reasons = [
-      &apos;Target share increased 35% over last 2 weeks. Elite matchup vs NYG.&apos;,
-      &apos;Snap count trending up. Averaging 8 targets per game last 3 weeks.&apos;,
-      &apos;Starting RB ruled out. Expected to see 15+ touches.&apos;,
-      &apos;Buy-low opportunity after tough matchups. Schedule lightens significantly.&apos;,
-      &apos;Breakout candidate with increasing red zone usage.&apos;
+      'Target share increased 35% over last 2 weeks. Elite matchup vs NYG.',
+      'Snap count trending up. Averaging 8 targets per game last 3 weeks.',
+      'Starting RB ruled out. Expected to see 15+ touches.',
+      'Buy-low opportunity after tough matchups. Schedule lightens significantly.',
+      'Breakout candidate with increasing red zone usage.'
     ];
     return reasons[index] || reasons[0];
   };
 
   const getBreakoutFactors = (index: number): string[] => {
-}
     const factors = [
-      [&apos;Increased snap %&apos;, &apos;Elite matchup&apos;, &apos;Target share rising&apos;],
-      [&apos;RZ opportunities&apos;, &apos;Weak opponent&apos;, &apos;Volume trending up&apos;],
-      [&apos;Injury to starter&apos;, &apos;Favorable game script&apos;, &apos;High implied total&apos;]
+      ['Increased snap %', 'Elite matchup', 'Target share rising'],
+      ['RZ opportunities', 'Weak opponent', 'Volume trending up'],
+      ['Injury to starter', 'Favorable game script', 'High implied total']
     ];
     return factors[index] || factors[0];
   };
 
   const getTypeIcon = (type: string) => {
-}
     switch (type) {
-}
-      case &apos;breakout&apos;: return &apos;🚀&apos;;
-      case &apos;trending&apos;: return &apos;📈&apos;;
-      case &apos;injury_replacement&apos;: return &apos;🏥&apos;;
-      case &apos;buy_low&apos;: return &apos;💎&apos;;
-      default: return &apos;📊&apos;;
+      case 'breakout': return '🚀';
+      case 'trending': return '📈';
+      case 'injury_replacement': return '🏥';
+      case 'buy_low': return '💎';
+      default: return '📊';
     }
   };
 
   const getTypeColor = (type: string) => {
-}
     switch (type) {
-}
-      case &apos;breakout&apos;: return &apos;from-purple-500 to-pink-500&apos;;
-      case &apos;trending&apos;: return &apos;from-green-500 to-emerald-500&apos;;
-      case &apos;injury_replacement&apos;: return &apos;from-orange-500 to-red-500&apos;;
-      case &apos;buy_low&apos;: return &apos;from-blue-500 to-indigo-500&apos;;
-      default: return &apos;from-gray-500 to-gray-600&apos;;
+      case 'breakout': return 'from-purple-500 to-pink-500';
+      case 'trending': return 'from-green-500 to-emerald-500';
+      case 'injury_replacement': return 'from-orange-500 to-red-500';
+      case 'buy_low': return 'from-blue-500 to-indigo-500';
+      default: return 'from-gray-500 to-gray-600';
     }
   };
 
   const getTrendIcon = (trend: string) => {
-}
     switch (trend) {
-}
-      case &apos;rising&apos;: return { icon: &apos;↗️&apos;, color: &apos;text-green-400&apos; };
-      case &apos;falling&apos;: return { icon: &apos;↘️&apos;, color: &apos;text-red-400&apos; };
-      default: return { icon: &apos;→&apos;, color: &apos;text-gray-400&apos; };
+      case 'rising': return { icon: '↗️', color: 'text-green-400' };
+      case 'falling': return { icon: '↘️', color: 'text-red-400' };
+      default: return { icon: '→', color: 'text-gray-400' };
     }
   };
 
-  const filteredRecommendations = selectedPosition === &apos;ALL&apos; 
+  const filteredRecommendations = selectedPosition === 'ALL' 
     ? recommendations 
     : recommendations.filter((r: any) => r.player.position === selectedPosition);
 
@@ -255,14 +225,13 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
             disabled={isAnalyzing}
             className="text-xs sm:px-4 md:px-6 lg:px-8"
           >
-            {isAnalyzing ? &apos;⚡&apos; : &apos;🔄&apos;}
+            {isAnalyzing ? '⚡' : '🔄'}
           </Button>
         </div>
 
         {/* View Mode Tabs */}
         <div className="flex gap-1 mt-3 sm:px-4 md:px-6 lg:px-8">
-          {[&apos;recommendations&apos;, &apos;breakouts&apos;, &apos;trends&apos;].map((mode: any) => (
-}
+          {['recommendations', 'breakouts', 'trends'].map((mode: any) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode as any)}
@@ -275,11 +244,9 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
 
       <CardContent className="space-y-3 sm:px-4 md:px-6 lg:px-8">
         {/* Position Filter */}
-        {viewMode === &apos;recommendations&apos; && (
-}
+        {viewMode === 'recommendations' && (
           <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
-            {[&apos;ALL&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;].map((pos: any) => (
-}
+            {['ALL', 'RB', 'WR', 'TE'].map((pos: any) => (
               <button
                 key={pos}
                 onClick={() => setSelectedPosition(pos)}
@@ -291,8 +258,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
         )}
 
         <AnimatePresence mode="wait">
-          {viewMode === &apos;recommendations&apos; && (
-}
+          {viewMode === 'recommendations' && (
             <motion.div
               key="recommendations"
               initial={{ opacity: 0, y: 10 }}
@@ -301,7 +267,6 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
               className="space-y-2 sm:px-4 md:px-6 lg:px-8"
             >
               {filteredRecommendations.slice(0, 4).map((rec, index) => (
-}
                 <motion.div
                   key={rec.player.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -354,7 +319,6 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
                       </div>
                     </div>
                     {rec.addDropSuggestion && (
-}
                       <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         Drop: <span className="text-orange-400 sm:px-4 md:px-6 lg:px-8">{rec.addDropSuggestion.drop.name}</span>
                       </div>
@@ -365,8 +329,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
             </motion.div>
           )}
 
-          {viewMode === &apos;breakouts&apos; && (
-}
+          {viewMode === 'breakouts' && (
             <motion.div
               key="breakouts"
               initial={{ opacity: 0, y: 10 }}
@@ -375,7 +338,6 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
               className="space-y-2 sm:px-4 md:px-6 lg:px-8"
             >
               {breakoutCandidates.map((candidate, index) => (
-}
                 <motion.div
                   key={candidate.player.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -402,7 +364,6 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
 
                   <div className="flex flex-wrap gap-1 mb-2 sm:px-4 md:px-6 lg:px-8">
                     {candidate.factors.map((factor, i) => (
-}
                       <span key={i} className="px-2 py-0.5 bg-purple-500/20 text-xs text-purple-300 rounded-md sm:px-4 md:px-6 lg:px-8">
                         {factor}
                       </span>
@@ -428,8 +389,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
             </motion.div>
           )}
 
-          {viewMode === &apos;trends&apos; && (
-}
+          {viewMode === 'trends' && (
             <motion.div
               key="trends"
               initial={{ opacity: 0, y: 10 }}
@@ -440,10 +400,9 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
               <div className="bg-dark-800/50 rounded-lg p-3 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
                 <p className="text-xs font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">🔥 Hot Pickups (Last 24h)</p>
                 <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                  {[&apos;Rashee Rice (+42%)&apos;, &apos;Tank Dell (+38%)&apos;, &apos;Sam LaPorta (+31%)&apos;].map((player, i) => (
-}
+                  {['Rashee Rice (+42%)', 'Tank Dell (+38%)', 'Sam LaPorta (+31%)'].map((player, i) => (
                     <div key={i} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">{player.split(&apos; (&apos;)[0]}</span>
+                      <span className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">{player.split(' (')[0]}</span>
                       <span className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">{player.match(/\(([^)]+)\)/)?.[1]}</span>
                     </div>
                   ))}
@@ -453,10 +412,9 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
               <div className="bg-dark-800/50 rounded-lg p-3 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
                 <p className="text-xs font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">📉 Dropping Fast</p>
                 <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                  {[&apos;Player A (-22%)&apos;, &apos;Player B (-18%)&apos;, &apos;Player C (-15%)&apos;].map((player, i) => (
-}
+                  {['Player A (-22%)', 'Player B (-18%)', 'Player C (-15%)'].map((player, i) => (
                     <div key={i} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">{player.split(&apos; (&apos;)[0]}</span>
+                      <span className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">{player.split(' (')[0]}</span>
                       <span className="text-xs text-red-400 sm:px-4 md:px-6 lg:px-8">{player.match(/\(([^)]+)\)/)?.[1]}</span>
                     </div>
                   ))}
@@ -468,7 +426,6 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
 
         {/* Loading State */}
         {isAnalyzing && (
-}
           <div className="flex flex-col items-center justify-center py-6 sm:px-4 md:px-6 lg:px-8">
             <div className="relative sm:px-4 md:px-6 lg:px-8">
               <div className="w-10 h-10 border-3 border-green-500/20 rounded-full sm:px-4 md:px-6 lg:px-8"></div>

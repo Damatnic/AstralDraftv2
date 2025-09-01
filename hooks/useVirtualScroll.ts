@@ -3,48 +3,39 @@
  * Optimized virtual scrolling for large lists on mobile devices
  */
 
-import { useOptimizedScroll } from &apos;../utils/mobilePerformanceUtils&apos;;
+import { useOptimizedScroll } from '../utils/mobilePerformanceUtils';
 
 interface VirtualScrollOptions {
-}
     itemHeight: number;
     containerHeight: number;
     overscan?: number;
     totalItems: number;
     scrollElement?: HTMLElement | null;
-}
 
 interface VirtualScrollResult {
-}
     visibleRange: { start: number; end: number };
     totalHeight: number;
     offsetY: number;
     containerProps: {
-}
         style: React.CSSProperties;
         ref: React.RefObject<HTMLDivElement | null>;
     };
     viewportProps: {
-}
         style: React.CSSProperties;
     };
-}
 
 export const useVirtualScroll = ({
-}
     itemHeight,
     containerHeight,
     overscan = 5,
     totalItems,
 //     scrollElement
 }: VirtualScrollOptions): VirtualScrollResult => {
-}
     const [scrollTop, setScrollTop] = React.useState(0);
     const containerRef = React.useRef<HTMLDivElement>(null);
 
     // Calculate visible range
     const visibleRange = React.useMemo(() => {
-}
         const itemsInViewport = Math.ceil(containerHeight / itemHeight);
         const start = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
         const end = Math.min(totalItems - 1, start + itemsInViewport + overscan * 2);
@@ -60,50 +51,41 @@ export const useVirtualScroll = ({
 
     // Handle scroll with optimization
     useOptimizedScroll((event: any) => {
-}
         const element = scrollElement || containerRef.current;
         if (element) {
-}
             setScrollTop(element.scrollTop);
         }
     });
 
     // Effect to track scroll on provided element
     React.useEffect(() => {
-}
         const element = scrollElement || containerRef.current;
         if (!element) return;
 
         const handleScroll = () => {
-}
             setScrollTop(element.scrollTop);
         };
 
-        element.addEventListener(&apos;scroll&apos;, handleScroll, { passive: true });
-        return () => element.removeEventListener(&apos;scroll&apos;, handleScroll);
+        element.addEventListener('scroll', handleScroll, { passive: true });
+        return () => element.removeEventListener('scroll', handleScroll);
     }, [scrollElement]);
 
     return {
-}
         visibleRange,
         totalHeight,
         offsetY,
         containerProps: {
-}
             style: {
-}
                 height: containerHeight,
-                overflow: &apos;auto&apos;,
-                position: &apos;relative&apos;
+                overflow: 'auto',
+                position: 'relative'
             },
             ref: containerRef
         },
         viewportProps: {
-}
             style: {
-}
                 height: totalHeight,
-                position: &apos;relative&apos;
+                position: 'relative'
             }
         }
     };

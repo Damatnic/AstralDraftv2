@@ -1,39 +1,31 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import type { Team } from &apos;../../types&apos;;
-import { Tooltip } from &apos;../ui/Tooltip&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import type { Team } from '../../types';
+import { Tooltip } from '../ui/Tooltip';
 
 interface MyTeamCompositionChartProps {
-}
     team: Team;
-}
 
-const positionOrder = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;];
+const positionOrder = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
 const positionColors: { [key: string]: string } = {
-}
-    QB: &apos;from-red-500 to-red-700&apos;,
-    RB: &apos;from-green-500 to-green-700&apos;,
-    WR: &apos;from-blue-500 to-blue-700&apos;,
-    TE: &apos;from-orange-500 to-orange-700&apos;,
-    K: &apos;from-yellow-500 to-yellow-700&apos;,
-    DST: &apos;from-purple-500 to-purple-700&apos;,
+    QB: 'from-red-500 to-red-700',
+    RB: 'from-green-500 to-green-700',
+    WR: 'from-blue-500 to-blue-700',
+    TE: 'from-orange-500 to-orange-700',
+    K: 'from-yellow-500 to-yellow-700',
+    DST: 'from-purple-500 to-purple-700',
 };
 
 const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team }: any) => {
-}
     const composition = React.useMemo(() => {
-}
         const counts: { [key: string]: number } = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 };
         team.roster.forEach((player: any) => {
-}
             if (counts[player.position] !== undefined) {
-}
                 counts[player.position]++;
             }
         });
         return positionOrder.map((pos: any) => ({
-}
             position: pos,
             count: counts[pos]
         }));

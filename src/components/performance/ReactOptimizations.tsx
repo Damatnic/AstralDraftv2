@@ -3,32 +3,27 @@
  * Implements React.memo, useMemo, useCallback, and other React-specific optimizations
  */
 
-import React, { memo, useMemo, useCallback, useState, useRef, useEffect } from &apos;react&apos;;
+import React, { memo, useMemo, useCallback, useState, useRef, useEffect } from 'react';
 
 // HOC for performance monitoring
 export const withPerformanceMonitoring = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
-  componentName: string = &apos;Component&apos;
+  componentName: string = 'Component'
 ) => {
-}
   const MonitoredComponent = React.forwardRef<any, P>((props, ref) => {
-}
     const startTime = useRef<number>(0);
     const renderCount = useRef<number>(0);
 
     useEffect(() => {
-}
       startTime.current = performance.now();
       renderCount.current += 1;
     });
 
     useEffect(() => {
-}
       const endTime = performance.now();
       const renderTime = endTime - startTime.current;
       
       if (import.meta.env.DEV && renderTime > 16) { // Warn if render takes longer than one frame
-}
         console.warn(`🐌 Slow render detected: ${componentName} took ${renderTime.toFixed(2)}ms (render #${renderCount.current})`);
       }
     });
@@ -42,7 +37,6 @@ export const withPerformanceMonitoring = <P extends object>(
 
 // Optimized List Component
 interface OptimizedListProps<T> {
-}
   items: T[];
   renderItem: (item: T, index: number) => React.ReactNode;
   keyExtractor?: (item: T, index: number) => string | number;
@@ -50,36 +44,30 @@ interface OptimizedListProps<T> {
   EmptyComponent?: React.ComponentType;
   threshold?: number;
   className?: string;
-}
 
 const OptimizedListItem = memo(<T,>({ 
-}
   item, 
   index, 
 //   renderItem 
 }: { 
-}
   item: T; 
   index: number; 
   renderItem: (item: T, index: number) => React.ReactNode;
 }) => {
-}
   return <>{renderItem(item, index)}</>;
 });
 
-OptimizedListItem.displayName = &apos;OptimizedListItem&apos;;
+OptimizedListItem.displayName = 'OptimizedListItem';
 
 export const OptimizedList = memo(<T,>({
-}
   items,
   renderItem,
   keyExtractor = (_, index) => index,
   ItemComponent,
   EmptyComponent,
   threshold = 100,
-  className = &apos;&apos;
+  className = ''
 }: OptimizedListProps<T>) => {
-}
   // Memoize the rendering logic
   const memoizedRenderItem = useCallback(renderItem, [renderItem]);
   
@@ -88,16 +76,12 @@ export const OptimizedList = memo(<T,>({
   
   // Memoize the list items
   const listItems = useMemo(() => {
-}
     if (shouldVirtualize) {
-}
       // For demonstration - in real app, use the VirtualizedList component
       return items.slice(0, threshold).map((item, index) => {
-}
         const key = keyExtractor(item, index);
         
         if (ItemComponent) {
-}
           return (
             <ItemComponent>
               key={key} 
@@ -119,11 +103,9 @@ export const OptimizedList = memo(<T,>({
     }
     
     return items.map((item, index) => {
-}
       const key = keyExtractor(item, index);
       
       if (ItemComponent) {
-}
         return (
           <ItemComponent>
             key={key} 
@@ -145,7 +127,6 @@ export const OptimizedList = memo(<T,>({
   }, [items, keyExtractor, ItemComponent, memoizedRenderItem, shouldVirtualize, threshold]);
 
   if (items.length === 0 && EmptyComponent) {
-}
     return <EmptyComponent />;
   }
 
@@ -153,7 +134,6 @@ export const OptimizedList = memo(<T,>({
     <div className={className}>
       {listItems}
       {shouldVirtualize && items.length > threshold && (
-}
         <div className="text-center p-4 text-sm text-gray-500">
           Showing {threshold} of {items.length} items
         </div>
@@ -162,51 +142,40 @@ export const OptimizedList = memo(<T,>({
   );
 });
 
-OptimizedList.displayName = &apos;OptimizedList&apos;;
+OptimizedList.displayName = 'OptimizedList';
 
 // Debounced Input Component
-interface DebouncedInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, &apos;onChange&apos;> {
-}
+interface DebouncedInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   onChange: (value: string) => void;
   debounceMs?: number;
-}
 
 export const DebouncedInput = memo(({
-}
   onChange,
   debounceMs = 300,
   ...props
 }: any) => {
-}
-  const [value, setValue] = useState(props.value || &apos;&apos;);
+  const [value, setValue] = useState(props.value || '');
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const debouncedOnChange = useCallback((newValue: string) => {
-}
     if (timeoutRef.current) {
-}
       clearTimeout(timeoutRef.current);
     }
     
     timeoutRef.current = setTimeout(() => {
-}
       onChange(newValue);
     }, debounceMs);
   }, [onChange, debounceMs]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-}
     const newValue = e.target.value;
     setValue(newValue);
     debouncedOnChange(newValue);
   }, [debouncedOnChange]);
 
   useEffect(() => {
-}
     return () => {
-}
       if (timeoutRef.current) {
-}
         clearTimeout(timeoutRef.current);
       }
     };
@@ -221,61 +190,50 @@ export const DebouncedInput = memo(({
   );
 });
 
-DebouncedInput.displayName = &apos;DebouncedInput&apos;;
+DebouncedInput.displayName = 'DebouncedInput';
 
 // Memoized Player Card Component
 interface Player {
-}
   id: string;
   name: string;
   team: string;
   position: string;
   points?: number;
   image?: string;
-}
 
 interface PlayerCardProps {
-}
   player: Player;
   selected?: boolean;
   onSelect?: (player: Player) => void;
   showDetails?: boolean;
-}
 
 export const PlayerCard = memo(({
-}
   player,
   selected = false,
   onSelect,
   showDetails = true
 }: any) => {
-}
   const handleClick = useCallback(() => {
-}
     onSelect?.(player);
   }, [player, onSelect]);
 
   const playerPoints = useMemo(() => {
-}
-    return player.points ? `${player.points.toFixed(1)} pts` : &apos;N/A&apos;;
+    return player.points ? `${player.points.toFixed(1)} pts` : 'N/A';
   }, [player.points]);
 
   return (
     <div
       className={`
-}
         p-4 rounded-lg border transition-all duration-200 cursor-pointer
         ${selected 
-}
-          ? &apos;border-blue-500 bg-blue-50 dark:bg-blue-900/20&apos; 
-          : &apos;border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600&apos;
+          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
         }
       `}
       onClick={handleClick}
     >
       <div className="flex items-center space-x-3">
         {player.image && (
-}
           <img
             src={player.image}
             alt={player.name}
@@ -295,7 +253,6 @@ export const PlayerCard = memo(({
             </p>
             
             {showDetails && (
-}
               <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
                 {playerPoints}
               </span>
@@ -307,38 +264,30 @@ export const PlayerCard = memo(({
   );
 });
 
-PlayerCard.displayName = &apos;PlayerCard&apos;;
+PlayerCard.displayName = 'PlayerCard';
 
 // Optimized Team Roster Component
 interface TeamRosterProps {
-}
   players: Player[];
   onPlayerSelect?: (player: Player) => void;
   selectedPlayerId?: string;
   groupByPosition?: boolean;
-}
 
 export const TeamRoster = memo(({
-}
   players,
   onPlayerSelect,
   selectedPlayerId,
   groupByPosition = false
 }: any) => {
-}
   // Memoize grouped players
   const groupedPlayers = useMemo(() => {
-}
     if (!groupByPosition) {
-}
-      return { &apos;All Players&apos;: players };
+      return { 'All Players': players };
     }
     
     return players.reduce((groups, player) => {
-}
       const position = player.position;
       if (!groups[position]) {
-}
         groups[position] = [];
       }
       groups[position].push(player);
@@ -361,10 +310,8 @@ export const TeamRoster = memo(({
   return (
     <div className="space-y-6">
       {Object.entries(groupedPlayers).map(([position, positionPlayers]) => (
-}
         <div key={position} className="space-y-3">
           {groupByPosition && (
-}
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {position} ({positionPlayers.length})
             </h3>
@@ -382,75 +329,61 @@ export const TeamRoster = memo(({
   );
 });
 
-TeamRoster.displayName = &apos;TeamRoster&apos;;
+TeamRoster.displayName = 'TeamRoster';
 
 // Performance-optimized Modal
 interface ModalProps {
-}
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
-}
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 
 export const OptimizedModal = memo(({
-}
   isOpen,
   onClose,
   title,
   children,
-  size = &apos;md&apos;
+  size = 'md'
 }: any) => {
-}
   // Memoize size classes
   const sizeClasses = useMemo(() => {
-}
     switch (size) {
-}
-      case &apos;sm&apos;: return &apos;max-w-md&apos;;
-      case &apos;md&apos;: return &apos;max-w-lg&apos;;
-      case &apos;lg&apos;: return &apos;max-w-2xl&apos;;
-      case &apos;xl&apos;: return &apos;max-w-4xl&apos;;
-      default: return &apos;max-w-lg&apos;;
+      case 'sm': return 'max-w-md';
+      case 'md': return 'max-w-lg';
+      case 'lg': return 'max-w-2xl';
+      case 'xl': return 'max-w-4xl';
+      default: return 'max-w-lg';
     }
   }, [size]);
 
   const handleBackdropClick = useCallback((e: React.MouseEvent) => {
-}
     if (e.target === e.currentTarget) {
-}
       onClose();
     }
   }, [onClose]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-}
-    if (e.key === &apos;Escape&apos;) {
-}
+    if (e.key === 'Escape') {
       onClose();
     }
   }, [onClose]);
 
   useEffect(() => {
-}
     if (isOpen) {
-}
-      document.addEventListener(&apos;keydown&apos;, handleKeyDown);
-      document.body.style.overflow = &apos;hidden&apos;;
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
     } else {
-}
-      document.body.style.overflow = &apos;unset&apos;;
+      document.body.style.overflow = 'unset';
     }
 
     return () => {
-}
-      document.removeEventListener(&apos;keydown&apos;, handleKeyDown);
-      document.body.style.overflow = &apos;unset&apos;;
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, handleKeyDown]);
 
-  // Don&apos;t render anything if modal is not open
+  // Don't render anything if modal is not open
   if (!isOpen) return null;
 
   return (
@@ -460,7 +393,6 @@ export const OptimizedModal = memo(({
     >
       <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full ${sizeClasses} max-h-[90vh] overflow-hidden`}>
         {title && (
-}
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               {title}
@@ -484,32 +416,27 @@ export const OptimizedModal = memo(({
   );
 });
 
-OptimizedModal.displayName = &apos;OptimizedModal&apos;;
+OptimizedModal.displayName = 'OptimizedModal';
 
 // Hook for optimized state updates
 export const useOptimizedState = <T,>(initialState: T) => {
-}
   const [state, setState] = useState<T>(initialState);
   const stateRef = useRef<T>(state);
 
   // Update ref when state changes
   useEffect(() => {
-}
     stateRef.current = state;
   }, [state]);
 
   // Optimized setter that prevents unnecessary re-renders
   const setOptimizedState = useCallback((newState: T | ((prevState: T) => T)) => {
-}
     setState(prevState => {
-}
-      const nextState = typeof newState === &apos;function&apos; 
+      const nextState = typeof newState === 'function' 
         ? (newState as (prevState: T) => T)(prevState)
         : newState;
       
       // Shallow comparison to prevent unnecessary updates
       if (JSON.stringify(nextState) === JSON.stringify(prevState)) {
-}
         return prevState;
       }
       
@@ -525,11 +452,9 @@ export const useOptimizedState = <T,>(initialState: T) => {
 
 // Component render count tracker (development only)
 export const useRenderTracker = (componentName: string) => {
-}
   const renderCount = useRef(0);
   
   if (import.meta.env.DEV) {
-}
     renderCount.current += 1;
     console.log(`🔄 ${componentName} rendered ${renderCount.current} times`);
   }
@@ -539,16 +464,13 @@ export const useRenderTracker = (componentName: string) => {
 
 // Stable reference hook
 export const useStableCallback = <T extends (...args: any[]) => any>(callback: T): T => {
-}
   const callbackRef = useRef<T>(callback);
   
   useEffect(() => {
-}
     callbackRef.current = callback;
   }, [callback]);
   
   return useCallback((...args: any[]) => {
-}
     return callbackRef.current(...args);
   }, []) as T;
 };

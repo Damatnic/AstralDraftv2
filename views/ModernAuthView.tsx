@@ -3,10 +3,9 @@
  * Beautiful login/register interface with animations
  */
 
-import React, { useState } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-}
   MailIcon,
   LockIcon,
   UserIcon,
@@ -19,21 +18,18 @@ import {
   ArrowRightIcon,
   CheckCircleIcon,
 //   AlertCircleIcon
-} from &apos;lucide-react&apos;;
-import { netlifyAuth } from &apos;../services/netlifyAuthService&apos;;
-import { useAppState } from &apos;../contexts/AppContext&apos;;
+} from 'lucide-react';
+import { netlifyAuth } from '../services/netlifyAuthService';
+import { useAppState } from '../contexts/AppContext';
 
 interface FormData {
-}
   email: string;
   username: string;
   password: string;
   confirmPassword: string;
 
-}
 
 interface FormErrors {
-}
   email?: string;
   username?: string;
   password?: string;
@@ -41,65 +37,52 @@ interface FormErrors {
   general?: string;}
 
 const ModernAuthView: React.FC = () => {
-}
   const { dispatch } = useAppState();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-}
-    email: &apos;&apos;,
-    username: &apos;&apos;,
-    password: &apos;&apos;,
-    confirmPassword: &apos;&apos;
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: ''
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [successMessage, setSuccessMessage] = useState(&apos;&apos;);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-}
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value )};
     // Clear error for this field
     if (errors[name as keyof FormErrors]) {
-}
       setErrors(prev => ({ ...prev, [name]: undefined )};
 
   };
 
   const validateForm = (): boolean => {
-}
     const newErrors: FormErrors = {};
 
     // Email validation
     if (!formData.email) {
-}
-      newErrors.email = &apos;Email is required&apos;;
+      newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-}
-      newErrors.email = &apos;Please enter a valid email&apos;;
+      newErrors.email = 'Please enter a valid email';
 
     // Password validation
     if (!formData.password) {
-}
-      newErrors.password = &apos;Password is required&apos;;
+      newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
-}
-      newErrors.password = &apos;Password must be at least 8 characters&apos;;
+      newErrors.password = 'Password must be at least 8 characters';
 
     // Register-specific validation
     if (!isLogin) {
-}
       if (!formData.username) {
-}
-        newErrors.username = &apos;Username is required&apos;;
+        newErrors.username = 'Username is required';
       } else if (formData.username.length < 3) {
-}
-        newErrors.username = &apos;Username must be at least 3 characters&apos;;
+        newErrors.username = 'Username must be at least 3 characters';
 
       if (formData.password !== formData.confirmPassword) {
-}
-        newErrors.confirmPassword = &apos;Passwords do not match&apos;;
+        newErrors.confirmPassword = 'Passwords do not match';
 
 
     setErrors(newErrors);
@@ -107,51 +90,40 @@ const ModernAuthView: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-}
     e.preventDefault();
     
     if (!validateForm()) {
-}
       return;
 
     setIsLoading(true);
     setErrors({});
-    setSuccessMessage(&apos;&apos;);
+    setSuccessMessage('');
 
     try {
-}
       if (isLogin) {
-}
         const result = await netlifyAuth.login(formData.email, formData.password);
         
         if (result.success) {
-}
-          setSuccessMessage(&apos;Login successful! Redirecting...&apos;);
+          setSuccessMessage('Login successful! Redirecting...');
           // Update app state with authenticated user
           setTimeout(() => {
-}
             const authState = netlifyAuth.getState();
             if (authState.user) {
-}
               dispatch({
-}
-                type: &apos;LOGIN&apos;,
+                type: 'LOGIN',
                 payload: {
-}
                   id: authState.user.id.toString(),
                   name: authState.user.username,
                   email: authState.user.email,
-                  avatar: authState.user.avatarUrl || &apos;/default-avatar.png&apos;
+                  avatar: authState.user.avatarUrl || '/default-avatar.png'
 
               });
 
           }, 1000);
         } else {
-}
-          setErrors({ general: result.error || &apos;Login failed&apos; });
+          setErrors({ general: result.error || 'Login failed' });
 
       } else {
-}
         const result = await netlifyAuth.register(
           formData.email,
           formData.username,
@@ -159,46 +131,38 @@ const ModernAuthView: React.FC = () => {
         );
         
         if (result.success) {
-}
-          setSuccessMessage(&apos;Registration successful! Redirecting...&apos;);
+          setSuccessMessage('Registration successful! Redirecting...');
           // Update app state with authenticated user
           setTimeout(() => {
-}
             const authState = netlifyAuth.getState();
             if (authState.user) {
-}
               dispatch({
-}
-                type: &apos;LOGIN&apos;,
+                type: 'LOGIN',
                 payload: {
-}
                   id: authState.user.id.toString(),
                   name: authState.user.username,
                   email: authState.user.email,
-                  avatar: authState.user.avatarUrl || &apos;/default-avatar.png&apos;
+                  avatar: authState.user.avatarUrl || '/default-avatar.png'
 
               });
 
           }, 1000);
         } else {
-}
-          setErrors({ general: result.error || &apos;Registration failed&apos; });
+          setErrors({ general: result.error || 'Registration failed' });
 
 
     } catch (error) {
-}
-      setErrors({ general: &apos;An unexpected error occurred. Please try again.&apos; });
+      setErrors({ general: 'An unexpected error occurred. Please try again.' });
     } finally {
-}
       setIsLoading(false);
 
   };
 
   const features = [
-    { icon: <TrophyIcon className="w-5 h-5" />, text: &apos;Win championships&apos; },
-    { icon: <ZapIcon className="w-5 h-5" />, text: &apos;AI-powered insights&apos; },
-    { icon: <ShieldIcon className="w-5 h-5" />, text: &apos;Secure & reliable&apos; },
-    { icon: <StarIcon className="w-5 h-5" />, text: &apos;Premium experience&apos; }
+    { icon: <TrophyIcon className="w-5 h-5" />, text: 'Win championships' },
+    { icon: <ZapIcon className="w-5 h-5" />, text: 'AI-powered insights' },
+    { icon: <ShieldIcon className="w-5 h-5" />, text: 'Secure & reliable' },
+    { icon: <StarIcon className="w-5 h-5" />, text: 'Premium experience' }
   ];
 
   return (
@@ -219,14 +183,13 @@ const ModernAuthView: React.FC = () => {
               <span className="text-2xl font-bold gradient-text">Astral Draft</span>
             </div>
             <p className="text-[var(--text-secondary)]">
-              {isLogin ? &apos;Welcome back, champion!&apos; : &apos;Join the elite fantasy league&apos;}
+              {isLogin ? 'Welcome back, champion!' : 'Join the elite fantasy league'}
             </p>
           </div>
 
           {/* Success Message */}
           <AnimatePresence>
             {successMessage && (
-}
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -242,7 +205,6 @@ const ModernAuthView: React.FC = () => {
           {/* Error Message */}
           <AnimatePresence>
             {errors.general && (
-}
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -270,7 +232,6 @@ const ModernAuthView: React.FC = () => {
                 />
               </div>
               {errors.email && (
-}
                 <p className="mt-1 text-sm text-red-500">{errors.email}</p>
               )}
             </div>
@@ -278,10 +239,9 @@ const ModernAuthView: React.FC = () => {
             {/* Username Field (Register only) */}
             <AnimatePresence>
               {!isLogin && (
-}
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: &apos;auto&apos; }}
+                  animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                 >
                   <label className="block text-sm font-medium mb-2">Username</label>
@@ -296,7 +256,6 @@ const ModernAuthView: React.FC = () => {
                     />
                   </div>
                   {errors.username && (
-}
                     <p className="mt-1 text-sm text-red-500">{errors.username}</p>
                   )}
                 </motion.div>
@@ -309,7 +268,7 @@ const ModernAuthView: React.FC = () => {
               <div className="relative">
                 <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--text-tertiary)]" />
                 <input
-                  type={showPassword ? &apos;text&apos; : &apos;password&apos;}
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange} focus:border-[var(--primary)] focus:outline-none transition-colors`}
@@ -323,7 +282,6 @@ const ModernAuthView: React.FC = () => {
                 </button>
               </div>
               {errors.password && (
-}
                 <p className="mt-1 text-sm text-red-500">{errors.password}</p>
               )}
             </div>
@@ -331,17 +289,16 @@ const ModernAuthView: React.FC = () => {
             {/* Confirm Password Field (Register only) */}
             <AnimatePresence>
               {!isLogin && (
-}
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: &apos;auto&apos; }}
+                  animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                 >
                   <label className="block text-sm font-medium mb-2">Confirm Password</label>
                   <div className="relative">
                     <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--text-tertiary)]" />
                     <input
-                      type={showPassword ? &apos;text&apos; : &apos;password&apos;}
+                      type={showPassword ? 'text' : 'password'}
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange} focus:border-[var(--primary)] focus:outline-none transition-colors`}
@@ -349,7 +306,6 @@ const ModernAuthView: React.FC = () => {
                     />
                   </div>
                   {errors.confirmPassword && (
-}
                     <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
                   )}
                 </motion.div>
@@ -365,11 +321,10 @@ const ModernAuthView: React.FC = () => {
               className="glass-button-primary w-full py-3 px-4 font-semibold flex items-center justify-center gap-2"
             >
               {isLoading ? (
-}
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
-                  <span>{isLogin ? &apos;Sign In&apos; : &apos;Create Account&apos;}</span>
+                  <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
                   <ArrowRightIcon className="w-5 h-5" />
                 </>
               )}
@@ -379,17 +334,16 @@ const ModernAuthView: React.FC = () => {
           {/* Toggle Auth Mode */}
           <div className="mt-6 text-center">
             <p className="text-sm text-[var(--text-secondary)]">
-              {isLogin ? "Don&apos;t have an account?" : &apos;Already have an account?&apos;}
+              {isLogin ? "Don't have an account?" : 'Already have an account?'}
               <button
                 onClick={() => {
-}
                   setIsLogin(!isLogin);
                   setErrors({}
-                  setFormData({ email: &apos;&apos;, username: &apos;&apos;, password: &apos;&apos;, confirmPassword: &apos;&apos; });
+                  setFormData({ email: '', username: '', password: '', confirmPassword: '' });
                 }}
                 className="ml-1 text-[var(--primary)] hover:underline font-medium"
               >
-                {isLogin ? &apos;Sign up&apos; : &apos;Sign in&apos;}
+                {isLogin ? 'Sign up' : 'Sign in'}
               </button>
             </p>
           </div>
@@ -419,7 +373,6 @@ const ModernAuthView: React.FC = () => {
 
           <div className="space-y-4">
             {features.map((feature, index) => (
-}
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
@@ -444,7 +397,6 @@ const ModernAuthView: React.FC = () => {
             <div className="flex items-center gap-4 mb-3">
               <div className="flex -space-x-2">
                 {[1, 2, 3].map((i: any) => (
-}
                   <div key={i} className="w-8 h-8 rounded-full bg-white/30 border-2 border-white" />
                 ))}
               </div>

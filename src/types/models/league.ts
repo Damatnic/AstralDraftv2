@@ -3,36 +3,33 @@
  * Comprehensive types for league settings, teams, seasons, and competitions
  */
 
-import { User } from &apos;./user&apos;;
-import { Player } from &apos;./player&apos;;
-import { DraftState } from &apos;./draft&apos;;
+import { User } from './user';
+import { Player } from './player';
+import { DraftState } from './draft';
 
 // ==================== LEAGUE ENUMS ====================
 
-export type LeagueStatus = &apos;PRE_DRAFT&apos; | &apos;DRAFTING&apos; | &apos;DRAFT_COMPLETE&apos; | &apos;IN_SEASON&apos; | &apos;PLAYOFFS&apos; | &apos;COMPLETE&apos; | &apos;ARCHIVED&apos;;
+export type LeagueStatus = 'PRE_DRAFT' | 'DRAFTING' | 'DRAFT_COMPLETE' | 'IN_SEASON' | 'PLAYOFFS' | 'COMPLETE' | 'ARCHIVED';
 
-export type LeagueType = &apos;REDRAFT&apos; | &apos;KEEPER&apos; | &apos;DYNASTY&apos; | &apos;BESTBALL&apos; | &apos;DAILY&apos; | &apos;TOURNAMENT&apos;;
+export type LeagueType = 'REDRAFT' | 'KEEPER' | 'DYNASTY' | 'BESTBALL' | 'DAILY' | 'TOURNAMENT';
 
-export type ScoringFormat = &apos;STANDARD&apos; | &apos;PPR&apos; | &apos;HALF_PPR&apos; | &apos;SUPER_FLEX&apos; | &apos;TWO_QB&apos; | &apos;IDP&apos; | &apos;CUSTOM&apos;;
+export type ScoringFormat = 'STANDARD' | 'PPR' | 'HALF_PPR' | 'SUPER_FLEX' | 'TWO_QB' | 'IDP' | 'CUSTOM';
 
-export type WaiverType = &apos;FAAB&apos; | &apos;ROLLING&apos; | &apos;REVERSE_STANDINGS&apos; | &apos;DAILY_ROLLING&apos;;
+export type WaiverType = 'FAAB' | 'ROLLING' | 'REVERSE_STANDINGS' | 'DAILY_ROLLING';
 
-export type PlayoffFormat = &apos;SINGLE_ELIMINATION&apos; | &apos;TWO_WEEK_PLAYOFFS&apos; | &apos;BRACKET_STYLE&apos;;
+export type PlayoffFormat = 'SINGLE_ELIMINATION' | 'TWO_WEEK_PLAYOFFS' | 'BRACKET_STYLE';
 
-export type TradeReviewType = &apos;NONE&apos; | &apos;COMMISSIONER&apos; | &apos;LEAGUE_VOTE&apos; | &apos;VETO_VOTE&apos;;
+export type TradeReviewType = 'NONE' | 'COMMISSIONER' | 'LEAGUE_VOTE' | 'VETO_VOTE';
 
 // ==================== SCORING SYSTEM ====================
 
 export interface ScoringRule {
-}
   stat: string;
   points: number;
   label: string;
-  category: &apos;passing&apos; | &apos;rushing&apos; | &apos;receiving&apos; | &apos;kicking&apos; | &apos;defense&apos; | &apos;misc&apos;;
-}
+  category: 'passing' | 'rushing' | 'receiving' | 'kicking' | 'defense' | 'misc';
 
 export interface ScoringSettings {
-}
   format: ScoringFormat;
   passingRules: ScoringRule[];
   rushingRules: ScoringRule[];
@@ -43,20 +40,16 @@ export interface ScoringSettings {
   fractionalScoring: boolean;
   negativePoints: boolean;
   bonuses: {
-}
     longTouchdown: { distance: number; points: number }[];
     perfectWeek: { points: number };
     highScore: { threshold: number; points: number };
   };
-}
 
 // ==================== ROSTER SETTINGS ====================
 
 export interface RosterSettings {
-}
   totalSize: number;
   starters: {
-}
     QB: number;
     RB: number;
     WR: number;
@@ -66,7 +59,6 @@ export interface RosterSettings {
     K: number;
     DEF: number;
     IDP?: {
-}
       DL: number;
       LB: number;
       DB: number;
@@ -76,7 +68,6 @@ export interface RosterSettings {
   ir: number; // Injured Reserve spots
   taxi?: number; // Taxi squad (dynasty)
   maxPerPosition?: {
-}
     QB: number;
     RB: number;
     WR: number;
@@ -84,12 +75,10 @@ export interface RosterSettings {
     K: number;
     DEF: number;
   };
-}
 
 // ==================== LEAGUE SETTINGS ====================
 
 export interface LeagueSettings {
-}
   // Basic Settings
   name: string;
   type: LeagueType;
@@ -108,10 +97,9 @@ export interface LeagueSettings {
   tradeDeadline: number; // Week number
   
   // Draft Settings
-  draftType: &apos;SNAKE&apos; | &apos;AUCTION&apos; | &apos;LINEAR&apos;;
+  draftType: 'SNAKE' | 'AUCTION' | 'LINEAR';
   draftDate?: Date;
   keeperSettings?: {
-}
     maxKeepers: number;
     keeperDeadline: Date;
     keeperCosts: boolean;
@@ -134,7 +122,6 @@ export interface LeagueSettings {
   lotteryDraft: boolean;
   rookieDraft?: boolean;
   salaryCapSettings?: {
-}
     enabled: boolean;
     initialBudget: number;
     minSalary: number;
@@ -143,22 +130,18 @@ export interface LeagueSettings {
   
   // Fun Settings
   lastPlaceFinisher?: {
-}
     punishment: string;
     description: string;
   };
   championships?: {
-}
     trophy: string;
     prize: string;
     description: string;
   };
-}
 
 // ==================== TEAM TYPES ====================
 
 export interface Team {
-}
   id: string;
   leagueId: string;
   name: string;
@@ -181,7 +164,6 @@ export interface Team {
   
   // Season Stats
   record: {
-}
     wins: number;
     losses: number;
     ties: number;
@@ -211,19 +193,16 @@ export interface Team {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
-}
 
 // ==================== MATCHUP TYPES ====================
 
 export interface Matchup {
-}
   id: string;
   leagueId: string;
   week: number;
   season: number;
   
   homeTeam: {
-}
     id: string;
     team: Team;
     score: number;
@@ -232,7 +211,6 @@ export interface Matchup {
   };
   
   awayTeam: {
-}
     id: string;
     team: Team;
     score: number;
@@ -240,7 +218,7 @@ export interface Matchup {
     projected: number;
   };
   
-  status: &apos;SCHEDULED&apos; | &apos;IN_PROGRESS&apos; | &apos;FINAL&apos;;
+  status: 'SCHEDULED' | 'IN_PROGRESS' | 'FINAL';
   isPlayoff: boolean;
   playoffRound?: number;
   
@@ -248,7 +226,6 @@ export interface Matchup {
   timeline?: ScoringEvent[];
   leadChanges: number;
   biggestLead: {
-}
     team: string;
     points: number;
     time: Date;
@@ -256,30 +233,24 @@ export interface Matchup {
   
   createdAt: Date;
   updatedAt: Date;
-}
 
 export interface MatchupLineup {
-}
   starters: MatchupPlayer[];
   bench: MatchupPlayer[];
   totalScore: number;
   totalProjected: number;
-}
 
 export interface MatchupPlayer {
-}
   playerId: string;
   player: Player;
   position: string; // Roster position (QB, RB1, FLEX, etc.)
   score: number;
   projected: number;
   isStarting: boolean;
-  gameStatus: &apos;NOT_STARTED&apos; | &apos;IN_PROGRESS&apos; | &apos;FINAL&apos;;
+  gameStatus: 'NOT_STARTED' | 'IN_PROGRESS' | 'FINAL';
   isLocked: boolean;
-}
 
 export interface ScoringEvent {
-}
   id: string;
   matchupId: string;
   playerId: string;
@@ -292,12 +263,10 @@ export interface ScoringEvent {
   statType: string;
   quarter?: number;
   timeRemaining?: string;
-}
 
 // ==================== STANDINGS ====================
 
 export interface Standings {
-}
   leagueId: string;
   week: number;
   season: number;
@@ -306,20 +275,16 @@ export interface Standings {
   divisions?: DivisionStandings[];
   
   wildCard?: {
-}
     teams: StandingsTeam[];
     cutoff: number;
   };
   
   lastUpdated: Date;
-}
 
 export interface StandingsTeam {
-}
   team: Team;
   rank: number;
   record: {
-}
     wins: number;
     losses: number;
     ties: number;
@@ -328,11 +293,10 @@ export interface StandingsTeam {
   pointsFor: number;
   pointsAgainst: number;
   streak: {
-}
-    type: &apos;W&apos; | &apos;L&apos; | &apos;T&apos;;
+    type: 'W' | 'L' | 'T';
     count: number;
   };
-  clinched?: &apos;PLAYOFFS&apos; | &apos;DIVISION&apos; | &apos;BYE&apos; | &apos;CHAMPIONSHIP&apos;;
+  clinched?: 'PLAYOFFS' | 'DIVISION' | 'BYE' | 'CHAMPIONSHIP';
   eliminated?: boolean;
   divisionRank?: number;
   
@@ -344,18 +308,14 @@ export interface StandingsTeam {
   headToHeadRecord?: { [teamId: string]: string };
   divisionalRecord?: string;
   commonOpponentsRecord?: string;
-}
 
 export interface DivisionStandings {
-}
   name: string;
   teams: StandingsTeam[];
-}
 
 // ==================== PLAYOFFS ====================
 
 export interface PlayoffBracket {
-}
   leagueId: string;
   season: number;
   format: PlayoffFormat;
@@ -367,18 +327,14 @@ export interface PlayoffBracket {
   
   createdAt: Date;
   completedAt?: Date;
-}
 
 export interface PlayoffRound {
-}
   round: number;
-  name: string; // &apos;Wild Card&apos;, &apos;Divisional&apos;, &apos;Championship&apos;
+  name: string; // 'Wild Card', 'Divisional', 'Championship'
   week: number;
   matchups: PlayoffMatchup[];
-}
 
 export interface PlayoffMatchup {
-}
   id: string;
   round: number;
   seed1: number;
@@ -390,28 +346,23 @@ export interface PlayoffMatchup {
   
   // Two-week playoff support
   week1Score?: {
-}
     team1: number;
     team2: number;
   };
   week2Score?: {
-}
     team1: number;
     team2: number;
   };
   totalScore: {
-}
     team1: number;
     team2: number;
   };
   
-  status: &apos;SCHEDULED&apos; | &apos;IN_PROGRESS&apos; | &apos;FINAL&apos;;
-}
+  status: 'SCHEDULED' | 'IN_PROGRESS' | 'FINAL';
 
 // ==================== MAIN LEAGUE INTERFACE ====================
 
 export interface League {
-}
   // Basic Info
   id: string;
   name: string;
@@ -458,25 +409,21 @@ export interface League {
   updatedAt: Date;
   seasonStartDate: Date;
   seasonEndDate: Date;
-}
 
 // ==================== HISTORY AND RECORDS ====================
 
 export interface SeasonSummary {
-}
   season: number;
   champion: Team;
   runnerUp: Team;
   regularSeasonChamp: Team;
   
   records: {
-}
     highestScore: { team: Team; score: number; week: number };
     lowestScore: { team: Team; score: number; week: number };
     mostPointsFor: Team;
     mostPointsAgainst: Team;
     biggestBlowout: {
-}
       winner: Team;
       loser: Team;
       margin: number;
@@ -486,75 +433,61 @@ export interface SeasonSummary {
   
   standings: StandingsTeam[];
   draftGrades?: { [teamId: string]: string };
-}
 
 export interface AllTimeRecord {
-}
   category: string;
   record: number | string;
   holder: Team;
   season: number;
   week?: number;
   date: Date;
-}
 
 export interface ActivityItem {
-}
   id: string;
-  type: &apos;TRADE&apos; | &apos;WAIVER&apos; | &apos;LINEUP&apos; | &apos;DRAFT&apos; | &apos;ADMIN&apos; | &apos;CHAT&apos;;
+  type: 'TRADE' | 'WAIVER' | 'LINEUP' | 'DRAFT' | 'ADMIN' | 'CHAT';
   user: User;
   description: string;
   timestamp: Date;
   data?: Record<string, any>;
-}
 
 export interface TradeHistoryItem {
-}
   id: string;
   date: Date;
   team1: Team;
   team2: Team;
-  team1Gets: (Player | { type: &apos;PICK&apos;; round: number; year: number })[];
-  team2Gets: (Player | { type: &apos;PICK&apos;; round: number; year: number })[];
-  status: &apos;COMPLETED&apos; | &apos;VETOED&apos; | &apos;REVERSED&apos;;
-  votes?: { team: Team; vote: &apos;APPROVE&apos; | &apos;VETO&apos; }[];
-}
+  team1Gets: (Player | { type: 'PICK'; round: number; year: number })[];
+  team2Gets: (Player | { type: 'PICK'; round: number; year: number })[];
+  status: 'COMPLETED' | 'VETOED' | 'REVERSED';
+  votes?: { team: Team; vote: 'APPROVE' | 'VETO' }[];
 
 export interface WaiverHistoryItem {
-}
   id: string;
   date: Date;
   team: Team;
-  action: &apos;ADD&apos; | &apos;DROP&apos;;
+  action: 'ADD' | 'DROP';
   player: Player;
   cost: number; // FAAB cost or waiver priority
   successful: boolean;
-}
 
 // ==================== LEAGUE CREATION ====================
 
 export interface LeagueTemplate {
-}
   id: string;
   name: string;
   description: string;
   settings: Partial<LeagueSettings>;
   popular: boolean;
   tags: string[];
-}
 
 export interface CreateLeagueRequest {
-}
   name: string;
   settings: LeagueSettings;
   templateId?: string;
   inviteEmails?: string[];
-}
 
 // ==================== EXPORT ALL ====================
 
 export type {
-}
   LeagueStatus,
   LeagueType,
   ScoringFormat,

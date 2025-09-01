@@ -3,34 +3,29 @@
  * In-app notification display and management
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Bell, X, Clock, Trophy, TrendingUp, Target } from &apos;lucide-react&apos;;
-import { notificationService, OracleNotification } from &apos;../../services/notificationService&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, X, Clock, Trophy, TrendingUp, Target } from 'lucide-react';
+import { notificationService, OracleNotification } from '../../services/notificationService';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface NotificationCenterProps {
-}
     className?: string;
     maxVisible?: number;
 
-}
 
-export const NotificationCenter: React.FC<NotificationCenterProps> = ({ className = &apos;&apos;,
-}
+export const NotificationCenter: React.FC<NotificationCenterProps> = ({ className = '',
     maxVisible = 5
  }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
     const [notifications, setNotifications] = useState<OracleNotification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const [showToast, setShowToast] = useState<OracleNotification | null>(null);
 
     useEffect(() => {
-}
         // Load existing notifications
         const existing = notificationService.getNotifications();
         setNotifications(existing);
@@ -38,7 +33,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
 
         // Listen for new notifications
         const unsubscribe = notificationService.onNotification((notification: any) => {
-}
             setNotifications(prev => [notification, ...prev]);
             setUnreadCount(prev => prev + 1);
             
@@ -51,7 +45,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
     }, []);
 
     const handleMarkAsRead = (notificationId: string) => {
-}
         notificationService.markAsRead(notificationId);
         setNotifications(prev => 
             prev.map((n: any) => n.id === notificationId ? { ...n, isRead: true } : n)
@@ -60,56 +53,49 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
     };
 
     const handleMarkAllAsRead = () => {
-}
         notificationService.markAllAsRead();
         setNotifications(prev => prev.map((n: any) => ({ ...n, isRead: true })));
         setUnreadCount(0);
     };
 
     const handleClearAll = () => {
-}
         notificationService.clearNotifications();
         setNotifications([]);
         setUnreadCount(0);
         setIsOpen(false);
     };
 
-    const getNotificationIcon = (type: OracleNotification[&apos;type&apos;]) => {
-}
+    const getNotificationIcon = (type: OracleNotification['type']) => {
         switch (type) {
-}
-            case &apos;deadline_warning&apos;:
+            case 'deadline_warning':
                 return <Clock className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
-            case &apos;result_announced&apos;:
+            case 'result_announced':
                 return <Target className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
-            case &apos;accuracy_update&apos;:
+            case 'accuracy_update':
                 return <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case &apos;streak_milestone&apos;:
+            case 'streak_milestone':
                 return <Trophy className="w-4 h-4 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
-            case &apos;ranking_change&apos;:
+            case 'ranking_change':
                 return <Trophy className="w-4 h-4 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <Bell className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
 
     };
 
-    const getPriorityColor = (priority: OracleNotification[&apos;priority&apos;]) => {
-}
+    const getPriorityColor = (priority: OracleNotification['priority']) => {
         switch (priority) {
-}
-            case &apos;high&apos;:
-                return &apos;border-red-500 bg-red-500/10&apos;;
-            case &apos;medium&apos;:
-                return &apos;border-yellow-500 bg-yellow-500/10&apos;;
-            case &apos;low&apos;:
-                return &apos;border-gray-500 bg-gray-500/10&apos;;
+            case 'high':
+                return 'border-red-500 bg-red-500/10';
+            case 'medium':
+                return 'border-yellow-500 bg-yellow-500/10';
+            case 'low':
+                return 'border-gray-500 bg-gray-500/10';
             default:
-                return &apos;border-gray-500 bg-gray-500/10&apos;;
+                return 'border-gray-500 bg-gray-500/10';
 
     };
 
     const formatTime = (timestamp: string) => {
-}
         const now = Date.now();
         const time = new Date(timestamp).getTime();
         const diff = now - time;
@@ -121,7 +107,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
         if (days > 0) return `${days}d ago`;
         if (hours > 0) return `${hours}h ago`;
         if (minutes > 0) return `${minutes}m ago`;
-        return &apos;Just now&apos;;
+        return 'Just now';
     };
 
     const visibleNotifications = notifications.slice(0, maxVisible);
@@ -133,24 +119,22 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className={`relative p-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${
-}
                         unreadCount > 0 
-                            ? &apos;bg-blue-600 hover:bg-blue-700 text-white&apos; 
-                            : &apos;bg-gray-800 hover:bg-gray-700 text-gray-300&apos;
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                            : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
                     }`}
-                    aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : &apos;&apos;}`}
+                    aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
                 >
                     <Bell className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                     
                     {/* Unread Badge */}
                     {unreadCount > 0 && (
-}
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 sm:px-4 md:px-6 lg:px-8"
                         >
-                            {unreadCount > 99 ? &apos;99+&apos; : unreadCount}
+                            {unreadCount > 99 ? '99+' : unreadCount}
                         </motion.div>
                     )}
                 </button>
@@ -158,14 +142,12 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
                 {/* Notification Panel */}
                 <AnimatePresence>
                     {isOpen && (
-}
                         <motion.div
                             initial={{ opacity: 0, y: -10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            className={`absolute ${isMobile ? &apos;left-0&apos; : &apos;right-0&apos;} top-full mt-2 ${
-}
-                                isMobile ? &apos;w-80&apos; : &apos;w-96&apos;
+                            className={`absolute ${isMobile ? 'left-0' : 'right-0'} top-full mt-2 ${
+                                isMobile ? 'w-80' : 'w-96'
                             } max-w-[90vw] bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50`}
                         >
                             {/* Header */}
@@ -173,7 +155,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
                                 <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Notifications</h3>
                                 <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     {unreadCount > 0 && (
-}
                                         <button
                                             onClick={handleMarkAllAsRead}
                                             className="text-xs text-blue-400 hover:text-blue-300 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -194,24 +175,19 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
                             {/* Notification List */}
                             <div className="max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                                 {visibleNotifications.length > 0 ? (
-}
                                     visibleNotifications.map((notification: any) => (
                                         <motion.div
                                             key={notification.id}
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             className={`p-4 border-l-4 ${getPriorityColor(notification.priority)} ${
-}
-                                                notification.isRead ? &apos;opacity-75&apos; : &apos;&apos;
+                                                notification.isRead ? 'opacity-75' : ''
                                             } hover:bg-gray-800/50 transition-colors cursor-pointer`}
                                             onClick={() => {
-}
                                                 if (!notification.isRead) {
-}
                                                     handleMarkAsRead(notification.id);
 
                                                 if (notification.actionUrl) {
-}
                                                     window.location.href = notification.actionUrl;
 
                                             }}
@@ -227,7 +203,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
                                                             {notification.title}
                                                         </p>
                                                         {!notification.isRead && (
-}
                                                             <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                                         )}
                                                     </div>
@@ -247,17 +222,15 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
                                     <div className="p-8 text-center text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                         <Bell className="w-12 h-12 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                         <p>No notifications yet</p>
-                                        <p className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">We&apos;ll notify you about prediction updates</p>
+                                        <p className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">We'll notify you about prediction updates</p>
                                     </div>
                                 )}
                             </div>
 
                             {/* Footer */}
                             {notifications.length > 0 && (
-}
                                 <div className="p-4 border-t border-gray-700 flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                     {notifications.length > maxVisible && (
-}
                                         <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                             Showing {maxVisible} of {notifications.length} notifications
                                         </p>
@@ -279,12 +252,11 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
             {/* Toast Notification */}
             <AnimatePresence>
                 {showToast && (
-}
                     <motion.div
                         initial={{ opacity: 0, y: 50, x: isMobile ? 0 : 300 }}
                         animate={{ opacity: 1, y: 0, x: 0 }}
                         exit={{ opacity: 0, y: 50, x: isMobile ? 0 : 300 }}
-                        className={`fixed ${isMobile ? &apos;bottom-4 left-4 right-4&apos; : &apos;bottom-4 right-4 w-80&apos;} z-50`}
+                        className={`fixed ${isMobile ? 'bottom-4 left-4 right-4' : 'bottom-4 right-4 w-80'} z-50`}
                     >
                         <div className={`bg-gray-900 border border-gray-700 rounded-lg shadow-xl p-4 border-l-4 ${getPriorityColor(showToast.priority)}`}>
                             <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">

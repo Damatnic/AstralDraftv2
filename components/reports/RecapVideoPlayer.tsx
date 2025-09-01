@@ -1,30 +1,26 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import type { RecapVideoScene, League } from &apos;../../types&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { LazyImage } from &apos;../ui/LazyImage&apos;;
-import { PlayIcon } from &apos;../icons/PlayIcon&apos;;
-import { PauseIcon } from &apos;../icons/PauseIcon&apos;;
-import useSound from &apos;../../hooks/useSound&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { RecapVideoScene, League } from '../../types';
+import { Avatar } from '../ui/Avatar';
+import { LazyImage } from '../ui/LazyImage';
+import { PlayIcon } from '../icons/PlayIcon';
+import { PauseIcon } from '../icons/PauseIcon';
+import useSound from '../../hooks/useSound';
 
 interface RecapVideoPlayerProps {
-}
     script: RecapVideoScene[];
     league: League;}
 
 const sceneDuration = 5000; // 5 seconds per scene
 
-}
 
 const TitleScene: React.FC<{
-}
   const [isLoading, setIsLoading] = React.useState(false); scene: RecapVideoScene }> = ({ scene }: any) => (
     <motion.div
         className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 to-black sm:px-4 md:px-6 lg:px-8"
         {...{
-}
             initial: { opacity: 0, scale: 0.8 },
             animate: { opacity: 1, scale: 1 },
             exit: { opacity: 0, scale: 1.2 },
@@ -39,14 +35,12 @@ const TitleScene: React.FC<{
 );
 
 const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }: any) => {
-}
     const teamA = league.teams.find((t: any) => t.name === scene.teamAName);
     const teamB = league.teams.find((t: any) => t.name === scene.teamBName);
     return (
          <motion.div
             className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-800 to-gray-900 sm:px-4 md:px-6 lg:px-8"
             {...{
-}
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },
                 exit: { opacity: 0 },
@@ -55,15 +49,15 @@ const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ sc
         >
             <div className="flex flex-col sm:flex-row items-center justify-around w-full gap-4">
                 <motion.div {...{ initial: { x: -50, opacity: 0 }, animate: { x: 0, opacity: 1 }, transition: { delay: 0.2 } }} className="text-center sm:px-4 md:px-6 lg:px-8">
-                    <Avatar avatar={teamA?.avatar || &apos;🏈&apos;} className="w-24 h-24 text-6xl mx-auto rounded-lg sm:px-4 md:px-6 lg:px-8" />
+                    <Avatar avatar={teamA?.avatar || '🏈'} className="w-24 h-24 text-6xl mx-auto rounded-lg sm:px-4 md:px-6 lg:px-8" />
                     <p className="mt-2 font-bold text-xl sm:px-4 md:px-6 lg:px-8">{teamA?.name}</p>
                 </motion.div>
                 <motion.div {...{ initial: { scale: 0 }, animate: { scale: 1 }, transition: { delay: 0.4 } }} className="text-center sm:px-4 md:px-6 lg:px-8">
                     <p className="font-display text-6xl font-bold sm:px-4 md:px-6 lg:px-8">{scene.teamAScore?.toFixed(2)} - {scene.teamBScore?.toFixed(2)}</p>
-                    <p className="text-red-400 font-bold mt-1 sm:px-4 md:px-6 lg:px-8">{scene.type === &apos;UPSET&apos; ? &apos;UPSET ALERT&apos; : &apos;FINAL&apos;}</p>
+                    <p className="text-red-400 font-bold mt-1 sm:px-4 md:px-6 lg:px-8">{scene.type === 'UPSET' ? 'UPSET ALERT' : 'FINAL'}</p>
                 </motion.div>
                 <motion.div {...{ initial: { x: 50, opacity: 0 }, animate: { x: 0, opacity: 1 }, transition: { delay: 0.2 } }} className="text-center sm:px-4 md:px-6 lg:px-8">
-                     <Avatar avatar={teamB?.avatar || &apos;🏈&apos;} className="w-24 h-24 text-6xl mx-auto rounded-lg sm:px-4 md:px-6 lg:px-8" />
+                     <Avatar avatar={teamB?.avatar || '🏈'} className="w-24 h-24 text-6xl mx-auto rounded-lg sm:px-4 md:px-6 lg:px-8" />
                     <p className="mt-2 font-bold text-xl sm:px-4 md:px-6 lg:px-8">{teamB?.name}</p>
                 </motion.div>
             </div>
@@ -75,13 +69,11 @@ const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ sc
 };
 
 const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }: any) => {
-}
     const team = league.teams.find((t: any) => t.name === scene.playerTeam);
     return (
          <motion.div
             className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-b from-yellow-900/50 to-gray-900 sm:px-4 md:px-6 lg:px-8"
             {...{
-}
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },
                 exit: { opacity: 0 },
@@ -90,7 +82,7 @@ const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = 
         >
             <motion.p {...{ initial: { y: -20 }, animate: { y: 0 } }} className="font-display text-3xl text-yellow-300 sm:px-4 md:px-6 lg:px-8">PLAYER OF THE WEEK</motion.p>
             <motion.div {...{ initial: { scale: 0.5 }, animate: { scale: 1 }, transition: { delay: 0.2 } }} className="my-4 sm:px-4 md:px-6 lg:px-8">
-                <Avatar avatar={team?.avatar || &apos;🏈&apos;} className="w-24 h-24 text-6xl rounded-full ring-4 ring-yellow-400 sm:px-4 md:px-6 lg:px-8" />
+                <Avatar avatar={team?.avatar || '🏈'} className="w-24 h-24 text-6xl rounded-full ring-4 ring-yellow-400 sm:px-4 md:px-6 lg:px-8" />
             </motion.div>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.4 } }} className="text-3xl font-bold sm:px-4 md:px-6 lg:px-8">{scene.playerName}</motion.p>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.6 } }} className="text-5xl font-display font-bold text-yellow-300 my-2 sm:px-4 md:px-6 lg:px-8">{scene.playerScore?.toFixed(2)} PTS</motion.p>
@@ -105,7 +97,6 @@ const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }: any) => (
      <motion.div
         className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 to-black sm:px-4 md:px-6 lg:px-8"
         {...{
-}
             initial: { opacity: 0 },
             animate: { opacity: 1 },
             exit: { opacity: 0 },
@@ -123,20 +114,15 @@ const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }: any) => (
 );
 
 const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }: any) => {
-}
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const [isPlaying, setIsPlaying] = React.useState(true);
     const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-    const playClickSound = useSound(&apos;bid&apos;, 0.3);
+    const playClickSound = useSound('bid', 0.3);
 
     React.useEffect(() => {
-}
         const advanceScene = () => {
-}
             setCurrentIndex(prev => {
-}
                 if (prev < script.length - 1) {
-}
                     return prev + 1;
 
                 setIsPlaying(false);
@@ -145,20 +131,16 @@ const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }: a
         };
 
         if (isPlaying) {
-}
             timerRef.current = setTimeout(advanceScene, sceneDuration);
 
         return () => {
-}
             if (timerRef.current) {
-}
                 clearTimeout(timerRef.current);
 
         };
     }, [currentIndex, isPlaying, script]);
 
     const handlePlayPause = () => {
-}
         playClickSound();
         setIsPlaying(prev => !prev);
     };
@@ -169,10 +151,10 @@ const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }: a
         <div className="w-full h-full flex flex-col relative text-white sm:px-4 md:px-6 lg:px-8">
             <div className="flex-grow sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="wait">
-                    {currentScene.type === &apos;TITLE&apos; && <TitleScene key={currentIndex} scene={currentScene} />}
-                    {(currentScene.type === &apos;MATCHUP&apos; || currentScene.type === &apos;UPSET&apos;) && <MatchupScene key={currentIndex} scene={currentScene} league={league} />}
-                    {currentScene.type === &apos;TOP_PERFORMER&apos; && <TopPerformerScene key={currentIndex} scene={currentScene} league={league} />}
-                    {currentScene.type === &apos;OUTRO&apos; && <OutroScene key={currentIndex} scene={currentScene} />}
+                    {currentScene.type === 'TITLE' && <TitleScene key={currentIndex} scene={currentScene} />}
+                    {(currentScene.type === 'MATCHUP' || currentScene.type === 'UPSET') && <MatchupScene key={currentIndex} scene={currentScene} league={league} />}
+                    {currentScene.type === 'TOP_PERFORMER' && <TopPerformerScene key={currentIndex} scene={currentScene} league={league} />}
+                    {currentScene.type === 'OUTRO' && <OutroScene key={currentIndex} scene={currentScene} />}
                 </AnimatePresence>
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent sm:px-4 md:px-6 lg:px-8">
@@ -181,10 +163,9 @@ const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }: a
                         className="h-full bg-cyan-400 rounded-full sm:px-4 md:px-6 lg:px-8"
                         key={currentIndex}
                         {...{
-}
-                            initial: { width: &apos;0%&apos; },
-                            animate: { width: isPlaying ? &apos;100%&apos; : &apos;0%&apos; },
-                            transition: { duration: isPlaying ? sceneDuration / 1000 : 0, ease: &apos;linear&apos; },
+                            initial: { width: '0%' },
+                            animate: { width: isPlaying ? '100%' : '0%' },
+                            transition: { duration: isPlaying ? sceneDuration / 1000 : 0, ease: 'linear' },
                         }}
                     />
                 </div>

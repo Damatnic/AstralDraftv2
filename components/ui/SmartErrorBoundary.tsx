@@ -1,44 +1,35 @@
-import React, { Component, ErrorInfo, ReactNode } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 interface Props {
-}
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 
-}
 
 interface State {
-}
   hasError: boolean;
   error?: Error;
   errorInfo?: ErrorInfo;
-}
 
 class SmartErrorBoundary extends Component<Props, State> {
-}
   private retryCount = 0;
   private maxRetries = 3;
 
   constructor(props: Props) {
-}
     super(props);
     this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): State {
-}
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-}
-    console.error(&apos;SmartErrorBoundary caught an error:&apos;, error, errorInfo);
+    console.error('SmartErrorBoundary caught an error:', error, errorInfo);
     
     // Call custom error handler if provided
     if (this.props.onError) {
-}
       this.props.onError(error, errorInfo);
     }
 
@@ -47,39 +38,31 @@ class SmartErrorBoundary extends Component<Props, State> {
 
     // Auto-retry for certain types of recoverable errors
     if (this.isRecoverableError(error) && this.retryCount < this.maxRetries) {
-}
       this.scheduleRetry();
     }
   }
   private isRecoverableError(error: Error): boolean {
-}
     // Check if error might be recoverable (network issues, temporary failures)
-    return error.message.includes(&apos;Network&apos;) || 
-           error.message.includes(&apos;timeout&apos;) ||
-           error.message.includes(&apos;Loading chunk failed&apos;);
+    return error.message.includes('Network') || 
+           error.message.includes('timeout') ||
+           error.message.includes('Loading chunk failed');
   }
   private scheduleRetry = () => {
-}
     this.retryCount++;
     setTimeout(() => {
-}
       this.setState({ hasError: false, error: undefined, errorInfo: undefined });
     }, 1000 * this.retryCount); // Progressive backoff
   };
 
   private handleManualRetry = () => {
-}
     this.retryCount = 0;
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
   };
 
   render() {
-}
     if (this.state.hasError) {
-}
       // Custom fallback UI or use provided fallback
       if (this.props.fallback) {
-}
         return this.props.fallback;
       }
       return (
@@ -102,14 +85,12 @@ class SmartErrorBoundary extends Component<Props, State> {
               
               <p className="text-gray-300 sm:px-4 md:px-6 lg:px-8">
                 {this.isRecoverableError(this.state.error!) && this.retryCount < this.maxRetries
-}
                   ? `Attempting to recover... (${this.retryCount}/${this.maxRetries})`
-                  : "We&apos;re having trouble loading this content."
+                  : "We're having trouble loading this content."
                 }
               </p>
               
-              {process.env.NODE_ENV === &apos;development&apos; && this.state.error && (
-}
+              {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="text-left text-xs bg-red-900/20 rounded p-3 border border-red-500/20 sm:px-4 md:px-6 lg:px-8">
                   <summary className="cursor-pointer text-red-400 font-medium sm:px-4 md:px-6 lg:px-8">
                     Error Details (Development)
@@ -148,9 +129,8 @@ class SmartErrorBoundary extends Component<Props, State> {
 
     return this.props.children;
   }
-}
 // Import ErrorBoundary at the top if not already imported
-// import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+// import { ErrorBoundary } from './ErrorBoundary';
 
 const SmartErrorBoundaryWithErrorBoundary: React.FC<Props> = (props: any) => (
   <SmartErrorBoundary {...props} />

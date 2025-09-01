@@ -8,63 +8,55 @@
  * - Different configurations and use cases
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useState } from &apos;react&apos;;
-import { motion } from &apos;framer-motion&apos;;
-import { SecurePasswordInput, SecurePinInput } from &apos;../ui/SecureInput&apos;;
-import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
-import { Button } from &apos;../ui/Button&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { SecurePasswordInput, SecurePinInput } from '../ui/SecureInput';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
 
 export const SecureInputDemo: React.FC = () => {
-}
   // Demo state
-  const [loginPassword, setLoginPassword] = useState(&apos;&apos;);
-  const [registerPassword, setRegisterPassword] = useState(&apos;&apos;);
-  const [confirmPassword, setConfirmPassword] = useState(&apos;&apos;);
-  const [userPin, setUserPin] = useState(&apos;&apos;);
-  const [adminPin, setAdminPin] = useState(&apos;&apos;);
-  const [customPin, setCustomPin] = useState(&apos;&apos;);
+  const [loginPassword, setLoginPassword] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [userPin, setUserPin] = useState('');
+  const [adminPin, setAdminPin] = useState('');
+  const [customPin, setCustomPin] = useState('');
   
   // Error states for demo
   const [errors, setErrors] = useState<Record<string, string>>({});
   
   // Demo validation
   const validateDemo = () => {
-}
     const newErrors: Record<string, string> = {};
     
     if (loginPassword.length < 8) {
-}
-      newErrors.loginPassword = &apos;Password must be at least 8 characters&apos;;
+      newErrors.loginPassword = 'Password must be at least 8 characters';
 
     if (registerPassword !== confirmPassword) {
-}
-      newErrors.confirmPassword = &apos;Passwords do not match&apos;;
+      newErrors.confirmPassword = 'Passwords do not match';
 
     if (userPin.length !== 4) {
-}
-      newErrors.userPin = &apos;PIN must be exactly 4 digits&apos;;
+      newErrors.userPin = 'PIN must be exactly 4 digits';
 
     if (adminPin.length !== 6) {
-}
-      newErrors.adminPin = &apos;Admin PIN must be 6 digits&apos;;
+      newErrors.adminPin = 'Admin PIN must be 6 digits';
 
     setErrors(newErrors);
     
     if (Object.keys(newErrors).length === 0) {
-}
-      alert(&apos;All inputs are valid! 🎉&apos;);
+      alert('All inputs are valid! 🎉');
 
   };
   
   const clearDemo = () => {
-}
-    setLoginPassword(&apos;&apos;);
-    setRegisterPassword(&apos;&apos;);
-    setConfirmPassword(&apos;&apos;);
-    setUserPin(&apos;&apos;);
-    setAdminPin(&apos;&apos;);
-    setCustomPin(&apos;&apos;);
+    setLoginPassword('');
+    setRegisterPassword('');
+    setConfirmPassword('');
+    setUserPin('');
+    setAdminPin('');
+    setCustomPin('');
     setErrors({});
   };
 

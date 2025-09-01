@@ -1,24 +1,21 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { SendIcon } from &apos;../icons/SendIcon&apos;;
-import type { User } from &apos;../../types&apos;;
-import EmptyState from &apos;../ui/EmptyState&apos;;
-import { UsersIcon } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { useAppState } from '../../contexts/AppContext';
+import { Avatar } from '../ui/Avatar';
+import { SendIcon } from '../icons/SendIcon';
+import type { User } from '../../types';
+import EmptyState from '../ui/EmptyState';
+import { UsersIcon } from 'lucide-react';
 
 interface MessageThreadProps {
-}
     userId: string | null;
     onUserSelected?: (userId: string) => void;
 
-}
 
 const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }: any) => {
-}
   const [isLoading, setIsLoading] = React.useState(false);
     const { state, dispatch } = useAppState();
-    const [text, setText] = React.useState(&apos;&apos;);
+    const [text, setText] = React.useState('');
     const [tempUser, setTempUser] = React.useState<User | null>(null);
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
@@ -26,23 +23,19 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }:
     const finalUser = otherUser || tempUser;
 
     React.useEffect(() => {
-}
         if (userId) {
-}
-            dispatch({ type: &apos;MARK_CONVERSATION_AS_READ&apos;, payload: { userId } });
+            dispatch({ type: 'MARK_CONVERSATION_AS_READ', payload: { userId } });
         }
     }, [userId, dispatch]);
 
     React.useEffect(() => {
-}
-        messagesEndRef.current?.scrollIntoView({ behavior: &apos;smooth&apos; });
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [userId, state.directMessages]);
     
     const handleSend = () => {
-}
         if (!text.trim() || !finalUser) return;
-        dispatch({ type: &apos;SEND_DIRECT_MESSAGE&apos;, payload: { toUserId: finalUser.id, text } });
-        setText(&apos;&apos;);
+        dispatch({ type: 'SEND_DIRECT_MESSAGE', payload: { toUserId: finalUser.id, text } });
+        setText('');
     };
 
     const messages = state.directMessages.filter(
@@ -50,14 +43,10 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }:
     );
     
     const allUsers = React.useMemo(() => {
-}
         const userMap = new Map<string, User>();
         state.leagues.forEach((league: any) => {
-}
             league.members.forEach((member: any) => {
-}
                 if (member.id !== state.user?.id) {
-}
                     userMap.set(member.id, member);
                 }
             });
@@ -66,7 +55,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }:
     },[state.leagues, state.user?.id]);
 
     if (!userId && onUserSelected) {
-}
          return (
             <div className="h-full flex flex-col sm:px-4 md:px-6 lg:px-8">
                 <div className="p-2 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
@@ -74,7 +62,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }:
                 </div>
                 <div className="flex-grow overflow-y-auto p-2 space-y-1 sm:px-4 md:px-6 lg:px-8">
                     {allUsers.map((user: any) => (
-}
                         <button key={user.id} onClick={() => onUserSelected(user.id)}>
                             <Avatar avatar={user.avatar} className="w-8 h-8 rounded-full mr-2 sm:px-4 md:px-6 lg:px-8"/>
                             {user.name}
@@ -86,7 +73,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }:
     }
 
     if (!finalUser) {
-}
         return <div />;
     }
 
@@ -98,10 +84,9 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }:
             </header>
             <main className="flex-grow p-4 space-y-4 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 {messages.map((msg: any) => (
-}
-                    <div key={msg.id} className={`flex items-start gap-2.5 text-sm ${msg.fromUserId === state.user?.id ? &apos;justify-end&apos; : &apos;&apos;}`}>
+                    <div key={msg.id} className={`flex items-start gap-2.5 text-sm ${msg.fromUserId === state.user?.id ? 'justify-end' : ''}`}>
                         {msg.fromUserId !== state.user?.id && <Avatar avatar={finalUser.avatar} className="w-8 h-8 text-xl rounded-full sm:px-4 md:px-6 lg:px-8" />}
-                        <div className={`p-2 rounded-lg max-w-[70%] ${msg.fromUserId === state.user?.id ? &apos;bg-cyan-600&apos; : &apos;bg-black/20&apos;}`}>
+                        <div className={`p-2 rounded-lg max-w-[70%] ${msg.fromUserId === state.user?.id ? 'bg-cyan-600' : 'bg-black/20'}`}>
                             <p>{msg.text}</p>
                         </div>
                     </div>

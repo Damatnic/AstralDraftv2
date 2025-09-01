@@ -3,33 +3,28 @@
  * Optimized utilities for mobile performance including debouncing and throttling
  */
 
-import { useCallback, useRef, useEffect, useState } from &apos;react&apos;;
+import { useCallback, useRef, useEffect, useState } from 'react';
 
 export interface DebouncedFunction<T extends (...args: any[]) => any> {
-}
     (...args: Parameters<T>): void;
     cancel: () => void;
     flush: () => void;
-}
 
 export function debounce<T extends (...args: any[]) => any>(
     func: T,
     wait: number,
     immediate = false
 ): DebouncedFunction<T> {
-}
     let timeout: NodeJS.Timeout | null = null;
     let result: ReturnType<T>;
     let savedThis: any;
     let savedArgs: Parameters<T>;
 
     const debounced = function(this: any, ...args: Parameters<T>) {
-}
         savedThis = this;
         savedArgs = args;
         
         const later = () => {
-}
             timeout = null;
             if (!immediate) result = func.apply(savedThis, savedArgs);
         };
@@ -43,18 +38,14 @@ export function debounce<T extends (...args: any[]) => any>(
     };
 
     debounced.cancel = () => {
-}
         if (timeout) {
-}
             clearTimeout(timeout);
             timeout = null;
         }
     };
 
     debounced.flush = () => {
-}
         if (timeout) {
-}
             clearTimeout(timeout);
             timeout = null;
             result = func.apply(savedThis, savedArgs);
@@ -62,14 +53,12 @@ export function debounce<T extends (...args: any[]) => any>(
     };
 
     return debounced as DebouncedFunction<T>;
-}
 
 export function throttle<T extends (...args: any[]) => any>(
     func: T,
     wait: number,
     options: { leading?: boolean; trailing?: boolean } = {}
 ): DebouncedFunction<T> {
-}
     let timeout: NodeJS.Timeout | null = null;
     let previous = 0;
     let result: ReturnType<T>;
@@ -79,7 +68,6 @@ export function throttle<T extends (...args: any[]) => any>(
     const { leading = true, trailing = true } = options;
 
     const throttled = function(this: any, ...args: Parameters<T>) {
-}
         savedThis = this;
         savedArgs = args;
         
@@ -90,18 +78,14 @@ export function throttle<T extends (...args: any[]) => any>(
         const remaining = wait - (now - previous);
 
         if (remaining <= 0 || remaining > wait) {
-}
             if (timeout) {
-}
                 clearTimeout(timeout);
                 timeout = null;
             }
             previous = now;
             result = func.apply(this, args);
         } else if (!timeout && trailing) {
-}
             timeout = setTimeout(() => {
-}
                 previous = leading ? Date.now() : 0;
                 timeout = null;
                 result = func.apply(savedThis, savedArgs);
@@ -110,9 +94,7 @@ export function throttle<T extends (...args: any[]) => any>(
     };
 
     throttled.cancel = () => {
-}
         if (timeout) {
-}
             clearTimeout(timeout);
             timeout = null;
         }
@@ -120,9 +102,7 @@ export function throttle<T extends (...args: any[]) => any>(
     };
 
     throttled.flush = () => {
-}
         if (timeout) {
-}
             clearTimeout(timeout);
             timeout = null;
             result = func.apply(savedThis, savedArgs);
@@ -130,38 +110,31 @@ export function throttle<T extends (...args: any[]) => any>(
     };
 
     return throttled as DebouncedFunction<T>;
-}
 
 export const useDebounce = <T extends (...args: any[]) => any>(
     callback: T,
     delay: number,
     immediate = false
 ): DebouncedFunction<T> => {
-}
     const callbackRef = useRef(callback);
     const debouncedRef = useRef<DebouncedFunction<T> | null>(null);
 
     // Update callback ref when callback changes
     useEffect(() => {
-}
         callbackRef.current = callback;
     }, [callback]);
 
     // Create debounced function
     const debouncedCallback = useCallback(() => {
-}
         return debounce((...args: Parameters<T>) => {
-}
             return callbackRef.current(...args);
         }, delay, immediate);
     }, [delay, immediate]);
 
     // Update debounced function when delay or immediate changes
     useEffect(() => {
-}
         debouncedRef.current = debouncedCallback();
         return () => {
-}
             debouncedRef.current?.cancel();
         };
     }, [debouncedCallback]);
@@ -174,31 +147,25 @@ export const useThrottle = <T extends (...args: any[]) => any>(
     delay: number,
     options: { leading?: boolean; trailing?: boolean } = {}
 ): DebouncedFunction<T> => {
-}
     const callbackRef = useRef(callback);
     const throttledRef = useRef<DebouncedFunction<T> | null>(null);
 
     // Update callback ref when callback changes
     useEffect(() => {
-}
         callbackRef.current = callback;
     }, [callback]);
 
     // Create throttled function
     const throttledCallback = useCallback(() => {
-}
         return throttle((...args: Parameters<T>) => {
-}
             return callbackRef.current(...args);
         }, delay, options);
     }, [delay, options]);
 
     // Update throttled function when delay or options change
     useEffect(() => {
-}
         throttledRef.current = throttledCallback();
         return () => {
-}
             throttledRef.current?.cancel();
         };
     }, [throttledCallback]);
@@ -211,24 +178,19 @@ export const useOptimizedScroll = (
     callback: (event: Event) => void,
     delay = 16 // ~60fps
 ) => {
-}
     const throttledCallback = useThrottle(callback, delay, { 
-}
         leading: true, 
         trailing: true 
     });
 
     useEffect(() => {
-}
         const handleScroll = (event: Event) => {
-}
             throttledCallback(event);
         };
 
-        window.addEventListener(&apos;scroll&apos;, handleScroll, { passive: true });
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => {
-}
-            window.removeEventListener(&apos;scroll&apos;, handleScroll);
+            window.removeEventListener('scroll', handleScroll);
             throttledCallback.cancel();
         };
     }, [throttledCallback]);
@@ -239,20 +201,16 @@ export const useOptimizedResize = (
     callback: (event: Event) => void,
     delay = 250
 ) => {
-}
     const debouncedCallback = useDebounce(callback, delay);
 
     useEffect(() => {
-}
         const handleResize = (event: Event) => {
-}
             debouncedCallback(event);
         };
 
-        window.addEventListener(&apos;resize&apos;, handleResize, { passive: true });
+        window.addEventListener('resize', handleResize, { passive: true });
         return () => {
-}
-            window.removeEventListener(&apos;resize&apos;, handleResize);
+            window.removeEventListener('resize', handleResize);
             debouncedCallback.cancel();
         };
     }, [debouncedCallback]);
@@ -260,50 +218,40 @@ export const useOptimizedResize = (
 
 // Performance monitoring utilities
 export const measurePerformance = (name: string, fn: () => void) => {
-}
-    if (typeof performance !== &apos;undefined&apos; && performance.mark) {
-}
+    if (typeof performance !== 'undefined' && performance.mark) {
         performance.mark(`${name}-start`);
         fn();
         performance.mark(`${name}-end`);
         performance.measure(name, `${name}-start`, `${name}-end`);
     } else {
-}
         fn();
     }
 };
 
 export const measureAsyncPerformance = async (name: string, fn: () => Promise<void>) => {
-}
-    if (typeof performance !== &apos;undefined&apos; && performance.mark) {
-}
+    if (typeof performance !== 'undefined' && performance.mark) {
         performance.mark(`${name}-start`);
         await fn();
         performance.mark(`${name}-end`);
         performance.measure(name, `${name}-start`, `${name}-end`);
     } else {
-}
         await fn();
     }
 };
 
 // RAF-based updates for smooth animations
 export const useRAFCallback = (callback: () => void) => {
-}
     const rafRef = useRef<number | undefined>(undefined);
     const callbackRef = useRef(callback);
 
     useEffect(() => {
-}
         callbackRef.current = callback;
     }, [callback]);
 
     const start = useCallback(() => {
-}
         if (rafRef.current) return;
         
         const loop = () => {
-}
             callbackRef.current();
             rafRef.current = requestAnimationFrame(loop);
         };
@@ -312,16 +260,13 @@ export const useRAFCallback = (callback: () => void) => {
     }, []);
 
     const stop = useCallback(() => {
-}
         if (rafRef.current) {
-}
             cancelAnimationFrame(rafRef.current);
             rafRef.current = undefined;
         }
     }, []);
 
     useEffect(() => {
-}
         return stop;
     }, [stop]);
 
@@ -331,39 +276,31 @@ export const useRAFCallback = (callback: () => void) => {
 // Advanced Mobile Performance and PWA Features
 
 interface MobileDeviceCapabilities {
-}
     isLowEndDevice: boolean;
     memoryInfo?: any;
     connectionType?: string;
     batteryLevel?: number;
     devicePixelRatio: number;
     hardwareConcurrency: number;
-}
 
 interface PWAInstallPrompt {
-}
     isInstallable: boolean;
     installPrompt: Event | null;
     showInstallPrompt: () => Promise<void>;
-}
 
 // Device capability detection
 export const detectMobileCapabilities = (): MobileDeviceCapabilities => {
-}
     const capabilities: MobileDeviceCapabilities = {
-}
         isLowEndDevice: false,
         devicePixelRatio: window.devicePixelRatio || 1,
         hardwareConcurrency: navigator.hardwareConcurrency || 4
     };
 
     // Memory detection (Chrome only)
-    if (&apos;memory&apos; in performance) {
-}
+    if ('memory' in performance) {
         capabilities.memoryInfo = (performance as any).memory;
         const memory = capabilities.memoryInfo;
         if (memory && memory.jsHeapSizeLimit < 1000000000) { // Less than 1GB
-}
             capabilities.isLowEndDevice = true;
         }
     }
@@ -371,25 +308,20 @@ export const detectMobileCapabilities = (): MobileDeviceCapabilities => {
     // Network connection
     const connection = (navigator as any).connection || (navigator as any).mozConnection;
     if (connection) {
-}
         capabilities.connectionType = connection.effectiveType;
-        if (connection.effectiveType === &apos;slow-2g&apos; || connection.effectiveType === &apos;2g&apos;) {
-}
+        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
             capabilities.isLowEndDevice = true;
         }
     }
 
     // Hardware concurrency check
     if (capabilities.hardwareConcurrency <= 2) {
-}
         capabilities.isLowEndDevice = true;
     }
 
     // Battery API
-    if (&apos;getBattery&apos; in navigator) {
-}
+    if ('getBattery' in navigator) {
         (navigator as any).getBattery().then((battery: any) => {
-}
             capabilities.batteryLevel = battery.level;
         });
     }
@@ -399,79 +331,64 @@ export const detectMobileCapabilities = (): MobileDeviceCapabilities => {
 
 // PWA installation hook
 export const usePWAInstall = (): PWAInstallPrompt => {
-}
     const [isInstallable, setIsInstallable] = useState(false);
     const [installPrompt, setInstallPrompt] = useState<any>(null);
 
     useEffect(() => {
-}
         const handleBeforeInstallPrompt = (e: Event) => {
-}
             e.preventDefault();
             setInstallPrompt(e);
             setIsInstallable(true);
         };
 
         const handleAppInstalled = () => {
-}
             setInstallPrompt(null);
             setIsInstallable(false);
         };
 
-        window.addEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
-        window.addEventListener(&apos;appinstalled&apos;, handleAppInstalled);
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.addEventListener('appinstalled', handleAppInstalled);
 
         return () => {
-}
-            window.removeEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
-            window.removeEventListener(&apos;appinstalled&apos;, handleAppInstalled);
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+            window.removeEventListener('appinstalled', handleAppInstalled);
         };
     }, []);
 
     const showInstallPrompt = useCallback(async () => {
-}
         if (!installPrompt) return;
 
         try {
-}
 
             const result = await installPrompt.prompt();
-            console.log(&apos;PWA install prompt result:&apos;, result);
+            console.log('PWA install prompt result:', result);
             
-            if (result.outcome === &apos;accepted&apos;) {
-}
+            if (result.outcome === 'accepted') {
                 setInstallPrompt(null);
                 setIsInstallable(false);
             }
         } catch (error) {
-}
             console.error(error);
         }
     }, [installPrompt]);
 
-    const optimizeImage = useCallback((src: string, width?: number, height?: number, quality: number = 0.8, format: &apos;webp&apos; | &apos;jpeg&apos; = &apos;jpeg&apos;) => {
-}
+    const optimizeImage = useCallback((src: string, width?: number, height?: number, quality: number = 0.8, format: 'webp' | 'jpeg' = 'jpeg') => {
         const cacheKey = `${src}-${width}-${height}-${quality}-${format}`;
         if (imageCache.current.has(cacheKey)) {
-}
             const cached = imageCache.current.get(cacheKey);
             return cached || src;
         }
 
         return new Promise((resolve: any) => {
-}
             const img = new Image();
-            img.crossOrigin = &apos;anonymous&apos;;
+            img.crossOrigin = 'anonymous';
             
             img.onload = () => {
-}
                 try {
-}
-                    const canvas = document.createElement(&apos;canvas&apos;);
-                    const ctx = canvas.getContext(&apos;2d&apos;);
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
                     
                     if (!ctx) {
-}
                         resolve(src);
                         return;
                     }
@@ -481,18 +398,14 @@ export const usePWAInstall = (): PWAInstallPrompt => {
                     let targetHeight = img.naturalHeight;
                     
                     if (width || height) {
-}
                         const aspectRatio = img.naturalWidth / img.naturalHeight;
                         if (width && height) {
-}
                             targetWidth = width;
                             targetHeight = height;
                         } else if (width) {
-}
                             targetWidth = width;
                             targetHeight = width / aspectRatio;
                         } else if (height) {
-}
                             targetHeight = height;
                             targetWidth = height * aspectRatio;
                         }
@@ -507,21 +420,19 @@ export const usePWAInstall = (): PWAInstallPrompt => {
                     ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
                     // Convert with appropriate quality
-                    const mimeType = format === &apos;webp&apos; ? &apos;image/webp&apos; : &apos;image/jpeg&apos;;
+                    const mimeType = format === 'webp' ? 'image/webp' : 'image/jpeg';
                     const optimizedDataUrl = canvas.toDataURL(mimeType, quality);
 
                     imageCache.current.set(cacheKey, optimizedDataUrl);
                     resolve(optimizedDataUrl);
                 } catch (error) {
-}
-                    console.error(&apos;Image optimization failed:&apos;, error);
+                    console.error('Image optimization failed:', error);
                     resolve(src);
                 }
             };
             
             img.onerror = () => {
-}
-                console.error(&apos;Image load failed&apos;);
+                console.error('Image load failed');
                 resolve(src);
             };
             
@@ -530,18 +441,14 @@ export const usePWAInstall = (): PWAInstallPrompt => {
     }, []);
 
     useEffect(() => {
-}
         return () => {
-}
             if (gestureFrameId.current) {
-}
                 cancelAnimationFrame(gestureFrameId.current);
             }
         };
     }, []);
 
     return {
-}
         optimizeGestureCallback,
         startGestureTracking,
 //         endGestureTracking

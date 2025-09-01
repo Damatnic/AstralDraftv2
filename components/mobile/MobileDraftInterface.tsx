@@ -3,14 +3,13 @@
  * Streamlined draft experience with touch-friendly controls and gesture support
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion, AnimatePresence, PanInfo } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Player, Team, User } from &apos;../../types&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Player, Team, User } from '../../types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { 
-}
     ChevronUpIcon, 
     ChevronDownIcon, 
     RefreshCwIcon,
@@ -27,10 +26,9 @@ import {
     SkipForwardIcon,
     ChevronLeftIcon,
 //     ChevronRightIcon
-} from &apos;lucide-react&apos;;
+} from 'lucide-react';
 
 interface MobileDraftInterfaceProps {
-}
     currentUser: User;
     teams: Team[];
     availablePlayers: Player[];
@@ -43,62 +41,51 @@ interface MobileDraftInterfaceProps {
     onPauseResume: () => void;
     className?: string;
 
-}
 
 interface SwipeablePlayerCard {
-}
     player: Player;
     onSwipeLeft: () => void;
     onSwipeRight: () => void;
     onTap: () => void;}
 
 const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
-}
     player,
     onSwipeLeft,
     onSwipeRight,
 //     onTap
 }: any) => {
-}
     const [dragOffset, setDragOffset] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
 
     const handleDragEnd = (event: any, info: PanInfo) => {
-}
         setIsDragging(false);
         const threshold = 100;
         
         if (info.offset.x > threshold) {
-}
             onSwipeRight();
         } else if (info.offset.x < -threshold) {
-}
             onSwipeLeft();
 
         setDragOffset(0);
     };
 
     const handleDrag = (event: any, info: PanInfo) => {
-}
         setDragOffset(info.offset.x);
         if (!isDragging) setIsDragging(true);
     };
 
     const getBackgroundColor = () => {
-}
-        if (!isDragging) return &apos;bg-[var(--panel-bg)]&apos;;
+        if (!isDragging) return 'bg-[var(--panel-bg)]';
         
-        if (dragOffset > 50) return &apos;bg-green-500/20&apos;;
-        if (dragOffset < -50) return &apos;bg-red-500/20&apos;;
-        return &apos;bg-[var(--panel-bg)]&apos;;
+        if (dragOffset > 50) return 'bg-green-500/20';
+        if (dragOffset < -50) return 'bg-red-500/20';
+        return 'bg-[var(--panel-bg)]';
     };
 
     const getSwipeIndicator = () => {
-}
         if (!isDragging) return null;
         
         if (dragOffset > 50) {
-}
             return (
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-green-400 sm:px-4 md:px-6 lg:px-8">
                     <StarIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
@@ -107,7 +94,6 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
             );
 
         if (dragOffset < -50) {
-}
             return (
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-red-400 sm:px-4 md:px-6 lg:px-8">
                     <XIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
@@ -135,7 +121,7 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
             
             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold sm:px-4 md:px-6 lg:px-8">
-                    {player.name.split(&apos; &apos;).map((n: any) => n[0]).join(&apos;&apos;)}
+                    {player.name.split(' ').map((n: any) => n[0]).join('')}
                 </div>
                 
                 <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
@@ -173,7 +159,6 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
             
             {/* Swipe hints */}
             {!isDragging && (
-}
                 <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-2 opacity-30 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-center gap-1 text-red-400 sm:px-4 md:px-6 lg:px-8">
                         <ChevronLeftIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -190,7 +175,6 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
 };
 
 const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
-}
     currentUser,
     teams,
     availablePlayers,
@@ -201,13 +185,12 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
     onDraftPlayer,
     onAutoPickToggle,
     onPauseResume,
-    className = &apos;&apos;
+    className = ''
 }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
-    const [activeView, setActiveView] = React.useState<&apos;players&apos; | &apos;picks&apos; | &apos;queue&apos;>(&apos;players&apos;);
-    const [searchQuery, setSearchQuery] = React.useState(&apos;&apos;);
-    const [filterPosition, setFilterPosition] = React.useState<string>(&apos;all&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const [activeView, setActiveView] = React.useState<'players' | 'picks' | 'queue'>('players');
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [filterPosition, setFilterPosition] = React.useState<string>('all');
     const [showFilters, setShowFilters] = React.useState(false);
     const [playerQueue, setPlayerQueue] = React.useState<Player[]>([]);
     const [isAutoPick, setIsAutoPick] = React.useState(false);
@@ -215,36 +198,29 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
 
     // Filter players based on search and position
     const filteredPlayers = React.useMemo(() => {
-}
         let filtered = availablePlayers;
 
         if (searchQuery) {
-}
             filtered = filtered.filter((player: any) =>
                 player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 player.team.toLowerCase().includes(searchQuery.toLowerCase())
             );
 
-        if (filterPosition !== &apos;all&apos;) {
-}
+        if (filterPosition !== 'all') {
             filtered = filtered.filter((player: any) => player.position === filterPosition);
 
         return filtered.slice(0, 50); // Limit for performance
     }, [availablePlayers, searchQuery, filterPosition]);
 
     const formatTime = (seconds: number) => {
-}
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        return `${mins}:${secs.toString().padStart(2, &apos;0&apos;)}`;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
     const handlePlayerQueue = (player: Player) => {
-}
         setPlayerQueue(prev => {
-}
             if (prev.find((p: any) => p.id === player.id)) {
-}
                 return prev.filter((p: any) => p.id !== player.id);
 
             return [...prev, player];
@@ -252,21 +228,18 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
     };
 
     const handlePlayerPass = (player: Player) => {
-}
         // Remove from queue if present, otherwise just visual feedback
         setPlayerQueue(prev => prev.filter((p: any) => p.id !== player.id));
     };
 
     const handleQuickDraft = () => {
-}
         if (playerQueue.length > 0) {
-}
             onDraftPlayer(playerQueue[0].id);
             setPlayerQueue(prev => prev.slice(1));
     }
   };
 
-    const positions = [&apos;all&apos;, &apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;];
+    const positions = ['all', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
     return (
         <div className={`h-full flex flex-col bg-[var(--panel-bg)] ${className}`}>
@@ -291,7 +264,6 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                             </div>
                             
                             {isUserTurn && (
-}
                                 <motion.div
                                     animate={{ scale: [1, 1.1, 1] }}
                                     transition={{ repeat: Infinity, duration: 1 }}
@@ -311,14 +283,13 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                                 className="flex items-center gap-1 px-2 py-1 bg-white/20 rounded text-xs sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
                                 {isDraftPaused ? <PlayIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" /> : <PauseIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />}
-                                {isDraftPaused ? &apos;Resume&apos; : &apos;Pause&apos;}
+                                {isDraftPaused ? 'Resume' : 'Pause'}
                             </button>
                             
                             <button
                                 onClick={onAutoPickToggle}
                                 className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${
-}
-                                    isAutoPick ? &apos;bg-green-500/20 text-green-300&apos; : &apos;bg-white/20&apos;
+                                    isAutoPick ? 'bg-green-500/20 text-green-300' : 'bg-white/20'
                                 }`}
                              aria-label="Action button">
                                 <RefreshCwIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
@@ -327,7 +298,6 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                         </div>
                         
                         {playerQueue.length > 0 && (
-}
                             <button
                                 onClick={handleQuickDraft}
                                 disabled={!isUserTurn}
@@ -342,10 +312,9 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                 {/* Navigation Tabs */}
                 <div className="flex sm:px-4 md:px-6 lg:px-8">
                     {[
-}
-                        { id: &apos;players&apos;, label: &apos;Players&apos;, icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                        { id: &apos;picks&apos;, label: &apos;Picks&apos;, icon: <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                        { id: &apos;queue&apos;, label: `Queue (${playerQueue.length})`, icon: <StarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
+                        { id: 'players', label: 'Players', icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                        { id: 'picks', label: 'Picks', icon: <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                        { id: 'queue', label: `Queue (${playerQueue.length})`, icon: <StarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
                     ].map((tab: any) => (
                         <button
                             key={tab.id}
@@ -359,8 +328,7 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
             </div>
 
             {/* Search and Filters (Players view only) */}
-            {activeView === &apos;players&apos; && (
-}
+            {activeView === 'players' && (
                 <div className="flex-shrink-0 p-3 bg-[var(--panel-bg)] border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <div className="flex gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex-1 relative sm:px-4 md:px-6 lg:px-8">
@@ -381,16 +349,14 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
 
                     <AnimatePresence>
                         {showFilters && (
-}
                             <motion.div
                                 initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: &apos;auto&apos; }}
+                                animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 className="overflow-hidden sm:px-4 md:px-6 lg:px-8"
                             >
                                 <div className="flex gap-1 flex-wrap sm:px-4 md:px-6 lg:px-8">
                                     {positions.map((position: any) => (
-}
                                         <button
                                             key={position}
                                             onClick={() => setFilterPosition(position)}`}
@@ -415,11 +381,9 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                         exit={{ opacity: 0, x: -20 }}
                         className="h-full overflow-y-auto p-3 sm:px-4 md:px-6 lg:px-8"
                     >
-                        {activeView === &apos;players&apos; && (
-}
+                        {activeView === 'players' && (
                             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {filteredPlayers.length === 0 ? (
-}
                                     <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         <UsersIcon className="w-12 h-12 mx-auto mb-2 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                         <p>No players found</p>
@@ -438,11 +402,9 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                             </div>
                         )}
 
-                        {activeView === &apos;picks&apos; && (
-}
+                        {activeView === 'picks' && (
                             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {draftedPlayers.slice(-10).reverse().map((player, index) => (
-}
                                     <div
                                         key={`${player.id}-${index}`}
                                         className="p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8"
@@ -465,11 +427,9 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                             </div>
                         )}
 
-                        {activeView === &apos;queue&apos; && (
-}
+                        {activeView === 'queue' && (
                             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {playerQueue.length === 0 ? (
-}
                                     <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         <StarIcon className="w-12 h-12 mx-auto mb-2 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                         <p>No players in queue</p>

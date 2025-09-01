@@ -1,28 +1,22 @@
 
 interface LoadingProps {
-}
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  size?: 'sm' | 'md' | 'lg';
   text?: string;
-  variant?: &apos;spinner&apos; | &apos;skeleton&apos;;
+  variant?: 'spinner' | 'skeleton';
 
-}
 
 export const Loading: React.FC<LoadingProps> = ({
-}
-  size = &apos;md&apos;,
+  size = 'md',
   text,
-  variant = &apos;spinner&apos;
+  variant = 'spinner'
 }: any) => {
-}
   const sizeClasses = {
-}
-    sm: &apos;w-4 h-4&apos;,
-    md: &apos;w-8 h-8&apos;, 
-    lg: &apos;w-12 h-12&apos;
+    sm: 'w-4 h-4',
+    md: 'w-8 h-8', 
+    lg: 'w-12 h-12'
   };
 
-  if (variant === &apos;skeleton&apos;) {
-}
+  if (variant === 'skeleton') {
     return (
       <div className="animate-pulse sm:px-4 md:px-6 lg:px-8">
         <div className="glass-pane p-6 space-y-4 sm:px-4 md:px-6 lg:px-8">

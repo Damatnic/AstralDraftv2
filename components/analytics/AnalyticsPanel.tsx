@@ -1,17 +1,15 @@
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import type { Analytics } from &apos;../../types&apos;;
-import AnimatedNumber from &apos;../ui/AnimatedNumber&apos;;
-import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
-import { FlameIcon } from &apos;../icons/FlameIcon&apos;;
-import { TrophyIcon } from &apos;../icons/TrophyIcon&apos;;
-import { Tooltip } from &apos;../ui/Tooltip&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import type { Analytics } from '../../types';
+import AnimatedNumber from '../ui/AnimatedNumber';
+import { ZapIcon } from '../icons/ZapIcon';
+import { FlameIcon } from '../icons/FlameIcon';
+import { TrophyIcon } from '../icons/TrophyIcon';
+import { Tooltip } from '../ui/Tooltip';
 
 interface AnalyticsPanelProps {
-}
   analytics: Analytics;
 
-}
 
 const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }: any) => (
     <div className={`p-2 bg-gray-800/50 rounded-lg flex items-center gap-3`}>
@@ -31,7 +29,6 @@ const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: num
 );
 
 const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
-}
   return (
     <div className="glass-pane flex-shrink-0 flex flex-col bg-gray-900/40 border border-cyan-300/20 rounded-2xl backdrop-blur-sm shadow-2xl shadow-black/50 sm:px-4 md:px-6 lg:px-8">
       <div className="flex-shrink-0 p-3 text-center border-b border-cyan-300/20 sm:px-4 md:px-6 lg:px-8">

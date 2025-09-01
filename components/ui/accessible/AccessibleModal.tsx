@@ -3,20 +3,19 @@
  * WCAG 2.1 Level AA Compliant Modal Dialog
  */
 
-import React, { useEffect, useRef, useId } from &apos;react&apos;;
-import { createPortal } from &apos;react-dom&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { FocusTrap, KEYBOARD_KEYS, announceToScreenReader } from &apos;../../../utils/accessibility&apos;;
-import AccessibleButton from &apos;./AccessibleButton&apos;;
+import React, { useEffect, useRef, useId } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FocusTrap, KEYBOARD_KEYS, announceToScreenReader } from '../../../utils/accessibility';
+import AccessibleButton from './AccessibleButton';
 
 interface AccessibleModalProps {
-}
   isOpen: boolean;
   onClose: () => void;
   title: string;
   description?: string;
   children: React.ReactNode;
-  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos; | &apos;full&apos;;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
   showCloseButton?: boolean;
@@ -25,17 +24,15 @@ interface AccessibleModalProps {
   returnFocus?: React.RefObject<HTMLElement>;
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
-  role?: &apos;dialog&apos; | &apos;alertdialog&apos;;
-}
+  role?: 'dialog' | 'alertdialog';
 
 const AccessibleModal: React.FC<AccessibleModalProps> = ({
-}
   isOpen,
   onClose,
   title,
   description,
   children,
-  size = &apos;md&apos;,
+  size = 'md',
   closeOnOverlayClick = true,
   closeOnEscape = true,
   showCloseButton = true,
@@ -44,9 +41,8 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
   returnFocus,
   ariaLabelledBy,
   ariaDescribedBy,
-  role = &apos;dialog&apos;
+  role = 'dialog'
 }: any) => {
-}
   const modalRef = useRef<HTMLDivElement>(null);
   const focusTrapRef = useRef<FocusTrap | null>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -56,19 +52,16 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
 
   // Size styles
   const sizeStyles = {
-}
-    sm: &apos;max-w-sm&apos;,
-    md: &apos;max-w-md&apos;,
-    lg: &apos;max-w-lg&apos;,
-    xl: &apos;max-w-xl&apos;,
-    full: &apos;max-w-full mx-4&apos;
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    full: 'max-w-full mx-4'
   };
 
   // Handle focus management
   useEffect(() => {
-}
     if (isOpen && modalRef.current) {
-}
       // Store the currently focused element
       previousActiveElement.current = document.activeElement as HTMLElement;
 
@@ -78,74 +71,64 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
 
       // Set initial focus
       if (initialFocus?.current) {
-}
         initialFocus.current.focus();
       }
 
       // Announce modal opening to screen readers
-      announceToScreenReader(`${title} dialog opened`, &apos;polite&apos;);
+      announceToScreenReader(`${title} dialog opened`, 'polite');
 
       // Prevent body scroll
-      document.body.style.overflow = &apos;hidden&apos;;
+      document.body.style.overflow = 'hidden';
 
       return () => {
-}
         // Deactivate focus trap
         focusTrapRef.current?.deactivate();
 
         // Restore body scroll
-        document.body.style.overflow = &apos;&apos;;
+        document.body.style.overflow = '';
 
         // Return focus to previous element or specified return focus
         const elementToFocus = returnFocus?.current || previousActiveElement.current;
         if (elementToFocus) {
-}
           // Small delay to ensure modal is fully closed
           setTimeout(() => {
-}
             elementToFocus.focus();
           }, 50);
         }
 
         // Announce modal closing
-        announceToScreenReader(`${title} dialog closed`, &apos;polite&apos;);
+        announceToScreenReader(`${title} dialog closed`, 'polite');
       };
     }
   }, [isOpen, title, initialFocus, returnFocus]);
 
   // Handle escape key
   useEffect(() => {
-}
     if (!isOpen || !closeOnEscape) return;
 
     const handleEscape = (e: KeyboardEvent) => {
-}
       if (e.key === KEYBOARD_KEYS.ESCAPE) {
-}
         e.preventDefault();
         onClose();
       }
     };
 
-    document.addEventListener(&apos;keydown&apos;, handleEscape);
-    return () => document.removeEventListener(&apos;keydown&apos;, handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, closeOnEscape, onClose]);
 
   // Handle overlay click
   const handleOverlayClick = (e: React.MouseEvent) => {
-}
     if (closeOnOverlayClick && e.target === e.currentTarget) {
-}
       onClose();
     }
   };
 
-  if (typeof document === &apos;undefined&apos;) return null;
+  if (typeof document === 'undefined') return null;
 
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-}
         <>
           {/* Overlay */}
           <motion.div
@@ -168,7 +151,6 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
             <div
               ref={modalRef}
               className={`
-}
                 ${sizeStyles[size]}
                 w-full bg-gray-800 rounded-xl shadow-2xl
                 pointer-events-auto
@@ -189,7 +171,6 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
                     {title}
                   </h2>
                   {description && (
-}
                     <p
                       id={descriptionId}
                       className="mt-1 text-sm text-gray-400"
@@ -199,7 +180,6 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
                   )}
                 </div>
                 {showCloseButton && (
-}
                   <button
                     type="button"
                     onClick={onClose}
@@ -231,7 +211,6 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
 
               {/* Footer */}
               {footer && (
-}
                 <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-700">
                   {footer}
                 </div>

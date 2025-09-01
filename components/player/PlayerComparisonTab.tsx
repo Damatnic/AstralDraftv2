@@ -3,50 +3,44 @@
  * Side-by-side player analysis and comparison tools
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { Avatar } from &apos;../ui/Avatar&apos;;
-import { Player, League } from &apos;../../types&apos;;
-import { CompareIcon } from &apos;../icons/CompareIcon&apos;;
-import { SearchIcon } from &apos;../icons/SearchIcon&apos;;
-import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
-import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
-import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
-import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
+import { Player, League } from '../../types';
+import { CompareIcon } from '../icons/CompareIcon';
+import { SearchIcon } from '../icons/SearchIcon';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { BarChartIcon } from '../icons/BarChartIcon';
+import { useAppState } from '../../contexts/AppContext';
 
 interface PlayerComparisonTabProps {
-}
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
 
-}
 
 interface ComparisonMetric {
-}
     label: string;
     player1Value: number;
     player2Value: number;
-    format: &apos;number&apos; | &apos;decimal&apos; | &apos;percentage&apos;;
+    format: 'number' | 'decimal' | 'percentage';
     higherIsBetter: boolean;}
 
 const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
-}
     player,
     league,
 //     dispatch
 }: any) => {
-}
     const { state } = useAppState();
     const [comparePlayer, setComparePlayer] = React.useState<Player | null>(null);
-    const [searchQuery, setSearchQuery] = React.useState(&apos;&apos;);
+    const [searchQuery, setSearchQuery] = React.useState('');
     const [showPlayerSearch, setShowPlayerSearch] = React.useState(false);
 
     // Get all players in the same position
     const availablePlayers = React.useMemo(() => {
-}
         return league.allPlayers.filter((p: any) => 
             p.position === player.position && 
             p.id !== player.id &&
@@ -56,148 +50,128 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
 
     // Helper functions with proper type safety
     const getSafeValue = (value: number | undefined, fallback: number = 0): number => {
-}
-        return typeof value === &apos;number&apos; && !isNaN(value) ? value : fallback;
+        return typeof value === 'number' && !isNaN(value) ? value : fallback;
     };
 
     const getTierDisplay = (tier: number | undefined): { text: string; color: string } => {
-}
         const safeTier = getSafeValue(tier, 10);
-        if (safeTier <= 1) return { text: &apos;Elite&apos;, color: &apos;text-yellow-400&apos; };
-        if (safeTier <= 3) return { text: &apos;Tier 1&apos;, color: &apos;text-green-400&apos; };
-        if (safeTier <= 6) return { text: &apos;Tier 2&apos;, color: &apos;text-blue-400&apos; };
-        if (safeTier <= 10) return { text: &apos;Tier 3&apos;, color: &apos;text-orange-400&apos; };
-        return { text: &apos;Deep&apos;, color: &apos;text-gray-400&apos; };
+        if (safeTier <= 1) return { text: 'Elite', color: 'text-yellow-400' };
+        if (safeTier <= 3) return { text: 'Tier 1', color: 'text-green-400' };
+        if (safeTier <= 6) return { text: 'Tier 2', color: 'text-blue-400' };
+        if (safeTier <= 10) return { text: 'Tier 3', color: 'text-orange-400' };
+        return { text: 'Deep', color: 'text-gray-400' };
     };
 
     const formatValue = (value: number, format: string): string => {
-}
         switch (format) {
-}
-            case &apos;decimal&apos;:
+            case 'decimal':
                 return value.toFixed(1);
-            case &apos;percentage&apos;:
+            case 'percentage':
                 return `${(value * 100).toFixed(1)}%`;
-            case &apos;number&apos;:
+            case 'number':
             default:
                 return Math.round(value).toString();
 
     };
 
     const getComparisonColor = (player1Value: number, player2Value: number, higherIsBetter: boolean): string => {
-}
-        if (player1Value === player2Value) return &apos;text-gray-400&apos;;
+        if (player1Value === player2Value) return 'text-gray-400';
         
         const isPlayer1Better = higherIsBetter ? player1Value > player2Value : player1Value < player2Value;
-        return isPlayer1Better ? &apos;text-green-400&apos; : &apos;text-red-400&apos;;
+        return isPlayer1Better ? 'text-green-400' : 'text-red-400';
     };
 
     // Create comparison metrics with proper type safety
     const getComparisonMetrics = (): ComparisonMetric[] => {
-}
         if (!comparePlayer) return [];
 
         const metrics: ComparisonMetric[] = [
             {
-}
-                label: &apos;Overall Rank&apos;,
+                label: 'Overall Rank',
                 player1Value: getSafeValue(player.rank, 999),
                 player2Value: getSafeValue(comparePlayer.rank, 999),
-                format: &apos;number&apos;,
+                format: 'number',
                 higherIsBetter: false
             },
             {
-}
-                label: &apos;ADP&apos;,
+                label: 'ADP',
                 player1Value: getSafeValue(player.adp, 999),
                 player2Value: getSafeValue(comparePlayer.adp, 999),
-                format: &apos;decimal&apos;,
+                format: 'decimal',
                 higherIsBetter: false
             },
             {
-}
-                label: &apos;Age&apos;,
+                label: 'Age',
                 player1Value: getSafeValue(player.age, 25),
                 player2Value: getSafeValue(comparePlayer.age, 25),
-                format: &apos;number&apos;,
+                format: 'number',
                 higherIsBetter: false
             },
             {
-}
-                label: &apos;Projected Points&apos;,
+                label: 'Projected Points',
                 player1Value: getSafeValue(player.stats?.projection, 0),
                 player2Value: getSafeValue(comparePlayer.stats?.projection, 0),
-                format: &apos;decimal&apos;,
+                format: 'decimal',
                 higherIsBetter: true
             },
             {
-}
-                label: &apos;VORP&apos;,
+                label: 'VORP',
                 player1Value: getSafeValue(player.stats?.vorp, 0),
                 player2Value: getSafeValue(comparePlayer.stats?.vorp, 0),
-                format: &apos;decimal&apos;,
+                format: 'decimal',
                 higherIsBetter: true
 
         ];
 
         // Add position-specific metrics
-        if (player.position === &apos;QB&apos;) {
-}
+        if (player.position === 'QB') {
             metrics.push(
                 {
-}
-                    label: &apos;Pass Yards&apos;,
+                    label: 'Pass Yards',
                     player1Value: getSafeValue(player.stats?.passingYards, 0),
                     player2Value: getSafeValue(comparePlayer.stats?.passingYards, 0),
-                    format: &apos;number&apos;,
+                    format: 'number',
                     higherIsBetter: true
                 },
                 {
-}
-                    label: &apos;Pass TDs&apos;,
+                    label: 'Pass TDs',
                     player1Value: getSafeValue(player.stats?.passingTouchdowns, 0),
                     player2Value: getSafeValue(comparePlayer.stats?.passingTouchdowns, 0),
-                    format: &apos;number&apos;,
+                    format: 'number',
                     higherIsBetter: true
 
             );
-        } else if (player.position === &apos;RB&apos;) {
-}
+        } else if (player.position === 'RB') {
             metrics.push(
                 {
-}
-                    label: &apos;Rush Yards&apos;,
+                    label: 'Rush Yards',
                     player1Value: getSafeValue(player.stats?.rushingYards, 0),
                     player2Value: getSafeValue(comparePlayer.stats?.rushingYards, 0),
-                    format: &apos;number&apos;,
+                    format: 'number',
                     higherIsBetter: true
                 },
                 {
-}
-                    label: &apos;Rush TDs&apos;,
+                    label: 'Rush TDs',
                     player1Value: getSafeValue(player.stats?.rushingTouchdowns, 0),
                     player2Value: getSafeValue(comparePlayer.stats?.rushingTouchdowns, 0),
-                    format: &apos;number&apos;,
+                    format: 'number',
                     higherIsBetter: true
 
             );
-        } else if (player.position === &apos;WR&apos; || player.position === &apos;TE&apos;) {
-}
+        } else if (player.position === 'WR' || player.position === 'TE') {
             metrics.push(
                 {
-}
-                    label: &apos;Receptions&apos;,
+                    label: 'Receptions',
                     player1Value: getSafeValue(player.stats?.receptions, 0),
                     player2Value: getSafeValue(comparePlayer.stats?.receptions, 0),
-                    format: &apos;number&apos;,
+                    format: 'number',
                     higherIsBetter: true
                 },
                 {
-}
-                    label: &apos;Rec Yards&apos;,
+                    label: 'Rec Yards',
                     player1Value: getSafeValue(player.stats?.receivingYards, 0),
                     player2Value: getSafeValue(comparePlayer.stats?.receivingYards, 0),
-                    format: &apos;number&apos;,
+                    format: 'number',
                     higherIsBetter: true
 
             );
@@ -208,20 +182,17 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
     const comparisonMetrics = getComparisonMetrics();
 
     const handlePlayerSelect = (selectedPlayer: Player) => {
-}
         setComparePlayer(selectedPlayer);
         setShowPlayerSearch(false);
-        setSearchQuery(&apos;&apos;);
+        setSearchQuery('');
     };
 
     const clearComparison = () => {
-}
         setComparePlayer(null);
     };
 
     // Calculate ADP difference with proper safety
     const adpDifference = React.useMemo(() => {
-}
         if (!comparePlayer) return null;
         
         const playerAdp = getSafeValue(player.adp, 999);
@@ -242,7 +213,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                 </div>
                 
                 {comparePlayer && (
-}
                     <button
                         onClick={clearComparison}
                         className="text-sm text-red-400 hover:text-red-300 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -254,7 +224,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
 
             {/* Player Selection */}
             {!comparePlayer ? (
-}
                 <Widget title="Select Player to Compare">
                     <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                         <CompareIcon className="w-12 h-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
@@ -280,7 +249,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                         <Widget title={player.name}>
                             <div className="text-center p-4 sm:px-4 md:px-6 lg:px-8">
                                 <Avatar>
-                                    avatar={state.playerAvatars[player.id] || &apos;🏈&apos;}
+                                    avatar={state.playerAvatars[player.id] || '🏈'}
                                     className="mx-auto mb-3 w-16 h-16 text-4xl rounded-full sm:px-4 md:px-6 lg:px-8"
                                 />
                                 <h4 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
@@ -301,7 +270,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                         <Widget title={comparePlayer.name}>
                             <div className="text-center p-4 sm:px-4 md:px-6 lg:px-8">
                                 <Avatar>
-                                    avatar={state.playerAvatars[comparePlayer.id] || &apos;🏈&apos;}
+                                    avatar={state.playerAvatars[comparePlayer.id] || '🏈'}
                                     className="mx-auto mb-3 w-16 h-16 text-4xl rounded-full sm:px-4 md:px-6 lg:px-8"
                                 />
                                 <h4 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
@@ -321,11 +290,9 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
 
                     {/* ADP Comparison */}
                     {adpDifference !== null && (
-}
                         <Widget title="ADP Analysis">
                             <div className="text-center py-4 sm:px-4 md:px-6 lg:px-8">
                                 {adpDifference > 0 ? (
-}
                                     <div className="text-green-400 sm:px-4 md:px-6 lg:px-8">
                                         <TrendingUpIcon className="w-6 h-6 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
                                         <p className="font-medium sm:px-4 md:px-6 lg:px-8">
@@ -358,7 +325,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                     <Widget title="Statistical Comparison">
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {comparisonMetrics.map((metric, index) => (
-}
                                 <div key={index} className="flex items-center justify-between py-2 border-b border-[var(--panel-border)] last:border-b-0 sm:px-4 md:px-6 lg:px-8">
                                     <span className="font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {metric.label}
@@ -381,7 +347,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                     <Widget title="Performance Visualization">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {comparisonMetrics.slice(0, 6).map((metric, index) => (
-}
                                 <div key={index} className="p-3 bg-[var(--panel-border)]/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                         {metric.label}
@@ -392,7 +357,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                                                 <div 
                                                     className="h-full bg-blue-400 transition-all duration-300 sm:px-4 md:px-6 lg:px-8"
                                                     style={{
-}
                                                         width: `${Math.max(10, (metric.player1Value / Math.max(metric.player1Value, metric.player2Value, 1)) * 100)}%`
                                                     }}
                                                 />
@@ -408,7 +372,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                                                 <div 
                                                     className="h-full bg-orange-400 transition-all duration-300 sm:px-4 md:px-6 lg:px-8"
                                                     style={{
-}
                                                         width: `${Math.max(10, (metric.player2Value / Math.max(metric.player1Value, metric.player2Value, 1)) * 100)}%`
                                                     }}
                                                 />
@@ -428,7 +391,6 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
             {/* Player Search Modal */}
             <AnimatePresence>
                 {showPlayerSearch && (
-}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -459,27 +421,25 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                             
                             <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-96 sm:px-4 md:px-6 lg:px-8">
                                 {availablePlayers.map((p: any) => (
-}
                                     <button
                                         key={p.id}
                                         onClick={() => handlePlayerSelect(p)}
                                     >
-                                        <Avatar avatar={state.playerAvatars[p.id] || &apos;⚡&apos;} className="w-10 h-10 text-2xl rounded-full sm:px-4 md:px-6 lg:px-8" />
+                                        <Avatar avatar={state.playerAvatars[p.id] || '⚡'} className="w-10 h-10 text-2xl rounded-full sm:px-4 md:px-6 lg:px-8" />
                                         <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                             <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                 {p.name}
                                             </div>
                                             <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
-                                                {p.team} • Rank #{p.rank || &apos;N/A&apos;} • ADP {p.adp?.toFixed(1) || &apos;N/A&apos;}
+                                                {p.team} • Rank #{p.rank || 'N/A'} • ADP {p.adp?.toFixed(1) || 'N/A'}
                                             </div>
                                         </div>
                                     </button>
                                 ))}
                                 
                                 {availablePlayers.length === 0 && (
-}
                                     <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
-                                        {searchQuery ? &apos;No players found&apos; : `No other ${player.position}s available`}
+                                        {searchQuery ? 'No players found' : `No other ${player.position}s available`}
                                     </div>
                                 )}
                             </div>

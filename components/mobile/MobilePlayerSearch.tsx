@@ -3,35 +3,30 @@
  * Integrates MobileSearchInterface for player search functionality
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo } from &apos;react&apos;;
-import { Player } from &apos;../../types&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
-import MobileSearchInterface from &apos;./MobileSearchInterface&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
+import { Player } from '../../types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import MobileSearchInterface from './MobileSearchInterface';
 
 interface MobilePlayerSearchProps {
-}
     players: Player[];
     onPlayerSelect?: (player: Player) => void;
     onSearch?: (query: string) => void;
     placeholder?: string;
     className?: string;
 
-}
 
 const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
-}
     players,
     onPlayerSelect,
     onSearch,
     placeholder = "Search players...",
-    className = &apos;&apos;
+    className = ''
 }: any) => {
-}
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     if (!isMobile) {
-}
         // Return desktop search component or null
         return (
             <div className={`desktop-search-fallback p-4 ${className}`}>
@@ -42,7 +37,6 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
                 />
                 <div className="mt-4 grid gap-2 sm:px-4 md:px-6 lg:px-8">
                     {players.slice(0, 10).map((player: any) => (
-}
                         <button
                             key={player.id}
                             onClick={() => onPlayerSelect?.(player)}

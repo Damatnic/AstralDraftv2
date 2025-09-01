@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo, useState, useRef } from &apos;react&apos;;
+import React, { useCallback, useMemo, useState, useRef } from 'react';
 
 interface VirtualizedListProps<T> {
-}
   items: T[];
   itemHeight: number;
   containerHeight: number;
@@ -9,14 +8,12 @@ interface VirtualizedListProps<T> {
   overscan?: number;
 
 export function VirtualizedList<T>({
-}
   items,
   itemHeight,
   containerHeight,
   renderItem,
   overscan = 5
 }: VirtualizedListProps<T>) {
-}
   const [scrollTop, setScrollTop] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +28,6 @@ export function VirtualizedList<T>({
   const offsetY = startIndex * itemHeight;
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-}
     setScrollTop(e.currentTarget.scrollTop);
   };
 
@@ -42,10 +38,9 @@ export function VirtualizedList<T>({
       style={{ height: containerHeight }}
       onScroll={handleScroll}
     >
-      <div style={{ height: totalHeight, position: &apos;relative&apos; }}>
+      <div style={{ height: totalHeight, position: 'relative' }}>
         <div style={{ transform: `translateY(${offsetY}px)` }}>
           {visibleItems.map((item, index) => (
-}
             <div key={startIndex + index} style={{ height: itemHeight }}>
               {renderItem(item, startIndex + index)}
             </div>

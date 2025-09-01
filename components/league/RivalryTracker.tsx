@@ -2,53 +2,46 @@
  * Enhanced Head-to-Head Rivalry Tracker - Track epic battles and grudge matches
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useMemo, useState, useEffect } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { Swords, Trophy, Target, Flame, Crown, TrendingUp, Calendar, BarChart3, Zap } from &apos;lucide-react&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Swords, Trophy, Target, Flame, Crown, TrendingUp, Calendar, BarChart3, Zap } from 'lucide-react';
 
 interface RivalryRecord {
-}
   teamId: string;
   wins: number;
   losses: number;
   totalPoints: number;
   avgMargin: number;
   lastMeeting?: {
-}
     week: number;
     season: number;
     score: { team: number; opponent: number };
     margin: number;
   };
   biggestWin: {
-}
     margin: number;
     week: number;
     season: number;
   };
   closestGame: {
-}
     margin: number;
     week: number;
     season: number;
   };
   winStreak: number;
   currentStreak: number;
-  streakType: &apos;win&apos; | &apos;loss&apos;;
+  streakType: 'win' | 'loss';
 
 interface Rivalry {
-}
   id: string;
   team1: {
-}
     id: string;
     name: string;
     owner: string;
     record: RivalryRecord;
   };
   team2: {
-}
     id: string;
     name: string;
     owner: string;
@@ -59,26 +52,22 @@ interface Rivalry {
   nickname: string;
   storyline: string;
   nextMeeting?: {
-}
     week: number;
     season: number;
     projected: { team1: number; team2: number };
   };
   memorable_moments: Array<{
-}
     description: string;
     week: number;
     season: number;
-    type: &apos;upset&apos; | &apos;blowout&apos; | &apos;comeback&apos; | &apos;heartbreak&apos;;
+    type: 'upset' | 'blowout' | 'comeback' | 'heartbreak';
   }>;
 
 interface RivalryTrackerProps {
-}
   leagueId: string;
   userId: string;
   currentWeek: number;
   teams: Array<{
-}
     id: string;
     name: string;
     owner: string;
@@ -86,31 +75,25 @@ interface RivalryTrackerProps {
   }>;
 
 const RivalryTracker: React.FC<RivalryTrackerProps> = ({
-}
   leagueId,
   userId,
   currentWeek,
 //   teams
 }: any) => {
-}
   const [selectedRivalry, setSelectedRivalry] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<&apos;grid&apos; | &apos;matrix&apos;>(&apos;grid&apos;);
+  const [viewMode, setViewMode] = useState<'grid' | 'matrix'>('grid');
   const [filterIntensity, setFilterIntensity] = useState<number>(0);
 
   // Generate real rivalries based on actual league history and matchup data
   const generateRealRivalries = (): Rivalry[] => {
-}
     const rivalries: Rivalry[] = [];
     
     if (!teams || teams.length < 2) {
-}
       return [];
 
     // Generate rivalries based on actual head-to-head records
     for (let i = 0; i < teams.length - 1; i++) {
-}
       for (let j = i + 1; j < teams.length; j++) {
-}
         const team1 = teams[i];
         const team2 = teams[j];
         
@@ -121,7 +104,6 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
         // Calculate rivalry intensity based on historical matchups
         let intensity = 1;
         if (totalGames > 0) {
-}
           // Close records increase intensity
           const winDiff = Math.abs(h2hRecord.wins - h2hRecord.losses);
           intensity = Math.min(10, Math.max(1, 8 - winDiff + (totalGames > 5 ? 2 : 0)));
@@ -137,78 +119,67 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
       const team2Wins = meetings - team1Wins;
       
       const rivalry: Rivalry = {
-}
         id: `${team1.id}_${team2.id}`,
         team1: {
-}
           id: team1.id,
           name: team1.name,
           owner: team1.owner,
           record: {
-}
             teamId: team1.id,
             wins: team1Wins,
             losses: team2Wins,
             totalPoints: 1200 + Math.random() * 400,
             avgMargin: Math.random() * 20 - 10,
             lastMeeting: {
-}
               week: Math.floor(Math.random() * 14) + 1,
               season: 2024,
               score: { team: 124.5, opponent: 118.2 },
               margin: 6.3
             },
             biggestWin: {
-}
               margin: 20 + Math.random() * 40,
               week: Math.floor(Math.random() * 14) + 1,
               season: 2024
             },
             closestGame: {
-}
               margin: Math.random() * 2,
               week: Math.floor(Math.random() * 14) + 1,
               season: 2024
             },
             winStreak: Math.floor(Math.random() * 4) + 1,
             currentStreak: Math.floor(Math.random() * 3) + 1,
-            streakType: Math.random() > 0.5 ? &apos;win&apos; : &apos;loss&apos;
+            streakType: Math.random() > 0.5 ? 'win' : 'loss'
 
         },
         team2: {
-}
           id: team2.id,
           name: team2.name,
           owner: team2.owner,
           record: {
-}
             teamId: team2.id,
             wins: team2Wins,
             losses: team1Wins,
             totalPoints: 1100 + Math.random() * 500,
             avgMargin: Math.random() * 20 - 10,
             lastMeeting: {
-}
               week: Math.floor(Math.random() * 14) + 1,
               season: 2024,
               score: { team: 118.2, opponent: 124.5 },
               margin: -6.3
             },
             biggestWin: {
-}
               margin: 15 + Math.random() * 35,
               week: Math.floor(Math.random() * 14) + 1,
               season: 2024
             },
             closestGame: {
-}
               margin: Math.random() * 2,
               week: Math.floor(Math.random() * 14) + 1,
               season: 2024
             },
             winStreak: Math.floor(Math.random() * 3) + 1,
             currentStreak: Math.floor(Math.random() * 2) + 1,
-            streakType: Math.random() > 0.5 ? &apos;win&apos; : &apos;loss&apos;
+            streakType: Math.random() > 0.5 ? 'win' : 'loss'
 
         },
         totalMeetings: meetings,
@@ -216,36 +187,31 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
         nickname: nicknames[i] || `Rivalry ${i + 1}`,
         storyline: storylines[Math.floor(Math.random() * storylines.length)],
         nextMeeting: Math.random() > 0.3 ? {
-}
           week: currentWeek + Math.floor(Math.random() * 5) + 1,
           season: 2024,
           projected: {
-}
             team1: 115 + Math.random() * 25, 
             team2: 110 + Math.random() * 30 
 
         } : undefined,
         memorable_moments: [
           {
-}
-            description: &apos;Miraculous Monday night comeback from 35 points down&apos;,
+            description: 'Miraculous Monday night comeback from 35 points down',
             week: 8,
             season: 2024,
-            type: &apos;comeback&apos;
+            type: 'comeback'
           },
           {
-}
-            description: &apos;Heartbreaking loss by 0.2 points on a stat correction&apos;,
+            description: 'Heartbreaking loss by 0.2 points on a stat correction',
             week: 3,
             season: 2023,
-            type: &apos;heartbreak&apos;
+            type: 'heartbreak'
           },
           {
-}
-            description: &apos;Massive upset victory despite being 40-point underdogs&apos;,
+            description: 'Massive upset victory despite being 40-point underdogs',
             week: 12,
             season: 2023,
-            type: &apos;upset&apos;
+            type: 'upset'
 
       };
       
@@ -257,44 +223,38 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
   const [rivalries] = useState<Rivalry[]>(generateRivalries());
 
   const getIntensityColor = (intensity: number) => {
-}
-    if (intensity >= 9) return &apos;text-red-400 bg-red-500/20&apos;;
-    if (intensity >= 7) return &apos;text-orange-400 bg-orange-500/20&apos;;
-    if (intensity >= 5) return &apos;text-yellow-400 bg-yellow-500/20&apos;;
-    return &apos;text-green-400 bg-green-500/20&apos;;
+    if (intensity >= 9) return 'text-red-400 bg-red-500/20';
+    if (intensity >= 7) return 'text-orange-400 bg-orange-500/20';
+    if (intensity >= 5) return 'text-yellow-400 bg-yellow-500/20';
+    return 'text-green-400 bg-green-500/20';
   };
 
   const getIntensityLabel = (intensity: number) => {
-}
-    if (intensity >= 9) return &apos;LEGENDARY&apos;;
-    if (intensity >= 7) return &apos;HEATED&apos;;
-    if (intensity >= 5) return &apos;COMPETITIVE&apos;;
-    return &apos;FRIENDLY&apos;;
+    if (intensity >= 9) return 'LEGENDARY';
+    if (intensity >= 7) return 'HEATED';
+    if (intensity >= 5) return 'COMPETITIVE';
+    return 'FRIENDLY';
   };
 
   const getWinPercentage = (wins: number, losses: number) => {
-}
     const total = wins + losses;
     if (total === 0) return 0;
     return (wins / total * 100).toFixed(1);
   };
 
   const getMomentIcon = (type: string) => {
-}
     switch (type) {
-}
-      case &apos;comeback&apos;: return &apos;🔄&apos;;
-      case &apos;heartbreak&apos;: return &apos;💔&apos;;
-      case &apos;upset&apos;: return &apos;🎯&apos;;
-      case &apos;blowout&apos;: return &apos;💥&apos;;
-      default: return &apos;⚔️&apos;;
+      case 'comeback': return '🔄';
+      case 'heartbreak': return '💔';
+      case 'upset': return '🎯';
+      case 'blowout': return '💥';
+      default: return '⚔️';
 
   };
 
   const filteredRivalries = rivalries.filter((r: any) => r.intensity >= filterIntensity);
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -328,27 +288,24 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
             </select>
           </div>
           <button
-            onClick={() => setViewMode(viewMode === &apos;grid&apos; ? &apos;matrix&apos; : &apos;grid&apos;)}
+            onClick={() => setViewMode(viewMode === 'grid' ? 'matrix' : 'grid')}
           >
-            {viewMode === &apos;grid&apos; ? &apos;Matrix View&apos; : &apos;Grid View&apos;}
+            {viewMode === 'grid' ? 'Matrix View' : 'Grid View'}
           </button>
         </div>
       </div>
 
-      {viewMode === &apos;grid&apos; ? (
-}
+      {viewMode === 'grid' ? (
         // Grid View
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           {filteredRivalries.map((rivalry: any) => (
-}
             <motion.div
               key={rivalry.id}
 //               layout
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className={`p-5 bg-dark-700 rounded-lg border border-gray-600 hover:border-red-500/50 transition-all cursor-pointer ${
-}
-                selectedRivalry === rivalry.id ? &apos;border-red-500 bg-red-500/5&apos; : &apos;&apos;
+                selectedRivalry === rivalry.id ? 'border-red-500 bg-red-500/5' : ''
               }`}
               onClick={() => setSelectedRivalry(selectedRivalry === rivalry.id ? null : rivalry.id)}
             >
@@ -403,7 +360,6 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
 
               {/* Next Meeting */}
               {rivalry.nextMeeting && (
-}
                 <div className="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg mb-4 sm:px-4 md:px-6 lg:px-8">
                   <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -444,15 +400,13 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
                   </div>
                   <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                     Week {rivalry.team1.record.biggestWin.margin > rivalry.team2.record.biggestWin.margin ? 
-}
                       rivalry.team1.record.biggestWin.week : rivalry.team2.record.biggestWin.week}
                   </div>
                 </div>
                 <div>
                   <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Current Streak</div>
                   <div className={`font-semibold ${
-}
-                    rivalry.team1.record.streakType === &apos;win&apos; ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
+                    rivalry.team1.record.streakType === 'win' ? 'text-green-400' : 'text-red-400'
                   }`}>
                     {rivalry.team1.record.currentStreak} {rivalry.team1.record.streakType}s
                   </div>
@@ -463,10 +417,9 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
               {/* Expanded Details */}
               <AnimatePresence>
                 {selectedRivalry === rivalry.id && (
-}
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: &apos;auto&apos;, opacity: 1 }}
+                    animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     className="mt-6 pt-6 border-t border-gray-600 space-y-4 sm:px-4 md:px-6 lg:px-8"
                   >
@@ -478,7 +431,6 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
                       </h4>
                       <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                         {rivalry.memorable_moments.map((moment, index) => (
-}
                           <div key={index} className="flex items-start gap-3 p-3 bg-dark-600 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="text-lg sm:px-4 md:px-6 lg:px-8">{getMomentIcon(moment.type)}</div>
                             <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
@@ -542,7 +494,6 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
               {/* Header row */}
               <div></div>
               {teams.slice(0, 10).map((team: any) => (
-}
                 <div key={team.id} className="text-center text-xs text-gray-400 p-1 sm:px-4 md:px-6 lg:px-8">
                   {team.name.substring(0, 8)}
                 </div>
@@ -550,27 +501,23 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
               
               {/* Matrix rows */}
               {teams.slice(0, 10).map((teamRow, rowIndex) => (
-}
                 <React.Fragment key={teamRow.id}>
                   <div className="text-xs text-gray-400 p-1 sm:px-4 md:px-6 lg:px-8">
                     {teamRow.name.substring(0, 8)}
                   </div>
                   {teams.slice(0, 10).map((teamCol, colIndex) => (
-}
                     <div 
                       key={teamCol.id} 
                       className={`text-center text-xs p-2 rounded ${
-}
                         rowIndex === colIndex 
-                          ? &apos;bg-gray-600&apos; 
+                          ? 'bg-gray-600' 
                           : Math.random() > 0.5 
-                            ? &apos;bg-green-600/30 text-green-400&apos; 
-                            : &apos;bg-red-600/30 text-red-400&apos;
+                            ? 'bg-green-600/30 text-green-400' 
+                            : 'bg-red-600/30 text-red-400'
                       }`}
                     >
                       {rowIndex === colIndex 
-}
-                        ? &apos;-&apos; 
+                        ? '-' 
                         : `${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 5)}`
 
                     </div>
@@ -590,17 +537,15 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
         </h3>
         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
           {rivalries
-}
             .sort((a, b) => b.intensity - a.intensity)
             .slice(0, 3)
             .map((rivalry, index) => (
               <div key={rivalry.id} className="flex items-center justify-between p-2 bg-dark-600 rounded sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-}
-                    index === 0 ? &apos;bg-gold-400 text-black&apos; :
-                    index === 1 ? &apos;bg-gray-400 text-black&apos; :
-                    &apos;bg-amber-600 text-white&apos;
+                    index === 0 ? 'bg-gold-400 text-black' :
+                    index === 1 ? 'bg-gray-400 text-black' :
+                    'bg-amber-600 text-white'
                   }`}>
                     {index + 1}
                   </span>
@@ -608,7 +553,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
                 </div>
                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                   <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                    {rivalry.team1.name.split(&apos; &apos;)[0]} vs {rivalry.team2.name.split(&apos; &apos;)[0]}
+                    {rivalry.team1.name.split(' ')[0]} vs {rivalry.team2.name.split(' ')[0]}
                   </span>
                   <span className={`px-2 py-1 rounded-full text-xs ${getIntensityColor(rivalry.intensity)}`}>
                     {rivalry.intensity}/10

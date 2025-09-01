@@ -3,16 +3,15 @@
  * Enhanced version with performance optimizations for large datasets and real-time interactions
  */
 
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useState, useEffect, useCallback, useMemo, memo } from &apos;react&apos;;
-import { motion, AnimatePresence } from &apos;framer-motion&apos;;
-import { useAuth } from &apos;../../contexts/SimpleAuthContext&apos;;
-import { Widget } from &apos;../ui/Widget&apos;;
-import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
-import { oracleApiClient } from &apos;../../services/oracleApiClient&apos;;
-import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../contexts/SimpleAuthContext';
+import { Widget } from '../ui/Widget';
+import { ZapIcon } from '../icons/ZapIcon';
+import { oracleApiClient } from '../../services/oracleApiClient';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { 
-}
     useOracleSearch,
     useThrottledOracleUpdates,
     useVirtualizedPredictionList,
@@ -20,20 +19,17 @@ import {
     useOptimizedPredictionSubmission,
     useOraclePerformanceMonitoring,
 //     useMemoryEfficientState
-} from &apos;../../hooks/useOraclePerformanceOptimization&apos;;
-import oraclePerformanceOptimizationService, { VirtualScrollItem } from &apos;../../services/oraclePerformanceOptimizationService&apos;;
+} from '../../hooks/useOraclePerformanceOptimization';
+import oraclePerformanceOptimizationService, { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
 
 // Memoized components for better performance
 const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmit }: {
-}
     prediction: any;
     isSelected: boolean;
     onSelect: (id: string) => void;
     onSubmit: (id: string, choice: number, confidence: number) => void;
 }) => {
-}
     const handleSubmit = useCallback((choice: number, confidence: number) => {
-}
         onSubmit(prediction.id, choice, confidence);
     }, [prediction.id, onSubmit]);
 
@@ -42,10 +38,9 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className={`p-4 rounded-lg border cursor-pointer transition-all ${
-}
 //                 isSelected 
-                    ? &apos;border-blue-500 bg-blue-50 dark:bg-blue-900/20&apos; 
-                    : &apos;border-gray-200 dark:border-gray-700 hover:border-gray-300&apos;
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
             }`}
             onClick={() => onSelect(prediction.id)}
         >
@@ -57,7 +52,7 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
                     <div className="flex items-center space-x-3 mt-2 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                         <span>Week {prediction.week}</span>
                         <span>•</span>
-                        <span className="capitalize sm:px-4 md:px-6 lg:px-8">{prediction.type.replace(&apos;_&apos;, &apos; &apos;)}</span>
+                        <span className="capitalize sm:px-4 md:px-6 lg:px-8">{prediction.type.replace('_', ' ')}</span>
                         <span>•</span>
                         <span>{prediction.participants} participants</span>
                     </div>
@@ -73,10 +68,9 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
             </div>
 
             {isSelected && (
-}
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: &apos;auto&apos;, opacity: 1 }}
+                    animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -89,18 +83,14 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
 
 // Memoized prediction submission form
 const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
-}
     prediction: any;
     onSubmit: (choice: number, confidence: number) => void;
 }) => {
-}
     const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
     const [confidence, setConfidence] = useState(75);
 
     const handleSubmit = useCallback(() => {
-}
         if (selectedChoice !== null) {
-}
             onSubmit(selectedChoice, confidence);
 
     }, [selectedChoice, confidence, onSubmit]);
@@ -113,7 +103,6 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
                 </label>
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {prediction.choices.map((choice: string, index: number) => (
-}
                         <button
                             key={index}
                             onClick={() => setSelectedChoice(index)}`}
@@ -150,25 +139,21 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
 
 // Virtualized prediction list component
 const VirtualizedPredictionList = memo(({ 
-}
     predictions, 
     selectedPrediction, 
     onSelectPrediction,
     onSubmitPrediction,
     containerHeight = 400 
 }: {
-}
     predictions: any[];
     selectedPrediction: string | null;
     onSelectPrediction: (id: string) => void;
     onSubmitPrediction: (id: string, choice: number, confidence: number) => void;
     containerHeight?: number;
 }) => {
-}
     // Convert predictions to virtual scroll items
     const virtualItems: VirtualScrollItem[] = useMemo(() => 
         predictions.map((prediction: any) => ({
-}
             id: prediction.id,
             height: selectedPrediction === prediction.id ? 200 : 120, // Expanded height when selected
             data: prediction
@@ -187,14 +172,12 @@ const VirtualizedPredictionList = memo(({
             style={{ height: containerHeight }}
             onScroll={handleScroll}
         >
-            <div style={{ height: virtualState.totalHeight, position: &apos;relative&apos; }}>
+            <div style={{ height: virtualState.totalHeight, position: 'relative' }}>
                 {virtualState.visibleItems.map((item, index) => (
-}
                     <div
                         key={item.id}
                         style={{
-}
-                            position: &apos;absolute&apos;,
+                            position: 'absolute',
                             top: (virtualState.startIndex + index) * 120,
                             left: 0,
                             right: 0,
@@ -216,13 +199,11 @@ const VirtualizedPredictionList = memo(({
 
 // Main optimized interface component
 const OptimizedOracleRealTimePredictionInterface: React.FC<{
-}
     week?: number;
     className?: string;
-}> = ({ week = 1, className = &apos;&apos; }: any) => {
-}
+}> = ({ week = 1, className = '' }: any) => {
     const { user } = useAuth();
-    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Performance monitoring
     const { metrics, startRenderMeasurement, endRenderMeasurement } = useOraclePerformanceMonitoring();
@@ -235,14 +216,13 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
     
     // Memory-efficient state management
     const [selectedPrediction, setSelectedPrediction] = useMemoryEfficientState<string | null>(null);
-    const [activeView, setActiveView] = useMemoryEfficientState<&apos;predictions&apos; | &apos;analytics&apos;>(&apos;predictions&apos;);
+    const [activeView, setActiveView] = useMemoryEfficientState<'predictions' | 'analytics'>('predictions');
     
     // Optimized prediction submission
     const { isSubmitting, submissionError, submitPrediction } = useOptimizedPredictionSubmission();
     
     // Cached predictions data
     const { 
-}
         data: predictions, 
         loading: predictionsLoading, 
         error: predictionsError,
@@ -250,33 +230,29 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
     } = useCachedOracleData(
         `predictions-week-${week}`,
         () => oracleApiClient.getWeeklyPredictions(week),
-        &apos;prediction&apos;
+        'prediction'
     );
     
     // Cached user stats
     const { 
-}
         data: userStats, 
         loading: statsLoading 
     } = useCachedOracleData(
         `user-stats-${user?.id}`,
-        () => oracleApiClient.getUserStats(parseInt(user?.id || &apos;0&apos;)),
-        &apos;userStats&apos;
+        () => oracleApiClient.getUserStats(parseInt(user?.id || '0')),
+        'userStats'
     );
 
     // Performance measurement effect
     useEffect(() => {
-}
         startRenderMeasurement();
         return () => {
-}
             endRenderMeasurement();
         };
     });
 
     // Handle prediction selection
     const handleSelectPrediction = useCallback((predictionId: string) => {
-}
         setSelectedPrediction(selectedPrediction === predictionId ? null : predictionId);
     }, [selectedPrediction, setSelectedPrediction]);
 
@@ -286,18 +262,15 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
         choice: number, 
         confidence: number
     ) => {
-}
         try {
-}
             await submitPrediction(() => 
                 oracleApiClient.submitPrediction(predictionId, choice, confidence)
             );
             
             // Add real-time update
             addUpdate({
-}
                 id: `submission-${Date.now()}`,
-                type: &apos;USER_PREDICTION_SUBMITTED&apos;,
+                type: 'USER_PREDICTION_SUBMITTED',
                 message: `Prediction submitted with ${confidence}% confidence`,
                 timestamp: new Date().toISOString()
             });
@@ -311,7 +284,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
     // Filter predictions based on search
     const filteredPredictions = useMemo(() => {
-}
         if (!predictions?.data || !debouncedQuery) return predictions?.data || [];
         
         return predictions.data.filter((prediction: any) =>
@@ -322,7 +294,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
     // Loading state
     if (predictionsLoading) {
-}
         return (
             <div className="flex items-center justify-center h-64 sm:px-4 md:px-6 lg:px-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
@@ -332,7 +303,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
     // Error state
     if (predictionsError) {
-}
         return (
             <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                 <div className="text-red-600 mb-4 sm:px-4 md:px-6 lg:px-8">Failed to load predictions</div>
@@ -345,7 +315,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
         );
 
   if (isLoading) {
-}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -356,8 +325,7 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
   return (
         <div className={`optimized-oracle-interface ${className}`}>
             {/* Performance metrics (development only) */}
-            {process.env.NODE_ENV === &apos;development&apos; && (
-}
+            {process.env.NODE_ENV === 'development' && (
                 <div className="mb-4 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs sm:px-4 md:px-6 lg:px-8">
                     <div>Renders: {metrics.renderCount} | Avg: {metrics.averageRenderTime.toFixed(2)}ms</div>
                     <div>Cache Hit Rate: {metrics.cacheHitRate.toFixed(1)}% | Memory: {metrics.memoryUsage.toFixed(1)}MB</div>
@@ -383,7 +351,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
                             onChange={(e: any) => setQuery(e.target.value)}
                         />
                         {isSearching && (
-}
                             <div className="absolute right-2 top-2 sm:px-4 md:px-6 lg:px-8">
                                 <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full sm:px-4 md:px-6 lg:px-8"></div>
                             </div>
@@ -391,23 +358,21 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
                     </div>
                     
                     <button
-                        onClick={() => setActiveView(activeView === &apos;predictions&apos; ? &apos;analytics&apos; : &apos;predictions&apos;)}
+                        onClick={() => setActiveView(activeView === 'predictions' ? 'analytics' : 'predictions')}
                     >
-                        {activeView === &apos;predictions&apos; ? &apos;Analytics&apos; : &apos;Predictions&apos;}
+                        {activeView === 'predictions' ? 'Analytics' : 'Predictions'}
                     </button>
                 </div>
             </div>
 
             {/* Real-time updates */}
             {updates.length > 0 && (
-}
                 <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     <div className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2 sm:px-4 md:px-6 lg:px-8">
                         Recent Updates
                     </div>
                     <div className="space-y-1 max-h-20 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                         {updates.slice(-3).map((update, index) => (
-}
                             <div key={index} className="text-xs text-blue-700 dark:text-blue-300 sm:px-4 md:px-6 lg:px-8">
                                 {update.message}
                             </div>
@@ -418,7 +383,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Submission error */}
             {submissionError && (
-}
                 <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     <div className="text-sm text-red-700 dark:text-red-300 sm:px-4 md:px-6 lg:px-8">
                         {submissionError}
@@ -428,8 +392,7 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Main content */}
             <AnimatePresence mode="wait">
-                {activeView === &apos;predictions&apos; ? (
-}
+                {activeView === 'predictions' ? (
                     <motion.div
                         key="predictions"
                         initial={{ opacity: 0 }}
@@ -439,7 +402,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
                     >
                         {/* User stats widget */}
                         {userStats?.data && !statsLoading && (
-}
                             <Widget title="Your Performance" className="mb-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                                     <div>
@@ -490,7 +452,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Loading overlay for submissions */}
             {isSubmitting && (
-}
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>

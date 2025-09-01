@@ -1,34 +1,28 @@
-import { render, screen } from &apos;@testing-library/react&apos;;
-import &apos;@testing-library/jest-dom&apos;;
-import Breadcrumbs from &apos;./Breadcrumbs&apos;;
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Breadcrumbs from './Breadcrumbs';
 
-describe(&apos;Breadcrumbs&apos;, () => {
-}
-  it(&apos;renders without crashing&apos;, () => {
-}
+describe('Breadcrumbs', () => {
+  it('renders without crashing', () => {
     render(<Breadcrumbs />);
-    expect(screen.getByTestId(&apos;breadcrumbs&apos;)).toBeInTheDocument();
+    expect(screen.getByTestId('breadcrumbs')).toBeInTheDocument();
   });
 
-  it(&apos;has proper accessibility attributes&apos;, () => {
-}
+  it('has proper accessibility attributes', () => {
     render(<Breadcrumbs />);
     // Add specific accessibility tests here
   });
 
-  it(&apos;handles loading states correctly&apos;, () => {
-}
+  it('handles loading states correctly', () => {
     render(<Breadcrumbs />);
     // Add loading state tests here
   });
 
-  it(&apos;works on mobile devices&apos;, () => {
-}
+  it('works on mobile devices', () => {
     // Add mobile-specific tests here
   });
 
-  it(&apos;handles error states gracefully&apos;, () => {
-}
+  it('handles error states gracefully', () => {
     // Add error handling tests here
   });
 });

@@ -1,24 +1,19 @@
-import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
-import React, { useCallback } from &apos;react&apos;;
-import type { Team, League } from &apos;../../types&apos;;
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import type { Team, League } from '../../types';
 
 interface WeeklyScoreChartProps {
-}
     team: Team;
     league: League;
 
-}
 
 const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any) => {
-}
     const chartRef = React.useRef<SVGSVGElement>(null);
     const [tooltip, setTooltip] = React.useState<{ x: number, y: number, content: React.ReactNode } | null>(null);
 
     const chartData = React.useMemo(() => {
-}
         const data = [];
         for (let week = 1; week < league.currentWeek; week++) {
-}
             const matchup = league.schedule.find((m: any) => m.week === week && (m.teamA.teamId === team.id || m.teamB.teamId === team.id));
             const myScore = matchup ? (matchup.teamA.teamId === team.id ? matchup.teamA.score : matchup.teamB.score) : 0;
 
@@ -32,7 +27,6 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
     }, [team, league]);
 
     if (chartData.length < 2) {
-}
         return <p className="text-center text-sm text-gray-400 p-8 sm:px-4 md:px-6 lg:px-8">Not enough data to display a trend.</p>;
 
     const width = 500;
@@ -45,16 +39,14 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
     const xScale = (week: number) => padding.left + ((week - weeks[0]) / (weeks[weeks.length - 1] - weeks[0] || 1)) * (width - padding.left - padding.right);
     const yScale = (score: number) => height - padding.bottom - (score / maxScore) * (height - padding.top - padding.bottom);
 
-    const createPath = (dataKey: &apos;myScore&apos; | &apos;leagueAverage&apos;) => {
-}
-        return chartData.map((d, i) => `${i === 0 ? &apos;M&apos; : &apos;L&apos;} ${xScale(d.week)},${yScale(d[dataKey])}`).join(&apos; &apos;);
+    const createPath = (dataKey: 'myScore' | 'leagueAverage') => {
+        return chartData.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d.week)},${yScale(d[dataKey])}`).join(' ');
     };
 
-    const myScorePath = createPath(&apos;myScore&apos;);
-    const avgScorePath = createPath(&apos;leagueAverage&apos;);
+    const myScorePath = createPath('myScore');
+    const avgScorePath = createPath('leagueAverage');
 
     const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-}
         if (!chartRef.current) return;
         const svgRect = chartRef.current.getBoundingClientRect();
         const mouseX = e.clientX - svgRect.left;
@@ -64,7 +56,6 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
         if (!weekData) return;
 
         setTooltip({
-}
             x: e.clientX - svgRect.left,
             y: e.clientY - svgRect.top,
             content: (
@@ -96,7 +87,6 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
                     <line x1={padding.left} y1={padding.top} x2={padding.left} y2={height - padding.bottom} stroke="#475569" />
                     
                     {[0, 0.25, 0.5, 0.75, 1].map((p: any) => {
-}
                         const y = yScale(p * maxScore);
                         return (
                              <g key={p}>
@@ -108,7 +98,6 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
                         );
                     })}
                      {weeks.map((w: any) => (
-}
                          <text key={w} x={xScale(w)} y={height - padding.bottom + 15} textAnchor="middle" fill="#94a3b8" fontSize="10">
                              W{w}
                          </text>
@@ -120,22 +109,18 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
 
                     {/* Data Points */}
                     {chartData.map((d: any) => (
-}
                          <circle key={`my-${d.week}`} cx={xScale(d.week)} cy={yScale(d.myScore)} r="3" fill="#06b6d4" />
                     ))}
                      {chartData.map((d: any) => (
-}
                          <circle key={`avg-${d.week}`} cx={xScale(d.week)} cy={yScale(d.leagueAverage)} r="3" fill="#6b7280" />
                     ))}
 
                     {/* Tooltip line */}
                     {tooltip && (
-}
                         <line x1={tooltip.x} y1={padding.top} x2={tooltip.x} y2={height - padding.bottom} stroke="#facc15" strokeDasharray="3,3" />
                     )}
                 </svg>
                  {tooltip && (
-}
                     <div className="absolute pointer-events-none p-2 rounded-lg sm:px-4 md:px-6 lg:px-8" style={{ left: tooltip.x + 10, top: tooltip.y - 30 }}>
                         {tooltip.content}
                     </div>

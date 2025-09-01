@@ -1,126 +1,102 @@
 // Enhanced error logging with tracking service integration
-if (typeof window !== &apos;undefined&apos;) {
-}
+if (typeof window !== 'undefined') {
   window.onerror = function(message, source, lineno, colno, error) {
-}
-    console.log(&apos;App error:&apos;, { message, source, lineno, colno, error });
+    console.log('App error:', { message, source, lineno, colno, error });
     
     // Capture error with tracking service if available
     if (window.errorTrackingService) {
-}
       try {
-}
         window.errorTrackingService.captureError(
           error || new Error(String(message)),
           {
-}
-            component: &apos;global-error-handler&apos;,
-            severity: &apos;high&apos;,
+            component: 'global-error-handler',
+            severity: 'high',
             context: { source, lineno, colno }
           }
         );
       } catch (e) {
-}
-        console.warn(&apos;Error tracking service failed:&apos;, e);
+        console.warn('Error tracking service failed:', e);
       }
     }
     
     return false; // Allow default error handling
   };
   
-  window.addEventListener(&apos;unhandledrejection&apos;, function(event) {
-}
-    console.log(&apos;Unhandled promise rejection:&apos;, event.reason);
+  window.addEventListener('unhandledrejection', function(event) {
+    console.log('Unhandled promise rejection:', event.reason);
     
     // Capture promise rejection with tracking service if available
     if (window.errorTrackingService) {
-}
       try {
-}
         window.errorTrackingService.captureError(
           new Error(`Unhandled promise rejection: ${event.reason}`),
           {
-}
-            component: &apos;promise-rejection-handler&apos;,
-            severity: &apos;high&apos;,
+            component: 'promise-rejection-handler',
+            severity: 'high',
             context: { reason: event.reason }
           }
         );
       } catch (e) {
-}
-        console.warn(&apos;Error tracking service failed:&apos;, e);
+        console.warn('Error tracking service failed:', e);
       }
     }
   });
-}
 
 // Critical: Import React first to prevent Children undefined error
-import { createRoot } from &apos;react-dom/client&apos;;
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
 // Initialize services early
-import { errorTrackingService } from &apos;./src/services/errorTrackingService&apos;;
-import { performanceService } from &apos;./src/services/performanceService&apos;;
-import { securityService } from &apos;./src/services/securityService&apos;;
+import { errorTrackingService } from './src/services/errorTrackingService';
+import { performanceService } from './src/services/performanceService';
+import { securityService } from './src/services/securityService';
 
 // Make services available globally
-if (typeof window !== &apos;undefined&apos;) {
-}
+if (typeof window !== 'undefined') {
   window.errorTrackingService = errorTrackingService;
   window.performanceService = performanceService;
   window.securityService = securityService;
   
   // Track page view for analytics
-  performanceService.recordMetric(&apos;page_view_start&apos;, performance.now());
+  performanceService.recordMetric('page_view_start', performance.now());
   
   // Security initialization complete
-  console.log(&apos;🔒 Security service initialized&apos;);
-}
+  console.log('🔒 Security service initialized');
 
 // Browser polyfills for older browsers
-if (typeof globalThis === &apos;undefined&apos;) {
-}
+if (typeof globalThis === 'undefined') {
   (window as typeof globalThis).globalThis = window;
-}
 
 // Polyfill for requestIdleCallback
 if (!window.requestIdleCallback) {
-}
   window.requestIdleCallback = function(cb: IdleRequestCallback) {
-}
     const start = Date.now();
     return setTimeout(() => {
-}
       cb({
-}
         didTimeout: false,
         timeRemaining() {
-}
           return Math.max(0, 50 - (Date.now() - start));
         }
       });
     }, 1) as unknown as number;
   };
-}
 
 // Import CSS after React is established
-import &apos;./index.css&apos;;
-import &apos;./styles/mobile-responsive.css&apos;;
+import './index.css';
+import './styles/mobile-responsive.css';
 
 // Import error boundary first
-import { ErrorBoundary } from &apos;./components/ui/ErrorBoundary&apos;;
-import DeploymentErrorBoundary from &apos;./src/components/deployment/DeploymentErrorBoundary&apos;;
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import DeploymentErrorBoundary from './src/components/deployment/DeploymentErrorBoundary';
 // Import main components after React is properly initialized
-import App from &apos;./App&apos;;
-import MinimalApp from &apos;./MinimalApp&apos;;
+import App from './App';
+import MinimalApp from './MinimalApp';
 
 // Enhanced error reporting function
 const reportInitializationError = (error: unknown, phase: string) => {
-}
   const errorDetails = {
-}
     phase,
     error: error instanceof Error ? {
-}
       message: error.message,
       stack: error.stack,
       name: error.name
@@ -129,26 +105,23 @@ const reportInitializationError = (error: unknown, phase: string) => {
     url: window.location.href,
     userAgent: navigator.userAgent,
     reactVersion: React.version,
-    nodeEnv: import.meta.env.MODE || &apos;development&apos;
+    nodeEnv: import.meta.env.MODE || 'development'
   };
 
   console.error(`App initialization failed in ${phase}:`, errorDetails);
   
   // Use error tracking service for comprehensive error reporting
   try {
-}
     errorTrackingService.captureError(
       error instanceof Error ? error : new Error(String(error)),
       {
-}
-        component: &apos;app-initialization&apos;,
-        severity: &apos;critical&apos;,
+        component: 'app-initialization',
+        severity: 'critical',
         context: errorDetails
       }
     );
   } catch (trackingError) {
-}
-    console.error(&apos;Failed to track initialization error:&apos;, trackingError);
+    console.error('Failed to track initialization error:', trackingError);
   }
 
   return errorDetails;
@@ -156,27 +129,25 @@ const reportInitializationError = (error: unknown, phase: string) => {
 
 // Graceful fallback UI
 const createFallbackUI = (error: unknown, phase: string) => {
-}
   const isReactError = error instanceof Error && (
-    error.message.includes(&apos;React&apos;) ||
-    error.message.includes(&apos;createElement&apos;) ||
-    error.message.includes(&apos;render&apos;)
+    error.message.includes('React') ||
+    error.message.includes('createElement') ||
+    error.message.includes('render')
   );
 
   return `
-    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%); font-family: -apple-system, BlinkMacSystemFont, &apos;Segoe UI&apos;, Roboto, sans-serif; padding: 20px;">
+    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px;">
       <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 40px; max-width: 500px; text-align: center; color: white;">
-        <div style="font-size: 48px; margin-bottom: 20px;">${isReactError ? &apos;⚛️&apos; : &apos;🚨&apos;}</div>
+        <div style="font-size: 48px; margin-bottom: 20px;">${isReactError ? '⚛️' : '🚨'}</div>
         <h1 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 700;">
-          ${isReactError ? &apos;React Initialization Error&apos; : &apos;Application Error&apos;}
+          ${isReactError ? 'React Initialization Error' : 'Application Error'}
         </h1>
         <p style="margin: 0 0 24px 0; color: #ccc; line-height: 1.5;">
           ${isReactError 
-}
-            ? &apos;There was a problem initializing the React application. This may be due to a JavaScript runtime issue.&apos; 
-            : &apos;We encountered an unexpected error while starting the application.&apos;}
+            ? 'There was a problem initializing the React application. This may be due to a JavaScript runtime issue.' 
+            : 'We encountered an unexpected error while starting the application.'}
         </p>
-        <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 24px; font-family: &apos;Courier New&apos;, monospace; font-size: 12px; text-align: left; color: #ff6b6b; overflow-wrap: break-word;">
+        <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 24px; font-family: 'Courier New', monospace; font-size: 12px; text-align: left; color: #ff6b6b; overflow-wrap: break-word;">
           Phase: ${phase}<br>
           Error: ${error instanceof Error ? error.message : String(error)}
         </div>
@@ -198,46 +169,38 @@ const createFallbackUI = (error: unknown, phase: string) => {
 
 // Enhanced app initialization with performance tracking
 const initializeApp = () => {
-}
   const initStartTime = performance.now();
-  console.log(&apos;🚀 Starting app initialization...&apos;);
+  console.log('🚀 Starting app initialization...');
   
   // Track initialization start
-  performanceService.recordMetric(&apos;app_init_start&apos;, initStartTime);
+  performanceService.recordMetric('app_init_start', initStartTime);
   
-  const rootElement = document.getElementById(&apos;root&apos;);
+  const rootElement = document.getElementById('root');
   if (!rootElement) {
-}
-    console.error(&apos;Root element not found!&apos;);
-    performanceService.recordMetric(&apos;app_init_error&apos;, 1, { error: &apos;root_element_not_found&apos; });
+    console.error('Root element not found!');
+    performanceService.recordMetric('app_init_error', 1, { error: 'root_element_not_found' });
     return;
   }
 
-  console.log(&apos;✅ Root element found&apos;);
+  console.log('✅ Root element found');
   
   try {
-}
     const root = createRoot(rootElement);
     
     // For debugging: Use minimal app first to test React rendering
     const useMinimalApp = false; // Change to false to use full app - FIXED: Now using full app
     
     if (useMinimalApp) {
-}
       root.render(React.createElement(MinimalApp));
-      console.log(&apos;✅ Minimal app rendered successfully&apos;);
+      console.log('✅ Minimal app rendered successfully');
     } else {
-}
       root.render(
         React.createElement(React.StrictMode, null,
           React.createElement(DeploymentErrorBoundary, null,
             React.createElement(ErrorBoundary, {
-}
               onError: (error, errorInfo) => {
-}
-                console.error(&apos;Error Boundary triggered:&apos;, error, errorInfo);
-                performanceService.recordMetric(&apos;error_boundary_triggered&apos;, 1, {
-}
+                console.error('Error Boundary triggered:', error, errorInfo);
+                performanceService.recordMetric('error_boundary_triggered', 1, {
                   error: error.message,
 //                   errorInfo
                 });
@@ -248,25 +211,23 @@ const initializeApp = () => {
           )
         )
       );
-      console.log(&apos;✅ Full app rendered successfully&apos;);
+      console.log('✅ Full app rendered successfully');
     }
     
     // Track successful initialization
     const initDuration = performance.now() - initStartTime;
-    performanceService.measureComponentRender(&apos;app_initialization&apos;, initStartTime);
+    performanceService.measureComponentRender('app_initialization', initStartTime);
     console.log(`✅ App initialized in ${initDuration.toFixed(2)}ms`);
     
   } catch (error) {
-}
-    console.error(&apos;Failed to render app:&apos;, error);
+    console.error('Failed to render app:', error);
     
     // Track initialization failure
-    performanceService.recordMetric(&apos;app_init_error&apos;, 1, {
-}
+    performanceService.recordMetric('app_init_error', 1, {
       error: error instanceof Error ? error.message : String(error)
     });
     
-    reportInitializationError(error, &apos;react-render&apos;);
+    reportInitializationError(error, 'react-render');
     
     rootElement.innerHTML = `
       <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #dc2626; color: white; font-family: system-ui;">
@@ -281,10 +242,7 @@ const initializeApp = () => {
 };
 
 // Start when DOM is ready
-if (document.readyState === &apos;loading&apos;) {
-}
-  document.addEventListener(&apos;DOMContentLoaded&apos;, initializeApp);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
-}
   initializeApp();
-}
