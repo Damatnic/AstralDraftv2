@@ -28,6 +28,7 @@ interface PlayerSearchResult {
   name: string;
   team: string;
   position: string;
+}
 
 export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   className = '',

@@ -5,7 +5,7 @@
 
 import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Cell } from 'recharts';
+import { loadRecharts } from '../../utils/dynamicImports';
 import { TrendingUp, TrendingDown, Target, Brain, Activity, Users, Cloud, MapPin } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/ShadcnTabs';

@@ -48,6 +48,7 @@ interface PerformanceData {
         accuracy: number;
         avgConfidence: number;
     }>;
+}
 
 interface GlobalAnalytics {
     globalStats: {
@@ -73,6 +74,7 @@ interface GlobalAnalytics {
         avgUserConfidence: number;
         uniqueParticipants: number;
     }>;
+}
 
 export const OracleAnalyticsDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -122,19 +124,21 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
             if (performanceResponse.success) {
                 setPerformanceData(performanceResponse.data);
+            }
 
             if (globalResponse.success) {
                 setGlobalData(globalResponse.data);
+            }
 
             if (leaderboardResponse.success) {
                 setLeaderboardData(leaderboardResponse.data);
+            }
 
-    } catch (error) {
-            setError(err instanceof Error ? err.message : 'Failed to load analytics data');
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Failed to load analytics data');
         } finally {
             setLoading(false);
-
-    };
+        }
 
     const StatCard: React.FC<{
         title: string;

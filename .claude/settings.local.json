@@ -70,7 +70,10 @@
       "Bash(npm test:*)",
       "Bash(dir:*)",
       "Bash(npm run test:integration:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(start http://localhost:8767)",
+      "Bash(npm audit:*)",
+      "Bash(npm outdated)"
     ],
     "deny": [],
     "ask": [],

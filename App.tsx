@@ -24,7 +24,8 @@ import { ModalProvider } from './contexts/ModalContext';
 import './styles/globals.css';
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import LeagueDashboard from './views/LeagueDashboard';
-import { AnimatePresence, motion } from 'framer-motion';
+// Dynamic import for framer-motion - will be loaded when needed
+// import { AnimatePresence, motion } from 'framer-motion';
 import { useMediaQuery } from './hooks/useMediaQuery';
 import { enhancedWebSocketService } from './services/enhancedWebSocketService';
 import { realtimeNotificationServiceV2 } from './services/realtimeNotificationServiceV2';
@@ -64,6 +65,11 @@ const EnhancedCommissionerToolsView = React.lazy(() => import('./views/EnhancedC
 const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoomView'));
 const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementView'));
 const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
+
+// Heavy analytics components - temporarily disabled due to syntax errors
+// const AdvancedAnalyticsDashboard = React.lazy(() => import('./components/analytics/AdvancedAnalyticsDashboard'));
+// const OracleAnalyticsDashboard = React.lazy(() => import('./components/analytics/OracleAnalyticsDashboard'));
+// const PlayerComparisonTool = React.lazy(() => import('./components/comparison/PlayerComparisonTool'));
 
 // Enhanced loading component with better visuals and performance
 const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (

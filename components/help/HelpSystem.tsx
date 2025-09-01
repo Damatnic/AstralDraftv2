@@ -5,8 +5,8 @@
 
 import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
+import { loadFramerMotion } from '../../utils/dynamicImports';
 
 interface HelpArticle {
   id: string;

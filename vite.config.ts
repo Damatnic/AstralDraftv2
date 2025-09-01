@@ -57,9 +57,26 @@ export default defineConfig(({ mode }: { mode: string }) => {
         assetsInlineLimit: 4096, // Inline assets under 4KB
         rollupOptions: {
           output: {
-            // Disable manual chunks temporarily to avoid circular dependencies
-            // Let Vite handle automatic chunking to fix the ReferenceError
-            manualChunks: undefined,
+            manualChunks(id) {
+              // Vendor chunks
+              if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+                return 'vendor-react';
+              }
+              if (id.includes('node_modules/framer-motion') || id.includes('node_modules/lucide-react')) {
+                return 'vendor-ui';
+              }
+              if (id.includes('node_modules/lodash') || id.includes('node_modules/axios')) {
+                return 'vendor-utils';
+              }
+              
+              // Feature chunks
+              if (id.includes('views/') && id.includes('DraftRoom')) {
+                return 'draft-features';
+              }
+              if (id.includes('components/admin/')) {
+                return 'admin-features';
+              }
+            },
             entryFileNames: 'assets/[name]-[hash].js',
             chunkFileNames: 'assets/[name]-[hash].js',
             assetFileNames: 'assets/[name]-[hash].[ext]'
@@ -73,7 +90,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
           } : undefined
         },
         emptyOutDir: true,
-        chunkSizeWarningLimit: 500, // Reduced from 1000 to encourage smaller chunks
+        chunkSizeWarningLimit: 100, // Warn at 100KB instead of 500KB to encourage smaller chunks
         cssCodeSplit: true // Enable CSS code splitting
       },
       optimizeDeps: {
