@@ -1,102 +1,92 @@
 [build]
   publish = "dist"
-  command = "node build.cjs"
-  functions = "netlify/functions"
+  command = "npm run build"
 
-[build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "10"
-  NODE_ENV = "production"
-  VITE_ENVIRONMENT = "production"
-  
-  # Force npm usage
-  NPM_CONFIG_PACKAGE_MANAGER = "npm"
-  NETLIFY_USE_YARN = "false"
-  NETLIFY_USE_PNPM = "false"
-  YARN_ENABLED = "false"
-  PNPM_ENABLED = "false"
-  
-  # Ensure devDependencies are installed
-  NPM_CONFIG_PRODUCTION = "false"
-  NPM_CONFIG_ONLY = ""
-  
-  # Disable all other language detections
-  DISABLE_RUBY = "true"
-  DISABLE_BUNDLER = "true"
-  SKIP_RUBY = "true"
-  SKIP_BUNDLER = "true"
-  SKIP_GEM = "true"
-  SKIP_MISE = "true"
-  SKIP_PYTHON = "true"
-  SKIP_GO = "true"
-  SKIP_RUST = "true"
-  SKIP_PHP = "true"
-
-# Functions Configuration
-[functions]
-  node_bundler = "esbuild"
-  external_node_modules = ["@neondatabase/serverless", "pg", "pg-pool", "bcryptjs", "jsonwebtoken"]
-
-# Context-specific settings - all use the same simple build script
-[context.production]
-  command = "node build.cjs"
-  
-[context.deploy-preview]
-  command = "node build.cjs"
-  
-[context.branch-deploy]
-  command = "node build.cjs"
-
-# API Redirects
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
-  force = true
-
-# SPA fallback
+# SPA Routing - Critical for React Router
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers for JavaScript files
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    "Content-Type" = "application/javascript; charset=utf-8"
-    "Cache-Control" = "public, max-age=31536000, immutable"
+# API Redirects (if using serverless functions)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
-# Headers for assets
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    "Content-Type" = "application/javascript; charset=utf-8"
-    "Cache-Control" = "public, max-age=31536000, immutable"
-    "X-Content-Type-Options" = "nosniff"
-
-# Headers for CSS files
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    "Content-Type" = "text/css; charset=utf-8"
-    "Cache-Control" = "public, max-age=31536000, immutable"
-
-# Headers for service worker
-[[headers]]
-  for = "/sw.js"
-  [headers.values]
-    "Content-Type" = "application/javascript; charset=utf-8"
-    "Cache-Control" = "public, max-age=0, must-revalidate"
-    "Service-Worker-Allowed" = "/"
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--production=false"
+  # Set production environment
+  NODE_ENV = "production"
+  # Enable build optimizations
+  GENERATE_SOURCEMAP = "false"
+  # Disable telemetry for faster builds
+  NEXT_TELEMETRY_DISABLED = "1"
 
 # Security headers
 [[headers]]
   for = "/*"
   [headers.values]
-    "Content-Security-Policy" = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https://astraldraft.netlify.app wss://astraldraft.netlify.app ws://localhost:* http://localhost:* https://fonts.googleapis.com https://fonts.gstatic.com https://api.gemini.com https://generativelanguage.googleapis.com https://*.espn.com https://api.the-odds-api.com https://api.sportsdata.io; img-src 'self' data: https:; manifest-src 'self'"
-    # X-Frame-Options removed - causing console errors when set via headers instead of server config
-    "X-Content-Type-Options" = "nosniff"
-    "X-XSS-Protection" = "1; mode=block"
-    "Referrer-Policy" = "strict-origin-when-cross-origin"
-    "Permissions-Policy" = "camera=(), microphone=(), geolocation=()"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Content Security Policy for enhanced security
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https: ws: wss:;"
+    # Enable modern security features
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    # Prevent MIME type sniffing
+    X-Content-Type-Options = "nosniff"
+    
+# Cache static assets with optimal cache headers
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    # Add ETag for better caching
+    Vary = "Accept-Encoding"
+
+# Cache JavaScript and CSS files
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images with shorter cache time
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "*.gif"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Service Worker caching
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+# HTML files - no cache for SPA routing
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

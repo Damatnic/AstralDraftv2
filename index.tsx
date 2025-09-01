@@ -91,6 +91,7 @@ import './styles/mobile-responsive.css';
 
 // Import error boundary first
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import DeploymentErrorBoundary from './src/components/deployment/DeploymentErrorBoundary';
 // Import main components after React is properly initialized
 import App from './App';
 import MinimalApp from './MinimalApp';
@@ -199,16 +200,18 @@ const initializeApp = () => {
     } else {
       root.render(
         React.createElement(React.StrictMode, null,
-          React.createElement(ErrorBoundary, {
-            onError: (error, errorInfo) => {
-              console.error('Error Boundary triggered:', error, errorInfo);
-              performanceService.recordMetric('error_boundary_triggered', 1, {
-                error: error.message,
-                errorInfo
-              });
-            }
-          },
-            React.createElement(App)
+          React.createElement(DeploymentErrorBoundary, null,
+            React.createElement(ErrorBoundary, {
+              onError: (error, errorInfo) => {
+                console.error('Error Boundary triggered:', error, errorInfo);
+                performanceService.recordMetric('error_boundary_triggered', 1, {
+                  error: error.message,
+                  errorInfo
+                });
+              }
+            },
+              React.createElement(App)
+            )
           )
         )
       );

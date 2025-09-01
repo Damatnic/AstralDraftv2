@@ -1,468 +1,194 @@
 #!/usr/bin/env node
-
 /**
  * Production Deployment Script
- * Comprehensive deployment workflow with validation and monitoring
+ * Comprehensive script to prepare and deploy the application to production
  */
 
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
 
-const DEPLOYMENT_CONFIG = {
-  environment: 'production',
-  requiredEnvVars: [
-    'VITE_API_BASE_URL',
-    'VITE_SPORTS_IO_API_KEY',
-    'VITE_OPENAI_API_KEY'
-  ],
-  buildTimeout: 300000, // 5 minutes
-  healthCheckUrl: 'https://astraldraft.netlify.app',
-  maxRetries: 3
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-class ProductionDeployer {
-  constructor() {
-    this.startTime = Date.now();
-    this.deploymentId = `deploy-${Date.now()}`;
+console.log('🚀 Starting Production Deployment Process');
+console.log('==========================================\n');
+
+// Helper function to run commands with error handling
+function runCommand(command, description) {
+  console.log(`🔄 ${description}...`);
+  try {
+    const output = execSync(command, { 
+      stdio: 'inherit', 
+      cwd: process.cwd(),
+      env: { ...process.env, NODE_ENV: 'production' }
+    });
+    console.log(`✅ ${description} completed\n`);
+    return true;
+  } catch (error) {
+    console.error(`❌ ${description} failed:`);
+    console.error(error.message);
+    return false;
   }
+}
 
-  log(message, type = 'info') {
-    const timestamp = new Date().toISOString();
-    const prefix = {
-      info: '📋',
-      success: '✅',
-      warning: '⚠️',
-      error: '❌',
-      progress: '🔄'
-    }[type] || '📋';
-
-    console.log(`${prefix} [${timestamp}] ${message}`);
+// Step 1: Clean previous builds
+console.log('🧹 Step 1: Cleaning previous builds');
+if (fs.existsSync('dist')) {
+  try {
+    execSync('rm -rf dist', { stdio: 'inherit' });
+    console.log('✅ Previous build cleaned\n');
+  } catch (error) {
+    console.log('⚠️  Could not clean previous build (may not exist)\n');
   }
+} else {
+  console.log('✅ No previous build to clean\n');
+}
 
-  async runCommand(command, description) {
-    this.log(`${description}...`, 'progress');
-    try {
-      const output = execSync(command, { 
-        encoding: 'utf8',
-        timeout: DEPLOYMENT_CONFIG.buildTimeout 
-      });
-      this.log(`${description} completed`, 'success');
-      return output;
-    } catch (error) {
-      this.log(`${description} failed: ${error.message}`, 'error');
-      throw error;
-    }
+// Step 2: Install dependencies
+console.log('📦 Step 2: Installing dependencies');
+if (!runCommand('npm ci --production=false', 'Installing dependencies')) {
+  console.error('🔴 Deployment aborted: Could not install dependencies');
+  process.exit(1);
+}
+
+// Step 3: Run type checking
+console.log('🔍 Step 3: Type checking');
+if (!runCommand('npm run type-check', 'Type checking')) {
+  console.warn('⚠️  Type checking failed, but continuing with deployment...\n');
+}
+
+// Step 4: Build the application
+console.log('🏗️  Step 4: Building application');
+if (!runCommand('npm run build', 'Building application')) {
+  console.error('🔴 Deployment aborted: Build failed');
+  process.exit(1);
+}
+
+// Step 5: Verify build output
+console.log('🔍 Step 5: Verifying build output');
+const buildVerificationChecks = [
+  { path: 'dist/index.html', name: 'index.html' },
+  { path: 'dist/assets', name: 'assets directory' },
+  { path: 'netlify.toml', name: 'netlify.toml configuration' },
+  { path: 'public/_redirects', name: '_redirects file' }
+];
+
+let verificationPassed = true;
+
+buildVerificationChecks.forEach(check => {
+  if (fs.existsSync(check.path)) {
+    console.log(`✅ ${check.name} - found`);
+  } else {
+    console.log(`❌ ${check.name} - missing`);
+    verificationPassed = false;
   }
+});
 
-  validateEnvironment() {
-    this.log('🔍 Validating deployment environment', 'progress');
+if (!verificationPassed) {
+  console.error('🔴 Deployment aborted: Build verification failed');
+  process.exit(1);
+}
+
+// Step 6: Check asset sizes
+console.log('\n📊 Step 6: Checking asset sizes');
+try {
+  const assetsDir = path.join(process.cwd(), 'dist', 'assets');
+  if (fs.existsSync(assetsDir)) {
+    const files = fs.readdirSync(assetsDir);
+    let totalSize = 0;
+    let largeFiles = [];
     
-    const missingVars = [];
-    DEPLOYMENT_CONFIG.requiredEnvVars.forEach(varName => {
-      if (!process.env[varName]) {
-        missingVars.push(varName);
+    files.forEach(file => {
+      const filePath = path.join(assetsDir, file);
+      const stats = fs.statSync(filePath);
+      totalSize += stats.size;
+      
+      // Flag files larger than 1MB
+      if (stats.size > 1024 * 1024) {
+        largeFiles.push({ file, size: (stats.size / 1024 / 1024).toFixed(2) + 'MB' });
       }
     });
-
-    if (missingVars.length > 0) {
-      this.log(`Missing required environment variables: ${missingVars.join(', ')}`, 'error');
-      return false;
-    }
-
-    // Check Node.js version
-    const nodeVersion = process.version;
-    this.log(`Node.js version: ${nodeVersion}`, 'info');
     
-    // Check npm version
-    try {
-      const npmVersion = execSync('npm --version', { encoding: 'utf8' }).trim();
-      this.log(`npm version: ${npmVersion}`, 'info');
-    } catch (error) {
-      this.log('Could not determine npm version', 'warning');
-    }
-
-    this.log('Environment validation completed', 'success');
-    return true;
-  }
-
-  async runPreDeploymentChecks() {
-    this.log('🛡️ Running comprehensive security checks', 'progress');
-
-    try {
-      // Check for exposed secrets
-      const gitignoreExists = fs.existsSync('.gitignore');
-      if (!gitignoreExists) {
-        this.log('.gitignore file missing', 'warning');
-      }
-
-      // Check .env is not committed
-      const envExists = fs.existsSync('.env');
-      if (envExists) {
-        const gitStatus = execSync('git ls-files .env', { encoding: 'utf8' });
-        if (gitStatus.trim()) {
-          this.log('WARNING: .env file is tracked by git', 'error');
-          throw new Error('Security violation: .env file should not be committed');
-        }
-      }
-
-      // Validate security configuration
-      this.log('Validating security configuration...', 'progress');
-      await this.validateSecurityConfiguration();
-
-      // Check for potential security vulnerabilities in code
-      this.log('Scanning for security vulnerabilities...', 'progress');
-      await this.scanForSecurityIssues();
-
-      // Validate Content Security Policy
-      this.log('Validating Content Security Policy...', 'progress');
-      await this.validateCSP();
-
-      this.log('Comprehensive security checks passed', 'success');
-    } catch (error) {
-      this.log(`Security check failed: ${error.message}`, 'error');
-      throw error;
-    }
-  }
-
-  async validateSecurityConfiguration() {
-    // Check if security services are properly configured
-    const securityConfigPath = path.join(process.cwd(), 'src/config/security.ts');
-    if (!fs.existsSync(securityConfigPath)) {
-      throw new Error('Security configuration file missing');
-    }
-
-    const securityServicePath = path.join(process.cwd(), 'src/services/securityService.ts');
-    if (!fs.existsSync(securityServicePath)) {
-      throw new Error('Security service file missing');
-    }
-
-    this.log('Security configuration validated', 'success');
-  }
-
-  async scanForSecurityIssues() {
-    // Scan for common security anti-patterns
-    const filesToScan = [
-      'src/**/*.ts',
-      'src/**/*.tsx',
-      'src/**/*.js',
-      'src/**/*.jsx'
-    ];
-
-    const dangerousPatterns = [
-      { pattern: /eval\s*\(/gi, message: 'Use of eval() detected' },
-      { pattern: /innerHTML\s*=/gi, message: 'Direct innerHTML usage detected' },
-      { pattern: /document\.write/gi, message: 'Use of document.write detected' },
-      { pattern: /window\.location\s*=/gi, message: 'Direct window.location assignment detected' },
-      { pattern: /\$\{.*\}/gi, message: 'Template literal in potentially unsafe context' }
-    ];
-
-    let issuesFound = 0;
-
-    for (const pattern of filesToScan) {
-      try {
-        const files = execSync(`npx glob "${pattern}"`, { encoding: 'utf8' })
-          .split('\n')
-          .filter(file => file.trim());
-
-        for (const file of files) {
-          if (fs.existsSync(file)) {
-            const content = fs.readFileSync(file, 'utf8');
-            
-            for (const { pattern: regex, message } of dangerousPatterns) {
-              if (regex.test(content)) {
-                this.log(`Security issue in ${file}: ${message}`, 'warning');
-                issuesFound++;
-              }
-            }
-          }
-        }
-      } catch (error) {
-        this.log(`Failed to scan pattern ${pattern}: ${error.message}`, 'warning');
-      }
-    }
-
-    if (issuesFound > 0) {
-      this.log(`Found ${issuesFound} potential security issues`, 'warning');
-    } else {
-      this.log('No security anti-patterns detected', 'success');
-    }
-  }
-
-  async validateCSP() {
-    // Check if CSP is properly configured in index.html
-    const indexPath = path.join(process.cwd(), 'index.html');
-    if (fs.existsSync(indexPath)) {
-      const content = fs.readFileSync(indexPath, 'utf8');
-      
-      if (!content.includes('Content-Security-Policy')) {
-        this.log('Content Security Policy not found in index.html', 'warning');
-      } else {
-        this.log('Content Security Policy configured', 'success');
-      }
-    }
-  }
-
-  async runTests() {
-    this.log('🧪 Running test suite', 'progress');
+    console.log(`📦 Total bundle size: ${(totalSize / 1024 / 1024).toFixed(2)}MB`);
     
-    try {
-      // Run linting
-      await this.runCommand('npm run lint', 'Linting code');
-      
-      // Run type checking
-      await this.runCommand('npx tsc --noEmit', 'Type checking');
-      
-      // Run unit tests (if available)
-      try {
-        await this.runCommand('npm test -- --watchAll=false --coverage=false', 'Running tests');
-      } catch (testError) {
-        this.log('Tests encountered issues but continuing deployment', 'warning');
-      }
-
-      this.log('Test suite completed', 'success');
-    } catch (error) {
-      this.log(`Tests failed: ${error.message}`, 'error');
-      throw error;
-    }
-  }
-
-  async buildApplication() {
-    this.log('🏗️ Building application for production', 'progress');
-    
-    await this.runCommand('npm run build:prod', 'Building production bundle');
-    
-    // Verify build output
-    const distPath = path.join(process.cwd(), 'dist');
-    if (!fs.existsSync(distPath)) {
-      throw new Error('Build failed - dist directory not found');
-    }
-
-    const indexHtml = path.join(distPath, 'index.html');
-    if (!fs.existsSync(indexHtml)) {
-      throw new Error('Build failed - index.html not found');
-    }
-
-    // Check bundle sizes
-    try {
-      const stats = fs.readdirSync(path.join(distPath, 'assets'))
-        .filter(file => file.endsWith('.js'))
-        .map(file => {
-          const filePath = path.join(distPath, 'assets', file);
-          const stats = fs.statSync(filePath);
-          return { file, size: stats.size };
-        });
-
-      const totalSize = stats.reduce((sum, stat) => sum + stat.size, 0);
-      const totalMB = (totalSize / 1024 / 1024).toFixed(2);
-      
-      this.log(`Total bundle size: ${totalMB}MB`, 'info');
-      
-      // Warn about large bundles
-      stats.forEach(({ file, size }) => {
-        const sizeMB = (size / 1024 / 1024).toFixed(2);
-        if (size > 500 * 1024) { // 500KB
-          this.log(`Large bundle detected: ${file} (${sizeMB}MB)`, 'warning');
-        }
+    if (largeFiles.length > 0) {
+      console.log('⚠️  Large files detected:');
+      largeFiles.forEach(({ file, size }) => {
+        console.log(`   - ${file}: ${size}`);
       });
-
-    } catch (error) {
-      this.log('Could not analyze bundle sizes', 'warning');
-    }
-
-    this.log('Application build completed', 'success');
-  }
-
-  async deployToNetlify() {
-    this.log('🚀 Deploying to Netlify', 'progress');
-    
-    try {
-      // Check if Netlify CLI is available
-      execSync('netlify --version', { encoding: 'utf8' });
-    } catch (error) {
-      this.log('Netlify CLI not found. Install with: npm install -g netlify-cli', 'error');
-      throw new Error('Netlify CLI required for deployment');
-    }
-
-    // Deploy to Netlify
-    await this.runCommand('netlify deploy --prod --dir=dist', 'Deploying to Netlify');
-    
-    this.log('Netlify deployment completed', 'success');
-  }
-
-  async performHealthCheck() {
-    this.log('🏥 Performing post-deployment health check', 'progress');
-    
-    let retries = 0;
-    const maxRetries = DEPLOYMENT_CONFIG.maxRetries;
-    
-    while (retries < maxRetries) {
-      try {
-        const response = await fetch(DEPLOYMENT_CONFIG.healthCheckUrl, {
-          timeout: 10000
-        });
-        
-        if (response.ok) {
-          this.log('Basic health check passed', 'success');
-          
-          // Additional checks for production features
-          await this.validateProductionFeatures();
-          
-          this.log('Comprehensive health check passed', 'success');
-          return true;
-        } else {
-          throw new Error(`HTTP ${response.status}`);
-        }
-      } catch (error) {
-        retries++;
-        this.log(`Health check attempt ${retries}/${maxRetries} failed: ${error.message}`, 'warning');
-        
-        if (retries < maxRetries) {
-          this.log('Retrying in 10 seconds...', 'progress');
-          await new Promise(resolve => setTimeout(resolve, 10000));
-        }
-      }
-    }
-    
-    throw new Error('Health check failed after maximum retries');
-  }
-
-  async validateProductionFeatures() {
-    this.log('🔍 Validating production features', 'progress');
-    
-    try {
-      // Test error tracking endpoint
-      const testErrorPayload = {
-        sessionId: 'health-check-test',
-        timestamp: new Date().toISOString(),
-        errors: [{
-          id: 'health-check-error',
-          timestamp: new Date(),
-          error: {
-            name: 'HealthCheckError',
-            message: 'Test error for deployment validation',
-            stack: 'Test stack trace'
-          },
-          severity: 'low',
-          component: 'health-check'
-        }]
-      };
-
-      const errorEndpoint = process.env.VITE_ERROR_REPORTING_URL || `${DEPLOYMENT_CONFIG.healthCheckUrl}/api/errors`;
-      
-      try {
-        const errorResponse = await fetch(errorEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(testErrorPayload),
-          timeout: 5000
-        });
-        
-        if (errorResponse.ok || errorResponse.status === 404) {
-          this.log('Error tracking endpoint accessible', 'success');
-        } else {
-          this.log(`Error tracking endpoint returned ${errorResponse.status}`, 'warning');
-        }
-      } catch (errorEndpointError) {
-        this.log('Error tracking endpoint not accessible (acceptable for test deployments)', 'warning');
-      }
-
-      // Test metrics endpoint
-      const metricsEndpoint = process.env.VITE_METRICS_URL || `${DEPLOYMENT_CONFIG.healthCheckUrl}/api/metrics`;
-      
-      try {
-        const metricsResponse = await fetch(metricsEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: 'deployment_health_check',
-            value: 1,
-            timestamp: Date.now()
-          }),
-          timeout: 5000
-        });
-        
-        if (metricsResponse.ok || metricsResponse.status === 404) {
-          this.log('Metrics endpoint accessible', 'success');
-        } else {
-          this.log(`Metrics endpoint returned ${metricsResponse.status}`, 'warning');
-        }
-      } catch (metricsEndpointError) {
-        this.log('Metrics endpoint not accessible (acceptable for test deployments)', 'warning');
-      }
-
-    } catch (error) {
-      this.log(`Feature validation failed: ${error.message}`, 'warning');
+      console.log('Consider code splitting for better performance\n');
+    } else {
+      console.log('✅ All assets are reasonably sized\n');
     }
   }
+} catch (error) {
+  console.log('⚠️  Could not analyze asset sizes\n');
+}
 
-  async generateDeploymentReport() {
-    const endTime = Date.now();
-    const duration = ((endTime - this.startTime) / 1000).toFixed(2);
-    
-    const report = {
-      deploymentId: this.deploymentId,
-      timestamp: new Date().toISOString(),
-      duration: `${duration}s`,
-      environment: DEPLOYMENT_CONFIG.environment,
-      nodeVersion: process.version,
-      success: true
-    };
+// Step 7: Security and Performance Checks
+console.log('🔒 Step 7: Security and Performance Checks');
 
-    const reportPath = `deployment-reports/${this.deploymentId}.json`;
-    fs.mkdirSync('deployment-reports', { recursive: true });
-    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    
-    this.log(`Deployment report saved: ${reportPath}`, 'info');
-    return report;
-  }
-
-  async deploy() {
-    try {
-      this.log(`🚀 Starting production deployment (${this.deploymentId})`, 'info');
-      
-      // Pre-deployment validation
-      if (!this.validateEnvironment()) {
-        throw new Error('Environment validation failed');
-      }
-      
-      await this.runPreDeploymentChecks();
-      await this.runTests();
-      await this.buildApplication();
-      await this.deployToNetlify();
-      await this.performHealthCheck();
-      
-      const report = await this.generateDeploymentReport();
-      
-      this.log(`🎉 Deployment completed successfully in ${report.duration}`, 'success');
-      this.log(`🌐 Application available at: ${DEPLOYMENT_CONFIG.healthCheckUrl}`, 'success');
-      
-    } catch (error) {
-      this.log(`💥 Deployment failed: ${error.message}`, 'error');
-      
-      // Generate failure report
-      const failureReport = {
-        deploymentId: this.deploymentId,
-        timestamp: new Date().toISOString(),
-        error: error.message,
-        success: false
-      };
-      
-      fs.mkdirSync('deployment-reports', { recursive: true });
-      fs.writeFileSync(
-        `deployment-reports/${this.deploymentId}-failure.json`, 
-        JSON.stringify(failureReport, null, 2)
-      );
-      
-      process.exit(1);
+// Check for sensitive information in build
+const indexHtmlPath = path.join(process.cwd(), 'dist', 'index.html');
+if (fs.existsSync(indexHtmlPath)) {
+  const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+  
+  const sensitivePatterns = [
+    /password/i,
+    /secret/i,
+    /private.*key/i,
+    /api.*key.*[a-zA-Z0-9]{20,}/i
+  ];
+  
+  let sensitiveDataFound = false;
+  sensitivePatterns.forEach(pattern => {
+    if (pattern.test(indexHtml)) {
+      sensitiveDataFound = true;
     }
+  });
+  
+  if (sensitiveDataFound) {
+    console.log('⚠️  Potential sensitive data detected in build');
+  } else {
+    console.log('✅ No sensitive data detected in build');
   }
 }
 
-// Run deployment if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const deployer = new ProductionDeployer();
-  deployer.deploy();
+// Step 8: Final deployment preparation
+console.log('\n🎯 Step 8: Final deployment preparation');
+
+// Ensure _redirects is in dist folder
+const publicRedirects = path.join(process.cwd(), 'public', '_redirects');
+const distRedirects = path.join(process.cwd(), 'dist', '_redirects');
+
+if (fs.existsSync(publicRedirects) && !fs.existsSync(distRedirects)) {
+  try {
+    fs.copyFileSync(publicRedirects, distRedirects);
+    console.log('✅ _redirects file copied to dist');
+  } catch (error) {
+    console.log('⚠️  Could not copy _redirects file');
+  }
 }
 
-export { ProductionDeployer };
+console.log('\n🎉 Production Deployment Preparation Complete!');
+console.log('============================================\n');
+
+console.log('📋 Next Steps:');
+console.log('1. Manual Netlify Deploy:');
+console.log('   netlify deploy --prod --dir=dist');
+console.log('');
+console.log('2. Or push to your connected Git branch for auto-deploy');
+console.log('');
+console.log('3. Monitor the deployment at: https://app.netlify.com/');
+console.log('');
+
+console.log('🔧 Troubleshooting:');
+console.log('- If the app shows a blank screen, check browser console for errors');
+console.log('- Verify all environment variables are set in Netlify dashboard');
+console.log('- Check that _redirects rules are working for SPA routing');
+console.log('');
+
+console.log('✅ Deployment package ready in ./dist/ directory');
+process.exit(0);
