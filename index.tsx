@@ -42,6 +42,7 @@ import './styles/mobile-responsive.css';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 // Import main components after React is properly initialized
 import App from './App';
+import MinimalApp from './MinimalApp';
 
 // Enhanced error reporting function
 const reportInitializationError = (error: unknown, phase: string) => {
@@ -128,19 +129,26 @@ const initializeApp = () => {
   try {
     const root = createRoot(rootElement);
     
-    root.render(
-      React.createElement(React.StrictMode, null,
-        React.createElement(ErrorBoundary, {
-          onError: (error, errorInfo) => {
-            console.error('Error Boundary triggered:', error, errorInfo);
-          }
-        },
-          React.createElement(App)
-        )
-      )
-    );
+    // For debugging: Use minimal app first to test React rendering
+    const useMinimalApp = true; // Change to false to use full app
     
-    console.log('✅ App rendered successfully');
+    if (useMinimalApp) {
+      root.render(React.createElement(MinimalApp));
+      console.log('✅ Minimal app rendered successfully');
+    } else {
+      root.render(
+        React.createElement(React.StrictMode, null,
+          React.createElement(ErrorBoundary, {
+            onError: (error, errorInfo) => {
+              console.error('Error Boundary triggered:', error, errorInfo);
+            }
+          },
+            React.createElement(App)
+          )
+        )
+      );
+      console.log('✅ Full app rendered successfully');
+    }
   } catch (error) {
     console.error('Failed to render app:', error);
     rootElement.innerHTML = `
