@@ -34,9 +34,9 @@ if (!window.requestIdleCallback) {
   };
 }
 
-// Import CSS after React is established (commented out for testing)
-// import './index.css';
-// import './styles/mobile-responsive.css';
+// Import CSS after React is established
+import './index.css';
+import './styles/mobile-responsive.css';
 
 // Import error boundary first
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -130,7 +130,7 @@ const initializeApp = () => {
     const root = createRoot(rootElement);
     
     // For debugging: Use minimal app first to test React rendering
-    const useMinimalApp = true; // Change to false to use full app
+    const useMinimalApp = false; // Change to false to use full app
     
     if (useMinimalApp) {
       root.render(React.createElement(MinimalApp));

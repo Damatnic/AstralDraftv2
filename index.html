@@ -493,21 +493,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://api.stripe.com" />
-    <link rel="modulepreload" href="/vendor-react.js" />
-    <link rel="modulepreload" href="/index.js" />
+    <!-- Module preloads will be handled automatically by Vite build -->
     
     <!-- Preload critical resources with optimized font loading -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap"></noscript>
     
-    <!-- Prefetch non-critical chunks for faster navigation -->
-    <link rel="prefetch" href="/feature-draft.js" />
-    <link rel="prefetch" href="/feature-matchup.js" />
-    <link rel="prefetch" href="/vendor-charts.js" />
+    <!-- Chunk prefetching will be handled automatically by Vite build -->
     
-    <!-- Preload critical CSS chunks -->
-    <link rel="preload" href="/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/index.css"></noscript>
+    <!-- CSS preloading will be handled automatically by Vite build -->
     
     <!-- Critical CSS inlined for faster FCP -->
     <style>
