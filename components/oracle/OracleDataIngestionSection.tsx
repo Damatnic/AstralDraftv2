@@ -39,7 +39,7 @@ interface DataQualityMetric {
   description: string;
   formula: string;
   threshold: string;
-  impact: string;
+  impact: string;}
 
 interface ProcessingPipeline {
   id: string;
@@ -48,7 +48,7 @@ interface ProcessingPipeline {
   parallelization: boolean;
   throughput: string;
   errorRecovery: string[];
-
+}
 
 const OracleDataIngestionSection: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

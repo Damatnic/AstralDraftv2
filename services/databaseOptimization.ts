@@ -25,14 +25,14 @@ interface TableStats {
     name: string;
     rowCount: number;
     sizeKB: number;
-    lastUpdated: string;
+    lastUpdated: string;}
 
 interface IndexStats {
     name: string;
     tableName: string;
     columns: string[];
     unique: boolean;
-    type: string;
+    type: string;}
 
 interface QueryPerformanceStats {
     slowQueries: SlowQuery[];
@@ -42,7 +42,7 @@ interface QueryPerformanceStats {
 interface SlowQuery {
     query: string;
     avgExecutionTime: number;
-    executionCount: number;
+    executionCount: number;}
 
 export class DatabaseOptimizationService {
     

@@ -29,7 +29,7 @@ export interface AccessibleButtonProps {
   // Announcement settings
   announceOnClick?: string;
   announceOnDisabled?: string;
-
+}
 
 const variantClasses = {
   primary: 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700',
@@ -151,7 +151,7 @@ export interface AccessibleIconButtonProps {
   pressed?: boolean;
   expanded?: boolean;
   announceOnClick?: string;
-
+}
 
 export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
   icon,

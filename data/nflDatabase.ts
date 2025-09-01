@@ -107,7 +107,7 @@ export interface PlayerStats {
   fantasyPoints?: number;
   fantasyPointsPPR?: number;
   gamesPlayed?: number;
-  pointsPerGame?: number;
+  pointsPerGame?: number;}
 
 export interface PlayerMetrics {
   // Advanced Analytics
@@ -141,7 +141,7 @@ export interface PlayerMetrics {
   
   // Age Curve
   ageCurvePosition: 'Ascending' | 'Peak' | 'Declining' | 'Veteran';
-  projectedDecline: number; // Expected year-over-year change
+  projectedDecline: number; // Expected year-over-year change}
 
 export interface NFLTeam {
   id: string;
@@ -180,7 +180,7 @@ export interface NFLTeam {
   defenseVsQB: number; // 1-32 ranking (1 = best defense)
   defenseVsRB: number;
   defenseVsWR: number;
-  defenseVsTE: number;
+  defenseVsTE: number;}
 
 // Complete NFL Database
 export const NFL_TEAMS: NFLTeam[] = [

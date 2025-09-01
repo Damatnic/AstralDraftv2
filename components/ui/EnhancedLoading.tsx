@@ -4,7 +4,7 @@ interface LoadingProps {
   text?: string;
   fullScreen?: boolean;
   className?: string;
-
+}
 
 const EnhancedLoading: React.FC<LoadingProps> = ({
   size = 'md',

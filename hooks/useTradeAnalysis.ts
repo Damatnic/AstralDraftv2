@@ -10,7 +10,7 @@ import { tradeAnalysisService, TradeProposal, TradeAnalysis, FantasyRoster } fro
 export interface UseTradeAnalysisOptions {
   autoRefresh?: boolean;
   refreshInterval?: number;
-  cacheTimeout?: number;
+  cacheTimeout?: number;}
 
 export interface TradeAnalysisState {
   isLoading: boolean;
@@ -18,7 +18,7 @@ export interface TradeAnalysisState {
   currentAnalysis: TradeAnalysis | null;
   error: string | null;
   lastUpdated: string | null;
-  analysisHistory: TradeAnalysis[];
+  analysisHistory: TradeAnalysis[];}
 
 export interface TradeComparisionState {
   proposals: TradeProposal[];

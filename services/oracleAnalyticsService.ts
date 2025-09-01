@@ -30,14 +30,14 @@ export interface UserInsight {
     type: 'SUCCESS_PATTERN' | 'IMPROVEMENT_AREA' | 'STREAK_POTENTIAL' | 'RECOMMENDATION';
     title: string;
     description: string;
-    data?: any;
+    data?: any;}
 
 export interface OraclePerformanceMetrics {
     overallAccuracy: number;
     weeklyAccuracy: Record<number, number>;
     typeAccuracy: Record<string, number>;
     confidenceCorrelation: number;
-    calibrationScore: number;
+    calibrationScore: number;}
 
 class OracleAnalyticsService {
     private readonly STORAGE_KEY = 'oracleAnalytics';

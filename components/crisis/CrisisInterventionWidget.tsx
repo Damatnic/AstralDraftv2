@@ -21,7 +21,7 @@ interface CrisisResource {
   hours: string;
   type: 'phone' | 'text' | 'both' | 'web';
   priority: 'immediate' | 'urgent' | 'support';
-
+}
 
 const crisisResources: CrisisResource[] = [
   {

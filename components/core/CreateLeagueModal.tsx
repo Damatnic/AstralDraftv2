@@ -12,7 +12,7 @@ interface CreateLeagueModalProps {
     onClose: () => void;
     user: User;
     dispatch: React.Dispatch<any>;
-
+}
 
 const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, dispatch }: any) => {
     const [name, setName] = React.useState('My Awesome League');

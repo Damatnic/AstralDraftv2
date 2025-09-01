@@ -18,7 +18,7 @@ import { League } from '../../types';
 interface SeasonManagementProps {
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface SeasonAction {
     type: 'ADVANCE_WEEK' | 'RESET_WEEK' | 'END_SEASON' | 'MANUAL_SCORE_ADJUSTMENT' | 'FORCE_SYNC';

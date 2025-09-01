@@ -49,7 +49,7 @@ interface TeamOptimizationDashboardProps {
   teamId: string;
   currentWeek: number;
   scoringSystem: 'standard' | 'ppr' | 'half_ppr' | 'superflex';
-
+}
 
 export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps> = ({
   leagueId,

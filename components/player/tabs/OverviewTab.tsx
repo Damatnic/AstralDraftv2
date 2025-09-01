@@ -9,7 +9,7 @@ import { useLeague } from '../../../hooks/useLeague';
 interface OverviewTabProps {
   player: Player;
   onFindSimilar: () => void;
-
+}
 
 const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">

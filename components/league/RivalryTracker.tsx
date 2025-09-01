@@ -468,7 +468,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
                               <span>{Math.abs(rivalry.team1.record.avgMargin).toFixed(1)} pts</span>
                             </div>
                             <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                              <span>Games Decided by &lt;5 pts:</span>
+                              <span>Games Decided by <5 pts:</span>
                               <span>{Math.floor(rivalry.totalMeetings * 0.4)}</span>
                             </div>
                             <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">

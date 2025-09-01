@@ -46,11 +46,13 @@ export interface SimpleUser {
     };
     createdAt: string;
     lastLogin?: string;
+}
 
 export interface AuthSession {
     user: SimpleUser;
     sessionId: string;
     expiresAt: string;
+}
 
 class SimpleAuthService {
     private static readonly STORAGE_KEY = 'astral_draft_users';
@@ -607,5 +609,6 @@ class SimpleAuthService {
     static resetAllUsers(): void {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.DEFAULT_USERS));
     }
+}
 
 export default SimpleAuthService;

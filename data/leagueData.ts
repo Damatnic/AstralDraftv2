@@ -264,11 +264,13 @@ export function getDaysUntilNextWeek(): number {
   const diffTime = Math.abs(nextThursday.getTime() - now.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
+}
 
 // Helper function to check if we're in season
 export function isSeasonActive(): boolean {
   const now = new Date();
   return now >= SEASON_DATES_2025.seasonStart && now <= SEASON_DATES_2025.regularSeasonEnd;
+}
 
 // Helper function to get current NFL week
 export function getCurrentNFLWeek(): number {
@@ -278,11 +280,14 @@ export function getCurrentNFLWeek(): number {
   
   const weeksSinceStart = Math.floor((now.getTime() - seasonStart.getTime()) / (1000 * 60 * 60 * 24 * 7));
   return Math.min(weeksSinceStart + 1, 18); // Max 18 weeks in NFL season
+}
 
 // Helper function to check if user is in league
 export function isUserInLeague(userId: string): boolean {
   return LEAGUE_MEMBERS.some((member: any) => member.id === userId);
+}
 
 // Helper function to get user's team
 export function getUserTeam(userId: string): Team | null {
   return TEAMS_2025.find((team: any) => team.owner.id === userId) || null;
+}

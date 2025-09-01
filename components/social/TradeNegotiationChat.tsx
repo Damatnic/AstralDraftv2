@@ -58,7 +58,7 @@ export interface TradeProposal {
     expiresAt: Date;
     fairnessScore?: number;
     notes?: string;
-
+}
 
 export interface MessageReaction {
     id: string;
@@ -66,7 +66,7 @@ export interface MessageReaction {
     userId: string;
     userName: string;
     timestamp: Date;
-
+}
 
 export interface TradeChatSession {
     id: string;

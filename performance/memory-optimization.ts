@@ -3,7 +3,7 @@
  * Advanced memory management for React applications
  */
 
-import { useCallback, useRef, useEffect, useMemo } from 'react';
+import { useCallback, useRef, useEffect, useMemo, useState } from 'react';
 
 /**
  * Memory usage monitoring
@@ -57,6 +57,7 @@ export class MemoryMonitor {
     // Force cleanup of WeakMaps and WeakSets
     await new Promise(resolve => setTimeout(resolve, 0));
   }
+}
 
 /**
  * Object pool for reusing objects
@@ -94,6 +95,7 @@ export class ObjectPool<T> {
   size(): number {
     return this.pool.length;
   }
+}
 
 /**
  * Efficient event listener cleanup
@@ -133,6 +135,7 @@ export class EventListenerManager {
   getListenerCount(): number {
     return this.listeners.length;
   }
+}
 
 /**
  * Memory-efficient React hooks
@@ -153,6 +156,7 @@ export function useStableCallback<T extends (...args: any[]) => any>(
   }
   
   return useCallback(callbackRef.current, []);
+}
 
 // Debounced value that reduces re-renders
 export function useDebounce<T>(value: T, delay: number): T {
@@ -176,6 +180,7 @@ export function useDebounce<T>(value: T, delay: number): T {
   }, [value, delay]);
   
   return debouncedValue;
+}
 
 // Efficient array operations
 export function useArrayOperations<T>() {
@@ -207,6 +212,7 @@ export function useArrayOperations<T>() {
       return newArray;
     }
   }), []);
+}
 
 /**
  * Component cleanup utilities
@@ -234,6 +240,7 @@ export function useComponentCleanup() {
   }, [cleanup]);
   
   return { addCleanupTask, cleanup };
+}
 
 /**
  * Intersection Observer for efficient visibility detection
@@ -269,6 +276,7 @@ export function useIntersectionObserver(
   }, []);
   
   return { entries, observe };
+}
 
 /**
  * Resize Observer for efficient dimension tracking
@@ -305,6 +313,7 @@ export function useResizeObserver() {
   }, []);
   
   return { dimensions, observe };
+}
 
 /**
  * Memory-efficient data structures
@@ -355,9 +364,7 @@ export class LRUCache<K, V> {
   size(): number {
     return this.cache.size;
   }
+}
 
 // Export memory monitor instance
 export const memoryMonitor = MemoryMonitor.getInstance();
-
-// Import missing React hooks
-import { useState } from 'react';

@@ -29,7 +29,7 @@ interface TradeDiscussionProps {
   tradeId: string;
   isVisible: boolean;
   onClose: () => void;
-
+}
 
 const TradeDiscussion: React.FC<TradeDiscussionProps> = ({ 
   tradeId, 

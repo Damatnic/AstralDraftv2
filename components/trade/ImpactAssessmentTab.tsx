@@ -19,7 +19,7 @@ interface ImpactAssessmentTabProps {
     league: League;
     currentTeam: Team;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface ImpactMetric {
     name: string;

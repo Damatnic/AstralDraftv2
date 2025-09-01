@@ -17,11 +17,11 @@ interface Matchup {
   awayScore: number;
   status: 'upcoming' | 'live' | 'final';
   gameTime?: string;
-
+}
 
 interface WeeklyMatchupsProps {
   selectedWeek?: number;
-  showAllWeeks?: boolean;
+  showAllWeeks?: boolean;}
 
 const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({ 
   selectedWeek = 1, 

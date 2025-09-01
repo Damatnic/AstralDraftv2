@@ -29,14 +29,14 @@ export interface RosterAnalysis {
   positionNeeds: PlayerPosition[];
   rosterBalance: number;
   projectedPoints: number;
-  playoffProbability: number;
+  playoffProbability: number;}
 
 export interface PlayerComparison {
   player1: Player;
   player2: Player;
   recommendation: 'player1' | 'player2' | 'either';
   reasoning: string;
-  keyDifferences: string[];
+  keyDifferences: string[];}
 
 export class GeniusAiAssistant {
   private queryPatterns = {

@@ -69,7 +69,7 @@ export interface ReportMetric {
     aggregation: 'sum' | 'avg' | 'count' | 'min' | 'max' | 'median' | 'std_dev';
     label: string;
     format: 'number' | 'percentage' | 'currency' | 'decimal';
-    precision?: number;
+    precision?: number;}
 
 export interface GeneratedReport {
     id: string;
@@ -85,7 +85,7 @@ export interface GeneratedReport {
     exportFormats: ExportFormat[];
     shareUrl?: string;
     isScheduled: boolean;
-    nextScheduledRun?: Date;
+    nextScheduledRun?: Date;}
 
 export interface ReportData {
     headers: string[];
@@ -129,7 +129,7 @@ export type InsightType =
     | 'prediction_accuracy' 
     | 'comparative_analysis';
 
-export type ExportFormat = 'pdf' | 'excel' | 'csv' | 'json' | 'png' | 'html';
+export type ExportFormat = 'pdf' | 'excel' | 'csv' | 'json' | 'png' | 'html';}
 
 export interface ReportSchedule {
     id: string;
@@ -144,7 +144,7 @@ export interface ReportSchedule {
     nextRun: Date;
     recipients: string[]; // Email addresses
     exportFormat: ExportFormat;
-    parameters: Record<string, unknown>;
+    parameters: Record<string, unknown>;}
 
 export interface DashboardWidget {
     id: string;
@@ -168,7 +168,7 @@ export interface CustomDashboard {
     isPublic: boolean;
     tags: string[];
     createdAt: Date;
-    lastModified: Date;
+    lastModified: Date;}
 
 // Advanced Reporting Service
 export class AdvancedReportingService {

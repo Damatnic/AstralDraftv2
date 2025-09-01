@@ -7,7 +7,7 @@ import { Avatar } from '../../ui/Avatar';
 
 interface GameLogTabProps {
     player: Player;
-
+}
 
 const GameLogTab: React.FC<GameLogTabProps> = ({ player }: any) => {
     const { league } = useLeague();

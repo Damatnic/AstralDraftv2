@@ -17,11 +17,11 @@ export interface PaginationParams {
 
 export interface SortParams {
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: 'asc' | 'desc';}
 
 export interface FilterParams {
   filters?: Record<string, any>;
-  search?: string;
+  search?: string;}
 
 export interface PaginatedRequest extends BaseRequest, PaginationParams, SortParams, FilterParams {}
 

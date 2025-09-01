@@ -53,7 +53,7 @@ export interface WeeklyPredictionSummary {
   resolvedPredictions: number;
   oracleAccuracy: number;
   userAccuracy: number;
-  topPerformers: UserPredictionSummary[];
+  topPerformers: UserPredictionSummary[];}
 
 export interface UserPredictionSummary {
   userId: string;
@@ -62,7 +62,7 @@ export interface UserPredictionSummary {
   totalPredictions: number;
   accuracy: number;
   totalPoints: number;
-  rank: number;
+  rank: number;}
 
 class ProductionOraclePredictionService {
   private readonly predictions: Map<string, ProductionOraclePrediction> = new Map();

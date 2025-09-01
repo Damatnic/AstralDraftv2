@@ -29,6 +29,7 @@ interface PlayerDetailModalProps {
   initialTab?: string;
   league?: League | null;
   playerAvatars: { [playerId: number]: string };
+}
 
 const positionColor: Record<string, string> = {
     QB: 'from-red-500/30',
@@ -43,7 +44,7 @@ interface MyNotesTabProps {
     player: Player;
     note: PlayerNote | undefined;
     dispatch: React.Dispatch<any>;
-
+}
 
 const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) => {
     const [noteText, setNoteText] = React.useState(note?.text || '');
@@ -229,7 +230,7 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
               {/* Header */}
               <div className={`p-4 sm:p-6 border-b border-[var(--panel-border)] bg-gradient-to-br ${positionColor[player.position]} to-transparent flex items-start justify-between`}>
                   <div className="flex items-start gap-4 sm:px-4 md:px-6 lg:px-8">
-                        <Avatar>
+                        <Avatar
                            avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'}
                            generatedAvatarUrl={generatedAvatar}
                            className="w-24 h-24 text-6xl rounded-lg flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
@@ -274,7 +275,7 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
       </Modal>
       <AnimatePresence>
         {isSimilarPlayersOpen && (
-            <SimilarPlayersPopup>
+            <SimilarPlayersPopup
                 playerToCompare={player}
                 onClose={() => setIsSimilarPlayersOpen(false)}
             />

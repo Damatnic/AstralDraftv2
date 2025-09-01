@@ -282,7 +282,7 @@ export interface ValidationErrorDetail {
   field: string;
   message: string;
   code: string;
-  value?: any;
+  value?: any;}
 
 // ==================== API TYPES ====================
 
@@ -290,16 +290,16 @@ export interface APIConfig {
   baseURL: string;
   timeout: number;
   headers: Record<string, string>;
-  withCredentials: boolean;
+  withCredentials: boolean;}
 
 export interface WebSocketConfig {
   url: string;
   protocols?: string[];
   reconnectAttempts: number;
   reconnectInterval: number;
-  heartbeatInterval: number;
+  heartbeatInterval: number;}
 
-// ==================== THEME TYPES ====================
+// ==================== THEME TYPES ====================}
 
 export interface ThemeConfig {
   name: string;

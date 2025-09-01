@@ -13,7 +13,7 @@ export interface OracleNotification {
     isRead: boolean;
     priority: 'low' | 'medium' | 'high';
     actionUrl?: string;
-    data?: Record<string, any>;
+    data?: Record<string, any>;}
 
 export interface NotificationPreferences {
     browserNotifications: boolean;
@@ -24,7 +24,7 @@ export interface NotificationPreferences {
     accuracyUpdates: boolean;
     streakMilestones: boolean;
     rankingChanges: boolean;
-    timeBeforeDeadline: number; // minutes
+    timeBeforeDeadline: number; // minutes}
 
 class NotificationService {
     private static instance: NotificationService;

@@ -26,7 +26,7 @@ interface Player {
   isRookie: boolean;
   injuryStatus?: string;
   byeWeek: number;
-
+}
 
 interface DraftPick {
   round: number;
@@ -35,6 +35,7 @@ interface DraftPick {
   teamId: string;
   timestamp: Date;
   timeUsed: number;
+}
 
 interface TeamDraft {
   id: string;
@@ -44,7 +45,7 @@ interface TeamDraft {
   isOnTheClock: boolean;
   isAutoPickEnabled: boolean;
   grade: string;
-  pickOrder: number[];
+  pickOrder: number[];}
 
 // Use AI Coach's recommendation interface
 type AIRecommendation = AICoachRecommendation;

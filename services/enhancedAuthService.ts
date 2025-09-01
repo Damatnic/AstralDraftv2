@@ -121,14 +121,14 @@ export interface LoginAttempt {
     pin: string;
     rememberMe?: boolean;
     userAgent?: string;
-    ipAddress?: string;
+    ipAddress?: string;}
 
 export interface AuthResponse {
     success: boolean;
     session?: SecureSession;
     error?: string;
     code?: string;
-    lockedUntil?: number;
+    lockedUntil?: number;}
 
 class EnhancedAuthService {
     private static readonly SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours

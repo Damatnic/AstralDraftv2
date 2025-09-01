@@ -9,7 +9,7 @@ import { Tooltip } from '../ui/Tooltip';
 
 interface AnalyticsPanelProps {
   analytics: Analytics;
-
+}
 
 const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }: any) => (
     <div className={`p-2 bg-gray-800/50 rounded-lg flex items-center gap-3`}>
@@ -35,7 +35,7 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
         <h2 className="font-display text-xl font-bold text-white tracking-wider sm:px-4 md:px-6 lg:px-8">DRAFT ANALYTICS</h2>
       </div>
       <div className="p-2 space-y-2 sm:px-4 md:px-6 lg:px-8">
-            <AnalyticsCard>
+            <AnalyticsCard
                 icon={<ZapIcon />} 
                 label="Draft Efficiency"
                 value={analytics.draftEfficiency}
@@ -43,7 +43,7 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
                 color="text-green-400"
                 tooltip="Measures how well your picks align with expert rankings and ADP."
             />
-             <AnalyticsCard>
+             <AnalyticsCard
                 icon={<FlameIcon />} 
                 label="Value Picks Found"
                 value={analytics.valuePicks}
@@ -51,7 +51,7 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
                 color="text-orange-400"
                 tooltip="Number of players drafted significantly later than their ADP."
             />
-             <AnalyticsCard>
+             <AnalyticsCard
                 icon={<TrophyIcon />} 
                 label="Championship Prob."
                 value={analytics.championshipProbability}

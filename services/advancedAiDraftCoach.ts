@@ -15,6 +15,7 @@ export interface DraftStrategy {
   positionPriority: PlayerPosition[];
   roundStrategy: Record<number, string>;
   riskTolerance: 'conservative' | 'moderate' | 'aggressive';
+}
 
 export interface AIRecommendation {
   player: Player;
@@ -25,6 +26,7 @@ export interface AIRecommendation {
   riskFactors: string[];
   alternativeOptions: Player[];
   expectedFantasyPoints: number;
+}
 
 export interface VBDCalculation {
   player: Player;
@@ -33,6 +35,7 @@ export interface VBDCalculation {
   replacementLevel: number;
   valueOverReplacement: number;
   opportunityCost: number;
+}
 
 export interface TeamAnalysis {
   strengths: string[];
@@ -42,7 +45,7 @@ export interface TeamAnalysis {
   projectedFinish: number;
   playoffProbability: number;
   championshipOdds: number;
-  riskScore: number;
+  riskScore: number;}
 
 export interface DraftGrade {
   overall: string;
@@ -52,7 +55,7 @@ export interface DraftGrade {
   balance: number;
   upside: number;
   floor: number;
-  analysis: string;
+  analysis: string;}
 
 // Machine Learning Models Interface
 export interface MLModels {
@@ -60,17 +63,17 @@ export interface MLModels {
   injuryRisk: InjuryRiskModel;
   breakoutPrediction: BreakoutModel;
   bustPrediction: BustModel;
-  positionScarcity: ScarcityModel;
+  positionScarcity: ScarcityModel;}
 
 export interface PlayerProjectionModel {
   predict(player: Player, leagueSettings: any): number;
   getConfidenceInterval(prediction: number): [number, number];
-  getFactors(): string[];
+  getFactors(): string[];}
 
 export interface InjuryRiskModel {
   calculateRisk(player: Player): number;
   getRiskFactors(player: Player): string[];
-  getHealthyAlternatives(player: Player): Player[];
+  getHealthyAlternatives(player: Player): Player[];}
 
 // Advanced AI Draft Coach Service
 export class AdvancedAiDraftCoach {
@@ -97,7 +100,7 @@ export class AdvancedAiDraftCoach {
    */
   private initializeModels(): MLModels {
     return {
-      playerProjections: new PlayerProjectionModel(),
+      playerProjections: new SimplePlayerProjectionModel(),
       injuryRisk: new InjuryRiskModel(),
       breakoutPrediction: new BreakoutModel(),
       bustPrediction: new BustModel(),
@@ -213,7 +216,7 @@ export class AdvancedAiDraftCoach {
         scarcityData,
         injuryRisk,
         breakoutChance,
-//         bustRisk
+        bustRisk
       );
 
       // Generate reasoning
@@ -222,7 +225,7 @@ export class AdvancedAiDraftCoach {
         vbd,
         teamAnalysis,
         scarcityData,
-//         currentRound
+        currentRound
       );
 
       // Find alternative options
@@ -276,7 +279,7 @@ export class AdvancedAiDraftCoach {
         const opportunityCost = this.calculateOpportunityCost(
           player,
           playersByPosition,
-//           i
+          i
         );
         
         const vbdScore = valueOverReplacement - opportunityCost;
@@ -287,7 +290,7 @@ export class AdvancedAiDraftCoach {
           positionRank: i + 1,
           replacementLevel,
           valueOverReplacement,
-//           opportunityCost
+          opportunityCost
         });
       }
     }
@@ -358,7 +361,7 @@ export class AdvancedAiDraftCoach {
       projectedFinish: this.estimateProjectedFinish(totalProjectedPoints),
       playoffProbability,
       championshipOdds,
-//       riskScore
+      riskScore
     };
   }
 
@@ -510,7 +513,7 @@ export class AdvancedAiDraftCoach {
       finalRoster,
       draftHistory,
       teamAnalysis,
-//       overallScore
+      overallScore
     );
     
     return {
@@ -521,7 +524,7 @@ export class AdvancedAiDraftCoach {
       balance: balanceScore,
       upside: upsideScore,
       floor: floorScore,
-//       analysis
+      analysis
     };
   }
 
@@ -715,9 +718,10 @@ export class AdvancedAiDraftCoach {
       `${teamAnalysis.strengths.length > 0 ? teamAnalysis.strengths[0] : 'solid foundation'}. ` +
       `Focus on ${teamAnalysis.needsPriority[0] || 'depth'} during the season.`;
   }
+}
 
 // Machine Learning Model Implementations (Simplified)
-class PlayerProjectionModel implements PlayerProjectionModel {
+class SimplePlayerProjectionModel implements PlayerProjectionModel {
   predict(player: Player, leagueSettings: any): number {
     // Simplified projection model
     return player.projectedPoints || 0;
@@ -731,6 +735,7 @@ class PlayerProjectionModel implements PlayerProjectionModel {
   getFactors(): string[] {
     return ['Historical performance', 'Target share', 'Team offense', 'Schedule strength'];
   }
+}
 
 class InjuryRiskModel implements InjuryRiskModel {
   calculateRisk(player: Player): number {
@@ -752,6 +757,7 @@ class InjuryRiskModel implements InjuryRiskModel {
     // Return healthy players at same position
     return [];
   }
+}
 
 class BreakoutModel {
   predict(player: Player): number {
@@ -760,6 +766,7 @@ class BreakoutModel {
     if (player.age && player.age < 25) return 0.4;
     return 0.1;
   }
+}
 
 class BustModel {
   predict(player: Player): number {
@@ -767,6 +774,7 @@ class BustModel {
     if (player.adp && player.adp < 24 && (player.projectedPoints || 0) < 200) return 0.5;
     return 0.2;
   }
+}
 
 class ScarcityModel {
   analyze(availablePlayers: Player[]): any {
@@ -782,6 +790,7 @@ class ScarcityModel {
       TE: { scarce: byPosition.TE < 8 }
     };
   }
+}
 
 // Export singleton instance
 export const advancedAiDraftCoach = new AdvancedAiDraftCoach();

@@ -22,7 +22,7 @@ export interface SeasonContest {
   weeks?: WeeklyContest[];
   bracket?: PlayoffBracket;
   awards?: AwardsPredictions;
-  milestones?: MilestonePredictions;
+  milestones?: MilestonePredictions;}
 
 export interface ContestParticipant {
   userId: string;
@@ -44,7 +44,7 @@ export interface ContestRules {
   requireAllPredictions: boolean;
   tiebreaker: 'TOTAL_POINTS' | 'WEEKLY_WINS' | 'RECENT_PERFORMANCE' | 'HEAD_TO_HEAD';
   bonusCategories: BonusCategory[];
-  penalties: PenaltyRule[];
+  penalties: PenaltyRule[];}
 
 export interface ContestScoring {
   correctPrediction: number;
@@ -81,13 +81,13 @@ export interface PredictionCategory {
   options: PredictionOption[];
   points: number;
   confidenceEnabled: boolean;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';}
 
 export interface PredictionOption {
   id: string;
   label: string;
   odds?: number;
-  description?: string;
+  description?: string;}
 
 export interface WeeklyPrediction {
   week: number;
@@ -131,7 +131,7 @@ export interface BracketGame {
   seed2?: number;
   winner?: string;
   predicted?: boolean;
-  pointValue: number;
+  pointValue: number;}
 
 export interface BracketPick {
   gameId: string;
@@ -139,7 +139,7 @@ export interface BracketPick {
   confidence?: number;
   reasoning?: string;
   isCorrect?: boolean;
-  pointsEarned?: number;
+  pointsEarned?: number;}
 
 export interface AwardsPredictions {
   categories: AwardCategory[];
@@ -152,7 +152,7 @@ export interface AwardCategory {
   name: string;
   description: string;
   nominees: AwardNominee[];
-  pointValue: number;
+  pointValue: number;}
 
 export interface AwardNominee {
   id: string;
@@ -259,7 +259,7 @@ export interface ProjectedFinish {
   currentRank: number;
   projectedRank: number;
   probability: number;
-  trend: 'IMPROVING' | 'DECLINING' | 'STABLE';
+  trend: 'IMPROVING' | 'DECLINING' | 'STABLE';}
 
 export interface ContestBadge {
   id: string;
@@ -268,7 +268,7 @@ export interface ContestBadge {
   icon: string;
   rarity: 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   earnedDate: Date;
-  criteria: string;
+  criteria: string;}
 
 export interface WeeklyResults {
   week: number;
@@ -285,7 +285,7 @@ export interface BracketScoring {
   conferenceChampionship: number;
   superBowl: number;
   perfectBracketBonus: number;
-  upsetBonus: number;
+  upsetBonus: number;}
 
 class SeasonContestService {
   private readonly contests: Map<string, SeasonContest> = new Map();

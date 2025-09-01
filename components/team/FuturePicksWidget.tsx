@@ -7,7 +7,7 @@ import { ArchiveIcon } from '../icons/ArchiveIcon';
 
 interface FuturePicksWidgetProps {
     team: Team;
-
+}
 
 const FuturePicksWidget: React.FC<FuturePicksWidgetProps> = ({ team }: any) => {
     const picksBySeason = (team.futureDraftPicks || []).reduce((acc, pick) => {

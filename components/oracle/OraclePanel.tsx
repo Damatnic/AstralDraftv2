@@ -18,7 +18,7 @@ interface OraclePrediction {
   prediction: string;
   reasoning: string[];
   timestamp: Date;
-
+}
 
 export const OraclePanel: React.FC = () => {
   const { state, dispatch } = useAppState();

@@ -9,7 +9,7 @@ interface CurrentMatchupWidgetProps {
     myTeam: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const nextMatchup = league.schedule.find((m: any) => 

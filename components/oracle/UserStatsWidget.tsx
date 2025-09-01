@@ -15,12 +15,12 @@ export interface UserStats {
     accuracy: number;
     streak: number;
     rank: number;
-
+}
 
 interface UserStatsWidgetProps {
     stats: UserStats;
     className?: string;
-    compact?: boolean;
+    compact?: boolean;}
 
 export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({ 
     stats, 

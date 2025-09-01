@@ -11,7 +11,7 @@ export interface RealtimeNotificationHookOptions {
   enableToasts?: boolean;
   enableSounds?: boolean;
   highPriorityOnly?: boolean;
-  maxToastDuration?: number;
+  maxToastDuration?: number;}
 
 export const useRealtimeNotifications = (options: RealtimeNotificationHookOptions = {}) => {
   const {

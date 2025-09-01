@@ -16,7 +16,7 @@ interface TradeOfferCardProps {
     league: League;
     myTeamId: number;
     dispatch: React.Dispatch<any>;
-
+}
 
 const statusStyles = {
     PENDING: { bg: 'bg-yellow-500/10', text: 'text-yellow-300', label: 'Pending' },
@@ -156,7 +156,7 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
         </div>
         <AnimatePresence>
             {isStoryModalOpen && (
-                <TradeStoryModal>
+                <TradeStoryModal
                     offer={offer}
                     league={league}
                     onClose={() => setIsStoryModalOpen(false)}

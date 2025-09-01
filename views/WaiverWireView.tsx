@@ -145,7 +145,7 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                 
                 <AnimatePresence>
                     {isClaimModalOpen && playerToClaim && (
-                        <PlaceClaimModal>
+                        <PlaceClaimModal
                             playerToAdd={playerToClaim}
                             myTeam={myTeam}
                             leagueId={league.id}
@@ -154,7 +154,7 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                         />
                     )}
                     {selectedPlayer && (
-                        <PlayerDetailModal>
+                        <PlayerDetailModal
                             player={selectedPlayer}
                             onClose={() => setSelectedPlayer(null)}
                             playerNotes={playerNotes}

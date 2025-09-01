@@ -33,7 +33,7 @@ export interface SeasonalMetrics {
   gamesPlayed: number;
   touchesPerGame?: number;
   redZoneTargets?: number;
-  snapSharePercentage?: number;
+  snapSharePercentage?: number;}
 
 export interface SeasonalPattern {
   type: 'improving' | 'declining' | 'consistent' | 'volatile' | 'injury_prone';
@@ -41,7 +41,7 @@ export interface SeasonalPattern {
   confidence: number;              // 0-1
   supportingWeeks: number[];
   severity: 'low' | 'moderate' | 'high';
-  fantasyImpact: string;
+  fantasyImpact: string;}
 
 export interface SeasonalAnalysis {
   overallTrend: 'positive' | 'negative' | 'stable';
@@ -67,7 +67,7 @@ export interface WeeklyPlayerData {
   snapShare?: number;
   gameScript: 'positive' | 'neutral' | 'negative';
   homeGame: boolean;
-  weather?: 'dome' | 'good' | 'poor';
+  weather?: 'dome' | 'good' | 'poor';}
 
 class SeasonalTrendsAnalysisService {
   private readonly cache = new Map<string, SeasonalTrendData>();

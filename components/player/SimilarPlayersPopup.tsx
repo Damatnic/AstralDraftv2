@@ -14,7 +14,7 @@ import { useAppState } from '../../contexts/AppContext';
 interface SimilarPlayersPopupProps {
     playerToCompare: Player;
     onClose: () => void;
-
+}
 
 const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompare, onClose }: any) => {
     const [similarPlayerNames, setSimilarPlayerNames] = React.useState<string[] | null>(null);

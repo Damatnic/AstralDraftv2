@@ -86,7 +86,7 @@ interface AlternativeOffer {
   playersOffered: Player[];
   playersRequested: Player[];
   fairnessScore: number;
-  improvement: string;
+  improvement: string;}
 
 interface SmartTradeTarget {
   player: Player;
@@ -94,7 +94,7 @@ interface SmartTradeTarget {
   likelihood: number;
   reasoning: string;
   suggestedOffer: Player[];
-  expectedValue: number;
+  expectedValue: number;}
 
 class AITradeAnalyzer {
   private playerDatabase: Map<string, Player> = new Map();

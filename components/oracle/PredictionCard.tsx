@@ -29,7 +29,7 @@ interface PredictionCardProps {
     onClick: () => void;
     className?: string;
     compact?: boolean;
-
+}
 
 export const PredictionCard: React.FC<PredictionCardProps> = ({
     prediction,

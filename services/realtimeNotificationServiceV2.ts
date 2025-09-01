@@ -36,6 +36,7 @@ export interface NotificationSettings {
     sms?: boolean;
     inApp?: boolean;
   };
+}
 
 export interface Notification {
   id: string;
@@ -60,6 +61,7 @@ export interface Notification {
     name: string;
     avatar?: string;
   };
+}
 
 export type NotificationType = 
   | 'trade_proposed'
@@ -105,6 +107,7 @@ export interface NotificationAction {
   type: 'primary' | 'secondary' | 'danger';
   action: string; // URL or action identifier
   icon?: string;
+}
 
 export interface NotificationGroup {
   id: string;
@@ -114,6 +117,7 @@ export interface NotificationGroup {
   unreadCount: number;
   latestTimestamp: number;
   collapsed: boolean;
+}
 
 export interface NotificationThread {
   id: string;
@@ -121,7 +125,7 @@ export interface NotificationThread {
   participants: string[];
   notifications: Notification[];
   lastActivity: number;
-  unreadCount: number;
+  unreadCount: number;}
 
 export interface NotificationStats {
   total: number;
@@ -130,7 +134,7 @@ export interface NotificationStats {
   byCategory: Record<NotificationCategory, number>;
   byPriority: Record<string, number>;
   todayCount: number;
-  weekCount: number;
+  weekCount: number;}
 
 export interface PushSubscription {
   endpoint: string;
@@ -139,6 +143,7 @@ export interface PushSubscription {
     auth: string;
   };
   expirationTime?: number | null;
+}
 
 // Notification Templates
 export const NotificationTemplates = {
@@ -1078,6 +1083,7 @@ export class RealTimeNotificationService extends EventEmitter {
     this.ws.off('notification:injury');
     this.ws.off('notification:score');
   }
+}
 
 // Singleton instance
 export const realtimeNotificationServiceV2 = new RealTimeNotificationService();

@@ -29,7 +29,7 @@ interface VirtualizedListProps<T> {
 interface VirtualizedItem {
   index: number;
   offset: number;
-  size: number;
+  size: number;}
 
 export function VirtualizedList<T>({
   items,
@@ -454,7 +454,7 @@ export const VirtualizedPlayerList: React.FC<{
   }, [onPlayerClick, selectedPlayers, isScrolling]);
 
   return (
-    <VirtualizedList>
+    <VirtualizedList
       items={players}
       itemHeight={80}
       containerHeight={containerHeight}

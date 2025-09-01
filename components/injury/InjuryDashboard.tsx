@@ -35,7 +35,7 @@ import {
 
 interface InjuryDashboardProps {
   className?: string;
-
+}
 
 interface PlayerSearchResult {
   playerId: string;
@@ -285,7 +285,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
             </Card>
           </div>
 
-          <Tabs>
+          <Tabs
             items={[
               { id: 'overview', label: 'Overview' },
               { id: 'monitored', label: 'Monitored Players' },

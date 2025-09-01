@@ -9,7 +9,7 @@ interface PreloadConfig {
   priority: 'critical' | 'high' | 'medium' | 'low';
   timing: 'immediate' | 'idle' | 'interaction' | 'viewport';
   condition?: () => boolean;
-  timeout?: number;
+  timeout?: number;}
 
 interface PreloadableResource {
   id: string;
@@ -17,7 +17,7 @@ interface PreloadableResource {
   config: PreloadConfig;
   loaded?: boolean;
   loading?: boolean;
-  error?: Error;
+  error?: Error;}
 
 class PreloadManager {
   private resources: Map<string, PreloadableResource> = new Map();

@@ -12,7 +12,7 @@ interface WebSocketConfig {
   reconnectInterval?: number;
   maxReconnectAttempts?: number;
   heartbeatInterval?: number;
-  messageQueueSize?: number;
+  messageQueueSize?: number;}
 
 interface WebSocketConnection {
   id: string;
@@ -24,7 +24,7 @@ interface WebSocketConnection {
   messageQueue: any[];
   listeners: Map<string, Set<Function>>;
   isClosing: boolean;
-  lastActivity: number;
+  lastActivity: number;}
 
 class WebSocketManager {
   private connections: Map<string, WebSocketConnection> = new Map();

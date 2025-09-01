@@ -11,7 +11,7 @@ import { SparklesIcon } from '../icons/SparklesIcon';
 interface NotificationProps {
   message: string;
   type: NotificationType;
-
+}
 
 const Notification: React.FC<NotificationProps> = ({ message, type }: any) => {
   const getIcon = () => {

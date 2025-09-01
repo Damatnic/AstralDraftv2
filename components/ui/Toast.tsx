@@ -7,7 +7,7 @@ interface ToastProps {
   duration?: number;
   onClose: () => void;
   visible: boolean;
-
+}
 
 export const Toast: React.FC<ToastProps> = ({
   message,

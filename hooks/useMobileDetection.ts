@@ -19,7 +19,7 @@ interface MobileDetection {
   viewportWidth: number;
   viewportHeight: number;
   hasNotch: boolean;
-  supportsHover: boolean;
+  supportsHover: boolean;}
 
 export const useMobileDetection = (): MobileDetection => {
   const [detection, setDetection] = useState<MobileDetection>({

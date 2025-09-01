@@ -19,7 +19,7 @@ interface BriefingItemCardProps {
     dispatch: React.Dispatch<any>;
     onGetAdvice?: (playerIds: number[]) => void;
     onClaimPlayer?: (player: Player) => void;
-
+}
 
 const itemConfig = {
     MATCHUP_PREVIEW: { icon: <TargetIcon />, color: 'text-blue-400' },

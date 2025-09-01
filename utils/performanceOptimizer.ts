@@ -7,14 +7,14 @@ interface PerformanceMetric {
   name: string;
   value: number;
   timestamp: number;
-  url?: string;
+  url?: string;}
 
 interface BundleAnalytics {
   totalSize: number;
   gzippedSize: number;
   chunkCount: number;
   largestChunk: string;
-  largestChunkSize: number;
+  largestChunkSize: number;}
 
 class PerformanceOptimizer {
   private metrics: PerformanceMetric[] = [];

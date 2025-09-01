@@ -51,7 +51,7 @@ export interface DraftedPlayer {
   overallPick: number;
   timestamp: string;
   isKeeper?: boolean;
-  auctionPrice?: number;
+  auctionPrice?: number;}
 
 export interface TeamRoster {
   teamId: string;
@@ -109,14 +109,14 @@ export interface StackingAnalysis {
   receivers: string[];
   correlationScore: number;
   projectedStackValue: number;
-  reasoning: string;
+  reasoning: string;}
 
 export interface HandcuffAnalysis {
   primaryBack: string;
   handcuff: string;
   handcuffValue: number;
   injuryLikelihood: number;
-  recommendedRound: number;
+  recommendedRound: number;}
 
 export interface DraftStrategy {
   id: string;
@@ -170,7 +170,7 @@ export interface SimulatedPick {
   playerName: string;
   position: string;
   reasoning: string;
-  alternatives: string[];
+  alternatives: string[];}
 
 export interface DraftGrade {
   overallGrade: string; // A+ to F
@@ -204,7 +204,7 @@ export interface GradedPick {
   expectedValue: number;
   actualValue: number;
   grade: string;
-  reasoning: string;
+  reasoning: string;}
 
 export interface DraftTrendAnalysis {
   positionRuns: PositionRun[];
@@ -245,13 +245,13 @@ export interface FallingPlayer {
   adp: number;
   currentPick: number;
   fallAmount: number;
-  reasoning: string[];
+  reasoning: string[];}
 
 export interface MarketInefficiency {
   type: 'undervalued_position' | 'overvalued_position' | 'tier_arbitrage' | 'stack_opportunity';
   description: string;
   exploitStrategy: string;
-  expectedValue: number;
+  expectedValue: number;}
 
 class AdvancedDraftTechnologiesService {
   private readonly cache = new Map<string, { data: any; expires: number }>();

@@ -19,7 +19,7 @@ interface VotingMethod {
   description: string;
   formula: string;
   strengths: string[];
-  limitations: string[];
+  limitations: string[];}
 
 interface WeightingStrategy {
   id: string;
@@ -28,7 +28,7 @@ interface WeightingStrategy {
   method: string;
   advantages: string[];
   useCases: string[];
-
+}
 
 const OracleEnsemblePredictionSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'models' | 'voting' | 'weighting' | 'optimization' | 'demo'>('overview');
@@ -413,7 +413,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <div className="formula-card sm:px-4 md:px-6 lg:px-8">
               <h6>Ensemble Variance</h6>
               <div className="formula sm:px-4 md:px-6 lg:px-8">
-                Var(ŷ) = Σᵢ₌₁ⁿ wᵢ² × Var(ŷᵢ) + 2Σᵢ&lt;j wᵢwⱼCov(ŷᵢ,ŷⱼ)
+                Var(ŷ) = Σᵢ₌₁ⁿ wᵢ² × Var(ŷᵢ) + 2Σᵢ<j wᵢwⱼCov(ŷᵢ,ŷⱼ)
               </div>
               <p>Ensemble variance depends on individual model variance and correlation</p>
             </div>

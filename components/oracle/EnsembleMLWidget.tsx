@@ -15,7 +15,7 @@ import oracleEnsembleMachineLearningService, {
 interface Props {
     playerId?: string;
     compact?: boolean;
-
+}
 
 const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) => {
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);

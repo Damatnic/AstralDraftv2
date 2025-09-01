@@ -8,7 +8,7 @@ interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   user?: any;
-
+}
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, user }: any) => {
   // Handle Escape key to close modal

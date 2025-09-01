@@ -11,7 +11,7 @@ interface EditProfileModalProps {
   user: User;
   dispatch: React.Dispatch<any>;
   onClose: () => void;
-
+}
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);

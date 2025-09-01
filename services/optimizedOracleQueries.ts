@@ -12,7 +12,7 @@ export interface OptimizedQueryConfig {
     cacheTTL: number;
     enablePagination: boolean;
     pageSize: number;
-    enableIndexHints: boolean;
+    enableIndexHints: boolean;}
 
 export interface QueryResult<T> {
     data: T[];
@@ -20,7 +20,7 @@ export interface QueryResult<T> {
     cached: boolean;
     executionTime: number;
     page?: number;
-    pageSize?: number;
+    pageSize?: number;}
 
 export interface PaginationOptions {
     page: number;

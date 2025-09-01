@@ -6,10 +6,10 @@
 
 interface SkipLink {
   id: string;
-  label: string;
+  label: string;}
 
 interface SkipNavigationProps {
-  links?: SkipLink[];
+  links?: SkipLink[];}
 
 const defaultLinks: SkipLink[] = [
   { id: 'main-content', label: 'Skip to main content' },

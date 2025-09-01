@@ -5,12 +5,12 @@ interface AccordionItem {
   id: string;
   title: string;
   content: React.ReactNode;
-
+}
 
 interface AccordionProps {
   items: AccordionItem[];
   allowMultiple?: boolean;
-  defaultOpen?: string[];
+  defaultOpen?: string[];}
 
 export const Accordion: React.FC<AccordionProps> = ({
   items,

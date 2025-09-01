@@ -173,7 +173,7 @@ export const NotificationDemo: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <NotificationPreferencesComponent>
+                    <NotificationPreferencesComponent
                         onClose={() => setShowPreferences(false)}
                     />
                 </motion.div>

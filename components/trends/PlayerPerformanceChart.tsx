@@ -6,7 +6,7 @@ import { Tooltip } from '../ui/Tooltip';
 interface PlayerPerformanceChartProps {
     player: Player;
     league: League;
-
+}
 
 const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player, league }: any) => {
     const chartData = React.useMemo(() => {

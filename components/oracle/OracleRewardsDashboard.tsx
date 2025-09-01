@@ -9,7 +9,7 @@ interface ProgressBarProps {
     max: number;
     color?: string;
     showLabel?: boolean;
-
+}
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ current, 
     max, 
@@ -41,7 +41,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ current,
 interface AchievementCardProps {
     achievement: Achievement;
     isUnlocked: boolean;
-
+}
 
 const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }: any) => {
     const getDifficultyColor = (difficulty: Achievement['difficulty']) => {
@@ -126,7 +126,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
 interface BadgeDisplayProps {
     badge: Badge;
     size?: 'sm' | 'md' | 'lg';
-
+}
 
 const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) => {
     const getSizeClasses = () => {
@@ -169,7 +169,7 @@ interface LevelDisplayProps {
     level: number;
     currentPoints: number;
     nextLevelPoints: number;
-
+}
 
 const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }: any) => {
     const pointsInCurrentLevel = currentPoints % 500;
@@ -195,7 +195,7 @@ const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextL
                 {nextLevelPoints} points to level {level + 1}
             </div>
             <div className="mt-2 sm:px-4 md:px-6 lg:px-8">
-                <ProgressBar>
+                <ProgressBar
                     current={pointsInCurrentLevel}
                     max={500}
                     color="bg-gradient-to-r from-blue-500 to-purple-500"
@@ -306,7 +306,7 @@ export const OracleRewardsDashboard: React.FC = () => {
                     {filteredAchievements.map((achievement: any) => {
                         const isUnlocked = unlockedAchievements.some((ua: any) => ua.id === achievement.id);
                         return (
-                            <AchievementCard>
+                            <AchievementCard
                                 key={achievement.id}
                                 achievement={achievement}
                                 isUnlocked={isUnlocked}

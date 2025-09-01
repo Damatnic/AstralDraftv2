@@ -10,25 +10,35 @@ interface CardProps extends Omit<HTMLMotionProps<"div">, 'children'> {
   glow?: boolean;
   glowColor?: 'primary' | 'secondary' | 'accent' | 'danger' | 'warning';
   interactive?: boolean;
+}
 
 // Card Header Props
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   separated?: boolean;
+}
 
 // Card Title Props
 interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+}
+
+// Card Description Props
+interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  children: React.ReactNode;
+}
 
 // Card Content Props
 interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
+}
 
 // Card Footer Props
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   separated?: boolean;
+}
 
 // Main Card Component
 export const Card: React.FC<CardProps> = ({ 

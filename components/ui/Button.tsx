@@ -8,6 +8,7 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, 'children'> {
   iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
   children: React.ReactNode;
+}
 
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',

@@ -88,14 +88,14 @@ export interface LeaderboardEntry {
     rank: number;
     points: number;
     accuracy: number;
-    currentStreak: number;
+    currentStreak: number;}
 
 export interface LeaderboardResponse {
     success: boolean;
     data: LeaderboardEntry[];
     season: number;
     week: string | number;
-    limit: number;
+    limit: number;}
 
 class OracleApiClient {
     private readonly baseUrl: string;

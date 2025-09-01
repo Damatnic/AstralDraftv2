@@ -11,7 +11,7 @@ import type { GamedayEventType } from '../../types';
 
 interface LiveEventTickerProps {
     matchupId: string;
-
+}
 
 const eventIcons: Record<GamedayEventType, React.ReactElement> = {
     TOUCHDOWN: <FlameIcon />,

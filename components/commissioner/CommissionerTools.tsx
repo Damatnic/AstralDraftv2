@@ -11,7 +11,7 @@ import { Team, Player } from '../../types';
 
 interface CommissionerToolsProps {
   isCommissioner?: boolean;
-
+}
 
 const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = false }: any) => {
   const { state, dispatch } = useAppState();

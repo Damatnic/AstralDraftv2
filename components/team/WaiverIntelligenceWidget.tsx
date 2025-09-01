@@ -11,7 +11,7 @@ import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 
 interface WaiverIntelligenceWidgetProps {
     league: League;
-
+}
 
 const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ league }: any) => {
     const [intel, setIntel] = React.useState<WaiverIntelligence[]>([]);

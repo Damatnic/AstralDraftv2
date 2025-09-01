@@ -22,7 +22,7 @@ interface DashboardTab {
     label: string;
     icon: React.ReactNode;
     component: React.ReactNode;
-
+}
 
 const OracleDashboardContainer: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>('overview');

@@ -5,12 +5,12 @@ interface Props {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
-
+}
 
 interface State {
   hasError: boolean;
   error?: Error;
-  errorInfo?: ErrorInfo;
+  errorInfo?: ErrorInfo;}
 
 class SmartErrorBoundary extends Component<Props, State> {
   private retryCount = 0;

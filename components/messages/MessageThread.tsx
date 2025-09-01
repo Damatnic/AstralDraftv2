@@ -10,7 +10,7 @@ import { UsersIcon } from 'lucide-react';
 interface MessageThreadProps {
     userId: string | null;
     onUserSelected?: (userId: string) => void;
-
+}
 
 const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);

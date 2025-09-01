@@ -20,7 +20,7 @@ interface UseInjuryTrackingOptions {
   playerId?: string;
   playerIds?: string[];
   alertCallback?: (alert: InjuryAlert) => void;
-  updateCallback?: (status: InjuryStatus) => void;
+  updateCallback?: (status: InjuryStatus) => void;}
 
 interface UseInjuryTrackingReturn {
   // State
@@ -51,7 +51,7 @@ interface UseInjuryTrackingReturn {
   criticalAlerts: InjuryAlert[];
   highPriorityPlayers: MonitoredPlayer[];
   injuryCount: number;
-  alertCount: number;
+  alertCount: number;}
 
 export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseInjuryTrackingReturn => {
   const {

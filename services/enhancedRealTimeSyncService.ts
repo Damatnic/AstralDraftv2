@@ -17,7 +17,7 @@ export interface SyncEvent {
     version: number;
     data: any;
     priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    requiresAck: boolean;
+    requiresAck: boolean;}
 
 export interface ConflictResolution {
     strategy: 'LAST_WRITE_WINS' | 'MERGE' | 'MANUAL_REVIEW' | 'TIMESTAMP_PRIORITY';
@@ -25,7 +25,7 @@ export interface ConflictResolution {
     originalEvent: SyncEvent;
     conflictingEvent: SyncEvent;
     resolvedEvent?: SyncEvent;
-    status: 'PENDING' | 'RESOLVED' | 'ESCALATED';
+    status: 'PENDING' | 'RESOLVED' | 'ESCALATED';}
 
 export interface ClientConnection {
     id: string;
@@ -63,7 +63,7 @@ export interface OfflineSync {
     leagueId: string;
     events: SyncEvent[];
     lastSync: number;
-    conflictCount: number;
+    conflictCount: number;}
 
 export interface PerformanceMetrics {
     totalConnections: number;
@@ -73,7 +73,7 @@ export interface PerformanceMetrics {
     conflictRate: number;
     errorRate: number;
     dataVolume: number;
-    lastMetricsUpdate: number;
+    lastMetricsUpdate: number;}
 
 class EnhancedRealTimeSyncService extends EventEmitter {
     private wss!: WebSocketServer;

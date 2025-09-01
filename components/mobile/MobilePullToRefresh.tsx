@@ -22,7 +22,7 @@ import {
     maxPullDistance?: number;
     disabled?: boolean;
     className?: string;
-
+}
 
 const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
     children,

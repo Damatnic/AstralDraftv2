@@ -44,7 +44,7 @@ interface SocialActivity {
     teamName?: string;
     description: string;
     timestamp: Date;
-    relatedId?: string;
+    relatedId?: string;}
 
 interface CommunityStats {
     totalMembers: number;
@@ -53,7 +53,7 @@ interface CommunityStats {
     tradesThisMonth: number;
     interactionsToday: number;
     engagementScore: number;
-
+}
 
 const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     league,
@@ -406,7 +406,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
         switch (activeTab) {
             case 'feed':
                 return (
-                    <SocialFeed>
+                    <SocialFeed
                         feedItems={mockFeedItems}
                         currentUser={currentUser}
                         onReaction={(itemId, emoji) => handleSocialAction('feed_reaction', { itemId, emoji })}
@@ -442,7 +442,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 
             case 'history':
                 return (
-                    <LeagueHistoryViewer>
+                    <LeagueHistoryViewer
                         league={league}
                         events={mockLeagueEvents}
                         milestones={mockMilestones}

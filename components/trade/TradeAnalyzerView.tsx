@@ -46,7 +46,7 @@ export interface DraftPick {
     originalTeamId: string;
     estimatedValue: number;
     description: string;
-
+}
 
 export interface TradeAnalysis {
     overallGrade: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F';
@@ -76,7 +76,7 @@ export interface TradeAnalysis {
     strengths: string[];
     weaknesses: string[];
     warnings: string[];
-
+}
 
 export interface TeamImpactAnalysis {
     teamId: string;
@@ -121,7 +121,7 @@ export interface ImprovementSuggestion {
     impact: number;
     confidence: number;
     suggestion: string;
-
+}
 
 export interface AlternativeOffer {
     id: string;
@@ -130,7 +130,7 @@ export interface AlternativeOffer {
     toPlayers: Player[];
     expectedImprovement: number;
     reasoning: string;
-
+}
 
 const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'builder' | 'fairness' | 'impact' | 'suggestions'>('builder');
@@ -319,7 +319,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         transition={{ duration: 0.2 }}
                     >
                         {selectedTab === 'builder' && (
-                            <TradeBuilderTab>
+                            <TradeBuilderTab
                                 league={league}
                                 currentTeam={currentTeam}
                                 proposal={currentProposal}
@@ -329,7 +329,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         )}
                         
                         {selectedTab === 'fairness' && (
-                            <FairnessAnalysisTab>
+                            <FairnessAnalysisTab
                                 proposal={currentProposal}
                                 analysis={analysis}
                                 league={league}
@@ -338,7 +338,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         )}
                         
                         {selectedTab === 'impact' && (
-                            <ImpactAssessmentTab>
+                            <ImpactAssessmentTab
                                 proposal={currentProposal}
                                 analysis={analysis}
                                 league={league}
@@ -348,7 +348,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         )}
                         
                         {selectedTab === 'suggestions' && (
-                            <AutomatedSuggestionsTab>
+                            <AutomatedSuggestionsTab
                                 proposal={currentProposal}
                                 analysis={analysis}
                                 league={league}

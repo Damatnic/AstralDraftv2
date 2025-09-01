@@ -4,7 +4,7 @@ interface BadgeProps {
   variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'secondary' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-
+}
 
 export const Badge: React.FC<BadgeProps> = ({
   children,

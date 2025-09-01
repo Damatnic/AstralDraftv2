@@ -209,7 +209,7 @@ export interface LeagueContext {
   competitorWeaknesses: string[];
   availableBudget: number;
   waiverPosition: number;
-  rosterConstruction: RosterAnalysis;
+  rosterConstruction: RosterAnalysis;}
 
 export interface RosterAnalysis {
   strengthsByPosition: Record<string, number>;
@@ -217,7 +217,7 @@ export interface RosterAnalysis {
   ageProfile: number;
   injuryRisk: number;
   upside: number;
-  floor: number;
+  floor: number;}
 
 class WaiverWireAnalyzer {
   private readonly cache = new Map<string, { data: any; expires: number }>();

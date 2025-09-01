@@ -73,10 +73,9 @@ const EnhancedTeamHubView: React.FC = () => {
             <CardDescription>Unable to load your team information.</CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button>
+            <Button
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               variant="primary"
-//               fullWidth
             >
               Back to Dashboard
             </Button>
@@ -84,6 +83,7 @@ const EnhancedTeamHubView: React.FC = () => {
         </Card>
       </div>
     );
+  }
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <TargetIcon className="w-5 h-5" /> },
@@ -194,7 +194,7 @@ const EnhancedTeamHubView: React.FC = () => {
                 <CardDescription>Manage your team efficiently</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button>
+                <Button
                   variant="primary" 
 //                   fullWidth 
                   icon={<ZapIcon className="w-4 h-4" />}
@@ -202,7 +202,7 @@ const EnhancedTeamHubView: React.FC = () => {
                 >
                   Optimize Lineup
                 </Button>
-                <Button>
+                <Button
                   variant="default" 
 //                   fullWidth 
                   icon={<TrendingUpIcon className="w-4 h-4" />}
@@ -210,7 +210,7 @@ const EnhancedTeamHubView: React.FC = () => {
                 >
                   Trade Center
                 </Button>
-                <Button>
+                <Button
                   variant="outline" 
 //                   fullWidth 
                   icon={<DollarSignIcon className="w-4 h-4" />}
@@ -218,7 +218,7 @@ const EnhancedTeamHubView: React.FC = () => {
                 >
                   Waiver Wire
                 </Button>
-                <Button>
+                <Button
                   variant="ghost" 
 //                   fullWidth 
                   icon={<SparklesIcon className="w-4 h-4" />}
@@ -285,7 +285,7 @@ const EnhancedTeamHubView: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <RosterManagement>
+            <RosterManagement
               team={userTeam}
               isOwner={true}
               showAddDropButtons={true}
@@ -297,7 +297,7 @@ const EnhancedTeamHubView: React.FC = () => {
         return (
           <div className="space-y-6">
             {showOptimizer ? (
-              <LineupOptimizer>
+              <LineupOptimizer
                 team={userTeam}
                 league={league}
                 dispatch={dispatch}
@@ -311,7 +311,7 @@ const EnhancedTeamHubView: React.FC = () => {
                       <CardTitle size="xl">Starting Lineup</CardTitle>
                       <CardDescription>Optimize your lineup for maximum points</CardDescription>
                     </div>
-                    <Button>
+                    <Button
                       variant="primary"
                       icon={<BrainCircuitIcon className="w-4 h-4" />}
                       onClick={() => setShowOptimizer(true)}
@@ -623,7 +623,7 @@ const EnhancedTeamHubView: React.FC = () => {
                       <motion.div
                         key={week}
                         className={`p-3 rounded-lg border ${
-//                           isPast 
+                          isPast 
                             ? isWin 
                               ? 'bg-secondary-500/10 border-secondary-500/30' 
                               : 'bg-danger-500/10 border-danger-500/30'
@@ -690,12 +690,12 @@ const EnhancedTeamHubView: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Button>
+            <Button
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               variant="ghost"
               icon={<ChevronLeftIcon className="w-5 h-5" />}
             >
-//               Dashboard
+              Dashboard
             </Button>
             
             <div className="flex items-center gap-4">
@@ -846,7 +846,7 @@ const EnhancedTeamHubView: React.FC = () => {
         animate={{ scale: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
       >
-        <Button>
+        <Button
           variant="primary"
           size="lg"
           className="rounded-full shadow-2xl shadow-primary-500/30 w-14 h-14 p-0"
@@ -903,7 +903,7 @@ const EnhancedTeamHubView: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
-                <LineupOptimizer>
+                <LineupOptimizer
                   team={userTeam}
                   league={league}
                   dispatch={dispatch}
@@ -916,6 +916,6 @@ const EnhancedTeamHubView: React.FC = () => {
       </AnimatePresence>
     </div>
   );
-
+};
 
 export default EnhancedTeamHubView;

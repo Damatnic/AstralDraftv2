@@ -15,6 +15,7 @@ interface ErrorReport {
   context?: Record<string, unknown>;
   stackTrace: string;
   browserInfo: BrowserInfo;
+}
 
 interface BrowserInfo {
   name: string;
@@ -22,6 +23,7 @@ interface BrowserInfo {
   os: string;
   viewport: { width: number; height: number };
   connection?: string;
+}
 
 interface PerformanceMetrics {
   loadTime: number;
@@ -30,6 +32,7 @@ interface PerformanceMetrics {
   largestContentfulPaint: number;
   cumulativeLayoutShift: number;
   firstInputDelay: number;
+}
 
 class ErrorTrackingService {
   private errorQueue: ErrorReport[] = [];
@@ -363,6 +366,7 @@ class ErrorTrackingService {
   public getErrorCount(): number {
     return Array.from(this.errorCounts.values()).reduce((sum, count) => sum + count, 0);
   }
+}
 
 // Global singleton instance
 export const errorTrackingService = new ErrorTrackingService();
@@ -370,3 +374,4 @@ export const errorTrackingService = new ErrorTrackingService();
 // Make it available globally for React Error Boundaries
 if (typeof window !== 'undefined') {
   (window as any).errorTrackingService = errorTrackingService;
+}

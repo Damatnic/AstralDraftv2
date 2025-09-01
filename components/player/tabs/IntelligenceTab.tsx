@@ -11,7 +11,7 @@ import LoadingSpinner from '../../ui/LoadingSpinner';
 
 interface IntelligenceTabProps {
   player: Player;
-
+}
 
 const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}: any) => (
     <div className="bg-white/5 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">

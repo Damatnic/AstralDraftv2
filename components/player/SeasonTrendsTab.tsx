@@ -25,7 +25,7 @@ interface WeeklyPerformance {
     projected: number;
     opponent: string;
     result: 'over' | 'under';
-    matchupDifficulty: 'easy' | 'medium' | 'hard';
+    matchupDifficulty: 'easy' | 'medium' | 'hard';}
 
 interface TrendMetric {
     label: string;
@@ -33,7 +33,7 @@ interface TrendMetric {
     trend: 'up' | 'down' | 'stable';
     changePercent: number;
     timeframe: string;
-
+}
 
 interface SeasonComparison {
     season: number;

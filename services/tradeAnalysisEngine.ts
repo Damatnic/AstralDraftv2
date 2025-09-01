@@ -16,13 +16,13 @@ export interface TradeProposal {
     proposedAt: Date;
     expiresAt: Date;
     status: 'pending' | 'accepted' | 'rejected' | 'expired' | 'countered';
-    message?: string;
+    message?: string;}
 
 export interface DraftPick {
     season: number;
     round: number;
     originalTeamId: string;
-    estimatedPosition?: number;
+    estimatedPosition?: number;}
 
 export interface TradeAnalysis {
     overallGrade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
@@ -122,14 +122,14 @@ export interface LeagueContext {
     startingPositions: Record<string, number>;
     playoffTeams: number;
     tradingDeadline: Date;
-    currentWeek: number;
+    currentWeek: number;}
 
 export interface ValueCalculationParams {
     scoringSystem: 'standard' | 'ppr' | 'half_ppr' | 'superflex';
     leagueSize: number;
     rosterComposition: Record<string, number>;
     seasonLength: number;
-    playoffStart: number;
+    playoffStart: number;}
 
 class TradeAnalysisEngine {
     private readonly playerDatabase: Map<string, Player> = new Map();

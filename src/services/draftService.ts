@@ -77,7 +77,7 @@ export interface DraftPick {
   playerTeam: string;
   pickTime: number;
   isAutoPick: boolean;
-  timestamp: string;
+  timestamp: string;}
 
 export interface ChatMessage {
   userId: string;
@@ -85,7 +85,7 @@ export interface ChatMessage {
   avatar?: string;
   message: string;
   timestamp: string;
-  type: 'message' | 'pick' | 'trade' | 'system';
+  type: 'message' | 'pick' | 'trade' | 'system';}
 
 export interface AvailablePlayer {
   id: string;

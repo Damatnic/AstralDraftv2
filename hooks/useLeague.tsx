@@ -13,7 +13,7 @@ interface UseLeagueReturn {
   selectLeague: (leagueId: string) => void;
   createLeague: (leagueData: Partial<League>) => Promise<void>;
   updateLeagueSettings: (settings: Record<string, unknown>) => void;
-  joinLeague: (_inviteCode: string) => Promise<void>;
+  joinLeague: (_inviteCode: string) => Promise<void>;}
 
 export const useLeague = (): UseLeagueReturn => {
   const { state, dispatch } = useAppState();

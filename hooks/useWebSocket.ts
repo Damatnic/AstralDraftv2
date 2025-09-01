@@ -12,7 +12,7 @@ interface UseWebSocketOptions {
   onOpen?: () => void;
   onClose?: () => void;
   onError?: (error: Event) => void;
-  onMessage?: (message: string) => void;
+  onMessage?: (message: string) => void;}
 
 interface UseWebSocketReturn {
   isConnected: boolean;
@@ -20,7 +20,7 @@ interface UseWebSocketReturn {
   sendMessage: (message: string) => void;
   connect: () => void;
   disconnect: () => void;
-  reconnect: () => void;
+  reconnect: () => void;}
 
 export const useWebSocket = (url: string, options: UseWebSocketOptions = {}): UseWebSocketReturn => {
   const {

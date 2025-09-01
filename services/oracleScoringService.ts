@@ -29,7 +29,7 @@ export interface ScoringResult {
   totalPoints: number;
   wasCorrect: boolean;
   beatOracle: boolean;
-  newStreak: number;
+  newStreak: number;}
 
 export interface UserScore {
   userId: string;
@@ -41,7 +41,7 @@ export interface UserScore {
   currentStreak: number;
   longestStreak: number;
   rank: number;
-  level: number;
+  level: number;}
 
 export interface Achievement {
   id: string;

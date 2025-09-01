@@ -16,7 +16,7 @@ interface LeagueSettingsEditorProps {
     league: League;
     onClose: () => void;
     onSave: (settings: LeagueSettings) => void;
-
+}
 
 interface SettingsFormData {
     draftFormat: 'SNAKE' | 'AUCTION';

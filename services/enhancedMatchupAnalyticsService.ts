@@ -15,7 +15,7 @@ export interface MatchupTrend {
   gameScript: GameScript;
   opponent: string;
   defensiveRank: number;
-  weather?: WeatherConditions;
+  weather?: WeatherConditions;}
 
 export interface DefensiveHeatMap {
   position: string;
@@ -37,7 +37,7 @@ export interface DefensiveWeeklyTrend {
   touchdownsAllowed: number;
   sacks?: number;
   interceptions?: number;
-  pressureRate?: number;
+  pressureRate?: number;}
 
 export interface DefensiveTotals {
   totalFantasyPointsAllowed: number;
@@ -54,7 +54,7 @@ export interface WeatherTrendAnalysis {
   temperatureImpact: TemperatureImpact;
   windImpact: WindImpact;
   precipitationImpact: PrecipitationImpact;
-  predictedImpact: WeatherPrediction;
+  predictedImpact: WeatherPrediction;}
 
 export interface WeatherGameData {
   date: string;
@@ -64,7 +64,7 @@ export interface WeatherGameData {
   precipitation: number;
   fantasyPoints: number;
   efficiency: number;
-  weather: WeatherConditions;
+  weather: WeatherConditions;}
 
 export interface TemperatureImpact {
   optimalRange: { min: number; max: number };
@@ -223,7 +223,7 @@ export interface ScheduleStrength {
 export interface ScheduleComparison {
   vsLeagueAverage: number; // percentage easier/harder
   vsPosition: number; // percentage easier/harder vs same position
-  rank: number; // rank among all players
+  rank: number; // rank among all players}
 
 export interface FutureMatchup {
   week: number;
@@ -231,12 +231,12 @@ export interface FutureMatchup {
   difficulty: MatchupDifficulty;
   projectedPoints: number;
   confidence: number;
-  keyFactors: string[];
+  keyFactors: string[];}
 
 // Enums and types
 export type GameScript = 'positive' | 'negative' | 'neutral' | 'blowout_positive' | 'blowout_negative';
 export type MatchupDifficulty = 'easy' | 'moderate' | 'hard' | 'elite';
-export type WeatherConditions = 'clear' | 'cloudy' | 'rain' | 'snow' | 'wind' | 'fog';
+export type WeatherConditions = 'clear' | 'cloudy' | 'rain' | 'snow' | 'wind' | 'fog';}
 
 class EnhancedMatchupAnalyticsService {
   private readonly sportsDataService: typeof productionSportsDataService;

@@ -54,7 +54,7 @@ interface DashboardState {
   alertsEnabled: boolean;
   autoRefresh: boolean;
   refreshInterval: number;
-
+}
 
 const COLORS = {
   primary: '#2563eb',
@@ -444,16 +444,16 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="time" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip>
+                <Tooltip
                   contentStyle={{ 
                     backgroundColor: 'white', 
                     border: '1px solid #e2e8f0', 
                     borderRadius: '8px',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                  }} 
+                  }}
                 />
                 <Legend />
-                <Area>
+                <Area
                   type="monotone" 
                   dataKey="accuracy" 
                   fill={`${COLORS.primary}20`} 
@@ -461,7 +461,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
                   strokeWidth={2}
                   name="Accuracy %"
                 />
-                <Line>
+                <Line
                   type="monotone" 
                   dataKey="confidence" 
                   stroke={COLORS.secondary} 

@@ -23,7 +23,7 @@ export interface NavigationAction {
   type: 'navigate' | 'back' | 'forward' | 'replace';
   route: string;
   data?: any;
-  preserveHistory?: boolean;
+  preserveHistory?: boolean;}
 
 // Standard button styles for navigation
 export const NAVIGATION_BUTTON_STYLES = {
@@ -117,7 +117,7 @@ export const createBackHandler = (
 export interface BreadcrumbItem {
   label: string;
   route: string;
-  isActive?: boolean;
+  isActive?: boolean;}
 
 export const generateBreadcrumbs = (
   currentRoute: string,

@@ -5,10 +5,10 @@ interface BreadcrumbItem {
   label: string;
   href?: string;
   onClick?: () => void;
-
+}
 
 interface BreadcrumbsProps {
-  items: BreadcrumbItem[];
+  items: BreadcrumbItem[];}
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }: any) => {
   return (

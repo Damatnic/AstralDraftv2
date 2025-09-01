@@ -20,6 +20,7 @@ export interface DraftSettings {
   reverseOddRounds: boolean; // for snake drafts
   pauseEnabled: boolean;
   autoDraftEnabled: boolean;
+}
 
 export interface DraftState {
   status: 'waiting' | 'active' | 'paused' | 'completed';
@@ -31,6 +32,7 @@ export interface DraftState {
   availablePlayers: Player[];
   teamRosters: Map<string, DraftPick[]>;
   nextPicks: string[]; // next 5 teams to pick
+}
 
 export interface DraftPick {
   pickNumber: number;
@@ -44,6 +46,7 @@ export interface DraftPick {
   autoDrafted?: boolean;
   keeperPick?: boolean;
   bid?: number; // for auction drafts
+}
 
 export interface Player {
   id: string;
@@ -62,6 +65,7 @@ export interface Player {
     lastYear: any;
     projected: any;
   };
+}
 
 export interface DraftTimer {
   total: number;
@@ -70,11 +74,13 @@ export interface DraftTimer {
   isPaused: boolean;
   warningThreshold: number; // seconds before warning
   criticalThreshold: number; // seconds before critical
+}
 
 export interface DraftChat {
   messages: ChatMessage[];
   participants: Participant[];
   typingUsers: string[];
+}
 
 export interface ChatMessage {
   id: string;
@@ -84,6 +90,7 @@ export interface ChatMessage {
   timestamp: number;
   type: 'message' | 'pick' | 'trade' | 'system';
   metadata?: any;
+}
 
 export interface Participant {
   userId: string;
@@ -93,6 +100,7 @@ export interface Participant {
   status: 'active' | 'idle' | 'offline';
   isCommissioner: boolean;
   autoDraftEnabled: boolean;
+}
 
 export interface AutoDraftStrategy {
   strategy: 'bestAvailable' | 'positional' | 'balanced' | 'custom';
@@ -101,6 +109,7 @@ export interface AutoDraftStrategy {
   targetPlayers?: string[];
   maxPlayersPerPosition?: Record<string, number>;
   preferredTeams?: string[];
+}
 
 export interface TradeProposal {
   id: string;
@@ -110,6 +119,7 @@ export interface TradeProposal {
   toPicks: number[];
   status: 'pending' | 'accepted' | 'rejected' | 'countered';
   timestamp: number;
+}
 
 // Draft Events
 export type DraftEvent = 
@@ -135,6 +145,7 @@ export interface DraftResults {
   worstPicks: DraftPick[];
   steals: DraftPick[];
   reaches: DraftPick[];
+}
 
 export interface DraftGrade {
   teamId: string;
@@ -145,6 +156,7 @@ export interface DraftGrade {
   bestPick: DraftPick;
   worstPick: DraftPick;
   projectedFinish: number;
+}
 
 // Main Real-Time Draft Service
 export class RealTimeDraftService extends EventEmitter {
@@ -265,7 +277,7 @@ export class RealTimeDraftService extends EventEmitter {
       position: player.position,
       team: player.team,
       timestamp: Date.now(),
-//       bid
+      bid
     };
 
     // Send pick to server
@@ -421,7 +433,7 @@ export class RealTimeDraftService extends EventEmitter {
     this.ws.sendMessage(
       this.settings!.id,
       'draft',
-//       message
+      message
     );
 
     // Optimistically add to local chat
@@ -845,7 +857,7 @@ export class RealTimeDraftService extends EventEmitter {
       bestPicks,
       worstPicks,
       steals,
-//       reaches
+      reaches
     };
   }
 
@@ -1104,6 +1116,7 @@ export class RealTimeDraftService extends EventEmitter {
   getAutoDraftStrategy(teamId: string): AutoDraftStrategy | undefined {
     return this.autoDraftStrategies.get(teamId);
   }
+}
 
 // Singleton instance
 export const realTimeDraftServiceV2 = new RealTimeDraftService();

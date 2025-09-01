@@ -50,7 +50,7 @@ export interface WaiverBudget {
   remaining: number;
   spent: number;
   pendingBids: number;
-  available: number;
+  available: number;}
 
 export interface ProcessingTime {
   nextProcessing: string;

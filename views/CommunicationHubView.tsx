@@ -460,7 +460,7 @@ const CommunicationHubView: React.FC = () => {
       </div>
 
       {/* Trade Discussion Modal */}
-      <TradeDiscussion>
+      <TradeDiscussion
         tradeId="trade-1"
         isVisible={showTradeDiscussion}
         onClose={() => setShowTradeDiscussion(false)}

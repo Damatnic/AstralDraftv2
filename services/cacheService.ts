@@ -14,7 +14,7 @@ interface CacheConfig {
   maxSize: number;
   defaultTTL: number;
   enablePersistence: boolean;
-  storagePrefix: string;
+  storagePrefix: string;}
 
 class CacheService {
   private readonly cache: Map<string, CacheItem<unknown>> = new Map();

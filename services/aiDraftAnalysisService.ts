@@ -61,14 +61,14 @@ interface DraftTrend {
   description: string;
   startedAt: number;
   affectedPositions: string[];
-  recommendation: string;
+  recommendation: string;}
 
 interface OpportunityCost {
   player: Player;
   alternativeOptions: Player[];
   costAnalysis: string;
   expectedValueLost: number;
-  recoveryStrategy: string;
+  recoveryStrategy: string;}
 
 class AIDraftAnalysisService {
   private draftHistory: Map<string, DraftPick[]> = new Map();

@@ -25,7 +25,7 @@ interface CacheMetrics {
     totalSize: string;
     totalItems: number;
     lastCleanup: string;
-
+}
 
 const CacheManagementDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

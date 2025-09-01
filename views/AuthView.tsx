@@ -12,7 +12,7 @@ type AuthMode = 'login' | 'register';
 
 interface AuthViewProps {
   // No props currently needed, but interface ready for future expansion
-
+}
 
 const AuthView: React.FC<AuthViewProps> = () => {
     const { dispatch } = useAppState();

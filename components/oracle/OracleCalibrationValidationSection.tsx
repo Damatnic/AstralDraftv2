@@ -31,7 +31,7 @@ interface ValidationMethod {
   useCases: string[];
   complexity: ComplexityLevel;
   computationalCost: ComplexityLevel;
-  reliability: ComplexityLevel;
+  reliability: ComplexityLevel;}
 
 // Cross-Validation Interfaces
 
@@ -49,7 +49,7 @@ interface CrossValidationConfig {
   validationSize?: number;
   description: string;
   formula: string;
-  implementation: string;
+  implementation: string;}
 
 interface CrossValidationResult {
   method: string;
@@ -82,9 +82,9 @@ interface HoldoutConfig {
   groupBy?: string;
   timeAware: boolean;
   description: string;
-  implementation: string;
+  implementation: string;}
 
-// Time Series Validation Interfaces
+// Time Series Validation Interfaces}
 
 interface TimeSeriesValidationConfig {
   id: string;
@@ -101,7 +101,7 @@ interface TimeSeriesValidationConfig {
   implementation: string;
   advantages: string[];
   disadvantages: string[];
-  useCases: string[];
+  useCases: string[];}
 
 // Bootstrap Resampling Configuration
 interface BootstrapConfig {
@@ -121,7 +121,7 @@ interface BootstrapConfig {
   advantages: string[];
   disadvantages: string[];
   useCases: string[];
-
+}
 
 interface TimeSeriesValidationResult {
   method: string;
@@ -157,7 +157,7 @@ interface CalibrationMethod {
   interpretability: ComplexityLevel;
   scalability: ComplexityLevel;
   robustness: ComplexityLevel;
-
+}
 
 interface CalibrationConfig {
   method: string;
@@ -247,16 +247,16 @@ interface FantasyMetrics {
   injuryAdjustedAccuracy: number;
   weatherAdjustedAccuracy: number;
   matchupAdjustedAccuracy: number;
-
+}
 
 interface ComprehensiveMetrics {
   classification?: ClassificationMetrics;
   regression?: RegressionMetrics;
   calibration: CalibrationMetrics;
   fantasy: FantasyMetrics;
-  custom?: Record<string, number>;
+  custom?: Record<string, number>;}
 
-// ===== EXPERIMENT AND EVALUATION INTERFACES =====
+// ===== EXPERIMENT AND EVALUATION INTERFACES =====}
 
 interface ValidationExperiment {
   id: string;
@@ -342,7 +342,7 @@ interface ValidationDemoConfig {
   targetType: TargetType;
   temporalData: boolean;
   realTimeMode: boolean;
-
+}
 
 interface ValidationDemoState {
   isRunning: boolean;
@@ -367,7 +367,7 @@ interface ValidationConfig {
   backend: 'sklearn' | 'custom' | 'distributed';
   cachePredictions: boolean;
   saveIntermediateResults: boolean;
-
+}
 
 interface ModelMetadata {
   name: string;
@@ -399,7 +399,7 @@ interface BiasVarianceExperiment {
   expectedNoise: number;
   totalError: number;
   decompositionMethod: 'bootstrap' | 'analytical' | 'monte_carlo';
-
+}
 
 interface BiasVarianceResult {
   modelComplexity: number;
@@ -432,7 +432,7 @@ interface BiasVarianceVisualization {
   underfittingRegion: [number, number];
   overfittingRegion: [number, number];
   sweetSpot: number;
-
+}
 
 interface ModelComplexityConfig {
   id: string;
@@ -444,7 +444,7 @@ interface ModelComplexityConfig {
   stepSize: number;
   optimizationTarget: 'bias' | 'variance' | 'total_error' | 'generalization';
   regularization: boolean;
-  crossValidation: boolean;
+  crossValidation: boolean;}
 
 // ===== LEARNING CURVE ANALYSIS INTERFACES =====
 
@@ -459,7 +459,7 @@ interface LearningCurveExperiment {
   expectedConvergencePoint: number;
   dataEfficiency: 'low' | 'medium' | 'high';
   convergenceRate: 'slow' | 'medium' | 'fast';
-
+}
 
 interface LearningCurveResult {
   sampleSize: number;
@@ -472,7 +472,7 @@ interface LearningCurveResult {
   overfittingGap: number;
   generalizationError: number;
   confidenceInterval: [number, number];
-  isConverged: boolean;
+  isConverged: boolean;}
 
 interface LearningCurveVisualization {
   sampleSizes: number[];
@@ -505,7 +505,7 @@ interface DataSizeConfig {
   validationRatio: number;
   crossValidationFolds: number;
   randomState: number;
-
+}
 
 interface FantasyContext {
   league: {
@@ -3172,7 +3172,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>❌ Don't</h5>
             <ul>
-              <li>Use holdout with small datasets (&lt;1000 samples)</li>
+              <li>Use holdout with small datasets (<1000 samples)</li>
               <li>Ignore class imbalance in splits</li>
               <li>Shuffle time series data randomly</li>
               <li>Reuse test set for model selection</li>

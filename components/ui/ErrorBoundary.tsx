@@ -4,11 +4,13 @@ interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
   isolateError?: boolean;
+}
 
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorId?: string;
+}
 
 // ZERO-ERROR Authentication-Aware Fallback
 const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }: any) => {
@@ -218,7 +220,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError) {
       const FallbackComponent = this.props.fallback || DefaultErrorFallback;
       return (
-        <FallbackComponent>
+        <FallbackComponent
           error={this.state.error!} 
           retry={this.handleRetry} 
         />
@@ -227,6 +229,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     return this.props.children;
   }
+}
 
 // HOC for wrapping components with ErrorBoundary
 export const withErrorBoundary = <P extends object>(

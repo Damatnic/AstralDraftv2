@@ -16,7 +16,7 @@ interface ConfettiParticle {
     rotation: number;
     tilt: number;
     tiltAngle: number;
-    tiltAngleIncrement: number;
+    tiltAngleIncrement: number;}
 
 export const useConfetti = () => {
     const [canvas, setCanvas] = React.useState<HTMLCanvasElement | null>(null);

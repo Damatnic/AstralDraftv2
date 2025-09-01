@@ -22,19 +22,19 @@ interface SwipeHandlers {
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
-  onSwipeDown?: () => void;
+  onSwipeDown?: () => void;}
 
 interface GestureConfig {
   threshold?: number;
   velocity?: number;
   preventDefaultTouches?: boolean;
   enablePinch?: boolean;
-  enableRotate?: boolean;
+  enableRotate?: boolean;}
 
 // =========================================
 // HAPTIC FEEDBACK SYSTEM
 // =========================================
-
+}
 
 export class HapticManager {
   private static instance: HapticManager;
@@ -90,7 +90,7 @@ interface TouchButtonProps {
   rippleColor?: string;
   pressScale?: number;
   longPressDuration?: number;
-
+}
 
 export const TouchButton: React.FC<TouchButtonProps> = ({
   children,
@@ -255,7 +255,7 @@ interface SwipeGestureProps {
   handlers?: SwipeHandlers;
   config?: GestureConfig;
   className?: string;
-
+}
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   children,
@@ -319,7 +319,7 @@ interface PullToRefreshProps {
   threshold?: number;
   className?: string;
   refreshIndicator?: ReactNode;
-
+}
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   children,
@@ -403,7 +403,7 @@ interface TouchCardStackProps {
   children: ReactNode[];
   onSwipe?: (direction: 'left' | 'right', index: number) => void;
   className?: string;
-
+}
 
 export const TouchCardStack: React.FC<TouchCardStackProps> = ({
   children,

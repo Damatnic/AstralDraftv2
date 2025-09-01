@@ -10,7 +10,7 @@ interface VirtualScrollOptions {
     containerHeight: number;
     overscan?: number;
     totalItems: number;
-    scrollElement?: HTMLElement | null;
+    scrollElement?: HTMLElement | null;}
 
 interface VirtualScrollResult {
     visibleRange: { start: number; end: number };

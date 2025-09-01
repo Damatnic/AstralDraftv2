@@ -12,14 +12,14 @@ type ReactionType = '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂';
 
 interface SocialTabProps {
     isActive: boolean;
-
+}
 
 interface CreateLeagueFormData {
     name: string;
     description: string;
     isPublic: boolean;
     maxMembers: number;
-    settings: LeagueSettings;
+    settings: LeagueSettings;}
 
 // Helper functions
 const getPredictionStatusColor = (status: string) => {
@@ -357,7 +357,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {userLeagues.map((league: any) => (
-                                    <LeagueCard>
+                                    <LeagueCard
                                         key={league.id} 
                                         league={league} 
                                         isOwned={league.creatorId === 'current-user'}
@@ -383,7 +383,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {publicLeagues.map((league: any) => (
-                                    <LeagueCard>
+                                    <LeagueCard
                                         key={league.id} 
                                         league={league} 
                                         onJoin={() => handleJoinLeague(league.id)}
@@ -396,7 +396,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
                     {/* Create League Modal */}
                     {showCreateLeague && (
-                        <CreateLeagueModal>
+                        <CreateLeagueModal
                             formData={createLeagueForm}
                             setFormData={setCreateLeagueForm}
                             onSubmit={handleCreateLeague}
@@ -406,7 +406,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
                     {/* League Details Modal */}
                     {selectedLeague && (
-                        <LeagueDetailsModal>
+                        <LeagueDetailsModal
                             league={selectedLeague}
                             onClose={() => setSelectedLeague(null)}
                         />
@@ -415,7 +415,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             )}
             
             {activeSubTab === 'predictions' && (
-                <GroupPredictionsTab>
+                <GroupPredictionsTab
                     userLeagues={userLeagues}
                     selectedLeague={selectedLeague}
                     onSelectLeague={setSelectedLeague}
@@ -423,7 +423,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             )}
             
             {activeSubTab === 'debates' && (
-                <DebatesTab>
+                <DebatesTab
                     userLeagues={userLeagues}
                     selectedLeague={selectedLeague}
                     onSelectLeague={setSelectedLeague}
@@ -710,7 +710,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                 ) : (
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {debates.map((debate: any) => (
-                            <DebateCard>
+                            <DebateCard
                                 key={debate.id}
                                 debate={debate}
                                 onSelectDebate={onSelectDebate}
@@ -751,7 +751,7 @@ interface DebateCardProps {
     getDebateStatusColor: (status: string) => string;
     getSideColor: (side: DebateSide) => string;
     loading: boolean;
-
+}
 
 const DebateCard: React.FC<DebateCardProps> = ({
     debate,
@@ -980,7 +980,7 @@ interface LeagueCardProps {
     showJoinButton?: boolean;
     onJoin?: () => void;
     onClick?: () => void;
-
+}
 
 const LeagueCard: React.FC<LeagueCardProps> = ({ 
     league, 
@@ -1051,9 +1051,9 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
 
 // Group Prediction Card Component
 interface GroupPredictionCardProps {
-    prediction: GroupPrediction;
+    prediction: GroupPrediction;}
 
-// Create League Modal Component
+// Create League Modal Component}
 
 interface CreateLeagueModalProps {
     formData: CreateLeagueFormData;
@@ -1214,7 +1214,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
 interface LeagueDetailsModalProps {
     league: OracleLeague;
     onClose: () => void;
-
+}
 
 const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose }: any) => {
     const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings'>('overview');
@@ -1373,7 +1373,7 @@ interface GroupPredictionsTabProps {
     userLeagues: OracleLeague[];
     selectedLeague: OracleLeague | null;
     onSelectLeague: (league: OracleLeague | null) => void;
-
+}
 
 const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({ 
     userLeagues, 
@@ -1457,7 +1457,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {userLeagues.map((league: any) => (
-                        <LeagueCard>
+                        <LeagueCard
                             key={league.id}
                             league={league}
                             isOwned={league.creatorId === 'current-user'}
@@ -1617,7 +1617,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                 return (
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {groupPredictions.map((prediction: any) => (
-                            <GroupPredictionCard>
+                            <GroupPredictionCard
                                 key={prediction.id}
                                 prediction={prediction}
                                 onRefresh={loadGroupPredictions}
@@ -1634,7 +1634,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
 interface GroupPredictionCardProps {
     prediction: GroupPrediction;
     onRefresh: () => void;
-
+}
 
 const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, onRefresh }: any) => {
     const [showDetails, setShowDetails] = useState(false);

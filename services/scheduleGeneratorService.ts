@@ -10,6 +10,7 @@ interface ScheduleConfig {
   regularSeasonWeeks: number;
   playoffWeeks: number;
   playoffTeams: number;
+}
 
 /**
  * Generate a complete season schedule using round-robin algorithm
@@ -79,6 +80,7 @@ export function generateRegularSeasonSchedule(config: ScheduleConfig): Matchup[]
   }
   
   return matchups;
+}
 
 /**
  * Generate playoff bracket matchups
@@ -182,6 +184,7 @@ export function generatePlayoffSchedule(
   }
   
   return matchups;
+}
 
 /**
  * Create a playoff matchup
@@ -228,6 +231,7 @@ function createPlayoffMatchup(
     isComplete: false,
     isPlayoffs: true
   };
+}
 
 /**
  * Generate round-robin schedule matrix
@@ -260,6 +264,7 @@ function generateRoundRobinSchedule(teamCount: number): number[][][] {
   }
   
   return fullSchedule;
+}
 
 /**
  * Get matchups for a specific week
@@ -269,6 +274,7 @@ export function getWeekMatchups(
   week: number
 ): Matchup[] {
   return allMatchups.filter((m: any) => m.week === week);
+}
 
 /**
  * Get upcoming matchups for a team
@@ -286,6 +292,7 @@ export function getTeamUpcomingMatchups(
       m.week <= currentWeek + weeksAhead
     )
     .sort((a, b) => a.week - b.week);
+}
 
 /**
  * Calculate strength of schedule for remaining games
@@ -321,6 +328,7 @@ export function calculateStrengthOfSchedule(
   });
   
   return opponentCount > 0 ? totalOpponentWinPct / opponentCount : 0.5;
+}
 
 /**
  * Validate schedule for conflicts and fairness
@@ -360,5 +368,6 @@ export function validateSchedule(matchups: Matchup[]): {
   
   return {
     isValid: errors.length === 0,
-//     errors
+    errors
   };
+}

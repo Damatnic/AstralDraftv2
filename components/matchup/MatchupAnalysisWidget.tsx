@@ -9,7 +9,7 @@ import { Tooltip } from '../ui/Tooltip';
 interface MatchupAnalysisWidgetProps {
     myTeam: Team;
     opponentTeam: Team;
-
+}
 
 const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, opponentTeam }: any) => {
     const [analysis, setAnalysis] = React.useState<MatchupAnalysis | null>(null);

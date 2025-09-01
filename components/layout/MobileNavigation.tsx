@@ -26,7 +26,7 @@ interface MobileNavItem {
   view: View;
   badge?: number;
   disabled?: boolean;
-
+}
 
 const MobileNavigation: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -182,7 +182,7 @@ const MobileNavigation: React.FC = () => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/10 sm:px-4 md:px-6 lg:px-8">
               <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
-                <LazyImage>
+                <LazyImage
                   src="/favicon.svg" 
                   alt="Astral Draft" 
                   className="h-8 w-8 sm:px-4 md:px-6 lg:px-8"

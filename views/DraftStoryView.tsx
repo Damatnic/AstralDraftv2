@@ -102,7 +102,7 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
                                         transition: { delay: index * 0.15 },
                                     }}
                                 >
-                                    <HighlightCard>
+                                    <HighlightCard
                                         event={event}
                                         player={players.find((p: any) => p.id === event.playerId)}
                                         team={league.teams.find((t: any) => t.id === event.teamId)}

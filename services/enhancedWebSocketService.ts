@@ -18,6 +18,7 @@ export interface WebSocketConfig {
   timeout: number;
   transports: string[];
   secure: boolean;
+}
 
 export interface ConnectionState {
   status: 'connecting' | 'connected' | 'disconnected' | 'reconnecting' | 'error';
@@ -25,12 +26,14 @@ export interface ConnectionState {
   lastError?: string;
   latency: number;
   quality: 'excellent' | 'good' | 'fair' | 'poor';
+}
 
 export interface DraftUpdate {
   type: 'pick' | 'trade' | 'timer' | 'turn' | 'complete';
   draftId: string;
   data: any;
   timestamp: number;
+}
 
 export interface LiveScoreUpdate {
   gameId: string;
@@ -40,6 +43,7 @@ export interface LiveScoreUpdate {
   delta?: number;
   data: any;
   timestamp: number;
+}
 
 export interface NotificationPayload {
   id: string;
@@ -53,6 +57,7 @@ export interface NotificationPayload {
     action: string;
   }>;
   timestamp: number;
+}
 
 export interface ChatMessage {
   id: string;
@@ -70,6 +75,7 @@ export interface ChatMessage {
   replyTo?: string;
   edited?: boolean;
   timestamp: number;
+}
 
 export interface PresenceUpdate {
   userId: string;
@@ -80,6 +86,7 @@ export interface PresenceUpdate {
     roomId: string;
     roomType: string;
   };
+}
 
 export interface DataSyncEvent {
   type: 'roster' | 'standings' | 'transactions' | 'settings';
@@ -88,6 +95,7 @@ export interface DataSyncEvent {
   data: any;
   version: number;
   timestamp: number;
+}
 
 // Message Queue for offline/reconnection handling
 class MessageQueue {
@@ -133,6 +141,7 @@ class MessageQueue {
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+}
 
 // Connection Pool Manager
 class ConnectionPool {
@@ -172,6 +181,7 @@ class ConnectionPool {
     this.connections.forEach((socket: any) => socket.disconnect());
     this.connections.clear();
   }
+}
 
 // Main Enhanced WebSocket Service
 export class EnhancedWebSocketService extends EventEmitter {
@@ -808,6 +818,7 @@ export class EnhancedWebSocketService extends EventEmitter {
   getSubscriptions(): string[] {
     return Array.from(this.subscriptions);
   }
+}
 
 // Singleton instance
 export const enhancedWebSocketService = new EnhancedWebSocketService();

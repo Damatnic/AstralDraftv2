@@ -18,13 +18,13 @@ interface AuthState {
   user: User | null;
   tokens: AuthTokens | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  isLoading: boolean;}
 
 interface AuthResponse {
   user?: User;
   accessToken?: string;
   refreshToken?: string;
-  error?: string;
+  error?: string;}
 
 class NetlifyAuthService {
   private state: AuthState = {

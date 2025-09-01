@@ -72,13 +72,13 @@ export interface RegisterData {
 
 export interface ResetPasswordData {
   email: string;
-
+}
 
 export interface ChangePasswordData {
   currentPassword: string;
   newPassword: string;
   confirmNewPassword: string;
-
+}
 
 export interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<{ success: boolean; error?: string }>;
@@ -107,13 +107,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // API Base URL
 const API_BASE = process.env.NODE_ENV === 'production' 
   ? 'https://your-api-domain.com/api' 
-  : 'http://localhost:3001/api';
+  : 'http://localhost:3001/api';}
 
 // Token Storage Keys
 const TOKEN_KEY = 'astral_draft_token';
-const REFRESH_TOKEN_KEY = 'astral_draft_refresh_token';
+const REFRESH_TOKEN_KEY = 'astral_draft_refresh_token';}
 
-// Helper Functions
+// Helper Functions}
 
 const getStoredToken = (): string | null => {
   try {

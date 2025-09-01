@@ -20,14 +20,14 @@ interface PerformanceBudget {
   metric: string;
   budget: number;
   current: number;
-  status: 'within-budget' | 'approaching-limit' | 'over-budget';
+  status: 'within-budget' | 'approaching-limit' | 'over-budget';}
 
 interface PerformanceReport {
   score: number;
   metrics: PerformanceMetric[];
   budgets: PerformanceBudget[];
   recommendations: string[];
-  timestamp: number;
+  timestamp: number;}
 
 const PERFORMANCE_THRESHOLDS = {
   FCP: { good: 1800, poor: 3000 }, // First Contentful Paint
@@ -48,7 +48,7 @@ const PERFORMANCE_BUDGETS = [
 interface PerformanceMonitorProps {
   enabled?: boolean;
   showWidget?: boolean;
-  onPerformanceIssue?: (issue: PerformanceMetric) => void;
+  onPerformanceIssue?: (issue: PerformanceMetric) => void;}
 
 export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   enabled = true,

@@ -173,7 +173,7 @@ export const ContestEntryPayment: React.FC<{
 
       {clientSecret && stripe && (
         <Elements options={stripeOptions} stripe={stripe}>
-          <CheckoutForm>
+          <CheckoutForm
             paymentType="contest"
             onSuccess={onSuccess}
             onError={setError}

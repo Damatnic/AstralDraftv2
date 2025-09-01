@@ -28,7 +28,7 @@ interface NotificationCenterProps {
     isOpen: boolean;
     onClose: () => void;
     className?: string;
-
+}
 
 const NotificationCenter: React.FC<NotificationCenterProps> = ({ 
     isOpen, 
@@ -200,7 +200,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                         exit={{ height: 0, opacity: 0 }}
                         className="border-b border-gray-700 overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     >
-                        <NotificationSettings>
+                        <NotificationSettings
                             preferences={preferences}
                             onClose={() => setShowSettings(false)}
                         />
@@ -236,7 +236,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                     <div className="p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
                         <AnimatePresence>
                             {filteredNotifications.map((notification: any) => (
-                                <NotificationItem>
+                                <NotificationItem
                                     key={notification.id}
                                     notification={notification}
                                     onMarkAsRead={markAsRead}
@@ -264,7 +264,7 @@ interface NotificationItemProps {
     getIcon: (type: string) => string;
     getPriorityColor: (priority: string) => string;
     formatTimeAgo: (date: Date) => string;
-
+}
 
 const NotificationItem: React.FC<NotificationItemProps> = ({
     notification,
@@ -371,7 +371,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 interface NotificationSettingsProps {
     preferences: any;
     onClose: () => void;
-
+}
 
 const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }: any) => {
     const { updatePreferences } = useNotifications();

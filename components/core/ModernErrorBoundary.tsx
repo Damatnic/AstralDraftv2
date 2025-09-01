@@ -9,13 +9,13 @@ import { AlertTriangleIcon, RefreshCwIcon, HomeIcon, MessageCircleIcon } from 'l
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
-
+}
 
 interface State {
   hasError: boolean;
   error: Error | null;
   errorInfo: ErrorInfo | null;
-  errorCount: number;
+  errorCount: number;}
 
 class ModernErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {

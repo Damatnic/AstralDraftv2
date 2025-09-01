@@ -105,7 +105,7 @@ export interface StoryComment {
     timestamp: Date;
     likes: number;
     replies?: StoryComment[];
-
+}
 
 export interface StoryTemplate {
     id: string;
@@ -116,7 +116,7 @@ export interface StoryTemplate {
     sections: Omit<StorySection, 'id' | 'content'>[];
     theme: StoryTheme;
     popularityScore: number;
-
+}
 
 interface TeamStoryBuilderProps {
     team: Team;

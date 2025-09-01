@@ -17,7 +17,7 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 interface ShareTeamCardModalProps {
     team: Team;
     onClose: () => void;
-
+}
 
 const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }: any) => {
     const { state, dispatch } = useAppState();

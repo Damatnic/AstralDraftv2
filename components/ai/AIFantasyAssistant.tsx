@@ -14,14 +14,14 @@ interface ChatMessage {
   content: string;
   timestamp: Date;
   suggestions?: string[];
-  data?: any;
+  data?: any;}
 
 interface AIResponse {
   message: string;
   confidence: number;
   suggestions: string[];
   actionable: boolean;
-  data?: any;
+  data?: any;}
 
 const AIFantasyAssistant: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

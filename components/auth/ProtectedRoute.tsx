@@ -13,7 +13,7 @@ interface ProtectedRouteProps {
 /**
  * Protected Route Component
  * Wraps content that requires specific permissions or roles
- */
+ */}
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
@@ -93,7 +93,7 @@ interface RoleGuardProps {
 /**
  * Role Guard Component
  * Show/hide content based on user roles
- */
+ */}
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({
   children,
@@ -125,7 +125,7 @@ interface PermissionGuardProps {
 /**
  * Permission Guard Component
  * Show/hide content based on user permissions
- */
+ */}
 
 export const PermissionGuard: React.FC<PermissionGuardProps> = ({
   children,
@@ -156,7 +156,7 @@ interface ConditionalRenderProps {
 /**
  * Conditional Render Component
  * Custom condition-based rendering
- */
+ */}
 
 export const ConditionalRender: React.FC<ConditionalRenderProps> = ({
   children,
@@ -179,7 +179,7 @@ interface UserRoleBadgeProps {
 /**
  * User Role Badge Component
  * Displays the user's highest role as a badge
- */
+ */}
 
 export const UserRoleBadge: React.FC<UserRoleBadgeProps> = ({
   className = '',
@@ -222,7 +222,7 @@ interface PermissionListProps {
 /**
  * Permission List Component
  * Displays all permissions for the current user
- */
+ */}
 
 export const PermissionList: React.FC<PermissionListProps> = ({
   className = '',

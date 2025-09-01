@@ -46,7 +46,7 @@ interface MatchupTrendChartProps {
   playerId: string;
   playerName: string;
   className?: string;
-
+}
 
 interface ChartDataPoint extends MatchupTrend {
   formattedWeek: string;
@@ -222,7 +222,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs>
+          <Tabs
             items={[
               { id: 'trends', label: 'Performance Trends' },
               { id: 'defensive', label: 'Defensive Analysis' },
@@ -246,7 +246,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       <YAxis yAxisId="touches" orientation="right" />
                       <Tooltip content={<CustomTooltip />} />
                       <Legend />
-                      <Area>
+                      <Area
                         yAxisId="points"
                         type="monotone"
                         dataKey="fantasyPoints"
@@ -256,7 +256,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         strokeWidth={2}
                         name="Fantasy Points"
                       />
-                      <Line>
+                      <Line
                         yAxisId="touches"
                         type="monotone"
                         dataKey="touches"
@@ -565,7 +565,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Line>
+                      <Line
                         type="monotone"
                         dataKey="efficiency"
                         stroke="#10b981"
@@ -648,7 +648,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         </div>
                         <div>
                           <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
-                            <span>Low Volume (&lt;10 touches):</span>
+                            <span>Low Volume (<10 touches):</span>
                             <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                               {trends.filter((t: any) => t.touches < 10).length} games
                             </span>

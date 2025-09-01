@@ -122,7 +122,7 @@ const PlayerPool: React.FC<PlayerPoolProps> = ({ players, onPlayerSelect, onAddT
       <div className="flex-grow overflow-y-auto p-1 sm:p-2 space-y-1">
         <AnimatePresence>
             {playersToShow.map((player: any) => (
-                <PlayerCard>
+                <PlayerCard
                     key={player.id} 
                     player={player} 
                     onSelect={() => onPlayerSelect(player)}

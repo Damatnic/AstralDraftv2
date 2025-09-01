@@ -41,7 +41,7 @@ export interface DraftPick {
     confidence: number;
     adpDifference: number;
     wasReach: boolean;
-    strategyAlignment: number;
+    strategyAlignment: number;}
 
 export interface MarketTrend {
     position: string;
@@ -49,7 +49,7 @@ export interface MarketTrend {
     magnitude: number;
     confidence: number;
     timeWindow: number;
-    causedBy: string[];
+    causedBy: string[];}
 
 export interface OpponentBehaviorModel {
     teamId: number;
@@ -68,7 +68,7 @@ export interface AdaptationEvent {
     round: number;
     trigger: string;
     adjustment: Record<string, number>;
-    confidence: number;
+    confidence: number;}
 
 export interface PickRecommendation {
     player: Player;
@@ -78,7 +78,7 @@ export interface PickRecommendation {
     value: number;
     strategicFit: number;
     marketTiming: number;
-    alternatives: Player[];
+    alternatives: Player[];}
 
 class EnhancedDraftSimulationEngine {
     private aiPersonalities: EnhancedAiPersonality[];

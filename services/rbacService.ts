@@ -117,7 +117,7 @@ interface RoleConfig {
   description: string;
   color: string;
   icon: string;
-  priority: number;
+  priority: number;}
 
 const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
   [UserRole.GUEST]: {
@@ -177,7 +177,7 @@ export interface UserWithRoles {
   email: string;
   display_name: string;
   roles: UserRole[];
-  permissions?: Permission[];
+  permissions?: Permission[];}
 
 class RBACService {
   /**

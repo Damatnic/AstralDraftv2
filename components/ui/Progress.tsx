@@ -7,7 +7,7 @@ interface ProgressProps {
   showLabel?: boolean;
   label?: string;
   className?: string;
-
+}
 
 export const Progress: React.FC<ProgressProps> = ({
   value,

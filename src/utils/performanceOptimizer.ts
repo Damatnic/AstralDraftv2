@@ -8,7 +8,7 @@ interface PerformanceMetrics {
   lcp: number; // Largest Contentful Paint
   cls: number; // Cumulative Layout Shift
   tbt: number; // Total Blocking Time
-  fid: number; // First Input Delay
+  fid: number; // First Input Delay}
 
 interface OptimizationConfig {
   enableLazyLoading: boolean;
@@ -16,7 +16,7 @@ interface OptimizationConfig {
   enableServiceWorker: boolean;
   enableVirtualization: boolean;
   enableBundleOptimization: boolean;
-  enableMemoryOptimization: boolean;
+  enableMemoryOptimization: boolean;}
 
 class PerformanceOptimizer {
   private config: OptimizationConfig;

@@ -8,7 +8,7 @@ interface MobileGestureNavigationProps {
   onQuickAction?: () => void;
   className?: string;
   children?: React.ReactNode;
-
+}
 
 export const MobileGestureNavigation: React.FC<MobileGestureNavigationProps> = ({
   onNavigate,

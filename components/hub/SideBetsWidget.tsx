@@ -69,7 +69,7 @@ const SideBetsWidget: React.FC = () => {
                     {myBets.length > 0 ? (
                         <div className="space-y-2 max-h-48 overflow-y-auto pr-1 sm:px-4 md:px-6 lg:px-8">
                             {myBets.map((bet: any) => (
-                                <SideBetCard>
+                                <SideBetCard
                                     key={bet.id}
                                     bet={bet}
                                     onRespond={handleRespond}

@@ -12,6 +12,7 @@ export interface TouchTargetValidation {
         isValid: boolean;
         reason?: string;
     }[];
+}
 
 export interface AccessibilityAuditResult {
     isValid: boolean;
@@ -25,6 +26,7 @@ export interface AccessibilityAuditResult {
         isValid: boolean;
         violations: string[];
     };
+}
 
 export interface ColorContrastResult {
     isValid: boolean;
@@ -32,6 +34,7 @@ export interface ColorContrastResult {
     level: 'AA' | 'AAA' | 'FAIL';
     backgroundColor: string;
     foregroundColor: string;
+}
 
 /**
  * Comprehensive accessibility testing utility
@@ -227,6 +230,7 @@ export class AccessibilityTester {
         // Fallback to black
         return [0, 0, 0];
     }
+}
 
 /**
  * Announce text to screen readers
@@ -244,6 +248,7 @@ export function announceToScreenReader(message: string, priority: 'polite' | 'as
     setTimeout(() => {
         document.body.removeChild(announcement);
     }, 1000);
+}
 
 /**
  * Focus management utilities
@@ -282,7 +287,8 @@ export const focusManagement = {
         // Focus first element
         firstElement?.focus();
 
-        // Return cleanup function return() => {
+        // Return cleanup function
+        return () => {
             container.removeEventListener('keydown', handleTabKey);
         };
     },
@@ -368,6 +374,7 @@ export function useKeyboardNavigation(elementRef: React.RefObject<HTMLElement>) 
         element.addEventListener('keydown', handleKeyDown);
         return () => element.removeEventListener('keydown', handleKeyDown);
     }, [elementRef]);
+}
 
 /**
  * Hook for focus management
@@ -388,6 +395,7 @@ export function useFocusManagement() {
     };
 
     return { trapFocus, returnFocus, saveFocus };
+}
 
 /**
  * Hook for reduced motion preference
@@ -406,3 +414,4 @@ export function useReducedMotion(): boolean {
     }, []);
 
     return prefersReducedMotion;
+}

@@ -36,13 +36,13 @@ interface MetricCard {
     trend?: 'up' | 'down' | 'stable';
     color: string;
     icon: React.ReactNode;
-    description?: string;
+    description?: string;}
 
 interface ChartData {
     label: string;
     value: number;
     color: string;
-
+}
 
 const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     team,

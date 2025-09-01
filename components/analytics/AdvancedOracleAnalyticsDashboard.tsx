@@ -60,6 +60,7 @@ interface AdvancedAnalyticsMetrics {
         marketInefficiencies: Array<{ area: string; opportunity: number; description: string }>;
         predictionPatterns: Array<{ pattern: string; frequency: number; successRate: number }>;
     };
+}
 
 interface ReportFilters {
     timeframe: 'week' | 'month' | 'season' | 'all';
@@ -67,7 +68,7 @@ interface ReportFilters {
     confidenceRange: [number, number];
     includedUsers: 'all' | 'active' | 'top10' | 'custom';
     season: number;
-
+}
 
 const AdvancedOracleAnalyticsDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -401,7 +402,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
 
             {/* Key Performance Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <MetricCard>
+                <MetricCard
                     title="Oracle Accuracy"
                     value={`${metrics.oracle.overallAccuracy.toFixed(1)}%`}
                     subtitle="Overall performance"
@@ -410,7 +411,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     color="text-purple-400"
                 />
                 
-                <MetricCard>
+                <MetricCard
                     title="User Average"
                     value={`${metrics.users.averageAccuracy.toFixed(1)}%`}
                     subtitle="Community performance"
@@ -419,7 +420,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     color="text-blue-400"
                 />
                 
-                <MetricCard>
+                <MetricCard
                     title="Performance Gap"
                     value={`${(metrics.oracle.overallAccuracy - metrics.users.averageAccuracy).toFixed(1)}%`}
                     subtitle="Oracle advantage"
@@ -428,7 +429,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     color="text-green-400"
                 />
                 
-                <MetricCard>
+                <MetricCard
                     title="Oracle Beat Rate"
                     value={`${metrics.users.beatOracleRate.toFixed(1)}%`}
                     subtitle="Users beating Oracle"
@@ -451,7 +452,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                                 <XAxis dataKey="week" stroke="#9CA3AF" />
                                 <YAxis stroke="#9CA3AF" />
-                                <Tooltip>
+                                <Tooltip
                                     contentStyle={{ 
                                         backgroundColor: '#1F2937', 
                                         border: '1px solid #374151',
@@ -459,7 +460,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                     }}
                                 />
                                 <Legend />
-                                <Line>
+                                <Line
                                     type="monotone" 
                                     dataKey="oracleAccuracy" 
                                     stroke="#8B5CF6" 
@@ -467,7 +468,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                     name="Oracle"
                                     dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 4 }}
                                 />
-                                <Line>
+                                <Line
                                     type="monotone" 
                                     dataKey="userAccuracy" 
                                     stroke="#3B82F6" 
@@ -491,7 +492,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                                 <XAxis dataKey="range" stroke="#9CA3AF" />
                                 <YAxis stroke="#9CA3AF" />
-                                <Tooltip>
+                                <Tooltip
                                     contentStyle={{ 
                                         backgroundColor: '#1F2937', 
                                         border: '1px solid #374151',
@@ -517,7 +518,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                             <XAxis dataKey="type" stroke="#9CA3AF" />
                             <YAxis stroke="#9CA3AF" />
-                            <Tooltip>
+                            <Tooltip
                                 contentStyle={{ 
                                     backgroundColor: '#1F2937', 
                                     border: '1px solid #374151',

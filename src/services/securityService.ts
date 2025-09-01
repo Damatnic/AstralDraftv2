@@ -11,6 +11,7 @@ interface SecurityViolation {
   context?: Record<string, unknown>;
   timestamp: Date;
   blocked: boolean;
+}
 
 interface SecurityConfig {
   enableCSPValidation: boolean;
@@ -19,6 +20,7 @@ interface SecurityConfig {
   enableAPIKeyProtection: boolean;
   enableContentValidation: boolean;
   logSecurityEvents: boolean;
+}
 
 class SecurityService {
   private violations: SecurityViolation[] = [];
@@ -276,7 +278,7 @@ class SecurityService {
           originalInput: input.substring(0, 200),
           sanitizedInput: sanitized.substring(0, 200),
           inputContext: context,
-//           violations
+          violations
         },
         blocked: true
       });
@@ -285,7 +287,7 @@ class SecurityService {
     return {
       isValid: violations.length === 0,
       sanitized,
-//       violations
+      violations
     };
   }
 
@@ -423,13 +425,14 @@ class SecurityService {
       totalViolations: this.violations.length,
       violationsBySeverity,
       violationsByType,
-//       recentViolations
+      recentViolations
     };
   }
 
   public clearViolations(): void {
     this.violations = [];
   }
+}
 
 // Global singleton instance
 export const securityService = new SecurityService();
@@ -437,3 +440,4 @@ export const securityService = new SecurityService();
 // Make it available globally
 if (typeof window !== 'undefined') {
   (window as any).securityService = securityService;
+}

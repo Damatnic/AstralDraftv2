@@ -17,14 +17,14 @@ interface PasswordStatus {
   isSecurePattern: boolean;
   isMainUser: boolean;
   lastUpdated?: string;
-
+}
 
 interface SecurityReport {
   totalUsers: number;
   securePasswords: number;
   weakPasswords: number;
   mainUsersProtected: boolean;
-  recommendations: string[];
+  recommendations: string[];}
 
 const PasswordManagementWidget: React.FC = () => {
   const [passwordStatus, setPasswordStatus] = useState<PasswordStatus[]>([]);
@@ -193,7 +193,7 @@ const PasswordManagementWidget: React.FC = () => {
           {/* Generate Passwords Button */}
           <div className="flex flex-col gap-2 sm:px-4 md:px-6 lg:px-8">
             {!showConfirmation ? (
-              <Button>
+              <Button
                 onClick={() => setShowConfirmation(true)}
                 disabled={isLoading}
                 className="w-full bg-blue-600 hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8"
@@ -210,7 +210,7 @@ const PasswordManagementWidget: React.FC = () => {
                   Main user passwords (admin and player1) will be preserved.
                 </div>
                 <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                  <Button>
+                  <Button
                     onClick={handleGeneratePasswords}
                     disabled={isLoading}
                     size="sm"
@@ -218,7 +218,7 @@ const PasswordManagementWidget: React.FC = () => {
                   >
                     {isLoading ? '⏳ Generating...' : '✅ Confirm'}
                   </Button>
-                  <Button>
+                  <Button
                     onClick={() => setShowConfirmation(false)}
                     disabled={isLoading}
                     size="sm"
@@ -273,7 +273,7 @@ const PasswordManagementWidget: React.FC = () => {
           )}
 
           {/* Refresh Button */}
-          <Button>
+          <Button
             onClick={loadPasswordData}
             variant="outline"
             size="sm"

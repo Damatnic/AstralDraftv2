@@ -12,7 +12,7 @@ interface RivalryReportModalProps {
     myTeam: Team;
     opponentTeam: Team;
     onClose: () => void;
-
+}
 
 const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponentTeam, onClose }: any) => {
     const [report, setReport] = React.useState<string | null>(null);

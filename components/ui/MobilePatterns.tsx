@@ -20,7 +20,7 @@ interface BottomSheetProps {
 /**
  * Bottom Sheet Modal for Mobile
  * Provides native mobile app-like modal experience
- */
+ */}
 
 export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   onClose,
@@ -140,7 +140,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
             <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
               {title}
             </h2>
-            <AccessibleButton>
+            <AccessibleButton
               onClick={onClose}
               size="sm"
               aria-label="Close bottom sheet"
@@ -171,7 +171,7 @@ interface SwipeGestureProps {
 /**
  * Swipe Gesture Handler
  * Provides swipe gesture detection for mobile interactions
- */
+ */}
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   onSwipeLeft,
@@ -250,7 +250,7 @@ interface MobileDrawerProps {
 /**
  * Mobile Drawer Navigation
  * Side drawer for mobile navigation
- */
+ */}
 
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
@@ -305,7 +305,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
         role="dialog"
         aria-modal="true"
       >
-        <SwipeGesture>
+        <SwipeGesture
           onSwipeLeft={side === 'left' ? onClose : undefined}
           onSwipeRight={side === 'right' ? onClose : undefined}
           className="h-full sm:px-4 md:px-6 lg:px-8"
@@ -389,7 +389,7 @@ interface PullToRefreshProps {
   children: React.ReactNode;
   className?: string;
   threshold?: number;
-
+}
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   onRefresh,

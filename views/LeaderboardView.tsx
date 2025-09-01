@@ -18,13 +18,13 @@ interface LeaderboardFilter {
   timeframe: 'weekly' | 'monthly' | 'season' | 'all-time';
   category: 'overall' | 'accuracy' | 'streak' | 'consistency';
   league?: string;
-
+}
 
 interface LeaderboardTab {
   id: string;
   label: string;
   icon: React.ReactNode;
-  description: string;
+  description: string;}
 
 interface LeaderboardEntry {
 

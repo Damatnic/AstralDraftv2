@@ -32,13 +32,13 @@ export interface PickGuideline {
     condition: string;
     recommendation: string;
     weight: number;
-    roundRelevance: number[];
+    roundRelevance: number[];}
 
 export interface ContextualRule {
     scenario: string;
     condition: (context: DraftContext) => boolean;
     adjustment: StrategyAdjustment;
-    priority: number;
+    priority: number;}
 
 export interface StrategyAdjustment {
     positionPriorityChanges: Record<string, number>;
@@ -67,7 +67,7 @@ export interface DraftFlow {
     valueDeviations: number[];
     averagePickTime: number;
     emergentPatterns: string[];
-    marketSentiment: 'bullish' | 'bearish' | 'neutral';
+    marketSentiment: 'bullish' | 'bearish' | 'neutral';}
 
 export interface StrategyRecommendation {
     type: 'position_pivot' | 'value_hunt' | 'safe_pick' | 'contrarian' | 'need_fill';
@@ -78,7 +78,7 @@ export interface StrategyRecommendation {
     reasoning: string[];
     suggestedPlayers: Player[];
     riskLevel: number;
-    potentialImpact: number;
+    potentialImpact: number;}
 
 class RealTimeStrategyAdjustmentService {
     private marketDetector: MarketInefficiencyDetector;

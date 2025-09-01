@@ -9,13 +9,13 @@ export interface ImageOptimizationOptions {
   sizes?: string;
   loading?: 'lazy' | 'eager';
   placeholder?: 'blur' | 'empty';
-  priority?: boolean;
+  priority?: boolean;}
 
 export interface ResponsiveImageSizes {
   sm: number;  // Mobile
   md: number;  // Tablet
   lg: number;  // Desktop
-  xl: number;  // Large desktop
+  xl: number;  // Large desktop}
 
 // Default responsive breakpoints
 const DEFAULT_BREAKPOINTS: ResponsiveImageSizes = {

@@ -22,7 +22,7 @@ interface AutomatedSuggestionsTabProps {
     currentTeam: Team;
     onProposalUpdate: (proposal: TradeProposal) => void;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface SmartSuggestion {
     id: string;

@@ -25,7 +25,7 @@ export interface ErrorResponse {
   error: ApiError;
   timestamp: string;
   requestId: string;
-  version: string;
+  version: string;}
 
 export interface PaginationMeta {
   page: number;
@@ -35,7 +35,7 @@ export interface PaginationMeta {
   hasNext: boolean;
   hasPrev: boolean;
   nextPage?: number;
-  prevPage?: number;
+  prevPage?: number;}
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   pagination: PaginationMeta;

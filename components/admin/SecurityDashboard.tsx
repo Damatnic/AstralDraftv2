@@ -15,6 +15,7 @@ interface SecurityMetrics {
   totalUsers: number;
   uptime: string;
   lastSecurityScan: string;
+}
 
 interface SecurityEvent {
   id: string;
@@ -25,12 +26,14 @@ interface SecurityEvent {
   description: string;
   location?: string;
   resolved: boolean;
+}
 
 interface SecurityThreat {
   type: string;
   count: number;
   lastSeen: string;
   severity: string;
+}
 
 interface SystemStatus {
   api: 'healthy' | 'degraded' | 'down';
@@ -38,6 +41,7 @@ interface SystemStatus {
   authentication: 'healthy' | 'degraded' | 'down';
   monitoring: 'healthy' | 'degraded' | 'down';
   backups: 'healthy' | 'degraded' | 'down';
+}
 
 const SecurityDashboard: FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -198,7 +202,8 @@ const SecurityDashboard: FC = () => {
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <select
             value={timeRange}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => setTimeRange(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setTimeRange(e.target.value as '1h' | '24h' | '7d' | '30d')}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="1h">Last Hour</option>
             <option value="24h">Last 24 Hours</option>
@@ -212,7 +217,7 @@ const SecurityDashboard: FC = () => {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
            aria-label="Action button">
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-//             Refresh
+            Refresh
           </button>
 
           <button

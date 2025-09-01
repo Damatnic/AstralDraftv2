@@ -132,7 +132,7 @@ export interface FeedMention {
     type: 'user' | 'team';
     position: number;
     length: number;
-
+}
 
 export interface SocialFeedFilter {
     types: FeedItemType[];
@@ -140,7 +140,7 @@ export interface SocialFeedFilter {
     timeRange: 'today' | 'week' | 'month' | 'all';
     sortBy: 'latest' | 'popular' | 'trending';
     showPinnedOnly: boolean;
-
+}
 
 interface SocialFeedProps {
     feedItems: SocialFeedItem[];

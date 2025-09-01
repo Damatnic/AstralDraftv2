@@ -16,13 +16,13 @@ interface EnhancedMatchupAnalyticsState {
   defensiveHeatMap: DefensiveHeatMap | null;
   weatherAnalysis: WeatherTrendAnalysis | null;
   loading: boolean;
-  error: string | null;
+  error: string | null;}
 
 interface UseEnhancedMatchupAnalyticsProps {
   playerId: string;
   position?: string;
   autoRefresh?: boolean;
-  refreshInterval?: number;
+  refreshInterval?: number;}
 
 export const useEnhancedMatchupAnalytics = ({
   playerId,

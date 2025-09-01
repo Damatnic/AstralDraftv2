@@ -9,7 +9,7 @@ interface ConversationListProps {
     onSelectUser: (userId: string) => void;
     onStartNewMessage: () => void;
     isNewMessageActive: boolean;
-
+}
 
 const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }: any) => {
     const { state } = useAppState();

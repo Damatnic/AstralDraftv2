@@ -7,7 +7,7 @@ import { ErrorBoundary } from '../ui/ErrorBoundary';
 interface SuspenseLoaderProps {
   message?: string;
   size?: 'sm' | 'md' | 'lg';
-
+}
 
 const SuspenseLoader: React.FC<SuspenseLoaderProps> = ({ 
   message = "Loading...", 

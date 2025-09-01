@@ -39,7 +39,7 @@ interface NavItem {
   view: View;
   badge?: number;
   color?: string;
-
+}
 
 interface MobileResponsiveNavProps {
   currentView: View;

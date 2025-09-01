@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 export interface UseEnhancedRealTimeDraftOptions {
   autoConnect?: boolean;
-  autoReconnect?: boolean;
+  autoReconnect?: boolean;}
 
 export interface EnhancedRealTimeDraftState {
   isConnected: boolean;
@@ -19,7 +19,7 @@ export interface EnhancedRealTimeDraftState {
   chatMessages: ChatMessage[];
   currentPick: DraftRoom['currentPick'] | null;
   isMyTurn: boolean;
-  myParticipant: DraftParticipant | null;
+  myParticipant: DraftParticipant | null;}
 
 export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOptions = {}) {
   const { user } = useAuth();

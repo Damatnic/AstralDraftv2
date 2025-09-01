@@ -23,12 +23,12 @@ interface WaiverClaim {
   priority: number;
   status: 'pending' | 'successful' | 'failed';
   processedAt?: Date;
-
+}
 
 interface WaiverPeriod {
   isActive: boolean;
   nextProcessing: Date;
-  currentPeriod: 'waiver' | 'free_agency';
+  currentPeriod: 'waiver' | 'free_agency';}
 
 const EnhancedWaiverWire: React.FC = () => {
   const { state, dispatch } = useAppState();

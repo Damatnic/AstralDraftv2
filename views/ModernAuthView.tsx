@@ -27,7 +27,7 @@ interface FormData {
   username: string;
   password: string;
   confirmPassword: string;
-
+}
 
 interface FormErrors {
   email?: string;

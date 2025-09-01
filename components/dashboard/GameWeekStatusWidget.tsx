@@ -65,7 +65,7 @@ const GameWeekStatusWidget: React.FC = () => {
   };
   
   return (
-    <Widget>
+    <Widget
       title="NFL Week Status" 
       icon={<CalendarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       className="col-span-1 sm:px-4 md:px-6 lg:px-8"

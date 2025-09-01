@@ -2,21 +2,6 @@
  * Main App Component - Fantasy Football League Application
  */
 
-// Simple console filtering for production
-if (import.meta.env.PROD) {
-  const originalConsoleError = console.error;
-  console.error = (...args) => {
-    const message = args.join(' ').toLowerCase();
-    const isExtensionNoise = message.includes('extension') || 
-                           message.includes('devtools') || 
-                           message.includes('chrome-') ||
-                           message.includes('moz-');
-    
-    if (!isExtensionNoise) {
-      originalConsoleError.apply(console, args);
-    }
-  };
-
 import React, { useEffect, FC, ReactNode } from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
 import { ModalProvider } from './contexts/ModalContext';
@@ -73,9 +58,26 @@ const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 // const OracleAnalyticsDashboard = React.lazy(() => import('./components/analytics/OracleAnalyticsDashboard'));
 // const PlayerComparisonTool = React.lazy(() => import('./components/comparison/PlayerComparisonTool'));
 
+// Simple console filtering for production
+if (import.meta.env.PROD) {
+  const originalConsoleError = console.error;
+  console.error = (...args) => {
+    const message = args.join(' ').toLowerCase();
+    const isExtensionNoise = message.includes('extension') || 
+                           message.includes('devtools') || 
+                           message.includes('chrome-') ||
+                           message.includes('moz-');
+    
+    if (!isExtensionNoise) {
+      originalConsoleError.apply(console, args);
+    }
+  };
+}
+
 // Enhanced loading component with better visuals and performance
 interface SimpleLoaderProps {
   message?: string;
+}
 
 const SimpleLoader: FC<SimpleLoaderProps> = ({ message = "Loading..." }: any) => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
@@ -663,6 +665,7 @@ const AppContent: FC = () => {
 // NUCLEAR-LEVEL Error Prevention Component
 interface NuclearErrorBoundaryProps {
   children: ReactNode;
+}
 
 const NuclearErrorBoundary: FC<NuclearErrorBoundaryProps> = ({ children }: any) => {
   const [hasError, setHasError] = React.useState(false);

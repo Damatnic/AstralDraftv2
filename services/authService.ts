@@ -9,7 +9,7 @@ interface User {
   email: string;
   display_name: string;
   avatar_url?: string;
-  created_at: string;
+  created_at: string;}
 
 interface AuthResponse {
   success: boolean;

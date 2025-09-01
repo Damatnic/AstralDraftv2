@@ -8,7 +8,7 @@ interface SkeletonProps {
   height?: string | number;
   rows?: number;
   animation?: 'pulse' | 'wave' | 'none';
-
+}
 
 const SkeletonLoader: React.FC<SkeletonProps> = ({ 
   className = '', 

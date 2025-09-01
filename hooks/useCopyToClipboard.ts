@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 export default function useCopyToClipboard() {
   const copy = React.useCallback(async (text: string) => {
     if (!navigator?.clipboard) {
@@ -14,3 +16,4 @@ export default function useCopyToClipboard() {
   }, []);
 
   return { copy };
+}

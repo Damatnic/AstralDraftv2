@@ -18,7 +18,7 @@ const CustomScoringEditorView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Widget>
+                <Widget
                     title="Scoring Settings"
                     icon={<SettingsIcon />}
                     className="lg:col-span-2"
@@ -57,7 +57,7 @@ const CustomScoringEditorView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget>
+                <Widget
                     title="Position Settings"
                     icon={<SettingsIcon />}
                 >
@@ -70,7 +70,7 @@ const CustomScoringEditorView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget>
+                <Widget
                     title="Bonus Rules"
                     icon={<SettingsIcon />}
                 >

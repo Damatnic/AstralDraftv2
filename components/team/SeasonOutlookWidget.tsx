@@ -10,7 +10,7 @@ interface SeasonOutlookWidgetProps {
     myTeam: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const SeasonOutlookWidget: React.FC<SeasonOutlookWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);

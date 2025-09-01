@@ -35,7 +35,7 @@ const PREDICTION_TYPE_COLORS: Record<PredictionType, string> = {
 
 interface HistoricalAnalyticsOverviewProps {
     className?: string;
-
+}
 
 export function HistoricalAnalyticsOverview({ className = '' }: Readonly<HistoricalAnalyticsOverviewProps>) {
     const {
@@ -139,7 +139,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard>
+                <StatCard
                     title="Overall Accuracy"
                     value={formatAccuracy(overallStats.overallAccuracy)}
                     change={formatChange(recentPerformance.improvement) + " from last 30 days"}
@@ -149,7 +149,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                     delay={0}
                 />
 
-                <StatCard>
+                <StatCard
                     title="Total Predictions"
                     value={overallStats.totalPredictions.toLocaleString()}
                     change={`${recentPerformance.predictions} in last 30 days`}
@@ -159,7 +159,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                     delay={0.1}
                 />
 
-                <StatCard>
+                <StatCard
                     title="Current Streak"
                     value={overallStats.currentStreak.toString()}
                     change={`Best: ${overallStats.longestStreak} correct`}
@@ -169,7 +169,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                     delay={0.2}
                 />
 
-                <StatCard>
+                <StatCard
                     title="Avg Confidence"
                     value={`${overallStats.averageConfidence.toFixed(0)}%`}
                     change="Calibration pending analysis"
@@ -216,7 +216,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                             ) : (
                                 <>
                                     {trendAnalysis ? (
-                                        <SimpleLineChart>
+                                        <SimpleLineChart
                                             data={trendAnalysis.accuracyTrend}
                                             height={250}
                                             color="#8B5CF6"
@@ -238,7 +238,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                             className="bg-white rounded-lg border border-gray-200 p-6"
                         >
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance by Type</h3>
-                            <SimpleBarChart>
+                            <SimpleBarChart
                                 data={Object.entries(typePerformance).map(([type, stats]) => ({
                                     label: type.replace('_', ' '),
                                     value: stats.accuracy,
@@ -259,7 +259,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                             className="bg-white rounded-lg border border-gray-200 p-6"
                         >
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Confidence Trend</h3>
-                            <SimpleLineChart>
+                            <SimpleLineChart
                                 data={trendAnalysis.confidenceTrend}
                                 height={300}
                                 color="#06B6D4"
@@ -281,13 +281,13 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                                             <h4 className="font-medium text-gray-900">
                                                 {typeData.type.replace('_', ' ')}
                                             </h4>
-                                            <TrendIndicator>
+                                            <TrendIndicator
                                                 value={typeData.trendStrength}
                                                 label={typeData.overallTrend}
                                                 showIcon={false}
                                             />
                                         </div>
-                                        <SimpleLineChart>
+                                        <SimpleLineChart
                                             data={typeData.periods}
                                             height={150}
                                             color="#10B981"

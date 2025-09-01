@@ -13,6 +13,7 @@ interface VirtualScrollProps {
   renderItem: (item: any, index: number) => React.ReactNode;
   overscan?: number;
   className?: string;
+}
 
 export const VirtualScroll: React.FC<VirtualScrollProps> = ({
   items,
@@ -87,6 +88,7 @@ interface VariableHeightVirtualScrollProps {
   renderItem: (item: any, index: number) => React.ReactNode;
   overscan?: number;
   className?: string;
+}
 
 export const VariableHeightVirtualScroll: React.FC<VariableHeightVirtualScrollProps> = ({
   items,
@@ -228,6 +230,7 @@ interface InfiniteScrollProps {
   loading: boolean;
   threshold?: number;
   className?: string;
+}
 
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   items,
@@ -308,6 +311,7 @@ interface VirtualTableProps {
   containerWidth: number;
   overscan?: number;
   className?: string;
+}
 
 export const VirtualTable: React.FC<VirtualTableProps> = ({
   data,

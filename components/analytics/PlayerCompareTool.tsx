@@ -8,7 +8,7 @@ import { Modal } from '../ui/Modal';
 interface PlayerCompareToolProps {
     players: Player[];
     onClose: () => void;
-
+}
 
 const PlayerCompareTool: React.FC<PlayerCompareToolProps> = ({ players, onClose }: any) => {
 

@@ -11,7 +11,7 @@ interface TeamChemistryWidgetProps {
     myTeam: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);

@@ -18,7 +18,7 @@ export interface Player {
   averagePoints: number;
   isStarting: boolean;
   injuryStatus?: string;
-
+}
 
 export interface Team {
   id: string;
@@ -41,10 +41,10 @@ export interface Transaction {
   type: 'add' | 'drop' | 'trade' | 'waiver';
   player: Player;
   timestamp: string;
-  description: string;
+  description: string;}
 
 export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
-
+}
 
 interface TeamManagementViewProps {
   onBack?: () => void;}

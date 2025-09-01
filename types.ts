@@ -72,6 +72,7 @@ export interface Player {
       lastBreakfast: string;
   };
   advancedMetrics?: AdvancedMetrics;
+}
 
 export type BadgeType = 'CHAMPION' | 'TOP_SCORER' | 'WIN_STREAK_3';
 
@@ -79,7 +80,7 @@ export interface Badge {
   id: string;
   type: BadgeType;
   text: string;
-  season: number;
+  season: number;}
 
 export interface User {
   id: string;
@@ -91,7 +92,7 @@ export interface User {
   isReady?: boolean;
   bio?: string;
   memberSince?: number;
-  badges?: Badge[];
+  badges?: Badge[];}
 
 export type ChampionshipProbability = {
     week: number;
@@ -127,6 +128,7 @@ export interface Team {
   themeSongUrl?: string;
   mascotUrl?: string;
   keepers?: number[]; // player IDs
+}
 
 export interface DraftGrade {
     overall: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F';
@@ -135,6 +137,7 @@ export interface DraftGrade {
     bestPick: Player;
     biggestReach: Player;
     narrative: string;
+}
 
 export interface DraftPick {
   overall: number;
@@ -144,6 +147,7 @@ export interface DraftPick {
   playerId?: number;
   price?: number; // For auction
   timestamp?: number;
+}
 
 export type RecommendationType = 'VALUE' | 'UPSCALE' | 'POSITIONAL_NEED' | 'SAFE_PICK' | 'SLEEPER' | 'INJURY_RISK' | 'HOT_PROSPECT' | 'GAMBIT';
 
@@ -151,13 +155,13 @@ export interface Recommendation {
     id: number;
     player: Player;
     type: RecommendationType;
-    reason: string;
+    reason: string;}
 
 export interface Analytics {
     draftEfficiency: number;
     valuePicks: number;
     championshipProbability: number;
-    avgPickTime: number;
+    avgPickTime: number;}
 
 // Multiplayer & League Types
 export type DraftFormat = 'SNAKE' | 'AUCTION';
@@ -165,13 +169,14 @@ export type DraftFormat = 'SNAKE' | 'AUCTION';
 export interface ScoringRule {
   stat: string;
   points: number;
+}
 
 export interface ScoringSettings {
   passing: ScoringRule[];
   rushing: ScoringRule[];
   receiving: ScoringRule[];
   misc: ScoringRule[];
-
+}
 
 export interface LeagueSettings {
     draftFormat: DraftFormat;
@@ -183,7 +188,7 @@ export interface LeagueSettings {
     waiverRule: 'FAAB' | 'REVERSE_ORDER';
     scoringRules?: ScoringSettings;
     keeperCount?: number;
-    aiAssistanceLevel: 'FULL' | 'BASIC';
+    aiAssistanceLevel: 'FULL' | 'BASIC';}
 
 export interface AuctionState {
     nominatingTeamId: number;
@@ -193,10 +198,12 @@ export interface AuctionState {
     timer: number;
     lastBidTimestamp: number;
     bidHistory: { teamId: number, bid: number }[];
+}
 
 export interface TradeAnalysis {
     summary: string;
     winner: 'TEAM_A' | 'TEAM_B' | 'EVEN' | null;
+}
 
 export interface TradeOffer {
     id: string;
@@ -209,6 +216,7 @@ export interface TradeOffer {
     status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'VETOED' | 'FORCED';
     createdAt: number;
     tradeAnalysis?: TradeAnalysis | null;
+}
 
 export interface WaiverClaim {
     id: string;
@@ -217,11 +225,13 @@ export interface WaiverClaim {
     bid: number;
     playerToDropId?: number;
     status: 'PENDING' | 'PROCESSED';
+}
 
 export interface WaiverWireAdvice {
     summary: string;
     suggestedBid: number;
     optimalDropPlayerId?: number;
+}
 
 export type WaiverIntelligenceType = 'STORY' | 'STREAMING' | 'BREAKOUT';
 
@@ -229,11 +239,11 @@ export interface WaiverIntelligence {
     type: WaiverIntelligenceType;
     title: string;
     content: string;
-    players: string[];
+    players: string[];}
 
 export interface StartSitAdvice {
     recommendedPlayerId: number;
-    summary: string;
+    summary: string;}
 
 export interface WeeklyReportData {
     title: string;
@@ -254,6 +264,7 @@ export interface WeeklyReportData {
         move: string;
         rationale: string;
     };
+}
 
 export interface SeasonReviewData {
     title: string;
@@ -267,6 +278,7 @@ export interface SeasonReviewData {
         teamName: string;
         rank: number;
     }[];
+}
 
 export type BriefingItemType = 'MATCHUP_PREVIEW' | 'WAIVER_GEM' | 'ROSTER_WARNING' | 'PLAYER_SPOTLIGHT' | 'TRADE_TIP' | 'ON_THE_HOT_SEAT';
 
@@ -276,39 +288,46 @@ export interface DailyBriefingItem {
     summary: string;
     relatedPlayerIds?: number[];
     playerName?: string;
+}
 
 export interface MatchupPlayer {
     player: Player;
     projectedScore: number;
     actualScore: number;
     isHot?: boolean; // For RedZone alerts
+}
 
 export interface MatchupTeam {
     teamId: number;
     score: number;
     roster: MatchupPlayer[];
     seed?: number;
+}
 
 export interface Matchup {
     id: string;
     week: number;
     teamA: MatchupTeam;
     teamB: MatchupTeam;
+}
 
 export interface MatchupAnalysis {
     winProbability: number;
     keyPlayerMyTeam: string;
     keyPlayerOpponent: string;
+}
 
 export interface PowerRanking {
     teamId: number;
     rank: number;
     trend: 'up' | 'down' | 'same';
     justification: string;
+}
 
 export interface AiLineupSuggestion {
     recommendedStarters: number[]; // player IDs
     reasoning: string;
+}
 
 export type LeagueAwardType = 'HIGHEST_SCORE' | 'BEST_TRADE' | 'BEST_RECORD' | 'CLOSEST_MATCHUP';
 
@@ -318,6 +337,7 @@ export interface LeagueAward {
     season: number;
     teamId: number;
     details: string; // e.g., "185.5 points in Week 8"
+}
 
 export interface LeagueHistoryEntry {
     season: number;
@@ -327,11 +347,13 @@ export interface LeagueHistoryEntry {
     };
     finalStandings: { teamId: number; rank: number; record: { wins: number; losses: number; ties: number } }[];
     leagueAwards?: LeagueAward[];
+}
 
 export interface AiProfileData {
     name: string;
     avatar: string;
     persona: Persona;
+}
 
 export interface CreateLeaguePayload {
     id: string;
@@ -342,11 +364,13 @@ export interface CreateLeaguePayload {
     userTeamName: string;
     userTeamAvatar: string;
     aiProfiles: AiProfileData[];
+}
 
 export interface TopRivalry {
     teamAId: number;
     teamBId: number;
     narrative: string;
+}
 
 export type ActivityType = 'TRADE' | 'WAIVER' | 'DRAFT';
 
@@ -355,6 +379,7 @@ export interface ActivityItem {
   type: ActivityType;
   timestamp: number;
   content: string;
+}
 
 export interface LeagueInvitation {
     id: string;
@@ -362,6 +387,7 @@ export interface LeagueInvitation {
     leagueId: string;
     link: string;
     status: 'PENDING' | 'ACCEPTED';
+}
 
 export interface DirectMessage {
     id: string;
@@ -370,21 +396,25 @@ export interface DirectMessage {
     text: string;
     timestamp: number;
     isRead: boolean;
+}
 
 export interface DraftCommentaryItem {
   pickNumber: number;
   text: string;
+}
 
 export interface Dues {
     [teamId: number]: {
         amount: number;
         paid: boolean;
-    }
+    };
+}
 
 export interface Payout {
     firstPlace: number;
     secondPlace: number;
     thirdPlace: number;
+}
 
 export type GamedayEventType = 'TOUCHDOWN' | 'FIELD_GOAL' | 'INTERCEPTION' | 'FUMBLE' | 'BIG_PLAY' | 'REDZONE_ENTRY';
 
@@ -396,6 +426,7 @@ export interface GamedayEvent {
     player: Player;
     type: GamedayEventType;
     points: number;
+}
 
 export type PlayerAwardType = 'MVP' | 'DRAFT_GEM' | 'WAIVER_HERO' | 'BIGGEST_BUST';
 
@@ -405,15 +436,17 @@ export interface PlayerAward {
     playerId: number;
     season: number;
     awardedByTeamId: number;
+}
 
 export interface NewspaperArticle {
     headline: string;
     content: string;
+}
 
 export interface NewspaperContent {
     masthead: string;
     leadStory: NewspaperArticle;
-    articles: NewspaperArticle[];
+    articles: NewspaperArticle[];}
 
 export interface League {
     id: string;
@@ -446,6 +479,7 @@ export interface League {
     payouts?: Payout;
     sideBets?: SideBet[];
     playerAwards?: PlayerAward[];
+}
 
 export type ChatMessage = {
     id: string;
@@ -468,6 +502,7 @@ export interface DraftEvent {
     content: string;
     teamId?: number;
     playerId?: number;
+}
 
 export type View = 'AUTH' | 'DASHBOARD' | 'LEAGUE_HUB' | 'CREATE_LEAGUE' | 'DRAFT_ROOM' | 'LIVE_DRAFT_ROOM' | 'SEASON_CONTESTS' | 'TEAM_HUB' | 'ANALYTICS_HUB' | 'REALTIME_ANALYTICS' | 'HISTORICAL_ANALYTICS' | 'LEAGUE_STANDINGS' | 'WAIVER_WIRE' | 'MATCHUP' | 'POWER_RANKINGS' | 'PLAYOFF_BRACKET' | 'WEEKLY_REPORT' | 'LEAGUE_HISTORY' | 'SEASON_REVIEW' | 'START_SIT_TOOL' | 'ASSISTANT' | 'PROFILE' | 'LEAGUE_RULES' | 'COMMISSIONER_TOOLS' | 'DRAFT_STORY' | 'MANAGER_PROFILE' | 'PROJECT_INTEGRITY' | 'EDIT_ROSTER' | 'DRAFT_PREP_CENTER' | 'PERFORMANCE_TRENDS' | 'SEASON_STORY' | 'TEAM_COMPARISON' | 'EDIT_LEAGUE_SETTINGS' | 'SEASON_ARCHIVE' | 'LEAGUE_STATS' | 'SCHEDULE_MANAGEMENT' | 'MESSAGES' | 'CHAMPIONSHIP_ODDS' | 'PROJECTED_STANDINGS' | 'TROPHY_ROOM' | 'BEAT_THE_ORACLE' | 'LEAGUE_CONSTITUTION' | 'CUSTOM_SCORING_EDITOR' | 'FINANCE_TRACKER' | 'WEEKLY_RECAP_VIDEO' | 'GAMEDAY_HOST' | 'LEAGUE_NEWSPAPER' | 'KEEPER_SELECTION' | 'OPEN_LEAGUES' | 'LEADERBOARD' | 'PLAYERS' | 'ENHANCED_LEAGUE_STANDINGS' | 'TRADES' | 'SEASON_MANAGEMENT' | 'MOCK_DRAFT';
 
@@ -481,6 +516,7 @@ export interface Notification {
     id: number;
     message: string;
     type: NotificationType;
+}
 
 export interface DraftRecapData {
     title: string;
@@ -491,6 +527,7 @@ export interface DraftRecapData {
         playerName: string;
         rationale: string;
     }[];
+}
 
 export type WatchlistInsightType = 'MATCHUP_GOOD' | 'VALUE_INCREASE' | 'RISK_ALERT' | 'NEWS_POSITIVE';
 
@@ -498,13 +535,16 @@ export interface WatchlistInsight {
   playerId: number;
   insight: string;
   type: WatchlistInsightType;
+}
 
 export interface WebGroundingChunk {
     uri?: string;
     title?: string;
+}
 
 export interface GroundingChunk {
     web?: WebGroundingChunk;
+}
 
 export type CustomRanking = { [playerId: number]: number };
 
@@ -514,25 +554,30 @@ export interface LeaguePoll {
     options: { id: string; text: string; votes: string[] }[];
     createdBy: string; // user ID
     closesAt: number;
+}
 
 export interface Announcement {
     id: string;
     title: string;
     content: string;
     timestamp: number;
+}
 
 export interface PlayerStory {
     title: string;
     narrative: string;
+}
 
 export interface TradeStory {
     title: string;
     narrative: string;
     winnerDeclared: string;
+}
 
 export interface SeasonStory {
     title: string;
     narrative: string;
+}
 
 export interface TeamComparison {
     strengthsA: string[];
@@ -541,6 +586,7 @@ export interface TeamComparison {
     weaknessesB: string[];
     analysis: string;
     prediction: string;
+}
 
 export type IntegrityTaskStatus = 'pending' | 'passed' | 'failed' | 'skipped';
 
@@ -549,6 +595,7 @@ export interface ScanFinding {
     description: string;
     taskText: string;
     isCritical: boolean;
+}
 
 export interface IntegrityTask {
   id: number;
@@ -557,15 +604,18 @@ export interface IntegrityTask {
   status: IntegrityTaskStatus;
   isCritical?: boolean;
   details?: string;
+}
 
 export interface ChampionshipOddsSimulation {
     before: { teamId: number; probability: number; }[];
     after: { teamId: number; probability: number; }[];
+}
 
 export interface PlayerVolatility {
     boom: number; // 0-100
     bust: number; // 0-100
     narrative: string;
+}
 
 export interface ProjectedStanding {
     teamId: number;
@@ -573,11 +623,13 @@ export interface ProjectedStanding {
     projectedLosses: number;
     projectedTies: number;
     narrative: string;
+}
 
 export interface AdvancedMetrics {
     snapCountPct: number;
     targetSharePct: number;
     redZoneTouches: number;
+}
 
 export type UserPrediction = {
     [matchupId: string]: number; // teamId of predicted winner
@@ -602,6 +654,7 @@ export interface RecapVideoScene {
     playerName?: string;
     playerTeam?: string;
     playerScore?: number;
+}
 
 export interface SideBet {
   id: string;
@@ -611,17 +664,20 @@ export interface SideBet {
   stakes: string;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'RESOLVED';
   winnerId?: number;
+}
 
 export interface SmartFaabAdvice {
     narrative: string;
     aggressiveBid: number;
     valueBid: number;
+}
 
 export interface TradeSuggestion {
     playersToSend: number[];
     playersToReceive: number[];
     toTeamId: number;
     rationale: string;
+}
 
 export interface AppState {
     theme: 'dark' | 'light';
@@ -673,6 +729,7 @@ export interface AppState {
     seasonReviewYear?: number;
     editingMatchups?: boolean;
     weeklyRecapScript?: { [key: string]: any };
+}
 
 // Holdout Validation Result Interface
 export interface HoldoutResult {
@@ -693,6 +750,7 @@ export interface HoldoutResult {
         fantasyAccuracy: number;
         rankingCorrelation: number;
     };
+}
 
 // Time Series Validation Result Interface
 export interface TimeSeriesResult {
@@ -724,6 +782,7 @@ export interface TimeSeriesResult {
         temporalStability: number;
         seasonConsistency: number;
     };
+}
 
 // Bootstrap Resampling Result Interface
 export interface BootstrapResult {
@@ -765,6 +824,7 @@ export interface BootstrapResult {
         stabilityThreshold: number;
         finalVariance: number;
     };
+}
 
 // Calibration Techniques Result Interface
 export interface CalibrationResult {
@@ -810,3 +870,4 @@ export interface CalibrationResult {
         fractionPositives: number[];
         binCounts: number[];
     };
+}

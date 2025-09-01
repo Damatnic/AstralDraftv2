@@ -81,7 +81,7 @@ interface OAuthLoginComponentProps {
   onSuccess?: (user: any) => void;
   onError?: (error: string) => void;
   className?: string;
-
+}
 
 export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
   onSuccess,
@@ -196,7 +196,7 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
 
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               {providers.map((provider: any) => (
-                <OAuthButton>
+                <OAuthButton
                   key={provider.id}
                   provider={provider}
                   isLoading={loadingProvider === provider.id}
@@ -213,7 +213,7 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
 
 interface LinkedAccountsManagerProps {
   className?: string;
-
+}
 
 export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
   className = ''

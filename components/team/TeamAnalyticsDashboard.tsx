@@ -25,7 +25,7 @@ interface WeeklyPerformance {
     points: number;
     projectedPoints: number;
     opponent: string;
-    result: 'W' | 'L' | 'T';
+    result: 'W' | 'L' | 'T';}
 
 interface PositionAnalysis {
     position: string;
@@ -34,7 +34,7 @@ interface PositionAnalysis {
     trend: 'up' | 'down' | 'stable';
     topPlayer: Player;
     depth: number;
-
+}
 
 interface MatchupPreview {
     opponent: Team;

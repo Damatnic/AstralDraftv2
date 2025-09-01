@@ -28,7 +28,7 @@ export interface Contest {
   leaderboard?: ContestLeaderboard;
   results?: ContestResults;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string;}
 
 export interface ContestRules {
   predictionDeadline: string; // Minutes before game start
@@ -36,7 +36,7 @@ export interface ContestRules {
   confidenceEnabled: boolean;
   allowLateEntry: boolean;
   requireAllPredictions: boolean;
-  tiebreaker: 'accuracy' | 'confidence' | 'submission_time' | 'total_points';
+  tiebreaker: 'accuracy' | 'confidence' | 'submission_time' | 'total_points';}
 
 export interface ContestScoring {
   correctPrediction: number; // Base points for correct prediction
@@ -182,7 +182,7 @@ export interface ContestPayout {
   amount: number;
   percentage: number;
   paymentId?: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: 'pending' | 'processing' | 'completed' | 'failed';}
 
 export interface ContestFinalStats {
   totalParticipants: number;
@@ -192,14 +192,14 @@ export interface ContestFinalStats {
   winningAccuracy: number;
   totalCorrectPredictions: number;
   surpriseResults: string[];
-  topPerformers: TopPerformer[];
+  topPerformers: TopPerformer[];}
 
 export interface TopPerformer {
   userId: string;
   username: string;
   category: 'highest_score' | 'best_accuracy' | 'most_oracle_beats' | 'longest_streak';
   value: number;
-  description: string;
+  description: string;}
 
 // Game Result Interfaces
 export interface GameResult {
@@ -223,7 +223,7 @@ export interface PlayerGameStats {
   position: string;
   team: string;
   stats: Record<string, number>;
-  fantasyPoints: number;
+  fantasyPoints: number;}
 
 class ContestScoringService {
   private readonly contests = new Map<string, Contest>();

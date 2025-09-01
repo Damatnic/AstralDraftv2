@@ -21,7 +21,7 @@ interface Challenge {
   prize?: string;
   criteria: any;
   leaderboard?: ChallengeEntry[];
-
+}
 
 interface ChallengeEntry {
 
@@ -41,7 +41,7 @@ interface ChallengeEntry {
   userName: string;
   week: number;
   onChallengeComplete?: (challengeId: string, score: number) => void;
-
+}
 
 const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   leagueId,

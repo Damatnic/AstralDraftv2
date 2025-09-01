@@ -25,3 +25,4 @@ export interface ViewTypeConfig {
   label: string;
   description?: string;
   icon?: string;
+}

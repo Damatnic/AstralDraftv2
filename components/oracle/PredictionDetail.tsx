@@ -23,7 +23,7 @@ interface PredictionDetailProps {
     prediction: LivePrediction;
     onSubmit: (predictionId: string, choice: number, confidence: number) => void;
     className?: string;
-
+}
 
 export const PredictionDetail: React.FC<PredictionDetailProps> = ({ 
     prediction, 

@@ -90,7 +90,7 @@ export interface PlayerComparison {
     overallSimilarity: number; // 0-1
     strengthComparison: PlayerStrengthComparison;
     recommendedTrade?: TradeRecommendation;
-    createdAt: Date;
+    createdAt: Date;}
 
 export interface ComparisonMetric {
     name: string;
@@ -98,7 +98,7 @@ export interface ComparisonMetric {
     player2Value: number;
     advantage: 'player1' | 'player2' | 'even';
     significantDifference: boolean;
-    category: 'offense' | 'consistency' | 'opportunity' | 'efficiency';
+    category: 'offense' | 'consistency' | 'opportunity' | 'efficiency';}
 
 export interface PlayerStrengthComparison {
     player1Strengths: string[];
@@ -114,7 +114,7 @@ export interface TradeRecommendation {
     recommended: boolean;
     reasoning: string;
     tradeValue: 'favor_player1' | 'favor_player2' | 'even';
-    confidenceLevel: number; // 0-100
+    confidenceLevel: number; // 0-100}
 
 export interface PlayerResearchFilter {
     positions?: string[];
@@ -130,7 +130,7 @@ export interface PlayerResearchFilter {
     sortBy?: 'name' | 'position' | 'team' | 'fantasy_points' | 'projections' | 'trends';
     sortOrder?: 'asc' | 'desc';
     limit?: number;
-    offset?: number;
+    offset?: number;}
 
 export interface ResearchInsight {
     id: string;
@@ -142,7 +142,7 @@ export interface ResearchInsight {
     timeframe: 'immediate' | 'short_term' | 'long_term';
     actionItems: string[];
     supporting_data: Record<string, any>;
-    generatedAt: Date;
+    generatedAt: Date;}
 
 // Main Player Research Service
 class PlayerResearchService {

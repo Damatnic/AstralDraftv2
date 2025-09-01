@@ -67,11 +67,11 @@ const LeagueNewspaperView: React.FC = () => {
                 <div className="flex items-center gap-4">
                      <div className="flex items-center gap-2">
                         <button onClick={() => setSelectedWeek(w => w - 1)} className="glass-button px-3 py-1 text-sm">
-                            &lt;
+                            <
                         </button>
                         <span className="font-bold w-24 text-center">Week {selectedWeek} Issue</span>
                         <button onClick={() => setSelectedWeek(w => w + 1)} className="glass-button px-3 py-1 text-sm">
-                            &gt;
+                            >
                         </button>
                     </div>
                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="glass-button">

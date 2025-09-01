@@ -17,7 +17,7 @@ interface PlayerSearchProps {
   showAddButton?: boolean;
   filterPosition?: string;
   excludePlayerIds?: number[];
-
+}
 
 const PlayerSearch: FC<PlayerSearchProps> = ({
   onPlayerSelect,

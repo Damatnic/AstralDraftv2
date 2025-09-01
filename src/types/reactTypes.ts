@@ -44,7 +44,7 @@ export interface InputProps {
  */
 export interface FormProps {
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
-  onReset?: (event: FormEvent<HTMLFormElement>) => void;
+  onReset?: (event: FormEvent<HTMLFormElement>) => void;}
 
 // ==========================================
 // REACT EVENT HANDLER TYPES
@@ -88,7 +88,7 @@ export type FormSubmitHandler = (event: FormEvent<HTMLFormElement>) => void;
 /**
  * Keyboard event handler
  */
-export type KeyboardEventHandler = (event: KeyboardEvent<HTMLElement>) => void;
+export type KeyboardEventHandler = (event: KeyboardEvent<HTMLElement>) => void;}
 
 // ==========================================
 // COMPONENT TYPE DEFINITIONS
@@ -123,7 +123,7 @@ export interface WithLoading {
  */
 export interface WithError {
   error?: string | null;
-  onClearError?: () => void;
+  onClearError?: () => void;}
 
 // ==========================================
 // MODAL AND OVERLAY TYPES
@@ -147,7 +147,7 @@ export interface DropdownProps extends BaseComponentProps {
   isOpen: boolean;
   onToggle: () => void;
   trigger: ReactNode;
-  position?: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
+  position?: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';}
 
 // ==========================================
 // FORM COMPONENT TYPES
@@ -267,7 +267,7 @@ export interface SidebarProps extends BaseComponentProps {
   onToggle?: () => void;
   width?: string | number;
   position?: 'left' | 'right';
-  overlay?: boolean;
+  overlay?: boolean;}
 
 // ==========================================
 // FEEDBACK COMPONENT TYPES
@@ -297,7 +297,7 @@ export interface ToastProps extends Omit<AlertProps, 'dismissible'> {
 export interface SpinnerProps extends BaseComponentProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
-  label?: string;
+  label?: string;}
 
 // ==========================================
 // UTILITY TYPES

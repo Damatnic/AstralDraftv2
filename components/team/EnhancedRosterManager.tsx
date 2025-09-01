@@ -34,7 +34,7 @@ interface PlayerCardProps {
     onEdit?: () => void;
     onRemove?: () => void;
     showActions: boolean;
-    isStarter?: boolean;
+    isStarter?: boolean;}
 
 interface PositionGroupProps {
     position: PlayerPosition;
@@ -42,7 +42,7 @@ interface PositionGroupProps {
     maxStarters: number;
     onPlayerAction: (player: Player, action: 'view' | 'edit' | 'remove') => void;
     canEdit: boolean;
-
+}
 
 const SortablePlayerCard: React.FC<{
   const [isLoading, setIsLoading] = React.useState(false); player: Player; onAction: (player: Player, action: 'view' | 'edit' | 'remove') => void; canEdit: boolean; isStarter?: boolean }> = ({ 
@@ -69,9 +69,9 @@ const SortablePlayerCard: React.FC<{
         >
             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-3 min-w-0 flex-1 sm:px-4 md:px-6 lg:px-8">
-                    <Avatar>
+                    <Avatar
                         avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'} 
-                        className="w-10 h-10 text-xl rounded-md flex-shrink-0 sm:px-4 md:px-6 lg:px-8" 
+                        className="w-10 h-10 text-xl rounded-md flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                     />
                     <div className="min-w-0 flex-1 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -138,7 +138,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                         <SortableContext items={starters.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {starters.map((player: any) => (
-                                <SortablePlayerCard>
+                                <SortablePlayerCard
                                     key={player.id}
                                     player={player}
                                     onAction={onPlayerAction}
@@ -167,7 +167,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                         <SortableContext items={bench.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {bench.map((player: any) => (
-                                <SortablePlayerCard>
+                                <SortablePlayerCard
                                     key={player.id}
                                     player={player}
                                     onAction={onPlayerAction}
@@ -371,7 +371,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                     return (
                         <Widget key={position} title={`${position} (${players.length} players)`}>
                             <div className="p-4 sm:px-4 md:px-6 lg:px-8">
-                                <PositionGroup>
+                                <PositionGroup
                                     position={pos}
                                     players={players}
                                     maxStarters={maxStarters}

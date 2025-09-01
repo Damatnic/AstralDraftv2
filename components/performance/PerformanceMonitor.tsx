@@ -35,7 +35,7 @@ interface PerformanceMetrics {
   connectionType: string;
   effectiveType: string;
   downlink: number;
-  rtt: number;
+  rtt: number;}
 
 interface PerformanceIssue {
   id: string;
@@ -46,7 +46,7 @@ interface PerformanceIssue {
   impact: 'low' | 'medium' | 'high';
   suggestion: string;
   metric?: number;
-  threshold?: number;
+  threshold?: number;}
 
 const PerformanceMonitor: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

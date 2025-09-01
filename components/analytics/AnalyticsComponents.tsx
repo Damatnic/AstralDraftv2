@@ -90,7 +90,7 @@ interface StatCardProps {
     icon: React.ReactNode;
     iconBgColor: string;
     delay?: number;
-
+}
 
 export function StatCard({ 
     title, 
@@ -140,7 +140,7 @@ interface ProgressBarProps {
     max: number;
     color?: string;
     height?: string;
-
+}
 
 export function ProgressBar({ value, max, color = "bg-purple-600", height = "h-2" }: Readonly<ProgressBarProps>) {
     const percentage = Math.min((value / max) * 100, 100);
@@ -159,7 +159,7 @@ interface TrendIndicatorProps {
     value: number;
     label: string;
     showIcon?: boolean;
-
+}
 
 export function TrendIndicator({ value, label, showIcon = true }: Readonly<TrendIndicatorProps>) {
     const isPositive = value > 0;
@@ -193,6 +193,7 @@ interface SimpleLineChartProps {
     data: { period: string; value: number }[];
     height?: number;
     color?: string;
+}
 
 export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Readonly<SimpleLineChartProps>) {
     if (!data || data.length === 0) {
@@ -277,6 +278,7 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
 interface SimpleBarChartProps {
     data: { label: string; value: number; color?: string }[];
     height?: number;
+}
 
 export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartProps>) {
     if (!data || data.length === 0) {
@@ -321,12 +323,13 @@ export function LoadingSpinner({ size = "h-8 w-8" }: Readonly<{ size?: string }>
     return (
         <div className={`animate-spin rounded-full ${size} border-b-2 border-purple-600`} />
     );
+}
 
 // Error Display
 interface ErrorDisplayProps {
     error: string;
     onRetry?: () => void;
-
+}
 
 export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
     return (
@@ -341,8 +344,9 @@ export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
                     onClick={onRetry}
                     className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors sm:px-4 md:px-6 lg:px-8"
                  aria-label="Action button">
-//                     Retry
+                    Retry
                 </button>
             )}
         </div>
     );
+}

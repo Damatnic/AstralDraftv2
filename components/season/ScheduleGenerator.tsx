@@ -17,11 +17,11 @@ interface Matchup {
   team2Score?: number;
   isPlayoff?: boolean;
   isChampionship?: boolean;
-
+}
 
 interface ScheduleGeneratorProps {
   onScheduleGenerated?: (schedule: Matchup[]) => void;
-  isCommissioner?: boolean;
+  isCommissioner?: boolean;}
 
 const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   onScheduleGenerated,
@@ -192,7 +192,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
             onClick={handleGenerateSchedule}
             disabled={isGenerating}
             className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-//               isGenerating
+              isGenerating
                 ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}

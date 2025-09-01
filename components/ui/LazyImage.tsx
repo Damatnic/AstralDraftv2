@@ -6,6 +6,7 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   placeholder?: string;
   fallback?: string;
   className?: string;
+}
 
 export const LazyImage: React.FC<LazyImageProps> = ({
   src,

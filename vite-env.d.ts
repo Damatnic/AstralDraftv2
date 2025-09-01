@@ -21,10 +21,12 @@ interface ImportMetaEnv {
   readonly VITE_SENTRY_DSN: string
   readonly VITE_WEBSOCKET_URL: string
   readonly VITE_CDN_URL: string
-  readonly VITE_FEATURE_FLAGS: string
+  readonly VITE_FEATURE_FLAGS: string;
+}
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+  readonly env: ImportMetaEnv;
+}
 
 declare global {
   interface Window {
@@ -32,3 +34,4 @@ declare global {
       error: (message: string, data?: any, category?: string) => void;
     };
   }
+}

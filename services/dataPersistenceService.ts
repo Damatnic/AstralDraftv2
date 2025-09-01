@@ -68,7 +68,7 @@ export interface LeagueData {
   season: number;
   status: 'active' | 'completed' | 'draft_pending';
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string;}
 
 export interface SyncOperation {
   id: string;
@@ -76,7 +76,7 @@ export interface SyncOperation {
   table: string;
   data: unknown;
   timestamp: string;
-  synced: boolean;
+  synced: boolean;}
 
 class DataPersistenceService {
   private isInitialized = false;

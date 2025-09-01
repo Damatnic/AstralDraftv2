@@ -7,7 +7,7 @@ interface OptimizedImageProps {
   height?: number;
   className?: string;
   sizes?: string;
-
+}
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
@@ -38,7 +38,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         sizes={sizes}
         type="image/webp"
       />
-      <LazyImage>
+      <LazyImage
         src={src}
         alt={alt}
         width={width}

@@ -14,7 +14,7 @@ interface UsePlayerComparisonOptions {
   defaultWeek?: number;
   defaultSeason?: number;
   maxPlayers?: number;
-  autoCompare?: boolean;
+  autoCompare?: boolean;}
 
 interface UsePlayerComparisonReturn {
   // State

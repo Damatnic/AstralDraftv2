@@ -16,7 +16,7 @@ export interface PredictiveInsight {
   description: string;
   confidence: number;
   impact: 'high' | 'medium' | 'low';
-  actionable: boolean;
+  actionable: boolean;}
 
 export interface AnalyticsReport {
   id: string;
@@ -24,7 +24,7 @@ export interface AnalyticsReport {
   summary: string;
   metrics: Record<string, number>;
   insights: PredictiveInsight[];
-  generatedAt: number;
+  generatedAt: number;}
 
 export interface EnhancedAnalyticsMetrics {
   userEngagement: number;

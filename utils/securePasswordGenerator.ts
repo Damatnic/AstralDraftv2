@@ -8,6 +8,7 @@ export interface PasswordGenerationOptions {
   excludePatterns?: string[];
   excludeExisting?: string[];
   maxAttempts?: number;
+}
 
 export class SecurePasswordGenerator {
   // Common patterns to avoid for security
@@ -192,5 +193,6 @@ export class SecurePasswordGenerator {
       (window as any).__ASTRAL_AUDIT_LOG.push(logEntry);
     }
   }
+}
 
 export default SecurePasswordGenerator;

@@ -6,7 +6,7 @@ import { LinkIcon } from '../icons/LinkIcon';
 
 interface GroundingCitationsProps {
     chunks: GroundingChunk[];
-
+}
 
 const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }: any) => {
     const webChunks = chunks.filter((c: any) => c.web && c.web.uri && c.web.title);

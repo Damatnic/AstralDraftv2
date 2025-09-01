@@ -10,7 +10,7 @@ import { execSync } from 'child_process';
 interface FixRule {
   pattern: RegExp;
   replacement: string | ((match: string, ...groups: string[]) => string);
-  description: string;
+  description: string;}
 
 const fixRules: FixRule[] = [
   // Remove unused React imports in test files

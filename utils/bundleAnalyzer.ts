@@ -9,7 +9,7 @@ interface BundleChunk {
   gzippedSize: number;
   type: 'vendor' | 'component' | 'service' | 'view' | 'other';
   priority: 'critical' | 'high' | 'medium' | 'low';
-  loadTime?: number;
+  loadTime?: number;}
 
 interface BundleAnalysis {
   totalSize: number;

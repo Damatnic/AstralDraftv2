@@ -12,7 +12,7 @@ interface MascotWidgetProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
@@ -44,7 +44,7 @@ export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispat
                 {isLoading ? (
                     <LoadingSpinner size="sm" text="The Oracle is sketching..." />
                 ) : mascotUrl ? (
-                    <LazyImage>
+                    <LazyImage
                       src={mascotUrl} 
                       alt={`${team.name} Mascot`} 
                       className="w-32 h-32 rounded-lg object-cover sm:px-4 md:px-6 lg:px-8"

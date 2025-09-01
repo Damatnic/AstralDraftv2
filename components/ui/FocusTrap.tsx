@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 interface FocusTrapProps {
   children: React.ReactNode;
-  active: boolean;
+  active: boolean;}
 
 export const FocusTrap: React.FC<FocusTrapProps> = ({ children, active }: any) => {
   const containerRef = useRef<HTMLDivElement>(null);

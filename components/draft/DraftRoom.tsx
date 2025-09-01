@@ -8,7 +8,7 @@ interface DraftRoomProps {
   userId: string;
   teamId: number;
   onExitDraft?: () => void;
-
+}
 
 interface Player {
   id: number;
@@ -17,7 +17,7 @@ interface Player {
   team: string;
   adp: number;
   projectedPoints: number;
-  tier: number;
+  tier: number;}
 
 const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
   userId,

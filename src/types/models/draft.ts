@@ -32,7 +32,7 @@ export interface DraftPick {
   price?: number; // For auction drafts
   tradedFrom?: string; // Original team ID if pick was traded
   isSkipped: boolean;
-  skipReason?: string;
+  skipReason?: string;}
 
 export interface DraftQueue {
   teamId: string;
@@ -49,7 +49,7 @@ export interface DraftTimer {
   state: TimerState;
   pausedAt?: Date;
   resumedAt?: Date;
-  overTime: number; // seconds over limit
+  overTime: number; // seconds over limit}
 
 export interface DraftSettings {
   format: DraftFormat;
@@ -86,7 +86,7 @@ export interface DraftState {
   startTime: Date | null;
   endTime: Date | null;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date;}
 
 // ==================== AUCTION-SPECIFIC TYPES ====================
 
@@ -107,7 +107,7 @@ export interface BidHistory {
   amount: number;
   timestamp: Date;
   isWinning: boolean;
-  isNomination: boolean;
+  isNomination: boolean;}
 
 export interface TeamBudget {
   teamId: string;
@@ -115,9 +115,9 @@ export interface TeamBudget {
   spent: number;
   remaining: number;
   playersRemaining: number;
-  averagePerPlayer: number;
+  averagePerPlayer: number;}
 
-// ==================== DRAFT BOARD AND RANKINGS ====================
+// ==================== DRAFT BOARD AND RANKINGS ====================}
 
 export interface DraftBoard {
   availablePlayers: Player[];
@@ -152,15 +152,15 @@ export type RecommendationType =
   | 'CEILING_PLAY' 
   | 'FLOOR_PLAY'
   | 'ROOKIE_UPSIDE'
-  | 'INJURY_REPLACEMENT';
+  | 'INJURY_REPLACEMENT';}
 
 export interface PositionNeed {
   position: string;
   priority: 'HIGH' | 'MEDIUM' | 'LOW';
   reason: string;
-  suggestedPlayers: string[]; // Player IDs
+  suggestedPlayers: string[]; // Player IDs}
 
-// ==================== DRAFT ANALYTICS ====================
+// ==================== DRAFT ANALYTICS ====================}
 
 export interface DraftGrade {
   teamId: string;
@@ -217,7 +217,7 @@ export interface DraftEvent {
   teamId?: string;
   playerId?: string;
   data: Record<string, any>;
-  message: string;
+  message: string;}
 
 export type DraftEventType = 
   | 'DRAFT_STARTED'
@@ -235,7 +235,7 @@ export type DraftEventType =
   | 'TEAM_JOINED'
   | 'TEAM_LEFT'
   | 'ROUND_COMPLETED'
-  | 'COMMISSIONER_ACTION';
+  | 'COMMISSIONER_ACTION';}
 
 // ==================== TRADE TYPES ====================
 
@@ -253,7 +253,7 @@ export interface DraftTrade {
   status: 'PROPOSED' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED';
   proposedAt: Date;
   respondedAt?: Date;
-  expiresAt: Date;
+  expiresAt: Date;}
 
 export interface TradeAnalysis {
   tradeId: string;
@@ -291,9 +291,9 @@ export interface MockParticipant {
   isHuman: boolean;
   isUser: boolean; // The actual user
   draftingStyle: 'AGGRESSIVE' | 'CONSERVATIVE' | 'VALUE_BASED' | 'POSITIONAL';
-  avatar: string;
+  avatar: string;}
 
-// ==================== DRAFT PREPARATION ====================
+// ==================== DRAFT PREPARATION ====================}
 
 export interface DraftPrep {
   userId: string;
@@ -318,7 +318,7 @@ export interface DraftTargets {
   middle: string[]; // Rounds 4-8
   late: string[]; // Rounds 9+
   sleepers: string[];
-  handcuffs: string[];
+  handcuffs: string[];}
 
 export interface DraftStrategy {
   approach: 'RB_HEAVY' | 'WR_HEAVY' | 'ZERO_RB' | 'ZERO_WR' | 'BALANCED' | 'LATE_ROUND_QB';
@@ -345,7 +345,7 @@ export interface PlayerTier {
   position: string;
   playerIds: string[];
   label: string;
-  description: string;
+  description: string;}
 
 // ==================== COMMISSIONER CONTROLS ====================
 
@@ -358,7 +358,7 @@ export interface CommissionerAction {
   targetPlayerId?: string;
   data: Record<string, any>;
   timestamp: Date;
-  reason: string;
+  reason: string;}
 
 export type CommissionerActionType = 
   | 'PAUSE_DRAFT'
@@ -369,9 +369,9 @@ export type CommissionerActionType =
   | 'RESET_TIMER'
   | 'KICK_PARTICIPANT'
   | 'CHANGE_ORDER'
-  | 'REVERSE_TRADE';
+  | 'REVERSE_TRADE';}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   DraftFormat,

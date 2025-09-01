@@ -12,12 +12,12 @@ import { SecurePinInput } from '../ui/SecureInput';
 interface Props {
     onLogin: (user: SimpleUser) => void;
     className?: string;
-
+}
 
 interface PinInputProps {
     user: SimpleUser;
     onSuccess: (user: SimpleUser) => void;
-    onBack: () => void;
+    onBack: () => void;}
 
 const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => {
     const [pin, setPin] = useState('');
@@ -82,7 +82,7 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
             </div>
 
             <form onSubmit={handlePinSubmit} className="space-y-6">
-                <SecurePinInput>
+                <SecurePinInput
                     value={pin}
                     onChange={handlePinChange}
                     showProgress={true}
@@ -159,7 +159,7 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
     if (selectedUser) {
         return (
             <div className={`min-h-screen bg-gray-900 flex items-center justify-center p-4 ${className}`}>
-                <PinInput>
+                <PinInput
                     user={selectedUser}
                     onSuccess={handleLoginSuccess}
                     onBack={handleBack}

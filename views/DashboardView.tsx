@@ -27,7 +27,7 @@ import GameWeekStatusWidget from '../components/dashboard/GameWeekStatusWidget';
 
 interface DashboardViewProps {
   // No props currently needed, but interface ready for future expansion
-
+}
 
 const DashboardView: React.FC<DashboardViewProps> = () => {
     const { state, dispatch } = useAppState();
@@ -178,7 +178,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                 <AnimatePresence>
                     {isCreateModalOpen && state.user && <CreateLeagueModal onClose={() => setIsCreateModalOpen(false)} user={state.user} dispatch={dispatch} />}
                     {isEnhancedCreateModalOpen && (
-                        <EnhancedCreateLeagueModal>
+                        <EnhancedCreateLeagueModal
                             onClose={() => setIsEnhancedCreateModalOpen(false)}
                             user={state.user!}
                             dispatch={dispatch}

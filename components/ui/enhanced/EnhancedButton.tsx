@@ -340,7 +340,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     if (as === 'a' && href) {
       return (
         <ButtonWrapper>
-          <MotionAnchor>
+          <MotionAnchor
             ref={ref as React.Ref<HTMLAnchorElement>}
             href={href}
             className={classes}
@@ -353,7 +353,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
 
     return (
       <ButtonWrapper>
-        <MotionButton>
+        <MotionButton
           ref={ref as React.Ref<HTMLButtonElement>}
           type="button"
           disabled={disabled || loading}
@@ -380,7 +380,7 @@ interface ButtonGroupProps {
   orientation?: 'horizontal' | 'vertical';
   spacing?: 'none' | 'sm' | 'md' | 'lg';
   variant?: 'connected' | 'separated';
-
+}
 
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   children,
@@ -460,7 +460,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 
   return (
     <div className={`${positionClasses[position]} z-50`}>
-      <EnhancedButton>
+      <EnhancedButton
         shape="circle"
         size={size}
 //         elevated

@@ -11,7 +11,7 @@ interface TeamNeedsAnalysisProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);

@@ -60,7 +60,7 @@ export type ForumCategory =
     | 'matchup_discussion' 
     | 'strategy' 
     | 'trash_talk' 
-    | 'announcements';
+    | 'announcements';}
 
 // Team Comparison Types
 export interface TeamComparison {
@@ -85,7 +85,7 @@ export interface ComparisonMetric {
     team2Value: number;
     advantage: 'team1' | 'team2' | 'tie';
     weightedScore: number;
-    description: string;
+    description: string;}
 
 export interface ComparisonComment {
     id: string;
@@ -94,7 +94,7 @@ export interface ComparisonComment {
     content: string;
     timestamp: Date;
     likes: number;
-    likedBy: string[];
+    likedBy: string[];}
 
 // Trash Talk & Rivalry Types
 export interface TrashTalkPost {
@@ -115,7 +115,7 @@ export interface TrashTalkPost {
     context: 'matchup' | 'trade' | 'waiver' | 'general' | 'playoff';
     severity: 'friendly' | 'competitive' | 'heated';
     isReported: boolean;
-    reportCount: number;
+    reportCount: number;}
 
 export interface TrashTalkReply {
     id: string;
@@ -124,7 +124,7 @@ export interface TrashTalkReply {
     content: string;
     timestamp: Date;
     likes: number;
-    parentId?: string; // For nested replies
+    parentId?: string; // For nested replies}
 
 // Rivalry System
 export interface Rivalry {
@@ -158,7 +158,7 @@ export interface CommunityActivity {
     relatedEntityId?: string;
     relatedEntityType?: string;
     points: number; // Engagement points
-    visibility: 'public' | 'league' | 'private';
+    visibility: 'public' | 'league' | 'private';}
 
 // User Social Profile
 export interface UserSocialProfile {
@@ -175,7 +175,7 @@ export interface UserSocialProfile {
     reputation: number;
     badges: SocialBadge[];
     socialStats: SocialStats;
-    preferences: SocialPreferences;
+    preferences: SocialPreferences;}
 
 export interface SocialBadge {
     id: string;
@@ -184,7 +184,7 @@ export interface SocialBadge {
     icon: string;
     color: string;
     earnedAt: Date;
-    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+    rarity: 'common' | 'rare' | 'epic' | 'legendary';}
 
 export interface SocialStats {
     messagesPerWeek: number;
@@ -203,7 +203,7 @@ export interface SocialPreferences {
     autoSubscribeToTopics: boolean;
     profanityFilter: boolean;
     blockList: string[]; // User IDs
-    mutedTopics: string[];
+    mutedTopics: string[];}
 
 // Social Interaction Service
 export class SocialInteractionService {

@@ -20,7 +20,7 @@ import { Player } from '../../types';
 interface SimpleTradeProposal {
     fromPlayers: Player[];
     toPlayers: Player[];
-
+}
 
 interface SimpleTradeAnalysis {
     overallGrade: string;
@@ -29,7 +29,7 @@ interface SimpleTradeAnalysis {
     currentValueDifference: number;
     projectedValueDifference: number;
     reasoning: string[];
-    warnings: string[];
+    warnings: string[];}
 
 export const TradeAnalysisInterface: React.FC<{
     className?: string;

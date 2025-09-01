@@ -33,7 +33,7 @@ export interface ValueOpportunity {
     currentPosition: number;
     valueDifference: number;
     confidence: number;
-    reasons: string[];
+    reasons: string[];}
 
 export interface RunAnalysis {
     position: string;
@@ -41,7 +41,7 @@ export interface RunAnalysis {
     intensity: number; // How compressed the run is
     likelyToContinue: boolean;
     nextTargets: Player[];
-    counterStrategy: string[];
+    counterStrategy: string[];}
 
 class MarketInefficiencyDetector {
     private recentPicks: Array<{

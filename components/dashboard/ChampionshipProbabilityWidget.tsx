@@ -23,7 +23,7 @@ interface ProbabilityData {
   strengthOfSchedule: number;
   trend: 'up' | 'down' | 'stable';
   weeklyChange: number;
-
+}
 
 const ChampionshipProbabilityWidget: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -122,7 +122,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-            <Button>
+            <Button
               variant={viewMode === 'user' ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setViewMode('user')}
@@ -130,7 +130,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
             >
               My Team
             </Button>
-            <Button>
+            <Button
               variant={viewMode === 'league' ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setViewMode('league')}
@@ -316,7 +316,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
             <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
               Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
-            <Button>
+            <Button
               variant="ghost"
               size="sm"
               onClick={calculateProbabilities}

@@ -8,7 +8,7 @@ import { ZapIcon } from '../icons/ZapIcon';
 
 interface WeeklyReportDisplayProps {
     report: WeeklyReportData;
-
+}
 
 const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }: any) => {
     return (

@@ -35,14 +35,14 @@ interface LeagueCreationStep {
     title: string;
     description: string;
     component: React.ComponentType<StepProps>;
-    validation: (data: WizardSettings) => string | null;
+    validation: (data: WizardSettings) => string | null;}
 
 interface StepProps {
     settings: WizardSettings;
     updateSettings: (updates: Partial<WizardSettings>) => void;
-    errors: Record<string, string>;
+    errors: Record<string, string>;}
 
-// Step 1: Basic Information
+// Step 1: Basic Information}
 
 const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     return (
@@ -460,7 +460,7 @@ const LeagueCreationWizard: React.FC = () => {
                                 exit={{ opacity: 0, x: -20 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <CurrentStepComponent>
+                                <CurrentStepComponent
                                     settings={settings}
                                     updateSettings={updateSettings}
                                     errors={errors}

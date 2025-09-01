@@ -10,7 +10,7 @@ interface ChampionshipOddsWidgetProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const ChampionshipOddsWidget: React.FC<ChampionshipOddsWidgetProps> = ({ team, league, dispatch }: any) => {
     const history = team.championshipProbHistory || [];

@@ -15,13 +15,13 @@ interface RosterManagementProps {
   team: Team;
   isOwner?: boolean;
   showAddDropButtons?: boolean;
-
+}
 
 interface RosterSlot {
   position: string;
   player: Player | null;
   isStarter: boolean;
-  isLocked?: boolean;
+  isLocked?: boolean;}
 
 const RosterManagement: React.FC<RosterManagementProps> = ({
   team,
@@ -345,7 +345,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
                 </button>
               </div>
               
-              <PlayerSearch>
+              <PlayerSearch
                 onPlayerSelect={handlePlayerSelect}
                 filterPosition={selectedPosition === 'FLEX' ? '' : selectedPosition}
                 excludePlayerIds={team.roster.map((p: any) => p.id)}

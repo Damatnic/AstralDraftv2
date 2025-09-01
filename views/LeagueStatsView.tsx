@@ -53,20 +53,20 @@ const LeagueStatsView: React.FC = () => {
                 </button>
             </header>
             <main className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Leaderboard>
+                <Leaderboard
                     title="Total Points For"
                     icon={<TrophyIcon />}
                     data={leaderboards.pointsFor}
                     valueKey="totalPointsFor"
                 />
-                <Leaderboard>
+                <Leaderboard
                     title="Best Week"
                     icon={<FlameIcon />}
                     data={leaderboards.highestSingleGame}
                     valueKey="highestWeek"
                     subtext={(stat: any) => `Week ${stat.highestWeek.week}`}
                 />
-                <Leaderboard>
+                <Leaderboard
                     title="Total Points Against"
                     icon={<ShieldAlertIcon />}
                     data={leaderboards.pointsAgainst}

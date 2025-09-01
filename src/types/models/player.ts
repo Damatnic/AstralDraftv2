@@ -33,9 +33,9 @@ export interface NFLTeam {
   logoUrl?: string;
   homeStadium: string;
   byeWeek: number;
-  timezone: string;
+  timezone: string;}
 
-// ==================== PLAYER STATS ====================
+// ==================== PLAYER STATS ====================}
 
 export interface PlayerStats {
   // Passing stats (QB)
@@ -186,7 +186,7 @@ export interface InjuryHistory {
   expectedRecoveryWeeks: number;
   actualRecoveryWeeks?: number;
   status: InjuryStatus;
-  impactOnPerformance?: 'none' | 'minimal' | 'moderate' | 'significant';
+  impactOnPerformance?: 'none' | 'minimal' | 'moderate' | 'significant';}
 
 export interface NewsItem {
   id: string;
@@ -198,9 +198,9 @@ export interface NewsItem {
   category: 'injury' | 'trade' | 'performance' | 'personal' | 'team' | 'contract';
   sentiment: 'positive' | 'neutral' | 'negative';
   fantasyImpact: 'bullish' | 'neutral' | 'bearish';
-  impactScore: number; // 1-10 scale
+  impactScore: number; // 1-10 scale}
 
-// ==================== MAIN PLAYER INTERFACE ====================
+// ==================== MAIN PLAYER INTERFACE ====================}
 
 export interface Player {
   // Basic Info
@@ -272,7 +272,7 @@ export interface PositionalRankings {
   WR: Player[];
   TE: Player[];
   K: Player[];
-  DEF: Player[];
+  DEF: Player[];}
 
 // ==================== PLAYER SEARCH AND FILTERING ====================
 
@@ -286,14 +286,14 @@ export interface PlayerFilter {
   minProjectedPoints?: number;
   maxProjectedPoints?: number;
   rookiesOnly?: boolean;
-  byeWeeks?: number[];
+  byeWeeks?: number[];}
 
 export interface PlayerSortOption {
   field: keyof Player | keyof PlayerStats | keyof PlayerProjections;
   direction: 'asc' | 'desc';
-  label: string;
+  label: string;}
 
-// ==================== PLAYER COMPARISONS ====================
+// ==================== PLAYER COMPARISONS ====================}
 
 export interface PlayerComparison {
   playerA: Player;

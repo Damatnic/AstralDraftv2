@@ -55,7 +55,7 @@ export interface PrivacySettings {
   allowLeagueInvites: boolean;
   dataCollection: boolean;
   analytics: boolean;
-  thirdPartySharing: boolean;
+  thirdPartySharing: boolean;}
 
 export interface DisplaySettings {
   theme: Theme;
@@ -72,7 +72,7 @@ export interface DisplaySettings {
   highContrast: boolean;
   reducedMotion: boolean;
   screenReader: boolean;
-  keyboardNavigation: boolean;
+  keyboardNavigation: boolean;}
 
 export interface GameplaySettings {
   defaultDraftStrategy: 'CONSERVATIVE' | 'AGGRESSIVE' | 'BALANCED';
@@ -105,9 +105,9 @@ export interface UserPreferences {
   favoriteViews: string[];
   dashboardLayout: string[];
   
-  updatedAt: Date;
+  updatedAt: Date;}
 
-// ==================== USER PROFILE ====================
+// ==================== USER PROFILE ====================}
 
 export interface UserProfile {
   // Basic Info
@@ -233,9 +233,9 @@ export interface Badge {
   color: string;
   earnedAt: Date;
   season?: number;
-  leagueId?: string;
+  leagueId?: string;}
 
-// ==================== SUBSCRIPTION AND BILLING ====================
+// ==================== SUBSCRIPTION AND BILLING ====================}
 
 export interface Subscription {
   tier: SubscriptionTier;
@@ -303,7 +303,7 @@ export interface User {
   // Temporary session data (not persisted)
   isOnline?: boolean;
   currentLeagueId?: string;
-  sessionToken?: string;
+  sessionToken?: string;}
 
 // ==================== AUTHENTICATION ====================
 
@@ -320,14 +320,14 @@ export interface RegisterCredentials {
   firstName: string;
   lastName: string;
   agreeToTerms: boolean;
-  subscribeToNewsletter?: boolean;
+  subscribeToNewsletter?: boolean;}
 
 export interface AuthSession {
   user: User;
   token: string;
   refreshToken: string;
   expiresAt: Date;
-  permissions: string[];
+  permissions: string[];}
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -350,13 +350,13 @@ export interface PasswordResetRequest {
   email: string;
   token?: string;
   newPassword?: string;
-  confirmPassword?: string;
+  confirmPassword?: string;}
 
 export interface TwoFactorAuth {
   enabled: boolean;
   secret?: string;
   backupCodes: string[];
-  lastUsedAt?: Date;
+  lastUsedAt?: Date;}
 
 export interface SecurityLog {
   id: string;
@@ -382,7 +382,7 @@ export interface UserConnection {
   status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
   initiatedBy: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date;}
 
 export interface UserInvite {
   id: string;
@@ -394,9 +394,9 @@ export interface UserInvite {
   token: string;
   expiresAt: Date;
   acceptedAt?: Date;
-  createdAt: Date;
+  createdAt: Date;}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   UserRole,

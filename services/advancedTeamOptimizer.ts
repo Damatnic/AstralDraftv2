@@ -251,7 +251,7 @@ export interface ProjectedOutcome {
   playoffProbability: number;
   championshipProbability: number;
   expectedFinish: number;
-  confidenceInterval: [number, number];
+  confidenceInterval: [number, number];}
 
 export interface OptimizationOptions {
   strategy: 'win_now' | 'balanced' | 'rebuild';
@@ -260,7 +260,7 @@ export interface OptimizationOptions {
   currentWeek: number;
   playoffWeeks: number[];
   rosterRequirements: RosterRequirements;
-  constraints?: OptimizationConstraints;
+  constraints?: OptimizationConstraints;}
 
 export interface RosterRequirements {
   qb: { min: number; max: number };

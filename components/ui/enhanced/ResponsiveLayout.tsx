@@ -104,7 +104,7 @@ interface ContainerProps {
   padding?: boolean;
   center?: boolean;
   className?: string;
-
+}
 
 export const Container: React.FC<ContainerProps> = ({
   children,
@@ -210,7 +210,7 @@ interface ShowProps {
   above?: Breakpoint;
   below?: Breakpoint;
   only?: Breakpoint | Breakpoint[];
-
+}
 
 export const Show: React.FC<ShowProps> = ({
   children,
@@ -323,7 +323,7 @@ interface ResponsiveTextProps {
   size?: ResponsiveValueProps<'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | '8xl' | '9xl'>;
   weight?: ResponsiveValueProps<'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'>;
   className?: string;
-
+}
 
 export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
   children,
@@ -412,7 +412,7 @@ interface ResponsiveSpacingProps {
   pl?: ResponsiveValueProps<number>;
   pr?: ResponsiveValueProps<number>;
   className?: string;
-
+}
 
 export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
   children,
@@ -468,7 +468,7 @@ interface AspectRatioProps {
   children: ReactNode;
   ratio?: number | string;
   className?: string;
-
+}
 
 export const AspectRatio: React.FC<AspectRatioProps> = ({
   children,
@@ -501,7 +501,7 @@ interface ResponsiveImageProps {
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   loading?: 'lazy' | 'eager';
   priority?: boolean;
-
+}
 
 export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
   src,

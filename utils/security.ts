@@ -108,6 +108,7 @@ export function isExtensionNoise(message: any): boolean {
     // If any error occurs during filtering, silence the message
     return true;
   }
+}
 
 /**
  * Safe stringify function that handles all edge cases
@@ -149,6 +150,7 @@ export function safeStringify(obj: any): string {
       return '[Unparseable]';
     }
   }
+}
 
 /**
  * Initialize comprehensive console protection
@@ -215,6 +217,7 @@ export function initializeConsoleProtection(): void {
       return false;
     }
   }, true);
+}
 
 /**
  * Block React DevTools communication entirely
@@ -278,6 +281,7 @@ export function blockReactDevTools(): void {
     configurable: false,
     enumerable: false
   });
+}
 
 /**
  * Initialize all security measures
@@ -305,6 +309,7 @@ export function initializeSecurity(): void {
       }
     });
   }
+}
 
 // Auto-initialize on import in browser environment
 if (typeof window !== 'undefined') {
@@ -318,6 +323,7 @@ if (typeof window !== 'undefined') {
     // DOM already loaded, initialize again to be safe
     setTimeout(initializeSecurity, 0);
   }
+}
 
 /**
  * Security validators for input sanitization
@@ -382,15 +388,16 @@ export function sanitizeInput(input: string, type: 'text' | 'email' | 'numeric' 
     default:
       // Allow common text characters but escape HTML entities
       sanitized = sanitized
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
+        .replace(/&/g, '&')
+        .replace(/</g, '<')
+        .replace(/>/g, '>')
+        .replace(/"/g, '"')
         .replace(/'/g, '&#039;');
       break;
   }
   
   return sanitized;
+}
 
 export default {
   initializeSecurity,
@@ -399,5 +406,5 @@ export default {
   isExtensionNoise,
   safeStringify,
   sanitizeInput,
-//   SecurityValidators
+  SecurityValidators
 };

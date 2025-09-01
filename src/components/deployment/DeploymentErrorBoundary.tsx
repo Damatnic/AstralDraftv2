@@ -8,12 +8,14 @@ import React, { Component, ReactNode } from 'react';
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+}
 
 interface State {
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
   retryCount: number;
+}
 
 class DeploymentErrorBoundary extends Component<Props, State> {
   private retryTimeouts: NodeJS.Timeout[] = [];
@@ -164,5 +166,6 @@ class DeploymentErrorBoundary extends Component<Props, State> {
 
     return this.props.children;
   }
+}
 
 export default DeploymentErrorBoundary;

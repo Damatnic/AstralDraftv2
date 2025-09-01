@@ -59,14 +59,14 @@ export interface SnakeDraftState {
   setTierFilter: (tier: number | 'ALL') => void;
   setSearchTerm: (term: string) => void;
   getRecommendations: () => DraftRecommendation[];
-  analyzePosition: () => SnakeDraftOptimization | null;
+  analyzePosition: () => SnakeDraftOptimization | null;}
 
 export interface UseSnakeDraftOptions {
   league: League;
   userTeamId: number;
   autoDraftTimeout?: number; // Default timeout for auto-draft in ms
   enableAnalytics?: boolean;
-  keeperConfig?: KeeperLeagueConfig;
+  keeperConfig?: KeeperLeagueConfig;}
 
 export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const { league, userTeamId, autoDraftTimeout = 60000, enableAnalytics = true, keeperConfig } = options;

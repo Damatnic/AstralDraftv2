@@ -44,7 +44,7 @@ export interface ScoreFormatOptions extends NumberFormatOptions {
 export interface RankFormatOptions {
   suffix?: boolean; // Show "1st", "2nd", etc.
   showTies?: boolean;
-  highlightUser?: boolean;
+  highlightUser?: boolean;}
 
 // ==================== DATE FORMATTING ====================
 
@@ -68,14 +68,14 @@ export interface RelativeDateFormatOptions extends FormatOptions {
 
 export interface TimeAgoFormatOptions {
   addSuffix?: boolean;
-  includeSeconds?: boolean;
+  includeSeconds?: boolean;}
 
 export interface GameTimeFormatOptions extends DateFormatOptions {
   showCountdown?: boolean;
   showTimeZone?: boolean;
-  format?: 'full' | 'date-only' | 'time-only' | 'relative';
+  format?: 'full' | 'date-only' | 'time-only' | 'relative';}
 
-// ==================== TEXT FORMATTING ====================
+// ==================== TEXT FORMATTING ====================}
 
 export interface TextFormatOptions {
   truncate?: {
@@ -189,7 +189,7 @@ export interface WaiverFormatOptions {
 export interface FAABFormatOptions extends CurrencyFormatOptions {
   showRemaining?: boolean;
   showRecommended?: boolean;
-  highlightHighBids?: boolean;
+  highlightHighBids?: boolean;}
 
 // ==================== MATCHUP FORMATTING ====================
 
@@ -198,16 +198,16 @@ export interface MatchupFormatOptions {
   showProjections?: boolean;
   showLive?: boolean;
   showWinProbability?: boolean;
-  showKey?: string; // Key matchup position
+  showKey?: string; // Key matchup position}
 
 export interface ScoreboardFormatOptions extends ScoreFormatOptions {
   showQuarter?: boolean;
   showTimeRemaining?: boolean;
   showProjected?: boolean;
   showLiveUpdates?: boolean;
-  animate?: boolean;
+  animate?: boolean;}
 
-// ==================== CHART AND GRAPH FORMATTING ====================
+// ==================== CHART AND GRAPH FORMATTING ====================}
 
 export interface ChartFormatOptions {
   theme?: 'light' | 'dark';
@@ -313,7 +313,7 @@ export interface ThemeAwareFormatOptions {
 export interface LocalizationFormatOptions extends FormatOptions {
   rtl?: boolean;
   numberSystem?: 'arab' | 'arabext' | 'bali' | 'beng' | 'deva' | 'fullwide' | 'gujr' | 'guru' | 'hanidec' | 'khmr' | 'knda' | 'laoo' | 'latn' | 'limb' | 'mlym' | 'mong' | 'mymr' | 'orya' | 'tamldec' | 'telu' | 'thai' | 'tibt';
-  calendar?: 'buddhist' | 'chinese' | 'coptic' | 'ethioaa' | 'ethiopic' | 'gregory' | 'hebrew' | 'indian' | 'islamic' | 'islamicc' | 'iso8601' | 'japanese' | 'persian' | 'roc';
+  calendar?: 'buddhist' | 'chinese' | 'coptic' | 'ethioaa' | 'ethiopic' | 'gregory' | 'hebrew' | 'indian' | 'islamic' | 'islamicc' | 'iso8601' | 'japanese' | 'persian' | 'roc';}
 
 // ==================== COMBINED FORMAT CONFIGURATIONS ====================
 
@@ -334,15 +334,15 @@ export interface LeagueDisplayConfig extends DisplayConfig {
   scoreboard: ScoreboardFormatOptions;
   trades: TradeFormatOptions;
   waivers: WaiverFormatOptions;
-  draft: DraftPickFormatOptions;
+  draft: DraftPickFormatOptions;}
 
 export interface DashboardDisplayConfig extends DisplayConfig {
   charts: ChartFormatOptions;
   tables: TableFormatOptions;
   notifications: NotificationFormatOptions;
-  responsive: ResponsiveFormatOptions;
+  responsive: ResponsiveFormatOptions;}
 
-// ==================== FORMAT HELPER TYPES ====================
+// ==================== FORMAT HELPER TYPES ====================}
 
 export interface FormattedValue<T = any> {
   raw: T;
@@ -357,9 +357,9 @@ export interface FormatFunction<T = any, O = any> {
   (value: T, options?: O): FormattedValue<T>;
 
 export interface FormatRegistry {
-  [key: string]: FormatFunction;
+  [key: string]: FormatFunction;}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   FormatOptions,

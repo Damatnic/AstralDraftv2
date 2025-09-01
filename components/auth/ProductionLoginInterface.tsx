@@ -30,7 +30,7 @@ interface FormErrors {
   username?: string;
   displayName?: string;
   general?: string;
-
+}
 
 const ProductionLoginInterface: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewType>('login');
@@ -343,7 +343,7 @@ const ProductionLoginInterface: React.FC = () => {
         <p id="login-description" className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Sign in to your Astral Draft account</p>
       </div>
 
-      <InputField>
+      <InputField
         type="email"
         placeholder="Email address"
         value={loginData.email}
@@ -352,7 +352,7 @@ const ProductionLoginInterface: React.FC = () => {
         icon={<MailIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
 
-      <SecurePasswordInput>
+      <SecurePasswordInput
         type="password"
         placeholder="Password"
         value={loginData.password}
@@ -437,7 +437,7 @@ const ProductionLoginInterface: React.FC = () => {
         <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Join Astral Draft and start predicting</p>
       </div>
 
-      <InputField>
+      <InputField
         type="email"
         placeholder="Email address"
         value={registerData.email}
@@ -446,7 +446,7 @@ const ProductionLoginInterface: React.FC = () => {
         icon={<MailIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
 
-      <InputField>
+      <InputField
         type="text"
         placeholder="Username"
         value={registerData.username}
@@ -455,7 +455,7 @@ const ProductionLoginInterface: React.FC = () => {
         icon={<UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
 
-      <InputField>
+      <InputField
         type="text"
         placeholder="Display name"
         value={registerData.displayName}
@@ -464,7 +464,7 @@ const ProductionLoginInterface: React.FC = () => {
         icon={<UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
 
-      <SecurePasswordInput>
+      <SecurePasswordInput
         type="password"
         placeholder="Password"
         value={registerData.password}
@@ -479,7 +479,7 @@ const ProductionLoginInterface: React.FC = () => {
         className="pl-10 sm:px-4 md:px-6 lg:px-8"
       />
 
-      <SecurePasswordInput>
+      <SecurePasswordInput
         type="password"
         placeholder="Confirm password"
         value={registerData.confirmPassword}
@@ -549,7 +549,7 @@ const ProductionLoginInterface: React.FC = () => {
         <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Enter your email to receive a reset link</p>
       </div>
 
-      <InputField>
+      <InputField
         type="email"
         placeholder="Email address"
         value={forgotEmail}
@@ -601,7 +601,7 @@ const ProductionLoginInterface: React.FC = () => {
       </div>
 
       <form onSubmit={handleVerifyEmail}
-        <InputField>
+        <InputField
           type="text"
           placeholder="Verification token"
           value={verificationToken}

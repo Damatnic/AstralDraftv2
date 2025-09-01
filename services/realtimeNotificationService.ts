@@ -13,10 +13,10 @@ export interface RealtimeNotification {
   timestamp: Date;
   priority: 'low' | 'medium' | 'high';
   actionUrl?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, any>;}
 
 // Alias for internal use
-type NotificationData = RealtimeNotification;
+type NotificationData = RealtimeNotification;}
 
 interface PushSubscription {
   endpoint: string;
@@ -37,7 +37,7 @@ interface NotificationPreferences {
   prediction: boolean;
   soundEnabled: boolean;
   vibrationEnabled: boolean;
-  emailDigest: 'none' | 'daily' | 'weekly';
+  emailDigest: 'none' | 'daily' | 'weekly';}
 
 class RealtimeNotificationService {
   private static instance: RealtimeNotificationService;

@@ -4,7 +4,7 @@ import { animate } from 'framer-motion';
 
 interface AnimatedNumberProps {
     value: number;
-
+}
 
 const AnimatedNumber = ({ value }: any) => {
     const ref = React.useRef<HTMLSpanElement>(null);

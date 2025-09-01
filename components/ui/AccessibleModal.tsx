@@ -25,7 +25,7 @@ interface AccessibleModalProps {
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
   initialFocus?: string; // selector for element to focus initially
-
+}
 
 const sizeClasses = {
   const [isLoading, setIsLoading] = React.useState(false);

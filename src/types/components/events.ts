@@ -175,9 +175,9 @@ export interface SearchFilterHandlers {
   onSortChange?: SortChangeHandler;
   onPagination?: PaginationHandler;
   onClearFilters?: () => void;
-  onSaveSearch?: (name: string, query: string, filters: any) => void;
+  onSaveSearch?: (name: string, query: string, filters: any) => void;}
 
-// ==================== WEBSOCKET EVENT TYPES ====================
+// ==================== WEBSOCKET EVENT TYPES ====================}
 
 export interface WebSocketMessage {
   id: string;
@@ -185,7 +185,7 @@ export interface WebSocketMessage {
   payload: any;
   timestamp: Date;
   userId?: string;
-  leagueId?: string;
+  leagueId?: string;}
 
 // Draft Events
 export type DraftEventType = 
@@ -204,7 +204,7 @@ export type DraftEventType =
   | 'draft:user_joined'
   | 'draft:user_left'
   | 'draft:queue_updated'
-  | 'draft:trade_completed';
+  | 'draft:trade_completed';}
 
 export interface DraftWebSocketEvent extends WebSocketMessage {
   type: DraftEventType;
@@ -343,24 +343,24 @@ export interface WebSocketEventHandlers {
   onConnect?: () => void;
   onDisconnect?: () => void;
   onReconnect?: () => void;
-  onError?: (error: Error) => void;
+  onError?: (error: Error) => void;}
 
 // ==================== NOTIFICATION EVENT HANDLERS ====================
 
 export type NotificationHandler = (notification: any) => void;
-export type NotificationActionHandler = (notificationId: string, action: string) => void;
+export type NotificationActionHandler = (notificationId: string, action: string) => void;}
 
 export interface NotificationEventHandlers {
   onNotification?: NotificationHandler;
   onNotificationAction?: NotificationActionHandler;
   onNotificationDismiss?: (notificationId: string) => void;
   onNotificationMarkRead?: (notificationIds: string[]) => void;
-  onNotificationSettings?: (settings: any) => void;
+  onNotificationSettings?: (settings: any) => void;}
 
 // ==================== ANALYTICS EVENT HANDLERS ====================
 
 export type AnalyticsEventHandler = (eventName: string, properties?: Record<string, any>) => void;
-export type ChartInteractionHandler = (dataPoint: any, index: number) => void;
+export type ChartInteractionHandler = (dataPoint: any, index: number) => void;}
 
 export interface AnalyticsEventHandlers {
   onTrackEvent?: AnalyticsEventHandler;
@@ -380,9 +380,9 @@ export interface ErrorEventHandlers {
   onValidationError?: ValidationErrorHandler;
   onRetry?: () => void;
   onErrorDismiss?: () => void;
-  onErrorReport?: (error: Error) => void;
+  onErrorReport?: (error: Error) => void;}
 
-// ==================== LIFECYCLE EVENT HANDLERS ====================
+// ==================== LIFECYCLE EVENT HANDLERS ====================}
 
 export interface LifecycleEventHandlers {
   onLoad?: () => void;
@@ -391,9 +391,9 @@ export interface LifecycleEventHandlers {
   onReset?: () => void;
   onCancel?: () => void;
   onSuccess?: () => void;
-  onFailure?: (error: Error) => void;
+  onFailure?: (error: Error) => void;}
 
-// ==================== COMBINED EVENT HANDLERS ====================
+// ==================== COMBINED EVENT HANDLERS ====================}
 
 export interface AllEventHandlers extends
   PlayerEventHandlers,

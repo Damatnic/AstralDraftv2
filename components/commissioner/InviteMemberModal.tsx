@@ -12,7 +12,7 @@ import useCopyToClipboard from '../../hooks/useCopyToClipboard';
 interface InviteMemberModalProps {
     league: League;
     onClose: () => void;
-
+}
 
 const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }: any) => {
     const { dispatch } = useAppState();

@@ -41,14 +41,14 @@ export interface PerformanceReport {
   targets: PerformanceTarget[];
   optimizations: OptimizationResult[];
   recommendations: string[];
-  score: number;
+  score: number;}
 
 export interface CacheEntry {
   key: string;
   value: unknown;
   timestamp: number;
   hits: number;
-  lastAccess: number;
+  lastAccess: number;}
 
 export interface ResourceMonitor {
   cpu: {
@@ -73,7 +73,7 @@ export interface PredictionModel {
   accuracy: number;
   latency: number;
   memoryFootprint: number;
-  isActive: boolean;
+  isActive: boolean;}
 
 export class OraclePerformanceOptimizationService {
   private config: OptimizationConfig;

@@ -19,7 +19,7 @@ import type { AnalyticsViewType } from '../types/viewTypes';
 interface AnalyticsHubViewProps {
   // Props specific to analytics hub
   viewType?: AnalyticsViewType;
-
+}
 
 const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const draftedPlayerIds = new Set(league.draftPicks.map((p: any) => p.playerId));
@@ -96,7 +96,7 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' }) 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' })} 
                         className="flex items-center justify-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 transition-colors mobile-touch-target"
                     >
                         <span>Historical Analytics</span>
@@ -104,7 +104,7 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) className="back-btn">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
                         Back to My Team
                     </button>
                 </div>
@@ -150,7 +150,7 @@ const AnalyticsHubView: React.FC<AnalyticsHubViewProps> = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a completed league to view analytics.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
@@ -160,7 +160,7 @@ const AnalyticsHubView: React.FC<AnalyticsHubViewProps> = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Draft analytics are available after the draft is complete.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>

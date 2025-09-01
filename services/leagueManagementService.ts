@@ -23,7 +23,7 @@ export interface League {
     description?: string;
     rules?: string;
     payouts?: PayoutStructure;
-    history: LeagueEvent[];
+    history: LeagueEvent[];}
 
 export interface LeagueSettings {
     // Basic Settings
@@ -92,7 +92,7 @@ export interface KeeperSettings {
     keeperDeadline: Date;
     roundPenalty: number;
     costIncrease?: number;
-    rookieException: boolean;
+    rookieException: boolean;}
 
 export interface BonusScoring {
     passingYardBonus?: { threshold: number; points: number }[];
@@ -119,7 +119,7 @@ export interface LeagueMember {
     waiverPriority?: number;
     waiverBudget?: number;
     record?: TeamRecord;
-    powerRanking?: number;
+    powerRanking?: number;}
 
 export interface TeamRecord {
     wins: number;
@@ -128,7 +128,7 @@ export interface TeamRecord {
     pointsFor: number;
     pointsAgainst: number;
     streak: number;
-    streakType: 'W' | 'L' | 'T';
+    streakType: 'W' | 'L' | 'T';}
 
 export interface PayoutStructure {
     entryFee: number;
@@ -158,13 +158,13 @@ export interface LeagueInvitation {
     status: 'pending' | 'accepted' | 'declined' | 'expired';
     expiresAt: Date;
     createdAt: Date;
-    message?: string;
+    message?: string;}
 
 export interface CommissionerAction {
     type: 'force_trade' | 'reverse_trade' | 'move_player' | 'adjust_score' | 'change_lineup' | 'reset_waivers' | 'extend_deadline' | 'kick_member';
     targetUserId?: string;
     data: Record<string, unknown>;
-    reason: string;
+    reason: string;}
 
 export class LeagueManagementService {
     private readonly leagues: Map<string, League> = new Map();

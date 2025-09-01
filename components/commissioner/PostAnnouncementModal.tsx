@@ -10,7 +10,7 @@ import { MegaphoneIcon } from '../icons/MegaphoneIcon';
 interface PostAnnouncementModalProps {
     leagueId: string;
     onClose: () => void;
-
+}
 
 const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId, onClose }: any) => {
     const { dispatch } = useAppState();

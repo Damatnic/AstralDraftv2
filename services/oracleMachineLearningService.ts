@@ -14,13 +14,13 @@ export interface MLModel {
   accuracy: number;
   lastTrained: string;
   features: string[];
-  hyperparameters: Record<string, unknown>;
+  hyperparameters: Record<string, unknown>;}
 
 export interface PredictionInput {
   playerId: string;
   week: number;
   season: number;
-  features: Record<string, number>;
+  features: Record<string, number>;}
 
 export interface PredictionOutput {
   playerId: string;
@@ -36,7 +36,7 @@ export interface TrainingData {
   features: number[][];
   targets: number[];
   playerIds: string[];
-  weeks: number[];
+  weeks: number[];}
 
 export interface ModelMetrics {
   accuracy: number;
@@ -44,7 +44,7 @@ export interface ModelMetrics {
   recall: number;
   f1Score: number;
   rmse: number;
-  mae: number;
+  mae: number;}
 
 // Additional interfaces for MLAnalyticsDashboard
 export interface ModelPerformance {
@@ -68,14 +68,14 @@ export interface Pattern {
   type: string;
   description: string;
   confidence: number;
-  occurrences: number;
+  occurrences: number;}
 
 export interface MLInsight {
   type: string;
   title: string;
   description: string;
   actionable: boolean;
-  impact: 'high' | 'medium' | 'low';
+  impact: 'high' | 'medium' | 'low';}
 
 class OracleMachineLearningService {
   private models: Map<string, MLModel> = new Map();

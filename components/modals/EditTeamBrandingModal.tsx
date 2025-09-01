@@ -7,7 +7,7 @@ interface EditTeamBrandingModalProps {
     leagueId: string;
     dispatch: (action: any) => void;
     onClose: () => void;
-
+}
 
 const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
     team,

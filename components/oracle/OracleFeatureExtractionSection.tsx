@@ -39,7 +39,7 @@ interface TransformationExample {
   rawData: Record<string, any>;
   transformedData: Record<string, any>;
   steps: string[];
-  explanation: string;
+  explanation: string;}
 
 interface FeatureEngineeringMethod {
   id: string;
@@ -49,7 +49,7 @@ interface FeatureEngineeringMethod {
   formula: string;
   examples: string[];
   benefits: string[];
-
+}
 
 const OracleFeatureExtractionSection: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

@@ -145,12 +145,12 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
 interface AtomicErrorEliminatorState {
   hasError: boolean;
   errorCount: number;
-  lastError: Error | null;
+  lastError: Error | null;}
 
 interface AtomicErrorEliminatorProps {
   children: ReactNode;
   fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;}
 
 class AtomicErrorEliminator extends Component<AtomicErrorEliminatorProps, AtomicErrorEliminatorState> {
   private errorTimer: NodeJS.Timeout | null = null;
@@ -269,6 +269,7 @@ class AtomicErrorEliminator extends Component<AtomicErrorEliminatorProps, Atomic
       return null;
     }
   }
+}
 
 // Higher-order component to wrap ANY component with atomic error protection
 export const withAtomicErrorProtection = <P extends object>(

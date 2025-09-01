@@ -736,9 +736,9 @@ export interface ApiEndpoint {
   method: EndpointMethod;
   path: EndpointPath;
   authenticated: boolean;
-  roles?: string[];
+  roles?: string[];}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   EndpointConfig,

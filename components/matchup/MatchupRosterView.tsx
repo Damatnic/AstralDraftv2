@@ -12,7 +12,7 @@ interface MatchupRosterViewProps {
     isLive: boolean;
     week: number;
     matchupId: string;
-
+}
 
 const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam, isLive, week, matchupId }: any) => {
     const { state } = useAppState();
@@ -48,7 +48,7 @@ const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam
                     <span className="text-right sm:px-4 md:px-6 lg:px-8">SCORE</span>
                 </div>
                 {displayRoster.map((playerData, index) => (
-                   <PlayerRow>
+                   <PlayerRow
                         key={playerData.player.id}
                         playerData={playerData}
                         position={['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'FLEX', 'DST', 'K'][index]}

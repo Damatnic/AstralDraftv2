@@ -15,7 +15,7 @@ interface TeamColumnProps {
   draftFormat: 'SNAKE' | 'AUCTION';
   isMyTeam?: boolean;
   isOnTheClock?: boolean;
-
+}
 
 const positionColor: Record<string, string> = {
     QB: 'bg-red-500/70',
@@ -72,7 +72,7 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
         const textColor = item.player ? 'text-white' : 'text-gray-500';
 
         return (
-          <WrapperComponent>
+          <WrapperComponent
             key={item.key}
             onClick={() => item.player && onPlayerSelect(item.player)},
                 animate: { opacity: 1, y: 0 },

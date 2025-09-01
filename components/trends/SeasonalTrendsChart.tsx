@@ -44,7 +44,7 @@ interface SeasonalTrendsChartProps {
   playerId: string;
   playerName: string;
   className?: string;
-
+}
 
 interface ChartDataPoint {
   period: string;
@@ -53,7 +53,7 @@ interface ChartDataPoint {
   ceiling: number;
   floor: number;
   gamesPlayed: number;
-  color: string;
+  color: string;}
 
 // Custom tooltip component moved outside
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -213,7 +213,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs>
+          <Tabs
             items={[
               { id: 'overview', label: 'Overview' },
               { id: 'patterns', label: 'Patterns' },
@@ -291,14 +291,14 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                       <YAxis />
                       <Tooltip content={<CustomTooltip />} />
                       <Legend />
-                      <Line>
+                      <Line
                         type="monotone" 
                         dataKey="averagePoints" 
                         stroke="#3b82f6" 
                         strokeWidth={3}
                         name="Average Points"
                       />
-                      <Line>
+                      <Line
                         type="monotone" 
                         dataKey="consistency" 
                         stroke="#10b981" 
@@ -393,7 +393,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                             <XAxis dataKey="period" />
                             <YAxis />
                             <Tooltip />
-                            <Area>
+                            <Area
                               type="monotone" 
                               dataKey="ceiling" 
                               stackId="1"
@@ -402,7 +402,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                               fillOpacity={0.3}
                               name="Ceiling"
                             />
-                            <Area>
+                            <Area
                               type="monotone" 
                               dataKey="floor" 
                               stackId="2"

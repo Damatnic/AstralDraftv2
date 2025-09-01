@@ -111,7 +111,7 @@ export interface TeamScore {
   pointsFromBench: number;
   playersYetToPlay: number;
   playersInProgress: number;
-  playersComplete: number;
+  playersComplete: number;}
 
 export interface LineupSlot {
   slotId: string;
@@ -126,7 +126,7 @@ export interface LineupSlot {
   isStarter: boolean;
   isFlex: boolean;
   isEmpty: boolean;
-  gameTime?: string;
+  gameTime?: string;}
 
 export interface ScoringSettings {
   passingYards: number; // points per yard
@@ -160,7 +160,7 @@ export interface ScoringSettings {
 export interface LeagueStandings {
   standings: StandingEntry[];
   lastUpdated: number;
-  week: number;
+  week: number;}
 
 export interface StandingEntry {
   rank: number;
@@ -176,7 +176,7 @@ export interface StandingEntry {
   lastWeekRank?: number;
   rankChange?: number;
   playoffPosition?: number;
-  clinched?: 'PLAYOFFS' | 'BYE' | 'DIVISION' | 'ELIMINATED';
+  clinched?: 'PLAYOFFS' | 'BYE' | 'DIVISION' | 'ELIMINATED';}
 
 export interface LiveUpdate {
   type: 'touchdown' | 'fieldGoal' | 'bigPlay' | 'turnover' | 'injury' | 'statCorrection';
@@ -194,7 +194,7 @@ export interface LiveUpdate {
 
 export interface PlayByPlay {
   gameId: string;
-  plays: Play[];
+  plays: Play[];}
 
 export interface Play {
   id: string;

@@ -15,7 +15,7 @@ interface MobilePlayerSearchProps {
     onSearch?: (query: string) => void;
     placeholder?: string;
     className?: string;
-
+}
 
 const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
     players,
@@ -54,7 +54,7 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
         );
 
     return (
-        <MobileSearchInterface>
+        <MobileSearchInterface
             players={players}
             onPlayerSelect={onPlayerSelect}
             onSearch={onSearch}

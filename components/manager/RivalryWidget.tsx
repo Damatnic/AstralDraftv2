@@ -7,7 +7,7 @@ import { calculateHeadToHeadRecord } from '../../utils/careerStats';
 
 interface RivalryWidgetProps {
     opponentManagerId: string;
-
+}
 
 const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }: any) => {
     const { state } = useAppState();

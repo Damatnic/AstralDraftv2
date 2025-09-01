@@ -11,13 +11,13 @@ interface MFAStatus {
   enabled: boolean;
   backupCodesCount: number;
   enabledAt?: string;
-  lastBackupCodeUsed?: string;
+  lastBackupCodeUsed?: string;}
 
 interface SetupData {
   qrCode: string;
   manualEntryKey: string;
   instructions: string;
-
+}
 
 const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);

@@ -4,7 +4,7 @@ import { seasonContestService, SeasonContest, BracketPick, AwardPick } from '../
 export interface UseSeasonContestOptions {
   userId: string;
   autoRefresh?: boolean;
-  refreshInterval?: number;
+  refreshInterval?: number;}
 
 export interface SeasonContestHookReturn {
   // Contest data

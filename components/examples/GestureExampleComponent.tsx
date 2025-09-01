@@ -4,7 +4,7 @@ import { useAdvancedTouchGestures } from '../../hooks/useAdvancedTouchGestures';
 
 interface GestureExampleComponentProps {
   className?: string;
-
+}
 
 export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = ({ 
   className = '' 

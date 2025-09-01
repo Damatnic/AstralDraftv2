@@ -9,7 +9,7 @@ interface RadialChartProps {
     unit?: string;
     size?: number;
     strokeWidth?: number;
-
+}
 
 const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = '', size = 80, strokeWidth = 8 }: any) => {
     const radius = (size - strokeWidth) / 2;

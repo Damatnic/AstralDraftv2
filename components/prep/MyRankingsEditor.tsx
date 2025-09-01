@@ -13,7 +13,7 @@ const positionOrder: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 interface SortableItemProps {
     player: Player;
     rank: number;
-
+}
 
 const SortableItem: React.FC<SortableItemProps> = ({ player, rank }: any) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });

@@ -17,7 +17,7 @@ interface ChatMessage {
   recommendations?: Player[];
   insights?: string[];
   timestamp: Date;
-
+}
 
 interface Props {
   currentRoster: Player[];

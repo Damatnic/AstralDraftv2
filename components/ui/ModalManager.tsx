@@ -28,15 +28,15 @@ export const ModalManager: React.FC = () => {
     switch (activeModal) {
       case 'settings':
         return (
-          <SettingsModal>
+          <SettingsModal
             isOpen={true} 
-            onClose={closeModal} 
+            onClose={closeModal}
           />
         );
       
       case 'profile':
         return (
-          <ProfileModal>
+          <ProfileModal
             isOpen={true} 
             onClose={closeModal}
             user={state.user}
@@ -45,23 +45,23 @@ export const ModalManager: React.FC = () => {
       
       case 'analytics':
         return (
-          <AnalyticsModal>
+          <AnalyticsModal
             isOpen={true} 
-            onClose={closeModal} 
+            onClose={closeModal}
           />
         );
       
       case 'help':
         return (
-          <HelpSupportModal>
+          <HelpSupportModal
             isOpen={true} 
-            onClose={closeModal} 
+            onClose={closeModal}
           />
         );
       
       case 'trade':
         return (
-          <ProposeTradeModal>
+          <ProposeTradeModal
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
@@ -70,7 +70,7 @@ export const ModalManager: React.FC = () => {
       
       case 'assign-awards':
         return (
-          <AssignAwardsModal>
+          <AssignAwardsModal
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
@@ -79,7 +79,7 @@ export const ModalManager: React.FC = () => {
       
       case 'edit-branding':
         return (
-          <EditTeamBrandingModal>
+          <EditTeamBrandingModal
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
@@ -88,7 +88,7 @@ export const ModalManager: React.FC = () => {
       
       case 'share-team':
         return (
-          <ShareTeamCardModal>
+          <ShareTeamCardModal
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
@@ -97,7 +97,7 @@ export const ModalManager: React.FC = () => {
       
       case 'checklist-report':
         return (
-          <ChecklistReportModal>
+          <ChecklistReportModal
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}

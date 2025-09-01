@@ -32,13 +32,13 @@ interface AccessibilityState {
   focusIndicatorMode: boolean;
   colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
   announcements: Announcement[];
-
+}
 
 interface Announcement {
   id: string;
   message: string;
   priority: 'polite' | 'assertive';
-  timestamp: number;
+  timestamp: number;}
 
 interface AccessibilityActions {
   toggleScreenReader: () => void;
@@ -51,7 +51,7 @@ interface AccessibilityActions {
   announce: (message: string, priority?: 'polite' | 'assertive') => void;
   clearAnnouncements: () => void;
 
-type AccessibilityContextType = AccessibilityState & AccessibilityActions;
+type AccessibilityContextType = AccessibilityState & AccessibilityActions;}
 
 // =========================================
 // ACCESSIBILITY CONTEXT
@@ -76,7 +76,7 @@ export const useAccessibility = (): AccessibilityContextType => {
 interface AccessibilityProviderProps {
   children: ReactNode;
   storageKey?: string;
-
+}
 
 export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
   children,
@@ -297,7 +297,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
 
 interface LiveRegionProps {
   announcements: Announcement[];
-
+}
 
 const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }: any) => {
   return (
@@ -349,7 +349,7 @@ interface AccessibleButtonProps {
   'aria-label'?: string;
   'aria-describedby'?: string;
   role?: string;
-
+}
 
 export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   children,
@@ -447,7 +447,7 @@ interface AccessibleInputProps {
   hint?: string;
   className?: string;
   id?: string;
-
+}
 
 export const AccessibleInput: React.FC<AccessibleInputProps> = ({
   label,
@@ -542,7 +542,7 @@ interface SkipLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
-
+}
 
 export const SkipLink: React.FC<SkipLinkProps> = ({
   href,
@@ -582,7 +582,7 @@ interface FocusTrapProps {
   active?: boolean;
   restoreFocus?: boolean;
   className?: string;
-
+}
 
 export const FocusTrap: React.FC<FocusTrapProps> = ({
   children,
@@ -674,7 +674,7 @@ export const AccessibilityPanel: React.FC = () => {
 
   return (
     <>
-      <AccessibleButton>
+      <AccessibleButton
         onClick={() => setIsOpen(true)}
         aria-label="Open accessibility settings"
         variant="default"
@@ -706,7 +706,7 @@ export const AccessibilityPanel: React.FC = () => {
                 <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                   <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Accessibility Settings</h2>
-                    <AccessibleButton>
+                    <AccessibleButton
                       onClick={() => setIsOpen(false)}
                       aria-label="Close accessibility settings"
                       variant="default"

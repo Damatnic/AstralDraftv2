@@ -51,7 +51,7 @@ interface StackRecommendation {
   projectedBonus: number;
   correlation: number;
   risk: string;
-  explanation: string;
+  explanation: string;}
 
 interface HandcuffRecommendation {
   starter: Player;
@@ -59,7 +59,7 @@ interface HandcuffRecommendation {
   priority: 'critical' | 'high' | 'medium' | 'low';
   injuryRisk: number;
   valueIfStarterInjured: number;
-  explanation: string;
+  explanation: string;}
 
 interface AntifragilityScore {
   player: Player;
@@ -76,7 +76,7 @@ interface AntifragilityScore {
 interface LeagueSpecificAdjustment {
   setting: string;
   adjustment: number;
-  explanation: string;
+  explanation: string;}
 
 class AIRecommendationEngine {
   private defaultWeights: ScoringWeights;

@@ -52,7 +52,7 @@ const MessagesView: React.FC = () => {
             <div className="max-w-7xl mx-auto p-4">
                 <main className="card overflow-hidden flex" style={{ height: '80vh' }}>
                     <div className="w-1/3 border-r border-slate-600 flex flex-col">
-                        <ConversationList>
+                        <ConversationList
                             selectedUserId={selectedUserId} 
                             onSelectUser={handleSelectUser}
                             onStartNewMessage={handleStartNewMessage}

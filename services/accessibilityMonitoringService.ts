@@ -48,7 +48,7 @@ export interface ViolationTrend {
   serious: number;
   moderate: number;
   minor: number;
-  total: number;
+  total: number;}
 
 export interface AccessibilityReport {
   id: string;

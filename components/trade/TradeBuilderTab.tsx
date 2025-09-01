@@ -20,11 +20,11 @@ interface TradeBuilderTabProps {
     proposal: TradeProposal | null;
     onProposalUpdate: (proposal: TradeProposal) => void;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface PlayerSearchResult extends Player {
     teamName: string;
-    isAvailable: boolean;
+    isAvailable: boolean;}
 
 const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
     currentTeam,

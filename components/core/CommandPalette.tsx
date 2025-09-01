@@ -10,7 +10,7 @@ import { HistoryIcon } from '../icons/HistoryIcon';
 import { useFocusTrap } from '../../utils/accessibility';
 
 interface CommandPaletteProps {
-  [key: string]: unknown;
+  [key: string]: unknown;}
 
 const CommandPalette: React.FC<CommandPaletteProps> = () => {
   const [isLoading, setIsLoading] = React.useState(false);

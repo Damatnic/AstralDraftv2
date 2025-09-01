@@ -27,6 +27,7 @@ interface TradeOpportunity {
     weakens: string[];
   };
   confidence: number;
+}
 
 const TradeOpportunityWidget: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -165,7 +166,7 @@ const TradeOpportunityWidget: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-            <Button>
+            <Button
               variant={viewMode === 'opportunities' ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setViewMode('opportunities')}
@@ -173,7 +174,7 @@ const TradeOpportunityWidget: React.FC = () => {
             >
 //               Opportunities
             </Button>
-            <Button>
+            <Button
               variant={viewMode === 'analyzer' ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setViewMode('analyzer')}
@@ -290,7 +291,7 @@ const TradeOpportunityWidget: React.FC = () => {
               {opportunities.length === 0 && !isAnalyzing && (
                 <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                   <p className="text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">No trade opportunities found</p>
-                  <Button>
+                  <Button
                     variant="primary"
                     size="sm"
                     onClick={analyzeTradeOpportunities}
@@ -375,7 +376,7 @@ const TradeOpportunityWidget: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                <Button>
+                <Button
                   variant="success"
                   size="sm"
                   className="flex-1 sm:px-4 md:px-6 lg:px-8"
@@ -384,7 +385,7 @@ const TradeOpportunityWidget: React.FC = () => {
                   <span className="mr-1 sm:px-4 md:px-6 lg:px-8">✓</span>
                   Propose Trade
                 </Button>
-                <Button>
+                <Button
                   variant="default"
                   size="sm"
                   className="flex-1 sm:px-4 md:px-6 lg:px-8"

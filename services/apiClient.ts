@@ -16,6 +16,7 @@ interface SportsIOGame {
   status: 'scheduled' | 'in_progress' | 'completed';
   quarter?: number;
   time_remaining?: string;
+}
 
 interface SportsIOPlayer {
   player_id: string;
@@ -32,6 +33,7 @@ interface SportsIOPlayer {
     receiving_tds?: number;
     fantasy_points?: number;
   };
+}
 
 // ESPN API Interfaces
 interface ESPNPlayer {
@@ -44,9 +46,11 @@ interface ESPNPlayer {
     percentOwned: number;
     percentStarted: number;
   };
+}
 
 interface ESPNResponse {
   players: ESPNPlayer[];
+}
 
 // Transformed Player Interface (Unified)
 interface Player {
@@ -62,6 +66,7 @@ interface Player {
     percentStarted: number;
   };
   stats?: unknown;
+}
 
 class ApiClient {
   private readonly baseUrl: string;
@@ -370,7 +375,7 @@ class ApiClient {
         method: 'POST',
         body: JSON.stringify({
           userChoice,
-//           confidence
+          confidence
         })
       });
 
@@ -479,6 +484,7 @@ class ApiClient {
     }
     throw new Error('Max retries exceeded');
   }
+}
 
 // Export singleton instance
 export const apiClient = new ApiClient();

@@ -211,7 +211,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
                         onClick={(e: any) => e.target === e.currentTarget && setIsSettingsModalOpen(false)}
-                        <LeagueSettingsEditor>
+                        <LeagueSettingsEditor
                             league={league} 
                             onClose={() => setIsSettingsModalOpen(false)}
                             onSave={(settings: any) => {

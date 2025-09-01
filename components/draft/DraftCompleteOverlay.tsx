@@ -10,7 +10,7 @@ import { useConfetti } from '../../utils/confetti';
 interface DraftCompleteOverlayProps {
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const DraftCompleteOverlay: React.FC<DraftCompleteOverlayProps> = ({ league, dispatch  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);

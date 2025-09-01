@@ -4,7 +4,7 @@ interface SwitchProps {
   onChange: (checked: boolean) => void;
   label?: string;
   disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';}
 
 export const Switch: React.FC<SwitchProps> = ({
   checked,

@@ -11,7 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 interface TradeWhispererWidgetProps {
     onPropose: (suggestion: TradeSuggestion) => void;
-
+}
 
 const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }: any) => {
     const { league, myTeam } = useLeague();

@@ -26,11 +26,11 @@ interface WeeklyAward {
   teamName: string;
   description: string;
   value: string;
-  icon: string;
+  icon: string;}
 
 interface WeeklyRecapProps {
   week?: number;
-
+}
 
 const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }: any) => {
   const { state } = useAppState();

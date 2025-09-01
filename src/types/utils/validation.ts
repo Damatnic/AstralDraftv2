@@ -25,14 +25,14 @@ export interface ValidationRule<T = any> {
   validator: (value: T, context?: any) => boolean | string | ValidationError;
   message?: string;
   params?: Record<string, any>;
-  async?: boolean;
+  async?: boolean;}
 
 export interface FieldValidation<T = any> {
   rules: ValidationRule<T>[];
   required?: boolean;
   optional?: boolean;
   nullable?: boolean;
-  transform?: (value: any) => T;
+  transform?: (value: any) => T;}
 
 export interface ValidationSchema<T = any> {
   fields: {
@@ -225,19 +225,19 @@ export interface AsyncValidationResult {
   isValid: boolean;
   errors: ValidationError[];
   isPending?: boolean;
-  isStale?: boolean;
+  isStale?: boolean;}
 
 // ==================== CONDITIONAL VALIDATION ====================
 
 export interface ConditionalValidation<T = any> {
   condition: (data: any, context?: ValidationContext) => boolean;
-  validation: FieldValidation<T>;
+  validation: FieldValidation<T>;}
 
 export interface DependentValidation<T = any> {
   dependsOn: string | string[];
-  validation: FieldValidation<T> | ((dependentValues: any) => FieldValidation<T>);
+  validation: FieldValidation<T> | ((dependentValues: any) => FieldValidation<T>);}
 
-// ==================== CUSTOM VALIDATORS ====================
+// ==================== CUSTOM VALIDATORS ====================}
 
 export interface CustomValidator<T = any> {
   name: string;
@@ -313,7 +313,7 @@ export interface ValidationConfig {
   asyncTimeoutMs?: number;
   cacheValidationResults?: boolean;
   customValidators?: Record<string, CustomValidator>;
-  globalContext?: ValidationContext;
+  globalContext?: ValidationContext;}
 
 // ==================== VALIDATION STATE MANAGEMENT ====================
 
@@ -325,7 +325,7 @@ export interface ValidationState {
   warnings: Record<string, ValidationError[]>;
   touched: Record<string, boolean>;
   dirty: Record<string, boolean>;
-  pendingFields: string[];
+  pendingFields: string[];}
 
 export interface ValidationActions {
   validate: (field?: string) => Promise<void>;
@@ -335,9 +335,9 @@ export interface ValidationActions {
   clearAllErrors: () => void;
   setTouched: (field: string, touched?: boolean) => void;
   setDirty: (field: string, dirty?: boolean) => void;
-  reset: () => void;
+  reset: () => void;}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   ValidationResult,

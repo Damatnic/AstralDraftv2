@@ -10,7 +10,7 @@ interface AssignAwardsModalProps {
     league: League;
     dispatch: React.Dispatch<any>;
     onClose: () => void;
-
+}
 
 const awardTypes: { type: PlayerAwardType, label: string, description: string }[] = [
     { type: 'MVP', label: 'Team MVP', description: 'The most valuable player on your squad.' },

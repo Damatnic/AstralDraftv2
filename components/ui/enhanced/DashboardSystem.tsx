@@ -71,7 +71,7 @@ export interface DashboardLayout {
   created: Date;
   modified: Date;
   isDefault?: boolean;
-
+}
 
 export interface DashboardContextType {
   layouts: DashboardLayout[];
@@ -88,7 +88,7 @@ export interface DashboardContextType {
   toggleEditMode: () => void;
   exportLayout: () => string;
   importLayout: (data: string) => void;
-  resetLayout: () => void;
+  resetLayout: () => void;}
 
 // =========================================
 // DASHBOARD CONTEXT
@@ -153,7 +153,7 @@ interface SortableWidgetProps {
   onEdit?: (widget: Widget) => void;
   onRemove?: (widgetId: string) => void;
   onResize?: (widgetId: string, size: WidgetSize) => void;
-
+}
 
 const SortableWidget: React.FC<SortableWidgetProps> = ({
   widget,
@@ -275,7 +275,7 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
 interface BaseWidgetProps {
   widget: Widget;
   className?: string;
-
+}
 
 const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
   widget,
@@ -399,7 +399,7 @@ interface DashboardGridProps {
   onWidgetUpdate: (widgetId: string, updates: Partial<Widget>) => void;
   onWidgetRemove: (widgetId: string) => void;
   columns?: number;
-
+}
 
 export const DashboardGrid: React.FC<DashboardGridProps> = ({
   widgets,
@@ -456,13 +456,13 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
   const visibleWidgets = items.filter((widget: any) => widget.isVisible !== false);
 
   return (
-    <DndContext>
+    <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext>
+      <SortableContext
         items={visibleWidgets.map((w: any) => w.id)}
         strategy={rectSortingStrategy}
       >
@@ -475,7 +475,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
         >
           <AnimatePresence>
             {visibleWidgets.map((widget: any) => (
-              <SortableWidget>
+              <SortableWidget
                 key={widget.id}
                 widget={widget}
                 isEditing={isEditing}
@@ -501,7 +501,7 @@ interface WidgetLibraryProps {
   isOpen: boolean;
   onClose: () => void;
   onAddWidget: (widget: Omit<Widget, 'id'>) => void;
-
+}
 
 export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
   isOpen,
@@ -600,7 +600,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
 interface DashboardProviderProps {
   children: ReactNode;
   storageKey?: string;
-
+}
 
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   children,

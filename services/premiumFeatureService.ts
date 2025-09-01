@@ -116,7 +116,7 @@ export interface FeatureAccess {
     limit: number;
     used: number;
     remaining: number;
-    upgradeRequired?: FeatureTier;
+    upgradeRequired?: FeatureTier;}
 
 export class PremiumFeatureService {
     /**
@@ -330,6 +330,6 @@ export interface FeatureAccessHook {
     checkAccess: typeof PremiumFeatureService.checkFeatureAccess;
     getUserTier: typeof PremiumFeatureService.getUserTier;
     recordUsage: typeof PremiumFeatureService.recordFeatureUsage;
-    getFeatureLimits: typeof PremiumFeatureService.getUserFeatureLimits;
+    getFeatureLimits: typeof PremiumFeatureService.getUserFeatureLimits;}
 
 export default PremiumFeatureService;

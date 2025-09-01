@@ -35,7 +35,7 @@ export interface UserSubscription {
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
   cancelAtPeriodEnd: boolean;
-
+}
 
 export interface PaymentHistory {
   id: string;
@@ -45,7 +45,7 @@ export interface PaymentHistory {
   type: 'contest_entry' | 'subscription' | 'one_time';
   productId: string;
   createdAt: Date;
-
+}
 
 interface PaymentContextType {
   // Stripe instance
@@ -92,7 +92,7 @@ export const usePayment = () => {
 
 interface PaymentProviderProps {
   children: ReactNode;
-
+}
 
 export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: any) => {
   // Stripe instance

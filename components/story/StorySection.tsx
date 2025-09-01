@@ -4,7 +4,7 @@ import { ErrorBoundary } from '../ui/ErrorBoundary';
 interface StorySectionProps {
     title: string;
     children: React.ReactNode;
-
+}
 
 const StorySection: React.FC<StorySectionProps> = ({ title, children }: any) => {
     return (

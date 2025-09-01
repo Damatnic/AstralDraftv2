@@ -209,14 +209,14 @@ export interface ByeWeekAnalysis {
     conflicts: ByeWeekConflict[];
     coverage: Record<string, number>;
     recommendations: string[];
-    worstWeeks: number[];
+    worstWeeks: number[];}
 
 export interface ByeWeekConflict {
     week: number;
     positions: string[];
     players: string[];
     severity: 'low' | 'medium' | 'high';
-    impact: string;
+    impact: string;}
 
 export interface DraftPrepFilter {
     positions?: string[];
@@ -226,7 +226,7 @@ export interface DraftPrepFilter {
     tags?: string[];
     availability?: 'all' | 'available' | 'targeted';
     sortBy?: 'rank' | 'adp' | 'projected_points' | 'value' | 'upside';
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: 'asc' | 'desc';}
 
 // Main Draft Preparation Service
 class DraftPreparationService {

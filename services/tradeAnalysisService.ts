@@ -93,7 +93,7 @@ export interface PositionNeed {
   needLevel: 'critical' | 'high' | 'moderate' | 'low' | 'surplus';
   currentStarters: PlayerValue[];
   depthChart: PlayerValue[];
-  recommendation: string;
+  recommendation: string;}
 
 export interface FutureProjectionAnalysis {
   restOfSeasonProjection: {
@@ -140,14 +140,14 @@ export interface RiskFactor {
   severity: 'low' | 'moderate' | 'high';
   description: string;
   likelihood: number;
-  impact: number;
+  impact: number;}
 
 export interface AlternativeTradeOffer {
   givingPlayers: string[];
   receivingPlayers: string[];
   fairnessScore: number;
   reasoning: string;
-  improvementOverOriginal: number;
+  improvementOverOriginal: number;}
 
 export interface FantasyRoster {
   teamId: string;
@@ -164,7 +164,7 @@ export interface RosterPlayer {
   position: string;
   acquisitionType: 'draft' | 'waiver' | 'trade' | 'free_agent';
   acquisitionWeek?: number;
-  isStarter: boolean;
+  isStarter: boolean;}
 
 export interface ScoringSettings {
   passingTouchdown: number;
@@ -180,7 +180,7 @@ export interface ScoringSettings {
   defenseFumble: number;
   defenseSack: number;
   defenseTouchdown: number;
-  defenseSafety: number;
+  defenseSafety: number;}
 
 class TradeAnalysisService {
   private readonly cache = new Map<string, { data: any; expires: number }>();

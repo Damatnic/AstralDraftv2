@@ -7,7 +7,7 @@ import { Tooltip } from '../ui/Tooltip';
 
 interface PowerBalanceChartProps {
     leagues: League[];
-
+}
 
 const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }: any) => {
     const chartData = React.useMemo(() => {

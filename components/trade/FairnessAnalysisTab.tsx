@@ -19,7 +19,7 @@ interface FairnessAnalysisTabProps {
     analysis: TradeAnalysis | null;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface ValueMetric {
     name: string;

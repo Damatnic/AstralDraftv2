@@ -18,7 +18,7 @@ export interface NFLGame {
   awayScore?: number;
   venue: string;
   weather?: WeatherConditions;
-  odds?: GameOdds;
+  odds?: GameOdds;}
 
 export interface NFLTeam {
   id: string;
@@ -68,14 +68,14 @@ export interface GameOdds {
   total: number;
   moneylineHome: number;
   moneylineAway: number;
-  lastUpdated: string;
+  lastUpdated: string;}
 
 export interface WeatherConditions {
   temperature: number;
   conditions: string;
   windSpeed: number;
   precipitation: number;
-  humidity: number;
+  humidity: number;}
 
 export interface RealPrediction {
   id: string;

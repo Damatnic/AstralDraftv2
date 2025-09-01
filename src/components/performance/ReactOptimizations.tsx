@@ -83,16 +83,16 @@ export const OptimizedList = memo(<T,>({
         
         if (ItemComponent) {
           return (
-            <ItemComponent>
+            <ItemComponent
               key={key} 
               item={item} 
-              index={index} 
+              index={index}
             />
           );
         }
         
         return (
-          <OptimizedListItem>
+          <OptimizedListItem
             key={key}
             item={item}
             index={index}
@@ -107,16 +107,16 @@ export const OptimizedList = memo(<T,>({
       
       if (ItemComponent) {
         return (
-          <ItemComponent>
+          <ItemComponent
             key={key} 
             item={item} 
-            index={index} 
+            index={index}
           />
         );
       }
       
       return (
-        <OptimizedListItem>
+        <OptimizedListItem
           key={key}
           item={item}
           index={index}
@@ -199,13 +199,13 @@ interface Player {
   team: string;
   position: string;
   points?: number;
-  image?: string;
+  image?: string;}
 
 interface PlayerCardProps {
   player: Player;
   selected?: boolean;
   onSelect?: (player: Player) => void;
-  showDetails?: boolean;
+  showDetails?: boolean;}
 
 export const PlayerCard = memo(({
   player,
@@ -271,7 +271,7 @@ interface TeamRosterProps {
   players: Player[];
   onPlayerSelect?: (player: Player) => void;
   selectedPlayerId?: string;
-  groupByPosition?: boolean;
+  groupByPosition?: boolean;}
 
 export const TeamRoster = memo(({
   players,
@@ -297,7 +297,7 @@ export const TeamRoster = memo(({
 
   // Memoize render functions
   const renderPlayer = useCallback((player: Player, index: number) => (
-    <PlayerCard>
+    <PlayerCard
       key={player.id}
       player={player}
       selected={player.id === selectedPlayerId}
@@ -317,7 +317,7 @@ export const TeamRoster = memo(({
             </h3>
           )}
           
-          <OptimizedList>
+          <OptimizedList
             items={positionPlayers}
             renderItem={renderPlayer}
             keyExtractor={keyExtractor}
@@ -337,7 +337,7 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl';}
 
 export const OptimizedModal = memo(({
   isOpen,

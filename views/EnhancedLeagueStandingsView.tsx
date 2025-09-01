@@ -18,7 +18,7 @@ interface TeamStanding {
   winPercentage: number;
   playoffPosition: number;
   playoffStatus: 'clinched' | 'contending' | 'eliminated';
-
+}
 
 const EnhancedLeagueStandingsView: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -77,8 +77,8 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       case 'contending': return 'text-yellow-400';
       case 'eliminated': return 'text-red-400';
       default: return 'text-slate-400';
-
-  }
+    }
+  };
 
   const getPlayoffStatusText = (status: string, position: number) => {
     switch (status) {
@@ -86,8 +86,8 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       case 'contending': return 'In Hunt';
       case 'eliminated': return 'Eliminated';
       default: return '';
-
-  }
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -217,7 +217,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
 
       case 'schedule':
         return (
-          <ScheduleGenerator>
+          <ScheduleGenerator
             isCommissioner={isCommissioner}
             onScheduleGenerated={(schedule: any) => {
             }}
@@ -460,7 +460,5 @@ const EnhancedLeagueStandingsView: React.FC = () => {
     </div>
   );
 };
-
-
 
 export default EnhancedLeagueStandingsView;

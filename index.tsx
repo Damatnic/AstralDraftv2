@@ -1,3 +1,23 @@
+// Critical: Import React first to prevent Children undefined error
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+// Initialize services early
+import { errorTrackingService } from './src/services/errorTrackingService';
+import { performanceService } from './src/services/performanceService';
+import { securityService } from './src/services/securityService';
+
+// Import CSS after React is established
+import './index.css';
+import './styles/mobile-responsive.css';
+
+// Import error boundary first
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import DeploymentErrorBoundary from './src/components/deployment/DeploymentErrorBoundary';
+// Import main components after React is properly initialized
+import App from './App';
+import MinimalApp from './MinimalApp';
+
 // Enhanced error logging with tracking service integration
 if (typeof window !== 'undefined') {
   window.onerror = function(message, source, lineno, colno, error) {
@@ -42,17 +62,7 @@ if (typeof window !== 'undefined') {
     }
   });
 
-// Critical: Import React first to prevent Children undefined error
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-
-// Initialize services early
-import { errorTrackingService } from './src/services/errorTrackingService';
-import { performanceService } from './src/services/performanceService';
-import { securityService } from './src/services/securityService';
-
-// Make services available globally
-if (typeof window !== 'undefined') {
+  // Make services available globally
   window.errorTrackingService = errorTrackingService;
   window.performanceService = performanceService;
   window.securityService = securityService;
@@ -62,10 +72,12 @@ if (typeof window !== 'undefined') {
   
   // Security initialization complete
   console.log('🔒 Security service initialized');
+}
 
 // Browser polyfills for older browsers
 if (typeof globalThis === 'undefined') {
   (window as typeof globalThis).globalThis = window;
+}
 
 // Polyfill for requestIdleCallback
 if (!window.requestIdleCallback) {
@@ -80,17 +92,7 @@ if (!window.requestIdleCallback) {
       });
     }, 1) as unknown as number;
   };
-
-// Import CSS after React is established
-import './index.css';
-import './styles/mobile-responsive.css';
-
-// Import error boundary first
-import { ErrorBoundary } from './components/ui/ErrorBoundary';
-import DeploymentErrorBoundary from './src/components/deployment/DeploymentErrorBoundary';
-// Import main components after React is properly initialized
-import App from './App';
-import MinimalApp from './MinimalApp';
+}
 
 // Enhanced error reporting function
 const reportInitializationError = (error: unknown, phase: string) => {
@@ -202,7 +204,7 @@ const initializeApp = () => {
                 console.error('Error Boundary triggered:', error, errorInfo);
                 performanceService.recordMetric('error_boundary_triggered', 1, {
                   error: error.message,
-//                   errorInfo
+                  errorInfo
                 });
               }
             },
@@ -246,3 +248,4 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
   initializeApp();
+}

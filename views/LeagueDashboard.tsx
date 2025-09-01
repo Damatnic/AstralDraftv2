@@ -152,7 +152,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                   </div>
                 </div>
               </Card>
-              <Button>
+              <Button
                 variant="danger"
                 size="sm"
                 onClick={() => dispatch({ type: 'LOGOUT' })}
@@ -175,7 +175,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, type: "spring" }}
           >
-            <Card>
+            <Card
               variant="gradient" 
               className="mb-8 relative overflow-hidden"
 //               glow
@@ -209,7 +209,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                       >
-                        <Card>
+                        <Card
                           variant="elevated" 
                           padding="sm" 
                           className="min-w-[80px] sm:min-w-[100px] bg-gradient-to-br ${item.color} bg-opacity-20"
@@ -235,7 +235,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <Button>
+                    <Button
                       variant="primary" 
                       size="lg"
                       onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_PREP_CENTER' as View })}
@@ -244,7 +244,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                       <span className="mr-2">📋</span>
                       Prepare for Draft
                     </Button>
-                    <Button>
+                    <Button
                       variant="default" 
                       size="lg"
                       onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' as View })}
@@ -270,7 +270,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
             <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Quick Navigation
             </h3>
-            <Button>
+            <Button
               variant="ghost" 
               size="sm"
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' as View })}
@@ -290,7 +290,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as View })}
                 className="cursor-pointer"
               >
-                <Card>
+                <Card
                   variant="elevated" 
 //                   hover 
 //                   interactive
@@ -357,7 +357,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
             <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               AI-Powered Insights
             </h3>
-            <Button>
+            <Button
               variant="ghost" 
               size="sm"
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' as View })}
@@ -427,7 +427,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 + index * 0.03 }}
                     >
-                      <Card>
+                      <Card
                         variant="bordered" 
                         padding="sm" 
 //                         hover
@@ -470,7 +470,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter separated className="justify-center">
-                <Button>
+                <Button
                   variant="ghost" 
                   size="sm"
                   onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ENHANCED_LEAGUE_STANDINGS' as View })}
@@ -544,7 +544,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.6 + index * 0.1, type: "spring" }}
                     >
-                      <Card>
+                      <Card
                         variant="elevated" 
                         padding="sm"
                         className={`bg-gradient-to-r ${prize.color} bg-opacity-10 border-0`}
@@ -617,7 +617,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                     transition={{ delay: 0.6 + index * 0.1, type: "spring" }}
                     whileHover={{ scale: 1.05 }}
                   >
-                    <Card>
+                    <Card
                       variant="gradient" 
 //                       hover 
                       className="h-full text-center relative overflow-hidden group"

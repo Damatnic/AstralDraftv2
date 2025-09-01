@@ -15,7 +15,7 @@ interface EnhancedPlayerDetailModalProps {
     onClose: () => void;
     league?: League | null;
     dispatch: React.Dispatch<any>;
-
+}
 
 const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({ 
     player, 
@@ -57,7 +57,7 @@ const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({
     return (
         <AnimatePresence>
             <Modal isOpen={true} onClose={onClose}>
-                <PlayerProfileView>
+                <PlayerProfileView
                     player={player}
                     league={activeLeague}
                     dispatch={dispatch}

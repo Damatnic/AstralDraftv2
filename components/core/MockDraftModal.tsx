@@ -10,7 +10,7 @@ interface MockDraftModalProps {
     onClose: () => void;
     user: User;
     dispatch: React.Dispatch<any>;
-
+}
 
 const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch }: any) => {
     const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');

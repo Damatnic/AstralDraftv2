@@ -46,7 +46,7 @@ interface WeeklyPowerRankingsProps {
   week: number;
   teams: TeamRanking[];
   onTeamClick?: (teamId: string) => void;
-
+}
 
 const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
   week,

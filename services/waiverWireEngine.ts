@@ -504,13 +504,13 @@ interface BreakoutCandidate {
   player: Player;
   probability: number;
   factors: string[];
-  projectedImprovement: number;
+  projectedImprovement: number;}
 
 interface FAABStrategy {
   allocations: Map<string, number>;
   totalSpend: number;
   remainingBudget: number;
-  confidence: number;
+  confidence: number;}
 
 interface WaiverTrends {
   hotPickups: Array<{ playerId: string; pickupCount: number }>;
@@ -533,7 +533,7 @@ interface LeagueContext {
 
 interface DropCandidate {
   player: Player;
-  confidence: number;
+  confidence: number;}
 
 interface PlayerMetrics {
   targetShare: number;
@@ -541,9 +541,9 @@ interface PlayerMetrics {
   redZoneTargets: number;
   trend: 'rising' | 'falling' | 'stable';
 
-type WaiverPickupType = 'breakout' | 'injury_replacement' | 'trending' | 'buy_low' | 'speculative';
+type WaiverPickupType = 'breakout' | 'injury_replacement' | 'trending' | 'buy_low' | 'speculative';}
 
 // Export singleton instance
-export const waiverWireEngine = new WaiverWireEngine();
+export const waiverWireEngine = new WaiverWireEngine();}
 
 export default waiverWireEngine;

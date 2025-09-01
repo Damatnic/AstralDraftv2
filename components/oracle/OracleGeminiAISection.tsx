@@ -23,7 +23,7 @@ interface NLPCapability {
     description: string;
     examples: string[];
     applications: string[];
-    icon: string;
+    icon: string;}
 
 interface PromptEngineering {
     id: string;
@@ -32,7 +32,7 @@ interface PromptEngineering {
     variables: string[];
     purpose: string;
     example: string;
-
+}
 
 const OracleGeminiAISection: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -313,7 +313,7 @@ const OracleGeminiAISection: React.FC = () => {
                         </p>
                         <div className="processing-stats sm:px-4 md:px-6 lg:px-8">
                             <div className="stat sm:px-4 md:px-6 lg:px-8">
-                                <span className="stat-value sm:px-4 md:px-6 lg:px-8">&lt;2min</span>
+                                <span className="stat-value sm:px-4 md:px-6 lg:px-8"><2min</span>
                                 <span className="stat-label sm:px-4 md:px-6 lg:px-8">Average Response</span>
                             </div>
                             <div className="stat sm:px-4 md:px-6 lg:px-8">

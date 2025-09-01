@@ -28,7 +28,7 @@ interface OfflineIndicatorProps {
     className?: string;
     position?: 'top' | 'bottom';
     showDetails?: boolean;
-
+}
 
 const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = '',
     position = 'top',

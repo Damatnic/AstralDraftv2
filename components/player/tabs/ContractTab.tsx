@@ -6,7 +6,7 @@ import { ContractIcon } from '../../icons/ContractIcon';
 
 interface ContractTabProps {
     player: Player;
-
+}
 
 const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-4 rounded-lg text-center flex-1 sm:px-4 md:px-6 lg:px-8">

@@ -102,7 +102,7 @@ const EditRosterView: React.FC = () => {
             </main>
             <AnimatePresence>
                 {isAddModalOpen && selectedTeam && (
-                    <AddPlayerModal>
+                    <AddPlayerModal
                         league={league}
                         team={selectedTeam}
                         dispatch={dispatch}

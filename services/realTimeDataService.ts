@@ -44,9 +44,9 @@ export interface PredictionUpdate {
     newConfidence: number;
     updatedReasoning: string;
     triggerEvent: string;
-    timestamp: string;
+    timestamp: string;}
 
-export type UpdateCallback = (update: any) => void;
+export type UpdateCallback = (update: any) => void;}
 
 class RealTimeDataService {
     private isActive = false;

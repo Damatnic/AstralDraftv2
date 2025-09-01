@@ -11,7 +11,7 @@ interface MobileEnhancedDashboardProps {
 /**
  * Enhanced mobile dashboard component that wraps content with advanced mobile interactions
  * Provides pull-to-refresh, optimized mobile viewport handling, and gesture feedback
- */
+ */}
 
 export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = ({
   children,
@@ -85,7 +85,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
     >
       {/* Pull to refresh wrapper */}
       {showPullToRefresh && onRefresh ? (
-        <PullToRefresh>
+        <PullToRefresh
           onRefresh={onRefresh}
           threshold={80}
         >

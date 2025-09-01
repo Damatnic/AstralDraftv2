@@ -23,7 +23,8 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
     useLiveData(league, myTeam, opponentTeam);
 
     if (!matchup) {
-        return <div className="p-8 text-center text-gray-400">You have a bye week.</div>
+        return <div className="p-8 text-center text-gray-400">You have a bye week.</div>;
+    }
 
     const isMyTeamA = matchup.teamA.teamId === myTeam.id;
     const myMatchupTeam = isMyTeamA ? matchup.teamA : matchup.teamB;
@@ -31,6 +32,7 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
 
     if (!opponentTeam) {
         return <div className="p-8 text-center text-red-400">Error: Opponent not found.</div>;
+    }
 
     const canGoToPrev = viewedWeek > 1;
     const canGoToNext = viewedWeek < 14;
@@ -81,7 +83,7 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                         transition: { duration: 0.3 },
                     }}
                 >
-                    <MatchupScoreboard>
+                    <MatchupScoreboard
                         myTeam={myTeam}
                         opponentTeam={opponentTeam}
                         myMatchupTeam={myMatchupTeam}
@@ -104,14 +106,14 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                     </div>
 
                     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <MatchupRosterView>
+                        <MatchupRosterView
                             team={myTeam}
                             matchupTeam={myMatchupTeam}
                             isLive={isLive}
                             week={viewedWeek}
                             matchupId={matchup.id}
                         />
-                        <MatchupRosterView>
+                        <MatchupRosterView
                             team={opponentTeam}
                             matchupTeam={opponentMatchupTeam}
                             isLive={isLive}
@@ -123,7 +125,7 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                 
                 <AnimatePresence>
                     {isReportModalOpen && (
-                        <RivalryReportModal>
+                        <RivalryReportModal
                             myTeam={myTeam}
                             opponentTeam={opponentTeam}
                             onClose={() => setIsReportModalOpen(false)}
@@ -133,6 +135,7 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
             </div>
         </div>
     );
+};
 
 const MatchupView: React.FC = () => {
     const { dispatch } = useAppState();

@@ -27,6 +27,7 @@ interface TradeProposal {
     teamAGrade: string;
     teamBGrade: string;
   };
+}
 
 const TradingSystem: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -242,7 +243,7 @@ const TradingSystem: React.FC = () => {
                             onClick={() => setOfferedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
                             className="text-red-400 hover:text-red-300 text-sm"
                           >
-//                             Remove
+                            Remove
                           </button>
                         </div>
                       ))}
@@ -269,7 +270,7 @@ const TradingSystem: React.FC = () => {
                             onClick={() => setRequestedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
                             className="text-red-400 hover:text-red-300 text-sm"
                           >
-//                             Remove
+                            Remove
                           </button>
                         </div>
                       ))}
@@ -284,7 +285,8 @@ const TradingSystem: React.FC = () => {
                 <textarea
                   value={tradeMessage}
                   onChange={(e: any) => setTradeMessage(e.target.value)}
-                  className="form-input h-24 resize-none sm:px-4 md:px-6 lg:px-8"
+                  className="form-input h-24 resize-none"
+                  placeholder="Explain your trade proposal..."
                 />
               </div>
 
@@ -299,8 +301,8 @@ const TradingSystem: React.FC = () => {
                 <button
                   onClick={handleProposeTrade}
                   disabled={!selectedTeam || offeredPlayers.length === 0 || requestedPlayers.length === 0}
-                  className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8"
-                 aria-label="Action button">
+                  className="btn btn-primary flex-1"
+                >
                   Send Trade Proposal
                 </button>
               </div>
@@ -430,7 +432,7 @@ const TradingSystem: React.FC = () => {
                             onClick={() => handleTradeAction(trade.id, 'reject')}
                             className="btn btn-danger flex-1"
                           >
-//                             Reject
+                            Reject
                           </button>
                         </>
                       ) : (
@@ -481,7 +483,7 @@ const TradingSystem: React.FC = () => {
                     </div>
                     <div className="text-right sm:px-4 md:px-6 lg:px-8">
                       <div className="text-xs text-slate-400 mb-2 sm:px-4 md:px-6 lg:px-8">{player.reason}</div>
-                      <button className="btn btn-primary btn-sm sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                      <button className="btn btn-primary btn-sm">
                         Make Offer
                       </button>
                     </div>

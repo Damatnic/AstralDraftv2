@@ -97,7 +97,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Login Password */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Login Password</h3>
-                  <SecurePasswordInput>
+                  <SecurePasswordInput
                     type="password"
                     value={loginPassword}
                     onChange={setLoginPassword}
@@ -113,7 +113,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Registration Password with Strength */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Registration Password</h3>
-                  <SecurePasswordInput>
+                  <SecurePasswordInput
                     type="password"
                     value={registerPassword}
                     onChange={setRegisterPassword}
@@ -129,7 +129,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Confirm Password */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Confirm Password</h3>
-                  <SecurePasswordInput>
+                  <SecurePasswordInput
                     type="password"
                     value={confirmPassword}
                     onChange={setConfirmPassword}
@@ -162,7 +162,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* User PIN (4 digits) */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">User PIN (4 digits)</h3>
-                  <SecurePinInput>
+                  <SecurePinInput
                     type="pin"
                     value={userPin}
                     onChange={setUserPin}
@@ -178,7 +178,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Admin PIN (6 digits) */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Admin PIN (6 digits)</h3>
-                  <SecurePinInput>
+                  <SecurePinInput
                     type="pin"
                     value={adminPin}
                     onChange={setAdminPin}
@@ -194,7 +194,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Custom PIN with different mask */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Custom PIN (8 digits)</h3>
-                  <SecurePinInput>
+                  <SecurePinInput
                     type="pin"
                     value={customPin}
                     onChange={setCustomPin}
@@ -272,7 +272,7 @@ export const SecureInputDemo: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="mt-8 flex justify-center gap-4 sm:px-4 md:px-6 lg:px-8"
         >
-          <Button>
+          <Button
             variant="primary"
             size="lg"
             onClick={validateDemo}
@@ -280,7 +280,7 @@ export const SecureInputDemo: React.FC = () => {
           >
             ✅ Validate All Inputs
           </Button>
-          <Button>
+          <Button
             variant="default"
             size="lg"
             onClick={clearDemo}

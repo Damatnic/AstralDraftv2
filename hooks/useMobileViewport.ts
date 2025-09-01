@@ -23,7 +23,7 @@ export interface MobileViewportConfig {
   preventZoom: boolean;
   fixedViewport: boolean;
   statusBarStyle: 'default' | 'light-content' | 'dark-content';
-  homeIndicatorAutoHidden: boolean;
+  homeIndicatorAutoHidden: boolean;}
 
 const DEFAULT_CONFIG: MobileViewportConfig = {
   preventZoom: true,

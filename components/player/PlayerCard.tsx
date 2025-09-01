@@ -26,7 +26,7 @@ interface PlayerCardProps {
   onToggleCompare: () => void;
   isSelectedForCompare: boolean;
   isInQueue: boolean;
-
+}
 
 const positionStyles: Record<string, { border: string; bg: string; glow: string; badge: string }> = {
     QB: {

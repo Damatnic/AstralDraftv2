@@ -395,7 +395,7 @@ interface NetworkInfo {
   effectiveType: '4g' | '3g' | '2g' | 'slow-2g';
   downlink: number;
   rtt: number;
-  saveData: boolean;
+  saveData: boolean;}
 
 // Batch request processor
 export class BatchProcessor<T, R> {

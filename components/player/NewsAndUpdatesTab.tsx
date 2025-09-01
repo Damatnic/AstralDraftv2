@@ -26,7 +26,7 @@ interface InjuryUpdate {
     severity: 'minor' | 'moderate' | 'major';
     description: string;
     expectedReturn?: string;
-    source: string;
+    source: string;}
 
 interface TradeRumor {
     id: string;
@@ -36,7 +36,7 @@ interface TradeRumor {
     details: string;
     source: string;
     impact: 'positive' | 'negative' | 'neutral';
-
+}
 
 const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     player,

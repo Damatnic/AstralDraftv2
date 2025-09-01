@@ -31,7 +31,7 @@ interface Props {
     className?: string;
 
 type ReportingTab = 'templates' | 'reports' | 'insights' | 'dashboards' | 'custom';
-
+}
 
 const AdvancedReportingInterface: React.FC<Props> = ({ className = '' 
  }: any) => {

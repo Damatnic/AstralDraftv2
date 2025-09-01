@@ -22,13 +22,13 @@ interface TradeAnalysisDashboardProps {
   opponentRoster?: FantasyRoster;
   activeProposals?: TradeProposal[];
   onTradeAction?: (tradeId: string, action: TradeAction) => void;
-  className?: string;
+  className?: string;}
 
 // Component interfaces
 
 interface TradeScoreDisplayProps {
   analysis: TradeAnalysis;
-  compact?: boolean;
+  compact?: boolean;}
 
 interface PlayerValueCardProps {
   player: {
@@ -46,9 +46,9 @@ interface TradeRecommendationProps {
   analysis: TradeAnalysis;
   onAccept?: () => void;
   onReject?: () => void;
-  onCounter?: () => void;
+  onCounter?: () => void;}
 
-// Main dashboard component
+// Main dashboard component}
 
 const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
   currentRoster,
@@ -152,7 +152,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
       {/* Tab Content */}
       <div className="tab-content sm:px-4 md:px-6 lg:px-8">
         {selectedTab === 'analyze' && (
-          <AnalyzeTradesTab>
+          <AnalyzeTradesTab
             activeProposals={activeProposals}
             selectedProposal={selectedProposal}
             onProposalSelect={handleProposalSelect}
@@ -169,7 +169,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
         )}
 
         {selectedTab === 'compare' && (
-          <CompareTradesTab>
+          <CompareTradesTab
             tradeComparison={tradeComparison}
             currentRoster={currentRoster}
             opponentRoster={opponentRoster}
@@ -177,7 +177,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
         )}
 
         {selectedTab === 'recommendations' && (
-          <RecommendationsTab>
+          <RecommendationsTab
             tradeRecommendations={tradeRecommendations}
             currentRoster={currentRoster}
           />
@@ -267,7 +267,7 @@ const AnalyzeTradesTab: React.FC<{
         <div className="custom-trade-builder sm:px-4 md:px-6 lg:px-8">
           <div className="trade-side sm:px-4 md:px-6 lg:px-8">
             <label>Players You're Giving:</label>
-            <PlayerSelector>
+            <PlayerSelector
               availablePlayers={currentRoster.players}
               selectedPlayers={customGivingPlayers}
               onSelectionChange={onCustomGivingChange}
@@ -275,7 +275,7 @@ const AnalyzeTradesTab: React.FC<{
           </div>
           <div className="trade-side sm:px-4 md:px-6 lg:px-8">
             <label>Players You're Receiving:</label>
-            <PlayerSelector>
+            <PlayerSelector
               availablePlayers={[]} // Would get from opponent roster
               selectedPlayers={customReceivingPlayers}
               onSelectionChange={onCustomReceivingChange}
@@ -295,7 +295,7 @@ const AnalyzeTradesTab: React.FC<{
       {(tradeAnalysis.currentAnalysis || singleTradeAnalysis.analysis) && (
         <div className="analysis-results sm:px-4 md:px-6 lg:px-8">
           <h3>Trade Analysis Results</h3>
-          <TradeAnalysisDisplay>
+          <TradeAnalysisDisplay
             analysis={tradeAnalysis.currentAnalysis || singleTradeAnalysis.analysis}
             onTradeAction={onTradeAction}
             showActions={!!selectedProposal}
@@ -425,7 +425,7 @@ const TradeAnalysisDisplay: React.FC<{
       {/* Overall Score and Recommendation */}
       <div className="analysis-header sm:px-4 md:px-6 lg:px-8">
         <TradeScoreDisplay analysis={analysis} />
-        <TradeRecommendationComponent>
+        <TradeRecommendationComponent
           analysis={analysis}
           onAccept={showActions ? () => onTradeAction?.('accept') : undefined}
           onReject={showActions ? () => onTradeAction?.('reject') : undefined}

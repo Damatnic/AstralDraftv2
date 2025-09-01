@@ -31,13 +31,13 @@ export interface AssetAnalysis {
   name: string;
   size: number;
   type: 'js' | 'css' | 'image' | 'font' | 'other';
-  optimization: OptimizationSuggestion[];
+  optimization: OptimizationSuggestion[];}
 
 export interface OptimizationSuggestion {
   type: 'code-split' | 'lazy-load' | 'compress' | 'cache' | 'minify';
   description: string;
   impact: 'high' | 'medium' | 'low';
-  estimatedSavings: number;
+  estimatedSavings: number;}
 
 class PerformanceMonitoringService {
   private metrics: PerformanceMetrics | null = null;

@@ -254,13 +254,13 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             {/* Key Performance Indicators */}
             {performanceData && globalData && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    <StatCard>
+                    <StatCard
                         title="Your Ranking"
                         value={currentUserRank ? `#${currentUserRank.rank}` : 'Unranked'}
                         description="Current position"
                         icon={<Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
                     />
-                    <StatCard>
+                    <StatCard
                         title="Prediction Accuracy"
                         value={`${performanceData.weeklyTrends.length > 0 ? 
                             Math.round(performanceData.weeklyTrends.reduce((acc, w) => acc + w.accuracy, 0) / performanceData.weeklyTrends.length) 
@@ -270,13 +270,13 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                         trend={performanceData.weeklyTrends.length >= 2 ? 
                             (performanceData.weeklyTrends[0].accuracy > performanceData.weeklyTrends[1].accuracy ? 'up' : 'down') : 'neutral'}
                     />
-                    <StatCard>
+                    <StatCard
                         title="Current Streak"
                         value={performanceData.weeklyTrends.length > 0 ? performanceData.weeklyTrends[0].currentStreak : 0}
                         description="Consecutive correct"
                         icon={<Zap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
                     />
-                    <StatCard>
+                    <StatCard
                         title="Total Points"
                         value={performanceData.weeklyTrends.reduce((acc, w) => acc + w.totalPoints, 0)}
                         description={`${performanceData.predictionHistory.length} predictions`}
@@ -297,23 +297,23 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                             <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
                                 <LineChart data={[...performanceData.weeklyTrends].reverse()}>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis>
+                                    <XAxis
                                         dataKey="week" 
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                     />
-                                    <YAxis>
+                                    <YAxis
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                     />
                                     <Tooltip />
                                     {!isMobile && <Legend />}
-                                    <Line>
+                                    <Line
                                         type="monotone" 
                                         dataKey="accuracy" 
                                         stroke="#3B82F6" 
                                         strokeWidth={2}
-                                        name="Accuracy %" 
+                                        name="Accuracy %"
                                     />
                                 </LineChart>
                             </ResponsiveContainer>
@@ -329,7 +329,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                             <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
                                 <BarChart data={performanceData.confidenceAnalysis}>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis>
+                                    <XAxis
                                         dataKey="confidenceRange" 
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
@@ -337,7 +337,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                         textAnchor={isMobile ? 'end' : 'middle'}
                                         height={isMobile ? 60 : 30}
                                     />
-                                    <YAxis>
+                                    <YAxis
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                     />
@@ -358,23 +358,23 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                             <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
                                 <LineChart data={[...performanceData.weeklyTrends].reverse()}>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis>
+                                    <XAxis
                                         dataKey="week" 
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                     />
-                                    <YAxis>
+                                    <YAxis
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                     />
                                     <Tooltip />
                                     {!isMobile && <Legend />}
-                                    <Line>
+                                    <Line
                                         type="monotone" 
                                         dataKey="totalPoints" 
                                         stroke="#F59E0B" 
                                         strokeWidth={2}
-                                        name="Points Earned" 
+                                        name="Points Earned"
                                     />
                                 </LineChart>
                             </ResponsiveContainer>
@@ -390,7 +390,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                             <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
                                 <BarChart data={performanceData.typeBreakdown}>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis>
+                                    <XAxis
                                         dataKey="type" 
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
@@ -398,7 +398,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                         textAnchor={isMobile ? 'end' : 'middle'}
                                         height={isMobile ? 60 : 30}
                                     />
-                                    <YAxis>
+                                    <YAxis
                                         fontSize={isMobile ? 10 : 12}
                                         tick={{ fontSize: isMobile ? 10 : 12 }}
                                     />

@@ -14,7 +14,7 @@ interface PlaceClaimModalProps {
     leagueId: string;
     dispatch: React.Dispatch<any>;
     onClose: () => void;
-
+}
 
 const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, leagueId, dispatch, onClose }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);

@@ -12,7 +12,7 @@ import { ShieldIcon, MailIcon, PaletteIcon, UserIcon } from 'lucide-react';
 
 interface Props {
     className?: string;
-
+}
 
 const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
     const { user, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName } = useAuth();

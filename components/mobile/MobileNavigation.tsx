@@ -24,13 +24,13 @@ interface NavigationItem {
   label: string;
   icon: React.ComponentType<any>;
   path: string;
-  badge?: number;
+  badge?: number;}
 
 interface Props {
   activeView: string;
   onViewChange: (view: string) => void;
   notificationCount?: number;
-  className?: string;
+  className?: string;}
 
 const primaryNavItems: NavigationItem[] = [
   { id: 'home', label: 'Home', icon: Home, path: '/' },

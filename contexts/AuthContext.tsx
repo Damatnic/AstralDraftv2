@@ -13,7 +13,7 @@ interface User {
     display_name: string;
     avatar_url?: string;
     created_at: string;
-
+}
 
 interface AuthState {
     user: User | null;
@@ -21,7 +21,7 @@ interface AuthState {
     isAuthenticated: boolean;
     isLoading: boolean;
     error: string | null;
-    isInitialized: boolean;
+    isInitialized: boolean;}
 
 // Auth actions
 type AuthAction =
@@ -139,12 +139,12 @@ interface AuthContextType {
     logout: () => Promise<void>;
     updateProfile: (updates: Partial<User>) => Promise<void>;
     clearError: () => void;
-    checkAuth: () => Promise<void>;
+    checkAuth: () => Promise<void>;}
 
 // Create context
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);}
 
-// Provider component
+// Provider component}
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, initialAuthState);

@@ -15,7 +15,7 @@ interface AccessibleButtonProps {
     disabled?: boolean;
     ariaLabel?: string;
     className?: string;
-    type?: 'button' | 'submit' | 'reset';
+    type?: 'button' | 'submit' | 'reset';}
 
 export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     children,
@@ -46,7 +46,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
  * Visually hidden component for screen readers
  */
 interface VisuallyHiddenProps {
-    children: React.ReactNode;
+    children: React.ReactNode;}
 
 export const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ children }: any) => {
     return (
@@ -63,7 +63,7 @@ interface LiveRegionProps {
     children: React.ReactNode;
     politeness?: 'polite' | 'assertive';
     atomic?: boolean;
-    relevant?: 'all' | 'additions' | 'removals' | 'text' | 'additions text' | 'additions removals' | 'removals text' | 'text additions' | 'text removals' | 'removals additions';
+    relevant?: 'all' | 'additions' | 'removals' | 'text' | 'additions text' | 'additions removals' | 'removals text' | 'text additions' | 'text removals' | 'removals additions';}
 
 export const LiveRegion: React.FC<LiveRegionProps> = ({
     children,

@@ -26,7 +26,7 @@ interface AccessiblePullToRefreshProps {
     maxPullDistance?: number;
     disabled?: boolean;
     className?: string;
-
+}
 
 export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = ({
     onRefresh,
@@ -166,7 +166,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
             
             {/* Refresh button for keyboard users */}
             <div className="absolute top-2 right-2 z-10 sm:px-4 md:px-6 lg:px-8">
-                <AccessibleButton>
+                <AccessibleButton
                     onClick={handleKeyboardRefresh}
                     disabled={disabled || isRefreshing}
                     className="mobile-focus-ring text-sm px-2 py-1 sm:px-4 md:px-6 lg:px-8"
@@ -245,7 +245,7 @@ interface AccessibleTouchAreaProps {
     disabled?: boolean;
     role?: string;
     ariaLabel?: string;
-
+}
 
 export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
     onTap,

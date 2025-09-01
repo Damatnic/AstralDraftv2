@@ -47,7 +47,7 @@ interface TeamIdentityCustomizerProps {
   currentIdentity?: TeamIdentity;
   onSave: (identity: TeamIdentity) => void;
   onPreview: (identity: TeamIdentity) => void;
-
+}
 
 const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   teamId,

@@ -74,14 +74,14 @@ export interface ClinchingScenario {
   week: number;
   requirements: string[];
   probability: number;
-  type: 'division' | 'wildcard' | 'bye' | 'homefield';
+  type: 'division' | 'wildcard' | 'bye' | 'homefield';}
 
 export interface EliminationScenario {
   week: number;
   requirements: string[];
   probability: number;
   canAvoid: boolean;
-  avoidanceStrategy: string[];
+  avoidanceStrategy: string[];}
 
 export interface SimulationResult {
   simulationId: string;
@@ -123,13 +123,13 @@ export interface RankingMover {
   previousRank: number;
   currentRank: number;
   change: number;
-  reason: string;
+  reason: string;}
 
 export interface TierGroup {
   tier: 'elite' | 'contender' | 'middling' | 'struggling' | 'rebuilding';
   teams: string[];
   description: string;
-  averageRating: number;
+  averageRating: number;}
 
 export interface ScheduleAnalysis {
   teamId: string;
@@ -216,7 +216,7 @@ export interface TeamProjection {
   projectedPoints: number;
   projectedRank: number;
   playoffProbability: number;
-  championshipProbability: number;
+  championshipProbability: number;}
 
 export interface MonteCarloSimulation {
   simulationCount: number;

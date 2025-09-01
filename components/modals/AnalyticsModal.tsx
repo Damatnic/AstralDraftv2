@@ -7,7 +7,7 @@ import { X, BarChart3, TrendingUp, Target, Award, Calendar, Users, Zap } from 'l
 interface AnalyticsModalProps {
   isOpen: boolean;
   onClose: () => void;
-
+}
 
 export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose }: any) => {
   // Handle Escape key to close modal

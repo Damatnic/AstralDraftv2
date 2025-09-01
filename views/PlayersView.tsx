@@ -198,9 +198,9 @@ const PlayersView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <StarIcon>
+                    <StarIcon
                       key={i} 
-                      className={`h-3 w-3 ${i < Math.floor(player.fantasyRank / 20) ? 'text-yellow-400' : 'text-gray-600'}`} 
+                      className={`h-3 w-3 ${i < Math.floor(player.fantasyRank / 20) ? 'text-yellow-400' : 'text-gray-600'}`}
                     />
                   ))}
                 </div>
@@ -422,7 +422,7 @@ const PlayersView: React.FC = () => {
                   setComparePlayers([]);
                 }}
                 className={`px-4 py-2 rounded-xl font-medium transition-all ${
-//                   compareMode 
+                  compareMode 
                     ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' 
                     : 'bg-slate-800/50 text-gray-400 border border-white/10 hover:border-white/20'
                 }`}
@@ -498,7 +498,7 @@ const PlayersView: React.FC = () => {
 
       {/* Player Detail Modal */}
       {selectedPlayer && (
-        <PlayerDetailModal>
+        <PlayerDetailModal
           player={selectedPlayer}
           onClose={() => setSelectedPlayer(null)}
           playerNotes={state.playerNotes || {}}

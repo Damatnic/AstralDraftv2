@@ -69,7 +69,7 @@ export interface LineupPlayer {
   position: string;
   points: number;
   projectedPoints: number;
-  isStarter: boolean;
+  isStarter: boolean;}
 
 export interface ScoreUpdate {
   matchupId: string;
@@ -93,7 +93,7 @@ export interface ScoringStats {
   cacheSize: number;
   activeIntervals: number;
   isGameTime: boolean;
-  currentNFLWeek: number;
+  currentNFLWeek: number;}
 
 class ScoringService {
   private scoreUpdateCallbacks: Map<string, (update: ScoreUpdate) => void> = new Map();

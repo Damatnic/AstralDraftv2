@@ -27,7 +27,7 @@ interface LoadingStats {
   totalLoads: number;
   successfulLoads: number;
   failedLoads: number;
-  averageLoadTime: number;
+  averageLoadTime: number;}
 
 class LazyComponentManager {
   private static instance: LazyComponentManager;
@@ -403,7 +403,7 @@ export const LazyComponentLoader: React.FC<LazyLoaderProps> = ({
 
   return (
     <div ref={containerRef} className="w-full h-full">
-      <ErrorBoundary>
+      <ErrorBoundary
         fallback={(error: Error) => <ErrorFallback error={error} retry={handleRetry} />}
         key={retryCount} // Reset error boundary on retry
       >
@@ -464,7 +464,7 @@ export const LazyRoute: React.FC<{
   fallback?: React.ComponentType;
 }> = ({ component, preload, priority, fallback }: any) => {
   return (
-    <LazyComponentLoader>
+    <LazyComponentLoader
       componentPath={`views/${component}`}
       preload={preload}
       priority={priority}

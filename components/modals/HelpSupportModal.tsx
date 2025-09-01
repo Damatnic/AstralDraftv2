@@ -7,7 +7,7 @@ import { X, HelpCircle, MessageCircle, Book, Video, Search, ChevronRight, Extern
 interface HelpSupportModalProps {
   isOpen: boolean;
   onClose: () => void;
-
+}
 
 export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onClose }: any) => {
   // Handle Escape key to close modal

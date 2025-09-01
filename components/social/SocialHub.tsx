@@ -31,9 +31,9 @@ interface Props {
     leagueId: string;
     className?: string;
 
-type SocialTab = 'feed' | 'messages' | 'forum' | 'comparisons' | 'trash_talk' | 'rivalries' | 'profile';
+type SocialTab = 'feed' | 'messages' | 'forum' | 'comparisons' | 'trash_talk' | 'rivalries' | 'profile';}
 
-// Helper functions for styling
+// Helper functions for styling}
 
 const getActivityTypeStyles = (activityType: string): string => {
     switch (activityType) {

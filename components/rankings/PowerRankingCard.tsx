@@ -12,7 +12,7 @@ interface PowerRankingCardProps {
     ranking: PowerRanking;
     team?: Team;
     isMyTeam?: boolean;
-
+}
 
 const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }: any) => {
     switch (trend) {

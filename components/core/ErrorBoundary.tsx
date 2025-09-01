@@ -4,7 +4,7 @@ interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
-
+}
 
 interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error?: Error; retry: () => void }>;
@@ -127,7 +127,7 @@ const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) =>
 );
 
 export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
-  <ErrorBoundary>
+  <ErrorBoundary
     onError={(error, errorInfo) => {
       // Could send to analytics: trackEvent('error', 'draft', error.message);
     }}
@@ -138,7 +138,7 @@ export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ ch
 );
 
 export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
-  <ErrorBoundary>
+  <ErrorBoundary
     onError={(error, errorInfo) => {
     }}
     fallback={OracleErrorFallback}

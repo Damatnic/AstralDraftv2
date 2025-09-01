@@ -24,7 +24,7 @@ interface FormData {
   password: string;
   confirmPassword: string;
   displayName: string;
-
+}
 
 const EnhancedAuthView: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -273,7 +273,7 @@ const EnhancedAuthView: React.FC = () => {
 
             {/* OAuth Login (only show for login mode) */}
             {mode === 'login' && (
-              <OAuthLoginComponent>
+              <OAuthLoginComponent
                 onSuccess={handleOAuthSuccess}
                 onError={handleOAuthError}
                 className="mb-6 sm:px-4 md:px-6 lg:px-8"

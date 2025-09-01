@@ -9,7 +9,7 @@ import { SwordsIcon } from '../icons/SwordsIcon';
 
 interface ProposeSideBetModalProps {
     onClose: () => void;
-
+}
 
 const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: any) => {
     const { dispatch } = useAppState();

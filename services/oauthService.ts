@@ -19,13 +19,13 @@ export interface OAuthUser {
   email: string;
   username: string;
   displayName: string;
-  avatarUrl?: string;
+  avatarUrl?: string;}
 
 export interface OAuthResponse {
   success: boolean;
   user?: OAuthUser;
   sessionToken?: string;
-  error?: string;
+  error?: string;}
 
 class OAuthService {
   private readonly providers: Record<string, OAuthProvider>;

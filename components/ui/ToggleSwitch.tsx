@@ -9,7 +9,7 @@ interface ToggleSwitchProps {
     id?: string;
     checked: boolean;
     onChange: (checked: boolean) => void;
-
+}
 
 const spring = {
     type: "spring" as const,

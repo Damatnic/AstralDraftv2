@@ -8,7 +8,7 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 interface DraftGradeCardProps {
     team: Team;
     league: League;
-
+}
 
 const gradeColor = (grade: string) => {
     if (['A+', 'A', 'A-'].includes(grade)) return 'text-green-400 border-green-400/50';

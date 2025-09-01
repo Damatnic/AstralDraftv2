@@ -42,7 +42,7 @@ interface LeagueMemorySystemProps {
   userId: string;
   userName: string;
   onUpload?: (memory: Omit<LeagueMemory, 'id' | 'uploadedAt' | 'likes' | 'comments'>) => void;
-
+}
 
 const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   leagueId,

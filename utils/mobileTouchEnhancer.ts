@@ -4,7 +4,7 @@ export interface TouchEnhancerConfig {
   longPressMs?: number;
   swipeThreshold?: number;
   hapticFeedback?: boolean;
-  preventDoubleTouch?: boolean;
+  preventDoubleTouch?: boolean;}
 
 export class MobileTouchEnhancer {
   private static instance: MobileTouchEnhancer;
@@ -252,6 +252,7 @@ export class MobileTouchEnhancer {
     // Mark element as having custom handlers
     element.setAttribute('data-interactive', 'true');
   }
+}
 
 // Initialize the enhancer
 export const touchEnhancer = MobileTouchEnhancer.getInstance();

@@ -12,7 +12,7 @@ interface LeagueTeamsListProps {
     league: League;
     myTeamId: number;
     dispatch: React.Dispatch<any>;
-
+}
 
 export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dispatch }: any) => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -60,7 +60,7 @@ export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeam
             </Widget>
             <AnimatePresence>
                 {isModalOpen && selectedOpponent && (
-                    <ProposeTradeModal>
+                    <ProposeTradeModal
                         myTeam={myTeam}
                         otherTeam={selectedOpponent}
                         leagueId={league.id}

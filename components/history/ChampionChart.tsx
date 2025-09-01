@@ -9,7 +9,7 @@ import { Tooltip } from '../ui/Tooltip';
 interface ChampionChartProps {
     history: LeagueHistoryEntry[];
     teams: Team[];
-
+}
 
 const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) => {
     const championCounts = React.useMemo(() => {

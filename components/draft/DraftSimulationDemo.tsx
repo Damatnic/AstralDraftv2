@@ -23,7 +23,7 @@ interface DemoFeature {
     title: string;
     description: string;
     isHighlight?: boolean;
-
+}
 
 const DraftSimulationDemo: React.FC = () => {
     const [showDemo, setShowDemo] = useState(false);

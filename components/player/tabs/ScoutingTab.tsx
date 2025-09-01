@@ -8,7 +8,7 @@ import { ContractIcon } from '../../icons/ContractIcon';
 
 interface ScoutingTabProps {
   player: Player;
-
+}
 
 const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }: any) => {
   const { scoutingReport: report, contract } = player;

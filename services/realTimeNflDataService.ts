@@ -39,6 +39,7 @@ export interface RealTimeGameEvent {
     severity?: 'low' | 'medium' | 'high' | 'critical';
     impact?: 'positive' | 'negative' | 'neutral';
   };
+}
 
 export interface LivePlayerUpdate {
   playerId: string;
@@ -58,12 +59,14 @@ export interface LivePlayerUpdate {
   };
   injuryStatus: 'healthy' | 'questionable' | 'doubtful' | 'out';
   lastUpdated: number;
+}
 
 export interface LiveGameData {
   game: NFLGame;
   events: RealTimeGameEvent[];
   playerUpdates: LivePlayerUpdate[];
   lastUpdated: number;
+}
 
 export interface OracleDataUpdate {
   type: 'prediction_confidence_change' | 'new_data_available' | 'model_recalibration';
@@ -73,6 +76,7 @@ export interface OracleDataUpdate {
     newDataSources: string[];
     timestamp: number;
   };
+}
 
 // WebSocket connection interface
 interface WebSocketConnection {
@@ -80,6 +84,7 @@ interface WebSocketConnection {
   isConnected: boolean;
   reconnectAttempts: number;
   subscriptions: Set<string>;
+}
 
 class RealTimeNflDataService {
   private readonly wsConnection: WebSocketConnection = {
@@ -522,6 +527,7 @@ class RealTimeNflDataService {
       subscriptions: this.wsConnection.subscriptions.size
     };
   }
+}
 
 // Export singleton instance
 export const realTimeNflDataService = new RealTimeNflDataService();

@@ -19,7 +19,7 @@ interface OptimizationStrategy {
   description: string;
   icon: string;
   color: string;
-
+}
 
 const strategies: OptimizationStrategy[] = [
   {
@@ -144,7 +144,7 @@ const LineupOptimizerWidget: React.FC = () => {
               <p className="text-xs text-gray-400 mt-0.5 sm:px-4 md:px-6 lg:px-8">ML-powered recommendations</p>
             </div>
           </div>
-          <Button>
+          <Button
             variant="default"
             size="sm"
             onClick={() => setShowDetails(!showDetails)}
@@ -290,7 +290,7 @@ const LineupOptimizerWidget: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                <Button>
+                <Button
                   variant="primary"
                   size="sm"
                   onClick={optimizeLineup}
@@ -309,7 +309,7 @@ const LineupOptimizerWidget: React.FC = () => {
                     </>
                   )}
                 </Button>
-                <Button>
+                <Button
                   variant="success"
                   size="sm"
                   onClick={() => {

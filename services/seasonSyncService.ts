@@ -14,7 +14,7 @@ interface GameUpdate {
   awayScore: number;
   quarter: string;
   timeRemaining: string;
-  isComplete: boolean;
+  isComplete: boolean;}
 
 interface PlayerStatUpdate {
   playerId: number;

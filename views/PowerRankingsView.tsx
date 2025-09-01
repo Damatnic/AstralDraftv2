@@ -76,7 +76,7 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                         ) : (
                             <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {rankings.map((ranking: any) => (
-                                    <PowerRankingCard>
+                                    <PowerRankingCard
                                        key={ranking.teamId} 
                                        ranking={ranking} 
                                        team={league.teams.find((t: any) => t.id === ranking.teamId)}
@@ -106,8 +106,9 @@ const PowerRankingsView: React.FC = () => {
                 </button>
             </div>
         );
+    }
 
     return <PowerRankingsContent league={league} dispatch={dispatch} />;
-
+};
 
 export default PowerRankingsView;

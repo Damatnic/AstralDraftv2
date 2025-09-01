@@ -66,7 +66,7 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({ data  }: any) => {
 interface ConfidenceAnalysisProps {
     confidenceByType: Record<string, number>;
     typeAccuracy: Record<string, number>;
-
+}
 
 const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByType, typeAccuracy }: any) => {
     const predictionTypes = Object.keys(confidenceByType);
@@ -131,7 +131,7 @@ const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByTyp
 
 interface InsightCardProps {
     insight: UserInsight;
-
+}
 
 const InsightCard: React.FC<InsightCardProps> = ({ insight }: any) => {
     const getInsightIcon = (type: UserInsight['type']) => {
@@ -187,7 +187,7 @@ interface MetricCardProps {
     subtitle?: string;
     trend?: 'up' | 'down' | 'neutral';
     color?: string;
-
+}
 
 const MetricCard: React.FC<MetricCardProps> = ({ 
     title, 
@@ -256,13 +256,13 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     `${analytics.totalUserChallenges} challenges`}
                     color="text-green-400"
                 />
-                <MetricCard>
+                <MetricCard
                     title="Prediction Quality"
                     value={performanceMetrics.calibrationScore}
                     subtitle="Confidence calibration"
                     color="text-purple-400"
                 />
-                <MetricCard>
+                <MetricCard
                     title="Confidence Correlation"
                     value={performanceMetrics.confidenceCorrelation}
                     subtitle="Accuracy vs confidence"
@@ -293,7 +293,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             {/* Prediction Type Analysis */}
             <Widget title="Prediction Analysis by Type" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 {Object.keys(analytics.confidenceByType).length > 0 ? (
-                    <ConfidenceAnalysis>
+                    <ConfidenceAnalysis
                         confidenceByType={analytics.confidenceByType}
                         typeAccuracy={performanceMetrics.typeAccuracy}
                     />

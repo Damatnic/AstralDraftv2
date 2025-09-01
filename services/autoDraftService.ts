@@ -51,7 +51,7 @@ export interface AutoDraftConfig {
   userStrategy?: DraftStrategy;
   simulateFullLeague: boolean;
   roundLimit?: number;
-  allowTrades?: boolean;
+  allowTrades?: boolean;}
 
 // Advanced player evaluation metrics
 interface PlayerEvaluation {
@@ -63,7 +63,7 @@ interface PlayerEvaluation {
   upside: number;
   scheduleAdjustment: number;
   stackingBonus: number;
-  byeWeekPenalty: number;
+  byeWeekPenalty: number;}
 
 class AutoDraftService {
   private rosterRequirements: RosterRequirements = {

@@ -14,7 +14,7 @@ interface MatchupCardProps {
     matchup: Matchup;
     teams: Team[];
     isWinner?: boolean;
-
+}
 
 const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }: any) => {
     if (!matchupTeam || !team) {

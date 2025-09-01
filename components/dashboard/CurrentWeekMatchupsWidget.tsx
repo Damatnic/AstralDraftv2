@@ -18,7 +18,7 @@ interface MatchupCardProps {
   teams: Team[];
   currentUserId?: string;
   onViewMatchup: () => void;
-
+}
 
 const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId, onViewMatchup }: any) => {
   const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
@@ -113,7 +113,7 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
   };
   
   return (
-    <Widget>
+    <Widget
       title={`Week ${league.currentWeek} ${isPlayoffs ? 'Playoffs' : 'Matchups'}`} 
       icon={<TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       className="col-span-2 sm:px-4 md:px-6 lg:px-8"
@@ -141,7 +141,7 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
         <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
           {currentWeekMatchups.length > 0 ? (
             currentWeekMatchups.map((matchup, index) => (
-              <MatchupCard>
+              <MatchupCard
                 key={matchup.id || index}
                 matchup={matchup}
                 teams={league.teams}

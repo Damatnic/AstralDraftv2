@@ -34,6 +34,7 @@ interface PlayerScore {
     safeties?: number;
     pointsAllowed?: number;
   };
+}
 
 interface TeamScore {
   teamId: string;
@@ -41,12 +42,13 @@ interface TeamScore {
   totalPoints: number;
   projectedPoints: number;
   playerScores: PlayerScore[];
-
+}
 
 interface LiveScoringProps {
   matchupId?: string;
   teamId?: string;
   showProjections?: boolean;
+}
 
 const LiveScoring: React.FC<LiveScoringProps> = ({ 
   matchupId, 
@@ -57,6 +59,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [selectedView, setSelectedView] = useState<'summary' | 'detailed'>('summary');
+  const [isLoading, setIsLoading] = useState(false);
 
   const league = state.leagues[0];
 
@@ -165,7 +168,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
           projectedPoints: Math.round(projectedPoints * 10) / 10,
           isPlaying,
           gameStatus: Math.random() > 0.3 ? 'in_progress' : 'final',
-//           stats
+          stats
         };
       });
 
@@ -174,7 +177,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
         teamName: team.name,
         totalPoints: Math.round(playerScores.reduce((sum, p) => sum + p.points, 0) * 10) / 10,
         projectedPoints: Math.round(playerScores.reduce((sum, p) => sum + p.projectedPoints, 0) * 10) / 10,
-//         playerScores
+        playerScores
       };
     });
   }, [league?.teams]);
@@ -278,13 +281,13 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
               onClick={() => setSelectedView('summary')}
               className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === 'summary' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
-//               Summary
+              Summary
             </button>
             <button
               onClick={() => setSelectedView('detailed')}
               className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === 'detailed' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
-//               Detailed
+              Detailed
             </button>
           </div>
         </div>
@@ -354,7 +357,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                       </span>
                       {!player.isPlaying && (
                         <span className="px-2 py-1 bg-red-900/50 text-red-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
-//                           OUT
+                          OUT
                         </span>
                       )}
                     </div>

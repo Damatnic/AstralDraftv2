@@ -45,7 +45,7 @@ export interface DraftStrategy {
     riskTolerance: 'conservative' | 'moderate' | 'aggressive';
     valueBased: boolean;
     targetPositions: string[];
-
+}
 
 export interface CoachRecommendation {
     id: string;
@@ -59,7 +59,7 @@ export interface CoachRecommendation {
     action?: string;
     impact: number;
     timeLeft?: number;
-
+}
 
 export interface OpponentModel {
     teamId: number;
@@ -85,7 +85,7 @@ export interface MarketInefficiency {
     confidence: number;
     timeWindow: number;
     reasoning: string;
-
+}
 
 const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     league,

@@ -128,7 +128,7 @@ export interface OptimizedImageProps {
   height?: number;
   priority?: boolean;
   className?: string;
-  onLoad?: () => void;
+  onLoad?: () => void;}
 
 export function OptimizedImage({
   src,

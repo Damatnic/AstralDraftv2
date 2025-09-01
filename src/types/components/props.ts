@@ -28,7 +28,7 @@ export interface InteractiveProps extends BaseComponentProps {
   'aria-label'?: string;
   'aria-describedby'?: string;
   'aria-expanded'?: boolean;
-  'aria-controls'?: string;
+  'aria-controls'?: string;}
 
 // ==================== MODAL PROPS ====================
 
@@ -51,14 +51,14 @@ export interface ConfirmModalProps extends BaseModalProps {
   variant?: 'danger' | 'warning' | 'info' | 'success';
   onConfirm: () => void;
   onCancel?: () => void;
-  isLoading?: boolean;
+  isLoading?: boolean;}
 
 export interface PlayerDetailModalProps extends BaseModalProps {
   player: Player;
   showComparison?: boolean;
   showTrade?: boolean;
   canAddToWatchlist?: boolean;
-  onPlayerAction?: (action: string, playerId: string) => void;
+  onPlayerAction?: (action: string, playerId: string) => void;}
 
 // ==================== FORM PROPS ====================
 
@@ -88,7 +88,7 @@ export interface InputProps extends FormFieldProps {
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'filled' | 'outlined';
   leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;}
 
 export interface SelectProps<T = any> extends FormFieldProps {
   value: T;
@@ -483,17 +483,17 @@ export interface ResponsiveProps {
   mobile?: any;
   tablet?: any;
   desktop?: any;
-  largeDesktop?: any;
+  largeDesktop?: any;}
 
-// ==================== THEME PROPS ====================
+// ==================== THEME PROPS ====================}
 
 export interface ThemeProps {
   theme?: 'light' | 'dark' | 'auto';
   colorScheme?: string;
   variant?: string;
-  size?: string;
+  size?: string;}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   BaseComponentProps,

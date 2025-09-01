@@ -64,11 +64,11 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
                     </button>
                     <div className="flex items-center gap-2">
                         <button onClick={() => setSelectedWeek(w => w - 1)} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
-                            &lt;
+                            <
                         </button>
                         <span className="font-bold w-24 text-center">Week {selectedWeek}</span>
                         <button onClick={() => setSelectedWeek(w => w + 1)} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
-                            &gt;
+                            >
                         </button>
                     </div>
                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) className="back-btn">

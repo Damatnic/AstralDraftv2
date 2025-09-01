@@ -15,7 +15,7 @@ interface ProposeTradeModalProps {
     dispatch: React.Dispatch<any>;
     onClose: () => void;
     initialOffer?: Omit<TradeSuggestion, 'toTeamId' | 'rationale'>;
-
+}
 
 const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: boolean; onToggle: () => void; }> = ({ label, subtext, isSelected, onToggle }: any) => (
     <div

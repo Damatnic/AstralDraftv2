@@ -5,7 +5,7 @@ interface WidgetProps {
     icon?: React.ReactNode;
     children: React.ReactNode;
     className?: string;
-
+}
 
 export const Widget: React.FC<WidgetProps> = ({ title, icon, children, className }: any) => {
     return (

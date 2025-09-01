@@ -18,7 +18,7 @@ interface Props {
   showPWAPrompt?: boolean;
   notificationCount?: number;
   className?: string;
-
+}
 
 const MobileLayout: React.FC<Props> = ({ children,
   activeView,
@@ -125,7 +125,7 @@ const MobileLayout: React.FC<Props> = ({ children,
 
       {/* Mobile Navigation */}
       {showNavigation && (isMobile || isTablet) && (
-        <MobileNavigation>
+        <MobileNavigation
           activeView={activeView}
           onViewChange={onViewChange}
           notificationCount={notificationCount}
@@ -135,7 +135,7 @@ const MobileLayout: React.FC<Props> = ({ children,
 
       {/* PWA Install Prompt */}
       {showPWAPrompt && isMobile && (
-        <PWAInstallPrompt>
+        <PWAInstallPrompt
           className={isKeyboardOpen ? 'hidden' : ''}
         />
       )}

@@ -721,19 +721,19 @@ interface TeamStanding {
   teamId: string;
   wins: number;
   losses: number;
-  pointsFor: number;
+  pointsFor: number;}
 
 interface SimulationResults {
   playoffs: number;
   firstRound: number;
   semifinals: number;
   championship: number;
-  firstPlace: number;
+  firstPlace: number;}
 
 // Export singleton instances
 export const playerPerformanceModel = new PlayerPerformanceModel();
 export const tradeAnalysisEngine = new TradeAnalysisEngine(playerPerformanceModel);
-export const championshipCalculator = new ChampionshipProbabilityCalculator(playerPerformanceModel);
+export const championshipCalculator = new ChampionshipProbabilityCalculator(playerPerformanceModel);}
 
 export default {
   playerPerformanceModel,

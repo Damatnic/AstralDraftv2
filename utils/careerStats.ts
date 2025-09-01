@@ -101,3 +101,4 @@ export const calculateHeadToHeadRecord = (myUserId: string, opponentUserId: stri
     });
 
     return record;
+};

@@ -13,7 +13,7 @@ interface Message {
     text: string;
     isLoading?: boolean;
     groundingChunks?: GroundingChunk[];
-
+}
 
 const AssistantView: React.FC = () => {
     const { state, dispatch } = useAppState();

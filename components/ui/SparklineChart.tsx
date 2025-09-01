@@ -8,7 +8,7 @@ interface SparklineChartProps {
     height?: number;
     strokeColor?: string;
     strokeWidth?: number;
-
+}
 
 const SparklineChart: React.FC<SparklineChartProps> = ({
     data,

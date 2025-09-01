@@ -100,7 +100,7 @@ interface SkeletonProps {
   width?: string | number;
   height?: string | number;
   animation?: 'pulse' | 'wave';
-
+}
 
 export const Skeleton: React.FC<SkeletonProps> = ({
   className = '',
@@ -177,7 +177,7 @@ interface ProgressBarProps {
   color?: 'primary' | 'success' | 'warning' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   animated?: boolean;
-
+}
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value,

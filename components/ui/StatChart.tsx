@@ -9,7 +9,7 @@ interface StatChartProps {
   maxValue: number;
   prefix?: string;
   color?: string;
-
+}
 
 const StatChart: React.FC<StatChartProps> = ({ label, value, maxValue, prefix = '', color = 'bg-cyan-500' }: any) => {
   const percentage = (value / maxValue) * 100;

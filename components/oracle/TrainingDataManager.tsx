@@ -41,7 +41,7 @@ interface TrainingMetrics {
     epoch: number;
     learningRate: number;
     validationAccuracy: number;
-
+}
 
 const TrainingDataManager = memo(() => {
     const [activeTab, setActiveTab] = useState<TabType>('overview');

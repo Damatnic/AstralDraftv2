@@ -97,7 +97,7 @@ const ChampionshipOddsView: React.FC = () => {
             </main>
              <AnimatePresence>
                 {isSimModalOpen && (
-                    <TradeScenarioModal>
+                    <TradeScenarioModal
                         league={league}
                         onClose={() => setIsSimModalOpen(false)}
                     />

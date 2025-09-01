@@ -12,7 +12,7 @@ import { PlusCircleIcon } from '../icons/PlusCircleIcon';
 interface CreatePollModalProps {
     leagueId: string;
     onClose: () => void;
-
+}
 
 const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: any) => {
     const { state, dispatch } = useAppState();

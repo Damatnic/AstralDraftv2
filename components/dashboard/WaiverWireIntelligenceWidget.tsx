@@ -29,6 +29,7 @@ interface WaiverRecommendation {
     redZoneTargets: number;
     trend: 'rising' | 'falling' | 'stable';
   };
+}
 
 interface BreakoutCandidate {
   player: Player;
@@ -36,6 +37,7 @@ interface BreakoutCandidate {
   factors: string[];
   nextOpponent: string;
   projectedPoints: number;
+}
 
 const WaiverWireIntelligenceWidget: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -218,7 +220,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
               <p className="text-xs text-gray-400 mt-0.5 sm:px-4 md:px-6 lg:px-8">FAAB: ${faabBudget - faabSpent} remaining</p>
             </div>
           </div>
-          <Button>
+          <Button
             variant="ghost"
             size="sm"
             onClick={analyzeWaiverWire}
@@ -376,7 +378,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
                         {candidate.projectedPoints.toFixed(1)} pts
                       </span>
                     </span>
-                    <Button>
+                    <Button
                       variant="primary"
                       size="sm"
                       className="text-xs px-2 py-1 sm:px-4 md:px-6 lg:px-8"

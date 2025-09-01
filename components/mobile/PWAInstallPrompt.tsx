@@ -12,7 +12,7 @@ interface Props {
   onInstall?: () => void;
   onDismiss?: () => void;
   className?: string;
-
+}
 
 const PWAInstallPrompt: React.FC<Props> = ({ onInstall, 
   onDismiss,

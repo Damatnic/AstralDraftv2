@@ -13,7 +13,7 @@ interface DraftBoardProps {
   onPlayerSelect: (player: Player) => void;
   draftFormat: 'SNAKE' | 'AUCTION';
   teamOnClockId?: number;
-
+}
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }: any) => {
   const { state } = useAppState();
@@ -41,7 +41,7 @@ const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick,
             </div>
           )}
           {teams.map((team: any) => (
-            <TeamColumn>
+            <TeamColumn
               key={team.id}
               team={team}
               picks={draftPicks.filter((p: any) => p.teamId === team.id)}

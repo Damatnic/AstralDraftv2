@@ -27,7 +27,7 @@ interface MobileDashboardWidgetProps {
     trend?: 'up' | 'down' | 'stable';
     color: string;
     onClick?: () => void;
-
+}
 
 const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
     title,
@@ -84,7 +84,7 @@ interface QuickActionProps {
     label: string;
     color: string;
     onClick: () => void;
-
+}
 
 const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }: any) => (
     <motion.button
@@ -155,7 +155,7 @@ const EnhancedDashboardView: React.FC = () => {
 
                         {/* Quick Stats Grid */}
                         <div className="grid grid-cols-2 gap-3">
-                            <MobileDashboardWidget>
+                            <MobileDashboardWidget
                                 title="Total Points"
                                 icon={<TrophyIcon className="w-5 h-5 text-white" />}
                                 value={mockData.totalPoints}
@@ -164,7 +164,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 color="bg-blue-500"
                                 onClick={() => handleViewChange('ANALYTICS_HUB')}
                             
-                            <MobileDashboardWidget>
+                            <MobileDashboardWidget
                                 title="Weekly Rank"
                                 icon={<BarChart3Icon className="w-5 h-5 text-white" />}
                                 value={mockData.weeklyRank}
@@ -173,7 +173,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 color="bg-green-500"
                                 onClick={() => handleViewChange('LEAGUE_STANDINGS')}
                             
-                            <MobileDashboardWidget>
+                            <MobileDashboardWidget
                                 title="My Leagues"
                                 icon={<UsersIcon className="w-5 h-5 text-white" />}
                                 value={mockData.leagueCount}

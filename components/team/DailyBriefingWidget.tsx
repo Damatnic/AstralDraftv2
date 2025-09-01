@@ -16,7 +16,7 @@ interface DailyBriefingWidgetProps {
     myTeam: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () => void, onDismiss: () => void }> = ({ suggestion, onAccept, onDismiss }: any) => {
     const suggestedPlayers = suggestion.recommendedStarters.map((id: any) => players.find((p: any) => p.id === id)).filter(Boolean) as Player[];
@@ -133,7 +133,7 @@ export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam
              {isAdviceLoading && <LoadingSpinner size="sm" text="Optimizing lineup..." />}
             <AnimatePresence>
                 {lineupSuggestion && (
-                    <LineupSuggestion>
+                    <LineupSuggestion
                         suggestion={lineupSuggestion}
                         onAccept={handleAcceptLineup}
                         onDismiss={() => setLineupSuggestion(null)}
@@ -142,7 +142,7 @@ export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam
             </AnimatePresence>
              <AnimatePresence>
                 {claimModalPlayer && (
-                    <PlaceClaimModal>
+                    <PlaceClaimModal
                         playerToAdd={claimModalPlayer}
                         myTeam={myTeam}
                         leagueId={league.id}

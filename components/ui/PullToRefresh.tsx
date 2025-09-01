@@ -17,7 +17,7 @@ interface PullToRefreshProps {
   refreshingText?: string;
   pullText?: string;
   releaseText?: string;
-
+}
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
   threshold = 100,

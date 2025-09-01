@@ -5,7 +5,7 @@ import type { Team, League } from '../../types';
 interface WeeklyScoreChartProps {
     team: Team;
     league: League;
-
+}
 
 const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any) => {
     const chartRef = React.useRef<SVGSVGElement>(null);

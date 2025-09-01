@@ -18,7 +18,7 @@ interface FantasyTabProps {
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface FantasyMetric {
     label: string;
@@ -26,6 +26,7 @@ interface FantasyMetric {
     format: 'number' | 'decimal' | 'percentage';
     trend?: 'up' | 'down' | 'stable';
     color?: string;
+}
 
 interface WeeklyProjection {
     week: number;
@@ -33,7 +34,7 @@ interface WeeklyProjection {
     confidence: number;
     matchup: string;
     difficulty: 'easy' | 'medium' | 'hard';
-
+}
 
 const FantasyTab: React.FC<FantasyTabProps> = ({
     player,

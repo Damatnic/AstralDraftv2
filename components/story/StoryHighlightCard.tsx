@@ -7,7 +7,7 @@ interface StoryHighlightCardProps {
     title: string;
     description: string;
     player?: Player | null;
-
+}
 
 const StoryHighlightCard: React.FC<StoryHighlightCardProps> = ({ icon, title, description, player }: any) => {
     return (

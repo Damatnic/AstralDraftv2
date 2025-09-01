@@ -247,6 +247,7 @@ class LiveDataService {
             await realTimeNflDataService.forceRefresh();
         }
     }
+}
 
 // Export a single instance to be used across the app
 export const liveDataService = new LiveDataService();

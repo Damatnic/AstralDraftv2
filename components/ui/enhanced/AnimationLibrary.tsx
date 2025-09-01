@@ -164,7 +164,7 @@ interface AnimatedElementProps {
   triggerOnView?: boolean;
   viewThreshold?: number;
   repeatOnView?: boolean;
-
+}
 
 export const AnimatedElement: React.FC<AnimatedElementProps> = ({
   children,
@@ -230,7 +230,7 @@ interface StaggeredListProps {
   staggerDelay?: number;
   animation?: keyof typeof animationPresets;
   className?: string;
-
+}
 
 export const StaggeredList: React.FC<StaggeredListProps> = ({
   children,
@@ -272,7 +272,7 @@ interface CountUpProps {
   prefix?: string;
   suffix?: string;
   className?: string;
-
+}
 
 export const CountUp: React.FC<CountUpProps> = ({
   end,
@@ -327,7 +327,7 @@ interface TypewriterProps {
   className?: string;
   cursor?: boolean;
   onComplete?: () => void;
-
+}
 
 export const Typewriter: React.FC<TypewriterProps> = ({
   text,
@@ -390,7 +390,7 @@ interface ParallaxProps {
   children: ReactNode;
   offset?: number;
   className?: string;
-
+}
 
 export const Parallax: React.FC<ParallaxProps> = ({
   children,
@@ -430,7 +430,7 @@ interface MorphingShapeProps {
   shapes: string[];
   duration?: number;
   className?: string;
-
+}
 
 export const MorphingShape: React.FC<MorphingShapeProps> = ({
   shapes,
@@ -484,7 +484,7 @@ interface GlowEffectProps {
   color?: string;
   intensity?: number;
   className?: string;
-
+}
 
 export const GlowEffect: React.FC<GlowEffectProps> = ({
   children,
@@ -509,7 +509,7 @@ interface RippleEffectProps {
   children: ReactNode;
   color?: string;
   className?: string;
-
+}
 
 export const RippleEffect: React.FC<RippleEffectProps> = ({
   children,
@@ -564,7 +564,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
 interface ShimmerEffectProps {
   children: ReactNode;
   className?: string;
-
+}
 
 export const ShimmerEffect: React.FC<ShimmerEffectProps> = ({
   children,
@@ -614,7 +614,7 @@ interface AnimatedGridProps {
   gap?: number;
   staggerDelay?: number;
   className?: string;
-
+}
 
 export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
   children,

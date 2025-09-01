@@ -34,14 +34,14 @@ interface MobileBottomNavigationProps {
     onViewChange: (view: View) => void;
     notificationCount?: number;
     className?: string;
-
+}
 
 interface NavigationItem {
     id: View;
     label: string;
     icon: React.ReactNode;
     color: string;
-    category: 'primary' | 'secondary';
+    category: 'primary' | 'secondary';}
 
 const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
     activeView,
@@ -176,7 +176,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                 onClick={handleClick}
                 whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                 className={`mobile-touch-target mobile-focus-ring flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${
-//                     isActive
+                  isActive
                         ? `${item.color} bg-white/10`
                         : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}

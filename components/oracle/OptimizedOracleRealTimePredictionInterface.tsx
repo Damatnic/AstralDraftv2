@@ -185,7 +185,7 @@ const VirtualizedPredictionList = memo(({
                         }}
                         className="px-4 py-2 sm:px-4 md:px-6 lg:px-8"
                     >
-                        <MemoizedPredictionCard>
+                        <MemoizedPredictionCard
                             prediction={item.data}
                             isSelected={selectedPrediction === item.id}
                             onSelect={onSelectPrediction}
@@ -425,7 +425,7 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
                         )}
 
                         {/* Virtualized predictions list */}
-                        <VirtualizedPredictionList>
+                        <VirtualizedPredictionList
                             predictions={filteredPredictions}
                             selectedPrediction={selectedPrediction}
                             onSelectPrediction={handleSelectPrediction}

@@ -15,9 +15,9 @@ interface UserState {
 interface UserActions {
   login: (user: any) => void;
   logout: () => void;
-  updatePermissions: (permissions: string[]) => void;
+  updatePermissions: (permissions: string[]) => void;}
 
-const UserContext = createContext<(UserState & UserActions) | undefined>(undefined);
+const UserContext = createContext<(UserState & UserActions) | undefined>(undefined);}
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
@@ -97,9 +97,9 @@ interface LeagueState {
 interface LeagueActions {
   setLeagues: (leagues: any[]) => void;
   selectLeague: (leagueId: string) => void;
-  updateLeague: (leagueId: string, updates: any) => void;
+  updateLeague: (leagueId: string, updates: any) => void;}
 
-const LeagueContext = createContext<(LeagueState & LeagueActions) | undefined>(undefined);
+const LeagueContext = createContext<(LeagueState & LeagueActions) | undefined>(undefined);}
 
 export const LeagueProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
@@ -176,9 +176,9 @@ interface UIActions {
   addNotification: (notification: any) => void;
   removeNotification: (id: number) => void;
   toggleSound: () => void;
-  unlockAudio: () => void;
+  unlockAudio: () => void;}
 
-const UIContext = createContext<(UIState & UIActions) | undefined>(undefined);
+const UIContext = createContext<(UIState & UIActions) | undefined>(undefined);}
 
 export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
@@ -285,9 +285,9 @@ interface PlayerDataActions {
   addToWatchlist: (playerId: string) => void;
   removeFromWatchlist: (playerId: string) => void;
   updatePlayerNote: (playerId: string, note: string) => void;
-  updatePlayerNickname: (playerId: string, nickname: string) => void;
+  updatePlayerNickname: (playerId: string, nickname: string) => void;}
 
-const PlayerDataContext = createContext<(PlayerDataState & PlayerDataActions) | undefined>(undefined);
+const PlayerDataContext = createContext<(PlayerDataState & PlayerDataActions) | undefined>(undefined);}
 
 export const PlayerDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(

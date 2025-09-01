@@ -19,13 +19,13 @@ export interface PerformanceMetric {
     delta: number;
     id: string;
     rating: 'good' | 'needs-improvement' | 'poor';
-    navigationType: string;
+    navigationType: string;}
 
 export interface PerformanceConfig {
     enableLogging?: boolean;
     enableReporting?: boolean;
     sampleRate?: number;
-    apiEndpoint?: string;
+    apiEndpoint?: string;}
 
 class MobilePerformanceMonitor {
     private readonly config: PerformanceConfig;

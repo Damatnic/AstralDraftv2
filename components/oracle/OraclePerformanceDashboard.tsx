@@ -134,14 +134,14 @@ const PerformanceChart = memo(({ data, height = 200 }: {
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Line>
+                <Line
                     type="monotone" 
                     dataKey="renderTime" 
                     stroke="#3B82F6" 
                     strokeWidth={2}
                     name="Render Time (ms)"
                 />
-                <Line>
+                <Line
                     type="monotone" 
                     dataKey="cacheHitRate" 
                     stroke="#10B981" 
@@ -318,7 +318,7 @@ const OraclePerformanceDashboard: React.FC<{
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Performance metrics grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <PerformanceMetricCard>
+                <PerformanceMetricCard
                     title="Render Time"
                     value={metrics.averageRenderTime}
                     unit="ms"
@@ -326,7 +326,7 @@ const OraclePerformanceDashboard: React.FC<{
                     color="blue"
                     trend={metrics.averageRenderTime < 16 ? 'up' : 'stable'}
                 />
-                <PerformanceMetricCard>
+                <PerformanceMetricCard
                     title="Cache Hit Rate"
                     value={metrics.cacheHitRate}
                     unit="%"
@@ -334,7 +334,7 @@ const OraclePerformanceDashboard: React.FC<{
                     color="green"
                     trend="up"
                 />
-                <PerformanceMetricCard>
+                <PerformanceMetricCard
                     title="Memory Usage"
                     value={metrics.memoryUsage}
                     unit="MB"
@@ -342,7 +342,7 @@ const OraclePerformanceDashboard: React.FC<{
                     color="orange"
                     trend="stable"
                 />
-                <PerformanceMetricCard>
+                <PerformanceMetricCard
                     title="Render Count"
                     value={metrics.renderCount}
                     unit=""
@@ -479,7 +479,7 @@ const OraclePerformanceDashboard: React.FC<{
                         className="mb-6 sm:px-4 md:px-6 lg:px-8"
                     >
                         <Widget title="Performance Settings" className="bg-white dark:bg-gray-800 sm:px-4 md:px-6 lg:px-8">
-                            <SettingsPanel>
+                            <SettingsPanel
                                 onConfigUpdate={handleConfigUpdate}
                                 currentConfig={oraclePerformanceOptimizationService}
                             />

@@ -18,7 +18,7 @@ const FinanceTrackerView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Widget>
+                <Widget
                     title="Budget Overview"
                     icon={<DollarSignIcon />}
                     className="lg:col-span-2"
@@ -61,7 +61,7 @@ const FinanceTrackerView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget>
+                <Widget
                     title="Team Budgets"
                     icon={<DollarSignIcon />}
                 >
@@ -74,7 +74,7 @@ const FinanceTrackerView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget>
+                <Widget
                     title="Transaction History"
                     icon={<DollarSignIcon />}
                 >

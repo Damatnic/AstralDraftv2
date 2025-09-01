@@ -21,7 +21,7 @@ interface UncertaintySource {
   description: string;
   quantificationMethod: string;
   impact: 'Low' | 'Medium' | 'High';
-  mitigation: string[];
+  mitigation: string[];}
 
 interface CalibrationMetric {
   id: string;
@@ -30,7 +30,7 @@ interface CalibrationMetric {
   description: string;
   idealValue: string;
   interpretation: string;
-
+}
 
 interface PredictionInterval {
   id: string;
@@ -39,7 +39,7 @@ interface PredictionInterval {
   upperBound: number;
   prediction: number;
   method: string;
-  width: number;
+  width: number;}
 
 // Helper functions for method ratings
 const getMethodEffectiveness = (methodId: string): string => {

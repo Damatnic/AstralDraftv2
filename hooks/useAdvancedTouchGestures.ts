@@ -22,11 +22,11 @@ interface SwipeOptions {
   threshold?: number;
   velocityThreshold?: number;
   preventScroll?: boolean;
-  direction?: 'horizontal' | 'vertical' | 'all';
+  direction?: 'horizontal' | 'vertical' | 'all';}
 
 interface PinchOptions {
   threshold?: number;
-  preventZoom?: boolean;
+  preventZoom?: boolean;}
 
 interface UseAdvancedTouchGesturesOptions {
   swipe?: SwipeOptions;

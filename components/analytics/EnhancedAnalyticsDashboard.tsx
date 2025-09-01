@@ -37,13 +37,13 @@ interface PerformanceMetric {
   trend: 'up' | 'down' | 'stable';
   format: 'percentage' | 'number' | 'currency' | 'time';
   color: string;
-  description?: string;
+  description?: string;}
 
 interface ChartConfig {
   type: 'line' | 'area' | 'bar' | 'pie' | 'radar' | 'scatter';
   title: string;
   data: any[];
-  config: any;
+  config: any;}
 
 const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   className = '',
@@ -368,7 +368,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                               <XAxis dataKey={chart.config.xAxisKey} />
                               <YAxis />
                               <Tooltip />
-                              <Line>
+                              <Line
                                 type="monotone" 
                                 dataKey={chart.config.yAxisKey}
                                 stroke={chart.config.color}
@@ -389,7 +389,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                               <PolarGrid />
                               <PolarAngleAxis dataKey={chart.config.angleKey} />
                               <PolarRadiusAxis />
-                              <Radar>
+                              <Radar
                                 name="Performance"
                                 dataKey={chart.config.radiusKey}
                                 stroke={chart.config.color}
@@ -470,7 +470,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                           <Brain className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                           {insight.title}
                         </CardTitle>
-                        <Badge>
+                        <Badge
                           variant={insight.confidence > 80 ? 'default' : 'secondary'}
                         >
                           {insight.confidence}% confident

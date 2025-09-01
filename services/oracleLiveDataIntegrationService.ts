@@ -20,6 +20,7 @@ export interface OracleIntelligenceUpdate {
   message: string;
   source: string;
   metadata?: Record<string, unknown>;
+}
 
 export interface OracleGamePrediction {
   gameId: string;
@@ -32,6 +33,7 @@ export interface OracleGamePrediction {
   confidence: number;
   keyFactors: string[];
   playerProjections: Map<string, number>;
+}
 
 class OracleLiveDataIntegrationService {
   private updates: OracleIntelligenceUpdate[] = [];
@@ -173,6 +175,7 @@ class OracleLiveDataIntegrationService {
       }
     });
   }
+}
 
 // Export singleton instance
 export const oracleLiveDataIntegrationService = new OracleLiveDataIntegrationService();

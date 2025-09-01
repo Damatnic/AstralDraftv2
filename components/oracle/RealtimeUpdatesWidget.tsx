@@ -22,13 +22,13 @@ export interface RealtimeUpdate {
     message: string;
     timestamp: string;
     data?: any;
-
+}
 
 interface RealtimeUpdatesWidgetProps {
     updates: RealtimeUpdate[];
     className?: string;
     maxUpdates?: number;
-    compact?: boolean;
+    compact?: boolean;}
 
 export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
     updates,

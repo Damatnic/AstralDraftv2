@@ -12,7 +12,7 @@ interface TradeEventMessageProps {
     message: ChatMessage;
     league: League;
     onReact: (messageId: string, emoji: string) => void;
-
+}
 
 const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, onReact }: any) => {
     const { tradeEvent, aiHotTake, reactions } = message;

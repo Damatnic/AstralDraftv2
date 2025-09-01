@@ -20,7 +20,7 @@ interface PlayerComparisonTabProps {
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface ComparisonMetric {
     label: string;
@@ -248,7 +248,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                         {/* Current Player */}
                         <Widget title={player.name}>
                             <div className="text-center p-4 sm:px-4 md:px-6 lg:px-8">
-                                <Avatar>
+                                <Avatar
                                     avatar={state.playerAvatars[player.id] || '🏈'}
                                     className="mx-auto mb-3 w-16 h-16 text-4xl rounded-full sm:px-4 md:px-6 lg:px-8"
                                 />
@@ -269,7 +269,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                         {/* Comparison Player */}
                         <Widget title={comparePlayer.name}>
                             <div className="text-center p-4 sm:px-4 md:px-6 lg:px-8">
-                                <Avatar>
+                                <Avatar
                                     avatar={state.playerAvatars[comparePlayer.id] || '🏈'}
                                     className="mx-auto mb-3 w-16 h-16 text-4xl rounded-full sm:px-4 md:px-6 lg:px-8"
                                 />

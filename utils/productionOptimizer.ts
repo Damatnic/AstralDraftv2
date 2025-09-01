@@ -175,6 +175,7 @@ export class ProductionOptimizer {
       timestamp: new Date().toISOString(),
     };
   }
+}
 
 // Initialize the optimizer
 export const productionOptimizer = ProductionOptimizer.getInstance();

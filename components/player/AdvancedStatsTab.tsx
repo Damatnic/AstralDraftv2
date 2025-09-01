@@ -25,7 +25,7 @@ interface StatComparison {
     positionAverage: number;
     rank: number;
     total: number;
-    format: 'number' | 'percentage' | 'decimal';
+    format: 'number' | 'percentage' | 'decimal';}
 
 interface WeeklyProjection {
     week: number;
@@ -33,7 +33,7 @@ interface WeeklyProjection {
     difficulty: 'Easy' | 'Medium' | 'Hard';
     opponent: string;
     confidence: number;
-
+}
 
 const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: any) => {
     // Mock advanced stats - in real app this would come from analytics service

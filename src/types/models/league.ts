@@ -27,7 +27,7 @@ export interface ScoringRule {
   stat: string;
   points: number;
   label: string;
-  category: 'passing' | 'rushing' | 'receiving' | 'kicking' | 'defense' | 'misc';
+  category: 'passing' | 'rushing' | 'receiving' | 'kicking' | 'defense' | 'misc';}
 
 export interface ScoringSettings {
   format: ScoringFormat;
@@ -248,7 +248,7 @@ export interface MatchupPlayer {
   projected: number;
   isStarting: boolean;
   gameStatus: 'NOT_STARTED' | 'IN_PROGRESS' | 'FINAL';
-  isLocked: boolean;
+  isLocked: boolean;}
 
 export interface ScoringEvent {
   id: string;
@@ -262,9 +262,9 @@ export interface ScoringEvent {
   timestamp: Date;
   statType: string;
   quarter?: number;
-  timeRemaining?: string;
+  timeRemaining?: string;}
 
-// ==================== STANDINGS ====================
+// ==================== STANDINGS ====================}
 
 export interface Standings {
   leagueId: string;
@@ -311,7 +311,7 @@ export interface StandingsTeam {
 
 export interface DivisionStandings {
   name: string;
-  teams: StandingsTeam[];
+  teams: StandingsTeam[];}
 
 // ==================== PLAYOFFS ====================
 
@@ -326,13 +326,13 @@ export interface PlayoffBracket {
   thirdPlace?: Team;
   
   createdAt: Date;
-  completedAt?: Date;
+  completedAt?: Date;}
 
 export interface PlayoffRound {
   round: number;
   name: string; // 'Wild Card', 'Divisional', 'Championship'
   week: number;
-  matchups: PlayoffMatchup[];
+  matchups: PlayoffMatchup[];}
 
 export interface PlayoffMatchup {
   id: string;
@@ -408,9 +408,9 @@ export interface League {
   createdAt: Date;
   updatedAt: Date;
   seasonStartDate: Date;
-  seasonEndDate: Date;
+  seasonEndDate: Date;}
 
-// ==================== HISTORY AND RECORDS ====================
+// ==================== HISTORY AND RECORDS ====================}
 
 export interface SeasonSummary {
   season: number;
@@ -440,7 +440,7 @@ export interface AllTimeRecord {
   holder: Team;
   season: number;
   week?: number;
-  date: Date;
+  date: Date;}
 
 export interface ActivityItem {
   id: string;
@@ -448,7 +448,7 @@ export interface ActivityItem {
   user: User;
   description: string;
   timestamp: Date;
-  data?: Record<string, any>;
+  data?: Record<string, any>;}
 
 export interface TradeHistoryItem {
   id: string;
@@ -467,7 +467,7 @@ export interface WaiverHistoryItem {
   action: 'ADD' | 'DROP';
   player: Player;
   cost: number; // FAAB cost or waiver priority
-  successful: boolean;
+  successful: boolean;}
 
 // ==================== LEAGUE CREATION ====================
 
@@ -477,15 +477,15 @@ export interface LeagueTemplate {
   description: string;
   settings: Partial<LeagueSettings>;
   popular: boolean;
-  tags: string[];
+  tags: string[];}
 
 export interface CreateLeagueRequest {
   name: string;
   settings: LeagueSettings;
   templateId?: string;
-  inviteEmails?: string[];
+  inviteEmails?: string[];}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   LeagueStatus,

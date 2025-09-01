@@ -363,7 +363,7 @@ interface CardHeaderProps {
   title?: string;
   subtitle?: string;
   action?: ReactNode;
-
+}
 
 export const CardHeader: React.FC<CardHeaderProps> = ({
   children,
@@ -401,7 +401,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
 interface CardBodyProps {
   children: ReactNode;
   className?: string;
-
+}
 
 export const CardBody: React.FC<CardBodyProps> = ({
   children,
@@ -418,7 +418,7 @@ interface CardFooterProps {
   children: ReactNode;
   className?: string;
   justify?: 'start' | 'center' | 'end' | 'between';
-
+}
 
 export const CardFooter: React.FC<CardFooterProps> = ({
   children,
@@ -587,7 +587,7 @@ interface CardGridProps {
   gap?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   staggerDelay?: number;
-
+}
 
 export const CardGrid: React.FC<CardGridProps> = ({
   children,
@@ -614,7 +614,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
   return (
     <div className={`grid ${columnClasses[columns]} ${gapClasses[gap]} ${className}`}>
       {React.Children.map(children, (child, index) => (
-        <AnimatedElement>
+        <AnimatedElement
           key={index}
           animation="slideUp"
           delay={index * staggerDelay}

@@ -6,7 +6,7 @@ interface EmptyStateProps {
     illustration?: React.ReactNode;
     message: string;
     children?: React.ReactNode;
-
+}
 
 const EmptyState: React.FC<EmptyStateProps> = ({ icon, illustration, message, children }: any) => {
     return (

@@ -46,7 +46,7 @@ export function withLazyLoading<T extends Record<string, any>>(
     }, [preload]);
 
     return (
-      <ErrorBoundary>
+      <ErrorBoundary
         retryCount={retryCount}
         onRetry={() => setRetries(prev => prev + 1)}
         currentRetries={retries}
@@ -95,11 +95,11 @@ interface ErrorBoundaryProps {
   fallback: React.ReactNode;
   retryCount?: number;
   onRetry?: () => void;
-  currentRetries?: number;
+  currentRetries?: number;}
 
 interface ErrorBoundaryState {
   hasError: boolean;
-  error?: Error;
+  error?: Error;}
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {

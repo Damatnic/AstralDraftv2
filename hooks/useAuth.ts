@@ -14,12 +14,12 @@ interface AuthUser {
   role?: 'user' | 'commissioner' | 'admin';
   leagueIds?: string[];
   createdAt?: string;
-  lastLogin?: string;
+  lastLogin?: string;}
 
 interface AuthError {
   code: string;
   message: string;
-  details?: any;
+  details?: any;}
 
 interface UseAuthReturn {
   user: AuthUser | null;
@@ -32,7 +32,7 @@ interface UseAuthReturn {
   refreshToken: () => Promise<void>;
   updateProfile: (updates: Partial<AuthUser>) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  verifyToken: () => boolean;
+  verifyToken: () => boolean;}
 
 // Simulated JWT token functions
 const generateToken = (user: AuthUser): string => {

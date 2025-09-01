@@ -8,7 +8,7 @@ import { useAppState } from '../../contexts/AppContext';
 
 interface InjuryReportWidgetProps {
     myTeam: Team;
-
+}
 
 const InjuryReportWidget: React.FC<InjuryReportWidgetProps> = ({ myTeam }: any) => {
     const { dispatch } = useAppState();

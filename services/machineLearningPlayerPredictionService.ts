@@ -104,13 +104,13 @@ export interface ModelConsensus {
   gradientBoosting: ModelPrediction;
   neuralNetwork: ModelPrediction;
   svm: ModelPrediction;
-  ensemble: ModelPrediction;
+  ensemble: ModelPrediction;}
 
 export interface ModelPrediction {
   prediction: number;
   confidence: number;
   weight: number;
-  featureImportance: Record<string, number>;
+  featureImportance: Record<string, number>;}
 
 export interface PlayerComparison {
   player1: PlayerPredictionResult;
@@ -139,7 +139,7 @@ export interface BacktestResult {
   absoluteError: number;
   percentageError: number;
   rank: number;
-  features: PlayerPredictionFeatures;
+  features: PlayerPredictionFeatures;}
 
 export interface ModelPerformanceMetrics {
   meanAbsoluteError: number;
@@ -149,7 +149,7 @@ export interface ModelPerformanceMetrics {
   accuracy: number;                      // Within 20% of actual
   rankCorrelation: number;               // Spearman correlation of rankings
   calibration: number;                   // Reliability of confidence intervals
-  lastValidated: string;
+  lastValidated: string;}
 
 class MachineLearningPlayerPredictionService {
   private readonly MODEL_WEIGHTS = {

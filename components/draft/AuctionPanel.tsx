@@ -17,7 +17,7 @@ interface AuctionPanelProps {
     myTeamId?: number;
     bidHistory: AuctionState['bidHistory'];
     teams: Team[];
-
+}
 
 const BidHistory: React.FC<{ history: AuctionState['bidHistory'], teams: Team[] }> = ({ history, teams }: any) => (
     <div className="text-xs text-gray-400 flex flex-wrap-reverse items-center gap-x-3 gap-y-1 sm:px-4 md:px-6 lg:px-8">

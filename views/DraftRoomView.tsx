@@ -30,7 +30,7 @@ interface DraftRoomContainerProps {
     dispatch: React.Dispatch<any>;
     playerNotes: AppState['playerNotes'];
     playerQueues: AppState['playerQueues'];
-
+}
 
 const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }: any) => {
     const [playersToCompare, setPlayersToCompare] = React.useState<Player[]>([]);
@@ -111,7 +111,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
             </header>
             <div className="p-2 sm:p-3 flex-shrink-0">
                 {isAuction ? (
-                     <AuctionPanel>
+                     <AuctionPanel
                         nominatingTeam={auctionDraftState.nominatingTeam || undefined}
                         nominatedPlayer={auctionDraftState.nominatedPlayer || null}
                         currentBid={auctionDraftState.currentBid}
@@ -124,7 +124,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
                         teams={league.teams}
                     />
                 ) : (
-                    <TurnTimer>
+                    <TurnTimer
                         currentPick={snakeDraftState.currentPick} 
                         teams={league.teams}
                         draftPicks={league.draftPicks}
@@ -135,7 +135,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
             </div>
             <PanelGroup direction={isMobile ? 'vertical' : 'horizontal'} className="flex-grow px-1 sm:px-2 pb-1 sm:pb-2 gap-1 sm:gap-2">
                 <Panel defaultSize={isMobile ? 35 : 25} minSize={isMobile ? 25 : 20}>
-                    <PlayerPool>
+                    <PlayerPool
                         players={draft.availablePlayers} 
                         onPlayerSelect={handlePlayerSelect}
                         onAddToQueue={addToQueue}
@@ -152,7 +152,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
                 </Panel>
                 <PanelResizeHandle className={`bg-black/20 hover:bg-cyan-400/50 transition-colors rounded-full ${isMobile ? 'h-1 sm:h-2 w-full' : 'w-1 sm:w-2 h-full'} mobile-touch-target`} />
                 <Panel defaultSize={isMobile ? 45 : 50} minSize={30}>
-                    <DraftBoard>
+                    <DraftBoard
                         teams={league.teams} 
                         draftPicks={league.draftPicks} 
                         currentPick={snakeDraftState.currentPick}
@@ -187,7 +187,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
                 </Panel>
             </PanelGroup>
 
-            <CompareTray>
+            <CompareTray
                 players={playersToCompare}
                 onClear={() => setPlayersToCompare([])}
                 onCompare={() => setIsCompareModalOpen(true)}
@@ -201,7 +201,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
 
             <AnimatePresence>
                 {isCompareModalOpen && playersToCompare.length > 0 && (
-                    <PlayerCompareTool>
+                    <PlayerCompareTool
                         players={playersToCompare}
                         onClose={() => setIsCompareModalOpen(false)}
                     />
@@ -228,7 +228,7 @@ const DraftRoomView: React.FC = () => {
                     <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'})} className="btn btn-primary mt-4">Back to League Hub</button>
                 </div>
             ) : (
-                <DraftRoomContainer>
+                <DraftRoomContainer
                   league={league}
                   isPaused={state.isDraftPaused}
                   user={state.user}

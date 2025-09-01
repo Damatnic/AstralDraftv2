@@ -77,35 +77,37 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         {team.name}
                     </h1>
-                     {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">&quot;{team.motto}&quot;</p>}
+                     {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">"{team.motto}"</p>}
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">TEAM HUB • WEEK {league.currentWeek > 16 ? 'Post-Season' : league.currentWeek}</p>
                 </div>
-                 <button onClick={() => setIsEditHeaderModalOpen(true)}
+                <button onClick={() => setIsEditHeaderModalOpen(true)} className="btn-icon">
                     <ImageIcon /> {!isMobile && 'Edit Header'}
                 </button>
                 <div className={`${isMobile ? 'grid grid-cols-2 sm:grid-cols-3 gap-2' : 'flex gap-2 flex-wrap justify-end'}`}>
                     {isKeeperLeague && isPreDraft && (
-                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'KEEPER_SELECTION' }) 
-                                 className="px-4 py-2 bg-yellow-500/80 text-white rounded-lg text-sm hover:bg-yellow-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'KEEPER_SELECTION' })} 
+                                className="px-4 py-2 bg-yellow-500/80 text-white rounded-lg text-sm hover:bg-yellow-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
                             <UsersIcon /> {!isMobile && 'Select Keepers'}
                         </button>
                     )}
-                    <button onClick={() => setIsBrandingModalOpen(true)}
+                    <button onClick={() => setIsBrandingModalOpen(true)} className="btn-icon">
+                        <ImageIcon /> {!isMobile && 'Edit Branding'}
                     </button>
-                    <button onClick={() => setIsShareModalOpen(true)}
+                    <button onClick={() => setIsShareModalOpen(true)} className="btn-icon">
                         <Share2Icon /> {!isMobile && 'Share Team Card'}
                     </button>
-                     {team.themeSongUrl && 
-                        <button onClick={playThemeSong}
+                    {team.themeSongUrl && 
+                        <button onClick={playThemeSong} className="btn-icon">
                             <MusicIcon /> {!isMobile && 'Play Anthem'}
                         </button>
+                    }
 
-                     {isInSeason && (
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'GAMEDAY_HOST' }) 
+                    {isInSeason && (
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'GAMEDAY_HOST' })} 
                                 className="px-4 py-2 bg-red-500/80 text-white rounded-lg text-sm hover:bg-red-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
-                           <TvIcon /> {!isMobile && 'Gameday Host'}
+                            <TvIcon /> {!isMobile && 'Gameday Host'}
                         </button>
-                     )}
+                    )}
                      {isSeasonComplete && (
                          <button onClick={() => setIsAwardsModalOpen(true)}
                             <AwardIcon /> {!isMobile && 'Assign Season Awards'}
@@ -185,7 +187,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
             </main>
             <AnimatePresence>
                 {isEditHeaderModalOpen && (
-                    <EditHeaderModal>
+                    <EditHeaderModal
                         leagueId={league.id}
                         teamId={team.id}
                         currentHeader={team.headerImage}
@@ -194,7 +196,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     />
                 )}
                  {isBrandingModalOpen && (
-                    <EditTeamBrandingModal>
+                    <EditTeamBrandingModal
                         team={team}
                         leagueId={league.id}
                         dispatch={dispatch}
@@ -202,13 +204,13 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     />
                 )}
                  {isShareModalOpen && (
-                    <ShareTeamCardModal>
+                    <ShareTeamCardModal
                         team={team}
                         onClose={() => setIsShareModalOpen(false)}
                     />
                 )}
                 {isAwardsModalOpen && (
-                    <AssignAwardsModal>
+                    <AssignAwardsModal
                         team={team}
                         league={league}
                         dispatch={dispatch}
@@ -216,7 +218,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     />
                 )}
                 {isProposeTradeModalOpen && tradeOpponent && (
-                    <ProposeTradeModal>
+                    <ProposeTradeModal
                         myTeam={team}
                         otherTeam={tradeOpponent}
                         leagueId={league.id}

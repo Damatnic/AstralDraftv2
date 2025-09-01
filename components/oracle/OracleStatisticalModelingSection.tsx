@@ -64,7 +64,7 @@ interface StatisticalDemo {
   inputData: Record<string, any>;
   steps: DemoStep[];
   result: any;
-  interpretation: string;
+  interpretation: string;}
 
 interface DemoStep {
   id: string;
@@ -73,7 +73,7 @@ interface DemoStep {
   calculation: string;
   result: string | number;
   explanation: string;
-
+}
 
 const OracleStatisticalModelingSection: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

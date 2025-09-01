@@ -8,7 +8,7 @@ export interface KeyboardShortcut {
   metaKey?: boolean;
   action: () => void;
   description: string;
-  category?: string;
+  category?: string;}
 
 export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
   const handleKeyDown = useCallback((event: KeyboardEvent) => {

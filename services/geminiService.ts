@@ -9,7 +9,7 @@ const getApiKey = (): string | null => {
         process.env.API_KEY || 
         process.env.GEMINI_API_KEY || 
         process.env.VITE_GEMINI_API_KEY || 
-//         null
+        null
     );
 };
 
@@ -22,6 +22,7 @@ const ai = isApiKeyConfigured && apiKey ? new GoogleGenAI({ apiKey }) : null;
 // API availability check for development feedback
 if (!isApiKeyConfigured) {
     console.warn('🔑 Gemini API key not configured. Add VITE_GEMINI_API_KEY to your .env file to enable real AI features. Using mock responses for development.');
+}
 
 /**
  * Check if Gemini API is properly configured and available
@@ -52,7 +53,7 @@ export const checkGeminiApiStatus = (): {
         configured,
         available,
         message,
-//         apiKeyPresent
+        apiKeyPresent
     };
 };
 
@@ -444,6 +445,8 @@ export const generateTeamBranding = async (userName: string): Promise<{ teamName
         console.error("Error generating team branding:", e);
         return null;
     }
+}
+
 export const generateAiTeamProfile = async (leagueName: string): Promise<AiProfileData | null> => {
     if (!ai) return null;
     const personas: Persona[] = ['The Analyst', 'The Gambler', 'The Trash Talker', 'The Cagey Veteran', 'The Homer', 'The Enforcer', 'Tom Brady', 'Bill Belichick', 'Jerry Jones'];
@@ -493,6 +496,7 @@ export const generateAiTeamProfile = async (leagueName: string): Promise<AiProfi
             persona: personas[Math.floor(Math.random() * personas.length)]
         }
     }
+};
 
 export const streamAssistantResponse = async (prompt: string, leagues: League[], user: User): Promise<AsyncGenerator<GenerateContentResponse>> => {
     if (!isApiKeyConfigured || !ai) {
@@ -520,6 +524,7 @@ export const streamAssistantResponse = async (prompt: string, leagues: League[],
         }
     });
     return response;
+};
 
 // =====================================================================
 // === RE-ENABLED MOCK FUNCTIONS FOR TESTING & DEMO ===================
@@ -662,6 +667,7 @@ export const generatePlayerAvatar = async (player: Player): Promise<string | nul
     const seed = player.name.replace(/\s/g, '');
     const dataUrl = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}&backgroundColor=d1d5db,b6e3f4,c0aede,ffdfbf`;
     return mockApiCall(dataUrl, 200);
+};
 
 export const generateTeamMascot = async (team: Team): Promise<string | null> => {
     const seed = team.name.replace(/\s/g, '');

@@ -27,7 +27,7 @@ export const HighContrastMode: React.FC = () => {
   };
 
   return (
-    <Button>
+    <Button
       variant="default"
       size="sm"
       onClick={toggleHighContrast}

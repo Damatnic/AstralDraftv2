@@ -39,7 +39,7 @@ export interface NFLGame {
   awayScore?: number;
   venue: string;
   weather?: WeatherConditions;
-  odds?: GameOdds;
+  odds?: GameOdds;}
 
 export interface NFLTeam {
   id: string;
@@ -53,6 +53,7 @@ export interface NFLTeam {
     ties: number;
   };
   stats?: TeamStats;
+}
 
 export interface NFLPlayer {
   id: string;
@@ -63,6 +64,7 @@ export interface NFLPlayer {
   stats: PlayerStats;
   injuryStatus?: 'healthy' | 'questionable' | 'doubtful' | 'out';
   fantasyProjection?: number;
+}
 
 export interface PlayerStats {
   passingYards?: number;
@@ -74,6 +76,7 @@ export interface PlayerStats {
   receptions?: number;
   fantasyPoints?: number;
   gamesPlayed?: number;
+}
 
 export interface TeamStats {
   pointsPerGame: number;
@@ -83,20 +86,21 @@ export interface TeamStats {
   turnoverDifferential: number;
   redZoneEfficiency: number;
   thirdDownConversion: number;
+}
 
 export interface GameOdds {
   spread: number;
   total: number;
   moneylineHome: number;
   moneylineAway: number;
-  lastUpdated: string;
+  lastUpdated: string;}
 
 export interface WeatherConditions {
   temperature: number;
   conditions: string;
   windSpeed: number;
   precipitation: number;
-  humidity: number;
+  humidity: number;}
 
 export interface RealPrediction {
   id: string;
@@ -113,12 +117,13 @@ export interface RealPrediction {
     actualValue?: number;
     resolvedAt: string;
   };
+}
 
 export interface PredictionOption {
   id: number;
   text: string;
   odds: number;
-  probability: number;
+  probability: number;}
 
 class ProductionSportsDataService {
   private apiRequestCount = 0;
@@ -876,6 +881,7 @@ class ProductionSportsDataService {
     // Mock implementation for now
     return { winningOption: 0 };
   }
+}
 
 // Export singleton instance
 export const productionSportsDataService = new ProductionSportsDataService();

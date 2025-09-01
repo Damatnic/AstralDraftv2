@@ -20,7 +20,7 @@ import { League, User } from '../../types';
 interface EnhancedMemberManagementProps {
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface MemberAction {
     type: 'PROMOTE_TO_COMMISSIONER' | 'REMOVE_MEMBER' | 'EDIT_TEAM_NAME' | 'CHANGE_AVATAR' | 'TOGGLE_ADMIN';

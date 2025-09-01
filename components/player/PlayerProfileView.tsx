@@ -27,7 +27,7 @@ interface PlayerProfileViewProps {
     league: League;
     dispatch: React.Dispatch<any>;
     onClose?: () => void;
-
+}
 
 const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<string>('overview');
@@ -114,7 +114,7 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
                 <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-start justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
-                            <Avatar>
+                            <Avatar
                                 avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
                                 className="w-20 h-20 text-3xl rounded-xl border-2 border-white/20 sm:px-4 md:px-6 lg:px-8"
                             />

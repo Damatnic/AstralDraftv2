@@ -22,7 +22,7 @@ interface SystemComponent {
     purpose: string;
     inputs: string[];
     outputs: string[];
-    technology: string;
+    technology: string;}
 
 interface DataFlowStep {
     id: string;
@@ -31,7 +31,7 @@ interface DataFlowStep {
     description: string;
     duration: string;
     dependencies: string[];
-
+}
 
 const OracleArchitectureOverview: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -593,7 +593,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             <h4>Performance Metrics</h4>
                             <ul>
                                 <li><strong>Accuracy Rate:</strong> 85%+ across all prediction types</li>
-                                <li><strong>Response Time:</strong> &lt; 2 minutes end-to-end</li>
+                                <li><strong>Response Time:</strong> < 2 minutes end-to-end</li>
                                 <li><strong>Uptime:</strong> 99.9% availability during NFL season</li>
                                 <li><strong>Scalability:</strong> Handles 10K+ concurrent users</li>
                             </ul>

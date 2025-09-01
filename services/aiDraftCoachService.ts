@@ -46,7 +46,7 @@ interface UserDraftPreferences {
   rookiePreference: number;
   stackingEnabled: boolean;
   handcuffPriority: number;
-  byeWeekStrategy: 'ignore' | 'spread' | 'stack';
+  byeWeekStrategy: 'ignore' | 'spread' | 'stack';}
 
 interface MLPrediction {
   playerId: string;
@@ -55,7 +55,7 @@ interface MLPrediction {
   breakoutProbability: number;
   bustProbability: number;
   injuryRisk: number;
-  features: Map<string, number>;
+  features: Map<string, number>;}
 
 class AIDraftCoachService {
   private strategies: Map<string, DraftStrategy> = new Map();

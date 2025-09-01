@@ -26,10 +26,10 @@ import { useOracleNotifications } from '../../hooks/useOracleNotifications';
 
 interface Props {
     week?: number;
-    className?: string;
+    className?: string;}
 
 // Interfaces now imported from extracted components
-
+}
 
 const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1, 
     className = '' 
@@ -377,7 +377,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
     return (
         <OracleErrorBoundary>
             <div className={`oracle-realtime-interface ${className}`}>
-                <Widget>
+                <Widget
                     title="🔮 Oracle Predictions"
                     className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -443,7 +443,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                     {/* Notification Settings Panel */}
                     {showNotificationSettings && (
                         <div className="mb-6 px-4 sm:px-0">
-                            <NotificationPreferencesComponent>
+                            <NotificationPreferencesComponent
                                 onClose={() => setShowNotificationSettings(false)}
                             />
                         </div>
@@ -463,7 +463,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                                     {selectedPredictionData && (
                                         <div className="order-1 sm:px-4 md:px-6 lg:px-8">
                                             <h3 className="text-lg font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Selected Prediction</h3>
-                                            <PredictionDetail>
+                                            <PredictionDetail
                                                 prediction={selectedPredictionData}
                                                 onSubmit={submitPrediction}
                                         </div>
@@ -483,7 +483,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                                                     initial={{ opacity: 0, y: 20 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                 >
-                                                    <PredictionCard>
+                                                    <PredictionCard
                                                         prediction={prediction}
                                                         isSelected={selectedPrediction === prediction.id}
                                                         onClick={() => setSelectedPrediction(prediction.id)}
@@ -501,7 +501,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
 
                                     {/* Real-time Updates */}
                                     <div className="order-4 sm:px-4 md:px-6 lg:px-8">
-                                        <RealtimeUpdatesWidget>
+                                        <RealtimeUpdatesWidget
                                             updates={realtimeUpdates}
 //                                             compact
                                             maxUpdates={3}
@@ -525,7 +525,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                                                     initial={{ opacity: 0, y: 20 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                 >
-                                                    <PredictionCard>
+                                                    <PredictionCard
                                                         prediction={prediction}
                                                         isSelected={selectedPrediction === prediction.id}
                                                         onClick={() => setSelectedPrediction(prediction.id)}
@@ -540,7 +540,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {/* Selected Prediction Detail */}
                                         {selectedPredictionData && (
-                                            <PredictionDetail>
+                                            <PredictionDetail
                                                 prediction={selectedPredictionData}
                                                 onSubmit={submitPrediction}
                                         )}
@@ -549,7 +549,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                                         <EnsembleMLWidget compact={true} />
 
                                         {/* Real-time Updates */}
-                                        <RealtimeUpdatesWidget>
+                                        <RealtimeUpdatesWidget
                                             updates={realtimeUpdates}
 //                                             compact
                                             maxUpdates={5}

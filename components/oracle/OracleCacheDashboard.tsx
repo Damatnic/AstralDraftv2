@@ -14,7 +14,7 @@ interface CacheMetricsDisplayProps {
     onOptimize: () => Promise<any>;
     onWarmCache: (userId: string) => Promise<void>;
     onClearCache: (tags?: string[]) => void;
-
+}
 
 const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
     stats,
@@ -279,7 +279,7 @@ const OracleCacheManager: React.FC = () => {
     const { stats, isOptimizing, optimize, warmCache, clearCache } = useOracleCacheManager();
 
     return (
-        <OracleCacheDashboard>
+        <OracleCacheDashboard
             stats={stats}
             isOptimizing={isOptimizing}
             onOptimize={optimize}

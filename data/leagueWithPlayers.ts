@@ -69,6 +69,7 @@ function generateMockDraftLog(): any[] {
   }
 
   return draftLog;
+}
 
 // Create league with NFL players and schedule
 export const LEAGUE_WITH_PLAYERS: League = {

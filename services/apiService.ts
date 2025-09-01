@@ -19,7 +19,7 @@ interface User {
   avatar?: string;
   emailVerified: boolean;
   createdAt: string;
-  lastLoginAt?: string;
+  lastLoginAt?: string;}
 
 interface League {
   id: string;
@@ -35,7 +35,7 @@ interface League {
   createdAt: string;
   userTeam?: unknown;
   teams?: unknown[];
-  isCommissioner?: boolean;
+  isCommissioner?: boolean;}
 
 interface Player {
   id: string;

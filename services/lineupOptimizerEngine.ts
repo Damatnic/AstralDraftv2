@@ -804,7 +804,7 @@ interface LineupAnalysis {
   bustProbability: number;
   stackingBonus: number;
   positionStrength: Map<string, number>;
-  weakestLink: PlayerProjection;
+  weakestLink: PlayerProjection;}
 
 interface PlayerProjection {
   player: Player;
@@ -814,7 +814,7 @@ interface PlayerProjection {
   confidence: number;
   boomProbability: number;
   bustProbability: number;
-  matchupRating: number;
+  matchupRating: number;}
 
 interface LineupRequirements {
   [position: string]: {
@@ -851,21 +851,21 @@ interface DFSLineupRecommendation {
   ownership: Map<string, number>;
   leveragePlays: Player[];
   strategy: string;
-  confidence: number;
+  confidence: number;}
 
 interface FlexRecommendation {
   player: Player;
   projectedPoints: number;
   positionValue: number;
   matchupRating: number;
-  recommendation: string;
+  recommendation: string;}
 
 interface LineupProjection {
   total: number;
   floor: number;
   ceiling: number;
   volatility: number;
-  stackBonus: number;
+  stackBonus: number;}
 
 // Export singleton instance
 export const lineupOptimizer = new LineupOptimizerEngine({

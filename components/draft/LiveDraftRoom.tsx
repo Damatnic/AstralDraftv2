@@ -18,7 +18,7 @@ interface DraftPick {
   player: Player | null;
   timeRemaining: number;
   isComplete: boolean;
-
+}
 
 interface LiveDraftRoomProps {
   isActive?: boolean;
@@ -684,7 +684,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                 </button>
               </div>
               
-              <PlayerSearch>
+              <PlayerSearch
                 onPlayerSelect={handlePlayerSelect}
                 excludePlayerIds={draftPicks
                   .filter((pick: DraftPick) => pick.isComplete && pick.player)

@@ -12,11 +12,13 @@ interface PerformanceMetrics {
   CLS: number | null;  // Cumulative Layout Shift
   TTFB: number | null; // Time to First Byte
   TTI: number | null;  // Time to Interactive
+}
 
 interface PerformanceOptimizerProps {
   enableMonitoring?: boolean;
   reportToAnalytics?: boolean;
   onMetricsUpdate?: (metrics: PerformanceMetrics) => void;
+}
 
 /**
  * Web Vitals measurement utilities
@@ -200,6 +202,7 @@ class WebVitalsMonitor {
     }
     this.callbacks.clear();
   }
+}
 
 // Singleton instance
 const webVitalsMonitor = new WebVitalsMonitor();
@@ -285,6 +288,7 @@ export class ResourcePriorityManager {
     
     document.head.appendChild(link);
   }
+}
 
 // Singleton instance
 export const resourceManager = new ResourcePriorityManager();

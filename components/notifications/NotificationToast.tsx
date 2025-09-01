@@ -14,7 +14,7 @@ interface NotificationToastProps {
     onDismiss: () => void;
     onMarkAsRead?: () => void;
     autoHideDuration?: number;
-
+}
 
 const NotificationToast: React.FC<NotificationToastProps> = ({ notification,
     onDismiss,
@@ -151,7 +151,7 @@ const NotificationToast: React.FC<NotificationToastProps> = ({ notification,
 interface NotificationToastContainerProps {
     maxToasts?: number;
     position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-
+}
 
 export const NotificationToastContainer: React.FC<NotificationToastContainerProps> = ({
     maxToasts = 3,
@@ -197,7 +197,7 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
             <AnimatePresence>
                 {toastsToShow.map((notification: any) => (
                     <div key={notification.id} className="pointer-events-auto sm:px-4 md:px-6 lg:px-8">
-                        <NotificationToast>
+                        <NotificationToast
                             notification={notification}
                             onDismiss={() => handleDismissToast(notification.id)}
                             onMarkAsRead={() => handleMarkAsRead(notification.id)}

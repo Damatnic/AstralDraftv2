@@ -13,7 +13,7 @@ interface LeakTestResult {
   memoryGrowth: number;
   duration: number;
   leakDetected: boolean;
-  details: string;
+  details: string;}
 
 interface ComponentLeakTest {
   componentName: string;
@@ -23,7 +23,7 @@ interface ComponentLeakTest {
   activeIntervals: number;
   activeListeners: number;
   memoryRetained: number;
-  possibleLeaks: string[];
+  possibleLeaks: string[];}
 
 class MemoryLeakTester {
   private testResults: LeakTestResult[] = [];

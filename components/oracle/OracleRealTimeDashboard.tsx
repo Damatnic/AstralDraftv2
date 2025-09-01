@@ -47,7 +47,7 @@ interface RealTimeMetrics {
     consensusLevel: number;
     confidenceAverage: number;
     trendingDirection: 'up' | 'down' | 'stable';
-
+}
 
 const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predictionId,
     userId,
@@ -282,7 +282,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                 <div className="flex-1 overflow-y-auto pr-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {messages.map((message: any) => (
                         <div key={message.id} className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
-                            <Avatar>
+                            <Avatar
                                 avatar={message.username.charAt(0).toUpperCase()} 
                                 className="h-8 w-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             />
@@ -536,7 +536,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
             {/* Main Content Tabs */}
             <Card>
                 <CardHeader>
-                    <Tabs>
+                    <Tabs
                         items={tabItems}
                         activeTab={activeTab}
                         onTabChange={setActiveTab}

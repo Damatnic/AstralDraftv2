@@ -9,7 +9,7 @@ import ReactMarkdown from 'react-markdown';
 interface StoryTabProps {
   player: Player;
   league: League;
-
+}
 
 const StoryTab: React.FC<StoryTabProps> = ({ player, league }: any) => {
     const [story, setStory] = React.useState<PlayerStory | null>(null);

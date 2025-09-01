@@ -55,7 +55,7 @@ export interface KeeperLeagueConfig {
   keeperDeadline: Date;
   contractYears: boolean;
   salaryCapEnabled: boolean;
-  salaryCap?: number;
+  salaryCap?: number;}
 
 export interface KeeperPlayer extends Player {
   keeperCost: number;
@@ -63,7 +63,7 @@ export interface KeeperPlayer extends Player {
   contractYearsRemaining?: number;
   originalDraftRound?: number;
   isEligibleKeeper: boolean;
-  keeperValue: number; // Calculated keeper value vs cost
+  keeperValue: number; // Calculated keeper value vs cost}
 
 export interface DraftAnalytics {
   efficiencyScore: number;

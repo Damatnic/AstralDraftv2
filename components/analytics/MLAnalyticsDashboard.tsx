@@ -10,7 +10,7 @@ import oracleMachineLearningService, {
 
 interface MLAnalyticsDashboardProps {
     isActive: boolean;
-
+}
 
 const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive }: any) => {
     const [activeTab, setActiveTab] = useState<'performance' | 'features' | 'patterns' | 'insights'>('performance');

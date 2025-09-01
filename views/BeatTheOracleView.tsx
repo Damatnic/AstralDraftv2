@@ -28,7 +28,7 @@ interface OracleChallenge {
     oracleConfidence: number;
     result?: number;
     points?: number;
-
+}
 
 interface UserStats {
     totalChallenges: number;
@@ -37,7 +37,7 @@ interface UserStats {
     winRate: number;
     totalPoints: number;
     currentStreak: number;
-    longestStreak: number;
+    longestStreak: number;}
 
 // Helper function for generating challenges using AI prediction service
 const generateChallenges = async (week: number): Promise<OracleChallenge[]> => {
@@ -432,7 +432,7 @@ const BeatTheOracleView: React.FC = () => {
                                     </div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                                        <ChallengeOptions>
+                                        <ChallengeOptions
                                             challenge={challenge}
                                             onSelectOption={handleSelectOption}
                                         />
@@ -464,7 +464,7 @@ const BeatTheOracleView: React.FC = () => {
 
                     {/* Leaderboard */}
                     <Widget title="Oracle Leaderboard" className="bg-gray-900/50">
-                        <OracleLeaderboard>
+                        <OracleLeaderboard
                             currentUserId={state.user?.id}
                             showAchievements={false}
                             compact={true}
@@ -538,7 +538,7 @@ const BeatTheOracleView: React.FC = () => {
             {activeTab === 'realtime' && <OracleRealTimePredictionInterface />}
             {activeTab === 'leaderboard' && (
                 <div className="space-y-6">
-                    <OracleLeaderboard>
+                    <OracleLeaderboard
                         currentUserId={state.user?.id}
                         showAchievements={true}
                         compact={false}

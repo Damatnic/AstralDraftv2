@@ -23,7 +23,7 @@ interface NavigationItem {
   view: View;
   badge?: number;
   disabled?: boolean;
-
+}
 
 interface EnhancedMobileNavProps {
   currentView: View;

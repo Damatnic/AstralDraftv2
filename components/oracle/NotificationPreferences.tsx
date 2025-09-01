@@ -13,7 +13,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 interface NotificationPreferencesProps {
     className?: string;
     onClose?: () => void;
-
+}
 
 export const NotificationPreferencesComponent: React.FC<NotificationPreferencesProps> = ({
     className = '',
@@ -155,7 +155,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 </div>
                             </div>
                         ) : (
-                            <PreferenceRow>
+                            <PreferenceRow
                                 icon={<Bell className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Browser Notifications"
                                 description="Show desktop notifications for Oracle updates"
@@ -172,14 +172,14 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                         </h4>
 
                         <div className="space-y-0 sm:px-4 md:px-6 lg:px-8">
-                            <PreferenceRow>
+                            <PreferenceRow
                                 icon={<Clock className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Deadline Warnings"
                                 description="Get notified when prediction deadlines are approaching"
                                 enabled={preferences.deadlineWarnings}
                                 onChange={(enabled: any) => handlePreferenceChange('deadlineWarnings', enabled)}
 
-                            <PreferenceRow>
+                            <PreferenceRow
                                 icon={<Target className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Result Announcements"
                                 description="Receive notifications when prediction results are available"
@@ -245,14 +245,14 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                         </h4>
 
                         <div className="space-y-0 sm:px-4 md:px-6 lg:px-8">
-                            <PreferenceRow>
+                            <PreferenceRow
                                 icon={<Bell className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="In-App Notifications"
                                 description="Show notification toasts within the application"
                                 enabled={preferences.inAppNotifications}
                                 onChange={(enabled: any) => handlePreferenceChange('inAppNotifications', enabled)}
 
-                            <PreferenceRow>
+                            <PreferenceRow
                                 icon={<Mail className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />}
                                 title="Email Notifications"
                                 description="Receive email notifications for important updates (coming soon)"

@@ -13,6 +13,7 @@ export interface ModalContextValue {
   openModal: (type: ModalType, data?: any) => void;
   closeModal: () => void;
   isModalOpen: (type: ModalType) => boolean;
+}
 
 const ModalContext = createContext<ModalContextValue | undefined>(undefined);
 
@@ -26,6 +27,7 @@ export const useModal = () => {
 
 interface ModalProviderProps {
   children: ReactNode;
+}
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }: any) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);

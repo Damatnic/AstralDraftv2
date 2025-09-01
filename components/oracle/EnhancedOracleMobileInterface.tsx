@@ -43,7 +43,7 @@ import { NotificationPreferencesComponent } from './NotificationPreferences';
 interface Props {
     week?: number;
     className?: string;
-
+}
 
 interface MobileTouchState {
     startX: number;
@@ -542,7 +542,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                         'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'
                                     }`}>
                                         {predictions.map((prediction: any) => (
-                                            <PredictionCard>
+                                            <PredictionCard
                                                 key={prediction.id}
                                                 prediction={prediction}
                                                 onClick={() => setSelectedPrediction(prediction.id)}
@@ -570,11 +570,11 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
 
                         {activeView === 'stats' && (
                             <div className={`space-y-6 ${isMobile ? 'p-4' : 'p-6'}`}>
-                                <UserStatsWidget>
+                                <UserStatsWidget
                                     stats={userStats} 
                                     className="w-full sm:px-4 md:px-6 lg:px-8"
                                 />
-                                <RealtimeUpdatesWidget>
+                                <RealtimeUpdatesWidget
                                     updates={realtimeUpdates}
                                     className="w-full sm:px-4 md:px-6 lg:px-8"
                                 />
@@ -618,7 +618,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                 </div>
                                 
                                 {predictions.find((p: any) => p.id === selectedPrediction) && (
-                                    <PredictionDetail>
+                                    <PredictionDetail
                                         prediction={predictions.find((p: any) => p.id === selectedPrediction)!}
                                         onSubmit={async (predictionId, choice, confidence) => {
                                             try {
@@ -645,7 +645,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                     </div>
                                 </div>
                                 
-                                <NotificationPreferencesComponent>
+                                <NotificationPreferencesComponent
                                     className="p-6 sm:px-4 md:px-6 lg:px-8"
                                     onClose={() => setShowNotificationSettings(false)}
                                 />

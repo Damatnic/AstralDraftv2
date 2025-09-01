@@ -6,14 +6,14 @@ interface AvatarProps {
   className?: string;
   alt?: string;
   generatedAvatarUrl?: string;
-
+}
 
 export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team avatar', generatedAvatarUrl }: any) => {
   const isImageUrl = generatedAvatarUrl || (avatar && (avatar.startsWith('data:image') || avatar.startsWith('https')));
 
   if (isImageUrl) {
     return (
-      <LazyImage>
+      <LazyImage
         src={generatedAvatarUrl || avatar}
         alt={alt}
         className={`object-cover bg-black/20 ${className}`}

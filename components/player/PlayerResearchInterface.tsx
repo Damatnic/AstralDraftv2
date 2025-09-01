@@ -35,7 +35,7 @@ interface Props {
 
 type ResearchTab = 'search' | 'projections' | 'news' | 'trends' | 'compare' | 'insights';
 type PlayerDetailTab = 'overview' | 'stats' | 'projections' | 'news' | 'trends' | 'compare';
-
+}
 
 const PlayerResearchInterface: React.FC<Props> = ({ className = '' 
  }: any) => {

@@ -12,13 +12,13 @@ interface Props {
     fallbackTitle?: string;
     onRetry?: () => void;
     onReset?: () => void;
-
+}
 
 interface State {
     hasError: boolean;
     error: Error | null;
     errorInfo: any;
-    retryCount: number;
+    retryCount: number;}
 
 export class OracleErrorBoundary extends Component<Props, State> {
     private readonly maxRetries = 3;

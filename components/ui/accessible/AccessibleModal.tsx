@@ -24,7 +24,7 @@ interface AccessibleModalProps {
   returnFocus?: React.RefObject<HTMLElement>;
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
-  role?: 'dialog' | 'alertdialog';
+  role?: 'dialog' | 'alertdialog';}
 
 const AccessibleModal: React.FC<AccessibleModalProps> = ({
   isOpen,

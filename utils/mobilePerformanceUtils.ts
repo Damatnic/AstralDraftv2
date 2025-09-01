@@ -9,6 +9,7 @@ export interface DebouncedFunction<T extends (...args: any[]) => any> {
     (...args: Parameters<T>): void;
     cancel: () => void;
     flush: () => void;
+}
 
 export function debounce<T extends (...args: any[]) => any>(
     func: T,
@@ -53,6 +54,7 @@ export function debounce<T extends (...args: any[]) => any>(
     };
 
     return debounced as DebouncedFunction<T>;
+}
 
 export function throttle<T extends (...args: any[]) => any>(
     func: T,
@@ -110,6 +112,7 @@ export function throttle<T extends (...args: any[]) => any>(
     };
 
     return throttled as DebouncedFunction<T>;
+}
 
 export const useDebounce = <T extends (...args: any[]) => any>(
     callback: T,
@@ -282,11 +285,13 @@ interface MobileDeviceCapabilities {
     batteryLevel?: number;
     devicePixelRatio: number;
     hardwareConcurrency: number;
+}
 
 interface PWAInstallPrompt {
     isInstallable: boolean;
     installPrompt: Event | null;
     showInstallPrompt: () => Promise<void>;
+}
 
 // Device capability detection
 export const detectMobileCapabilities = (): MobileDeviceCapabilities => {
@@ -372,6 +377,16 @@ export const usePWAInstall = (): PWAInstallPrompt => {
         }
     }, [installPrompt]);
 
+    return { isInstallable, installPrompt, showInstallPrompt };
+};
+
+// Image optimization utilities  
+const imageCache = new Map<string, string>();
+export const useImageOptimization = () => {
+    const imageCache = useRef(new Map<string, string>());
+    const deviceCapabilities = detectMobileCapabilities();
+    const { isLowEndDevice, devicePixelRatio } = deviceCapabilities;
+
     const optimizeImage = useCallback((src: string, width?: number, height?: number, quality: number = 0.8, format: 'webp' | 'jpeg' = 'jpeg') => {
         const cacheKey = `${src}-${width}-${height}-${quality}-${format}`;
         if (imageCache.current.has(cacheKey)) {
@@ -440,6 +455,31 @@ export const usePWAInstall = (): PWAInstallPrompt => {
         });
     }, []);
 
+    return { optimizeImage };
+};
+
+// Advanced gesture handling for mobile
+export const useAdvancedGestureTracking = () => {
+    const gestureFrameId = useRef<number | undefined>(undefined);
+    
+    const optimizeGestureCallback = useCallback((callback: () => void) => {
+        if (gestureFrameId.current) {
+            cancelAnimationFrame(gestureFrameId.current);
+        }
+        gestureFrameId.current = requestAnimationFrame(callback);
+    }, []);
+
+    const startGestureTracking = useCallback(() => {
+        // Start gesture tracking logic
+    }, []);
+
+    const endGestureTracking = useCallback(() => {
+        if (gestureFrameId.current) {
+            cancelAnimationFrame(gestureFrameId.current);
+            gestureFrameId.current = undefined;
+        }
+    }, []);
+
     useEffect(() => {
         return () => {
             if (gestureFrameId.current) {
@@ -451,6 +491,6 @@ export const usePWAInstall = (): PWAInstallPrompt => {
     return {
         optimizeGestureCallback,
         startGestureTracking,
-//         endGestureTracking
+        endGestureTracking
     };
 };

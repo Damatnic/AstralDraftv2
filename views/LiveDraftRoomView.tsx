@@ -9,7 +9,7 @@ interface League {
   draftStatus: 'SCHEDULED' | 'ACTIVE' | 'COMPLETED';
   draftTime: Date;
   userTeamId: number;
-
+}
 
 const LiveDraftRoomView: React.FC = () => {
   const [selectedLeague, setSelectedLeague] = useState<League | null>(null);
@@ -68,7 +68,7 @@ const LiveDraftRoomView: React.FC = () => {
   // If in a draft room, render the DraftRoom component
   if (selectedLeague) {
     return (
-      <DraftRoom>
+      <DraftRoom
         leagueId={selectedLeague.id}
         userId={userId}
         teamId={selectedLeague.userTeamId}

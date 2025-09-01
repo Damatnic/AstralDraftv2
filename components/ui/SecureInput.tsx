@@ -39,6 +39,7 @@ interface SecureInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   
   /** Security level: 'standard' | 'high' */
   securityLevel?: 'standard' | 'high';
+}
 
 export interface SecureInputRef {
   getValue: () => string;
@@ -47,6 +48,7 @@ export interface SecureInputRef {
   validate: () => boolean;
   focus: () => void;
   clear: () => void;
+}
 
 const SecureInput = forwardRef<SecureInputRef, SecureInputProps>(({
   validationType = 'text',

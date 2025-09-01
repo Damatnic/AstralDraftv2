@@ -282,7 +282,7 @@ export interface Notification {
   message: string;
   timestamp: Date;
   isRead: boolean;
-  actionUrl?: string;
+  actionUrl?: string;}
 
 // User Types
 export interface User {
@@ -294,7 +294,7 @@ export interface User {
   teams?: Team[];
   leagues?: League[];
   notifications?: Notification[];
-  preferences?: UserPreferences;
+  preferences?: UserPreferences;}
 
 export interface UserPreferences {
   emailNotifications: boolean;
@@ -303,7 +303,7 @@ export interface UserPreferences {
   injuryNotifications: boolean;
   lineupReminders: boolean;
   theme: 'light' | 'dark' | 'auto';
-  timezone: string;
+  timezone: string;}
 
 // Analytics Types
 export interface PlayerProjection {
@@ -314,7 +314,7 @@ export interface PlayerProjection {
   floor: number;
   ceiling: number;
   source: string;
-  lastUpdated: Date;
+  lastUpdated: Date;}
 
 export interface TeamAnalytics {
   teamId: string;
@@ -324,7 +324,7 @@ export interface TeamAnalytics {
   projectedWins: number;
   projectedLosses: number;
   strengthOfSchedule: number;
-  remainingDifficulty: number;
+  remainingDifficulty: number;}
 
 // News/Update Types
 export interface NewsItem {
@@ -336,7 +336,7 @@ export interface NewsItem {
   source: string;
   publishedAt: Date;
   impact: 'positive' | 'negative' | 'neutral';
-  tags: string[];
+  tags: string[];}
 
 // Export all types
 export * from './viewTypes';

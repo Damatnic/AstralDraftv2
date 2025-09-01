@@ -20,7 +20,7 @@ interface HelpArticle {
   lastUpdated: Date;
   helpful: number;
   views: number;
-
+}
 
 interface HelpCategory {
   id: string;

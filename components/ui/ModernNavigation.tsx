@@ -13,7 +13,7 @@ interface NavigationProps {
   currentView?: View;
   onViewChange?: (view: View) => void;
   onLogout?: () => void;
-
+}
 
 interface NavItem {
   id: string;
@@ -21,6 +21,7 @@ interface NavItem {
   icon: string;
   badge?: number;
   accent?: string;
+}
 
 export const ModernNavigation: React.FC<NavigationProps> = ({
   user,
@@ -29,7 +30,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
   leagueName = 'Fantasy League',
   currentView = 'DASHBOARD' as View,
   onViewChange,
-//   onLogout
+  onLogout
 }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -67,7 +68,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 100, damping: 20 }}
         className={'fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ease-out ' + (
-//           scrolled 
+          scrolled 
             ? 'bg-dark-900/95 backdrop-blur-2xl border-b border-white/10 shadow-2xl' 
             : 'bg-gradient-to-b from-dark-900/80 to-transparent backdrop-blur-xl'
         )}
@@ -118,7 +119,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1" role="menubar" aria-label="Navigation menu">
               {navItems.map((item: any) => (
-                <NavButton>
+                <NavButton
                   key={item.id}
                   item={item}
                   isActive={currentView === item.id}
@@ -146,7 +147,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
               </button>
 
               {/* User Profile Dropdown */}
-              <UserMenu>
+              <UserMenu
                 userName={userName}
                 teamName={teamName}
                 onLogout={onLogout}
@@ -170,7 +171,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
             >
               <div className="px-4 py-4 space-y-1 sm:px-4 md:px-6 lg:px-8">
                 {navItems.map((item: any) => (
-                  <MobileNavButton>
+                  <MobileNavButton
                     key={item.id}
                     item={item}
                     isActive={currentView === item.id}
@@ -240,7 +241,7 @@ const MobileNavButton: React.FC<{
     <motion.button
       onClick={onClick}
       className={'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 ' + (
-//         isActive 
+        isActive 
           ? 'bg-gradient-to-r from-primary-500/20 to-primary-600/20 text-white border border-primary-500/30' 
           : 'text-gray-400 hover:text-white hover:bg-white/10'
       )}
@@ -333,7 +334,7 @@ const UserMenu: React.FC<{
                   
                   <div className="my-2 border-t border-white/10 sm:px-4 md:px-6 lg:px-8" />
                   
-                  <MenuButton>
+                  <MenuButton
                     icon="🚪" 
                     label="Sign Out" 
                     onClick={() => {

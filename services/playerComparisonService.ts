@@ -87,7 +87,7 @@ export interface OraclePlayerAccuracy {
   correctPredictions: number;
   accuracy: number;
   averageConfidence: number;
-  lastUpdated: string;
+  lastUpdated: string;}
 
 export interface PlayerComparison {
   id: string;
@@ -97,7 +97,7 @@ export interface PlayerComparison {
   analysis: ComparisonAnalysis;
   recommendations: ComparisonRecommendation[];
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string;}
 
 export interface ComparisonAnalysis {
   winner: string; // Player ID with best projection
@@ -115,7 +115,7 @@ export interface ComparisonRecommendation {
   player: string;
   confidence: number;
   reasoning: string;
-  riskLevel: RiskLevel;
+  riskLevel: RiskLevel;}
 
 class PlayerComparisonService {
   private readonly comparisonCache = new Map<string, PlayerComparison>();

@@ -9,7 +9,7 @@ import { XCircleIcon } from '../icons/XCircleIcon';
 interface ChecklistReportModalProps {
     tasks: IntegrityTask[];
     onClose: () => void;
-
+}
 
 const StatusIcon = ({ status }: { status: IntegrityTaskStatus }) => {
     switch (status) {

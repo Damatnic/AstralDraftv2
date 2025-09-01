@@ -43,7 +43,7 @@ export interface UseMLPlayerPredictionsActions {
   clearPrediction: () => void;
   clearRankings: () => void;
   clearComparison: () => void;
-  clearAll: () => void;
+  clearAll: () => void;}
 
 export interface UseMLPlayerPredictionsOptions {
   autoRefresh?: boolean;

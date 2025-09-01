@@ -7,7 +7,7 @@ import { useEscapeKey } from '../../hooks/useEscapeKey';
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
-
+}
 
 interface SettingItem {
   id: string;
@@ -15,7 +15,7 @@ interface SettingItem {
   description: string;
   type: 'toggle' | 'select' | 'slider';
   value: boolean | string | number;
-  options?: string[];
+  options?: string[];}
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }: any) => {
   // Handle Escape key to close modal

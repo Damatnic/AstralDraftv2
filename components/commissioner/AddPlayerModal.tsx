@@ -15,7 +15,7 @@ interface AddPlayerModalProps {
     team: Team;
     dispatch: React.Dispatch<any>;
     onClose: () => void;
-
+}
 
 const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }: any) => {
     const [search, setSearch] = React.useState('');

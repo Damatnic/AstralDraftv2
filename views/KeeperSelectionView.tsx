@@ -98,7 +98,7 @@ const KeeperSelectionView: React.FC = () => {
                 </motion.div>
 
                 {/* Player Selection Grid */}
-                <Widget>
+                <Widget
                     title={`Your Roster (${selectedIds.size}/${keeperCount} selected)`} 
                     icon={<UsersIcon />}
                     className="glass-pane"

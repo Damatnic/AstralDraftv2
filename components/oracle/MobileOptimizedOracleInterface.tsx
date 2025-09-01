@@ -17,9 +17,9 @@ import OracleRealTimePredictionInterface from './OracleRealTimePredictionInterfa
 
 interface Props {
     week?: number;
-    className?: string;
+    className?: string;}
 
-// Mobile Bottom Navigation Component
+// Mobile Bottom Navigation Component}
 
 const MobileBottomNav: React.FC<{
     activeView: string;
@@ -121,16 +121,16 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
     // If not mobile, render the regular interface
     if (!isMobile) {
         return (
-            <OracleRealTimePredictionInterface>
+            <OracleRealTimePredictionInterface
                 week={week} 
-                className={className} 
+                className={className}
             />
         );
 
     return (
         <div className={`w-full pb-20 ${className}`}>
             {/* Mobile Header */}
-            <MobileHeader>
+            <MobileHeader
                 onMenuToggle={() => setShowMobileMenu(true)}
                 accuracy={accuracy}
             />
@@ -155,15 +155,15 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                 >
-                    <OracleRealTimePredictionInterface>
+                    <OracleRealTimePredictionInterface
                         week={week} 
-                        className="mobile-optimized sm:px-4 md:px-6 lg:px-8" 
+                        className="mobile-optimized sm:px-4 md:px-6 lg:px-8"
                     />
                 </motion.div>
             </div>
 
             {/* Mobile Bottom Navigation */}
-            <MobileBottomNav>
+            <MobileBottomNav
                 activeView={activeView}
                 onViewChange={setActiveView}
                 onSettingsOpen={() => {

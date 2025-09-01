@@ -167,7 +167,7 @@ const AutoDraftView: React.FC = () => {
 
       {/* Main Interface */}
       <div className={showIntro ? 'hidden' : ''}>
-        <AutoDraftInterface>
+        <AutoDraftInterface
           onDraftComplete={handleDraftComplete}
           userId={1}
         />

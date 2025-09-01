@@ -3,7 +3,7 @@ interface LoadingProps {
   size?: 'sm' | 'md' | 'lg';
   text?: string;
   variant?: 'spinner' | 'skeleton';
-
+}
 
 export const Loading: React.FC<LoadingProps> = ({
   size = 'md',

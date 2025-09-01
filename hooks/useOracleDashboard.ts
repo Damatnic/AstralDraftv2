@@ -11,12 +11,12 @@ export interface DashboardData {
     insights: PersonalizedInsight[];
     history: UserPredictionHistory[];
     isLoading: boolean;
-    error: string | null;
+    error: string | null;}
 
 export interface DashboardFilters {
     timeframe: 'week' | 'month' | 'season' | 'all';
     category: string;
-    onlyResolved: boolean;
+    onlyResolved: boolean;}
 
 export const useOracleDashboard = (userId: string, season: number = 2024) => {
     const [data, setData] = useState<DashboardData>({

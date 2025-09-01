@@ -41,7 +41,7 @@ export interface EnhancedNotification {
     actionUrl?: string;
     actionText?: string;
     imageUrl?: string;
-    category: 'draft' | 'oracle' | 'league' | 'system';
+    category: 'draft' | 'oracle' | 'league' | 'system';}
 
 export interface NotificationPreferences {
     userId: string;
@@ -99,7 +99,7 @@ export interface NotificationChannel {
     name: string;
     type: 'push' | 'email' | 'in-app' | 'webhook';
     enabled: boolean;
-    config: any;
+    config: any;}
 
 export interface NotificationTemplate {
     id: string;
@@ -107,7 +107,7 @@ export interface NotificationTemplate {
     title: string;
     messageTemplate: string;
     variables: string[];
-    defaultPriority: NotificationPriority;
+    defaultPriority: NotificationPriority;}
 
 export interface NotificationStats {
     totalSent: number;

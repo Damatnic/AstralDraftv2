@@ -16,7 +16,7 @@ import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
 interface ManageTradesModalProps {
     league: League;
     onClose: () => void;
-
+}
 
 const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }: any) => {
     const { state, dispatch } = useAppState();

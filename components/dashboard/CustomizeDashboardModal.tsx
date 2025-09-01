@@ -10,7 +10,7 @@ import { DragHandleIcon } from '../icons/DragHandleIcon';
 
 interface CustomizeDashboardModalProps {
     onClose: () => void;
-
+}
 
 const widgetLabels: { [key: string]: string } = {
     whatsNext: "What's Next",

@@ -74,14 +74,14 @@ export interface ThemeActions {
   resetTheme: () => void;
   toggleMode: () => void;
   exportTheme: () => string;
-  importTheme: (themeData: string) => void;
+  importTheme: (themeData: string) => void;}
 
-export type ThemeContextType = ThemeState & ThemeActions;
+export type ThemeContextType = ThemeState & ThemeActions;}
 
 // =========================================
 // DEFAULT THEME CONFIGURATIONS
 // =========================================
-
+}
 
 const defaultCustomization: ThemeCustomization = {
   primaryColor: '#4f46e5',
@@ -210,7 +210,7 @@ interface ThemeProviderProps {
   defaultMode?: ThemeMode;
   enableSeasonalThemes?: boolean;
   enableSystemPreference?: boolean;
-
+}
 
 export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
@@ -571,7 +571,7 @@ interface ThemeSwitcherProps {
   className?: string;
   showLabels?: boolean;
   size?: 'sm' | 'md' | 'lg';
-
+}
 
 export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
   className = '',
@@ -625,7 +625,7 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
 
 interface ColorSchemeSelectorProps {
   className?: string;
-
+}
 
 export const ColorSchemeSelector: React.FC<ColorSchemeSelectorProps> = ({
   className = ''

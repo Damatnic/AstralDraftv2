@@ -21,7 +21,7 @@ import { TEAMS_2025 } from '../../data/leagueData';
 interface AutoDraftInterfaceProps {
   onDraftComplete?: (results: TeamDraftResult[]) => void;
   userId?: number;
-
+}
 
 const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete,
   userId = 1 

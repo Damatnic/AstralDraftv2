@@ -71,7 +71,7 @@ export interface SimulationSettings {
     aiDifficulty: 'easy' | 'medium' | 'hard' | 'expert';
     realtimeSpeed: number; // 1x, 2x, 4x, etc.
     includeRookies: boolean;
-    injuryUpdates: boolean;
+    injuryUpdates: boolean;}
 
 export interface SimulationResult {
     id: string;
@@ -80,7 +80,7 @@ export interface SimulationResult {
     userTeam: DraftTeam;
     analytics: SimulationAnalytics;
     timestamp: Date;
-    settings: SimulationSettings;
+    settings: SimulationSettings;}
 
 export interface SimulationAnalytics {
     userRosterScore: number;
@@ -101,7 +101,7 @@ export interface TradeSuggestion {
     receive: Player[];
     reasoning: string;
     confidence: number;
-    valueGap: number;
+    valueGap: number;}
 
 export interface TeamComparison {
     teamId: string;
@@ -110,7 +110,7 @@ export interface TeamComparison {
     strengthAreas: Position[];
     notes: string;
 
-type Position = 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DST';
+type Position = 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DST';}
 
 class AIPlayerEvaluator {
     private readonly playerRankings: Map<string, number> = new Map();

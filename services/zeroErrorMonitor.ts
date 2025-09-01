@@ -242,6 +242,7 @@ Environment: ${import.meta.env.DEV ? 'Development' : 'Production'}
             this.originalConsole.log('🛡️ Zero-Error Monitor deactivated');
         }
     }
+}
 
 // Export singleton instance
 export const zeroErrorMonitor = ZeroErrorMonitor.getInstance();
@@ -249,3 +250,4 @@ export const zeroErrorMonitor = ZeroErrorMonitor.getInstance();
 // Auto-initialize in production builds
 if (import.meta.env.PROD) {
     zeroErrorMonitor;
+}

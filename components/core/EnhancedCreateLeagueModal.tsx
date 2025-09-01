@@ -32,7 +32,7 @@ interface PlayerSetup {
   avatar: string;
   isUser: boolean;
   aiProfile?: AiProfileData;
-
+}
 
 interface EnhancedCreateLeagueModalProps {
   onClose: () => void;

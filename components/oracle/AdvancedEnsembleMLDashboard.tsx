@@ -13,7 +13,7 @@ import oracleEnsembleMachineLearningService, {
 interface Props {
     playerId?: string;
     onPredictionGenerated?: (prediction: EnsemblePredictionDetail) => void;
-
+}
 
 const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId, 
 //     onPredictionGenerated 

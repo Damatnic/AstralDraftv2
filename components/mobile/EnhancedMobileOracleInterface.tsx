@@ -35,14 +35,14 @@ interface PredictionOption {
   id: number;
   text: string;
   odds: number;
-  probability: number;
+  probability: number;}
 
 interface Props {
   activeView: string;
   onViewChange: (view: string) => void;
   week?: number;
   className?: string;
-
+}
 
 const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   onViewChange,
@@ -321,7 +321,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   };
 
   return (
-    <MobileLayout>
+    <MobileLayout
       activeView={activeView}
       onViewChange={onViewChange}
       className={className}

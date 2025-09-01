@@ -63,7 +63,7 @@ export interface UserRewards {
     availableTitles: string[];
     streakMultiplier: number;
     seasonRank: number;
-    weeklyRank: number;
+    weeklyRank: number;}
 
 export interface RewardCalculation {
     basePoints: number;
@@ -73,7 +73,7 @@ export interface RewardCalculation {
     totalPoints: number;
     newAchievements: Achievement[];
     newBadges: Badge[];
-    levelUp?: boolean;
+    levelUp?: boolean;}
 
 class OracleRewardsService {
     private readonly STORAGE_KEY = 'oracleRewards';

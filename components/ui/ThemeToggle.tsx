@@ -5,7 +5,7 @@ import { MoonIcon } from '../icons/MoonIcon';
 interface ThemeToggleProps {
     theme: 'dark' | 'light';
     dispatch: React.Dispatch<any>;
-
+}
 
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, dispatch }: any) => {
     return (

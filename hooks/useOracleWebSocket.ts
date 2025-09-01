@@ -16,13 +16,13 @@ export interface OracleWebSocketConfig {
     onError?: (error: string) => void;
     reconnectDelay?: number;
 
-export type ConnectionStatus = 'connected' | 'disconnected' | 'connecting';
+export type ConnectionStatus = 'connected' | 'disconnected' | 'connecting';}
 
 export interface UseOracleWebSocketReturn {
     connectionStatus: ConnectionStatus;
     sendMessage: (message: OracleWebSocketMessage) => void;
     reconnect: () => void;
-    disconnect: () => void;
+    disconnect: () => void;}
 
 export const useOracleWebSocket = ({
     userId,

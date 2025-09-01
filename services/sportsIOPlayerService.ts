@@ -266,6 +266,7 @@ class SportsIOPlayerService {
       keys: Array.from(this.cache.keys())
     };
   }
+}
 
 // Export singleton instance
 export const sportsIOPlayerService = new SportsIOPlayerService();

@@ -14,7 +14,7 @@ export interface TouchGesture {
     deltaX?: number;
     deltaY?: number;
     duration?: number;
-    touches?: number;
+    touches?: number;}
 
 // Mobile Oracle state interface
 export interface MobileOracleState {
@@ -22,7 +22,7 @@ export interface MobileOracleState {
     orientation: 'portrait' | 'landscape';
     viewportHeight: number;
     activeInput: HTMLElement | null;
-    lastTouchTime: number;
+    lastTouchTime: number;}
 
 // Hook for Oracle touch gestures
 export const useOracleTouchGestures = (

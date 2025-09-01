@@ -4,13 +4,13 @@ export interface SystemHealthCheck {
   status: 'healthy' | 'degraded' | 'critical' | 'unknown';
   responseTime?: number;
   lastCheck: Date;
-  details?: any;
+  details?: any;}
 
 export interface IntegrationReport {
   overallHealth: 'healthy' | 'degraded' | 'critical';
   systems: SystemHealthCheck[];
   recommendations: string[];
-  timestamp: Date;
+  timestamp: Date;}
 
 export class FinalSystemIntegrator {
   private static instance: FinalSystemIntegrator;

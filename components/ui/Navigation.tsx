@@ -16,7 +16,7 @@ interface NavigationButtonProps {
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
-
+}
 
 export const NavigationButton: React.FC<NavigationButtonProps> = ({
   variant = 'secondary',
@@ -46,7 +46,7 @@ interface BackButtonProps {
   customBackRoute?: string;
   label?: string;
   className?: string;
-
+}
 
 export const BackButton: React.FC<BackButtonProps> = ({
   dispatch,
@@ -58,7 +58,7 @@ export const BackButton: React.FC<BackButtonProps> = ({
   const handleBack = createBackHandler(dispatch, currentRoute, customBackRoute);
   
   return (
-    <NavigationButton>
+    <NavigationButton
       variant="back"
       onClick={handleBack}
       className={className}
@@ -91,7 +91,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
   return (
     <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
       {allRoutes.map(({ label, route, variant = 'secondary' }: any) => (
-        <NavigationButton>
+        <NavigationButton
           key={route}
           variant={variant}
           onClick={createNavigationHandler(dispatch, route)}
@@ -110,7 +110,7 @@ interface BreadcrumbNavigationProps {
   leagueName?: string;
   teamName?: string;
   className?: string;
-
+}
 
 export const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
   currentRoute,
@@ -161,7 +161,7 @@ interface ViewHeaderProps {
   teamName?: string;
   actions?: React.ReactNode;
   className?: string;
-
+}
 
 export const ViewHeader: React.FC<ViewHeaderProps> = ({
   title,
@@ -179,7 +179,7 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({
   return (
     <header className={`flex-shrink-0 mb-6 ${className}`}>
       {showBreadcrumbs && (
-        <BreadcrumbNavigation>
+        <BreadcrumbNavigation
           currentRoute={currentRoute}
           dispatch={dispatch}
           leagueName={leagueName}
@@ -203,7 +203,7 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({
         <div className="flex items-center gap-4 ml-4 sm:px-4 md:px-6 lg:px-8">
           {actions}
           {showBackButton && (
-            <BackButton>
+            <BackButton
               dispatch={dispatch}
               currentRoute={currentRoute}
               customBackRoute={customBackRoute}

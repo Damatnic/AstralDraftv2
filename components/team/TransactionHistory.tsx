@@ -19,7 +19,7 @@ interface TransactionHistoryProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface Transaction {
     id: string;
@@ -284,7 +284,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                             {transaction.playerIn && (
                                                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                                                    <Avatar>
+                                                    <Avatar
                                                         avatar={transaction.playerIn.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
                                                         className="w-8 h-8 text-lg rounded-md sm:px-4 md:px-6 lg:px-8"
                                                     />
@@ -294,7 +294,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                                             {transaction.type === 'TRADE' && <ArrowRightLeftIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />}
                                             {transaction.playerOut && (
                                                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                                                    <Avatar>
+                                                    <Avatar
                                                         avatar={transaction.playerOut.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
                                                         className="w-8 h-8 text-lg rounded-md sm:px-4 md:px-6 lg:px-8"
                                                     />

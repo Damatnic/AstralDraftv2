@@ -10,7 +10,7 @@ interface NavigationProps {
   teamName?: string;
   leagueName?: string;
   onLogout?: () => void;
-
+}
 
 interface NavItem {
   id: View;
@@ -19,7 +19,7 @@ interface NavItem {
   description?: string;
   badge?: number | string;
   color: string;
-  bgGradient: string;
+  bgGradient: string;}
 
 export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
   onViewChange,
@@ -163,7 +163,7 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
             {/* Desktop Navigation Items */}
             <div className="hidden lg:flex items-center gap-2">
               {navItems.map((item: any) => (
-                <NavButton>
+                <NavButton
                   key={item.id}
                   item={item}
                   isActive={currentView === item.id}
@@ -205,7 +205,7 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
             >
               <div className="p-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {navItems.map((item: any) => (
-                  <MobileNavItem>
+                  <MobileNavItem
                     key={item.id}
                     item={item}
                     isActive={currentView === item.id}

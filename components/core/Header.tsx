@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     return (
         <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 glass-pane border-b-0 rounded-b-xl mx-auto max-w-7xl mt-4">
              <div className="flex items-center gap-2">
-                <LazyImage>
+                <LazyImage
                   src="/favicon.svg" 
                   alt="Astral Draft Logo" 
                   className="h-8 w-8"

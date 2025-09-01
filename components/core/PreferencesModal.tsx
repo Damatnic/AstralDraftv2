@@ -9,7 +9,7 @@ import { requestNotificationPermission } from '../../utils/notifications';
 
 interface PreferencesModalProps {
     onClose: () => void;
-
+}
 
 export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }: any) => {
     const { state, dispatch } = useAppState();
@@ -47,7 +47,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }: a
                     </div>
                     <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                         <label htmlFor="sound-toggle" className="font-semibold sm:px-4 md:px-6 lg:px-8">Sound Effects</label>
-                        <ToggleSwitch>
+                        <ToggleSwitch
                             id="sound-toggle"
                             checked={state.soundEnabled}
                             onChange={() => dispatch({ type: 'TOGGLE_SOUND' }}

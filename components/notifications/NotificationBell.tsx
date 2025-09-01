@@ -12,7 +12,7 @@ import NotificationCenter from './NotificationCenter';
 
 interface NotificationBellProps {
     className?: string;
-
+}
 
 const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: any) => {
     const { unreadCount } = useNotifications();
@@ -50,7 +50,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: a
 
             <AnimatePresence>
                 {isNotificationCenterOpen && (
-                    <NotificationCenter>
+                    <NotificationCenter
                         isOpen={isNotificationCenterOpen}
                         onClose={() => setIsNotificationCenterOpen(false)}
                     />

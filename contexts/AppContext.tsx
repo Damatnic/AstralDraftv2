@@ -270,7 +270,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
 };
 
 interface AppProviderProps {
-  children: ReactNode;
+  children: ReactNode;}
 
 export const AppProvider: FC<AppProviderProps> = ({ children }: any) => {
   const [state, dispatch] = React.useReducer(appReducer, initialState);

@@ -39,14 +39,14 @@ export interface MarketData {
   beatReporterConfidence: number;
   spreadMovement: number;
   totalMovement: number;
-  publicBettingPercentage: number;
+  publicBettingPercentage: number;}
 
 export interface WeatherData {
   temperature: number;
   windSpeed: number;
   precipitation: number;
   humidity: number;
-  conditions: string;
+  conditions: string;}
 
 export interface PredictionFactors {
   playerMetrics: PlayerMetrics;

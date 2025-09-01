@@ -7,7 +7,7 @@ import { Avatar } from '../ui/Avatar';
 interface FinalStandingsTableProps {
     standings: LeagueHistoryEntry['finalStandings'];
     teams: Team[];
-
+}
 
 const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, teams }: any) => {
     return (

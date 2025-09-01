@@ -13,7 +13,7 @@ interface AiCoManagerWidgetProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);

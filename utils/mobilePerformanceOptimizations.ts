@@ -9,13 +9,13 @@ export interface MobilePerformanceConfig {
   enableNetworkAdaptation: boolean;
   enableHapticFeedback: boolean;
   enableGestureOptimization: boolean;
-  reducedMotionSupport: boolean;
+  reducedMotionSupport: boolean;}
 
 export interface NetworkInfo {
   effectiveType: string;
   downlink: number;
   rtt: number;
-  saveData: boolean;
+  saveData: boolean;}
 
 export interface BatteryInfo {
   charging: boolean;

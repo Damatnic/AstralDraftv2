@@ -27,7 +27,7 @@ interface InjuryAlertNotificationProps {
   maxAlerts?: number;
   showSettings?: boolean;
   onDismiss?: (alertId: string) => void;
-
+}
 
 interface NotificationSettings {
   position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
@@ -314,7 +314,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
 
             {/* Individual alerts */}
             {alerts.map((alert: any) => (
-              <Card>
+              <Card
                 key={alert.id}
                 className={`border-l-4 shadow-lg animate-slide-in ${getSeverityColor(alert.severity)}`}
               >

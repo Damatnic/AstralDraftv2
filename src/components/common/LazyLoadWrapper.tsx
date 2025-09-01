@@ -133,7 +133,7 @@ export const LazyLoadWrapper: React.FC<LazyLoadWrapperProps> = ({
   }
 
   return (
-    <LazyLoadErrorBoundary>
+    <LazyLoadErrorBoundary
       key={retryKey}
       fallback={ErrorFallbackComponent}
       componentName={componentName}
@@ -184,7 +184,7 @@ export const createLazyComponent = <P extends object = {}>({
   });
 
   const WrappedComponent: React.ComponentType<P> = (props: any) => (
-    <LazyLoadWrapper>
+    <LazyLoadWrapper
       fallback={fallback}
       errorFallback={errorFallback}
       componentName={componentName}

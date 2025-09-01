@@ -47,7 +47,7 @@ interface AdvancedAnalyticsDashboardProps {
     playerId: string;
     week: number;
     predictionFactors: PredictionFactors | null;
-    onRefresh: () => void;
+    onRefresh: () => void;}
 
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     predictionFactors,
@@ -280,7 +280,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                                 {predictionFactors.ensemblePrediction.predictionRange[0].toFixed(1)} - {predictionFactors.ensemblePrediction.predictionRange[1].toFixed(1)} pts
                                             </span>
                                         </div>
-                                        <Progress>
+                                        <Progress
                                             value={(predictionFactors.ensemblePrediction.prediction / 25) * 100} 
                                             className="w-full sm:px-4 md:px-6 lg:px-8"
                                         />

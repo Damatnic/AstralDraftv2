@@ -14,7 +14,7 @@ interface InstallPromptProps {
   onInstall?: () => void;
   onDismiss?: () => void;
   showOfflineStatus?: boolean;
-
+}
 
 export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
   onInstall,
@@ -108,7 +108,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
         
         <div className="install-prompt__actions sm:px-4 md:px-6 lg:px-8">
           {(platform === 'desktop' || platform === 'android') && (
-            <AccessibleButton>
+            <AccessibleButton
               onClick={handleInstall}
               disabled={installing}
               variant="primary"
@@ -119,7 +119,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
             </AccessibleButton>
           )}
           
-          <AccessibleButton>
+          <AccessibleButton
             onClick={handleDismiss}
             variant="ghost"
             size="sm"
@@ -139,7 +139,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
  */
 interface PWAStatusBannerProps {
   className?: string;
-
+}
 
 export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
   className = ''
@@ -178,7 +178,7 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
         )}
       </div>
       
-      <AccessibleButton>
+      <AccessibleButton
         onClick={() => setShowBanner(false)}
         variant="ghost"
         size="sm"

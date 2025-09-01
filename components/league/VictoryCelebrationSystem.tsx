@@ -25,7 +25,7 @@ interface VictoryType {
   type: 'weekly_win' | 'blowout' | 'comeback' | 'perfect_lineup' | 'highest_score' | 'playoff_berth' | 'championship';
   intensity: 1 | 2 | 3 | 4 | 5;
   duration: number; // seconds
-
+}
 
 interface VictoryCelebrationProps {
   userId: string;

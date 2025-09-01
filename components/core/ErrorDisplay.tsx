@@ -8,7 +8,7 @@ interface ErrorDisplayProps {
   title?: string;
   message: string;
   onRetry?: () => void;
-
+}
 
 const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ 
   title = "Something went wrong", 

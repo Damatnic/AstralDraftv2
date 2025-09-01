@@ -40,7 +40,7 @@ interface MobileDraftInterfaceProps {
     onAutoPickToggle: () => void;
     onPauseResume: () => void;
     className?: string;
-
+}
 
 interface SwipeablePlayerCard {
     player: Player;
@@ -390,7 +390,7 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
                                     </div>
                                 ) : (
                                     filteredPlayers.map((player: any) => (
-                                        <SwipeablePlayerCard>
+                                        <SwipeablePlayerCard
                                             key={player.id}
                                             player={player}
                                             onSwipeLeft={() => handlePlayerPass(player)}

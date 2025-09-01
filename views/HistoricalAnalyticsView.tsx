@@ -41,7 +41,7 @@ export interface AnalyticsData {
   predictions: number;
   confidence: number;
   winRate: number;
-
+}
 
 export interface TrendData {
   metric: string;
@@ -49,7 +49,7 @@ export interface TrendData {
   previous: number;
   change: number;
   trend: 'up' | 'down' | 'stable';
-
+}
 
 export interface PredictionMetrics {
   total: number;
@@ -65,7 +65,7 @@ export interface PerformanceMetrics {
   currentStreak: number;
   totalPredictions: number;
   confidenceScore: number;
-
+}
 
 const HistoricalAnalyticsView: React.FC = () => {
   // State management
@@ -292,14 +292,14 @@ const HistoricalAnalyticsView: React.FC = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={analyticsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis>
+                  <XAxis
                     dataKey="date" 
                     stroke="#9CA3AF"
                     fontSize={12}
                     tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} />
-                  <Tooltip>
+                  <Tooltip
                     contentStyle={{ 
                       backgroundColor: '#1F2937', 
                       border: '1px solid #374151',
@@ -307,7 +307,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                     }}
                     labelStyle={{ color: '#F3F4F6' }}
                   />
-                  <Line>
+                  <Line
                     type="monotone" 
                     dataKey="accuracy" 
                     stroke="#8B5CF6" 
@@ -335,14 +335,14 @@ const HistoricalAnalyticsView: React.FC = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analyticsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis>
+                  <XAxis
                     dataKey="date" 
                     stroke="#9CA3AF"
                     fontSize={12}
                     tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} />
-                  <Tooltip>
+                  <Tooltip
                     contentStyle={{ 
                       backgroundColor: '#1F2937', 
                       border: '1px solid #374151',
@@ -373,14 +373,14 @@ const HistoricalAnalyticsView: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={analyticsData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis>
+                <XAxis
                   dataKey="date" 
                   stroke="#9CA3AF"
                   fontSize={12}
                   tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 />
                 <YAxis stroke="#9CA3AF" fontSize={12} />
-                <Tooltip>
+                <Tooltip
                   contentStyle={{ 
                     backgroundColor: '#1F2937', 
                     border: '1px solid #374151',
@@ -388,7 +388,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                   }}
                   labelStyle={{ color: '#F3F4F6' }}
                 />
-                <Area>
+                <Area
                   type="monotone" 
                   dataKey="confidence" 
                   stackId="1"
@@ -396,7 +396,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                   fill="#10B981"
                   fillOpacity={0.3}
                 />
-                <Area>
+                <Area
                   type="monotone" 
                   dataKey="winRate" 
                   stackId="2"

@@ -67,7 +67,7 @@ export interface TradeMessage {
   fromTeam: string;
   message: string;
   timestamp: string;
-  type: 'initial' | 'counter' | 'acceptance' | 'rejection' | 'comment';
+  type: 'initial' | 'counter' | 'acceptance' | 'rejection' | 'comment';}
 
 export interface CounterOffer {
   counterId: string;
@@ -75,7 +75,7 @@ export interface CounterOffer {
   givingPlayers: string[];
   receivingPlayers: string[];
   reasoning: string;
-  timestamp: string;
+  timestamp: string;}
 
 export interface CompletedTrade {
   tradeId: string;
@@ -170,7 +170,7 @@ export interface TradeSimulation {
   projectedStandings: TeamProjection[];
   winProbabilityChanges: Map<string, number>;
   playoffProbabilityChanges: Map<string, number>;
-  recommendedActions: string[];
+  recommendedActions: string[];}
 
 export interface TeamProjection {
   teamId: string;
@@ -178,7 +178,7 @@ export interface TeamProjection {
   newProjectedRank: number;
   currentProjectedPoints: number;
   newProjectedPoints: number;
-  improvementScore: number;
+  improvementScore: number;}
 
 class AdvancedTradeMarketplaceService {
   private tradeBlocks = new Map<string, TradeBlock>();

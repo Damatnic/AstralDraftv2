@@ -37,17 +37,17 @@ interface ParticleSystemProps {
   animationSpeed?: number;
   className?: string;
   interactive?: boolean;
-
+}
 
 interface HolographicEffectProps {
   children: ReactNode;
   speed?: number;
   intensity?: number;
-  className?: string;
+  className?: string;}
 
 // =========================================
 // PREMIUM GLASS MORPHISM COMPONENT
-// =========================================
+// =========================================}
 
 export const GlassEffect: React.FC<GlassEffectProps> = ({ children,
   intensity = 'medium',
@@ -277,7 +277,7 @@ interface Particle {
   life: number;
   maxLife: number;
   size: number;
-
+}
 
 export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   particleCount = 50,
@@ -491,7 +491,7 @@ interface LiquidBackgroundProps {
   speed?: number;
   blur?: number;
   className?: string;
-
+}
 
 export const LiquidBackground: React.FC<LiquidBackgroundProps> = ({
   colors = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b'],
@@ -536,7 +536,7 @@ interface AuroraBackgroundProps {
   className?: string;
   colors?: string[];
   speed?: number;
-
+}
 
 export const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
   className = '',
@@ -577,7 +577,7 @@ interface GradientTextProps {
   gradient?: string[];
   animate?: boolean;
   className?: string;
-
+}
 
 export const GradientText: React.FC<GradientTextProps> = ({
   children,
@@ -619,7 +619,7 @@ interface FloatingElementsProps {
   speed?: number;
   range?: number;
   className?: string;
-
+}
 
 export const FloatingElements: React.FC<FloatingElementsProps> = ({
   children,

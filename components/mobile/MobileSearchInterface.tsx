@@ -36,14 +36,14 @@ interface SearchFilters {
     minRank?: number;
     maxRank?: number;
     injured?: boolean;
-    available?: boolean;
+    available?: boolean;}
 
 interface SortOption {
     id: string;
     label: string;
     key: keyof Player | 'projection';
     direction: 'asc' | 'desc';
-
+}
 
 const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     players,

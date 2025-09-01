@@ -9,7 +9,7 @@ interface ChunkLoadingOptions {
   timeout?: number;
   retries?: number;
   priority?: 'high' | 'normal' | 'low';
-  preload?: boolean;
+  preload?: boolean;}
 
 interface RouteChunk {
   path: string;

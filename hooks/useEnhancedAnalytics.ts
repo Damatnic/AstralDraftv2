@@ -10,7 +10,7 @@ import { enhancedAnalyticsService, type AnalyticsReport, type PredictiveInsight,
 export interface UseEnhancedAnalyticsOptions {
   timeRange?: number; // Days
   autoRefresh?: boolean;
-  refreshInterval?: number; // Milliseconds
+  refreshInterval?: number; // Milliseconds}
 
 export interface UseEnhancedAnalyticsReturn {
   // Data
@@ -32,7 +32,7 @@ export interface UseEnhancedAnalyticsReturn {
   
   // Configuration
   setTimeRange: (days: number) => void;
-  timeRange: number;
+  timeRange: number;}
 
 export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}): UseEnhancedAnalyticsReturn => {
   const {

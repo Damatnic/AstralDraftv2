@@ -6,7 +6,7 @@ import { Avatar } from '../ui/Avatar';
 interface TeamBrandingCardProps {
     team: Team;
     slogan: string;
-
+}
 
 const TeamBrandingCard: React.FC<TeamBrandingCardProps> = ({ team, slogan }: any) => {
     const { name, avatar, record } = team;

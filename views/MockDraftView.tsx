@@ -34,7 +34,7 @@ interface MockDraftSettings {
   enableTrades: boolean;
   enableKeepers: boolean;
   scoringFormat: 'standard' | 'ppr' | 'halfPpr';
-
+}
 
 interface DraftPick {
   round: number;
@@ -43,7 +43,7 @@ interface DraftPick {
   teamId: number;
   player: NFLPlayer;
   timestamp: Date;
-  isUserPick: boolean;
+  isUserPick: boolean;}
 
 interface MockTeam {
   id: number;
@@ -53,7 +53,7 @@ interface MockTeam {
   roster: NFLPlayer[];
   draftStrategy?: 'balanced' | 'rb-heavy' | 'wr-heavy' | 'best-available';
   needs: string[];
-
+}
 
 const MockDraftView: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -791,7 +791,7 @@ const MockDraftView: React.FC = () => {
                 <XCircleIcon className="w-5 h-5" />
               </button>
             </div>
-            <PlayerSearch>
+            <PlayerSearch
               players={availablePlayers}
               onSelectPlayer={(player: any) => {
                 setSelectedPlayer(player);

@@ -302,7 +302,7 @@ export interface CacheEntry<T> {
 export interface CacheConfig {
   ttl: number; // Time to live in seconds
   maxSize?: number; // Maximum number of entries
-  tags?: string[]; // Tags for cache invalidation
+  tags?: string[]; // Tags for cache invalidation}
 
 // ==================== ERROR TYPES ====================
 
@@ -311,7 +311,7 @@ export interface ErrorInfo {
   message: string;
   details?: Record<string, any>;
   timestamp: Date;
-  stack?: string;
+  stack?: string;}
 
 export interface ValidationError {
   field: string;
@@ -325,22 +325,22 @@ export interface ValidationError {
 export type Dictionary<T> = Record<string, T>;
 
 // Lookup table
-export type LookupTable<K extends string | number | symbol, V> = Record<K, V>;
+export type LookupTable<K extends string | number | symbol, V> = Record<K, V>;}
 
 // Key-value pair
 export interface KeyValuePair<K = string, V = any> {
   key: K;
-  value: V;
+  value: V;}
 
 // ==================== COORDINATE AND GEOMETRY TYPES ====================
 
 export interface Point {
   x: number;
-  y: number;
+  y: number;}
 
 export interface Size {
   width: number;
-  height: number;
+  height: number;}
 
 export interface Rectangle extends Point, Size {}
 
@@ -366,15 +366,15 @@ export interface RGBAColor extends RGBColor {
 export interface HSLColor {
   h: number;
   s: number;
-  l: number;
+  l: number;}
 
 // ==================== ENVIRONMENT TYPES ====================
 
-export type Environment = 'development' | 'staging' | 'production' | 'test';
+export type Environment = 'development' | 'staging' | 'production' | 'test';}
 
-export type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'trace';
+export type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'trace';}
 
-// ==================== EXPORT ALL ====================
+// ==================== EXPORT ALL ====================}
 
 export type {
   Nullable,

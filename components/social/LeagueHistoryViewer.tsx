@@ -116,7 +116,7 @@ export interface EventComment {
     timestamp: Date;
     likes: number;
     replies?: EventComment[];
-
+}
 
 export interface LeagueMilestone {
     id: string;
@@ -129,7 +129,7 @@ export interface LeagueMilestone {
     icon: string;
     value?: number;
     isFirstTime: boolean;
-
+}
 
 export interface TimelineFilter {
     seasons: number[];
@@ -150,7 +150,7 @@ interface LeagueHistoryViewerProps {
     onEventComment: (eventId: string, content: string) => void;
     onShareEvent: (eventId: string) => void;
     className?: string;
-
+}
 
 const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
     league,

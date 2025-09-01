@@ -16,7 +16,7 @@ export interface DraftParticipant {
   budget?: number;
   roster: DraftPick[];
   isOnline: boolean;
-  lastActivity?: string;
+  lastActivity?: string;}
 
 export interface DraftRoom {
   id: string;
@@ -51,7 +51,7 @@ export interface DraftPickRequest {
   playerId: string;
   playerName: string;
   position: string;
-  team: string;
+  team: string;}
 
 export interface ChatMessage {
   id: string;
@@ -59,7 +59,7 @@ export interface ChatMessage {
   username: string;
   message: string;
   timestamp: string;
-  type: 'message' | 'system' | 'pick_announcement';
+  type: 'message' | 'system' | 'pick_announcement';}
 
 class RealTimeDraftService {
   private socket: Socket | null = null;

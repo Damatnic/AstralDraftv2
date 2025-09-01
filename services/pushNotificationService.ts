@@ -15,12 +15,12 @@ interface NotificationPayload {
   requireInteraction?: boolean;
   silent?: boolean;
   timestamp?: number;
-  vibrate?: number[];
+  vibrate?: number[];}
 
 interface NotificationAction {
   action: string;
   title: string;
-  icon?: string;
+  icon?: string;}
 
 class PushNotificationService {
   private vapidPublicKey = 'BEl62iUYgUivxIkv69yViEuiBIa40HI0DLLuxazjqAKUrXK5acbVRongYXcB-P6RW4O50itsUgGwoRivQC6XzRY'; // Demo key

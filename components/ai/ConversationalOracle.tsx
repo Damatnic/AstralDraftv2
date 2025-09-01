@@ -12,11 +12,11 @@ interface Message {
     sender: 'user' | 'ai';
     text: string;
     isLoading?: boolean;
-    groundingChunks?: GroundingChunk[];
+    groundingChunks?: GroundingChunk[];}
 
 interface ConversationalOracleProps {
     myTeam: Team | undefined;
-    availablePlayers: Player[];
+    availablePlayers: Player[];}
 
 const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }: any) => {
     const [messages, setMessages] = React.useState<Message[]>([

@@ -15,7 +15,7 @@ interface Props {
   league: League;
   userTeamId: number;
   onExit: () => void;
-
+}
 
 interface PlayerRowProps {
   player: Player;
@@ -106,7 +106,7 @@ interface AutoDraftPanelProps {
   autoDraftConfig: AutoDraftConfig;
   onEnableAutoDraft: (config?: Partial<AutoDraftConfig>) => void;
   onDisableAutoDraft: () => void;
-
+}
 
 const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
   autoDraftEnabled,
@@ -257,7 +257,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
     return (
       <div className="players-list sm:px-4 md:px-6 lg:px-8">
         {playersToShow.map((player: any) => (
-          <PlayerRow>
+          <PlayerRow
             key={player.id}
             player={player}
             isInQueue={draftQueue.includes(player.id)}
@@ -373,7 +373,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
       <div className={`draft-content ${showAiChat ? 'with-ai-panel' : ''}`}>
         {showAiChat && (
           <div className="ai-chat-panel sm:px-4 md:px-6 lg:px-8">
-            <GeniusAiChat>
+            <GeniusAiChat
               currentRoster={userTeam?.roster || []}
               availablePlayers={filteredPlayers}
               currentRound={currentRound}
@@ -448,7 +448,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
           <div className="content-area sm:px-4 md:px-6 lg:px-8">
             {activeTab === 'analytics' ? renderAnalytics() : 
              activeTab === 'ai-assistant' ? (
-              <GeniusAiChat>
+              <GeniusAiChat
                 currentRoster={userTeam?.roster || []}
                 availablePlayers={filteredPlayers}
                 currentRound={currentRound}
@@ -462,7 +462,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }:
         </div>
 
         <div className="right-panel sm:px-4 md:px-6 lg:px-8">
-          <AutoDraftPanel>
+          <AutoDraftPanel
             autoDraftEnabled={autoDraftEnabled}
             autoDraftConfig={autoDraftConfig}
             onEnableAutoDraft={enableAutoDraft}

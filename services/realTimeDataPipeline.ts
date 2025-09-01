@@ -847,12 +847,12 @@ interface DataSubscriber {
   filters: string[];
   throttle: number;
   priority: Priority;
-  lastUpdate: number;
+  lastUpdate: number;}
 
 interface DataRequest {
   type: string;
   params: any;
-  priority?: Priority;
+  priority?: Priority;}
 
 interface BatchResponse {
   data: Map<string, any>;
@@ -868,12 +868,12 @@ interface CompressedData {
   data: string;
   originalSize: number;
   compressedSize: number;
-  channel?: string;
+  channel?: string;}
 
 interface DeltaUpdate {
   channel: DataChannel;
   baseVersion: number;
-  changes: any;
+  changes: any;}
 
 interface BatchUpdate {
   updates: Array<{
@@ -917,16 +917,16 @@ interface NewsUpdate {
 interface ScoringUpdate {
   playerId: string;
   points: number;
-  breakdown: any;
+  breakdown: any;}
 
 interface StatCorrection {
   playerId: string;
   week: number;
   stat: string;
   oldValue: number;
-  newValue: number;
+  newValue: number;}
 
 // Export singleton instance
-export const realTimeDataPipeline = new RealTimeDataPipeline();
+export const realTimeDataPipeline = new RealTimeDataPipeline();}
 
 export default realTimeDataPipeline;

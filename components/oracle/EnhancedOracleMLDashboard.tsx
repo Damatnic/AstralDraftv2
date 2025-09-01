@@ -26,12 +26,12 @@ interface CalibrationMetrics {
     overconfidenceRate: number;
     underconfidenceRate: number;
     averageCalibrationError: number;
-    reliabilityScore: number;
+    reliabilityScore: number;}
 
 interface EnhancedMLDashboardProps {
     isVisible?: boolean;
     onPredictionTest?: (result: any) => void;
-
+}
 
 const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
     isVisible = true,
@@ -191,7 +191,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                 <h3 className="text-lg font-semibold mb-4 text-gray-800 sm:px-4 md:px-6 lg:px-8">Dynamic Model Weights</h3>
                 <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
-                        <Pie>
+                        <Pie
                             data={modelPerformance}
                             cx="50%"
                             cy="50%"
@@ -458,7 +458,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" tickFormatter={(value: any) => new Date(value).toLocaleDateString()} />
                         <YAxis domain={[65, 90]} />
-                        <Tooltip>
+                        <Tooltip
                             formatter={(value: number) => [`${value}%`, '']}
                             labelFormatter={(value: any) => new Date(value).toLocaleDateString()}
                         />

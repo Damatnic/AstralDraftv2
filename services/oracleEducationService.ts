@@ -96,9 +96,9 @@ export type EducationCategory =
     | 'MACHINE_LEARNING'
     | 'ADVANCED_STRATEGIES'
     | 'DATA_INTERPRETATION'
-    | 'CONFIDENCE_CALIBRATION';
+    | 'CONFIDENCE_CALIBRATION';}
 
-export type DifficultyLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
+export type DifficultyLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';}
 
 class OracleEducationService {
     private readonly STORAGE_KEY = 'oracleEducationProgress';

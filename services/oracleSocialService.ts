@@ -46,7 +46,7 @@ export interface LeagueMemberStats {
     rank: number;
     weeklyRank: number;
     achievements: number;
-    badges: number;
+    badges: number;}
 
 export interface LeagueSettings {
     challengeFrequency: 'DAILY' | 'WEEKLY' | 'BI_WEEKLY';
@@ -57,7 +57,7 @@ export interface LeagueSettings {
     minimumParticipants: number;
     enableTrashtalk: boolean;
     moderationLevel: 'OPEN' | 'MODERATED' | 'STRICT';
-    customRules: string[];
+    customRules: string[];}
 
 export interface GroupPrediction {
     id: string;
@@ -90,7 +90,7 @@ export interface GroupPredictionParticipant {
     confidence: number;
     reasoning?: string;
     submittedAt: string;
-    weight?: number; // For weighted average calculations
+    weight?: number; // For weighted average calculations}
 
 export interface Debate {
     id: string;
@@ -178,7 +178,7 @@ export interface SocialNotification {
     data: any;
     isRead: boolean;
     createdAt: string;
-    expiresAt?: string;
+    expiresAt?: string;}
 
 export interface LeagueInvitation {
     id: string;
@@ -191,7 +191,7 @@ export interface LeagueInvitation {
     message?: string;
     status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'EXPIRED';
     createdAt: string;
-    expiresAt: string;
+    expiresAt: string;}
 
 export interface SocialChallenge {
     id: string;

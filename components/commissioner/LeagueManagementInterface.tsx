@@ -27,9 +27,9 @@ import {
 
 interface Props {
     leagueId?: string;
-    className?: string;
+    className?: string;}
 
-// Helper function to get status badge styles
+// Helper function to get status badge styles}
 
 const getStatusBadgeStyles = (status: string): string => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -260,7 +260,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         </h3>
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {invitations.map((invitation: any) => (
-                                <InvitationCard>
+                                <InvitationCard
                                     key={invitation.id}
                                     invitation={invitation}
                                     onAccept={() => handleAcceptInvitation(invitation.id)}
@@ -308,7 +308,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         )}
                         
                         {activeTab === 'members' && (
-                            <MembersManagement>
+                            <MembersManagement
                                 league={league}
                                 isCommissioner={isCommissioner}
                                 onInvite={handleInviteMember}
@@ -317,7 +317,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         )}
                         
                         {activeTab === 'settings' && (
-                            <LeagueSettingsPanel>
+                            <LeagueSettingsPanel
                                 league={league}
                                 isCommissioner={isCommissioner}
                                 editing={editingSettings}
@@ -332,7 +332,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         )}
                         
                         {activeTab === 'commissioner' && isCommissioner && (
-                            <CommissionerPanel>
+                            <CommissionerPanel
                                 league={league}
                                 onAction={handleCommissionerAction}
                                 pendingAction={pendingAction}

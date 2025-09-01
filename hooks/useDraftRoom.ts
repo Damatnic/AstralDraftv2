@@ -5,7 +5,7 @@ export interface UseDraftRoomOptions {
   leagueId: string;
   userId: string;
   teamId: number;
-  autoConnect?: boolean;
+  autoConnect?: boolean;}
 
 export interface DraftRoomHookReturn {
   // Connection state

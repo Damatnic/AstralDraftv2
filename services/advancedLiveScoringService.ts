@@ -93,7 +93,7 @@ export interface TeamGameInfo {
   timePossession: string;
   thirdDownConversions: string;
   redZoneAttempts: string;
-  scoringDrives: number;
+  scoringDrives: number;}
 
 export interface ScoringSummary {
   quarter: string;
@@ -102,7 +102,7 @@ export interface ScoringSummary {
   description: string;
   scoreType: 'touchdown' | 'field_goal' | 'safety' | 'two_point';
   players: string[];
-  videoHighlight?: string;
+  videoHighlight?: string;}
 
 export interface DriveSummary {
   currentDrive: {
@@ -196,7 +196,7 @@ export interface InjuryUpdate {
   severity: 'questionable' | 'doubtful' | 'out';
   returnStatus: string;
   fantasyImpact: string;
-  timestamp: string;
+  timestamp: string;}
 
 export interface RedZoneWatch {
   team: string;
@@ -263,7 +263,7 @@ export interface CriticalPlayer {
   importance: 'crucial' | 'important' | 'moderate';
   reasoning: string;
   pointsNeeded?: number;
-  probabilityToDeliver: number;
+  probabilityToDeliver: number;}
 
 export interface ScoringOpportunity {
   team: string;
@@ -271,7 +271,7 @@ export interface ScoringOpportunity {
   scenario: string;
   likelihood: number;
   potentialPoints: number;
-  timeframe: string;
+  timeframe: string;}
 
 export interface GameFlowPrediction {
   gameId: string;
@@ -299,7 +299,7 @@ export interface LiveAlert {
   timestamp: string;
   expiresAt?: string;
   actionRequired?: boolean;
-  suggestedAction?: string;
+  suggestedAction?: string;}
 
 export interface FantasyGameLog {
   playerId: string;

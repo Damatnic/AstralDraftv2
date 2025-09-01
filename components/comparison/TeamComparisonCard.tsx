@@ -11,7 +11,7 @@ interface TeamComparisonCardProps {
     team: Team;
     strengths?: string[];
     weaknesses?: string[];
-
+}
 
 const TeamComparisonCard: React.FC<TeamComparisonCardProps> = ({ team, strengths, weaknesses }: any) => {
     return (

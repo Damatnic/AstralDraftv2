@@ -13,7 +13,7 @@ import { Button } from '../ui/Button';
 import SecureInput from '../ui/SecureInput';
 
 interface SimplePlayerLoginProps {
-  onLogin?: (user: any) => void;
+  onLogin?: (user: any) => void;}
 
 const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) => {
   const { dispatch } = useAppState();
@@ -355,7 +355,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                       transition={{ delay: index * 0.05, duration: 0.3 }}
                       whileHover={{ y: -5 }}
                     >
-                      <Card>
+                      <Card
                         variant="gradient"
 //                         hover
 //                         interactive
@@ -419,7 +419,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                       { name: 'Apple', icon: '🍎', color: 'hover:bg-gray-500/10 hover:border-gray-500/30' },
                       { name: 'Yahoo', icon: '📧', color: 'hover:bg-purple-500/10 hover:border-purple-500/30' }
                     ].map((provider: any) => (
-                      <Button>
+                      <Button
                         key={provider.name}
                         variant="outline"
                         size="md"
@@ -505,7 +505,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                     {/* Modern PIN Input */}
                     <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                       <div onKeyPress={handleKeyPress}>
-                        <SecureInput>
+                        <SecureInput
                           type="password"
                           value={pin}
                           onSecureChange={(value: any) => handlePinChange(value)}
@@ -539,7 +539,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
 
                       {/* Action Buttons */}
                       <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
-                        <Button>
+                        <Button
                           variant="default"
                           size="lg"
                           onClick={handleBack}
@@ -548,7 +548,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                           <span className="mr-2 sm:px-4 md:px-6 lg:px-8">←</span>
 //                           Back
                         </Button>
-                        <Button>
+                        <Button
                           variant="primary"
                           size="lg"
                           onClick={handleLogin}

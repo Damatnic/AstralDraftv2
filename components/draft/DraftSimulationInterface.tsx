@@ -37,7 +37,7 @@ interface SimulationState {
     draftBoard: DraftPick[];
     availablePlayers: Player[];
     timeRemaining: number;
-
+}
 
 const DraftSimulationInterface: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -326,7 +326,7 @@ const DraftSimulationInterface: React.FC = () => {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8"
                             >
-                                <DraftSimulationSettingsComponent>
+                                <DraftSimulationSettingsComponent
                                     settings={settings}
                                     onSettingsChange={setSettings}
                                 />
@@ -339,7 +339,7 @@ const DraftSimulationInterface: React.FC = () => {
                         <div className="grid lg:grid-cols-3 gap-6">
                             {/* Draft Board */}
                             <div className="lg:col-span-2">
-                                <DraftBoard>
+                                <DraftBoard
                                     draftBoard={simulationState.draftBoard}
                                     currentPick={getDraftPosition(simulationState.currentRound, simulationState.currentPick)}
                                     settings={settings}
@@ -348,7 +348,7 @@ const DraftSimulationInterface: React.FC = () => {
 
                             {/* Team Panel */}
                             <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
-                                <TeamSelector>
+                                <TeamSelector
                                     teams={simulation.teams}
                                     selectedTeam={selectedTeam}
                                     onTeamSelect={setSelectedTeam}
@@ -393,7 +393,7 @@ const DraftSimulationInterface: React.FC = () => {
 interface DraftSimulationSettingsProps {
     settings: SimulationSettings;
     onSettingsChange: (settings: SimulationSettings) => void;
-
+}
 
 const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> = ({
     settings,
@@ -535,7 +535,7 @@ interface DraftBoardProps {
     draftBoard: DraftPick[];
     currentPick: number;
     settings: SimulationSettings;
-
+}
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ 
     draftBoard, 
@@ -593,7 +593,7 @@ interface TeamSelectorProps {
     teams: DraftTeam[];
     selectedTeam: string | null;
     onTeamSelect: (teamId: string) => void;
-
+}
 
 const TeamSelector: React.FC<TeamSelectorProps> = ({
     teams,
@@ -629,7 +629,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
 // Team Roster Component
 interface TeamRosterProps {
     team: DraftTeam;
-
+}
 
 const TeamRoster: React.FC<TeamRosterProps> = ({ team }: any) => {
     return (
@@ -667,7 +667,7 @@ const TeamRoster: React.FC<TeamRosterProps> = ({ team }: any) => {
 // Draft Analytics Component
 interface DraftAnalyticsProps {
     analytics: any;
-
+}
 
 const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }: any) => {
     return (

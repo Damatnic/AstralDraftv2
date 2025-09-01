@@ -13,7 +13,7 @@ import { useMediaQuery } from '../../hooks/useMediaQuery';
 interface NotificationCenterProps {
     className?: string;
     maxVisible?: number;
-
+}
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({ className = '',
     maxVisible = 5

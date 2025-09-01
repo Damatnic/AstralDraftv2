@@ -198,7 +198,7 @@ const LeagueConstitutionView: React.FC = () => {
                 </motion.div>
 
                 {/* Constitution Content */}
-                <Widget>
+                <Widget
                     title="Constitution Document" 
                     icon={<ScrollTextIcon />}
                     className="glass-pane"

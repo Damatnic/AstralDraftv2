@@ -3,7 +3,7 @@ interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
-
+}
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;

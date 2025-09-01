@@ -9,7 +9,7 @@ import {
 
 interface AccessibilityDashboardProps {
   className?: string;
-
+}
 
 export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = ''  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -146,27 +146,27 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
       <div className="dashboard-grid sm:px-4 md:px-6 lg:px-8">
         {/* Key Metrics Cards */}
         <div className="metrics-cards sm:px-4 md:px-6 lg:px-8">
-          <MetricCard>
+          <MetricCard
             title="Overall Score"
             value={overallScore}
             unit="%"
             trend={trendDirection}
             color={overallScore >= 90 ? 'success' : overallScore >= 70 ? 'warning' : 'danger'}
           />
-          <MetricCard>
+          <MetricCard
             title="Total Violations"
             value={metrics.totalViolations}
             trend={trendDirection}
             color={metrics.totalViolations === 0 ? 'success' : metrics.totalViolations <= 5 ? 'warning' : 'danger'}
           />
-          <MetricCard>
+          <MetricCard
             title="WCAG AA Compliance"
             value={Math.round(metrics.wcagCompliance.levelAA)}
             unit="%"
             trend={trendDirection}
             color={metrics.wcagCompliance.levelAA >= 95 ? 'success' : metrics.wcagCompliance.levelAA >= 80 ? 'warning' : 'danger'}
           />
-          <MetricCard>
+          <MetricCard
             title="Test Coverage"
             value={Math.round(metrics.testCoverage.coveragePercentage)}
             unit="%"
@@ -228,7 +228,7 @@ interface MetricCardProps {
   unit?: string;
   trend: 'improving' | 'declining' | 'stable';
   color: 'success' | 'warning' | 'danger';
-
+}
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }: any) => {
   const getTrendIcon = () => {
@@ -268,7 +268,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend,
 
 interface SimpleTrendChartProps {
   data: ViolationTrend[];
-
+}
 
 const SimpleTrendChart: React.FC<SimpleTrendChartProps> = ({ data }: any) => {
   const maxValue = Math.max(...data.map((d: any) => Math.max(d.critical, d.serious, d.moderate, d.minor, d.total)));
@@ -384,7 +384,7 @@ const SimpleTrendChart: React.FC<SimpleTrendChartProps> = ({ data }: any) => {
 
 interface ViolationDistributionChartProps {
   violationsByLevel: AccessibilityMetrics['violationsByLevel'];
-
+}
 
 const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }: any) => {
   const total = Object.values(violationsByLevel).reduce((sum, count) => sum + count, 0);
@@ -429,7 +429,7 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
 
 interface ComponentStatusTableProps {
   components: ComponentAccessibilityMetric[];
-
+}
 
 const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }: any) => {
   const getStatusIcon = (status: ComponentAccessibilityMetric['status']) => {
@@ -528,7 +528,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
 
 interface WCAGComplianceChartProps {
   wcagCompliance: AccessibilityMetrics['wcagCompliance'];
-
+}
 
 const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }: any) => {
   const levels = [

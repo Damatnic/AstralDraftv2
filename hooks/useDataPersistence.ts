@@ -39,7 +39,7 @@ export interface UserPreferences {
   autoRefresh: boolean;
   defaultView: string;
   customSettings: Record<string, unknown>;
-  updatedAt: number;
+  updatedAt: number;}
 
 export interface OraclePredictionHistory {
   id: string;
@@ -49,7 +49,7 @@ export interface OraclePredictionHistory {
   predictions: PredictionEntry[];
   accuracy: number;
   confidence: number;
-  createdAt: number;
+  createdAt: number;}
 
 export interface PredictionEntry {
 
@@ -83,7 +83,7 @@ export interface DataPersistenceState {
   isInitialized: boolean;
   isOnline: boolean;
   syncStatus: SyncStatus | null;
-  error: string | null;
+  error: string | null;}
 
 export interface DataPersistenceActions {
   // Draft Sessions
@@ -112,7 +112,7 @@ export interface DataPersistenceActions {
   // Sync Operations
   forceSyncAll: () => Promise<void>;
   getSyncStatus: () => Promise<SyncStatus>;
-  retryFailedOperations: () => Promise<void>;
+  retryFailedOperations: () => Promise<void>;}
 
 export function useDataPersistence(): [DataPersistenceState, DataPersistenceActions] {
   const [state, setState] = useState<DataPersistenceState>({

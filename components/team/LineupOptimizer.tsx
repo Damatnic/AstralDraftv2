@@ -21,7 +21,7 @@ interface LineupOptimizerProps {
     league: League;
     dispatch: React.Dispatch<any>;
     canEdit: boolean;
-
+}
 
 interface LineupSuggestion {
     id: string;
@@ -32,6 +32,7 @@ interface LineupSuggestion {
     reasoning: string;
     improvements: string[];
     riskLevel: 'Low' | 'Medium' | 'High';
+}
 
 interface OptimizerSettings {
     optimizeFor: 'ceiling' | 'floor' | 'projection';
@@ -39,7 +40,7 @@ interface OptimizerSettings {
     considerMatchups: boolean;
     considerWeather: boolean;
     considerInjuries: boolean;
-
+}
 
 const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }: any) => {
     const [isOptimizing, setIsOptimizing] = React.useState(false);
@@ -318,7 +319,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {currentLineup.map((player, index) => (
                             <div key={player.id} className="flex items-center gap-3 p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
-                                <Avatar>
+                                <Avatar
                                     avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
                                     className="w-10 h-10 text-xl rounded-md sm:px-4 md:px-6 lg:px-8"
                                 />

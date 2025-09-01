@@ -6,7 +6,7 @@ export interface MobilePerformanceConfig {
   networkAwareLoading?: boolean;
   batteryOptimization?: boolean;
   memoryManagement?: boolean;
-  renderOptimization?: boolean;
+  renderOptimization?: boolean;}
 
 export class MobilePerformanceOptimizer {
   private static instance: MobilePerformanceOptimizer;
@@ -283,6 +283,7 @@ export class MobilePerformanceOptimizer {
   public updateConfig(newConfig: Partial<MobilePerformanceConfig>): void {
     this.config = { ...this.config, ...newConfig };
   }
+}
 
 // Initialize the optimizer
 export const mobilePerformanceOptimizer = MobilePerformanceOptimizer.getInstance();

@@ -15,7 +15,7 @@ export interface DraftPick {
     teamId: string;
     playerId: string;
     timestamp: number;
-    reasoning?: string[];
+    reasoning?: string[];}
 
 export interface PickRecommendation {
     player: Player;
@@ -24,7 +24,7 @@ export interface PickRecommendation {
     position: string;
     value: number;
     riskLevel: 'low' | 'medium' | 'high';
-    priority: number;
+    priority: number;}
 
 export interface OpponentBehaviorModel {
     teamId: string;
@@ -65,7 +65,7 @@ export interface StrategyAdjustment {
     type: 'position_priority' | 'risk_tolerance' | 'market_timing' | 'opponent_reaction';
     description: string;
     impact: 'low' | 'medium' | 'high';
-    reasoning: string[];
+    reasoning: string[];}
 
 export interface AiCoachConfig {
     enableOpponentModeling: boolean;
@@ -74,7 +74,7 @@ export interface AiCoachConfig {
     aggressiveness: number; // 0-1 scale
     maxRecommendations: number;
     considerInjuries: boolean;
-    considerByes: boolean;
+    considerByes: boolean;}
 
 export interface AiCoachState {
     isActive: boolean;
@@ -99,7 +99,7 @@ export interface DraftContext {
     availablePlayers: Player[];
     recentPicks: DraftPick[];
     timeRemaining: number;
-    league: League;
+    league: League;}
 
 const useEnhancedAiDraftCoach = (params: {
     league: League;

@@ -13,7 +13,7 @@ interface CompareTrayProps {
     players: Player[];
     onClear: () => void;
     onCompare: () => void;
-
+}
 
 const CompareTray: FC<CompareTrayProps> = ({ players, onClear, onCompare }: any) => {
     const { dispatch } = useAppState();

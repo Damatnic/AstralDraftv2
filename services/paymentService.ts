@@ -98,13 +98,13 @@ export interface PaymentHistory {
   stripePaymentIntentId: string;
   createdAt: Date;
   updatedAt: Date;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;}
 
 export interface RefundRequest {
   paymentId: string;
   amount?: number; // Partial refund amount, omit for full refund
   reason: 'duplicate' | 'fraudulent' | 'requested_by_customer' | 'contest_cancelled';
-  metadata?: Record<string, string>;
+  metadata?: Record<string, string>;}
 
 class PaymentService {
   private readonly webhookSecret: string;

@@ -12,7 +12,7 @@ import { Team } from '../../types';
 interface DraftOrderProps {
   showRandomizeButton?: boolean;
   isCommissioner?: boolean;
-
+}
 
 const DraftOrder: React.FC<DraftOrderProps> = ({ 
   showRandomizeButton = false, 
@@ -100,7 +100,7 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
             onClick={randomizeDraftOrder}
             disabled={isRandomizing}
             className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-//               isRandomizing
+              isRandomizing
                 ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
@@ -133,7 +133,7 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
                 className={`p-4 rounded-lg border-2 transition-all ${
-//                   isRandomizing
+                  isRandomizing
                     ? 'border-blue-400 bg-blue-900/20'
                     : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
                 }`}

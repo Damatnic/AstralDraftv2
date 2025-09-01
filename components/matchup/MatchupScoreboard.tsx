@@ -11,7 +11,7 @@ interface MatchupScoreboardProps {
     opponentMatchupTeam: MatchupTeam;
     week: number;
     isLive: boolean;
-
+}
 
 const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentTeam, myMatchupTeam, opponentMatchupTeam, week, isLive }: any) => {
     

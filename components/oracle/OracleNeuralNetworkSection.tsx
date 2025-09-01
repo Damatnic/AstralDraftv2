@@ -30,7 +30,7 @@ interface TrainingTechnique {
   algorithm: string;
   benefits: string[];
   challenges: string[];
-  implementation: string;
+  implementation: string;}
 
 // --- Learning Curve Analysis Section ---
 
@@ -40,7 +40,7 @@ interface LearningCurvePoint {
   valLoss: number;
   trainAccuracy: number;
   valAccuracy: number;
-  converged: boolean;
+  converged: boolean;}
 
 interface LearningCurveConfig {
   id: string;
@@ -49,7 +49,7 @@ interface LearningCurveConfig {
   maxSample: number;
   step: number;
   convergenceThreshold: number;
-  expectedConvergence: number;
+  expectedConvergence: number;}
 
 // --- Feature Importance Analysis Section ---
 
@@ -60,7 +60,7 @@ interface FeatureImportanceResult {
   baselineContribution: number;
   rank: number;
   category: 'high' | 'medium' | 'low';
-  description: string;
+  description: string;}
 
 interface SHAPAnalysis {
   globalImportance: FeatureImportanceResult[];
@@ -86,7 +86,7 @@ interface PermutationConfig {
   iterations: number;
   metric: 'mse' | 'mae' | 'r2';
   randomSeed: number;
-
+}
 
 const learningCurveConfigs: LearningCurveConfig[] = [
   {
@@ -1131,7 +1131,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               <div className="stage-details sm:px-4 md:px-6 lg:px-8">
                 <span>Runtime: TensorRT</span>
                 <span>Scaling: Auto</span>
-                <span>Latency: &lt;5ms</span>
+                <span>Latency: <5ms</span>
               </div>
             </div>
           </div>
@@ -1276,7 +1276,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Real-time Inference</h5>
             <p>
-              Model optimization techniques ensure fast inference times (&lt;5ms) enabling real-time 
+              Model optimization techniques ensure fast inference times (<5ms) enabling real-time 
               predictions during live games and draft scenarios.
             </p>
           </div>

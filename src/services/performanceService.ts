@@ -9,6 +9,7 @@ interface PerformanceMetric {
   timestamp: number;
   sessionId: string;
   additionalData?: Record<string, unknown>;
+}
 
 interface WebVitals {
   fcp?: number; // First Contentful Paint
@@ -16,12 +17,14 @@ interface WebVitals {
   fid?: number; // First Input Delay
   cls?: number; // Cumulative Layout Shift
   ttfb?: number; // Time to First Byte
+}
 
 interface ResourceTiming {
   name: string;
   duration: number;
   size?: number;
   type: 'script' | 'stylesheet' | 'image' | 'fetch' | 'other';
+}
 
 class PerformanceService {
   private metrics: PerformanceMetric[] = [];
@@ -353,6 +356,7 @@ class PerformanceService {
     this.observers = [];
     this.metrics = [];
   }
+}
 
 // Create global instance
 export const performanceService = new PerformanceService();
@@ -360,9 +364,11 @@ export const performanceService = new PerformanceService();
 // Make available globally
 if (typeof window !== 'undefined') {
   (window as any).performanceService = performanceService;
+}
 
 // Clean up on page unload
 if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', () => {
     performanceService.cleanup();
   });
+}

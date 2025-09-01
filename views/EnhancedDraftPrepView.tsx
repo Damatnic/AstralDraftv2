@@ -32,7 +32,7 @@ const EnhancedDraftPrepView: React.FC = () => {
     switch (activeTab) {
       case 'order':
         return (
-          <DraftOrder>
+          <DraftOrder
             showRandomizeButton={true}
             isCommissioner={isCommissioner}
           />

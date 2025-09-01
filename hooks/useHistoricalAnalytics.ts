@@ -24,7 +24,7 @@ export interface HistoricalPredictionRecord {
   accuracy: number;
   deviation: number;
   timestamp: number;
-  validated: boolean;
+  validated: boolean;}
 
 export interface AccuracyMetrics {
   overall: number;
@@ -32,7 +32,7 @@ export interface AccuracyMetrics {
   byWeek: Record<number, number>;
   bySeason: Record<number, number>;
   byConfidence: Record<string, number>;
-  trend: 'improving' | 'stable' | 'declining';
+  trend: 'improving' | 'stable' | 'declining';}
 
 export interface TrendAnalysis {
   accuracyTrend: { period: string; accuracy: number }[];
@@ -89,7 +89,7 @@ export interface HistoricalAnalyticsState {
   comparisonAnalysis: ComparisonAnalysis | null;
   advancedInsights: AdvancedInsights | null;
   isLoading: boolean;
-  error: string | null;
+  error: string | null;}
 
 export interface HistoricalAnalyticsActions {
   refreshAnalytics: () => Promise<void>;
@@ -111,7 +111,7 @@ interface UseHistoricalAnalyticsParams {
   userId?: string;
   autoLoad?: boolean;
   advancedInsights?: boolean;
-  cacheResults?: boolean;
+  cacheResults?: boolean;}
 
 export function useHistoricalAnalytics(params: UseHistoricalAnalyticsParams = {}) {
   const { autoLoad = true, advancedInsights = false } = params;

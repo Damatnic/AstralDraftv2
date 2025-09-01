@@ -21,14 +21,14 @@ interface QuizQuestion {
     question: string;
     options: string[];
     correctAnswer: number;
-    explanation: string;
+    explanation: string;}
 
 interface PracticeChallenge {
     type: 'prediction' | 'confidence' | 'reasoning';
     scenario: string;
     options?: string[];
     expectedAnswer?: string | number;
-
+}
 
 interface UserProgress {
     currentStep: number;

@@ -28,14 +28,14 @@ interface OfflineData {
     leagues: League[];
     userDrafts: DraftPick[];
     lastSync: number;
-    version: string;
+    version: string;}
 
 interface OfflineState {
     isOffline: boolean;
     hasOfflineData: boolean;
     pendingActions: OfflineAction[];
     lastSync: Date | null;
-    syncInProgress: boolean;
+    syncInProgress: boolean;}
 
 class MobileOfflineService {
     private readonly STORAGE_KEYS = {

@@ -8,7 +8,7 @@ import { TrophyIcon } from '../icons/TrophyIcon';
 interface TrophyCaseWidgetProps {
     team: Team;
     league: League;
-
+}
 
 const TrophyCaseWidget: React.FC<TrophyCaseWidgetProps> = ({ team, league }: any) => {
     const awards = team.awards || [];

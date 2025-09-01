@@ -18,7 +18,7 @@ import { MinusIcon } from '../icons/MinusIcon';
 interface TradeScenarioModalProps {
     league: League;
     onClose: () => void;
-
+}
 
 const PlayerSelectItem: React.FC<{ player: Player; isSelected: boolean; onToggle: () => void }> = ({ player, isSelected, onToggle }: any) => (
     <div

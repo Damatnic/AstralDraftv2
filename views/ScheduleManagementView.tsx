@@ -171,7 +171,7 @@ const ScheduleManagementView: React.FC = () => {
                 </motion.div>
 
                 {/* Week Navigation */}
-                <Widget>
+                <Widget
                     title={`Week ${selectedWeek} Schedule ${isPlayoffWeek ? '🏆' : ''}`} 
                     icon={<CalendarIcon />}
                     className="glass-pane"
@@ -235,7 +235,7 @@ const ScheduleManagementView: React.FC = () => {
                     <div className="p-4 space-y-3">
                         <AnimatePresence mode="wait">
                             {weeklyMatchups.map((matchup, index) => (
-                                <MatchupCard>
+                                <MatchupCard
                                     key={`${matchup.week}-${index}`}
                                     matchup={matchup} 
                                     league={league}

@@ -11,7 +11,7 @@ interface OfflineState {
     hasOfflineData: boolean;
     pendingActions: any[];
     lastSync: Date | null;
-    syncInProgress: boolean;
+    syncInProgress: boolean;}
 
 interface OfflineActions {
     cacheDraftData: (players: Player[], leagues: League[], teams: Team[]) => Promise<void>;
@@ -20,7 +20,7 @@ interface OfflineActions {
     draftPlayerOffline: (playerId: number, teamId: number, pick: number) => Promise<boolean>;
     queueAction: (type: string, payload: any) => string;
     syncPendingActions: () => Promise<void>;
-    clearOfflineData: () => void;
+    clearOfflineData: () => void;}
 
 export const useMobileOffline = (): [OfflineState, OfflineActions] => {
     const [state, setState] = React.useState<OfflineState>(mobileOfflineService.getState());

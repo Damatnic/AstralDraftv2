@@ -12,7 +12,7 @@ interface WarRoomPanelProps {
     queue: number[]; // player IDs
     leagueId: string;
     dispatch: React.Dispatch<any>;
-
+}
 
 const WarRoomPanel: React.FC<WarRoomPanelProps> = ({ queue, leagueId, dispatch }: any) => {
     // We have player IDs, we need the full player objects, maintaining order

@@ -4,7 +4,7 @@ import type { League } from '../../types';
 interface LeagueCardProps {
     league: League;
     onJoin: () => void;
-
+}
 
 export const LeagueCard: React.FC<LeagueCardProps> = ({ league, onJoin }: any) => {
     const isPreDraft = league?.status === 'PRE_DRAFT';

@@ -10,7 +10,7 @@ import { Avatar } from '../ui/Avatar';
 interface MemberManagementWidgetProps {
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league, dispatch }: any) => {
     const handleKick = (user: User) => {

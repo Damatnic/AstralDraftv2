@@ -29,7 +29,7 @@ export interface InjuryStatus {
   historicalPattern?: InjuryHistoricalPattern;
   medicalTimeline?: MedicalTimeline;
   newsUpdates: InjuryNewsUpdate[];
-  lastUpdated: string;
+  lastUpdated: string;}
 
 export interface InjuryFantasyImpact {
   projectionChange: number; // Percentage change in fantasy projection
@@ -117,7 +117,7 @@ export interface AlertPreferences {
   replacementSuggestions: boolean;
   emailNotifications: boolean;
   pushNotifications: boolean;
-  smsNotifications: boolean;
+  smsNotifications: boolean;}
 
 export interface InjuryDashboardData {
   totalMonitoredPlayers: number;
@@ -126,7 +126,7 @@ export interface InjuryDashboardData {
   criticalUpdates: InjuryStatus[];
   weeklyImpact: WeeklyInjuryImpact;
   replacementRecommendations: ReplacementPlayer[];
-  injuryTrends: InjuryTrendData[];
+  injuryTrends: InjuryTrendData[];}
 
 export interface WeeklyInjuryImpact {
   week: number;
@@ -140,7 +140,7 @@ export interface InjuryTrendData {
   trend: 'INCREASING' | 'DECREASING' | 'STABLE';
   weeklyCount: number[];
   seasonTotal: number;
-  averageRecoveryTime: number;
+  averageRecoveryTime: number;}
 
 class InjuryTrackingService {
   private monitoredPlayers: Map<string, MonitoredPlayer> = new Map();

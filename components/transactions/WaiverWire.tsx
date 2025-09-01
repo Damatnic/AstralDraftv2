@@ -20,7 +20,7 @@ interface WaiverClaim {
   priority: number;
   status: 'pending' | 'processed' | 'failed';
   timestamp: Date;
-
+}
 
 export const WaiverWire: React.FC = () => {
   const { state, dispatch } = useAppState();

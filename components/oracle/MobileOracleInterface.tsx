@@ -19,7 +19,7 @@ interface MobileOracleInterfaceProps {
     onSubmitPrediction: (challengeId: string, optionIndex: number) => void;
     onViewAnalytics: () => void;
     onViewRewards: () => void;
-
+}
 
 interface SwipeDirection {
     deltaX: number;

@@ -10,7 +10,7 @@ import { TrophyIcon } from '../icons/TrophyIcon';
 interface ChampionshipOddsPreviewProps {
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ league, dispatch }: any) => {
     

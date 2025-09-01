@@ -19,7 +19,7 @@ interface BottomSheetProps {
 /**
  * Bottom Sheet Modal for Mobile
  * Provides native mobile app-like modal experience
- */
+ */}
 
 export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   onClose,
@@ -128,7 +128,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
             <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
               {title}
             </h2>
-            <AccessibleButton>
+            <AccessibleButton
               onClick={onClose}
               size="sm"
               aria-label="Close bottom sheet"
@@ -154,7 +154,7 @@ interface SwipeGestureProps {
   threshold?: number;
   children: React.ReactNode;
   className?: string;
-
+}
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   onSwipeLeft,

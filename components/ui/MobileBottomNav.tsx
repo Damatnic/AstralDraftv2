@@ -6,7 +6,7 @@ interface NavItem {
   label: string;
   icon: string;
   view: string;
-
+}
 
 interface MobileBottomNavProps {
   activeView: string;

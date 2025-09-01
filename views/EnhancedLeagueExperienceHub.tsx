@@ -27,7 +27,7 @@ interface EnhancedLeagueExperienceHubProps {
   userName: string;
   teamName: string;
   currentWeek: number;
-
+}
 
 interface LeagueStats {
   totalMessages: number;
@@ -278,7 +278,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         return renderOverview();
       case 'trash-talk':
         return (
-          <TrashTalkSystem>
+          <TrashTalkSystem
             leagueId={leagueId}
             currentUserId={userId}
             currentUserName={userName}
@@ -287,7 +287,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       case 'power-rankings':
         return (
-          <WeeklyPowerRankings>
+          <WeeklyPowerRankings
             leagueId={leagueId}
             week={currentWeek}
             teams={[]}
@@ -295,7 +295,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       case 'challenges':
         return (
-          <WeeklyChallengeSystem>
+          <WeeklyChallengeSystem
             leagueId={leagueId}
             userId={userId}
             userName={userName}
@@ -304,7 +304,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       case 'superlatives':
         return (
-          <LeagueSuperlativesSystem>
+          <LeagueSuperlativesSystem
             leagueId={leagueId}
             currentWeek={currentWeek}
             teams={mockTeams}
@@ -312,7 +312,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       case 'rivalries':
         return (
-          <RivalryTracker>
+          <RivalryTracker
             leagueId={leagueId}
             userId={userId}
             currentWeek={currentWeek}
@@ -321,7 +321,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       case 'team-identity':
         return (
-          <TeamIdentityCustomizer>
+          <TeamIdentityCustomizer
             teamId={userId}
             onSave={(identity: any) => console.log('Saving identity:', identity)}
             onPreview={(identity: any) => console.log('Previewing identity:', identity)}
@@ -329,7 +329,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       case 'memories':
         return (
-          <LeagueMemorySystem>
+          <LeagueMemorySystem
             leagueId={leagueId}
             userId={userId}
             userName={userName}
@@ -343,7 +343,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950 text-white">
       {/* Victory Celebration System - Always Active */}
-      <VictoryCelebrationSystem>
+      <VictoryCelebrationSystem
         userId={userId}
         userName={userName}
         teamName={teamName}

@@ -11,7 +11,7 @@ interface PlayerTemplate {
   team: string;
   tier: 'Elite' | 'High' | 'Medium' | 'Low' | 'Deep League';
   adp: number;
-  projectedPoints: number;
+  projectedPoints: number;}
 
 // Complete NFL Player Database (1,700+ players)
 export const COMPLETE_NFL_PLAYERS: PlayerTemplate[] = [

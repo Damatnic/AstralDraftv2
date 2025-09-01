@@ -204,9 +204,9 @@ export class InputSanitizer {
    */
   static sanitizeHTML(input: string): string {
     return input
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
+      .replace(/</g, '<')
+      .replace(/>/g, '>')
+      .replace(/"/g, '"')
       .replace(/'/g, '&#x27;')
       .replace(/\//g, '&#x2F;')
       .replace(/`/g, '&#96;')

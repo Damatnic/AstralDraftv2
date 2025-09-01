@@ -36,7 +36,7 @@ interface LeaderboardEntry {
     timeframe: 'week' | 'month' | 'season' | 'all';
     season: number;
     week?: number;
-
+}
 
 interface OracleLeaderboardProps {
     currentUserId?: string;

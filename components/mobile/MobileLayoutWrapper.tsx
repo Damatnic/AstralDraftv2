@@ -24,13 +24,13 @@ interface MobileLayoutWrapperProps {
     onViewChange: (view: View) => void;
     showBottomNav?: boolean;
     className?: string;
-
+}
 
 interface MobileLayoutConfig {
     hasBottomNav: boolean;
     hasPadding: boolean;
     hasScrollPadding: boolean;
-    backgroundColor: string;
+    backgroundColor: string;}
 
 const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     children,
@@ -227,7 +227,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                                 paddingBottom: safeAreaInsets.bottom
                             }}
                         >
-                            <MobileBottomNavigation>
+                            <MobileBottomNavigation
                                 activeView={currentView}
                                 onViewChange={onViewChange}
                             />

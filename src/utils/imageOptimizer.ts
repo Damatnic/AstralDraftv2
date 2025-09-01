@@ -19,14 +19,14 @@ interface ResponsiveImageSet {
   srcSet: string;
   sizes: string;
   placeholder?: string;
-  blurDataURL?: string;
+  blurDataURL?: string;}
 
 interface ImageMetrics {
   totalImages: number;
   loadedImages: number;
   failedImages: number;
   averageLoadTime: number;
-  totalDataSaved: number;
+  totalDataSaved: number;}
 
 class ImageOptimizer {
   private static instance: ImageOptimizer;

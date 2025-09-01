@@ -6,7 +6,7 @@ import { Avatar } from '../ui/Avatar';
 
 interface PickTimeAnalyticsProps {
     league: League;
-
+}
 
 const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }: any) => {
     const analyticsData = React.useMemo(() => {

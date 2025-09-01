@@ -8,7 +8,7 @@ export interface MobileTestResult {
   testType: string;
   passed: boolean;
   issues: string[];
-  recommendations: string[];
+  recommendations: string[];}
 
 export interface TouchTargetTest {
   element: string;
@@ -23,7 +23,7 @@ export interface ViewportTest {
   height: number;
   components: string[];
   issues: string[];
-  passed: boolean;
+  passed: boolean;}
 
 class MobileTestingSuite {
   private readonly minTouchTargetSize = 44; // Apple's recommended minimum

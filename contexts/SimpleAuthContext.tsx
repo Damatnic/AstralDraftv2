@@ -23,7 +23,7 @@ const SimpleAuthContext = createContext<SimpleAuthContextType | undefined>(undef
 
 
 interface Props {
-    children: ReactNode;
+    children: ReactNode;}
 
 export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
     const [user, setUser] = useState<SimpleUser | null>(null);

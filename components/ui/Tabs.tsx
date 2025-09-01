@@ -3,12 +3,12 @@ import React, { useCallback, useMemo } from 'react';
 interface Tab {
   id: string;
   label: string;
-  disabled?: boolean;
+  disabled?: boolean;}
 
 interface TabsProps {
   items: Tab[];
   activeTab: string;
-  onTabChange: (tabId: string) => void;
+  onTabChange: (tabId: string) => void;}
 
 export const Tabs: React.FC<TabsProps> = ({
   items,

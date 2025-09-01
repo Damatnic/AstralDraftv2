@@ -16,7 +16,7 @@ export interface GestureConfig {
   velocityThreshold: number;
   pinchThreshold: number;
   longPressDelay: number;
-  hapticFeedback: boolean;
+  hapticFeedback: boolean;}
 
 export interface TouchGesture {
   type: 'swipe' | 'pinch' | 'longpress' | 'tap' | 'doubletap';
@@ -24,7 +24,7 @@ export interface TouchGesture {
   velocity?: number;
   scale?: number;
   duration?: number;
-  points: TouchPoint[];
+  points: TouchPoint[];}
 
 const DEFAULT_CONFIG: GestureConfig = {
   swipeThreshold: 50,

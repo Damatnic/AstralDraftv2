@@ -6,7 +6,7 @@ interface TooltipProps {
   children: React.ReactNode;
   position?: 'top' | 'bottom' | 'left' | 'right';
   delay?: number;
-
+}
 
 export const Tooltip: React.FC<TooltipProps> = ({
   content,

@@ -40,7 +40,7 @@ const NotificationContext = createContext<NotificationContextValue | null>(null)
 
 
 interface NotificationProviderProps {
-    children: React.ReactNode;
+    children: React.ReactNode;}
 
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }: any) => {
     const { user, isAuthenticated } = useAuth();

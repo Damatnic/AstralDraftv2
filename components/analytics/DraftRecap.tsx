@@ -14,7 +14,7 @@ import { TelescopeIcon } from '../icons/TelescopeIcon';
 interface DraftRecapProps {
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }: any) => {
     const getIcon = (title: string) => {
@@ -57,7 +57,7 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
                 setError("The Oracle is resting. Could not generate a draft recap.");
             } finally {
                 setIsLoading(false);
-
+            }
         };
 
         fetchRecap();
@@ -79,8 +79,8 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
                         {recap.title}
                     </span>
                 </h2>
-                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_STORY' }}
+                <button 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_STORY' })}
                     className="mb-3 sm:mb-4 flex items-center gap-2 mx-auto px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg btn-primary text-sm mobile-touch-target"
                 >
                     <TelescopeIcon />

@@ -11,7 +11,7 @@ interface CacheConfig {
     version: number;
     maxAge: number; // in milliseconds
     maxSize: number; // max number of items
-    priority: 'high' | 'medium' | 'low';
+    priority: 'high' | 'medium' | 'low';}
 
 interface CacheItem<T = any> {
     key: string;
@@ -32,7 +32,7 @@ interface CacheStats {
     totalSize: number;
     hitRate: number;
     missRate: number;
-    lastCleanup: number;
+    lastCleanup: number;}
 
 class EnhancedCacheService {
     private db: IDBPDatabase | null = null;

@@ -5,6 +5,7 @@ import { Button } from './Button';
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 export const PWAInstallButton: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -42,7 +43,7 @@ export const PWAInstallButton: React.FC = () => {
   if (!showInstall) return null;
 
   return (
-    <Button>
+    <Button
       variant="primary"
       size="sm"
       onClick={handleInstall}

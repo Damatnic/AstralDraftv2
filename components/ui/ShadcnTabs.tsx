@@ -8,13 +8,13 @@ interface TabsProps {
 
 interface TabsListProps {
   children: React.ReactNode;
-  className?: string;
+  className?: string;}
 
 interface TabsTriggerProps {
   value: string;
   children: React.ReactNode;
   className?: string;
-
+}
 
 interface TabsContentProps {
   value: string;

@@ -22,7 +22,7 @@ export interface UseOracleNotificationsReturn {
     notifyAccuracyUpdate: (newAccuracy: number, previousAccuracy: number) => Promise<void>;
     notifyStreakMilestone: (streakCount: number) => Promise<void>;
     notifyRankingChange: (newRank: number, previousRank: number) => Promise<void>;
-    scheduleDeadlineNotifications: (predictionId: string, question: string, expiresAt: string) => void;
+    scheduleDeadlineNotifications: (predictionId: string, question: string, expiresAt: string) => void;}
 
 export const useOracleNotifications = (): UseOracleNotificationsReturn => {
     const [notifications, setNotifications] = useState<OracleNotification[]>([]);

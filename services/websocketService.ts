@@ -11,14 +11,14 @@ export interface WebSocketConfig {
   reconnectDelay?: number;
   heartbeatInterval?: number;
   timeout?: number;
-  fallbackToPolling?: boolean;
+  fallbackToPolling?: boolean;}
 
 export enum ConnectionState {
   DISCONNECTED = 'disconnected',
   CONNECTING = 'connecting',
   CONNECTED = 'connected',
   RECONNECTING = 'reconnecting',
-  FAILED = 'failed'
+  FAILED = 'failed'}
 
 class ResilientWebSocketService extends EventEmitter {
   private socket: WebSocket | null = null;

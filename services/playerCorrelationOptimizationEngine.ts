@@ -32,7 +32,7 @@ export interface PlayerCorrelation {
   sampleSize: number;
   gamesSampled: number;
   stackingType?: StackingType;
-  reasoning: string[];
+  reasoning: string[];}
 
 export interface StackingOpportunity {
   id: string;
@@ -63,7 +63,7 @@ export interface StackPlayer {
   ownership: number;
   value: number; // points per $1000
   ceiling: number;
-  floor: number;
+  floor: number;}
 
 export interface LineupConstraints {
   salary: {

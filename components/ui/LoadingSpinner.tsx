@@ -4,7 +4,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 interface LoadingSpinnerProps {
     size?: 'sm' | 'md' | 'lg';
     text?: string;
-
+}
 
 const sizeClasses = {
     sm: 'w-6 h-6',

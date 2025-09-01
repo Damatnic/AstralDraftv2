@@ -216,6 +216,7 @@ class PerformanceMonitor {
     this.observers = [];
     this.metrics.clear();
   }
+}
 
 export const performanceMonitor = new PerformanceMonitor();
 

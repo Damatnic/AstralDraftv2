@@ -8,6 +8,7 @@ export enum LogLevel {
   INFO = 1,
   WARN = 2,
   ERROR = 3,
+}
 
 export interface LogEntry {
   timestamp: string;
@@ -15,6 +16,7 @@ export interface LogEntry {
   message: string;
   data?: unknown;
   category?: string;
+}
 
 class LoggingService {
   private logLevel: LogLevel;
@@ -134,6 +136,7 @@ class LoggingService {
   clearLogs(): void {
     this.logs = [];
   }
+}
 
 // Export singleton instance
 export const logger = new LoggingService();

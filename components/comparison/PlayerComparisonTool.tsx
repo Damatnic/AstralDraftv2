@@ -20,13 +20,13 @@ interface PlayerComparisonToolProps {
   initialPlayers?: string[];
   week?: number;
   season?: number;
-
+}
 
 interface PlayerSearchResult {
   id: string;
   name: string;
   team: string;
-  position: string;
+  position: string;}
 
 export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   className = '',
@@ -256,7 +256,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
               <div className="text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Selected Players ({selectedPlayers.length}/4):</div>
               <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                 {comparison?.players.map((player: any) => (
-                  <Badge>
+                  <Badge
                     key={player.id} 
                     variant="default"
                     className="flex items-center gap-2 py-1 px-3 sm:px-4 md:px-6 lg:px-8"
@@ -289,7 +289,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       {comparison && (
         <div className="w-full sm:px-4 md:px-6 lg:px-8">
           <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
-            <Tabs>
+            <Tabs
               items={tabItems}
               activeTab={activeTab}
               onTabChange={setActiveTab}

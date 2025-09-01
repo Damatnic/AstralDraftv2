@@ -51,7 +51,7 @@ interface PredictionHistory {
     points: number;
     submittedAt: string;
     category: string;
-
+}
 
 interface PersonalizedInsight {
     type: 'strength' | 'improvement' | 'trend' | 'recommendation';

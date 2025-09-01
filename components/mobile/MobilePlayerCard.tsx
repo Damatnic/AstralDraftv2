@@ -31,7 +31,7 @@ interface MobilePlayerCardProps {
     isCompact?: boolean;
     swipeActions?: boolean;
     className?: string;
-
+}
 
 interface SwipeAction {
     icon: React.ReactNode;

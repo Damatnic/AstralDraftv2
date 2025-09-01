@@ -24,3 +24,4 @@ export function formatRelativeTime(timestamp: number): string {
     } else {
         return `${Math.floor(secondsAgo / YEAR)}y ago`;
     }
+}
