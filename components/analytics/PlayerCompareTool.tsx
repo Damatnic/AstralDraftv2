@@ -105,3 +105,4 @@ const PlayerCompareToolWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(PlayerCompareToolWithErrorBoundary);
+}

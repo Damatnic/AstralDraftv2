@@ -98,7 +98,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
             }`}
-           aria-label="Action button">
+            aria-label="Sign in button">
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
@@ -168,7 +168,7 @@ const AdminRoute: React.FC = () => {
           <button
             onClick={handleLogout}
             className="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-md text-sm font-medium sm:px-4 md:px-6 lg:px-8"
-           aria-label="Action button">
+            aria-label="Logout button">
             Logout
           </button>
         </div>

@@ -285,8 +285,8 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         impact: 'medium',
         actionable: false
       }
-    ];
-  };
+    ]
+  });
 
   const generateMockPredictiveInsights = (): PredictiveInsight[] => [
     {
@@ -353,7 +353,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
           </select>
           
           <button
-            onClick={() => handleStateChange({ isRealTime: !state.isRealTime }}
+            onClick={() => handleStateChange({ isRealTime: !state.isRealTime })}
             className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2 ${
               state.isRealTime 
                 ? 'bg-green-100 text-green-700 hover:bg-green-200' 
@@ -370,7 +370,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
             className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"
            aria-label="Action button">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-//             Refresh
+            Refresh
           </button>
           
           <button

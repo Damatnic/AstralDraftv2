@@ -59,7 +59,7 @@ const EnhancedAuthView: React.FC = () => {
         email: user.email,
         displayName: user.display_name
       }));
-
+    }
   }, [mode, user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +73,7 @@ const EnhancedAuthView: React.FC = () => {
         delete newErrors[name];
         return newErrors;
       });
+    }
 
     if (authError) setAuthError(null);
   };
@@ -87,14 +88,17 @@ const EnhancedAuthView: React.FC = () => {
         errors.username = 'Username must be at least 3 characters';
       } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
         errors.username = 'Username can only contain letters, numbers, and underscores';
+      }
 
       if (!formData.email.trim()) {
         errors.email = 'Email is required';
       } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
         errors.email = 'Please enter a valid email address';
+      }
 
       if (!formData.displayName.trim()) {
         errors.displayName = 'Display name is required';
+      }
 
 
     if (mode === 'register') {
@@ -104,16 +108,20 @@ const EnhancedAuthView: React.FC = () => {
         errors.password = 'Password must be at least 8 characters';
       } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
         errors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+      }
 
       if (formData.password !== formData.confirmPassword) {
         errors.confirmPassword = 'Passwords do not match';
+      }
 
     } else if (mode === 'login') {
       if (!formData.username.trim()) {
         errors.username = 'Username or email is required';
+      }
 
       if (!formData.password) {
         errors.password = 'Password is required';
+      }
 
 
     setValidationErrors(errors);
@@ -139,12 +147,12 @@ const EnhancedAuthView: React.FC = () => {
           display_name: formData.displayName,
           email: formData.email
         });
-
+      }
     } catch (error) {
-      setAuthError(err instanceof Error ? err.message : 'An error occurred');
+      setAuthError(error instanceof Error ? error.message : 'An error occurred');
     } finally {
       setIsSubmitting(false);
-
+    }
   };
 
   const handleOAuthSuccess = (oauthUser: any) => {
@@ -238,7 +246,8 @@ const EnhancedAuthView: React.FC = () => {
             {/* Header */}
             <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-4 sm:px-4 md:px-6 lg:px-8">
-                <ShieldCheckIcon className="w-8 h-8 text-blue-600 dark:text-blue-400 sm:px-4 md:px-6 lg:px-8" />
+                {/* <ShieldCheckIcon className="w-8 h-8 text-blue-600 dark:text-blue-400 sm:px-4 md:px-6 lg:px-8" /> */}
+                <UserIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:px-4 md:px-6 lg:px-8">
                 {mode === 'login' && 'Welcome Back'}
@@ -281,7 +290,12 @@ const EnhancedAuthView: React.FC = () => {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Username Field */}
+              {(mode === 'login' || mode === 'register') && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Username
                   </label>
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <UserIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
@@ -290,7 +304,7 @@ const EnhancedAuthView: React.FC = () => {
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
-                      `}
+                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       placeholder={mode === 'login' ? 'Username or email' : 'Choose a username'}
                     />
                   </div>
@@ -306,7 +320,7 @@ const EnhancedAuthView: React.FC = () => {
               {(mode === 'register' || mode === 'profile') && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-//                     Email
+                    Email
                   </label>
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <MailIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
@@ -315,7 +329,7 @@ const EnhancedAuthView: React.FC = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      `}
+                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -338,7 +352,7 @@ const EnhancedAuthView: React.FC = () => {
                     name="displayName"
                     value={formData.displayName}
                     onChange={handleInputChange}
-                    `}
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="How should we display your name?"
                   />
                   {validationErrors.displayName && (
@@ -352,8 +366,8 @@ const EnhancedAuthView: React.FC = () => {
               {/* Password Field */}
               {mode !== 'profile' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-//                     Password
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Password
                   </label>
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <LockIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
@@ -362,7 +376,7 @@ const EnhancedAuthView: React.FC = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      `}
+                      className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       placeholder="Enter your password"
                     />
                     <button
@@ -393,7 +407,7 @@ const EnhancedAuthView: React.FC = () => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      `}
+                      className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       placeholder="Confirm your password"
                     />
                     <button
@@ -442,8 +456,7 @@ const EnhancedAuthView: React.FC = () => {
                 >
                   {mode === 'login' 
                     ? "Don't have an account? Sign up" 
-                    : "Already have an account? Sign in"
-
+                    : "Already have an account? Sign in"}
                 </button>
               </div>
             )}

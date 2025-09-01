@@ -179,7 +179,7 @@ const PasswordManagementWidget: React.FC = () => {
                   </span>
                   {user.isMainUser && (
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded sm:px-4 md:px-6 lg:px-8">
-//                       Protected
+                      Protected
                     </span>
                   )}
                 </div>
@@ -224,7 +224,7 @@ const PasswordManagementWidget: React.FC = () => {
                     size="sm"
                     variant="outline"
                   >
-//                     Cancel
+                    Cancel
                   </Button>
                 </div>
               </div>

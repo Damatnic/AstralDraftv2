@@ -25,9 +25,11 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }: any) =>
                 
                 if (!pickTimes[currentPick.teamId]) {
                     pickTimes[currentPick.teamId] = [];
+                }
 
                 pickTimes[currentPick.teamId].push(timeDiff);
-
+            }
+        }
 
         return league.teams.map((team: any) => {
             const times = pickTimes[team.id] || [];

@@ -44,6 +44,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay title="Error" message="No active league found." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
+    }
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">

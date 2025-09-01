@@ -32,12 +32,12 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
                 setReport({ ...reportData, powerPlay: powerPlayData || undefined });
             } else {
                  setError("The Oracle could not produce a weekly report.");
-
+            }
         } catch (err) {
             setError("An error occurred while consulting the Oracle for a weekly report.");
         } finally {
             setIsLoading(false);
-
+        }
     }, [league, selectedWeek]);
     
     React.useEffect(() => {
@@ -57,7 +57,7 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
                 </div>
                  <div className="flex items-center gap-4">
                     <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_RECAP_VIDEO' })
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_RECAP_VIDEO' })}
                         className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 text-purple-300 rounded-lg text-sm hover:bg-purple-500/30"
                     >
                         <FilmIcon /> Generate AI Recap Video

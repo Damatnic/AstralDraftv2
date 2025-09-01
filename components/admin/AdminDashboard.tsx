@@ -217,7 +217,7 @@ const UserManagement: React.FC = () => {
                         onClick={() => handleStatusChange(user.id, 'banned')}
                         className="px-3 py-1 rounded text-xs bg-red-100 text-red-800 hover:bg-red-200 sm:px-4 md:px-6 lg:px-8"
                       >
-//                         Ban
+                        Ban
                       </button>
                     </div>
                   </td>
@@ -330,14 +330,14 @@ const ContestManagement: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium sm:px-4 md:px-6 lg:px-8">
                     <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                       <button className="text-blue-600 hover:text-blue-900 sm:px-4 md:px-6 lg:px-8">
-//                         View
+                        View
                       </button>
                       {contest?.status === 'active' && (
                         <button
                           onClick={() => handleCancelContest(contest.id)}
                           className="text-red-600 hover:text-red-900 sm:px-4 md:px-6 lg:px-8"
                         >
-//                           Cancel
+                          Cancel
                         </button>
                       )}
                     </div>

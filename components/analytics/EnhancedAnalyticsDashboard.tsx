@@ -27,7 +27,7 @@ import { useEnhancedAnalytics } from '../../hooks/useEnhancedAnalytics';
 interface EnhancedAnalyticsDashboardProps {
   className?: string;
   onExport?: (data: any) => void;
-
+}
 
 interface PerformanceMetric {
   id: string;

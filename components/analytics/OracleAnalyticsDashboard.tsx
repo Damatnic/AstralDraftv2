@@ -47,7 +47,7 @@ interface PerformanceData {
         correctPredictions: number;
         accuracy: number;
         avgConfidence: number;
-    }>;
+    }>}
 
 interface GlobalAnalytics {
     globalStats: {

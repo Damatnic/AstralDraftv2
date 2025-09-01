@@ -215,7 +215,7 @@ const SecurityDashboard: FC = () => {
             onClick={loadSecurityData}
             disabled={refreshing}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
-           aria-label="Action button">
+            aria-label="Refresh security data">
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             Refresh
           </button>
@@ -223,7 +223,7 @@ const SecurityDashboard: FC = () => {
           <button
             onClick={generateSecurityReport}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 sm:px-4 md:px-6 lg:px-8"
-           aria-label="Action button">
+            aria-label="Generate security report">
             <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             Generate Report
           </button>
@@ -400,23 +400,23 @@ const SecurityDashboard: FC = () => {
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          <button className="flex items-center gap-2 px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+          <button className="flex items-center gap-2 px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 sm:px-4 md:px-6 lg:px-8" aria-label="Emergency lockdown">
             <Ban className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             Emergency Lockdown
           </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+          <button className="flex items-center gap-2 px-4 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 sm:px-4 md:px-6 lg:px-8" aria-label="View blocked IPs">
             <Globe className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             View Blocked IPs
           </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+          <button className="flex items-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8" aria-label="View user sessions">
             <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             User Sessions
           </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+          <button className="flex items-center gap-2 px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 sm:px-4 md:px-6 lg:px-8" aria-label="Run security scan">
             <Shield className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             Security Scan
           </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+          <button className="flex items-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 sm:px-4 md:px-6 lg:px-8" aria-label="View audit logs">
             <Activity className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             Audit Logs
           </button>

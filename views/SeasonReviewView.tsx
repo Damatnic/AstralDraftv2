@@ -41,12 +41,12 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
                 setReview(data);
             } else {
                  setError("The Oracle could not produce a season review. Please try again later.");
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError("An error occurred while consulting the Oracle for a season review.");
         } finally {
             setIsLoading(false);
-
+        }
     }, [league, seasonYear]);
     
     React.useEffect(() => {

@@ -23,21 +23,20 @@ const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dis
             const fetchedNeeds = await generateTeamNeedsAnalysis(team);
             if (fetchedNeeds) {
                 dispatch({ type: 'SET_TEAM_NEEDS', payload: { leagueId: league.id, teamId: team.id, needs: fetchedNeeds } });
-
-    } catch (error) {
+            }
+        } catch (error) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not analyze team needs.', type: 'SYSTEM' } });
         } finally {
             setIsLoading(false);
-
+        }
     };
 
     React.useEffect(() => {
         // Fetch only if needs are not already in state and the season has started
         if (!needs && (league?.status === 'IN_SEASON' || league?.status === 'PLAYOFFS' || league?.status === 'COMPLETE')) {
             handleFetchNeeds();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [team.id, league?.status]);
 
     return (
