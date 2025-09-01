@@ -31,7 +31,8 @@ interface ValidationMethod {
   useCases: string[];
   complexity: ComplexityLevel;
   computationalCost: ComplexityLevel;
-  reliability: ComplexityLevel;}
+  reliability: ComplexityLevel;
+}
 
 // Cross-Validation Interfaces
 
@@ -49,7 +50,8 @@ interface CrossValidationConfig {
   validationSize?: number;
   description: string;
   formula: string;
-  implementation: string;}
+  implementation: string;
+}
 
 interface CrossValidationResult {
   method: string;
@@ -67,6 +69,7 @@ interface CrossValidationResult {
     score: number;
     metrics: Record<string, number>;
   }[];
+}
 
 // Holdout Validation Interfaces
 interface HoldoutConfig {
@@ -82,9 +85,10 @@ interface HoldoutConfig {
   groupBy?: string;
   timeAware: boolean;
   description: string;
-  implementation: string;}
+  implementation: string;
+}
 
-// Time Series Validation Interfaces}
+// Time Series Validation Interfaces
 
 interface TimeSeriesValidationConfig {
   id: string;
@@ -101,7 +105,8 @@ interface TimeSeriesValidationConfig {
   implementation: string;
   advantages: string[];
   disadvantages: string[];
-  useCases: string[];}
+  useCases: string[];
+}
 
 // Bootstrap Resampling Configuration
 interface BootstrapConfig {
@@ -141,6 +146,7 @@ interface TimeSeriesValidationResult {
     score: number;
     metrics: Record<string, number>;
   }[];
+}
 
 // ===== CALIBRATION METHOD INTERFACES =====
 
@@ -171,6 +177,7 @@ interface CalibrationConfig {
     weights?: number[];
     voting: VotingStrategy;
   };
+}
 
 // ===== PERFORMANCE METRICS INTERFACES =====
 
@@ -185,7 +192,7 @@ interface PerformanceMetric {
   higherIsBetter: boolean;
   useCases: string[];
   limitations: string[];
-
+}
 
 interface ClassificationMetrics {
   accuracy: number;
@@ -203,6 +210,7 @@ interface ClassificationMetrics {
   balancedAccuracy: number;
   topKAccuracy?: number;
   confusionMatrix: number[][];
+}
 
 interface RegressionMetrics {
   mse: number;
@@ -218,7 +226,7 @@ interface RegressionMetrics {
   explainedVariance: number;
   huberLoss?: number;
   quantileLoss?: number;
-
+}
 
 interface CalibrationMetrics {
   expectedCalibrationError: number;
@@ -233,6 +241,7 @@ interface CalibrationMetrics {
   uncertainty: number;
   calibrationSlope: number;
   calibrationIntercept: number;
+}
 
 interface FantasyMetrics {
   pointsAccuracy: number;
@@ -254,9 +263,10 @@ interface ComprehensiveMetrics {
   regression?: RegressionMetrics;
   calibration: CalibrationMetrics;
   fantasy: FantasyMetrics;
-  custom?: Record<string, number>;}
+  custom?: Record<string, number>;
+}
 
-// ===== EXPERIMENT AND EVALUATION INTERFACES =====}
+// ===== EXPERIMENT AND EVALUATION INTERFACES =====
 
 interface ValidationExperiment {
   id: string;
@@ -280,6 +290,7 @@ interface ValidationExperiment {
   startTime?: string;
   endTime?: string;
   duration?: number;
+}
 
 interface ExperimentResult {
   experimentId: string;
@@ -298,6 +309,7 @@ interface ExperimentResult {
     recommendations: string[];
     riskAssessment: string;
   };
+}
 
 interface ValidationReport {
   summary: {
@@ -636,7 +648,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       randomState: 42,
       description: 'Double CV for unbiased hyperparameter tuning and model selection in fantasy sports',
       formula: 'NestedCV = (1/k₁) ∑ᵢ₌₁ᵏ¹ min_{h} (1/k₂) ∑ⱼ₌₁ᵏ² L(fₕ(X₋ᵢⱼ), yᵢⱼ)',
-      implementation: 'Outer loop for model evaluation, inner loop for hyperparameter optimization'
+      implementation: 'Outer loop for model evaluation, inner loop for hyperparameter optimization',
 
   ];
 
@@ -693,7 +705,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       groupBy: 'player_id',
       timeAware: false,
       description: 'Player-grouped split ensuring same player never appears in both train and test sets',
-      implementation: 'Group-based sampling for testing generalization to unseen players'
+      implementation: 'Group-based sampling for testing generalization to unseen players',
 
   ];
 
@@ -870,7 +882,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Player performance probability calibration',
         'Binary outcomes (injury, breakout)',
         'Draft pick success probability',
-        'Win/loss predictions'
+        'Win/loss predictions',
 
     },
     {
@@ -905,7 +917,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Player ranking calibration',
         'Multi-class position predictions',
         'Performance tier classifications',
-        'Trade value assessments'
+        'Trade value assessments',
 
     },
     {
@@ -940,7 +952,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Rookie performance prediction',
         'Injury recovery probability',
         'Career trajectory modeling',
-        'Draft value uncertainty'
+        'Draft value uncertainty',
 
     },
     {
@@ -975,7 +987,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Deep learning player predictions',
         'Multi-position classifications',
         'Ensemble model calibration',
-        'Neural ranking systems'
+        'Neural ranking systems',
 
   ];
 
@@ -1213,7 +1225,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       expectedVariance: 0.15,
       expectedNoise: 0.10,
       totalError: 0.65,
-      decompositionMethod: 'analytical'
+      decompositionMethod: 'analytical',
 
   ];
 
@@ -1341,7 +1353,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       convergenceThreshold: 0.005,
       expectedConvergencePoint: 3500,
       dataEfficiency: 'low',
-      convergenceRate: 'slow'
+      convergenceRate: 'slow',
 
   ];
 
@@ -2665,7 +2677,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       'nested_cv': {
         best: 'Hyperparameter optimization with unbiased evaluation',
         use: 'Model selection for production deployment',
-        tradeoff: 'Most reliable but computationally expensive'
+        tradeoff: 'Most reliable but computationally expensive',
 
     };
 

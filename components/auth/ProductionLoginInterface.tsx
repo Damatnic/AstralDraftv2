@@ -16,7 +16,7 @@ import {
   AlertCircleIcon,
   CheckCircleIcon,
   LoaderIcon,
-//   ArrowLeftIcon
+  ArrowLeftIcon
 } from 'lucide-react';
 import { useProductionAuth, LoginCredentials, RegisterData } from '../../contexts/ProductionAuthContext';
 import { SecurePasswordInput } from '../ui/SecureInput';
@@ -80,7 +80,7 @@ const ProductionLoginInterface: React.FC = () => {
     if (password.length < 8) return 'Password must be at least 8 characters';
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)) {
       return 'Password must contain uppercase, lowercase, number, and special character';
-
+    }
     return undefined;
   };
 
@@ -98,57 +98,45 @@ const ProductionLoginInterface: React.FC = () => {
   };
 
   // Handle login
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
     try {
+      e?.preventDefault();
+      setIsLoading(true);
+      setErrors({});
 
-    e.preventDefault();
-    setIsLoading(true);
-    setErrors({
-    } catch (error) {
-      console.error('Error in handleLogin:', error);
-
-    } catch (error) {
-        console.error(error);
-    });
-
-    // Validate form
+      // Validate form
     const emailError = validateEmail(loginData.email);
-    if (emailError) {
-      setErrors({ email: emailError });
-      setIsLoading(false);
-      return;
+      if (emailError) {
+        setErrors({ email: emailError });
+        setIsLoading(false);
+        return;
+      }
 
-    if (!loginData.password) {
-      setErrors({ password: 'Password is required' });
-      setIsLoading(false);
-      return;
+      if (!loginData.password) {
+        setErrors({ password: 'Password is required' });
+        setIsLoading(false);
+        return;
+      }
 
-    try {
       const result = await login(loginData);
       if (!result.success) {
         setErrors({ general: result.error || 'Login failed' });
-
+      }
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
-
-    setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle registration
-  const handleRegister = async () => {
+  const handleRegister = async (e?: React.FormEvent) => {
     try {
+      e?.preventDefault();
+      setIsLoading(true);
+      setErrors({});
 
-    e.preventDefault();
-    setIsLoading(true);
-    setErrors({
-    } catch (error) {
-      console.error('Error in handleRegister:', error);
-
-    } catch (error) {
-        console.error(error);
-    });
-
-    // Validate form
+      // Validate form
     const validationErrors: FormErrors = {};
     
     const emailError = validateEmail(registerData.email);
@@ -163,121 +151,105 @@ const ProductionLoginInterface: React.FC = () => {
     const passwordError = validatePassword(registerData.password);
     if (passwordError) validationErrors.password = passwordError;
     
-    if (registerData.password !== registerData.confirmPassword) {
-      validationErrors.confirmPassword = 'Passwords do not match';
+      if (registerData.password !== registerData.confirmPassword) {
+        validationErrors.confirmPassword = 'Passwords do not match';
+      }
 
-    if (!registerData.acceptTerms) {
-      validationErrors.general = 'You must accept the terms and conditions';
+      if (!registerData.acceptTerms) {
+        validationErrors.general = 'You must accept the terms and conditions';
+      }
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setIsLoading(false);
-      return;
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        setIsLoading(false);
+        return;
+      }
 
-    try {
       const result = await register(registerData);
       if (result.success) {
         setSuccessMessage('Registration successful! Please check your email to verify your account.');
         setCurrentView('verify-email');
       } else {
         setErrors({ general: result.error || 'Registration failed' });
-
+      }
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
-
-    setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle forgot password
-  const handleForgotPassword = async () => {
+  const handleForgotPassword = async (e?: React.FormEvent) => {
     try {
+      e?.preventDefault();
+      setIsLoading(true);
+      setErrors({});
 
-    e.preventDefault();
-    setIsLoading(true);
-    setErrors({
-    } catch (error) {
-      console.error('Error in handleForgotPassword:', error);
+      const emailError = validateEmail(forgotEmail);
+      if (emailError) {
+        setErrors({ email: emailError });
+        setIsLoading(false);
+        return;
+      }
 
-    } catch (error) {
-        console.error(error);
-    });
-
-    const emailError = validateEmail(forgotEmail);
-    if (emailError) {
-      setErrors({ email: emailError });
-      setIsLoading(false);
-      return;
-
-    try {
       const result = await resetPassword({ email: forgotEmail });
       if (result.success) {
         setSuccessMessage('Password reset link sent to your email');
       } else {
         setErrors({ general: result.error || 'Failed to send reset email' });
-
+      }
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
-
-    setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle email verification
-  const handleVerifyEmail = async () => {
+  const handleVerifyEmail = async (e?: React.FormEvent) => {
     try {
+      e?.preventDefault();
+      setIsLoading(true);
+      setErrors({});
 
-    e.preventDefault();
-    setIsLoading(true);
-    setErrors({
-    } catch (error) {
-      console.error('Error in handleVerifyEmail:', error);
+      if (!verificationToken) {
+        setErrors({ general: 'Verification token is required' });
+        setIsLoading(false);
+        return;
+      }
 
-    } catch (error) {
-        console.error(error);
-    });
-
-    if (!verificationToken) {
-      setErrors({ general: 'Verification token is required' });
-      setIsLoading(false);
-      return;
-
-    try {
       const result = await verifyEmail(verificationToken);
       if (result.success) {
         setSuccessMessage('Email verified successfully! You can now log in.');
         setCurrentView('login');
       } else {
         setErrors({ general: result.error || 'Verification failed' });
-
+      }
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
-
-    setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle resend verification
   const handleResendVerification = async () => {
     try {
+      setIsLoading(true);
+      setErrors({});
 
-    setIsLoading(true);
-    setErrors({
-    } catch (error) {
-      console.error('Error in handleResendVerification:', error);
-
-    } catch (error) {
-        console.error(error);
-    });
-
-    try {
       const result = await resendVerification();
       if (result.success) {
         setSuccessMessage('Verification email sent! Please check your inbox.');
       } else {
         setErrors({ general: result.error || 'Failed to resend verification' });
-
+      }
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
-
-    setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Input component with error handling
@@ -337,7 +309,7 @@ const ProductionLoginInterface: React.FC = () => {
 
   // Login view
   const LoginView = () => (
-    <form onSubmit={handleLogin} aria-label="Login form"
+    <form onSubmit={handleLogin} aria-label="Login form">
       <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
         <h1 id="login-title" className="text-3xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Welcome Back</h1>
         <p id="login-description" className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Sign in to your Astral Draft account</p>
@@ -347,7 +319,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="email"
         placeholder="Email address"
         value={loginData.email}
-        onChange={(value: any) => setLoginData({ ...loginData, email: value }}
+        onChange={(value: any) => setLoginData({ ...loginData, email: value })}
         error={errors.email}
         icon={<MailIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
@@ -356,7 +328,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="password"
         placeholder="Password"
         value={loginData.password}
-        onChange={(value: string) => setLoginData({ ...loginData, password: value }}
+        onChange={(value: string) => setLoginData({ ...loginData, password: value })}
         error={errors.password}
         label="Password"
         showToggle={true}
@@ -370,7 +342,7 @@ const ProductionLoginInterface: React.FC = () => {
             type="checkbox"
             id="remember-me"
             checked={loginData.rememberMe}
-            onChange={(e: any) => setLoginData({ ...loginData, rememberMe: e.target.checked }}
+            onChange={(e: any) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
             aria-label="Remember me"
             className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800 sm:px-4 md:px-6 lg:px-8"
           />
@@ -424,7 +396,7 @@ const ProductionLoginInterface: React.FC = () => {
 
   // Register view
   const RegisterView = () => (
-    <form onSubmit={handleRegister}
+    <form onSubmit={handleRegister} aria-label="Register form">
       <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
         <button
           type="button"
@@ -441,7 +413,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="email"
         placeholder="Email address"
         value={registerData.email}
-        onChange={(value: any) => setRegisterData({ ...registerData, email: value }}
+        onChange={(value: any) => setRegisterData({ ...registerData, email: value })}
         error={errors.email}
         icon={<MailIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
@@ -450,7 +422,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="text"
         placeholder="Username"
         value={registerData.username}
-        onChange={(value: any) => setRegisterData({ ...registerData, username: value }}
+        onChange={(value: any) => setRegisterData({ ...registerData, username: value })}
         error={errors.username}
         icon={<UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
@@ -459,7 +431,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="text"
         placeholder="Display name"
         value={registerData.displayName}
-        onChange={(value: any) => setRegisterData({ ...registerData, displayName: value }}
+        onChange={(value: any) => setRegisterData({ ...registerData, displayName: value })}
         error={errors.displayName}
         icon={<UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       />
@@ -468,7 +440,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="password"
         placeholder="Password"
         value={registerData.password}
-        onChange={(value: string) => setRegisterData({ ...registerData, password: value }}
+        onChange={(value: string) => setRegisterData({ ...registerData, password: value })}
         error={errors.password}
         label="Password"
         showToggle={true}
@@ -483,7 +455,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="password"
         placeholder="Confirm password"
         value={registerData.confirmPassword}
-        onChange={(value: string) => setRegisterData({ ...registerData, confirmPassword: value }}
+        onChange={(value: string) => setRegisterData({ ...registerData, confirmPassword: value })}
         error={errors.confirmPassword}
         label="Confirm Password"
         showToggle={true}
@@ -495,7 +467,7 @@ const ProductionLoginInterface: React.FC = () => {
         <input
           type="checkbox"
           checked={registerData.acceptTerms}
-          onChange={(e: any) => setRegisterData({ ...registerData, acceptTerms: e.target.checked }}
+          onChange={(e: any) => setRegisterData({ ...registerData, acceptTerms: e.target.checked })}
           className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800 mt-1 sm:px-4 md:px-6 lg:px-8"
         />
         <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -536,7 +508,7 @@ const ProductionLoginInterface: React.FC = () => {
 
   // Forgot password view
   const ForgotPasswordView = () => (
-    <form onSubmit={handleForgotPassword}
+    <form onSubmit={handleForgotPassword} aria-label="Forgot password form">
       <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
         <button
           type="button"
@@ -600,7 +572,7 @@ const ProductionLoginInterface: React.FC = () => {
         <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Enter the verification token from your email</p>
       </div>
 
-      <form onSubmit={handleVerifyEmail}
+      <form onSubmit={handleVerifyEmail} aria-label="Email verification form">
         <InputField
           type="text"
           placeholder="Verification token"

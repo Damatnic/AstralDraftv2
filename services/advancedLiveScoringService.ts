@@ -30,6 +30,7 @@ export interface PlayByPlayEvent {
   excitement: number; // 0-100 excitement level
   highlight: boolean;
   video?: string; // URL to video clip
+}
 
 export interface PlayParticipant {
   playerId: string;
@@ -41,6 +42,7 @@ export interface PlayParticipant {
     turnover?: boolean;
     penalty?: boolean;
   };
+}
 
 export interface FantasyImpact {
   playerId: string;
@@ -52,6 +54,7 @@ export interface FantasyImpact {
   totalPoints: number;
   projectedFinal: number;
   percentOfProjection: number;
+}
 
 export interface LiveGameDashboard {
   gameId: string;
@@ -65,6 +68,7 @@ export interface LiveGameDashboard {
   weatherImpact?: WeatherImpact;
   injuryUpdates: InjuryUpdate[];
   nextRedZoneOpportunities: RedZoneWatch[];
+}
 
 export interface GameStatus {
   gameId: string;
@@ -82,6 +86,7 @@ export interface GameStatus {
   isRedZone: boolean;
   isTwoMinuteWarning: boolean;
   gameFlow: 'normal' | 'hurry_up' | 'clock_management' | 'comeback_mode';
+}
 
 export interface TeamGameInfo {
   teamId: string;
@@ -93,7 +98,8 @@ export interface TeamGameInfo {
   timePossession: string;
   thirdDownConversions: string;
   redZoneAttempts: string;
-  scoringDrives: number;}
+  scoringDrives: number;
+}
 
 export interface ScoringSummary {
   quarter: string;
@@ -102,7 +108,8 @@ export interface ScoringSummary {
   description: string;
   scoreType: 'touchdown' | 'field_goal' | 'safety' | 'two_point';
   players: string[];
-  videoHighlight?: string;}
+  videoHighlight?: string;
+}
 
 export interface DriveSummary {
   currentDrive: {
@@ -121,6 +128,7 @@ export interface DriveSummary {
     yards: number;
     timeElapsed: string;
   }>;
+}
 
 export interface PlayerPerformance {
   playerId: string;
@@ -138,6 +146,7 @@ export interface PlayerPerformance {
   performance: 'exceeding' | 'meeting' | 'underperforming';
   keyMoments: string[];
   nextOpportunity?: string;
+}
 
 export interface FantasyLeader {
   category: 'overall' | 'QB' | 'RB' | 'WR' | 'TE';
@@ -148,6 +157,7 @@ export interface FantasyLeader {
     points: number;
     gameStatus: string;
   }>;
+}
 
 export interface ProjectedFinal {
   homeTeam: {
@@ -160,6 +170,7 @@ export interface ProjectedFinal {
   };
   totalPoints: number;
   gameScript: 'blowout' | 'competitive' | 'comeback' | 'defensive_battle' | 'shootout';
+}
 
 export interface BettingInfo {
   spread: {
@@ -176,6 +187,7 @@ export interface BettingInfo {
     home: number;
     away: number;
   };
+}
 
 export interface WeatherImpact {
   conditions: string;
@@ -187,6 +199,7 @@ export interface WeatherImpact {
     kicking: number;
     overall: string;
   };
+}
 
 export interface InjuryUpdate {
   playerId: string;
@@ -196,7 +209,8 @@ export interface InjuryUpdate {
   severity: 'questionable' | 'doubtful' | 'out';
   returnStatus: string;
   fantasyImpact: string;
-  timestamp: string;}
+  timestamp: string;
+}
 
 export interface RedZoneWatch {
   team: string;
@@ -208,6 +222,7 @@ export interface RedZoneWatch {
     position: string;
     targetProbability: number;
   }>;
+}
 
 export interface LiveMatchupTracker {
   matchupId: string;
@@ -228,6 +243,7 @@ export interface LiveMatchupTracker {
     strength: number; // 0-100
     recentEvents: string[];
   };
+}
 
 export interface LiveTeamScore {
   teamId: string;
@@ -241,6 +257,7 @@ export interface LiveTeamScore {
   lineup: LivePlayerStatus[];
   bench: LivePlayerStatus[];
   optimalLineupDifference: number;
+}
 
 export interface LivePlayerStatus {
   playerId: string;
@@ -255,6 +272,7 @@ export interface LivePlayerStatus {
   trend: 'hot' | 'cold' | 'steady';
   lastUpdate?: string;
   nextScoringOpp?: string;
+}
 
 export interface CriticalPlayer {
   playerId: string;
@@ -263,7 +281,8 @@ export interface CriticalPlayer {
   importance: 'crucial' | 'important' | 'moderate';
   reasoning: string;
   pointsNeeded?: number;
-  probabilityToDeliver: number;}
+  probabilityToDeliver: number;
+}
 
 export interface ScoringOpportunity {
   team: string;
@@ -271,7 +290,8 @@ export interface ScoringOpportunity {
   scenario: string;
   likelihood: number;
   potentialPoints: number;
-  timeframe: string;}
+  timeframe: string;
+}
 
 export interface GameFlowPrediction {
   gameId: string;
@@ -286,6 +306,7 @@ export interface GameFlowPrediction {
   stackingBenefit: {
     [teamId: string]: number;
   };
+}
 
 export interface LiveAlert {
   alertId: string;
@@ -299,7 +320,8 @@ export interface LiveAlert {
   timestamp: string;
   expiresAt?: string;
   actionRequired?: boolean;
-  suggestedAction?: string;}
+  suggestedAction?: string;
+}
 
 export interface FantasyGameLog {
   playerId: string;
@@ -323,6 +345,7 @@ export interface FantasyGameLog {
     vsSeasonAvg: number;
     vsPositionAvg: number;
   };
+}
 
 class AdvancedLiveScoringService extends EventEmitter {
   private gameTrackers = new Map<string, LiveGameDashboard>();
@@ -388,7 +411,8 @@ class AdvancedLiveScoringService extends EventEmitter {
     // Start tracking this game
     this.scoringSubscriptions.add(gameId);
     
-    // Return unsubscribe function return() => {
+    // Return unsubscribe function 
+    return () => {
       this.off(eventName, callback);
       this.scoringSubscriptions.delete(gameId);
     };
@@ -487,7 +511,7 @@ class AdvancedLiveScoringService extends EventEmitter {
         gameId,
         predictions,
         scriptType: gameScript,
-//         stackingBenefit
+        stackingBenefit
       };
 
     } catch (error) {
@@ -1148,6 +1172,8 @@ class AdvancedLiveScoringService extends EventEmitter {
       subscriptions: this.scoringSubscriptions.size
     };
   }
+
+}
 
 // Export singleton instance
 export const advancedLiveScoringService = new AdvancedLiveScoringService();

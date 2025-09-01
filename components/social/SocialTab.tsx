@@ -5,7 +5,7 @@ import oracleSocialService, {
     LeagueSettings,
     GroupPrediction,
     Debate,
-//     DebateSide
+    DebateSide
 } from '../../services/oracleSocialService';
 
 type ReactionType = '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂';
@@ -19,11 +19,11 @@ interface CreateLeagueFormData {
     description: string;
     isPublic: boolean;
     maxMembers: number;
-    settings: LeagueSettings;}
+    settings: LeagueSettings;
+}
 
 // Helper functions
 const getPredictionStatusColor = (status: string) => {
-  const [isLoading, setIsLoading] = React.useState(false);
     if (status === 'OPEN') return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
     if (status === 'CLOSED') return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
     return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
@@ -65,7 +65,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             enableTrashtalk: true,
             moderationLevel: 'MODERATED',
             customRules: []
-
+        }
     });
 
     const [joinCode, setJoinCode] = useState('');
@@ -104,11 +104,12 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             if (selectedLeague) {
                 const leagueDebates = await oracleSocialService.getLeagueDebates(selectedLeague.id);
                 setDebates(leagueDebates);
-
-    } catch (error) {
+            }
+        } catch (error) {
+            console.error('Error loading data:', error);
         } finally {
             setLoading(false);
-
+        }
     };
 
     const handleCreateLeague = async () => {
@@ -139,7 +140,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                     enableTrashtalk: true,
                     moderationLevel: 'MODERATED',
                     customRules: []
-
+                }
             });
             loadData();
     } catch (error) {
@@ -155,11 +156,12 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             const success = await oracleSocialService.joinLeague(leagueId);
             if (success) {
                 loadData();
-
-    } catch (error) {
+            }
+        } catch (error) {
+            console.error('Error joining league:', error);
         } finally {
             setLoading(false);
-
+        }
     };
 
     const handleJoinByCode = async () => {
@@ -172,11 +174,12 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             if (success) {
                 setJoinCode('');
                 loadData();
-
-    } catch (error) {
+            }
+        } catch (error) {
+            console.error('Error joining by code:', error);
         } finally {
             setLoading(false);
-
+        }
     };
 
     // Debate handlers
@@ -267,17 +270,17 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             <div className="border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
                 <nav className="flex space-x-8 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={() => setActiveSubTab('leagues')}`}
+                        onClick={() => setActiveSubTab('leagues')}
                     >
                         🏆 Leagues
                     </button>
                     <button
-                        onClick={() => setActiveSubTab('predictions')}`}
+                        onClick={() => setActiveSubTab('predictions')}
                     >
                         🔮 Group Predictions
                     </button>
                     <button
-                        onClick={() => setActiveSubTab('debates')}`}
+                        onClick={() => setActiveSubTab('debates')}
                     >
                         ⚔️ Debates
                     </button>

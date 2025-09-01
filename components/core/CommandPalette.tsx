@@ -10,7 +10,8 @@ import { HistoryIcon } from '../icons/HistoryIcon';
 import { useFocusTrap } from '../../utils/accessibility';
 
 interface CommandPaletteProps {
-  [key: string]: unknown;}
+  [key: string]: unknown;
+}
 
 const CommandPalette: React.FC<CommandPaletteProps> = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -26,22 +27,25 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
                 dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: !state.isCommandPaletteOpen });
+            }
 
             if (e.key === 'Escape') {
                 dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
                 setQuery(''); // Clear query on close
+            }
 
             // Quick navigation shortcuts when palette is open
             if (state.isCommandPaletteOpen) {
                 if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                     e.preventDefault();
                     // Handle arrow navigation (implementation would depend on results structure)
+                }
 
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     // Handle selection (implementation would depend on selected item)
-
-
+                }
+            }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
@@ -50,7 +54,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
     React.useEffect(() => {
         if (!state.isCommandPaletteOpen) {
             setQuery('');
-    }
+        }
   }, [state.isCommandPaletteOpen]);
 
     const handleSelectLeague = (id: string) => {
@@ -93,20 +97,23 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
                 <>
                     {state.recentCommands.length > 0 && (
                          <>
-                            <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><HistoryIcon className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" /> Recent</h4>
+                            <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><HistoryIcon className="h-4 w-4" /> Recent</h4>
                             {state.recentCommands.map((cmd, i) => (
-                                <button key={i} onClick={() => handleSelectView(cmd.view, cmd.name)}
+                                <button key={i} onClick={() => handleSelectView(cmd.view, cmd.name)} className="block w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm">
+                                    {cmd.name}
                                 </button>
                             ))}
                         </>
                     )}
                     <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8">My Leagues</h4>
                     {leagues.map((league: any) => (
-                        <button key={league.id} onClick={() => handleSelectLeague(league.id)}
+                        <button key={league.id} onClick={() => handleSelectLeague(league.id)} className="block w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm">
+                            {league.name}
                         </button>
                     ))}
                 </>
-            )
+            );
+        }
 
         return (
             <>

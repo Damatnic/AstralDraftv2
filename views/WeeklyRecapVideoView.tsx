@@ -25,6 +25,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
             setScript(cachedScript);
             setIsLoading(false);
             return;
+        }
 
         setIsLoading(true);
         setError(null);
@@ -35,7 +36,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
                     dispatch({ type: 'SET_WEEKLY_RECAP_SCRIPT', payload: { key: scriptCacheKey, script: data } });
                 } else {
                     setError("The Oracle could not produce a video script for this week.");
-
+                }
             })
             .catch(() => setError("An error occurred while consulting the Oracle."))
             .finally(() => setIsLoading(false));
@@ -54,7 +55,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
                 {script && <RecapVideoPlayer script={script} league={league} />}
             </div>
             <button
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' })
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' })}
                 className="glass-button mt-6"
             >
                 Back to Report

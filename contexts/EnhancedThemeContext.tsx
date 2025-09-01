@@ -44,7 +44,7 @@ export interface ThemeCustomization {
   borderRadius: number;
   fontSize: number;
   spacing: number;
-
+}
 
 export interface AccessibilitySettings {
   highContrast: boolean;
@@ -53,7 +53,7 @@ export interface AccessibilitySettings {
   focusVisible: boolean;
   colorBlindFriendly: boolean;
   screenReaderOptimized: boolean;
-
+}
 
 export interface ThemeState {
   mode: ThemeMode;
@@ -63,7 +63,7 @@ export interface ThemeState {
   accessibility: AccessibilitySettings;
   isSystemDark: boolean;
   isInitialized: boolean;
-
+}
 
 export interface ThemeActions {
   setMode: (mode: ThemeMode) => void;
@@ -74,14 +74,14 @@ export interface ThemeActions {
   resetTheme: () => void;
   toggleMode: () => void;
   exportTheme: () => string;
-  importTheme: (themeData: string) => void;}
+  importTheme: (themeData: string) => void;
+}
 
-export type ThemeContextType = ThemeState & ThemeActions;}
+export type ThemeContextType = ThemeState & ThemeActions;
 
 // =========================================
 // DEFAULT THEME CONFIGURATIONS
 // =========================================
-}
 
 const defaultCustomization: ThemeCustomization = {
   primaryColor: '#4f46e5',

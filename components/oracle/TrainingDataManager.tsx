@@ -162,8 +162,9 @@ const TrainingDataManager = memo(() => {
     const setSpecificError = useCallback((category: keyof typeof errors, message: string | null) => {
         setErrors(prev => ({ ...prev, [category]: message }));
         if (message) {
-
-    }, [errors]);
+            console.error(`Training data error in ${category}:`, message);
+        }
+    }, []);
 
     const clearAllErrors = useCallback(() => {
         setErrors({
@@ -216,8 +217,8 @@ const TrainingDataManager = memo(() => {
                 setSpecificError(operationType === 'dataLoad' ? 'dataLoad' : 'general', errorMessage);
                 resetRetryAttempts(operationType);
                 return null;
-
-
+            }
+        }
     }, [retryAttempts, incrementRetryAttempt, resetRetryAttempts, setSpecificError]);
 
     // Load configuration function (moved up to avoid forward reference)

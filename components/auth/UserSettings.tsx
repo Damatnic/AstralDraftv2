@@ -48,18 +48,17 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
-
             const success = await updateUserDisplayName(displayName.trim());
             if (success) {
                 setSuccess('Display name updated successfully!');
             } else {
                 setError('Failed to update display name');
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError('Failed to update display name');
         } finally {
             setIsLoading(false);
-
+        }
     };
 
     const handleEmailUpdate = async (e: React.FormEvent) => {
@@ -70,43 +69,36 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
-
             const success = await updateUserEmail(email.trim());
             if (success) {
                 setSuccess('Email updated successfully!');
             } else {
                 setError('Failed to update email');
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError('Failed to update email');
         } finally {
             setIsLoading(false);
-
+        }
     };
 
-    const handlePinUpdate = async () => {
-    try {
-
+    const handlePinUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         
         if (newPin.length !== 4 || confirmPin.length !== 4) {
             setError('PIN must be 4 digits');
             return;
+        }
         
-    } catch (error) {
-      console.error('Error in handlePinUpdate:', error);
-
-    } catch (error) {
-        console.error(error);
-    }if (newPin !== confirmPin) {
+        if (newPin !== confirmPin) {
             setError('PINs do not match');
             return;
+        }
 
         setIsLoading(true);
         clearMessages();
 
         try {
-
             const success = await updateUserPin(newPin);
             if (success) {
                 setSuccess('PIN updated successfully!');
@@ -114,12 +106,12 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                 setConfirmPin('');
             } else {
                 setError('Failed to update PIN');
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError('Failed to update PIN');
         } finally {
             setIsLoading(false);
-
+        }
     };
 
     const handleCustomizationUpdate = async () => {
@@ -127,18 +119,17 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
-
             const success = await updateUserCustomization(customization);
             if (success) {
                 setSuccess('Appearance updated successfully!');
             } else {
                 setError('Failed to update appearance');
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError('Failed to update appearance');
         } finally {
             setIsLoading(false);
-
+        }
     };
 
     const colorOptions = [

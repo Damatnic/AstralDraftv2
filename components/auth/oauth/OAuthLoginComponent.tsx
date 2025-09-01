@@ -13,6 +13,7 @@ interface OAuthButtonProps {
   isLoading?: boolean;
   onClick: () => void;
   className?: string;
+}
 
 const OAuthButton: React.FC<OAuthButtonProps> = ({ 
   provider, 
@@ -45,7 +46,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = ({
         );
       default:
         return <LinkIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-
+    }
   };
 
   return (
@@ -101,25 +102,20 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
   useEffect(() => {
     // Handle OAuth callback if we're on a callback URL
     const handleCallback = async () => {
-    try {
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      const state = urlParams.get('state');
-      const error = urlParams.get('error');
-      
-      if (error) {
-        const errorMessage = urlParams.get('error_description') || 'OAuth authentication failed';
-        setError(errorMessage);
-        onError?.(errorMessage);
-        return;
-      
-    } catch (error) {
-      console.error('Error in handleCallback:', error);
-
-    } catch (error) {
-        console.error(error);
-    }if (code && state) {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        
+        if (error) {
+          const errorMessage = urlParams.get('error_description') || 'OAuth authentication failed';
+          setError(errorMessage);
+          onError?.(errorMessage);
+          return;
+        }
+        
+        if (code && state) {
         // Extract provider from current path
         const pathParts = window.location.pathname.split('/');
         const callbackIndex = pathParts.indexOf('callback');
@@ -140,16 +136,18 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
             } else {
               setError(result.error || 'OAuth authentication failed');
               onError?.(result.error || 'OAuth authentication failed');
-
-    } catch (error) {
+            }
+          } catch (error) {
             const errorMessage = 'OAuth authentication failed';
             setError(errorMessage);
             onError?.(errorMessage);
           } finally {
             setLoadingProvider(null);
-
-
-
+          }
+        }
+      } catch (error) {
+        console.error('Error in handleCallback:', error);
+      }
     };
 
     handleCallback();
@@ -162,10 +160,18 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
     setLoadingProvider(providerId);
     
     try {
-
       await oauthService.initiateLogin(providerId);
-    
-    `oauth-login ${className}`}>
+    } catch (error) {
+      const errorMessage = 'Failed to initiate OAuth login';
+      setError(errorMessage);
+      onError?.(errorMessage);
+    } finally {
+      setLoadingProvider(null);
+    }
+  };
+
+  return (
+    <div className={`oauth-login ${className}`}>
       <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {error && (
@@ -241,10 +247,11 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
 
         setAvailableProviders(providers);
     
-    } catch (error) {
+      } catch (error) {
+        console.error('Error loading OAuth data:', error);
       } finally {
         setLoading(false);
-
+      }
     };
 
     loadData();
@@ -253,23 +260,31 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
   const handleLinkAccount = async (providerId: string) => {
     setActionLoading(providerId);
     try {
-
       await oauthService.initiateLogin(providerId);
-
     } catch (error) {
+      console.error('Error linking account:', error);
+    } finally {
       setActionLoading(null);
-
+    }
   };
 
   const handleUnlinkAccount = async (providerId: string) => {
     setActionLoading(providerId);
     try {
-
       const result = await oauthService.unlinkAccount(providerId);
       if (result.success) {
         setLinkedAccounts(prev => prev.filter((account: any) => account.provider !== providerId));
-  } finally {
+      }
+    } catch (error) {
+      console.error('Error unlinking account:', error);
+    } finally {
       setActionLoading(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className=
 
     `${className} animate-pulse`}>
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
@@ -333,7 +348,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
                     ${isLinked 
                       ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/40' 
                       : 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/40'
-
+                    }
                     disabled:opacity-50 disabled:cursor-not-allowed
                   `}
                   whileHover={{ scale: isLoading ? 1 : 1.05 }}
@@ -346,12 +361,12 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
                       {isLinked ? (
                         <>
                           <UnlinkIcon className="w-3 h-3 inline mr-1 sm:px-4 md:px-6 lg:px-8" />
-//                           Unlink
+                          Unlink
                         </>
                       ) : (
                         <>
                           <LinkIcon className="w-3 h-3 inline mr-1 sm:px-4 md:px-6 lg:px-8" />
-//                           Link
+                          Link
                         </>
                       )}
                     </>

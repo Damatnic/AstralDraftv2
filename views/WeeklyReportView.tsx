@@ -64,14 +64,14 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
                     </button>
                     <div className="flex items-center gap-2">
                         <button onClick={() => setSelectedWeek(w => w - 1)} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
-                            <
+                            &lt;
                         </button>
                         <span className="font-bold w-24 text-center">Week {selectedWeek}</span>
                         <button onClick={() => setSelectedWeek(w => w + 1)} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
-                            >
+                            &gt;
                         </button>
                     </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) className="back-btn">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
                         Back to Team
                     </button>
                 </div>
@@ -88,12 +88,15 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
                     {(() => {
                         if (isLoading) {
                             return <div className="p-6"><LoadingSpinner text="Compiling the weekly report..." /></div>;
+                        }
 
                         if (error) {
                             return <ErrorDisplay message={error} onRetry={handleRetry} />;
+                        }
 
                         if (report) {
                             return <WeeklyReportDisplay report={report} />;
+                        }
 
                         return <div className="p-6 text-center text-gray-400">No report available for this week.</div>;
                     })()}
@@ -111,7 +114,7 @@ export const WeeklyReportView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view reports.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="btn btn-primary mt-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>

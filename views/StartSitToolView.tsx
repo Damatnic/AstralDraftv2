@@ -44,15 +44,15 @@ const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () =>
      <div className="glass-pane rounded-xl p-4 flex flex-col items-center justify-center h-48">
         {player ? (
             <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
-                <button onClick={onClear}
+                <button onClick={onClear} className="absolute top-2 right-2 p-1 bg-red-500/20 text-red-300 rounded-full hover:bg-red-500/40">
                     <CloseIcon className="h-3 w-3" />
                 </button>
                 <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-16 h-16 text-4xl rounded-lg" />
                 <p className="font-bold mt-2">{player.name}</p>
                 <p className="text-xs text-gray-400">{player.position} - {player.team}</p>
-                 {weeklyProjection !== undefined && (
-                     <p className="text-xs text-cyan-300 mt-1">Proj: <span className="font-bold">{weeklyProjection.toFixed(2)}</span></p>
-                 )}
+                {weeklyProjection !== undefined && (
+                    <p className="text-xs text-cyan-300 mt-1">Proj: <span className="font-bold">{weeklyProjection.toFixed(2)}</span></p>
+                )}
             </div>
         ) : (
             <div className="text-center text-gray-400">
@@ -130,13 +130,30 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
         setIsLoading(true);
         setAdvice(null);
         try {
-
             const result = await getStartSitAdvice(playerA, playerB, league);
             setAdvice(result);
-        
-    } catch (error) {
-        console.error(error);
-    `grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-[1fr_auto_1fr]'} items-center gap-4 mb-6`}>
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const playerA = playerAId ? myTeam.roster.find((p: any) => p.id === playerAId) : undefined;
+    const playerB = playerBId ? myTeam.roster.find((p: any) => p.id === playerBId) : undefined;
+    const playerAProj = playerA?.weeklyProjection;
+    const playerBProj = playerB?.weeklyProjection;
+
+    return (
+        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
+            <header className="flex-shrink-0 mb-6">
+                <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)] mb-2">
+                    Start/Sit Tool
+                </h1>
+                <p className="text-sm text-[var(--text-secondary)] tracking-widest">Oracle-powered player comparisons for optimal lineups</p>
+            </header>
+            <main className="flex-grow space-y-6">
+                <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-[1fr_auto_1fr]'} items-center gap-4 mb-6`}>
                      <PlayerSelectionSlot player={playerA} onClear={() => setPlayerAId(null)} label="Player A" weeklyProjection={playerAProj} />
                      {!isMobile && <ArrowRightLeftIcon className="w-8 h-8 text-cyan-400 mx-auto" />}
                      {isMobile && (
@@ -197,7 +214,7 @@ const StartSitToolView: React.FC = () => {
         return (
             <div className="w-full h-full flex items-center justify-center p-4">
                 <p>Could not load tool. Please select a league with an active season first.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="glass-button-primary ml-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary ml-4">
                     Back to Dashboard
                 </button>
             </div>
@@ -205,6 +222,7 @@ const StartSitToolView: React.FC = () => {
 
     if (league.settings.aiAssistanceLevel === 'BASIC') {
         return <ErrorDisplay title="Feature Disabled" message="The Start/Sit Tool is disabled in leagues with Basic AI Assistance." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
+    }
 
     return <StartSitToolContent league={league} myTeam={myTeam} dispatch={dispatch} />;
 };

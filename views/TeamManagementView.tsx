@@ -27,6 +27,7 @@ export interface Team {
   roster: Player[];
   record: { wins: number; losses: number; ties: number };
   totalPoints: number;
+}
 
 export interface League {
   id: string;
@@ -34,6 +35,7 @@ export interface League {
   teams: Team[];
   currentWeek: number;
   settings: Record<string, unknown>;
+}
 
 
 export interface Transaction {
@@ -41,13 +43,14 @@ export interface Transaction {
   type: 'add' | 'drop' | 'trade' | 'waiver';
   player: Player;
   timestamp: string;
-  description: string;}
-
-export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
+  description: string;
 }
 
+export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
+
 interface TeamManagementViewProps {
-  onBack?: () => void;}
+  onBack?: () => void;
+}
 
 const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) => {
   // State management
@@ -84,8 +87,9 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
         record: { wins: 2, losses: 2, ties: 0 },
         totalPoints: 425.0,
         roster: generateMockRoster()
-
+      }
     ];
+  }
 
   function generateMockRoster(): Player[] {
     return [
@@ -125,8 +129,9 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
         projectedPoints: 14.2,
         averagePoints: 13.8,
         isStarting: true
-
+      }
     ];
+  }
 
   // Tab handlers
   const handleTabChange = (tab: TabType): void => {
@@ -340,8 +345,9 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
         player: mockPlayer,
         timestamp: new Date(Date.now() - 172800000).toISOString(),
         description: 'Dropped Sample Player to waivers'
-
+      }
     ];
+  }
 
   // Tab configuration
   const tabs = [
@@ -399,7 +405,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
               return (
                 <button
                   key={tab.id}
-                  onClick={() => handleTabChange(tab.id)}`}
+                  onClick={() => handleTabChange(tab.id)}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{tab.label}</span>
