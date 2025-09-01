@@ -156,7 +156,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     setActiveTab(tab.id);
                                     clearMessages();
                                 }}
@@ -197,7 +197,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                             className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
                             {/* Display Name */}
-                            <form onSubmit={handleDisplayNameUpdate}
+                            <form onSubmit={handleDisplayNameUpdate} className="space-y-4">
                                 <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Display Name</span>
@@ -214,14 +214,14 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         type="submit"
                                         disabled={isLoading || !displayName.trim() || displayName === user.displayName}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
-                                     aria-label="Action button">
-//                                         Update
+                                     aria-label="Update">
+Update
                                     </button>
                                 </div>
                             </form>
 
                             {/* Email */}
-                            <form onSubmit={handleEmailUpdate}
+                            <form onSubmit={handleEmailUpdate} className="space-y-4">
                                 <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <MailIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Recovery Email</span>
@@ -237,8 +237,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         type="submit"
                                         disabled={isLoading || !email.trim() || email === user.email}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
-                                     aria-label="Action button">
-//                                         Update
+                                     aria-label="Update">
+Update
                                     </button>
                                 </div>
                                 <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
@@ -255,7 +255,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                             animate={{ opacity: 1, x: 0 }}
                             className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <form onSubmit={handlePinUpdate}
+                            <form onSubmit={handlePinUpdate} className="space-y-4">
                                 <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <ShieldIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Change PIN</span>
@@ -292,7 +292,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                     type="submit"
                                     disabled={isLoading || newPin.length !== 4 || confirmPin.length !== 4}
                                     className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
-                                 aria-label="Action button">
+                                 aria-label="Update">
                                     {isLoading ? 'Updating...' : 'Update PIN'}
                                 </button>
                                 
@@ -379,7 +379,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                 onClick={handleCustomizationUpdate}
                                 disabled={isLoading}
                                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
-                             aria-label="Action button">
+                             aria-label="Update">
                                 {isLoading ? 'Updating...' : 'Save Appearance'}
                             </button>
                         </motion.div>

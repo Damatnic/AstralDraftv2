@@ -266,7 +266,7 @@ const GeniusAiChat: React.FC<Props> = ({
           {selectedPersona && (
             <button 
               className="clear-persona sm:px-4 md:px-6 lg:px-8"
-              onClick={() = aria-label="Action button"> {
+              onClick={() => {
                 setSelectedPersona(null);
                 personaEngine.current.selectPersona('');
               }}

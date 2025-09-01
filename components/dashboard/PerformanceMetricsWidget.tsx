@@ -53,7 +53,7 @@ const PerformanceMetricsWidget: React.FC = () => {
             </div>
         </Widget>
     );
-};
+}
 
 const PerformanceMetricsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
@@ -62,3 +62,4 @@ const PerformanceMetricsWidgetWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(PerformanceMetricsWidgetWithErrorBoundary);
+}

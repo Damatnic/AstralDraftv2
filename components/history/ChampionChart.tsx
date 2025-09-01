@@ -59,7 +59,7 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) =>
             ))}
         </div>
     );
-};
+}
 
 const ChampionChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
@@ -68,3 +68,4 @@ const ChampionChartWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(ChampionChartWithErrorBoundary);
+}

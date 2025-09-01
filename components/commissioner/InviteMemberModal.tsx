@@ -25,6 +25,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
         if (!email.trim().includes('@')) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Please enter a valid email.", type: 'SYSTEM' } });
             return;
+        }
 
         dispatch({ type: 'INVITE_MEMBER', payload: { leagueId: league.id, invitation: { email, status: 'PENDING', leagueId: league.id } } });
         setEmail('');
@@ -40,14 +41,15 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
         <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg sm:px-4 md:px-6 lg:px-8"
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+            >
             >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><UserPlusIcon /> Invite Members</h2>
                 </header>
-                <form onSubmit={handleSubmit}
+                <form onSubmit={handleSubmit} className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     <label htmlFor="invite-email" className="block text-sm font-medium text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Manager Email</label>
                     <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                         <input

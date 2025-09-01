@@ -1032,7 +1032,7 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
 
         {showJoinButton && onJoin && (
             <button
-                onClick={(e: any) = aria-label="Action button"> {
+                onClick={(e: any) => {
                     e.stopPropagation();
                     onJoin();
                 }}
@@ -1861,3 +1861,4 @@ const SocialTabWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(SocialTabWithErrorBoundary);
+}}}}}}}}}}}

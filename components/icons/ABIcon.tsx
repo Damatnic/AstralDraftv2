@@ -5,3 +5,4 @@ interface IconProps {
   className?: string;
   color?: string;
   'aria-label'?: string;
+}

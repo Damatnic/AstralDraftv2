@@ -184,7 +184,7 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
 
       {/* Reset Button */}
       <button
-        onClick={() = aria-label="Action button"> {
+        onClick={() => {
           setPosition({ x: 0, y: 0 });
           setScale(1);
           setGestureLog([]);

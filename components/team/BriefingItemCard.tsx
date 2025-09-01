@@ -51,7 +51,7 @@ const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onG
         if (canGetAdvice) {
             return (
                 <button
-                    onClick={(e: any) = aria-label="Action button"> {
+                    onClick={(e: any) => {
                         e.stopPropagation();
                         onGetAdvice(item.relatedPlayerIds!);
                     }}
@@ -65,7 +65,7 @@ const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onG
         if (canClaimPlayer) {
              return (
                 <button
-                    onClick={(e: any) = aria-label="Action button"> {
+                    onClick={(e: any) => {
                         e.stopPropagation();
                         onClaimPlayer(waiverGemPlayer);
                     }}

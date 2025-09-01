@@ -367,7 +367,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                             <div className="text-xs font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Status</div>
                             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <button
-                                    onClick={() = aria-label="Action button"> setFilters(prev => ({
+                                    onClick={() => setFilters(prev => ({
                                         ...prev,
                                         injured: prev.injured === true ? undefined : true
                                     }))}
@@ -380,7 +380,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     Injured Only
                                 </button>
                                 <button
-                                    onClick={() = aria-label="Action button"> setFilters(prev => ({
+                                    onClick={() => setFilters(prev => ({
                                         ...prev,
                                         injured: prev.injured === false ? undefined : false
                                     }))}

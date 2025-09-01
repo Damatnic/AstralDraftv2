@@ -364,7 +364,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                         />
                     </div>
                     <button 
-                        onClick={() = aria-label="Action button"> {
+                        onClick={() => {
                             // Handle insight sharing when method is available
                         }}
                         disabled={!insightTitle.trim() || !insightContent.trim()}

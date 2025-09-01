@@ -356,7 +356,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                 <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Award pending</div>
                 {superlative.category === 'silly' && (
                   <button
-                    onClick={(e) = aria-label="Action button"> {
+                    onClick={(e) => {
                       e.stopPropagation();
                       setShowVotingModal(superlative.id);
                     }}

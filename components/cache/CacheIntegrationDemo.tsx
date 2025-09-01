@@ -46,7 +46,7 @@ const mockAPIFunctions = {
             factors: ['Weather', 'Matchup', 'Recent Form', 'Injury Status'],
             timestamp: new Date().toISOString()
         };
-
+    }
 };
 
 const CacheIntegrationDemo: React.FC = () => {
@@ -61,8 +61,8 @@ const CacheIntegrationDemo: React.FC = () => {
         {
             staleTime: 10 * 1000, // 10 seconds
             cacheTime: 30 * 1000, // 30 seconds
-            refreshInterval: 15 * 1000, // Refresh every 15 seconds
-
+            refreshInterval: 15 * 1000 // Refresh every 15 seconds
+        }
     );
 
     // Demo 2: Offline-aware caching
@@ -72,8 +72,8 @@ const CacheIntegrationDemo: React.FC = () => {
         () => mockAPIFunctions.fetchDraftRoomData('456'),
         {
             staleTime: 5 * 1000, // 5 seconds (real-time data)
-            cacheTime: 60 * 1000, // 1 minute
-
+            cacheTime: 60 * 1000 // 1 minute
+        }
     );
 
     // Demo 3: Manual cache management
@@ -84,8 +84,8 @@ const CacheIntegrationDemo: React.FC = () => {
         {
             enabled: selectedDemo === 'oracle', // Only fetch when selected
             staleTime: 30 * 1000, // 30 seconds
-            cacheTime: 5 * 60 * 1000, // 5 minutes
-
+            cacheTime: 5 * 60 * 1000 // 5 minutes
+        }
     );
 
     const demos = [
@@ -112,21 +112,37 @@ const CacheIntegrationDemo: React.FC = () => {
             cache: oracleCache,
             icon: ZapIcon,
             color: 'purple'
-
+        }
     ];
 
     const handlePreload = async () => {
         try {
-
             await preloadData(
                 'players',
                 'player-preload',
                 () => mockAPIFunctions.fetchPlayerStats('preload'),
                 { tags: ['preload', 'demo'] }
             );
-        
-    `p-4 rounded-lg border-2 transition-colors cursor-pointer ${
-//                                             isActive 
+        } catch (error) {
+            console.error('Preload failed:', error);
+        }
+    };
+
+    return (
+        <div className="max-w-4xl mx-auto p-6 space-y-6">
+            <div className="text-center">
+                <h1 className="text-2xl font-bold text-white mb-2">Cache Integration Demo</h1>
+                <p className="text-gray-400">Explore different caching strategies and their performance</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {demos.map((demo) => {
+                    const isActive = selectedDemo === demo.id;
+                    return (
+                        <motion.div
+                            key={demo.id}
+                            className={`p-4 rounded-lg border-2 transition-colors cursor-pointer ${
+isActive 
                                                 ? `border-${demo.color}-500 bg-${demo.color}-900/20` 
                                                 : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
                                         }`}
@@ -178,7 +194,7 @@ const CacheIntegrationDemo: React.FC = () => {
                                         {/* Action Buttons */}
                                         <div className="mt-3 space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             <button
-                                                onClick={(e: any) = aria-label="Action button"> {
+                                                onClick={(e: any) => {
                                                     e.stopPropagation();
                                                     cache.refetch();
                                                 }}
@@ -189,7 +205,7 @@ const CacheIntegrationDemo: React.FC = () => {
                                             </button>
                                             
                                             <button
-                                                onClick={(e: any) = aria-label="Action button"> {
+                                                onClick={(e: any) => {
                                                     e.stopPropagation();
                                                     cache.invalidate();
                                                 }}
@@ -239,13 +255,13 @@ const CacheIntegrationDemo: React.FC = () => {
                             </button>
                             
                             <button
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     // Force all demos to refresh
                                     playerCache.refetch();
                                     draftCache.refetch();
                                     if (selectedDemo === 'oracle') {
                                         oracleCache.refetch();
-
+                                    }
                                 }}
                                 className="flex items-center justify-center space-x-2 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                             >

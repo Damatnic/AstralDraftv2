@@ -644,7 +644,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             </div>
         </div>
     );
-};
+}
 
 const AdvancedOracleAnalyticsDashboardWithErrorBoundary: React.FC<any> = (props: any) => (
   <ErrorBoundary>

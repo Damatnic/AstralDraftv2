@@ -244,6 +244,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
 
         if (accountsResult.success) {
           setLinkedAccounts(accountsResult.accounts || []);
+        }
 
         setAvailableProviders(providers);
     
@@ -284,9 +285,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
 
   if (loading) {
     return (
-      <div className=
-
-    `${className} animate-pulse`}>
+      <div className={`${className} animate-pulse`}>
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           {[1, 2, 3].map((i: any) => (
             <div key={i} className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg sm:px-4 md:px-6 lg:px-8"></div>

@@ -249,7 +249,7 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
             {showCompareButton && (
                 <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={(e: any) = aria-label="Action button"> {
+                        onClick={(e: any) => {
                             e.stopPropagation();
                             handleCompareSelect(player, 1);
                         }}
@@ -258,7 +258,7 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
                         Compare A
                     </button>
                     <button
-                        onClick={(e: any) = aria-label="Action button"> {
+                        onClick={(e: any) => {
                             e.stopPropagation();
                             handleCompareSelect(player, 2);
                         }}

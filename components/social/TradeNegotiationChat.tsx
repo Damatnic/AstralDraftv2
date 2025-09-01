@@ -473,7 +473,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                         {['👍', '👎', '😄', '😮', '😢', '😡', '❤️', '🔥'].map((emoji: any) => (
                             <button
                                 key={emoji}
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     // Would add reaction to last message or selected message
                                     setShowEmojiPicker(false);
                                 }}

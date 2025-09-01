@@ -52,7 +52,7 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
             </div>
         </div>
     );
-};
+}
 
 const MyRosterPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
@@ -60,4 +60,4 @@ const MyRosterPanelWithErrorBoundary: React.FC = (props: any) => (
   </ErrorBoundary>
 );
 
-export default React.memo(MyRosterPanelWithErrorBoundary);
+export default React.memo(MyRosterPanelWithErrorBoundary);}

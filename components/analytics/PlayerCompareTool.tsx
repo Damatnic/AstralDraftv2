@@ -29,7 +29,7 @@ const PlayerCompareTool: React.FC<PlayerCompareToolProps> = ({ players, onClose 
                 ))}
             </tr>
         )
-    };
+    }
 
     return (
         <Modal isOpen={true} onClose={onClose}>

@@ -342,7 +342,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Quick Actions</h3>
                             
                             <button
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     loadPredictions();
                                     setIsMobileMenuOpen(false);
                                 }}
@@ -358,7 +358,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             </button>
                             
                             <button
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     setActiveView('analytics');
                                     setIsMobileMenuOpen(false);
                                 }}
@@ -374,7 +374,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             </button>
                             
                             <button
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     setShowNotificationSettings(true);
                                     setIsMobileMenuOpen(false);
                                 }}

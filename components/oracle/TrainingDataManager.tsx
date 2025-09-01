@@ -2432,7 +2432,7 @@ const TrainingDataManager = memo(() => {
                         </button>
 
                         <button
-                            onClick={() = aria-label="Action button"> {
+                            onClick={() => {
                                 if (configurationChanged) {
                                     saveConfiguration().then(() => {
                                         // Apply configuration immediately after saving
@@ -2555,3 +2555,4 @@ const TrainingDataManagerWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(TrainingDataManagerWithErrorBoundary);
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

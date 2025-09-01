@@ -61,3 +61,4 @@ const BreadcrumbsWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(BreadcrumbsWithErrorBoundary);
+}

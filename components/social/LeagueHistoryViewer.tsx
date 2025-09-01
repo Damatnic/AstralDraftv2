@@ -443,7 +443,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                             return (
                                                 <button
                                                     key={emoji}
-                                                    onClick={(e: any) = aria-label="Action button"> {
+                                                    onClick={(e: any) => {
                                                         e.stopPropagation();
                                                         onEventReaction(event.id, emoji);
                                                     }}
@@ -458,7 +458,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
                                     {/* Comment count */}
                                     <button
-                                        onClick={(e: any) = aria-label="Action button"> e.stopPropagation()}
+                                        onClick={(e: any) => e.stopPropagation()}
                                         className="flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                     >
                                         <MessageCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -467,7 +467,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                 </div>
 
                                 <button
-                                    onClick={(e: any) = aria-label="Action button"> {
+                                    onClick={(e: any) => {
                                         e.stopPropagation();
                                         onShareEvent(event.id);
                                     }}

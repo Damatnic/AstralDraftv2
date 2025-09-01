@@ -265,7 +265,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                     {/* Test Notification */}
                     <div className="p-4 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
                         <button
-                            onClick={() = aria-label="Action button"> {
+                            onClick={() => {
                                 notificationService.addNotification({
                                     type: 'result_announced',
                                     title: 'Test Notification',

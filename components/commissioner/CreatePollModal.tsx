@@ -28,13 +28,13 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: 
     const addOption = () => {
         if (options.length < 5) {
             setOptions([...options, '']);
-
+        }
     };
     
     const removeOption = (index: number) => {
         if (options.length > 2) {
             setOptions(options.filter((_, i) => i !== index));
-
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -42,6 +42,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: 
         if (!question.trim() || options.some((opt: any) => !opt.trim())) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Question and all options must be filled out.", type: 'SYSTEM' } });
             return;
+        }
 
         dispatch({
             type: 'CREATE_POLL',
@@ -63,9 +64,11 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: 
         <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"
+            >
             >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">

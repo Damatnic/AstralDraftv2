@@ -269,7 +269,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
               {gifReactions.map((gif: any) => (
                 <button
                   key={gif.id}
-                  onClick={() = aria-label="Action button"> {
+                  onClick={() => {
                     setNewMessage(prev => prev + ` [GIF: ${gif.name}]`);
                     setShowGifSelector(false);
                   }}

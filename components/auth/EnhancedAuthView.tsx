@@ -485,3 +485,4 @@ const EnhancedAuthViewWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(EnhancedAuthViewWithErrorBoundary);
+}

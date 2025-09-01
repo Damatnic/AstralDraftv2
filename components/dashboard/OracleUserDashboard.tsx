@@ -342,7 +342,7 @@ const OracleUserDashboard: React.FC = () => {
                                 <button
                                     key={category.category}
                                     className={`p-3 rounded-lg border transition-colors ${borderClass}`}
-                                    onClick={() = aria-label="Action button"> setSelectedCategory(
+                                    onClick={() => setSelectedCategory(
                                         isSelected ? 'all' : category.category
                                     )}
                                     type="button"

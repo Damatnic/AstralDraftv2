@@ -285,7 +285,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-600 sm:px-4 md:px-6 lg:px-8">
                   <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                     <button
-                      onClick={(e) = aria-label="Action button"> {
+                      onClick={(e) => {
                         e.stopPropagation();
                         handleLike(memory.id);
                       }}
@@ -301,7 +301,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                       {memory.likes.length}
                     </button>
                     <button
-                      onClick={(e) = aria-label="Action button"> {
+                      onClick={(e) => {
                         e.stopPropagation();
                         setSelectedMemory(memory);
                       }}

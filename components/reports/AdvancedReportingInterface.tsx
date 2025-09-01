@@ -336,7 +336,7 @@ const AdvancedReportingInterface: React.FC<Props> = ({ className = ''
 //                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() = aria-label="Action button"> {
+                                    onClick={() => {
                                         handleGenerateReport(selectedTemplate.id, reportParameters);
                                         setShowTemplateModal(false);
                                         setReportParameters({});

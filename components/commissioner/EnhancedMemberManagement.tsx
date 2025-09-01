@@ -241,7 +241,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                         {!member.isCommissioner && (
                                                             <>
                                                                 <button 
-                                                                    onClick={() = aria-label="Action button"> handleMemberAction({ 
+                                                                    onClick={() => handleMemberAction({ 
                                                                         type: 'TOGGLE_ADMIN', 
                                                                         memberId: member.id 
                                                                     })}
@@ -251,7 +251,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                                     {member.isCoCommissioner ? 'Remove Admin' : 'Make Admin'}
                                                                 </button>
                                                                 <button 
-                                                                    onClick={() = aria-label="Action button"> handleMemberAction({ 
+                                                                    onClick={() => handleMemberAction({ 
                                                                         type: 'PROMOTE_TO_COMMISSIONER', 
                                                                         memberId: member.id 
                                                                     })}
@@ -277,7 +277,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                         <hr className="my-1 border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8" />
                                                         {!member.isCommissioner && (
                                                             <button 
-                                                                onClick={() = aria-label="Action button"> handleMemberAction({ 
+                                                                onClick={() => handleMemberAction({ 
                                                                     type: 'REMOVE_MEMBER', 
                                                                     memberId: member.id 
                                                                 })}

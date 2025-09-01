@@ -194,7 +194,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                             <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Quick Actions</h3>
                             
                             <button
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     setActiveView('predictions');
                                     setShowMobileMenu(false);
                                 }}
@@ -210,7 +210,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                             </button>
                             
                             <button
-                                onClick={() = aria-label="Action button"> {
+                                onClick={() => {
                                     setActiveView('analytics');
                                     setShowMobileMenu(false);
                                 }}

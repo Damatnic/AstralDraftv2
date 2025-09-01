@@ -210,7 +210,7 @@ const AIFantasyAssistant: React.FC = () => {
         ],
       actionable: false
     };
-  };
+  }
 
   const handleSuggestionClick = (suggestion: string) => {
     setInputMessage(suggestion);
@@ -357,7 +357,7 @@ const AIFantasyAssistant: React.FC = () => {
       </AnimatePresence>
     </>
   );
-};
+}
 
 const AIFantasyAssistantWithErrorBoundary: React.FC<any> = (props: any) => (
   <ErrorBoundary>
@@ -366,3 +366,9 @@ const AIFantasyAssistantWithErrorBoundary: React.FC<any> = (props: any) => (
 );
 
 export default React.memo(AIFantasyAssistantWithErrorBoundary);
+}
+}
+}
+}
+}
+}

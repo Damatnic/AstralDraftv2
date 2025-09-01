@@ -336,7 +336,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                         <span className="font-medium capitalize sm:px-4 md:px-6 lg:px-8">{section.type.replace('_', ' ')}</span>
                     </div>
                     <button
-                        onClick={(e: any) = aria-label="Action button"> {
+                        onClick={(e: any) => {
                             e.stopPropagation();
                             removeSection(section.id);
                         }}
@@ -643,7 +643,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                                     {predefinedThemes.map((theme: any) => (
                                         <button
                                             key={theme.name}
-                                            onClick={() = aria-label="Action button"> setCurrentStory(prev => ({
+                                            onClick={() => setCurrentStory(prev => ({
                                                 ...prev,
                                                 content: { ...prev.content!, theme }
                                             }))}
@@ -680,7 +680,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                                     ].map((layout: any) => (
                                         <button
                                             key={layout.id}
-                                            onClick={() = aria-label="Action button"> setCurrentStory(prev => ({
+                                            onClick={() => setCurrentStory(prev => ({
                                                 ...prev,
                                                 content: { ...prev.content!, layout: layout.id as any }
                                             }))}

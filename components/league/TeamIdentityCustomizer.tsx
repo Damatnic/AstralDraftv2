@@ -368,7 +368,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           {(Object.keys(personalityTraits) as Array<keyof typeof personalityTraits>).map((style: any) => (
             <button
               key={style}
-              onClick={() = aria-label="Action button"> updateIdentity({ 
+              onClick={() => updateIdentity({ 
                 teamPersonality: {
                   style, 
                   traits: personalityTraits[style].slice(0, 3) 
