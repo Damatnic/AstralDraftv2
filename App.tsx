@@ -28,6 +28,9 @@ import { initializeMobileOptimizations } from './utils/mobileOptimizations';
 // Production optimizations
 import useProductionOptimizations from './hooks/useProductionOptimizations';
 
+// PWA Install Prompt
+import PWAInstallPrompt from './components/pwa/PWAInstallPrompt';
+
 // Placeholder component for views that are broken
 const PlaceholderView: React.FC<{ viewName: string }> = ({ viewName }) => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center">
@@ -410,6 +413,9 @@ const AppContent: React.FC = () => {
       <main className="flex-1">
         {renderView()}
       </main>
+      
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </div>
   );
 };

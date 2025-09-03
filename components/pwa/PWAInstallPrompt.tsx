@@ -14,6 +14,7 @@ interface BeforeInstallPromptEvent extends Event {
     platform: string;
   }>;
   prompt(): Promise<void>;
+}
 
 const PWAInstallPrompt: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -53,7 +54,7 @@ const PWAInstallPrompt: React.FC = () => {
         setTimeout(() => {
           setShowInstallPrompt(true);
         }, 5000); // Show after 5 seconds
-
+      }
     };
 
     // Listen for app installed event
@@ -76,18 +77,19 @@ const PWAInstallPrompt: React.FC = () => {
     if (!deferredPrompt) return;
 
     try {
-
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
 
       if (outcome === 'accepted') {
         setIsInstalled(true);
+      }
 
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
 
     } catch (error) {
-
+      console.error('Error installing PWA:', error);
+    }
   };
 
   const handleDismiss = () => {
@@ -104,6 +106,7 @@ const PWAInstallPrompt: React.FC = () => {
   // Don't show if already installed or dismissed this session
   if (isInstalled || sessionStorage.getItem('pwa-install-dismissed')) {
     return null;
+  }
 
   return (
     <>

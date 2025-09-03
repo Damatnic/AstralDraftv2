@@ -71,30 +71,55 @@ const useProductionOptimizations = () => {
       }
     };
 
-    // Service Worker management - DISABLED due to CSS interception issues
+    // Service Worker management - NEW VERSION without CSS interception
     const manageServiceWorker = () => {
-      console.log('🚫 Service Worker registration disabled to prevent CSS loading issues');
-      
-      // Unregister any existing Service Workers that might be causing issues
       if ('serviceWorker' in navigator) {
+        // First clean up any old problematic Service Workers
         navigator.serviceWorker.getRegistrations().then(registrations => {
-          if (registrations.length > 0) {
-            console.log('🧹 Unregistering existing Service Workers to fix CSS loading issues');
-            registrations.forEach(registration => {
-              registration.unregister().then(() => {
-                console.log('✅ Service Worker unregistered successfully');
-              }).catch(error => {
-                console.warn('⚠️ Failed to unregister Service Worker:', error);
+          const oldRegistrations = registrations.filter(reg => 
+            reg.scope.includes('sw.js.disabled') || 
+            !reg.scope.includes('sw.js') ||
+            reg.active?.scriptURL.includes('sw.js.disabled')
+          );
+          
+          if (oldRegistrations.length > 0) {
+            console.log('🧹 Cleaning up old Service Workers');
+            oldRegistrations.forEach(registration => {
+              registration.unregister().catch(error => {
+                console.warn('⚠️ Failed to unregister old Service Worker:', error);
               });
             });
           }
         }).catch(error => {
-          console.warn('Error checking Service Worker registrations:', error);
+          console.warn('Error checking existing Service Worker registrations:', error);
         });
+
+        // Register new PWA-only Service Worker
+        navigator.serviceWorker.register('/sw.js', { 
+          scope: '/',
+          updateViaCache: 'none' 
+        }).then(registration => {
+          console.log('📱 Service Worker registered successfully for PWA features');
+          console.log('✅ New Service Worker avoids CSS/JS interception issues');
+          
+          // Handle Service Worker updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('🔄 New Service Worker available, will activate on next page load');
+                }
+              });
+            }
+          });
+          
+        }).catch(error => {
+          console.warn('⚠️ Service Worker registration failed:', error);
+        });
+      } else {
+        console.log('📱 Service Worker not supported in this browser');
       }
-      
-      // Service Worker registration is temporarily disabled due to CSS interception issues
-      // This was causing "Failed to load assets" errors on Netlify deployment
     };
 
     // Image lazy loading setup
@@ -138,7 +163,7 @@ const useProductionOptimizations = () => {
 
     // Initialize optimizations
     monitorPerformance();
-    manageServiceWorker(); // Disabled and unregisters existing SWs
+    manageServiceWorker(); // Registers new PWA-only Service Worker
     setupLazyLoading();
     prefetchResources();
 
