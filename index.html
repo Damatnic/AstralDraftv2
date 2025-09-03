@@ -829,21 +829,47 @@
         }
       }, 8000);
       
-      // Monitor for React mounting
+      // Monitor for React mounting with improved detection
+      let reactDetected = false;
       const observer = new MutationObserver((mutations) => {
+        if (reactDetected) return; // Prevent multiple executions
+        
         mutations.forEach((mutation) => {
           if (mutation.type === 'childList') {
+            const rootEl = document.getElementById('root');
+            const loadingEl = document.getElementById('loading-fallback');
+            
+            // Multiple ways to detect React has mounted
             const hasReactContent = document.querySelector('[data-reactroot]') || 
                                    document.querySelector('.App') ||
                                    document.querySelector('[class*="react"]') ||
                                    document.querySelector('div[class^="css-"]') ||
-                                   (document.getElementById('root').children.length > 1);
+                                   document.querySelector('button[class*="btn"]') ||
+                                   document.querySelector('[class*="Card"]') ||
+                                   (rootEl && rootEl.children.length > 1);
             
-            if (hasReactContent) {
-              addDebugInfo('✅ React detected, cleaning up...');
+            // Also check if the loading screen is the only child
+            const onlyLoadingScreen = loadingEl && rootEl && rootEl.children.length === 1 && rootEl.children[0] === loadingEl;
+            
+            if (hasReactContent && !onlyLoadingScreen) {
+              reactDetected = true;
+              addDebugInfo('✅ React detected, removing loading screen...');
+              
+              // Force remove loading screen
+              if (loadingEl) {
+                loadingEl.style.display = 'none';
+                setTimeout(() => {
+                  if (loadingEl.parentNode) {
+                    loadingEl.parentNode.removeChild(loadingEl);
+                  }
+                }, 100);
+                addDebugInfo('🧹 Loading screen removed');
+              }
+              
               clearInterval(debugTimer);
               clearTimeout(emergencyTimer);
               observer.disconnect();
+              addDebugInfo('🎉 Initialization complete!');
             }
           }
         });
@@ -851,8 +877,53 @@
       
       observer.observe(document.getElementById('root'), {
         childList: true,
-        subtree: true
+        subtree: true,
+        attributes: true,
+        attributeOldValue: true
       });
+      
+      // Additional check every 500ms for React content
+      const reactCheckInterval = setInterval(() => {
+        if (reactDetected) {
+          clearInterval(reactCheckInterval);
+          return;
+        }
+        
+        const rootEl = document.getElementById('root');
+        const loadingEl = document.getElementById('loading-fallback');
+        
+        // Check if React has rendered by looking for common patterns
+        const hasReactElements = document.querySelector('div[class*="bg-"]') ||
+                                document.querySelector('button[class*="btn"]') ||
+                                document.querySelector('[class*="flex"]') ||
+                                document.querySelector('[class*="grid"]') ||
+                                document.querySelector('[class*="Card"]') ||
+                                document.querySelector('[class*="Button"]');
+        
+        const onlyLoadingScreen = loadingEl && rootEl && rootEl.children.length === 1 && rootEl.children[0] === loadingEl;
+        
+        if (hasReactElements && !onlyLoadingScreen && !reactDetected) {
+          reactDetected = true;
+          addDebugInfo('✅ React detected via interval check');
+          
+          // Force remove loading screen
+          if (loadingEl) {
+            loadingEl.style.display = 'none';
+            setTimeout(() => {
+              if (loadingEl.parentNode) {
+                loadingEl.parentNode.removeChild(loadingEl);
+              }
+            }, 100);
+            addDebugInfo('🧹 Loading screen removed via interval');
+          }
+          
+          clearInterval(debugTimer);
+          clearTimeout(emergencyTimer);
+          clearInterval(reactCheckInterval);
+          observer.disconnect();
+          addDebugInfo('🎉 React fully loaded!');
+        }
+      }, 500);
       
       addDebugInfo('🔍 Monitoring for React...');
     </script>

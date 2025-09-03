@@ -39,10 +39,21 @@ const initializeApp = (): void => {
 
   console.log('✅ INIT: Root container found');
   
-  // Clear loading screen immediately
+  // Clear loading screen immediately when React starts
   const loadingEl = document.getElementById('loading-fallback');
   if (loadingEl) {
-    console.log('🧹 INIT: Clearing loading screen');
+    console.log('🧹 INIT: Found loading screen, will remove after render');
+    // Add a marker to indicate React is starting
+    loadingEl.setAttribute('data-react-starting', 'true');
+    
+    // Add React status to debug info
+    const debugEl = document.getElementById('debug-info');
+    if (debugEl) {
+      const statusDiv = document.createElement('div');
+      statusDiv.textContent = '⚛️ React initializing...';
+      statusDiv.style.color = '#10b981';
+      debugEl.appendChild(statusDiv);
+    }
   }
 
   try {
@@ -58,9 +69,35 @@ const initializeApp = (): void => {
     
     console.log('✅ INIT: React render completed successfully');
     
-    // Mark successful initialization
+    // Mark successful initialization and cleanup loading screen
     setTimeout(() => {
-      console.log('🎉 INIT: App fully initialized');
+      console.log('🎉 INIT: App fully initialized, cleaning up loading screen');
+      
+      // Force remove loading screen after successful render
+      const loadingEl = document.getElementById('loading-fallback');
+      if (loadingEl) {
+        console.log('🧹 INIT: Removing loading screen after successful render');
+        loadingEl.style.opacity = '0';
+        loadingEl.style.transition = 'opacity 0.3s ease-out';
+        
+        setTimeout(() => {
+          if (loadingEl.parentNode) {
+            loadingEl.parentNode.removeChild(loadingEl);
+            console.log('✅ INIT: Loading screen successfully removed');
+          }
+        }, 300);
+        
+        // Update debug info one final time
+        const debugEl = document.getElementById('debug-info');
+        if (debugEl) {
+          const finalDiv = document.createElement('div');
+          finalDiv.textContent = '🎉 React app loaded successfully!';
+          finalDiv.style.color = '#10b981';
+          finalDiv.style.fontWeight = 'bold';
+          debugEl.appendChild(finalDiv);
+        }
+      }
+      
       window.performance?.mark?.('react-app-mounted');
     }, 100);
     

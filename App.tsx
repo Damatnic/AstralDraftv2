@@ -76,6 +76,31 @@ const AppContent: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: false });
     console.log('✅ Loading forcibly set to false');
     
+    // CRITICAL: Force remove loading screen when App component mounts
+    const loadingEl = document.getElementById('loading-fallback');
+    if (loadingEl) {
+      console.log('🧹 APP: Found loading screen, removing immediately');
+      loadingEl.style.opacity = '0';
+      loadingEl.style.transition = 'opacity 0.2s ease-out';
+      
+      setTimeout(() => {
+        if (loadingEl.parentNode) {
+          loadingEl.parentNode.removeChild(loadingEl);
+          console.log('✅ APP: Loading screen removed by App component');
+        }
+      }, 200);
+      
+      // Update debug info from App component
+      const debugEl = document.getElementById('debug-info');
+      if (debugEl) {
+        const appDiv = document.createElement('div');
+        appDiv.textContent = '🎯 App component mounted!';
+        appDiv.style.color = '#3b82f6';
+        appDiv.style.fontWeight = 'bold';
+        debugEl.appendChild(appDiv);
+      }
+    }
+    
     // Initialize mobile optimizations only in browser environment
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       try {
