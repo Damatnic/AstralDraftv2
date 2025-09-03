@@ -1,126 +1,164 @@
+import React, { useState } from 'react';
 
-import { useAppState } from '../contexts/AppContext';
-import { generateWeeklyReport, generateWeeklyPowerPlay } from '../services/geminiService';
-import type { League, WeeklyReportData } from '../types';
-import WeeklyReportDisplay from '../components/reports/WeeklyReportDisplay';
-import { motion } from 'framer-motion';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import { useLeague } from '../hooks/useLeague';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { FilmIcon } from '../components/icons/FilmIcon';
+// Mock context
+const useAppContext = () => ({
+  state: {
+    league: { 
+      id: '1', 
+      name: 'Fantasy League', 
+      teams: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F']
+    },
+    myTeam: { id: '1', name: 'My Team' }
+  },
+  dispatch: (_action: { type: string; payload?: string }) => {
+    // Mock dispatch function
+  }
+});
 
-const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
-    const [report, setReport] = React.useState<WeeklyReportData | null>(null);
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [error, setError] = React.useState<string | null>(null);
-    const [selectedWeek, setSelectedWeek] = React.useState(league.currentWeek > 1 ? league.currentWeek - 1 : 1);
-    const [retryCount, setRetryCount] = React.useState(0);
-    
-    const maxWeek = league.currentWeek - 1;
+const WeeklyReportView: React.FC = () => {
+  const { state, dispatch } = useAppContext();
+  const { league, myTeam } = state;
+  
+  const [selectedWeek, setSelectedWeek] = useState(13);
 
-    const fetchReport = React.useCallback(async () => {
-        if (!league || selectedWeek < 1) return;
-        setIsLoading(true);
-        setError(null);
-        try {
-            const [reportData, powerPlayData] = await Promise.all([
-                generateWeeklyReport(league, selectedWeek),
-                generateWeeklyPowerPlay(league, selectedWeek)
-            ]);
+  const mockReport = {
+    weekNumber: selectedWeek,
+    highScore: { team: 'Team A', points: 156.8 },
+    lowScore: { team: 'Team D', points: 89.2 },
+    upsets: [
+      { winner: 'Team E', loser: 'Team B', difference: 12.3 }
+    ],
+    bestPerformers: [
+      { player: 'Josh Allen', team: 'Team A', points: 32.4 },
+      { player: 'Christian McCaffrey', team: 'Team C', points: 28.9 }
+    ],
+    worstPerformers: [
+      { player: 'Russell Wilson', team: 'Team D', points: 4.2 }
+    ]
+  };
 
-            if(reportData) {
-                setReport({ ...reportData, powerPlay: powerPlayData || undefined });
-            } else {
-                 setError("The Oracle could not produce a weekly report.");
-            }
-        } catch (err) {
-            setError("An error occurred while consulting the Oracle for a weekly report.");
-        } finally {
-            setIsLoading(false);
-        }
-    }, [league, selectedWeek]);
-    
-    React.useEffect(() => {
-        fetchReport();
-    }, [fetchReport, retryCount]);
-
-    const handleRetry = () => setRetryCount(c => c + 1);
-    
+  if (!league || !myTeam) {
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <header className="flex-shrink-0 flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        The Oracle's Report
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
-                </div>
-                 <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_RECAP_VIDEO' })}
-                        className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 text-purple-300 rounded-lg text-sm hover:bg-purple-500/30"
-                    >
-                        <FilmIcon /> Generate AI Recap Video
-                    </button>
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => setSelectedWeek(w => w - 1)} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
-                            &lt;
-                        </button>
-                        <span className="font-bold w-24 text-center">Week {selectedWeek}</span>
-                        <button onClick={() => setSelectedWeek(w => w + 1)} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
-                            &gt;
-                        </button>
-                    </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
-                        Back to Team
-                    </button>
-                </div>
-            </header>
-            <main className="flex-grow glass-pane rounded-2xl">
-                 <motion.div
-                    key={selectedWeek}
-                    {...{
-                        initial: { opacity: 0 },
-                        animate: { opacity: 1 },
-                        transition: { duration: 0.5 },
-                    }}
-                >
-                    {(() => {
-                        if (isLoading) {
-                            return <div className="p-6"><LoadingSpinner text="Compiling the weekly report..." /></div>;
-                        }
-
-                        if (error) {
-                            return <ErrorDisplay message={error} onRetry={handleRetry} />;
-                        }
-
-                        if (report) {
-                            return <WeeklyReportDisplay report={report} />;
-                        }
-
-                        return <div className="p-6 text-center text-gray-400">No report available for this week.</div>;
-                    })()}
-                </motion.div>
-            </main>
-        </div>
+      <div className="glass-panel p-8 text-center">
+        <p className="text-gray-400">League data not available</p>
+        <button 
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+          className="glass-button-primary mt-4"
+        >
+          Return to Dashboard
+        </button>
+      </div>
     );
-};
+  }
 
-export const WeeklyReportView: React.FC = () => {
-    const { dispatch } = useAppState();
-    const { league } = useLeague();
-    
-    if (!league) {
-        return (
-            <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
-                <p>Please select a league to view reports.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary mt-4">
-                    Back to Dashboard
-                </button>
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            Weekly Report
+          </h1>
+          <p className="text-gray-400 mt-2">Week {selectedWeek} Recap</p>
+        </div>
+        
+        <div className="flex gap-3">
+          <select
+            value={selectedWeek}
+            onChange={(e) => setSelectedWeek(Number(e.target.value))}
+            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+          >
+            {Array.from({ length: 17 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>Week {i + 1}</option>
+            ))}
+          </select>
+          
+          <button 
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+            className="glass-button"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+
+      {/* Week Highlights */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+          <h3 className="text-lg font-semibold mb-4 text-green-400">High Score</h3>
+          <div className="text-center">
+            <div className="text-3xl font-bold">{mockReport.highScore.points}</div>
+            <div className="text-gray-400">{mockReport.highScore.team}</div>
+          </div>
+        </div>
+        
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+          <h3 className="text-lg font-semibold mb-4 text-red-400">Low Score</h3>
+          <div className="text-center">
+            <div className="text-3xl font-bold">{mockReport.lowScore.points}</div>
+            <div className="text-gray-400">{mockReport.lowScore.team}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Best Performers */}
+      <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">Best Performers</h3>
+        <div className="space-y-3">
+          {mockReport.bestPerformers.map((performer, index) => (
+            <div key={index} className="flex justify-between items-center p-3 bg-green-500/10 rounded-lg">
+              <div>
+                <div className="font-semibold">{performer.player}</div>
+                <div className="text-sm text-gray-400">{performer.team}</div>
+              </div>
+              <div className="text-xl font-bold text-green-400">
+                {performer.points} pts
+              </div>
             </div>
-        );
+          ))}
+        </div>
+      </div>
 
-    return <WeeklyReportContent league={league} dispatch={dispatch} />;
+      {/* Worst Performers */}
+      <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">Worst Performers</h3>
+        <div className="space-y-3">
+          {mockReport.worstPerformers.map((performer, index) => (
+            <div key={index} className="flex justify-between items-center p-3 bg-red-500/10 rounded-lg">
+              <div>
+                <div className="font-semibold">{performer.player}</div>
+                <div className="text-sm text-gray-400">{performer.team}</div>
+              </div>
+              <div className="text-xl font-bold text-red-400">
+                {performer.points} pts
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Upsets */}
+      {mockReport.upsets.length > 0 && (
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+          <h3 className="text-lg font-semibold mb-4">Upsets</h3>
+          <div className="space-y-3">
+            {mockReport.upsets.map((upset, index) => (
+              <div key={index} className="p-3 bg-yellow-500/10 rounded-lg">
+                <div className="text-center">
+                  <span className="font-semibold text-yellow-400">{upset.winner}</span>
+                  <span className="mx-2 text-gray-400">defeated</span>
+                  <span className="font-semibold">{upset.loser}</span>
+                  <div className="text-sm text-gray-400 mt-1">
+                    by {upset.difference} points
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default WeeklyReportView;

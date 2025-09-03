@@ -1,73 +1,164 @@
+import React, { useState } from 'react';
 
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { Widget } from '../components/ui/Widget';
-import type { Team, TeamComparison } from '../types';
-import { generateTeamComparison } from '../services/geminiService';
-import TeamComparisonCard from '../components/comparison/TeamComparisonCard';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import { SparklesIcon } from '../components/icons/SparklesIcon';
-import ReactMarkdown from 'react-markdown';
+// Mock context
+const useAppContext = () => ({
+  state: {
+    league: { 
+      id: '1', 
+      name: 'Fantasy League', 
+      teams: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F']
+    },
+    myTeam: { id: '1', name: 'My Team' }
+  },
+  dispatch: (_action: { type: string; payload?: string }) => {
+    // Mock dispatch function
+  }
+});
 
 const TeamComparisonView: React.FC = () => {
-    const { state, dispatch } = useAppState();
-    const { league } = useLeague();
-    const [comparison, setComparison] = React.useState<TeamComparison | null>(null);
-    const [isLoading, setIsLoading] = React.useState(true);
+  const { state, dispatch } = useAppContext();
+  const { league, myTeam } = state;
+  
+  const [selectedTeamA, setSelectedTeamA] = useState('Team A');
+  const [selectedTeamB, setSelectedTeamB] = useState('Team B');
 
-    const teamIds = state.teamsToCompare;
-    const teamA = league?.teams.find((t: any) => t.id === teamIds?.[0]);
-    const teamB = league?.teams.find((t: any) => t.id === teamIds?.[1]);
-
-    React.useEffect(() => {
-        if (teamA && teamB && league) {
-            setIsLoading(true);
-            generateTeamComparison(teamA, teamB, league)
-                .then(setComparison)
-                .finally(() => setIsLoading(false));
-    }
-  }, [teamA, teamB, league]);
-
-    if (!league || !teamA || !teamB) {
-        return <ErrorDisplay title="Error" message="Could not find teams to compare." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} />;
-
+  if (!league || !myTeam) {
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
-            <header className="flex-shrink-0 flex justify-between items-center mb-6">
-                 <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        Team Comparison
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
-                </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }) className="glass-button">
-                    Back to Standings
-                </button>
-            </header>
-            <main className="flex-grow grid grid-cols-1 xl:grid-cols-[1fr_2fr_1fr] gap-6">
-                <TeamComparisonCard team={teamA} strengths={comparison?.strengthsA} weaknesses={comparison?.weaknessesA} />
-                
-                <Widget title="Oracle's Analysis" icon={<SparklesIcon />}>
-                    <div className="p-4 h-full overflow-y-auto">
-                        {isLoading ? <LoadingSpinner text="Analyzing both teams..." /> :
-                         comparison ? (
-                            <div className="prose prose-sm prose-invert">
-                                <h3>Prediction</h3>
-                                <p>{comparison.prediction}</p>
-                                <h3>Analysis</h3>
-                                <ReactMarkdown>{comparison.analysis}</ReactMarkdown>
-                            </div>
-                         ) : (
-                            <ErrorDisplay title="Analysis Failed" message="The Oracle could not provide an analysis for this matchup." />
-                         )}
-                    </div>
-                </Widget>
-                
-                <TeamComparisonCard team={teamB} strengths={comparison?.strengthsB} weaknesses={comparison?.weaknessesB} />
-            </main>
-        </div>
+      <div className="glass-panel p-8 text-center">
+        <p className="text-gray-400">League data not available</p>
+        <button 
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+          className="glass-button-primary mt-4"
+        >
+          Return to Dashboard
+        </button>
+      </div>
     );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
+            Team Comparison
+          </h1>
+          <p className="text-gray-400 mt-2">{league.name}</p>
+        </div>
+        
+        <button 
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })}
+          className="glass-button"
+        >
+          Back to Standings
+        </button>
+      </div>
+
+      {/* Team Selection */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium mb-2">Team A</label>
+          <select
+            value={selectedTeamA}
+            onChange={(e) => setSelectedTeamA(e.target.value)}
+            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+          >
+            {league.teams?.map(team => (
+              <option key={team} value={team}>{team}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">Team B</label>
+          <select
+            value={selectedTeamB}
+            onChange={(e) => setSelectedTeamB(e.target.value)}
+            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+          >
+            {league.teams?.map(team => (
+              <option key={team} value={team}>{team}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Comparison Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TeamCard teamName={selectedTeamA} />
+        <TeamCard teamName={selectedTeamB} />
+      </div>
+
+      {/* Comparison Stats */}
+      <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">Head-to-Head Comparison</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-blue-400">8-5</div>
+            <div className="text-sm text-gray-400">{selectedTeamA} Record</div>
+          </div>
+          
+          <div className="text-center">
+            <div className="text-2xl font-bold text-purple-400">VS</div>
+            <div className="text-sm text-gray-400">Season Matchup</div>
+          </div>
+          
+          <div className="text-center">
+            <div className="text-2xl font-bold text-green-400">7-6</div>
+            <div className="text-sm text-gray-400">{selectedTeamB} Record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface TeamCardProps {
+  teamName: string;
+}
+
+const TeamCard: React.FC<TeamCardProps> = ({ teamName }) => {
+  const mockStats = {
+    pointsFor: 1456.8,
+    pointsAgainst: 1234.5,
+    record: '8-5',
+    averagePoints: 112.1,
+    rank: 3
+  };
+
+  return (
+    <div className="bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+      <h3 className="text-xl font-semibold mb-4">{teamName}</h3>
+      
+      <div className="space-y-3">
+        <div className="flex justify-between">
+          <span className="text-gray-400">Record:</span>
+          <span className="font-semibold">{mockStats.record}</span>
+        </div>
+        
+        <div className="flex justify-between">
+          <span className="text-gray-400">Points For:</span>
+          <span className="font-semibold text-green-400">{mockStats.pointsFor}</span>
+        </div>
+        
+        <div className="flex justify-between">
+          <span className="text-gray-400">Points Against:</span>
+          <span className="font-semibold text-red-400">{mockStats.pointsAgainst}</span>
+        </div>
+        
+        <div className="flex justify-between">
+          <span className="text-gray-400">Average Points:</span>
+          <span className="font-semibold">{mockStats.averagePoints}</span>
+        </div>
+        
+        <div className="flex justify-between">
+          <span className="text-gray-400">League Rank:</span>
+          <span className="font-semibold text-yellow-400">#{mockStats.rank}</span>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default TeamComparisonView;

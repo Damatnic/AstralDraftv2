@@ -65,7 +65,7 @@ const ChampionshipOddsView: React.FC = () => {
                     >
                         <FlaskConicalIcon /> Run Trade Scenario
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }) className="back-btn">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} className="back-btn">
                         Back to Analytics Hub
                     </button>
                 </div>

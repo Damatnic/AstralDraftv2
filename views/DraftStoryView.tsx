@@ -79,7 +79,7 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }) className="mobile-touch-target px-4 py-3 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} className="mobile-touch-target px-4 py-3 bg-white/10 rounded-lg text-sm hover:bg-white/20">
                     Back to Analytics
                 </button>
             </header>

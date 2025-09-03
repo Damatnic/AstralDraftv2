@@ -74,7 +74,7 @@ const LeagueNewspaperView: React.FC = () => {
                             >
                         </button>
                     </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="glass-button">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="glass-button">
                         Back to League Hub
                     </button>
                 </div>

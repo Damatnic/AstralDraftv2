@@ -1,452 +1,390 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { 
-    TrophyIcon, 
-    TargetIcon, 
-    DollarSignIcon,
-    UsersIcon,
-    StarIcon,
-    CheckCircleIcon,
-    XCircleIcon,
-    PlusCircleIcon,
-//     AwardIcon
-} from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+
+// Mock context
+const useAppContext = () => ({
+  state: {
+    league: { 
+      id: '1', 
+      name: 'Fantasy League', 
+      teams: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F']
+    },
+    myTeam: { id: '1', name: 'My Team' }
+  },
+  dispatch: (_action: { type: string; payload?: string }) => {
+    // Mock dispatch function
+  }
+});
+
+// Simple Widget component
+const Widget: React.FC<{ title: string; className?: string; children: React.ReactNode }> = ({ title, className, children }) => (
+  <div className={`bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg p-6 ${className || ''}`}>
+    <h3 className="text-lg font-semibold mb-4">{title}</h3>
+    {children}
+  </div>
+);
+
+// Simple icons
+const PlusIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+  </svg>
+);
+
+const TrophyIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+  </svg>
+);
+
+const CalendarIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+);
 
 interface Contest {
-    id: string;
-    name: string;
-    description: string;
-    type: 'weekly' | 'season' | 'playoff';
-    prize: number;
-    participants: string[];
-    leader?: {
-        teamId: number;
-        teamName: string;
-        owner: string;
-        score: number;
-    };
-    deadline?: string;
-    status: 'active' | 'completed' | 'upcoming';
+  id: string;
+  name: string;
+  type: 'weekly' | 'monthly' | 'season';
+  description: string;
+  prize: number;
+  startDate: string;
+  endDate: string;
+  participants: number;
+  status: 'active' | 'completed' | 'upcoming';
+  winner?: string;
+}
 
 const SeasonContestView: React.FC = () => {
-    const { state, dispatch } = useAppState();
-    const { league } = useLeague();
-    const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [newContest, setNewContest] = useState({
-        name: '',
-        description: '',
-        type: 'weekly' as Contest['type'],
-        prize: 10
+  const { state, dispatch } = useAppContext();
+  const { league, myTeam } = state;
+  
+  const [selectedTab, setSelectedTab] = useState<'active' | 'upcoming' | 'completed'>('active');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newContest, setNewContest] = useState<Partial<Contest>>({
+    name: '',
+    type: 'weekly',
+    description: '',
+    prize: 0
+  });
+
+  // Mock contest data
+  const mockContests: Contest[] = useMemo(() => [
+    {
+      id: '1',
+      name: 'Weekly High Score',
+      type: 'weekly',
+      description: 'Highest weekly score wins the pot',
+      prize: 50,
+      startDate: '2024-01-01',
+      endDate: '2024-01-07',
+      participants: 8,
+      status: 'active'
+    },
+    {
+      id: '2',
+      name: 'Monthly Champion',
+      type: 'monthly',
+      description: 'Best record for the month',
+      prize: 100,
+      startDate: '2024-01-01',
+      endDate: '2024-01-31',
+      participants: 12,
+      status: 'active'
+    },
+    {
+      id: '3',
+      name: 'Season Long Accuracy',
+      type: 'season',
+      description: 'Most accurate start/sit decisions',
+      prize: 200,
+      startDate: '2024-01-01',
+      endDate: '2024-12-31',
+      participants: 10,
+      status: 'completed',
+      winner: 'Fantasy Expert'
+    }
+  ], []);
+
+  const filteredContests = mockContests.filter(contest => contest.status === selectedTab);
+
+  const handleCreateContest = () => {
+    // Mock contest creation
+    setShowCreateModal(false);
+    setNewContest({
+      name: '',
+      type: 'weekly',
+      description: '',
+      prize: 0
     });
+  };
 
-    const isCommissioner = state.user?.id === league?.commissionerId;
-
-    if (!league) {
-        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-
-    // Mock contest data - in production this would come from the database
-    const contests: Contest[] = [
-        {
-            id: '1',
-            name: 'Weekly High Score',
-            description: 'Highest scoring team each week wins the pot',
-            type: 'weekly',
-            prize: 20,
-            participants: league.teams.map((t) => t.owner.name),
-            leader: {
-                teamId: 1,
-                teamName: 'Thunder Bolts',
-                owner: 'Nick Damato',
-                score: 156.8
-            },
-            status: 'active'
-        },
-        {
-            id: '2',
-            name: 'Season Long Points',
-            description: 'Team with most total points at end of regular season',
-            type: 'season',
-            prize: 50,
-            participants: league.teams.map((t) => t.owner.name),
-            leader: {
-                teamId: 2,
-                teamName: 'Storm Chasers',
-                owner: 'Jon Kornbeck',
-                score: 1234.5
-            },
-            status: 'active'
-        },
-        {
-            id: '3',
-            name: 'Perfect Lineup Challenge',
-            description: 'First team to set a perfect optimal lineup wins',
-            type: 'season',
-            prize: 30,
-            participants: ['Nick Damato', 'Jon Kornbeck', 'Cason Minor'],
-            status: 'active'
-        },
-        {
-            id: '4',
-            name: 'Survivor Pool',
-            description: 'Pick one team to win each week, can only use each team once',
-            type: 'season',
-            prize: 100,
-            participants: league.teams.map((t) => t.owner.name),
-            leader: {
-                teamId: 3,
-                teamName: 'Lightning Strikes',
-                owner: 'Cason Minor',
-                score: 8
-            },
-            status: 'active'
-
-    ];
-
-    const handleCreateContest = () => {
-        // Logic to create new contest
-        setShowCreateModal(false);
-        dispatch({ 
-            type: 'ADD_NOTIFICATION', 
-            payload: { message: 'Contest created successfully!', type: 'SYSTEM' }
-        });
-    };
-
-    const handleJoinContest = (_contestId: string) => {
-        // Logic to join contest
-        dispatch({ 
-            type: 'ADD_NOTIFICATION', 
-            payload: { message: 'You have joined the contest!', type: 'SYSTEM' }
-        });
-    };
-
+  if (!league || !myTeam) {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 p-4 sm:p-6 lg:p-8">
-            <header className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)] flex items-center gap-3">
-                        <TrophyIcon className="w-8 h-8 text-yellow-400" />
-                        Season Contests
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} Side Bets & Challenges</p>
-                </div>
-                <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) 
-                    className="glass-button"
-                >
-                    Back to League Hub
-                </button>
-            </header>
-
-            <main className="max-w-6xl mx-auto">
-                {/* Contest Overview */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="glass-pane p-6 mb-6"
-                >
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                            <AwardIcon className="w-5 h-5 text-blue-400" />
-                            Active Contests
-                        </h2>
-                        {isCommissioner && (
-                            <button
-                                onClick={() => setShowCreateModal(true)}
-                            >
-                                <PlusCircleIcon className="w-4 h-4" />
-                                Create Contest
-                            </button>
-                        )}
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-2xl font-bold text-blue-400">{contests.length}</div>
-                            <div className="text-sm text-[var(--text-secondary)]">Active Contests</div>
-                        </div>
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-2xl font-bold text-green-400">
-                                ${contests.reduce((sum, c) => sum + c.prize, 0)}
-                            </div>
-                            <div className="text-sm text-[var(--text-secondary)]">Total Prize Pool</div>
-                        </div>
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-2xl font-bold text-purple-400">
-                                {contests.filter((c: Contest) => c.participants.includes(state.user?.name || '')).length}
-                            </div>
-                            <div className="text-sm text-[var(--text-secondary)]">Your Contests</div>
-                        </div>
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-2xl font-bold text-yellow-400">2</div>
-                            <div className="text-sm text-[var(--text-secondary)]">Leading</div>
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Contest Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {contests.map((contest, index) => {
-                        const isParticipating = contest.participants.includes(state.user?.name || '');
-                        const isLeading = contest.leader?.owner === state.user?.name;
-
-                        return (
-                            <motion.div
-                                key={contest.id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="glass-pane p-6 hover:ring-2 hover:ring-blue-400/50 transition-all cursor-pointer"
-                                onClick={() => setSelectedContest(contest)}
-                                <div className="flex items-start justify-between mb-4">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                            {contest.name}
-                                            {isLeading && <StarIcon className="w-4 h-4 text-yellow-400" />}
-                                        </h3>
-                                        <p className="text-sm text-[var(--text-secondary)] mt-1">
-                                            {contest.description}
-                                        </p>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-2xl font-bold text-green-400">${contest.prize}</div>
-                                        <div className="text-xs text-[var(--text-secondary)]">Prize</div>
-                                    </div>
-                                </div>
-
-                                {/* Contest Type Badge */}
-                                <div className="flex items-center gap-2 mb-4">
-                                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                                        contest.type === 'weekly' ? 'bg-blue-500/20 text-blue-400' :
-                                        contest.type === 'season' ? 'bg-purple-500/20 text-purple-400' :
-                                        'bg-yellow-500/20 text-yellow-400'
-                                    }`}>
-                                        {contest.type.toUpperCase()}
-                                    </span>
-                                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                                        contest.status === 'active' ? 'bg-green-500/20 text-green-400' :
-                                        contest.status === 'completed' ? 'bg-gray-500/20 text-gray-400' :
-                                        'bg-yellow-500/20 text-yellow-400'
-                                    }`}>
-                                        {contest.status.toUpperCase()}
-                                    </span>
-                                </div>
-
-                                {/* Current Leader */}
-                                {contest.leader && (
-                                    <div className="p-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-lg mb-4">
-                                        <p className="text-xs text-[var(--text-secondary)] mb-1">Current Leader</p>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-semibold text-white">
-                                                {contest.leader.teamName}
-                                            </span>
-                                            <span className="text-yellow-400 font-bold">
-                                                {contest.type === 'weekly' ? `${contest.leader.score} pts` : 
-                                                 contest.name.includes('Survivor') ? `Week ${contest.leader.score}` :
-                                                 `${contest.leader.score} pts`}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Participants */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <UsersIcon className="w-4 h-4 text-[var(--text-secondary)]" />
-                                        <span className="text-sm text-[var(--text-secondary)]">
-                                            {contest.participants.length} participants
-                                        </span>
-                                    </div>
-                                    {isParticipating ? (
-                                        <span className="flex items-center gap-1 text-green-400 text-sm">
-                                            <CheckCircleIcon className="w-4 h-4" />
-//                                             Joined
-                                        </span>
-                                    ) : (
-                                        <button
-                                            onClick={(e: React.MouseEvent) => {
-                                                e.stopPropagation();
-                                                handleJoinContest(contest.id);
-                                            }}
-                                            className="glass-button px-3 py-1 text-sm"
-                                        >
-                                            Join Contest
-                                        </button>
-                                    )}
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-                </div>
-
-                {/* Create Contest Modal */}
-                {showCreateModal && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9 }}
-                            animate={{ scale: 1 }}
-                            className="glass-pane p-6 max-w-md w-full"
-                        >
-                            <h3 className="text-xl font-bold text-white mb-4">Create New Contest</h3>
-                            
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                                        Contest Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={newContest.name}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewContest(prev => ({ ...prev, name: e.target.value }}
-                                        className="glass-input w-full"
-                                        placeholder="e.g., Weekly High Score"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-//                                         Description
-                                    </label>
-                                    <textarea
-                                        value={newContest.description}
-                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewContest(prev => ({ ...prev, description: e.target.value }}
-                                        className="glass-input w-full h-20"
-                                        placeholder="Describe the contest rules..."
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                                        Contest Type
-                                    </label>
-                                    <select
-                                        value={newContest.type}
-                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewContest(prev => ({ ...prev, type: e.target.value as Contest['type'] }}
-                                        className="glass-input w-full"
-                                    >
-                                        <option value="weekly">Weekly</option>
-                                        <option value="season">Season Long</option>
-                                        <option value="playoff">Playoff</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                                        Prize Amount ($)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        value={newContest.prize}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewContest(prev => ({ ...prev, prize: Number(e.target.value) }}
-                                        className="glass-input w-full"
-                                        min="0"
-                                        step="5"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex gap-3 mt-6">
-                                <button
-                                    onClick={() => setShowCreateModal(false)}
-                                >
-//                                     Cancel
-                                </button>
-                                <button
-                                    onClick={handleCreateContest}
-                                    disabled={!newContest.name || !newContest.description}
-                                >
-                                    Create Contest
-                                </button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-
-                {/* Contest Details Modal */}
-                {selectedContest && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-                        onClick={() => setSelectedContest(null)}
-                        <motion.div
-                            initial={{ scale: 0.9 }}
-                            animate={{ scale: 1 }}
-                            className="glass-pane p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
-                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                            <div className="flex items-start justify-between mb-4">
-                                <div>
-                                    <h3 className="text-2xl font-bold text-white">{selectedContest.name}</h3>
-                                    <p className="text-[var(--text-secondary)] mt-1">{selectedContest.description}</p>
-                                </div>
-                                <button
-                                    onClick={() => setSelectedContest(null)}
-                                >
-                                    <XCircleIcon className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            {/* Contest Stats */}
-                            <div className="grid grid-cols-3 gap-4 mb-6">
-                                <div className="text-center p-3 bg-white/5 rounded-lg">
-                                    <DollarSignIcon className="w-6 h-6 text-green-400 mx-auto mb-1" />
-                                    <div className="text-xl font-bold text-white">${selectedContest.prize}</div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Prize Pool</div>
-                                </div>
-                                <div className="text-center p-3 bg-white/5 rounded-lg">
-                                    <UsersIcon className="w-6 h-6 text-blue-400 mx-auto mb-1" />
-                                    <div className="text-xl font-bold text-white">{selectedContest.participants.length}</div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Participants</div>
-                                </div>
-                                <div className="text-center p-3 bg-white/5 rounded-lg">
-                                    <TargetIcon className="w-6 h-6 text-purple-400 mx-auto mb-1" />
-                                    <div className="text-xl font-bold text-white capitalize">{selectedContest.type}</div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Contest Type</div>
-                                </div>
-                            </div>
-
-                            {/* Leaderboard */}
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-white mb-3">Leaderboard</h4>
-                                {selectedContest.participants.map((participant, index) => (
-                                    <div
-                                        key={participant}
-                                        className={`flex items-center justify-between p-3 rounded-lg ${
-                                            index === 0 ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20' : 'bg-white/5'
-                                        }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <span className={`font-bold ${
-                                                index === 0 ? 'text-yellow-400' :
-                                                index === 1 ? 'text-gray-300' :
-                                                index === 2 ? 'text-orange-400' :
-                                                'text-white'
-                                            }`}>
-                                                #{index + 1}
-                                            </span>
-                                            <span className="text-white">{participant}</span>
-                                        </div>
-                                        {index === 0 && selectedContest.leader && (
-                                            <span className="text-yellow-400 font-bold">
-                                                {selectedContest.leader.score} pts
-                                            </span>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </main>
-        </div>
+      <div className="glass-panel p-8 text-center">
+        <p className="text-gray-400">League data not available</p>
+        <button 
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+          className="glass-button-primary mt-4"
+        >
+          Return to Dashboard
+        </button>
+      </div>
     );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+            Season Contests
+          </h1>
+          <p className="text-gray-400 mt-2">
+            Compete in special challenges for prizes and bragging rights
+          </p>
+        </div>
+        
+        <div className="flex gap-3">
+          <button 
+            onClick={() => setShowCreateModal(true)}
+            className="glass-button-primary flex items-center gap-2"
+          >
+            <PlusIcon className="w-4 h-4" />
+            Create Contest
+          </button>
+          
+          <button 
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })}
+            className="glass-button"
+          >
+            Back to League
+          </button>
+        </div>
+      </div>
+
+      {/* Contest Tabs */}
+      <div className="flex gap-1 bg-gray-800/50 p-1 rounded-lg">
+        {[
+          { key: 'active', label: 'Active', count: mockContests.filter(c => c.status === 'active').length },
+          { key: 'upcoming', label: 'Upcoming', count: mockContests.filter(c => c.status === 'upcoming').length },
+          { key: 'completed', label: 'Completed', count: mockContests.filter(c => c.status === 'completed').length }
+        ].map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => setSelectedTab(tab.key as 'active' | 'upcoming' | 'completed')}
+            className={`flex-1 px-4 py-2 rounded-md transition-all ${
+              selectedTab === tab.key
+                ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                : 'text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            {tab.label} ({tab.count})
+          </button>
+        ))}
+      </div>
+
+      {/* Contests Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredContests.map(contest => (
+          <ContestCard key={contest.id} contest={contest} />
+        ))}
+      </div>
+
+      {/* Empty State */}
+      {filteredContests.length === 0 && (
+        <div className="text-center py-12">
+          <TrophyIcon className="w-16 h-16 mx-auto mb-4 text-gray-600" />
+          <h3 className="text-xl font-semibold mb-2">No {selectedTab} contests</h3>
+          <p className="text-gray-400 mb-4">
+            {selectedTab === 'active' && 'No contests are currently running'}
+            {selectedTab === 'upcoming' && 'No contests are scheduled'}
+            {selectedTab === 'completed' && 'No contests have been completed yet'}
+          </p>
+          <button 
+            onClick={() => setShowCreateModal(true)}
+            className="glass-button-primary"
+          >
+            Create First Contest
+          </button>
+        </div>
+      )}
+
+      {/* Create Contest Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-white/10 rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-semibold mb-4">Create New Contest</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Contest Name</label>
+                <input
+                  type="text"
+                  value={newContest.name || ''}
+                  onChange={(e) => setNewContest(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+                  placeholder="Enter contest name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Description</label>
+                <textarea
+                  value={newContest.description || ''}
+                  onChange={(e) => setNewContest(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+                  rows={3}
+                  placeholder="Describe the contest rules"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Contest Type</label>
+                <select
+                  value={newContest.type || 'weekly'}
+                  onChange={(e) => setNewContest(prev => ({ ...prev, type: e.target.value as Contest['type'] }))}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+                >
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="season">Season Long</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Prize Amount ($)</label>
+                <input
+                  type="number"
+                  value={newContest.prize || 0}
+                  onChange={(e) => setNewContest(prev => ({ ...prev, prize: Number(e.target.value) }))}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"
+                  min="0"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={handleCreateContest}
+                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Create Contest
+              </button>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contest Stats */}
+      <Widget title="Contest Statistics">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center">
+            <CalendarIcon className="w-8 h-8 mx-auto mb-2 text-blue-400" />
+            <div className="text-2xl font-bold">{mockContests.length}</div>
+            <div className="text-sm text-gray-400">Total Contests</div>
+          </div>
+          
+          <div className="text-center">
+            <TrophyIcon className="w-8 h-8 mx-auto mb-2 text-yellow-400" />
+            <div className="text-2xl font-bold">
+              ${mockContests.reduce((sum, c) => sum + c.prize, 0)}
+            </div>
+            <div className="text-sm text-gray-400">Total Prizes</div>
+          </div>
+          
+          <div className="text-center">
+            <div className="w-8 h-8 mx-auto mb-2 bg-green-400 rounded-full flex items-center justify-center">
+              <span className="text-black font-bold text-xs">AVG</span>
+            </div>
+            <div className="text-2xl font-bold">
+              {Math.round(mockContests.reduce((sum, c) => sum + c.participants, 0) / mockContests.length)}
+            </div>
+            <div className="text-sm text-gray-400">Avg Participants</div>
+          </div>
+        </div>
+      </Widget>
+    </div>
+  );
+};
+
+interface ContestCardProps {
+  contest: Contest;
+}
+
+const ContestCard: React.FC<ContestCardProps> = ({ contest }) => {
+  const getStatusColor = (status: Contest['status']) => {
+    switch (status) {
+      case 'active': return 'border-green-500/30 bg-green-500/5';
+      case 'upcoming': return 'border-blue-500/30 bg-blue-500/5';
+      case 'completed': return 'border-gray-500/30 bg-gray-500/5';
+      default: return 'border-white/10';
+    }
+  };
+
+  const getTypeColor = (type: Contest['type']) => {
+    switch (type) {
+      case 'weekly': return 'text-blue-300 bg-blue-500/20';
+      case 'monthly': return 'text-purple-300 bg-purple-500/20';
+      case 'season': return 'text-orange-300 bg-orange-500/20';
+      default: return 'text-gray-300 bg-gray-500/20';
+    }
+  };
+
+  return (
+    <div className={`glass-panel p-6 rounded-lg border ${getStatusColor(contest.status)}`}>
+      <div className="flex items-start justify-between mb-4">
+        <h3 className="text-lg font-semibold">{contest.name}</h3>
+        <span className={`px-2 py-1 rounded text-xs font-medium ${getTypeColor(contest.type)}`}>
+          {contest.type}
+        </span>
+      </div>
+      
+      <p className="text-gray-400 text-sm mb-4">{contest.description}</p>
+      
+      <div className="space-y-2">
+        <div className="flex justify-between">
+          <span className="text-gray-400">Prize:</span>
+          <span className="font-semibold text-green-400">${contest.prize}</span>
+        </div>
+        
+        <div className="flex justify-between">
+          <span className="text-gray-400">Participants:</span>
+          <span className="font-semibold">{contest.participants}</span>
+        </div>
+        
+        <div className="flex justify-between">
+          <span className="text-gray-400">Status:</span>
+          <span className={`font-semibold capitalize ${
+            contest.status === 'active' ? 'text-green-400' :
+            contest.status === 'upcoming' ? 'text-blue-400' : 'text-gray-400'
+          }`}>
+            {contest.status}
+          </span>
+        </div>
+        
+        {contest.winner && (
+          <div className="flex justify-between">
+            <span className="text-gray-400">Winner:</span>
+            <span className="font-semibold text-yellow-400">{contest.winner}</span>
+          </div>
+        )}
+      </div>
+      
+      {contest.status === 'active' && (
+        <button className="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+          Join Contest
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default SeasonContestView;

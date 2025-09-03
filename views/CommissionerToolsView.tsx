@@ -84,7 +84,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                             </h3>
                             <p className="text-xs text-gray-400 mt-1">Configure league rules and settings.</p>
                         </button>
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'EDIT_SCORING' }) className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'EDIT_SCORING' })} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><PencilIcon /> Edit Scoring Rules</h3>
                             <p className="text-xs text-gray-400 mt-1">Customize your league's scoring system.</p>
                         </button>
@@ -92,7 +92,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><CalendarIcon /> Edit Schedule</h3>
                             <p className="text-xs text-gray-400 mt-1">View and manually adjust weekly matchups.</p>
                         </button>
-                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_CONSTITUTION' }) className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_CONSTITUTION' })} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><FileTextIcon /> Generate Constitution</h3>
                             <p className="text-xs text-gray-400 mt-1">Create a formal league constitution document.</p>
                         </button>
@@ -115,7 +115,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><PauseIcon /> {state.isDraftPaused ? 'Resume Draft' : 'Pause Draft'}</h3>
                             <p className="text-xs text-gray-400 mt-1">Temporarily pause or unpause a live draft.</p>
                         </button>
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'FINANCE_TRACKER' }) className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'FINANCE_TRACKER' })} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><PencilIcon /> Financials</h3>
                             <p className="text-xs text-gray-400 mt-1">Track league dues and payouts.</p>
                         </button>
@@ -142,8 +142,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                             <h3 className="font-semibold text-white flex items-center gap-2"><ShieldAlertIcon /> Project Integrity</h3>
                             <p className="text-xs text-gray-400 mt-1 mb-2">Run a diagnostic scan on the application codebase to check for potential issues.</p>
                             <button
-                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECT_INTEGRITY' })
-                                className="px-4 py-2 bg-gray-600/80 text-white font-bold text-sm rounded-lg hover:bg-gray-500"
+                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECT_INTEGRITY' })} className="px-4 py-2 bg-gray-600/80 text-white font-bold text-sm rounded-lg hover:bg-gray-500"
                             >
                                 Run Integrity Scan
                             </button>
@@ -159,8 +158,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
             <header className="flex-shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">
                     <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                         aria-label="Back to Dashboard"
                     >
                         <ChevronLeftIcon className="w-5 h-5" />
