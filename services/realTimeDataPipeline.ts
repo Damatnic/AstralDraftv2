@@ -871,6 +871,7 @@ interface BatchResponse {
     serverTime: number;
     cacheHits: number;
   };
+}
 
 interface CompressedData {
   algorithm: string;
