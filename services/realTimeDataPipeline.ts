@@ -697,6 +697,7 @@ export class RealTimeDataPipeline {
     this.messageQueue = [];
     this.cache.clear();
   }
+}
 
 /**
  * Data Cache Implementation
