@@ -9,6 +9,7 @@ interface TouchPoint {
   x: number;
   y: number;
   timestamp: number;
+}
 
 interface GestureState {
   startPoint: TouchPoint | null;
@@ -17,6 +18,7 @@ interface GestureState {
   distance: number;
   velocity: number;
   duration: number;
+}
 
 interface SwipeOptions {
   threshold?: number;
@@ -26,7 +28,8 @@ interface SwipeOptions {
 
 interface PinchOptions {
   threshold?: number;
-  preventZoom?: boolean;}
+  preventZoom?: boolean;
+}
 
 interface UseAdvancedTouchGesturesOptions {
   swipe?: SwipeOptions;
@@ -39,6 +42,7 @@ interface UseAdvancedTouchGesturesOptions {
     threshold?: number;
     delay?: number;
   };
+}
 
 interface UseAdvancedTouchGesturesReturn {
   onSwipeLeft: (callback: (gesture: GestureState) => void) => void;
@@ -55,6 +59,7 @@ interface UseAdvancedTouchGesturesReturn {
   };
   gestureState: GestureState;
   isGestureActive: boolean;
+}
 
 export const useAdvancedTouchGestures = (
   options: UseAdvancedTouchGesturesOptions = {}
@@ -375,6 +380,6 @@ export const useAdvancedTouchGestures = (
       onTouchEnd: handleTouchEnd
     },
     gestureState,
-//     isGestureActive
+    isGestureActive
   };
 };
