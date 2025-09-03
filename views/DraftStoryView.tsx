@@ -126,7 +126,7 @@ const DraftStoryView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a completed league to view its draft story.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mobile-touch-target mt-4 px-4 py-3 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mobile-touch-target mt-4 px-4 py-3 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
