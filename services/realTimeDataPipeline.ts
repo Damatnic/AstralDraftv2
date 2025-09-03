@@ -774,6 +774,7 @@ class CompressionEngine {
     // Implementation would use actual decompression
     return JSON.parse(compressed.data);
   }
+}
 
 /**
  * Batch Processor
@@ -784,6 +785,7 @@ class BatchProcessor {
       callback(update.channel, update.data);
     }
   }
+}
 
 /**
  * Performance Monitor
@@ -817,6 +819,7 @@ class PerformanceMonitor {
   getMetrics(): Map<string, any[]> {
     return this.metrics;
   }
+}
 
 // Type definitions
 type DataChannel = 
@@ -870,12 +873,14 @@ interface CompressedData {
   data: string;
   originalSize: number;
   compressedSize: number;
-  channel?: string;}
+  channel?: string;
+}
 
 interface DeltaUpdate {
   channel: DataChannel;
   baseVersion: number;
-  changes: any;}
+  changes: any;
+}
 
 interface BatchUpdate {
   updates: Array<{
@@ -883,16 +888,19 @@ interface BatchUpdate {
     data: any;
   }>;
   timestamp: number;
+}
 
 interface CacheEntry {
   data: any;
   timestamp: number;
   ttl: number;
+}
 
 interface QueuedMessage {
   event: string;
   data: any;
   timestamp: number;
+}
 
 interface PlayerUpdate {
   playerId: string;
@@ -900,6 +908,7 @@ interface PlayerUpdate {
   data: any;
   impact: number;
   timestamp: number;
+}
 
 interface InjuryUpdate {
   playerId: string;
@@ -907,6 +916,7 @@ interface InjuryUpdate {
   severity: string;
   returnTimeline: string;
   fantasyImpact: number;
+}
 
 interface NewsUpdate {
   id: string;
@@ -915,20 +925,23 @@ interface NewsUpdate {
   sentiment: number;
   relevance: number;
   tags: string[];
+}
 
 interface ScoringUpdate {
   playerId: string;
   points: number;
-  breakdown: any;}
+  breakdown: any;
+}
 
 interface StatCorrection {
   playerId: string;
   week: number;
   stat: string;
   oldValue: number;
-  newValue: number;}
+  newValue: number;
+}
 
 // Export singleton instance
-export const realTimeDataPipeline = new RealTimeDataPipeline();}
+export const realTimeDataPipeline = new RealTimeDataPipeline();
 
 export default realTimeDataPipeline;
