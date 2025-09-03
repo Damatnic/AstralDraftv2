@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 interface IconProps {
   size?: number | string;
   className?: string;
@@ -13,3 +15,5 @@ export const TargetIcon: React.FC<{ className?: string }> = ({ className }: any)
         <circle cx="12" cy="12" r="2" />
     </svg>
 );
+
+export default TargetIcon;
