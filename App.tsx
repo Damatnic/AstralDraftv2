@@ -5,6 +5,7 @@
 
 import React, { useEffect } from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
+import { LEAGUE_MEMBERS } from './data/leagueData';
 import './styles/globals.css';
 
 // Core authentication component
@@ -76,20 +77,36 @@ const AppContent: React.FC = () => {
     const selectedPlayer = localStorage.getItem('selectedPlayer');
     
     if (fastLogin && selectedPlayer) {
-      console.log('🚀 FAST LOGIN: Player', selectedPlayer, 'selected via HTML interface');
+      console.log('🚀 FAST LOGIN: User', selectedPlayer, 'selected via HTML interface');
       
       // Clear the fast login flag
       sessionStorage.removeItem('fastLogin');
       
-      // Auto-login the selected player
-      const playerData = {
-        id: selectedPlayer,
-        name: `Player ${selectedPlayer}`,
-        isCommissioner: selectedPlayer === '1'
-      };
+      // Find the user in league data
+      const leagueMember = LEAGUE_MEMBERS.find((member: any) => member.id === selectedPlayer);
       
-      dispatch({ type: 'LOGIN', payload: playerData });
-      console.log('✅ FAST LOGIN: User logged in automatically');
+      if (leagueMember) {
+        console.log('✅ FAST LOGIN: Found league member:', leagueMember.name);
+        dispatch({ type: 'LOGIN', payload: leagueMember });
+        console.log('✅ FAST LOGIN: User logged in automatically as', leagueMember.name);
+        
+        // Hide HTML login interface now that we have a user
+        setTimeout(() => {
+          const loginInterface = document.getElementById('login-interface');
+          if (loginInterface) {
+            console.log('🎯 Hiding HTML login interface - user logged in:', leagueMember.name);
+            loginInterface.style.transition = 'opacity 0.5s ease-out';
+            loginInterface.style.opacity = '0';
+            setTimeout(() => {
+              if (loginInterface.parentNode) {
+                loginInterface.parentNode.removeChild(loginInterface);
+              }
+            }, 500);
+          }
+        }, 100);
+      } else {
+        console.error('❌ FAST LOGIN: User not found in league:', selectedPlayer);
+      }
     }
     
     // FORCE APP TO SHOW - bypass all loading logic
