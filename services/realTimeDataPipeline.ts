@@ -754,6 +754,7 @@ class DataCache {
   clear(): void {
     this.cache.clear();
   }
+}
 
 /**
  * Compression Engine
