@@ -838,12 +838,14 @@ type Priority = 'critical' | 'high' | 'normal' | 'low';
 interface ConnectionOptions {
   auth?: Record<string, any>;
   socketOptions?: any;
+}
 
 interface SubscriptionOptions {
   filters?: string[];
   throttle?: number;
   priority?: Priority;
   compression?: boolean;
+}
 
 interface DataSubscriber {
   id: string;
@@ -852,12 +854,14 @@ interface DataSubscriber {
   filters: string[];
   throttle: number;
   priority: Priority;
-  lastUpdate: number;}
+  lastUpdate: number;
+}
 
 interface DataRequest {
   type: string;
   params: any;
-  priority?: Priority;}
+  priority?: Priority;
+}
 
 interface BatchResponse {
   data: Map<string, any>;
