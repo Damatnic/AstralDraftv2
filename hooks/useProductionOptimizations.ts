@@ -71,17 +71,30 @@ const useProductionOptimizations = () => {
       }
     };
 
-    // Service Worker registration
-    const registerServiceWorker = () => {
+    // Service Worker management - DISABLED due to CSS interception issues
+    const manageServiceWorker = () => {
+      console.log('🚫 Service Worker registration disabled to prevent CSS loading issues');
+      
+      // Unregister any existing Service Workers that might be causing issues
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-          .then(registration => {
-            console.log('✅ Service Worker registered');
-          })
-          .catch(error => {
-            console.warn('Service Worker registration failed:', error);
-          });
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          if (registrations.length > 0) {
+            console.log('🧹 Unregistering existing Service Workers to fix CSS loading issues');
+            registrations.forEach(registration => {
+              registration.unregister().then(() => {
+                console.log('✅ Service Worker unregistered successfully');
+              }).catch(error => {
+                console.warn('⚠️ Failed to unregister Service Worker:', error);
+              });
+            });
+          }
+        }).catch(error => {
+          console.warn('Error checking Service Worker registrations:', error);
+        });
       }
+      
+      // Service Worker registration is temporarily disabled due to CSS interception issues
+      // This was causing "Failed to load assets" errors on Netlify deployment
     };
 
     // Image lazy loading setup
@@ -125,7 +138,7 @@ const useProductionOptimizations = () => {
 
     // Initialize optimizations
     monitorPerformance();
-    registerServiceWorker();
+    manageServiceWorker(); // Disabled and unregisters existing SWs
     setupLazyLoading();
     prefetchResources();
 
