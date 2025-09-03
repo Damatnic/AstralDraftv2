@@ -45,27 +45,71 @@ const PlaceholderView: React.FC<{ viewName: string }> = ({ viewName }) => (
 const AppContent: React.FC = () => {
   const { state, dispatch } = useAppState();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [emergencyFallback, setEmergencyFallback] = React.useState(false);
 
-  // Initialize production optimizations
-  useProductionOptimizations();
+  // Initialize production optimizations - safely
+  try {
+    useProductionOptimizations();
+  } catch (error) {
+    console.error('Production optimizations error:', error);
+  }
 
   // Initialize app
   useEffect(() => {
+    console.log('App initialization started...');
+    
     // Basic initialization
     if (!state.user) {
       dispatch({ type: 'SET_LOADING', payload: false });
+      console.log('Loading set to false');
     }
     
-    // Initialize mobile optimizations
-    try {
-      initializeMobileOptimizations();
-    } catch (error) {
-      console.error('Mobile optimization error:', error);
+    // Initialize mobile optimizations only in browser environment
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      try {
+        initializeMobileOptimizations();
+        console.log('Mobile optimizations initialized');
+      } catch (error) {
+        console.error('Mobile optimization error:', error);
+      }
     }
+    
+    // Failsafe timeout - if app is still in loading state after 10 seconds, enable emergency fallback
+    const failsafeTimeout = setTimeout(() => {
+      console.warn('App initialization timeout - enabling emergency fallback');
+      setEmergencyFallback(true);
+      if (!state.user) {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    }, 10000);
+    
+    return () => clearTimeout(failsafeTimeout);
   }, [dispatch, state.user]);
 
-  // If user is not authenticated, show login
+  // If user is not authenticated, show login (with emergency fallback)
   if (!state.user) {
+    if (emergencyFallback) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center">
+          <div className="text-center space-y-4 p-8 bg-gray-800 rounded-lg shadow-xl max-w-md">
+            <div className="text-6xl">⚡</div>
+            <h1 className="text-2xl font-bold text-white">Emergency Fallback Mode</h1>
+            <p className="text-gray-300">
+              The normal login process failed to load. This could be due to network issues or server problems.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+            >
+              Retry
+            </button>
+            <p className="text-xs text-gray-500">
+              If this problem persists, please check your internet connection or try again later.
+            </p>
+          </div>
+        </div>
+      );
+    }
     return <SimplePlayerLogin />;
   }
 
@@ -391,6 +435,10 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('App Error:', error, errorInfo);
+    
+    // Send error details to console for debugging in production
+    console.error('Error Stack:', error.stack);
+    console.error('Component Stack:', errorInfo.componentStack);
   }
 
   render() {

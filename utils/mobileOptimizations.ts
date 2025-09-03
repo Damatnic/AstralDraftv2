@@ -188,33 +188,49 @@ export const monitorNetworkStatus = () => {
 
 // Initialize mobile optimizations
 export const initializeMobileOptimizations = () => {
-  setViewportHeight();
-  setupLazyLoading();
-  preventZoomOnInputFocus();
-  monitorNetworkStatus();
-  
-  // Add mobile-specific classes to body
-  if (isMobileDevice()) {
-    document.body.classList.add('mobile-device');
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    console.warn('Mobile optimizations skipped - not in browser environment');
+    return;
   }
-  
-  if (isTouchDevice()) {
-    document.body.classList.add('touch-device');
+
+  try {
+    setViewportHeight();
+    setupLazyLoading();
+    preventZoomOnInputFocus();
+    monitorNetworkStatus();
+    
+    // Add mobile-specific classes to body
+    if (isMobileDevice()) {
+      document.body.classList.add('mobile-device');
+    }
+    
+    if (isTouchDevice()) {
+      document.body.classList.add('touch-device');
+    }
+    
+    if (isIOS()) {
+      document.body.classList.add('ios-device');
+    }
+    
+    if (isAndroid()) {
+      document.body.classList.add('android-device');
+    }
+    
+    // Low battery optimizations - wrap in try/catch as this API might not be available
+    try {
+      monitorBatteryStatus(() => {
+        document.body.classList.add('low-battery-mode');
+        // Reduce animations and effects
+      });
+    } catch (batteryError) {
+      console.warn('Battery monitoring not available:', batteryError);
+    }
+    
+    console.log('Mobile optimizations initialized successfully');
+  } catch (error) {
+    console.error('Error initializing mobile optimizations:', error);
   }
-  
-  if (isIOS()) {
-    document.body.classList.add('ios-device');
-  }
-  
-  if (isAndroid()) {
-    document.body.classList.add('android-device');
-  }
-  
-  // Low battery optimizations
-  monitorBatteryStatus(() => {
-    document.body.classList.add('low-battery-mode');
-    // Reduce animations and effects
-  });
 };
 
 // Export all utilities

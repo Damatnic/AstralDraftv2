@@ -8,8 +8,8 @@ import { useEffect } from 'react';
 // Simple production performance monitoring
 const useProductionOptimizations = () => {
   useEffect(() => {
-    // Only run in production
-    if (process.env.NODE_ENV !== 'production') {
+    // Only run in production and in browser environment
+    if (process.env.NODE_ENV !== 'production' || typeof window === 'undefined') {
       return;
     }
 
