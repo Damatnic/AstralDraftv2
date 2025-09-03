@@ -69,37 +69,22 @@ const initializeApp = (): void => {
     
     console.log('✅ INIT: React render completed successfully');
     
-    // Mark successful initialization and cleanup loading screen
+    // Mark successful initialization - DON'T remove loading screen here
     setTimeout(() => {
-      console.log('🎉 INIT: App fully initialized, cleaning up loading screen');
+      console.log('🎉 INIT: React render call completed');
       
-      // Force remove loading screen after successful render
-      const loadingEl = document.getElementById('loading-fallback');
-      if (loadingEl) {
-        console.log('🧹 INIT: Removing loading screen after successful render');
-        loadingEl.style.opacity = '0';
-        loadingEl.style.transition = 'opacity 0.3s ease-out';
-        
-        setTimeout(() => {
-          if (loadingEl.parentNode) {
-            loadingEl.parentNode.removeChild(loadingEl);
-            console.log('✅ INIT: Loading screen successfully removed');
-          }
-        }, 300);
-        
-        // Update debug info one final time
-        const debugEl = document.getElementById('debug-info');
-        if (debugEl) {
-          const finalDiv = document.createElement('div');
-          finalDiv.textContent = '🎉 React app loaded successfully!';
-          finalDiv.style.color = '#10b981';
-          finalDiv.style.fontWeight = 'bold';
-          debugEl.appendChild(finalDiv);
-        }
+      // Just mark performance, let the App component handle loading screen removal
+      window.performance?.mark?.('react-render-called');
+      
+      // Update debug info
+      const debugEl = document.getElementById('debug-info');
+      if (debugEl) {
+        const finalDiv = document.createElement('div');
+        finalDiv.textContent = '⚛️ React render() called successfully';
+        finalDiv.style.color = '#10b981';
+        debugEl.appendChild(finalDiv);
       }
-      
-      window.performance?.mark?.('react-app-mounted');
-    }, 100);
+    }, 50);
     
   } catch (error) {
     console.error('❌ INIT: Failed to render application:', error);

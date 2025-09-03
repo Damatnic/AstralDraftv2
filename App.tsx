@@ -76,29 +76,14 @@ const AppContent: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: false });
     console.log('✅ Loading forcibly set to false');
     
-    // CRITICAL: Force remove loading screen when App component mounts
-    const loadingEl = document.getElementById('loading-fallback');
-    if (loadingEl) {
-      console.log('🧹 APP: Found loading screen, removing immediately');
-      loadingEl.style.opacity = '0';
-      loadingEl.style.transition = 'opacity 0.2s ease-out';
-      
-      setTimeout(() => {
-        if (loadingEl.parentNode) {
-          loadingEl.parentNode.removeChild(loadingEl);
-          console.log('✅ APP: Loading screen removed by App component');
-        }
-      }, 200);
-      
-      // Update debug info from App component
-      const debugEl = document.getElementById('debug-info');
-      if (debugEl) {
-        const appDiv = document.createElement('div');
-        appDiv.textContent = '🎯 App component mounted!';
-        appDiv.style.color = '#3b82f6';
-        appDiv.style.fontWeight = 'bold';
-        debugEl.appendChild(appDiv);
-      }
+    // Update debug info that App component mounted
+    const debugEl = document.getElementById('debug-info');
+    if (debugEl) {
+      const appDiv = document.createElement('div');
+      appDiv.textContent = '🎯 App component mounted!';
+      appDiv.style.color = '#3b82f6';
+      appDiv.style.fontWeight = 'bold';
+      debugEl.appendChild(appDiv);
     }
     
     // Initialize mobile optimizations only in browser environment
@@ -122,6 +107,57 @@ const AppContent: React.FC = () => {
     
     return () => clearTimeout(failsafeTimeout);
   }, []);
+  
+  // Remove loading screen after UI is fully rendered
+  useEffect(() => {
+    // Wait for the actual UI to render before removing loading screen
+    const removeLoadingScreen = () => {
+      console.log('🎨 APP: Checking if UI is ready for loading screen removal');
+      
+      // Check if actual UI components are rendered
+      const hasUI = document.querySelector('nav') || 
+                   document.querySelector('main') ||
+                   document.querySelector('[class*="bg-"]') ||
+                   document.querySelector('button') ||
+                   document.querySelector('.card') ||
+                   state.user === null; // If no user, show login screen
+      
+      if (hasUI) {
+        console.log('✅ APP: UI detected, removing loading screen');
+        
+        const loadingEl = document.getElementById('loading-fallback');
+        if (loadingEl) {
+          console.log('🧹 APP: Removing loading screen with fade out');
+          loadingEl.style.opacity = '0';
+          loadingEl.style.transition = 'opacity 0.5s ease-out';
+          
+          setTimeout(() => {
+            if (loadingEl.parentNode) {
+              loadingEl.parentNode.removeChild(loadingEl);
+              console.log('✅ APP: Loading screen successfully removed');
+            }
+          }, 500);
+          
+          // Final debug update
+          const debugEl = document.getElementById('debug-info');
+          if (debugEl) {
+            const finalDiv = document.createElement('div');
+            finalDiv.textContent = '🎉 UI fully loaded!';
+            finalDiv.style.color = '#10b981';
+            finalDiv.style.fontWeight = 'bold';
+            debugEl.appendChild(finalDiv);
+          }
+        }
+      } else {
+        console.log('⏳ APP: UI not ready yet, checking again...');
+        // Try again in 100ms
+        setTimeout(removeLoadingScreen, 100);
+      }
+    };
+    
+    // Start checking after a brief delay to let render complete
+    setTimeout(removeLoadingScreen, 200);
+  }, [state.user]);
 
   // If user is not authenticated, show login (with emergency fallback)
   if (!state.user) {
