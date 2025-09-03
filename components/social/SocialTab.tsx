@@ -7,6 +7,10 @@ import oracleSocialService, {
     Debate,
     DebateSide
 } from '../../services/oracleSocialService';
+import RealTimeNotificationCenter from './RealTimeNotificationCenter';
+import LiveReactionBar from './LiveReactionBar';
+import { useUserPresence, useSocialStats } from '../../hooks/useRealTimeSocial';
+import { useAuth } from '../../contexts/SimpleAuthContext';
 
 type ReactionType = '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂';
 
@@ -42,12 +46,27 @@ const getSideDisplayText = (side: DebateSide) => {
 };
 
 const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
+    const { user } = useAuth();
     const [activeSubTab, setActiveSubTab] = useState<'leagues' | 'predictions' | 'debates'>('leagues');
     const [userLeagues, setUserLeagues] = useState<OracleLeague[]>([]);
     const [publicLeagues, setPublicLeagues] = useState<OracleLeague[]>([]);
     const [showCreateLeague, setShowCreateLeague] = useState(false);
     const [loading, setLoading] = useState(false);
     const [selectedLeague, setSelectedLeague] = useState<OracleLeague | null>(null);
+    
+    // Real-time social features
+    const { activeUsers, onlineCount, updateActivity } = useUserPresence(user?.id, user?.username);
+    const socialStats = useSocialStats();
+
+    // Update activity when tab changes
+    useEffect(() => {
+        if (isActive) {
+            updateActivity({
+                type: 'browsing_leagues',
+                entityId: selectedLeague?.id
+            });
+        }
+    }, [isActive, selectedLeague?.id, updateActivity]);
 
     // Form data states
     const [createLeagueForm, setCreateLeagueForm] = useState<CreateLeagueFormData>({
@@ -266,6 +285,24 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+            {/* Header with Real-time Features */}
+            <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Social Hub</h2>
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <span>{onlineCount} online</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-3">
+                    <div className="hidden sm:flex items-center gap-4 text-sm text-gray-500">
+                        <span>{socialStats.totalNotifications} notifications</span>
+                        <span>{socialStats.recentActivityCount} recent activities</span>
+                    </div>
+                    <RealTimeNotificationCenter />
+                </div>
+            </div>
+
             {/* Sub-navigation */}
             <div className="border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
                 <nav className="flex space-x-8 sm:px-4 md:px-6 lg:px-8">
@@ -480,6 +517,7 @@ interface DebatesTabProps {
     onVoteInDebate: (debateId: string, side: 'SIDE_A' | 'SIDE_B') => void;
     onAddReaction: (postId: string, reaction: ReactionType) => void;
     loading: boolean;
+}
 
 const DebatesTab: React.FC<DebatesTabProps> = ({
     userLeagues,
@@ -629,8 +667,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                                     value={createDebateForm.title}
                                     onChange={(e: any) => onUpdateCreateDebateForm({
                                         ...createDebateForm,
-                                        title: e.target.value,
-                                        leagueId: selectedLeague.id
+                                        title: e.target.value
                                     }}
                                     placeholder="e.g., Should I trade my RB1 for a WR1?"
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
@@ -957,7 +994,7 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                                     return (
                                                         <button
                                                             key={reaction}
-                                                            onClick={() => onAddReaction(post.id, reaction as any)}`}
+                                                            onClick={() => onAddReaction(post.id, reaction as any)}
                                                         >
                                                             {reaction} {count > 0 && count}
                                                         </button>
@@ -1030,6 +1067,15 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
             ))}
         </div>
 
+        {/* Live Reactions */}
+        <div className="mb-3" onClick={(e) => e.stopPropagation()}>
+            <LiveReactionBar
+                entityType="league"
+                entityId={league.id}
+                compact={true}
+            />
+        </div>
+
         {showJoinButton && onJoin && (
             <button
                 onClick={(e: any) => {
@@ -1098,7 +1144,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                             id="league-name-input"
                             type="text"
                             value={formData.name}
-                            onChange={(e: any) => setFormData(prev => ({ ...prev, name: e.target.value }}
+                            onChange={(e: any) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8"
                             placeholder="Enter league name"
                         />
@@ -1111,7 +1157,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                         <textarea
                             id="league-description-input"
                             value={formData.description}
-                            onChange={(e: any) => setFormData(prev => ({ ...prev, description: e.target.value }}
+                            onChange={(e: any) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8"
                             rows={3}
                             placeholder="Describe your league"
@@ -1127,7 +1173,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                                 id="max-members-input"
                                 type="number"
                                 value={formData.maxMembers}
-                                onChange={(e: any) => setFormData(prev => ({ ...prev, maxMembers: parseInt(e.target.value) || 50 }}
+                                onChange={(e: any) => setFormData(prev => ({ ...prev, maxMembers: parseInt(e.target.value) || 50 }))}
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8"
                                 min="2"
                                 max="500"
@@ -1141,7 +1187,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                             <select
                                 id="visibility-select"
                                 value={formData.isPublic ? 'public' : 'private'}
-                                onChange={(e: any) => setFormData(prev => ({ ...prev, isPublic: e.target.value === 'public' }}
+                                onChange={(e: any) => setFormData(prev => ({ ...prev, isPublic: e.target.value === 'public' }))}
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8"
                             >
                                 <option value="public">Public</option>
@@ -1249,7 +1295,7 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                             {['overview', 'members', 'settings'].map((tab: any) => (
                                 <button
                                     key={tab}
-                                    onClick={() => setActiveTab(tab as any)}`}
+                                    onClick={() => setActiveTab(tab as any)}
                                 >
                                     {tab}
                                 </button>
@@ -1517,7 +1563,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                                     id="prediction-title"
                                     type="text"
                                     value={createPredictionForm.title}
-                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, title: e.target.value }}
+                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, title: e.target.value }))}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                     placeholder="e.g., Who will score the most points this week?"
                                 />
@@ -1530,7 +1576,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                                 <textarea
                                     id="prediction-description"
                                     value={createPredictionForm.description}
-                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, description: e.target.value }}
+                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, description: e.target.value }))}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                     rows={3}
                                     placeholder="Additional details about the prediction..."
@@ -1544,7 +1590,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                                 <select
                                     id="prediction-type"
                                     value={createPredictionForm.type}
-                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, type: e.target.value as GroupPrediction['type'] }}
+                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, type: e.target.value as GroupPrediction['type'] }))}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                 >
                                     <option value="MAJORITY_VOTE">Majority Vote</option>
@@ -1561,7 +1607,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                                     id="prediction-hours"
                                     type="number"
                                     value={createPredictionForm.closesInHours}
-                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, closesInHours: Number(e.target.value) }}
+                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, closesInHours: Number(e.target.value) }))}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                     min="1"
                                     max="168"
@@ -1596,6 +1642,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                             <p className="text-gray-600 dark:text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">Loading predictions...</p>
                         </div>
                     );
+                }
 
                 if (groupPredictions.length === 0) {
                     return (
@@ -1797,7 +1844,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                                     id="submit-prediction"
                                     type="number"
                                     value={submitForm.prediction}
-                                    onChange={(e: any) => setSubmitForm(prev => ({ ...prev, prediction: e.target.value }}
+                                    onChange={(e: any) => setSubmitForm(prev => ({ ...prev, prediction: e.target.value }))}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                     placeholder="Enter your prediction"
                                 />
@@ -1813,7 +1860,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                                     min="0"
                                     max="100"
                                     value={submitForm.confidence}
-                                    onChange={(e: any) => setSubmitForm(prev => ({ ...prev, confidence: Number(e.target.value) }}
+                                    onChange={(e: any) => setSubmitForm(prev => ({ ...prev, confidence: Number(e.target.value) }))}
                                     className="w-full sm:px-4 md:px-6 lg:px-8"
                                 />
                             </div>
@@ -1825,7 +1872,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                                 <textarea
                                     id="submit-reasoning"
                                     value={submitForm.reasoning}
-                                    onChange={(e: any) => setSubmitForm(prev => ({ ...prev, reasoning: e.target.value }}
+                                    onChange={(e: any) => setSubmitForm(prev => ({ ...prev, reasoning: e.target.value }))}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                     rows={3}
                                     placeholder="Explain your reasoning..."

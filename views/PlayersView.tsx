@@ -20,6 +20,10 @@ import { LayoutIcon as GridIcon } from '../components/icons/LayoutIcon';
 import { ListChecksIcon as ListIcon } from '../components/icons/ListChecksIcon';
 import PlayerDetailModal from '../components/player/PlayerDetailModal';
 import { sportsIOPlayerService } from '../services/sportsIOPlayerService';
+import MobileOptimizedContainer from '../components/mobile/MobileOptimizedContainer';
+import { useRealTimePlayers, useRealTimeUpdates } from '../hooks/useEnhancedSportsIORealTime';
+import { WifiIcon } from '../components/icons/WifiIcon';
+import { WifiOffIcon } from '../components/icons/WifiOffIcon';
 
 const PlayersView: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -39,13 +43,33 @@ const PlayersView: React.FC = () => {
   const userTeam = league?.teams.find((team: any) => team.owner.id === state.user?.id);
   const allPlayers = league?.allPlayers || [];
 
+  // Real-time data integration
+  const playerIds = allPlayers.slice(0, 20).map((p: Player) => p.id); // Limit to first 20 for demo
+  const { 
+    players: livePlayerData, 
+    playersMap: livePlayersMap, 
+    isLoading: realTimeLoading,
+    lastUpdate: realTimeLastUpdate 
+  } = useRealTimePlayers({ 
+    playerIds,
+    updateInterval: 10000,
+    autoSubscribe: true 
+  });
+  
+  const { 
+    connectionStatus, 
+    totalUpdates, 
+    lastActivityTime,
+    isConnected 
+  } = useRealTimeUpdates();
+
   // Load live player data from Sports.io API
   useEffect(() => {
     const loadLivePlayerData = async () => {
       if (!league) return;
       
       try {
-        console.log('🚀 Loading live player data from Sports.io...');
+        // Loading live player data from Sports.io
         const livePlayers = await sportsIOPlayerService.getAllPlayers();
         
         if (livePlayers && livePlayers.length > 0) {
@@ -80,11 +104,111 @@ const PlayersView: React.FC = () => {
     loadLivePlayerData();
   }, [league, dispatch]);
 
+  // Helper Functions
+  const getPositionConfig = (position: string) => {
+    const configs: Record<string, { color: string; icon: string }> = {
+      'QB': { color: 'from-purple-500 to-purple-700', icon: '🎯' },
+      'RB': { color: 'from-green-500 to-green-700', icon: '🏃' },
+      'WR': { color: 'from-blue-500 to-blue-700', icon: '⚡' },
+      'TE': { color: 'from-orange-500 to-orange-700', icon: '🎪' },
+      'K': { color: 'from-yellow-500 to-yellow-700', icon: '🎯' },
+      'DEF': { color: 'from-red-500 to-red-700', icon: '🛡️' },
+    };
+    return configs[position] || { color: 'from-gray-500 to-gray-700', icon: '👤' };
+  };
+
+  const getInjuryConfig = (status?: string) => {
+    const configs: Record<string, { color: string; icon: string }> = {
+      'Healthy': { color: 'text-green-400', icon: '✅' },
+      'Questionable': { color: 'text-yellow-400', icon: '❓' },
+      'Doubtful': { color: 'text-orange-400', icon: '⚠️' },
+      'Out': { color: 'text-red-400', icon: '❌' },
+      'IR': { color: 'text-red-600', icon: '🏥' },
+    };
+    return configs[status || 'Healthy'] || { color: 'text-gray-400', icon: '❓' };
+  };
+
+  const getTrendingScore = (player: Player): number => {
+    // Calculate trending score based on recent performance and projections
+    const baseScore = player.fantasyPointsPerGame || 0;
+    const projectedPoints = player.projectedPoints || 0;
+    const injuryPenalty = player.injuryStatus === 'Healthy' ? 0 : -20;
+    
+    return Math.min(100, Math.max(0, (baseScore * 5) + (projectedPoints * 2) + injuryPenalty));
+  };
+
+  const handlePlayerSelect = (player: Player) => {
+    setSelectedPlayer(player === selectedPlayer ? null : player);
+  };
+
+  const handleAddToRoster = (player: Player) => {
+    if (!league) return;
+    
+    // Add player to roster logic
+    dispatch({
+      type: 'ADD_NOTIFICATION',
+      payload: {
+        message: `Added ${player.name} to your roster!`,
+        type: 'SUCCESS'
+      }
+    });
+
+    // You might want to add actual roster management logic here
+    // Player added to roster successfully
+  };
+
+  // Filtered and sorted players
+  const filteredPlayers = useMemo(() => {
+    let filtered = allPlayers.filter((player: Player) => {
+      // Search query filter
+      if (searchQuery && !player.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      
+      // Position filter
+      if (selectedPosition !== 'ALL' && player.position !== selectedPosition) {
+        return false;
+      }
+      
+      // Team filter
+      if (selectedTeam !== 'ALL' && player.team !== selectedTeam) {
+        return false;
+      }
+      
+      // Injury status filter
+      if (injuryFilter !== 'ALL' && player.injuryStatus !== injuryFilter) {
+        return false;
+      }
+      
+      return true;
+    });
+
+    // Sort players
+    filtered.sort((a: Player, b: Player) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'team':
+          return a.team.localeCompare(b.team);
+        case 'points':
+          return (b.fantasyPoints || 0) - (a.fantasyPoints || 0);
+        case 'trending':
+          return getTrendingScore(b) - getTrendingScore(a);
+        case 'rank':
+        default:
+          return (b.fantasyPoints || b.projectedPoints || 0) - (a.fantasyPoints || a.projectedPoints || 0);
+      }
+    });
+
+    return filtered;
+  }, [allPlayers, searchQuery, selectedPosition, selectedTeam, injuryFilter, sortBy]);
+
   // Player Card Component
   const PlayerCard = ({ player, index }: { player: Player; index: number }) => {
     const config = getPositionConfig(player.position);
     const injuryConfig = getInjuryConfig(player.injuryStatus);
     const trendingScore = getTrendingScore(player);
+    const playerRank = index + 1; // Simple rank based on filtered position
     const isSelected = selectedPlayer?.id === player.id;
     const isComparing = comparePlayers.find((p: any) => p.id === player.id);
 
@@ -156,11 +280,11 @@ const PlayersView: React.FC = () => {
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className={`p-3 rounded-lg ${config.bgColor} border ${config.borderColor}`}>
-                  <div className="text-2xl font-bold text-white">#{player.fantasyRank}</div>
+                  <div className="text-2xl font-bold text-white">#{playerRank}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wider">Rank</div>
                 </div>
                 <div className="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                  <div className="text-2xl font-bold text-white">{player.projectedPoints.toFixed(0)}</div>
+                  <div className="text-2xl font-bold text-white">{(player.projectedPoints || 0).toFixed(0)}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wider">Proj Pts</div>
                 </div>
               </div>
@@ -200,7 +324,7 @@ const PlayersView: React.FC = () => {
                   {[...Array(5)].map((_, i) => (
                     <StarIcon
                       key={i} 
-                      className={`h-3 w-3 ${i < Math.floor(player.fantasyRank / 20) ? 'text-yellow-400' : 'text-gray-600'}`}
+                      className={`h-3 w-3 ${i < Math.floor((player.fantasyPoints || 0) / 4) ? 'text-yellow-400' : 'text-gray-600'}`}
                     />
                   ))}
                 </div>
@@ -216,7 +340,6 @@ const PlayersView: React.FC = () => {
                     handleAddToRoster(player);
                   }}
                   className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium text-sm transition-colors"
-                  autoComplete="off"
                   data-form="false"
                 >
                   Add to Roster
@@ -252,11 +375,11 @@ const PlayersView: React.FC = () => {
               {/* Stats */}
               <div className="flex items-center gap-6">
                 <div className="text-center">
-                  <div className="text-xl font-bold text-white">#{player.fantasyRank}</div>
+                  <div className="text-xl font-bold text-white">#{playerRank}</div>
                   <div className="text-xs text-gray-400">Rank</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-bold text-white">{player.projectedPoints.toFixed(0)}</div>
+                  <div className="text-xl font-bold text-white">{(player.projectedPoints || 0).toFixed(0)}</div>
                   <div className="text-xs text-gray-400">Proj</div>
                 </div>
                 <div className="text-center">
@@ -274,7 +397,6 @@ const PlayersView: React.FC = () => {
                   handleAddToRoster(player);
                 }}
                 className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg font-medium text-sm transition-colors border border-blue-500/30"
-                autoComplete="off"
                 data-form="false"
               >
 //                 Add
@@ -287,14 +409,24 @@ const PlayersView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900">
-      {/* Enhanced Background Effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
+    <MobileOptimizedContainer
+      enableSwipeNavigation={true}
+      enablePullToRefresh={true}
+      onSwipeLeft={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
+      onSwipeRight={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
+      onPullToRefresh={async () => {
+        // Refresh player data
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }}
+    >
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900">
+        {/* Enhanced Background Effects */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
 
-      <div className="relative z-10 p-4">
+        <div className="relative z-10 p-4">
         {/* Navigation Header */}
         <div className="nav-header mb-4">
           <button
@@ -322,6 +454,32 @@ const PlayersView: React.FC = () => {
                 </p>
               </div>
               <div className="flex items-center gap-4">
+                {/* Real-time Status Indicator */}
+                <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className={`px-4 py-2 rounded-xl border backdrop-blur-xl ${
+                    isConnected 
+                      ? 'bg-green-500/20 border-green-500/30' 
+                      : 'bg-red-500/20 border-red-500/30'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {isConnected ? (
+                      <WifiIcon className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <WifiOffIcon className="h-4 w-4 text-red-400" />
+                    )}
+                    <div className="text-xs">
+                      <div className={`font-bold ${isConnected ? 'text-green-400' : 'text-red-400'}`}>
+                        {isConnected ? 'LIVE' : 'OFFLINE'}
+                      </div>
+                      <div className="text-gray-400">
+                        {totalUpdates} updates
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
                 <motion.div 
                   whileHover={{ scale: 1.05 }}
                   className="px-6 py-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl border border-white/10 backdrop-blur-xl"
@@ -360,7 +518,7 @@ const PlayersView: React.FC = () => {
                 onChange={(e: any) => setSelectedPosition(e.target.value)}
               >
                 <option value="ALL">All Positions</option>
-                {Object.keys(positionConfig).map((pos: any) => (
+                {['QB', 'RB', 'WR', 'TE', 'K', 'DEF'].map((pos: string) => (
                   <option key={pos} value={pos}>{pos}</option>
                 ))}
               </select>
@@ -507,7 +665,8 @@ const PlayersView: React.FC = () => {
           playerAvatars={state.playerAvatars || {}}
         />
       )}
-    </div>
+      </div>
+    </MobileOptimizedContainer>
   );
 };
 

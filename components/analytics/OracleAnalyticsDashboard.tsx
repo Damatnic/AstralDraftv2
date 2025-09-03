@@ -1,460 +1,353 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Target, Trophy, Zap, BarChart3, Activity } from 'lucide-react';
-import { useAuth } from '../../contexts/SimpleAuthContext';
-import { oracleApiClient } from '../../services/oracleApiClient';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
+/**
+ * Enhanced Oracle Analytics Dashboard Component
+ * Real-time integration with Sports.io data and Oracle predictions
+ */
 
-interface PerformanceData {
-    predictionHistory: Array<{
-        id: string;
-        week: number;
-        question: string;
-        type: string;
-        userChoice: number;
-        oracleChoice: number;
-        userConfidence: number;
-        oracleConfidence: number;
-        pointsEarned: number;
-        submittedAt: string;
-        isResolved: boolean;
-        actualResult: number | null;
-        isCorrect: boolean;
-    }>;
-    weeklyTrends: Array<{
-        week: number;
-        totalPredictions: number;
-        correctPredictions: number;
-        accuracy: number;
-        totalPoints: number;
-        currentStreak: number;
-        oracleBeats: number;
-    }>;
-    typeBreakdown: Array<{
-        type: string;
-        totalPredictions: number;
-        correctPredictions: number;
-        accuracy: number;
-        avgConfidence: number;
-        totalPoints: number;
-    }>;
-    confidenceAnalysis: Array<{
-        confidenceRange: string;
-        totalPredictions: number;
-        correctPredictions: number;
-        accuracy: number;
-        avgConfidence: number;
-    }>}
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  useOracleAnalytics,
+  useOraclePredictionUpdates,
+  useOraclePerformanceMetrics,
+  useOracleSystemStatus
+} from '../../hooks/useEnhancedOracleAnalytics';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { ZapIcon } from '../icons/ZapIcon';
+import { ActivityIcon } from '../icons/ActivityIcon';
+import { TargetIcon } from '../icons/TargetIcon';
+import { ClockIcon } from '../icons/ClockIcon';
 
-interface GlobalAnalytics {
-    globalStats: {
-        totalUsers: number;
-        totalPredictions: number;
-        totalSubmissions: number;
-        avgUserConfidence: number;
-        avgOracleConfidence: number;
-        userAccuracy: number;
-        oracleAccuracy: number;
-    };
-    weeklyParticipation: Array<{
-        week: number;
-        predictionsCreated: number;
-        totalSubmissions: number;
-        activeUsers: number;
-        avgConfidence: number;
-    }>;
-    typePopularity: Array<{
-        type: string;
-        totalPredictions: number;
-        totalSubmissions: number;
-        avgUserConfidence: number;
-        uniqueParticipants: number;
-    }>;
+interface OracleAnalyticsDashboardProps {
+  className?: string;
+}
 
-export const OracleAnalyticsDashboard: React.FC = () => {
-  const [isLoading, setIsLoading] = React.useState(false);
-    const { user } = useAuth();
-    const isMobile = useMediaQuery('(max-width: 768px)');
-    const isTablet = useMediaQuery('(max-width: 1024px)');
-    
-    const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
-    const [globalData, setGlobalData] = useState<GlobalAnalytics | null>(null);
-    const [leaderboardData, setLeaderboardData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedSeason, setSelectedSeason] = useState<number>(2024);
-    const [selectedWeeks, setSelectedWeeks] = useState<number>(10);
+/**
+ * Enhanced Oracle Analytics Dashboard with Real-time Integration
+ */
+export const OracleAnalyticsDashboard: React.FC<OracleAnalyticsDashboardProps> = ({
+  className = ''
+}) => {
+  const [selectedTimeRange, setSelectedTimeRange] = useState<'1h' | '24h' | '7d'>('24h');
+  
+  // Enhanced hooks for real-time data
+  const { dashboard, isLoading, error, lastUpdate } = useOracleAnalytics();
+  const { updates } = useOraclePredictionUpdates(8);
+  const performanceMetrics = useOraclePerformanceMetrics();
+  const systemStatus = useOracleSystemStatus();
 
-    useEffect(() => {
-        if (user?.id) {
-            loadAnalyticsData();
+  // Helper functions
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'excellent': return 'text-green-400';
+      case 'good': return 'text-yellow-400';
+      case 'poor': return 'text-orange-400';
+      case 'offline': return 'text-red-400';
+      default: return 'text-gray-400';
     }
-  }, [user, selectedSeason, selectedWeeks]);
+  };
 
-    const getPlayerNumber = (user: any): number => {
-        if (user.isAdmin) return 0; // Admin is player 0 for Oracle
-        const match = user.id.match(/player(\d+)/);
-        return match ? parseInt(match[1]) : 1;
-    };
+  const formatTimeAgo = (date: Date) => {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
+  };
 
-    const loadAnalyticsData = async () => {
-        try {
-
-            setLoading(true);
-            setError(null);
-
-            const playerNumber = getPlayerNumber(user!);
-
-            const [performanceResponse, globalResponse, leaderboardResponse] = await Promise.all([
-                oracleApiClient.getPerformanceAnalytics(playerNumber, { 
-                    season: selectedSeason, 
-                    weeks: selectedWeeks 
-                }),
-                oracleApiClient.getGlobalAnalytics({ 
-                    season: selectedSeason, 
-                    weeks: selectedWeeks 
-                }),
-                oracleApiClient.getLeaderboard(selectedSeason, undefined, 20)
-            ]);
-
-            if (performanceResponse.success) {
-                setPerformanceData(performanceResponse.data);
-            }
-
-            if (globalResponse.success) {
-                setGlobalData(globalResponse.data);
-            }
-
-            if (leaderboardResponse.success) {
-                setLeaderboardData(leaderboardResponse.data);
-            }
-
-        } catch (error) {
-            setError(error instanceof Error ? error.message : 'Failed to load analytics data');
-        } finally {
-            setLoading(false);
-        }
-
-    const StatCard: React.FC<{
-        title: string;
-        value: string | number;
-        description?: string;
-        icon: React.ReactNode;
-        trend?: 'up' | 'down' | 'neutral';
-        trendValue?: string;
-    }> = ({ title, value, description, icon, trend, trendValue }: any) => (
-        <Card>
-            <CardContent className="flex items-center p-4 sm:p-6">
-                <div className="flex items-center space-x-3 sm:space-x-4 w-full">
-                    <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
-                        {icon}
-                    </div>
-                    <div className="min-w-0 flex-1 sm:px-4 md:px-6 lg:px-8">
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">{title}</p>
-                        <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{value}</p>
-                        {description && (
-                            <p className="text-xs text-gray-500 truncate sm:px-4 md:px-6 lg:px-8">{description}</p>
-                        )}
-                        {trend && trendValue && (
-                            <div className={`flex items-center text-xs ${
-                                trend === 'up' ? 'text-green-600' : 
-                                trend === 'down' ? 'text-red-600' : 'text-gray-600'
-                            }`}>
-                                {trend === 'up' ? <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : 
-                                 trend === 'down' ? <TrendingDown className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : null}
-                                <span className="truncate sm:px-4 md:px-6 lg:px-8">{trendValue}</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-    );
-
-    if (loading) {
-        return (
-            <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                    <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-                    <h1 className="text-xl sm:text-2xl font-bold text-white">Oracle Analytics Dashboard</h1>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    {[...Array(4)].map((_, i) => (
-                        <Card key={i}>
-                            <CardContent className="p-4 sm:p-6">
-                                <div className="animate-pulse sm:px-4 md:px-6 lg:px-8">
-                                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded mb-2"></div>
-                                    <div className="w-16 sm:w-20 h-3 sm:h-4 bg-gray-200 rounded mb-1"></div>
-                                    <div className="w-12 sm:w-16 h-5 sm:h-6 bg-gray-200 rounded"></div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </div>
-        );
-
-    if (error) {
-        return (
-            <div className="p-4 sm:p-6">
-                <Card>
-                    <CardContent className="p-4 sm:p-6 text-center">
-                        <div className="text-red-500 mb-2 sm:px-4 md:px-6 lg:px-8">
-                            <Activity className="w-8 h-8 sm:w-12 sm:h-12 mx-auto" />
-                        </div>
-                        <h3 className="text-base sm:text-lg font-semibold text-red-700">Error Loading Analytics</h3>
-                        <p className="text-red-600 mt-2 text-sm sm:text-base break-words">{error}</p>
-                        <button 
-                            onClick={loadAnalyticsData}
-                            className="mt-4 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm sm:text-base font-medium min-h-[44px] min-w-[120px]"
-                            aria-label="Retry loading analytics data"
-                        >
-//                             Retry
-                        </button>
-                    </CardContent>
-                </Card>
-            </div>
-        );
-
-    const currentUserRank = leaderboardData?.find((entry: any) => entry.playerNumber === getPlayerNumber(user!));
-
+  if (isLoading) {
     return (
-        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                    <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" />
-                    <h1 className="text-xl sm:text-2xl font-bold text-white">Oracle Analytics Dashboard</h1>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2">
-                    <select 
-                        value={selectedSeason} 
-                        onChange={(e: any) => setSelectedSeason(Number(e.target.value))}
-                        aria-label="Select season"
-                    >
-                        <option value="2024">2024 Season</option>
-                        <option value="2023">2023 Season</option>
-                    </select>
-                    <select 
-                        value={selectedWeeks} 
-                        onChange={(e: any) => setSelectedWeeks(Number(e.target.value))}
-                        aria-label="Select time range"
-                    >
-                        <option value="5">Last 5 Weeks</option>
-                        <option value="10">Last 10 Weeks</option>
-                        <option value="15">Last 15 Weeks</option>
-                        <option value="20">All Season</option>
-                    </select>
-                </div>
-            </div>
-
-            {/* Key Performance Indicators */}
-            {performanceData && globalData && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    <StatCard
-                        title="Your Ranking"
-                        value={currentUserRank ? `#${currentUserRank.rank}` : 'Unranked'}
-                        description="Current position"
-                        icon={<Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
-                    />
-                    <StatCard
-                        title="Prediction Accuracy"
-                        value={`${performanceData.weeklyTrends.length > 0 ? 
-                            Math.round(performanceData.weeklyTrends.reduce((acc, w) => acc + w.accuracy, 0) / performanceData.weeklyTrends.length) 
-                            : 0}%`}
-                        description={`vs Oracle ${globalData.globalStats.oracleAccuracy}%`}
-                        icon={<Target className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
-                        trend={performanceData.weeklyTrends.length >= 2 ? 
-                            (performanceData.weeklyTrends[0].accuracy > performanceData.weeklyTrends[1].accuracy ? 'up' : 'down') : 'neutral'}
-                    />
-                    <StatCard
-                        title="Current Streak"
-                        value={performanceData.weeklyTrends.length > 0 ? performanceData.weeklyTrends[0].currentStreak : 0}
-                        description="Consecutive correct"
-                        icon={<Zap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
-                    />
-                    <StatCard
-                        title="Total Points"
-                        value={performanceData.weeklyTrends.reduce((acc, w) => acc + w.totalPoints, 0)}
-                        description={`${performanceData.predictionHistory.length} predictions`}
-                        icon={<Activity className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />}
-                    />
-                </div>
-            )}
-
-            {/* Performance Charts */}
-            {performanceData && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                    {/* Weekly Accuracy Trend */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-white text-base sm:text-lg">Weekly Accuracy Trend</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
-                                <LineChart data={[...performanceData.weeklyTrends].reverse()}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis
-                                        dataKey="week" 
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                    />
-                                    <YAxis
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                    />
-                                    <Tooltip />
-                                    {!isMobile && <Legend />}
-                                    <Line
-                                        type="monotone" 
-                                        dataKey="accuracy" 
-                                        stroke="#3B82F6" 
-                                        strokeWidth={2}
-                                        name="Accuracy %"
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-
-                    {/* Confidence vs Accuracy */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-white text-base sm:text-lg">Confidence vs Accuracy</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
-                                <BarChart data={performanceData.confidenceAnalysis}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis
-                                        dataKey="confidenceRange" 
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                        angle={isMobile ? -45 : 0}
-                                        textAnchor={isMobile ? 'end' : 'middle'}
-                                        height={isMobile ? 60 : 30}
-                                    />
-                                    <YAxis
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                    />
-                                    <Tooltip />
-                                    {!isMobile && <Legend />}
-                                    <Bar dataKey="accuracy" fill="#10B981" name="Accuracy %" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-
-                    {/* Points Progression */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-white text-base sm:text-lg">Points Progression</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
-                                <LineChart data={[...performanceData.weeklyTrends].reverse()}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis
-                                        dataKey="week" 
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                    />
-                                    <YAxis
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                    />
-                                    <Tooltip />
-                                    {!isMobile && <Legend />}
-                                    <Line
-                                        type="monotone" 
-                                        dataKey="totalPoints" 
-                                        stroke="#F59E0B" 
-                                        strokeWidth={2}
-                                        name="Points Earned"
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-
-                    {/* Prediction Type Performance */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-white text-base sm:text-lg">Performance by Prediction Type</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
-                                <BarChart data={performanceData.typeBreakdown}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis
-                                        dataKey="type" 
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                        angle={isMobile ? -45 : 0}
-                                        textAnchor={isMobile ? 'end' : 'middle'}
-                                        height={isMobile ? 60 : 30}
-                                    />
-                                    <YAxis
-                                        fontSize={isMobile ? 10 : 12}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                    />
-                                    <Tooltip />
-                                    {!isMobile && <Legend />}
-                                    <Bar dataKey="accuracy" fill="#8B5CF6" name="Accuracy %" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-                </div>
-            )}
-
-            {/* Recent Activity */}
-            {performanceData && (
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-white text-base sm:text-lg">Recent Prediction History</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-2 sm:space-y-3">
-                            {performanceData.predictionHistory.slice(0, isMobile ? 3 : 5).map((prediction: any) => (
-                                <div key={prediction.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg gap-2 sm:gap-0">
-                                    <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
-                                        <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{prediction.question}</p>
-                                        <p className="text-xs sm:text-sm text-gray-600">
-                                            Week {prediction.week} • {prediction.type}
-                                        </p>
-                                    </div>
-                                    <div className="flex flex-wrap items-center gap-2 flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
-                                        <Badge variant={prediction.isCorrect ? "default" : "secondary"} className="text-xs sm:px-4 md:px-6 lg:px-8">
-                                            {prediction.userConfidence}% confidence
-                                        </Badge>
-                                        {prediction.isResolved && (
-                                            <Badge variant={prediction.isCorrect ? "default" : "destructive"} className="text-xs sm:px-4 md:px-6 lg:px-8">
-                                                {prediction.isCorrect ? 'Correct' : 'Incorrect'}
-                                            </Badge>
-                                        )}
-                                        <span className="text-xs sm:text-sm font-medium text-gray-900">
-                                            {prediction.pointsEarned} pts
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
+      <div className={`oracle-analytics-dashboard bg-slate-800/50 backdrop-blur-xl rounded-xl p-6 ${className}`}>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-400">Loading real-time analytics...</p>
+          </div>
         </div>
+      </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className={`oracle-analytics-dashboard bg-slate-800/50 backdrop-blur-xl rounded-xl p-6 ${className}`}>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="text-red-500 text-2xl mb-2">⚠️</div>
+            <h3 className="text-white text-lg font-semibold mb-2">Analytics Unavailable</h3>
+            <p className="text-gray-400 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              Retry Connection
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`oracle-analytics-dashboard bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 ${className}`}>
+      {/* Header */}
+      <div className="p-6 border-b border-slate-700/50">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1 flex items-center gap-2">
+              <ZapIcon className="w-6 h-6 text-blue-400" />
+              Oracle Analytics
+            </h2>
+            <p className="text-sm text-gray-400">
+              Real-time insights powered by live Sports.io data
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            {/* System Status */}
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${systemStatus.connectionQuality === 'excellent' ? 'bg-green-400 animate-pulse' : 
+                systemStatus.connectionQuality === 'good' ? 'bg-yellow-400' : 
+                systemStatus.connectionQuality === 'poor' ? 'bg-orange-400' : 'bg-red-400'}`}></div>
+              <span className={`text-xs font-medium ${getStatusColor(systemStatus.connectionQuality)}`}>
+                {systemStatus.connectionQuality.toUpperCase()}
+              </span>
+            </div>
+            
+            {/* Time Range Selector */}
+            <div className="flex bg-slate-700 rounded-lg p-1">
+              {(['1h', '24h', '7d'] as const).map((range) => (
+                <button
+                  key={range}
+                  onClick={() => setSelectedTimeRange(range)}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                    selectedTimeRange === range 
+                      ? 'bg-blue-600 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {range}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Last Update Info */}
+        {lastUpdate && (
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <ClockIcon className="w-3 h-3" />
+            Last updated: {formatTimeAgo(lastUpdate)}
+          </div>
+        )}
+      </div>
+
+      {/* Main Content */}
+      <div className="p-6 space-y-6">
+        {/* Key Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Live Players */}
+          <motion.div 
+            className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Live Players</p>
+                <p className="text-2xl font-bold text-white">
+                  {dashboard?.livePlayerCount || 0}
+                </p>
+              </div>
+              <ActivityIcon className="w-8 h-8 text-green-400" />
+            </div>
+            <div className="mt-2 text-xs text-green-400 flex items-center gap-1">
+              <TrendingUpIcon className="w-3 h-3" />
+              Active tracking
+            </div>
+          </motion.div>
+
+          {/* Active Games */}
+          <motion.div 
+            className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Active Games</p>
+                <p className="text-2xl font-bold text-white">
+                  {dashboard?.activeGames || 0}
+                </p>
+              </div>
+              <TargetIcon className="w-8 h-8 text-blue-400" />
+            </div>
+            <div className="mt-2 text-xs text-blue-400 flex items-center gap-1">
+              <ZapIcon className="w-3 h-3" />
+              Real-time data
+            </div>
+          </motion.div>
+
+          {/* Oracle Accuracy */}
+          <motion.div 
+            className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Accuracy Today</p>
+                <p className="text-2xl font-bold text-white">
+                  {performanceMetrics.accuracyToday.toFixed(1)}%
+                </p>
+              </div>
+              <TrendingUpIcon className="w-8 h-8 text-yellow-400" />
+            </div>
+            <div className="mt-2 text-xs text-yellow-400">
+              vs. {performanceMetrics.avgConfidence * 100}% confidence
+            </div>
+          </motion.div>
+
+          {/* Live Updates */}
+          <motion.div 
+            className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Live Updates</p>
+                <p className="text-2xl font-bold text-white">
+                  {performanceMetrics.liveUpdates}
+                </p>
+              </div>
+              <ZapIcon className="w-8 h-8 text-purple-400 animate-pulse" />
+            </div>
+            <div className="mt-2 text-xs text-purple-400">
+              Last minute
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Performance Analysis */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Top Performers */}
+          <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <TrendingUpIcon className="w-5 h-5 text-green-400" />
+              Top Performers
+            </h3>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {dashboard?.topPerformers?.slice(0, 5).map((performer, index) => (
+                <div key={performer.playerId} className="flex items-center justify-between p-2 rounded bg-slate-600/30">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold text-white">
+                      {index + 1}
+                    </span>
+                    <span className="text-sm text-white">
+                      Player {performer.playerId.slice(-4)}
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-green-400">
+                    +{performer.performanceMetrics?.vsProjection?.toFixed(1) || 0}%
+                  </span>
+                </div>
+              )) || (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No performance data available</p>
+                  <p className="text-xs mt-1">Data will appear during active games</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Recent Updates */}
+          <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <ActivityIcon className="w-5 h-5 text-blue-400" />
+              Recent Updates
+            </h3>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {updates?.map((update) => (
+                <motion.div 
+                  key={update.predictionId}
+                  className="p-3 rounded bg-slate-600/30 border-l-2 border-blue-400"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm text-white font-medium">
+                        {update.type.replace('_', ' ').toUpperCase()}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        Confidence: {(update.confidence * 100).toFixed(0)}%
+                      </p>
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      {formatTimeAgo(new Date(update.timestamp))}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-300 mt-2 truncate">
+                    {update.reasoning}
+                  </p>
+                </motion.div>
+              )) || (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No recent updates</p>
+                  <p className="text-xs mt-1">Oracle predictions will appear here</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Game Highlights */}
+        {dashboard?.gameHighlights && dashboard.gameHighlights.length > 0 && (
+          <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <TargetIcon className="w-5 h-5 text-yellow-400" />
+              Game Highlights
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {dashboard.gameHighlights.map((game, index) => (
+                <motion.div 
+                  key={game.gameId}
+                  className="bg-slate-600/30 rounded-lg p-3"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-white">
+                      {game.teams}
+                    </span>
+                    <span className="text-sm text-blue-400">
+                      Q{game.quarter}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-white">
+                      {game.score}
+                    </span>
+                    {game.analytics && (
+                      <span className="text-xs text-gray-400">
+                        Pace: {game.analytics.totalScoringPace?.toFixed(1) || 'N/A'}
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
-const OracleAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
-  <ErrorBoundary>
-    <OracleAnalyticsDashboard {...props} />
-  </ErrorBoundary>
-);
-
-export default React.memo(OracleAnalyticsDashboardWithErrorBoundary);
+export default OracleAnalyticsDashboard;

@@ -23,6 +23,7 @@ import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { NotificationCenter } from './NotificationCenter';
 import { NotificationPreferencesComponent } from './NotificationPreferences';
 import { useOracleNotifications } from '../../hooks/useOracleNotifications';
+import { useOracleSystemStatus, useOraclePerformanceMetrics } from '../../hooks/useEnhancedOracleAnalytics';
 
 interface Props {
     week?: number;
@@ -165,6 +166,10 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
         onMessage: handleWebSocketMessage,
         onError: (errorMsg: any) => setError(errorMsg)
     });
+
+    // Enhanced Analytics Hooks
+    const systemStatus = useOracleSystemStatus();
+    const performanceMetrics = useOraclePerformanceMetrics();
 
     // Helper Functions
     const addRealtimeUpdate = useCallback((update: RealtimeUpdate) => {
@@ -432,10 +437,22 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
                                 </button>
                             </div>
                             
-                            {/* Connection Status */}
+                            {/* Enhanced Connection Status */}
                             <div className="flex items-center justify-center sm:justify-start space-x-2 p-2 sm:p-0">
-                                <div className={`w-2 h-2 rounded-full ${getConnectionStatusColor()}`} aria-hidden="true"></div>
-                                <span className="text-xs sm:text-sm text-gray-400 capitalize">{connectionStatus}</span>
+                                <div className={`w-2 h-2 rounded-full ${
+                                    systemStatus.connectionQuality === 'excellent' ? 'bg-green-400 animate-pulse' :
+                                    systemStatus.connectionQuality === 'good' ? 'bg-yellow-400' :
+                                    systemStatus.connectionQuality === 'poor' ? 'bg-orange-400' : 
+                                    'bg-red-400'
+                                }`} aria-hidden="true"></div>
+                                <div className="flex flex-col">
+                                    <span className="text-xs text-gray-400 capitalize">
+                                        {systemStatus.connectionQuality} • {performanceMetrics.accuracyToday.toFixed(1)}% accuracy
+                                    </span>
+                                    <span className="text-xs text-gray-500">
+                                        {performanceMetrics.liveUpdates} live updates
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
