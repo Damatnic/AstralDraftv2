@@ -15,7 +15,8 @@ export interface MatchupTrend {
   gameScript: GameScript;
   opponent: string;
   defensiveRank: number;
-  weather?: WeatherConditions;}
+  weather?: WeatherConditions;
+}
 
 export interface DefensiveHeatMap {
   position: string;
@@ -29,6 +30,7 @@ export interface DefensiveHeatMap {
   };
   weeklyTrends: DefensiveWeeklyTrend[];
   seasonTotals: DefensiveTotals;
+}
 
 export interface DefensiveWeeklyTrend {
   week: number;
@@ -37,7 +39,8 @@ export interface DefensiveWeeklyTrend {
   touchdownsAllowed: number;
   sacks?: number;
   interceptions?: number;
-  pressureRate?: number;}
+  pressureRate?: number;
+}
 
 export interface DefensiveTotals {
   totalFantasyPointsAllowed: number;
@@ -48,13 +51,15 @@ export interface DefensiveTotals {
     home: number;
     away: number;
   };
+}
 
 export interface WeatherTrendAnalysis {
   historicalWeatherGames: WeatherGameData[];
   temperatureImpact: TemperatureImpact;
   windImpact: WindImpact;
   precipitationImpact: PrecipitationImpact;
-  predictedImpact: WeatherPrediction;}
+  predictedImpact: WeatherPrediction;
+}
 
 export interface WeatherGameData {
   date: string;
@@ -64,31 +69,36 @@ export interface WeatherGameData {
   precipitation: number;
   fantasyPoints: number;
   efficiency: number;
-  weather: WeatherConditions;}
+  weather: WeatherConditions;
+}
 
 export interface TemperatureImpact {
   optimalRange: { min: number; max: number };
   coldWeatherPerformance: number; // percentage change
   hotWeatherPerformance: number; // percentage change
   threshold: { cold: number; hot: number };
+}
 
 export interface WindImpact {
   passAttemptImpact: number; // percentage change per mph
   passingAccuracyImpact: number; // percentage change per mph
   kickingImpact: number; // percentage change per mph
   threshold: number; // mph when impact becomes significant
+}
 
 export interface PrecipitationImpact {
   fumblesIncreaseRate: number; // percentage increase
   passingImpact: number; // percentage decrease
   runningImpact: number; // percentage change (could be positive)
   receivingImpact: number; // percentage decrease
+}
 
 export interface WeatherPrediction {
   expectedImpact: 'positive' | 'negative' | 'neutral';
   impactMagnitude: number; // 0-100
   reasoning: string[];
   adjustedProjection: number;
+}
 
 export interface TargetShareTrend {
   week: number;
@@ -99,6 +109,7 @@ export interface TargetShareTrend {
   redZoneTargets: number;
   efficiency: number;
   depth: number; // average depth of target
+}
 
 export interface SnapCountAnalysis {
   week: number;
@@ -109,12 +120,14 @@ export interface SnapCountAnalysis {
   goalLineSnaps: number;
   packagesUsed: string[];
   efficiency: number;
+}
 
 export interface InjuryHistoryAnalysis {
   injuryHistory: InjuryRecord[];
   recoveryPatterns: RecoveryPattern[];
   currentRiskFactors: RiskFactor[];
   impactAnalysis: InjuryImpactAnalysis;
+}
 
 export interface InjuryRecord {
   date: string;
@@ -124,6 +137,7 @@ export interface InjuryRecord {
   gamesmissed: number;
   recoveryTime: number; // days
   impactOnReturn: InjuryReturnImpact;
+}
 
 export interface RecoveryPattern {
   injuryType: string;
@@ -131,22 +145,26 @@ export interface RecoveryPattern {
   returnToFormWeeks: number;
   reinjuryRate: number;
   performanceImpact: number; // percentage change
+}
 
 export interface RiskFactor {
   factor: string;
   riskLevel: 'low' | 'medium' | 'high';
   description: string;
   mitigation?: string;
+}
 
 export interface InjuryReturnImpact {
   firstWeekBack: number; // percentage of normal performance
   fullRecoveryWeeks: number;
   sustainedImpact: number; // long-term impact percentage
+}
 
 export interface InjuryImpactAnalysis {
   currentRiskScore: number; // 0-100
   expectedImpact: number; // percentage impact on performance
   monitoringRecommendations: string[];
+}
 
 export interface GameScriptPrediction {
   predictedScript: GameScript;
@@ -154,12 +172,14 @@ export interface GameScriptPrediction {
   factors: GameScriptFactor[];
   historicalAnalogy: HistoricalGameScript[];
   playerImpact: GameScriptPlayerImpact;
+}
 
 export interface GameScriptFactor {
   factor: string;
   weight: number;
   impact: 'positive' | 'negative' | 'neutral';
   description: string;
+}
 
 export interface HistoricalGameScript {
   date: string;
@@ -168,18 +188,21 @@ export interface HistoricalGameScript {
   actualScript: GameScript;
   playerPerformance: number;
   accuracy: number;
+}
 
 export interface GameScriptPlayerImpact {
   passingVolume: number; // expected change in attempts
   rushingVolume: number; // expected change in attempts
   receivingTargets: number; // expected change in targets
   gameFlowImpact: number; // overall impact score
+}
 
 export interface CeilingFloorAnalysis {
   historical: CeilingFloorData;
   projected: CeilingFloorProjection;
   factors: PerformanceRangeFactor[];
   scenarios: PerformanceScenario[];
+}
 
 export interface CeilingFloorData {
   ceiling: number; // 90th percentile performance
@@ -187,6 +210,7 @@ export interface CeilingFloorData {
   median: number; // 50th percentile performance
   volatility: number; // standard deviation
   consistency: number; // percentage of games within 1 std dev
+}
 
 export interface CeilingFloorProjection {
   projectedCeiling: number;
@@ -194,24 +218,28 @@ export interface CeilingFloorProjection {
   projectedMedian: number;
   confidence: number;
   factors: string[];
+}
 
 export interface PerformanceRangeFactor {
   factor: string;
   impact: number; // impact on range width
   type: 'ceiling' | 'floor' | 'both';
   description: string;
+}
 
 export interface PerformanceScenario {
   scenario: string;
   probability: number;
   projectedPoints: number;
   description: string;
+}
 
 export interface StrengthOfScheduleAnalysis {
   remaining: ScheduleStrength;
   completed: ScheduleStrength;
   comparison: ScheduleComparison;
   futureMatchups: FutureMatchup[];
+}
 
 export interface ScheduleStrength {
   averageDefensiveRank: number;
@@ -219,11 +247,13 @@ export interface ScheduleStrength {
   fantasyPointsAllowed: number;
   easiestMatchups: string[];
   hardestMatchups: string[];
+}
 
 export interface ScheduleComparison {
   vsLeagueAverage: number; // percentage easier/harder
   vsPosition: number; // percentage easier/harder vs same position
-  rank: number; // rank among all players}
+  rank: number; // rank among all players
+}
 
 export interface FutureMatchup {
   week: number;
@@ -231,12 +261,13 @@ export interface FutureMatchup {
   difficulty: MatchupDifficulty;
   projectedPoints: number;
   confidence: number;
-  keyFactors: string[];}
+  keyFactors: string[];
+}
 
 // Enums and types
 export type GameScript = 'positive' | 'negative' | 'neutral' | 'blowout_positive' | 'blowout_negative';
 export type MatchupDifficulty = 'easy' | 'moderate' | 'hard' | 'elite';
-export type WeatherConditions = 'clear' | 'cloudy' | 'rain' | 'snow' | 'wind' | 'fog';}
+export type WeatherConditions = 'clear' | 'cloudy' | 'rain' | 'snow' | 'wind' | 'fog';
 
 class EnhancedMatchupAnalyticsService {
   private readonly sportsDataService: typeof productionSportsDataService;
@@ -313,7 +344,7 @@ class EnhancedMatchupAnalyticsService {
           temperatureImpact,
           windImpact,
           precipitationImpact,
-//           predictedImpact
+          predictedImpact
         };
       } catch (error) {
         console.error('Error analyzing weather trends:', error);
@@ -365,7 +396,7 @@ class EnhancedMatchupAnalyticsService {
           injuryHistory,
           recoveryPatterns,
           currentRiskFactors,
-//           impactAnalysis
+          impactAnalysis
         };
       } catch (error) {
         console.error('Error analyzing injury history:', error);
@@ -400,7 +431,7 @@ class EnhancedMatchupAnalyticsService {
           confidence,
           factors,
           historicalAnalogy,
-//           playerImpact
+          playerImpact
         };
       } catch (error) {
         console.error('Error predicting game script:', error);
@@ -428,7 +459,7 @@ class EnhancedMatchupAnalyticsService {
           historical,
           projected,
           factors,
-//           scenarios
+          scenarios
         };
       } catch (error) {
         console.error('Error generating ceiling/floor analysis:', error);
@@ -456,7 +487,7 @@ class EnhancedMatchupAnalyticsService {
           remaining,
           completed,
           comparison,
-//           futureMatchups
+          futureMatchups
         };
       } catch (error) {
         console.error('Error analyzing schedule strength:', error);
@@ -969,6 +1000,8 @@ class EnhancedMatchupAnalyticsService {
   private async generateFutureMatchupAnalysis(playerId: string): Promise<FutureMatchup[]> {
     return [];
   }
+
+}
 
 // Export singleton instance
 export const enhancedMatchupAnalyticsService = new EnhancedMatchupAnalyticsService(

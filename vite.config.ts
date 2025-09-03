@@ -118,11 +118,27 @@ export default defineConfig(({ mode }: { mode: string }) => {
             drop_console: true, // Remove console.logs in production
             drop_debugger: true,
             pure_funcs: ['console.log', 'console.info', 'console.debug'],
+            passes: 2, // Run compression twice for better results
+            dead_code: true,
+            unused: true
           },
           mangle: {
             safari10: true,
+            properties: {
+              regex: /^_/ // Mangle private properties starting with _
+            }
           },
-        } : undefined
+          format: {
+            comments: false, // Remove all comments
+            safari10: true
+          }
+        } : undefined,
+        // Advanced production optimizations
+        modulePreload: {
+          polyfill: false // Use native module preload if supported
+        },
+        // Experimental optimizations
+        experimentalMinifyGlobalThis: isProduction
       },
       optimizeDeps: {
         include: [

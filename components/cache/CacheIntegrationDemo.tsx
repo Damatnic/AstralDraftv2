@@ -234,7 +234,7 @@ isActive
                                 {JSON.stringify(
                                     demos.find((d: any) => d.id === selectedDemo)?.cache.data,
                                     null,
-//                                     2
+                                    2
                                 )}
                             </pre>
                         </motion.div>
@@ -248,8 +248,8 @@ isActive
                         <div className="grid md:grid-cols-2 gap-4">
                             <button
                                 onClick={handlePreload}
-                                className="flex items-center justify-center space-x-2 p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
-                             aria-label="Action button">
+                                className="flex items-center justify-center space-x-2 p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                                aria-label="Preload cache data">
                                 <DatabaseIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Preload Data</span>
                             </button>

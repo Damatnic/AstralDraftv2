@@ -66,9 +66,10 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
         setMetrics(historyData[0]); // Most recent metrics
 
     } catch (error) {
+      console.error('Error loading accessibility data:', error);
     } finally {
       setLoading(false);
-
+    }
   };
 
   const trendData = useMemo(() => {
@@ -137,6 +138,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
                 id="timeRange"
                 value={selectedTimeRange}
                 onChange={(e: any) => setSelectedTimeRange(Number(e.target.value) as 7 | 30 | 90)}
+              >
                 <option value={7}>Last 7 days</option>
                 <option value={30}>Last 30 days</option>
                 <option value={90}>Last 90 days</option>
@@ -148,6 +150,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
                 id="component"
                 value={selectedComponent}
                 onChange={(e: any) => setSelectedComponent(e.target.value)}
+              >
                 <option value="all">All Components</option>
                 {metrics.componentMetrics.map((component: any) => (
                   <option key={component.componentName} value={component.componentName}>
@@ -259,7 +262,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend,
       case 'improving': return '📈';
       case 'declining': return '📉';
       default: return '➡️';
-
+    }
   };
 
   const getTrendText = () => {
@@ -267,7 +270,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend,
       case 'improving': return 'Improving';
       case 'declining': return 'Declining';
       default: return 'Stable';
-
+    }
   };
 
   return (
@@ -324,7 +327,8 @@ const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) 
         borderColor: '#28a745',
         backgroundColor: 'rgba(40, 167, 69, 0.1)',
         tension: 0.1
-
+      }
+    ]
   };
 
   const options = {
@@ -342,9 +346,9 @@ const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) 
         beginAtZero: true,
         ticks: {
           stepSize: 1
-
-
-
+        }
+      }
+    }
   };
 
   return <Line data={chartData} options={options} />;
@@ -389,10 +393,10 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
             const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
             return `${label}: ${value} (${percentage}%)`;
-
-
-
-
+          }
+        }
+      }
+    }
   };
 
   return <Doughnut data={chartData} options={options} />;
@@ -409,7 +413,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
       case 'warning': return '⚠️';
       case 'failing': return '❌';
       default: return '❓';
-
+    }
   };
 
   const getStatusText = (status: ComponentAccessibilityMetric['status']) => {
@@ -418,7 +422,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
       case 'warning': return 'Warning';
       case 'failing': return 'Failing';
       default: return 'Unknown';
-
+    }
   };
 
   return (
@@ -526,7 +530,7 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
     plugins: {
       legend: {
         display: false
-
+      }
     },
     scales: {
       y: {
@@ -535,10 +539,10 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
         ticks: {
           callback: function(value: any) {
             return value + '%';
-
-
-
-
+          }
+        }
+      }
+    }
   };
 
   return <Bar data={chartData} options={options} />;

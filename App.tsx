@@ -71,20 +71,31 @@ const AppContent: React.FC = () => {
     console.log('🚀 App initialization started...');
     console.log('📊 Current state:', JSON.stringify(state, null, 2));
     
+    // Check for fast login from HTML interface
+    const fastLogin = sessionStorage.getItem('fastLogin');
+    const selectedPlayer = localStorage.getItem('selectedPlayer');
+    
+    if (fastLogin && selectedPlayer) {
+      console.log('🚀 FAST LOGIN: Player', selectedPlayer, 'selected via HTML interface');
+      
+      // Clear the fast login flag
+      sessionStorage.removeItem('fastLogin');
+      
+      // Auto-login the selected player
+      const playerData = {
+        id: selectedPlayer,
+        name: `Player ${selectedPlayer}`,
+        isCommissioner: selectedPlayer === '1'
+      };
+      
+      dispatch({ type: 'LOGIN', payload: playerData });
+      console.log('✅ FAST LOGIN: User logged in automatically');
+    }
+    
     // FORCE APP TO SHOW - bypass all loading logic
     console.log('⚡ FORCE BYPASSING ALL LOADING LOGIC');
     dispatch({ type: 'SET_LOADING', payload: false });
     console.log('✅ Loading forcibly set to false');
-    
-    // Update debug info that App component mounted
-    const debugEl = document.getElementById('debug-info');
-    if (debugEl) {
-      const appDiv = document.createElement('div');
-      appDiv.textContent = '🎯 App component mounted!';
-      appDiv.style.color = '#3b82f6';
-      appDiv.style.fontWeight = 'bold';
-      debugEl.appendChild(appDiv);
-    }
     
     // Initialize mobile optimizations only in browser environment
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {

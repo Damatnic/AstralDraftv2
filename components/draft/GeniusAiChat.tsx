@@ -26,7 +26,8 @@ interface Props {
   currentPick: number;
   leagueSettings: any;
   draftHistory: any[];
-  onPlayerSelect?: (player: Player) => void;}
+  onPlayerSelect?: (player: Player) => void;
+}
 
 const QUICK_QUESTIONS = [
   "Who's the best sleeper RB available?",
@@ -76,13 +77,12 @@ const GeniusAiChat: React.FC<Props> = ({
         `Round ${currentRound}, Pick ${currentPick}`,
         `${availablePlayers.length} players available`,
         'Type a question or select one below to get started'
-
+      ]
     };
     setMessages([welcomeMessage]);
   }, []);
 
-  const handleSendMessage = async () => {
-    try {
+  const handleSendMessage = async (question?: string) => {
     const messageText = question || inputValue.trim();
     if (!messageText) return;
 
@@ -108,8 +108,8 @@ const GeniusAiChat: React.FC<Props> = ({
           currentRound,
           currentPick,
           leagueSettings,
-//           draftHistory
-
+          draftHistory
+        }
       });
 
       // Add assistant response
@@ -130,7 +130,7 @@ const GeniusAiChat: React.FC<Props> = ({
           const personaRec = personaEngine.current.getPersonaRecommendation(
             response.recommendations,
             currentRoster,
-//             currentPick
+            currentPick
           );
           
           if (personaRec.recommendedPlayer) {
@@ -141,8 +141,9 @@ const GeniusAiChat: React.FC<Props> = ({
               timestamp: new Date()
             };
             setMessages(prev => [...prev, personaMessage]);
-
-
+          }
+        }
+      }
 
       // Add follow-up questions if provided
       if (response.followUpQuestions && response.followUpQuestions.length > 0) {
@@ -156,8 +157,10 @@ const GeniusAiChat: React.FC<Props> = ({
           };
           setMessages(prev => [...prev, followUpMessage]);
         }, 500);
-
-    `,
+      }
+    } catch (error) {
+      const errorMessage: ChatMessage = {
+        id: `error-${Date.now()}`,
         type: 'assistant',
         message: 'I encountered an error processing your question. Please try rephrasing or ask something else.',
         timestamp: new Date()
@@ -165,7 +168,7 @@ const GeniusAiChat: React.FC<Props> = ({
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
-
+    }
   };
 
   const handleSelectPersona = (personaId: string) => {
@@ -182,7 +185,7 @@ const GeniusAiChat: React.FC<Props> = ({
         timestamp: new Date()
       };
       setMessages(prev => [...prev, personaMessage]);
-
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -230,7 +233,8 @@ const GeniusAiChat: React.FC<Props> = ({
                       <button 
                         className="select-player-btn sm:px-4 md:px-6 lg:px-8"
                         onClick={() => onPlayerSelect(player)}
-//                         Draft
+                      >
+                        Draft
                       </button>
                     )}
                   </div>
@@ -260,7 +264,10 @@ const GeniusAiChat: React.FC<Props> = ({
         <div className="header-controls sm:px-4 md:px-6 lg:px-8">
           <button 
             className="persona-toggle sm:px-4 md:px-6 lg:px-8"
-            onClick={() => setShowPersonaMenu(!showPersonaMenu)}` : 
+            onClick={() => setShowPersonaMenu(!showPersonaMenu)}
+          >
+            {selectedPersona ? 
+              `Coaching as ${CELEBRITY_PERSONAS.find(p => p.id === selectedPersona)?.name}` : 
               'Select Celebrity Coach'}
           </button>
           {selectedPersona && (
@@ -271,7 +278,7 @@ const GeniusAiChat: React.FC<Props> = ({
                 personaEngine.current.selectPersona('');
               }}
             >
-//               Clear
+              Clear
             </button>
           )}
         </div>
@@ -285,7 +292,9 @@ const GeniusAiChat: React.FC<Props> = ({
               <div 
                 key={persona.id}
                 className={`persona-option ${selectedPersona === persona.id ? 'selected' : ''}`}
-                onClick={() = role="button" tabIndex={0}> handleSelectPersona(persona.id)}
+                onClick={() => handleSelectPersona(persona.id)}
+                role="button" 
+                tabIndex={0}
               >
                 <div className="persona-name sm:px-4 md:px-6 lg:px-8">{persona.name}</div>
                 <div className="persona-description sm:px-4 md:px-6 lg:px-8">{persona.description}</div>
@@ -319,6 +328,8 @@ const GeniusAiChat: React.FC<Props> = ({
                 key={idx}
                 className="quick-question-btn sm:px-4 md:px-6 lg:px-8"
                 onClick={() => handleSendMessage(question)}
+              >
+                {question}
               </button>
             ))}
           </div>
@@ -332,13 +343,14 @@ const GeniusAiChat: React.FC<Props> = ({
           placeholder="Ask me anything about your draft..."
           value={inputValue}
           onChange={(e: any) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
           disabled={isLoading}
         />
         <button 
           className="send-button sm:px-4 md:px-6 lg:px-8"
           onClick={() => handleSendMessage()}
         >
-//           Send
+          Send
         </button>
       </div>
 

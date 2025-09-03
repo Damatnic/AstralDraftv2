@@ -28,7 +28,7 @@ import {
   UserPlus,
   UserMinus,
   FileText,
-//   Info
+  Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -55,7 +55,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
   leagueId,
   teamId,
   currentWeek,
-//   scoringSystem
+  scoringSystem
 }: any) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -94,7 +94,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
           def: { min: 1, max: 2 },
           bench: 6,
           ir: 2
-
+        }
       };
 
       const result = await advancedTeamOptimizer.optimizeTeam(roster, options);
@@ -104,9 +104,13 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
         toast.success(`Team optimized! Score: ${result.optimizationScore.toFixed(1)}/100`);
       } else {
         toast.warning(`Optimization complete. Score: ${result.optimizationScore.toFixed(1)}/100 - Improvements needed`);
-  } finally {
+      }
+    } catch (error) {
+      console.error('Optimization failed:', error);
+      toast.error('Failed to optimize team');
+    } finally {
       setLoading(false);
-
+    }
   };
 
   const fetchRoster = async (): Promise<EnhancedPlayer[]> => {
@@ -143,7 +147,10 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
               <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                 <label className="text-white text-sm sm:px-4 md:px-6 lg:px-8">Auto-optimize</label>
                 <button
-                  onClick={() => setAutoOptimize(!autoOptimize)}`}
+                  onClick={() => setAutoOptimize(!autoOptimize)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  autoOptimize ? 'bg-purple-600' : 'bg-gray-600'
+                }`}
                 >
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -191,7 +198,12 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}`}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-purple-600 text-white'
+                      : 'text-purple-200 hover:bg-white/10'
+                  }`}
                 >
                   <Icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                   {tab.label}
@@ -270,7 +282,7 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
       suffix: 'th',
       icon: Target,
       color: 'blue'
-
+    }
   ];
 
   return (
@@ -361,7 +373,7 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
         <div className="bg-white/10 backdrop-blur-xl rounded-xl p-6 border border-white/10 sm:px-4 md:px-6 lg:px-8">
           <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <Target className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />
-//             Recommendations
+            Recommendations
           </h3>
           
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">

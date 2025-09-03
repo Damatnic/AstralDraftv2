@@ -247,7 +247,7 @@ const TrainingDataManager = memo(() => {
             setSystemConfig(config);
             setConfigurationChanged(false);
             return config;
-        }, 'configuration', 'configuration');
+        });
     }, []);
 
     // Enhanced loading state management
@@ -261,6 +261,7 @@ const TrainingDataManager = memo(() => {
             setSpecificLoading(loadingType, true);
             if (errorCategory) {
                 setSpecificError(errorCategory, null);
+            }
 
             const result = await operation();
             return result;
@@ -272,11 +273,12 @@ const TrainingDataManager = memo(() => {
                 setSpecificError(errorCategory, errorMessage);
             } else {
                 setError(errorMessage);
+            }
 
             return null;
         } finally {
             setSpecificLoading(loadingType, false);
-
+        }
     }, [setSpecificLoading, setSpecificError]);
 
     // Connection health monitoring
@@ -293,14 +295,15 @@ const TrainingDataManager = memo(() => {
                 setRealtimeConnected(true);
                 setSpecificError('connection', null);
                 return true;
+            }
 
             return false;
 
-    } catch (error) {
+        } catch (error) {
             setRealtimeConnected(false);
             setSpecificError('connection', 'Connection lost - attempting to reconnect...');
             return false;
-
+        }
     }, [setSpecificError]);
 
     // Load initial data
@@ -324,15 +327,14 @@ const TrainingDataManager = memo(() => {
                 if (!isTraining) return;
                 
                 try {
-
                     const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                     setModelMetrics(metrics);
                     
                     const stats = await oracleEnsembleMLService.getDatasetStatistics();
                     setDatasetStats(stats);
-
-    } catch (error) {
-
+                } catch (error) {
+                    console.error('Error refreshing metrics:', error);
+                }
             }, 5000); // Refresh every 5 seconds
             
             // Set up training session monitoring
@@ -341,10 +343,10 @@ const TrainingDataManager = memo(() => {
             }, 1000); // Check training status every second
             
             setUpdateIntervals(prev => [...prev, metricsInterval, sessionInterval]);
-    
-    } catch (error) {
+        } catch (error) {
+            console.error('Error initializing realtime monitoring:', error);
             throw error;
-
+        }
     }, [isTraining]);
 
     // Enhanced data refresh for specific widgets
@@ -368,23 +370,31 @@ const TrainingDataManager = memo(() => {
             } else {
                 setSpecificError('dataLoad', 'Failed to load dataset statistics');
                 hasErrors = true;
+            }
 
             if (metrics?.status === 'fulfilled') {
                 setModelMetrics(metrics.value);
             } else {
                 setSpecificError('general', 'Failed to load model metrics');
                 hasErrors = true;
+            }
 
             if (history?.status === 'fulfilled') {
                 setTrainingHistory(history.value);
             } else {
+                setSpecificError('training', 'Failed to load training history');
+                hasErrors = true;
+            }
 
             if (report?.status === 'fulfilled') {
                 setValidationReport(report.value);
             } else {
+                console.log('No validation report available');
+            }
 
             if (hasErrors) {
                 throw new Error('Some data sources failed to refresh');
+            }
 
             return true;
         }, 'datasetStats', 'dataLoad');
@@ -448,11 +458,11 @@ const TrainingDataManager = memo(() => {
 
             // Load last validation report (non-critical)
             try {
-
                 const lastReport = oracleEnsembleMLService.getLastValidationReport();
                 setValidationReport(lastReport);
-            
-    } catch (error) {
+            } catch (error) {
+                console.error('Error loading validation report:', error);
+            }
 
             // Test connection health
             const connectionHealthy = await checkConnectionHealth();
@@ -460,6 +470,7 @@ const TrainingDataManager = memo(() => {
                 setRealtimeConnected(true);
             } else {
                 setSpecificError('connection', 'Connection unstable - some features may be limited');
+            }
 
             return true;
         }, 'dataLoad', 3, 2000).finally(() => {
@@ -497,27 +508,24 @@ const TrainingDataManager = memo(() => {
                 // Auto-refresh model metrics during training with error handling
                 if (session?.status === 'running') {
                     try {
-
                         const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                         setModelMetrics(metrics);
-
-    } catch (error) {
+                    } catch (error) {
                         // Don't fail the entire operation for metrics refresh
-
-
-            } else if (isTraining) {
+                        console.warn('Error refreshing metrics during training:', error);
+                    }
+                } else if (isTraining) {
                 setIsTraining(false);
                 setCurrentSession(null);
-                // Reload data after training completion with error handling
-                try {
+                    // Reload data after training completion with error handling
+                    try {
+                        await refreshDataSources();
+                    } catch (error) {
+                        setSpecificError('dataLoad', 'Failed to refresh data after training completion');
+                    }
+                }
 
-                    await refreshDataSources();
-
-    } catch (error) {
-                    setSpecificError('dataLoad', 'Failed to refresh data after training completion');
-
-
-            return true;
+                return true;
         }, 'realtimeUpdate', 'general');
     }, [isTraining, refreshDataSources, withLoadingState, setSpecificError]);
 
@@ -583,14 +591,15 @@ const TrainingDataManager = memo(() => {
         return await withLoadingState(async () => {
             if (!currentSession) {
                 throw new Error('No active training session to stop');
+            }
 
             // Attempt to cancel training session
             try {
-
                 oracleEnsembleMLService.cancelTrainingSession(currentSession.id);
-            
-    } catch (error) {
+            } catch (error) {
                 // Force stop the training state even if cancellation fails
+                console.error('Error cancelling training session:', error);
+            }
 
             setIsTraining(false);
             setCurrentSession(null);
@@ -598,19 +607,12 @@ const TrainingDataManager = memo(() => {
             
             // Refresh data after stopping training
             try {
-
                 await refreshDataSources();
-            
-    } catch (error) {
-        console.error(error);
-    `oracle_training_data_${new Date().toISOString().split('T')[0]}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-                
-                return true;
+            } catch (error) {
+                console.error('Error refreshing data after stopping training:', error);
+            }
 
-    } catch (error) {
-                throw new Error('Failed to create or download export file');
+            return true;
 
         }, 'export', 'general');
     };
@@ -622,26 +624,30 @@ const TrainingDataManager = memo(() => {
             // Validate configuration updates
             if (updates.maxEpochs !== undefined && updates.maxEpochs <= 0) {
                 throw new Error('Max epochs must be greater than 0');
+            }
 
             if (updates.batchSize !== undefined && updates.batchSize <= 0) {
                 throw new Error('Batch size must be greater than 0');
+            }
 
             if (updates.hyperparameters?.learningRate !== undefined && (updates.hyperparameters.learningRate <= 0 || updates.hyperparameters.learningRate >= 1)) {
                 throw new Error('Learning rate must be between 0 and 1');
+            }
 
             if (updates.trainingSplit !== undefined && (updates.trainingSplit <= 0 || updates.trainingSplit >= 1)) {
                 throw new Error('Training split must be between 0 and 1');
+            }
 
             if (updates.validationSplit !== undefined && (updates.validationSplit <= 0 || updates.validationSplit >= 1)) {
                 throw new Error('Validation split must be between 0 and 1');
+            }
 
             setTrainingConfig(prev => ({ ...prev, ...updates }));
             clearAllErrors();
-
-    } catch (error) {
+        } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Invalid configuration update';
             setSpecificError('configuration', errorMessage);
-
+        }
     }, [clearAllErrors, setSpecificError]);
 
     // Memoized computed values for performance optimization
@@ -700,12 +706,12 @@ const TrainingDataManager = memo(() => {
             
             // Refresh related data with error handling
             try {
-
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
-            
-    } catch (error) {
+            } catch (error) {
                 // Don't fail the entire validation for this
+                console.warn('Error loading validation rules:', error);
+            }
 
             resetRetryAttempts('validation');
             return report;
@@ -796,31 +802,35 @@ const TrainingDataManager = memo(() => {
             // Validate specific configuration fields
             if (field === 'predictionThreshold' && (value < 0 || value > 1)) {
                 throw new Error('Prediction threshold must be between 0 and 1');
+            }
 
             if (field === 'apiRateLimit' && value <= 0) {
                 throw new Error('API rate limit must be greater than 0');
+            }
 
             setSystemConfig(prev => ({ ...prev, [field]: value }));
             setConfigurationChanged(true);
             setSpecificError('configuration', null);
-
-    } catch (error) {
+        } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Invalid configuration value';
             setSpecificError('configuration', errorMessage);
-
+        }
     }, [setSpecificError]);
 
     const saveConfiguration = useCallback(async () => {
         return await withLoadingState(async () => {
             if (!configurationChanged) {
                 throw new Error('No configuration changes to save');
+            }
 
             // Validate entire configuration before saving
             if (systemConfig.predictionThreshold < 0 || systemConfig.predictionThreshold > 1) {
                 throw new Error('Invalid prediction threshold value');
+            }
 
             if (systemConfig.apiRateLimit <= 0) {
                 throw new Error('Invalid API rate limit value');
+            }
 
             // FUTURE: Implement actual service call when configuration API is available
             // const success = await oracleEnsembleMLService.updateConfiguration(systemConfig);
@@ -831,6 +841,7 @@ const TrainingDataManager = memo(() => {
             // Simulate occasional failures for testing
             if (Math.random() < 0.1) {
                 throw new Error('Configuration service temporarily unavailable');
+            }
 
             const success = true; 
             
@@ -839,11 +850,31 @@ const TrainingDataManager = memo(() => {
                 
                 // Refresh data to reflect configuration changes
                 try {
-
                     await refreshDataSources();
+                } catch (error) {
+                    console.error('Error refreshing data after configuration save:', error);
+                }
+                
                 return true;
-            
-    `px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+            }
+
+            return false;
+        }, 'configuration');
+    }, [withLoadingState, configurationChanged, systemConfig, refreshDataSources, setConfigurationChanged]);
+
+    // Add any remaining helper functions here
+
+    // Component JSX Return
+    return (
+        <div className="space-y-6">
+            {/* System Status Header */}
+            <Widget title="System Status" className="bg-gray-900/50">
+                <div className="space-y-4">
+                    {/* Training Status */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-gray-300 text-sm">Training Status</span>
+                        <div className="flex items-center space-x-2">
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                 isTraining ? 'bg-blue-600 text-blue-100' : 'bg-green-600 text-green-100'
                             }`}>
                                 {isTraining ? 'Training' : 'Ready'}
@@ -1499,7 +1530,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="model-type"
                                 value={trainingConfig.modelType}
-                                onChange={(e: any) => updateTrainingConfig({ modelType: e.target.value as TrainingConfiguration['modelType'] }}
+                                onChange={(e: any) => updateTrainingConfig({ modelType: e.target.value as TrainingConfiguration['modelType'] })}
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value="ensemble">Ensemble (Recommended)</option>
@@ -1564,7 +1595,7 @@ const TrainingDataManager = memo(() => {
                             <select 
                                 id="batch-size"
                                 value={trainingConfig.batchSize}
-                                onChange={(e: any) => updateTrainingConfig({ batchSize: parseInt(e.target.value) }}
+                                onChange={(e: any) => updateTrainingConfig({ batchSize: parseInt(e.target.value) })}
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value={16}>16</option>
@@ -1581,7 +1612,7 @@ const TrainingDataManager = memo(() => {
                                 id="max-epochs"
                                 type="number" 
                                 value={trainingConfig.maxEpochs}
-                                onChange={(e: any) => updateTrainingConfig({ maxEpochs: parseInt(e.target.value) }}
+                                onChange={(e: any) => updateTrainingConfig({ maxEpochs: parseInt(e.target.value) })}
                                 min="10" 
                                 max="1000"
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
@@ -1594,7 +1625,7 @@ const TrainingDataManager = memo(() => {
                                 <input 
                                     type="checkbox" 
                                     checked={trainingConfig.earlyStoppingEnabled}
-                                    onChange={(e: any) => updateTrainingConfig({ earlyStoppingEnabled: e.target.checked }}
+                                    onChange={(e: any) => updateTrainingConfig({ earlyStoppingEnabled: e.target.checked })}
                                     className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target sm:px-4 md:px-6 lg:px-8" 
                                 />
                             </div>
@@ -1603,7 +1634,7 @@ const TrainingDataManager = memo(() => {
                                 <input 
                                     type="checkbox" 
                                     checked={trainingConfig.crossValidationEnabled}
-                                    onChange={(e: any) => updateTrainingConfig({ crossValidationEnabled: e.target.checked }}
+                                    onChange={(e: any) => updateTrainingConfig({ crossValidationEnabled: e.target.checked })}
                                     className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target sm:px-4 md:px-6 lg:px-8" 
                                 />
                             </div>
@@ -1612,7 +1643,7 @@ const TrainingDataManager = memo(() => {
                                 <input 
                                     type="checkbox" 
                                     checked={trainingConfig.hyperparameterTuningEnabled}
-                                    onChange={(e: any) => updateTrainingConfig({ hyperparameterTuningEnabled: e.target.checked }}
+                                    onChange={(e: any) => updateTrainingConfig({ hyperparameterTuningEnabled: e.target.checked })}
                                     className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target sm:px-4 md:px-6 lg:px-8" 
                                 />
                             </div>
@@ -2437,7 +2468,7 @@ const TrainingDataManager = memo(() => {
                                     saveConfiguration().then(() => {
                                         // Apply configuration immediately after saving
                                     });
-
+                                }
                             }}
                             disabled={!configurationChanged}
                             className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -2518,7 +2549,8 @@ const TrainingDataManager = memo(() => {
                     return (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}`}
+                            onClick={() => setActiveTab(tab.id as any)}
+                            className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
                         >
                             <IconComponent className="w-4 h-4 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                             <span className="text-sm sm:text-base">{tab.label}</span>
@@ -2555,4 +2587,3 @@ const TrainingDataManagerWithErrorBoundary: React.FC = (props: any) => (
 );
 
 export default React.memo(TrainingDataManagerWithErrorBoundary);
-}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}

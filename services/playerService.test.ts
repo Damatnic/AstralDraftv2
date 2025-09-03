@@ -5,7 +5,7 @@
 
 import { playerService } from './playerService';
 import { createMockPlayer, createMockApiResponse, mockFetchSuccess, mockFetchError } from '../src/test-utils';
-import type { Player } from '../src/types';
+import type { Player } from '../types';
 
 // Mock global fetch
 global.fetch = jest.fn();

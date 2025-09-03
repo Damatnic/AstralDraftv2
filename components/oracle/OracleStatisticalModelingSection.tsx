@@ -13,7 +13,7 @@ interface StatisticalModel {
   accuracy: number;
   complexity: 'low' | 'medium' | 'high';
   interpretability: number; // 0-100
-
+}
 
 interface ProbabilityDistribution {
   id: string;
@@ -27,13 +27,14 @@ interface ProbabilityDistribution {
   cdf?: string;
   mean?: string;
   variance?: string;
+}
 
 interface DistributionExample {
   scenario: string;
   parameters: Record<string, number>;
   visualization: number[];
   interpretation: string;
-
+}
 
 interface BayesianComponent {
   id: string;
@@ -43,6 +44,7 @@ interface BayesianComponent {
   formula: string;
   role: string;
   examples: string[];
+}
 
 interface ConfidenceMethod {
   id: string;
@@ -54,7 +56,7 @@ interface ConfidenceMethod {
   limitations: string[];
   accuracy: number;
   computationalCost: 'low' | 'medium' | 'high';
-
+}
 
 interface StatisticalDemo {
   id: string;
@@ -181,7 +183,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
       accuracy: 83,
       complexity: 'high',
       interpretability: 70
-
+    }
   ];
 
   const probabilityDistributions: ProbabilityDistribution[] = [
@@ -208,7 +210,8 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { mean: 0, variance: 4 },
           visualization: [0.01, 0.04, 0.15, 0.30, 0.50, 0.30, 0.15, 0.04, 0.01],
           interpretation: 'Model errors are centered at zero with most predictions within ±2 points of actual'
-
+        }
+      ]
     },
     {
       id: 'binomial',
@@ -232,7 +235,8 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { n: 20, p: 0.65 },
           visualization: [0.0, 0.0, 0.01, 0.04, 0.09, 0.16, 0.22, 0.23, 0.17, 0.08],
           interpretation: '20 red zone trips with 65% TD rate yields ~13 touchdowns typically'
-
+        }
+      ]
     },
     {
       id: 'poisson',
@@ -256,7 +260,8 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { lambda: 1.2 },
           visualization: [0.30, 0.36, 0.22, 0.09, 0.03, 0.01, 0.0, 0.0, 0.0],
           interpretation: 'Player experiences ~1.2 injuries per season, 0-1 injuries most common'
-
+        }
+      ]
     },
     {
       id: 'beta',
@@ -280,7 +285,8 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { alpha: 27, beta: 3 },
           visualization: [0.0, 0.0, 0.0, 0.01, 0.04, 0.12, 0.25, 0.35, 0.23],
           interpretation: 'Kicker with 90% success rate showing high reliability in range'
-
+        }
+      ]
     },
     {
       id: 'gamma',
@@ -298,7 +304,8 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { alpha: 2, beta: 0.5 },
           visualization: [0.25, 0.30, 0.20, 0.12, 0.07, 0.04, 0.02, 0.0, 0.0],
           interpretation: 'Average 4 minutes between TDs, with exponential decay for longer intervals'
-
+        }
+      ]
     },
     {
       id: 'student-t',
@@ -316,7 +323,9 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { nu: 5 },
           visualization: [0.02, 0.06, 0.15, 0.25, 0.35, 0.25, 0.15, 0.06, 0.02],
           interpretation: 'With only 5 games, wider confidence intervals account for uncertainty'
-
+        }
+      ]
+    }
   ];
 
   const bayesianComponents: BayesianComponent[] = [
@@ -331,7 +340,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Update player injury probability with medical reports',
         'Revise team win probability with roster changes',
         'Adjust weather impact estimates with forecast updates'
-
+      ]
     },
     {
       id: 'prior-distribution',
@@ -344,7 +353,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Historical team performance as starting point',
         'Expert opinions on player capabilities',
         'League-wide statistical patterns as baseline'
-
+      ]
     },
     {
       id: 'likelihood-function',
@@ -357,7 +366,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'How well do QB stats explain team wins?',
         'Probability of observed scores given player projections',
         'Likelihood of weather affecting game outcomes'
-
+      ]
     },
     {
       id: 'posterior-distribution',
@@ -370,7 +379,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Updated player projections after recent games',
         'Revised team strength after key injuries',
         'Adjusted weather impact after historical analysis'
-
+      ]
     },
     {
       id: 'marginal-likelihood',
@@ -383,7 +392,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Model selection between different prediction approaches',
         'Evidence for including specific features',
         'Comparing team strength models'
-
+      ]
     },
     {
       id: 'conjugate-priors',
@@ -396,7 +405,8 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Beta prior for completion percentages yields beta posterior',
         'Normal prior for player means yields normal posterior',
         'Gamma prior for rate parameters yields gamma posterior'
-
+      ]
+    }
   ];
 
   const confidenceMethods: ConfidenceMethod[] = [
@@ -465,7 +475,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
       limitations: ['Crossing quantiles possible', 'Limited software support', 'Interpretation complexity'],
       accuracy: 83,
       computationalCost: 'medium'
-
+    }
   ];
 
   const statisticalDemos: StatisticalDemo[] = [
@@ -524,7 +534,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'P(>30 pts) = 1 - Φ((30-27.1)/2.4)',
           result: 0.227,
           explanation: '22.7% probability of exceeding 30 fantasy points'
-
+        }
       ],
       result: {
         prediction: 27.1,
@@ -534,7 +544,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           '20to25': 0.23,
           '25to30': 0.40,
           'over30': 0.22
-
+        }
       },
       interpretation: 'Statistical models converge on 27.1 point prediction with moderate confidence. Bayesian approach provides slight upward adjustment for home field advantage. Bootstrap confidence intervals account for recent performance variability.'
     },
@@ -585,7 +595,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'P(Total > 47.5) = 1 - P(Poisson(27.3) ≤ 47)',
           result: 0.02,
           explanation: 'Only 2% chance of exceeding 47.5 points - strong Under indication'
-
+        }
       ],
       result: {
         homeScore: 15.3,
@@ -611,7 +621,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           winsWithPlayer: 9,
           gamesWithoutPlayer: 4,
           winsWithoutPlayer: 1
-
+        }
       },
       steps: [
         {
@@ -645,7 +655,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'P(Win) = 0.65×0.75 + 0.35×0.25',
           result: 0.575,
           explanation: 'Win probability drops from 65% to 57.5% due to injury uncertainty'
-
+        }
       ],
       result: {
         originalWinProb: 0.65,
@@ -698,7 +708,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'PI = 24.6 ± 2.131 × √(2.1² + 4.41)',
           result: '[18.4, 30.8]',
           explanation: 'Wider interval accounting for both estimation and individual variability'
-
+        }
       ],
       result: {
         methods: {
@@ -712,10 +722,10 @@ const OracleStatisticalModelingSection: React.FC = () => {
           'Model-free inference': 'Bootstrap CI',
           'Prior incorporation': 'Bayesian CI',
           'Future prediction': 'Prediction Interval'
-
+        }
       },
       interpretation: 'All confidence methods provide similar parameter intervals (~±4.5 points). Prediction intervals are wider for forecasting individuals. Bootstrap method shows slight efficiency gain from empirical distribution.'
-
+    }
   ];
 
   useEffect(() => {
@@ -726,13 +736,13 @@ const OracleStatisticalModelingSection: React.FC = () => {
           if (prev >= (currentDemo?.steps.length || 0) - 1) {
             setIsDemoRunning(false);
             return 0;
-
+          }
           return prev + 1;
         });
       }, 3000);
 
       return () => clearInterval(interval);
-
+    }
   }, [isDemoRunning, activeDemo, statisticalDemos]);
 
   const startDemo = () => {
@@ -1188,10 +1198,10 @@ const OracleStatisticalModelingSection: React.FC = () => {
                       {(() => {
                         if (Array.isArray(value)) {
                           return `[${value.join(', ')}]`;
-
+                        }
                         if (typeof value === 'object' && value !== null) {
                           return JSON.stringify(value, null, 2);
-
+                        }
                         return String(value);
                       })()}
                     </span>
@@ -1244,13 +1254,13 @@ const OracleStatisticalModelingSection: React.FC = () => {
                         {(() => {
                           if (Array.isArray(value)) {
                             return `[${value.join(', ')}]`;
-
+                          }
                           if (typeof value === 'object' && value !== null) {
                             return JSON.stringify(value, null, 2);
-
+                          }
                           if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
                             return String(value);
-
+                          }
                           return '';
                         })()}
                       </span>

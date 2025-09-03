@@ -11,7 +11,7 @@ interface NetworkLayer {
   description: string;
   purpose: string;
   outputShape: string;
-
+}
 
 interface ActivationFunction {
   id: string;
@@ -22,6 +22,7 @@ interface ActivationFunction {
   advantages: string[];
   disadvantages: string[];
   useCases: string[];
+}
 
 interface TrainingTechnique {
   id: string;
@@ -30,7 +31,8 @@ interface TrainingTechnique {
   algorithm: string;
   benefits: string[];
   challenges: string[];
-  implementation: string;}
+  implementation: string;
+}
 
 // --- Learning Curve Analysis Section ---
 
@@ -40,7 +42,8 @@ interface LearningCurvePoint {
   valLoss: number;
   trainAccuracy: number;
   valAccuracy: number;
-  converged: boolean;}
+  converged: boolean;
+}
 
 interface LearningCurveConfig {
   id: string;
@@ -49,7 +52,8 @@ interface LearningCurveConfig {
   maxSample: number;
   step: number;
   convergenceThreshold: number;
-  expectedConvergence: number;}
+  expectedConvergence: number;
+}
 
 // --- Feature Importance Analysis Section ---
 
@@ -60,7 +64,8 @@ interface FeatureImportanceResult {
   baselineContribution: number;
   rank: number;
   category: 'high' | 'medium' | 'low';
-  description: string;}
+  description: string;
+}
 
 interface SHAPAnalysis {
   globalImportance: FeatureImportanceResult[];
@@ -78,6 +83,7 @@ interface SHAPAnalysis {
     feature: string;
     values: Array<{ x: number; y: number; color: number }>;
   }>;
+}
 
 interface PermutationConfig {
   id: string;
@@ -106,7 +112,7 @@ const learningCurveConfigs: LearningCurveConfig[] = [
     step: 50,
     convergenceThreshold: 0.005,
     expectedConvergence: 1500
-
+  }
 ];
 
 // Feature importance configurations
@@ -135,7 +141,7 @@ const permutationConfigs: PermutationConfig[] = [
     iterations: 30,
     metric: 'mae',
     randomSeed: 123
-
+  }
 ];
 
 const OracleNeuralNetworkSection: React.FC = () => {
@@ -171,34 +177,33 @@ const OracleNeuralNetworkSection: React.FC = () => {
   // Simulate model selection analysis
   const runModelSelectionAnalysis = async () => {
     try {
-
-    setModelSelectionRunning(true);
-    setModelSelectionProgress(0);
-    const results: any = {
+      setModelSelectionRunning(true);
+      setModelSelectionProgress(0);
+      const results: any = {};
+      
+      for (let i = 0; i < modelConfigs.length; i++) {
+        const model = modelConfigs[i];
+        // Simulate metrics
+        results[model.id] = {
+          accuracy: (0.85 + Math.random() * 0.1).toFixed(3),
+          generalization: (0.8 + Math.random() * 0.15).toFixed(3),
+          interpretability: (model.id === 'random_forest' ? 0.8 : model.id === 'ensemble' ? 0.6 : 0.5).toFixed(2),
+          trainingTime: (model.id === 'neural_network' ? 120 : model.id === 'random_forest' ? 40 : 180),
+          robustness: (0.7 + Math.random() * 0.2).toFixed(2),
+          overfittingRisk: (model.id === 'neural_network' ? 0.3 : model.id === 'random_forest' ? 0.2 : 0.15).toFixed(2),
+          complexity: (model.id === 'ensemble' ? 0.9 : model.id === 'neural_network' ? 0.7 : 0.5).toFixed(2),
+        };
+        setModelSelectionProgress(((i + 1) / modelConfigs.length) * 100);
+        await new Promise(res => setTimeout(res, 60));
+      }
+      
+      setModelSelectionResults(results);
+      setModelSelectionRunning(false);
+      setModelSelectionProgress(100);
     } catch (error) {
       console.error('Error in runModelSelectionAnalysis:', error);
-
-    } catch (error) {
-        console.error(error);
-    };
-    for (let i = 0; i < modelConfigs.length; i++) {
-      const model = modelConfigs[i];
-      // Simulate metrics
-      results[model.id] = {
-        accuracy: (0.85 + Math.random() * 0.1).toFixed(3),
-        generalization: (0.8 + Math.random() * 0.15).toFixed(3),
-        interpretability: (model.id === 'random_forest' ? 0.8 : model.id === 'ensemble' ? 0.6 : 0.5).toFixed(2),
-        trainingTime: (model.id === 'neural_network' ? 120 : model.id === 'random_forest' ? 40 : 180),
-        robustness: (0.7 + Math.random() * 0.2).toFixed(2),
-        overfittingRisk: (model.id === 'neural_network' ? 0.3 : model.id === 'random_forest' ? 0.2 : 0.15).toFixed(2),
-        complexity: (model.id === 'ensemble' ? 0.9 : model.id === 'neural_network' ? 0.7 : 0.5).toFixed(2),
-      };
-      setModelSelectionProgress(((i + 1) / modelConfigs.length) * 100);
-      await new Promise(res => setTimeout(res, 60));
-
-    setModelSelectionResults(results);
-    setModelSelectionRunning(false);
-    setModelSelectionProgress(100);
+      setModelSelectionRunning(false);
+    }
   };
   // --- Model Selection Section ---
   const renderModelSelection = () => (
@@ -209,7 +214,10 @@ const OracleNeuralNetworkSection: React.FC = () => {
         <select
           id="model-type-select"
           value={selectedModelType}
-          onChange={e => setSelectedModelType(e.target.value as 'neural_network' | 'random_forest' | 'ensemble')} value={cfg.id}>{cfg.name}</option>
+          onChange={e => setSelectedModelType(e.target.value as 'neural_network' | 'random_forest' | 'ensemble')}
+        >
+          {modelConfigs.map(cfg => (
+            <option key={cfg.id} value={cfg.id}>{cfg.name}</option>
           ))}
         </select>
         <button
@@ -434,7 +442,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       description: 'Final layer outputting continuous prediction values',
       purpose: 'Generate final fantasy points prediction',
       outputShape: '(batch_size, 1)'
-
+    }
   ];
 
   // Activation Functions
@@ -498,7 +506,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       advantages: ['Smooth gradients', 'Better performance than ReLU', 'Stochastic regularization'],
       disadvantages: ['Computationally complex', 'Not widely supported', 'Slower than ReLU'],
       useCases: ['Transformer models', 'BERT and GPT', 'State-of-the-art NLP']
-
+    }
   ];
 
   // Training Techniques
@@ -547,7 +555,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       benefits: ['Faster training', 'Better performance with limited data', 'Leverages existing knowledge'],
       challenges: ['Domain adaptation', 'Feature mismatch', 'Catastrophic forgetting'],
       implementation: 'Pre-trained sports models with fine-tuning'
-
+    }
   ];
 
   // Simulate network training
@@ -569,6 +577,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
         if (!prev || prev.epoch >= prev.totalEpochs) {
           clearInterval(interval);
           return { ...prev, isTraining: false };
+        }
 
         const newEpoch = prev.epoch + 1;
         const progress = newEpoch / prev.totalEpochs;
@@ -625,8 +634,77 @@ const OracleNeuralNetworkSection: React.FC = () => {
       const valAccuracy = Math.min(0.92, 0.42 + progress * 0.42 + Math.random() * 0.05);
       if (sample >= config.expectedConvergence && Math.abs(trainLoss - valLoss) < config.convergenceThreshold) {
         converged = true;
+      }
 
-    `layer-card ${selectedLayer === layer.id ? 'selected' : ''}`}
+      points.push({ sampleSize: sample, trainLoss, valLoss, trainAccuracy, valAccuracy, converged });
+      
+      // Update progress
+      setLearningCurveProgress((sample - config.minSample) / (config.maxSample - config.minSample) * 100);
+      
+      if (converged) break;
+    }
+    
+    setLearningCurvePoints(points);
+    setLearningCurveRunning(false);
+    setLearningCurveProgress(100);
+    } catch (error) {
+      console.error('Error in learning curve analysis:', error);
+      setLearningCurveRunning(false);
+    }
+  };
+
+  // Simulate feature importance analysis
+  const runFeatureImportanceAnalysis = async () => {
+    try {
+      setFeatureImportanceRunning(true);
+      setFeatureImportanceProgress(0);
+      
+      const config = permutationConfigs.find((c: any) => c.id === selectedPermutationConfig);
+      if (!config) return;
+      
+      // Simulate feature importance calculation
+      const results: FeatureImportanceResult[] = config.features.map((feature: string, index: number) => {
+        const importance = Math.random();
+        const shapValue = (Math.random() - 0.5) * 2;
+        const category = importance > 0.7 ? 'high' : importance > 0.4 ? 'medium' : 'low';
+        
+        return {
+          featureName: feature,
+          permutationImportance: importance,
+          shapValue,
+          baselineContribution: Math.random() * 0.1,
+          rank: index + 1,
+          category: category as 'high' | 'medium' | 'low',
+          description: `Analysis of ${feature} impact on fantasy predictions`
+        };
+      }).sort((a, b) => b.permutationImportance - a.permutationImportance)
+        .map((item, index) => ({ ...item, rank: index + 1 }));
+      
+      setFeatureImportanceResults(results);
+      setFeatureImportanceRunning(false);
+      setFeatureImportanceProgress(100);
+    } catch (error) {
+      console.error('Error in feature importance analysis:', error);
+      setFeatureImportanceRunning(false);
+    }
+  };
+
+  const renderOverview = () => (
+    <div className="overview-content sm:px-4 md:px-6 lg:px-8">
+      <h3>🧠 Neural Network Overview</h3>
+      <p>Oracle's neural network combines advanced deep learning techniques with fantasy football domain expertise.</p>
+    </div>
+  );
+
+  const renderArchitecture = () => (
+    <div className="network-architecture sm:px-4 md:px-6 lg:px-8">
+      <h3>🏗️ Network Architecture</h3>
+      <div className="architecture-visualization sm:px-4 md:px-6 lg:px-8">
+        <div className="layers-container sm:px-4 md:px-6 lg:px-8">
+          {networkLayers.map((layer: any, index: number) => (
+            <button
+              key={layer.id}
+              className={`layer-card ${selectedLayer === layer.id ? 'selected' : ''}`}
               onClick={() => setSelectedLayer(selectedLayer === layer.id ? '' : layer.id)}
               aria-label={`Select ${layer.name} details`}
             >

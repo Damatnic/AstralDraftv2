@@ -3,7 +3,7 @@
  * Premium micro-interactions, visual effects, and motion design
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../ErrorBoundary';
 import React, { useCallback, useMemo, ReactNode, useRef, useEffect, FC } from 'react';
 import { motion, AnimatePresence, useAnimation, useInView, Variants } from 'framer-motion';
 
@@ -68,8 +68,8 @@ export const animationPresets = {
       scale: {
         times: [0, 0.4, 0.6, 0.8, 1],
         ease: "easeOut"
-
-
+      }
+    }
   },
 
   flipIn: {
@@ -88,7 +88,7 @@ export const animationPresets = {
     whileTap: {
       y: -4, 
       transition: { duration: 0.1 } 
-
+    }
   },
 
   scale: {
@@ -98,22 +98,22 @@ export const animationPresets = {
     },
     whileTap: {
       scale: 0.98, 
-      transition: { duration: 0.1 } 
-
+      transition: { duration: 0.1 }
+    }
   },
 
   glow: {
     whileHover: {
       boxShadow: "0 0 20px rgba(79, 70, 229, 0.6), 0 0 40px rgba(79, 70, 229, 0.3)",
       transition: { duration: 0.3 }
-
+    }
   },
 
   rotate: {
     whileHover: {
       rotate: [0, -5, 5, -5, 0], 
       transition: { duration: 0.5 } 
-
+    }
   },
 
   // Continuous Animations
@@ -124,8 +124,8 @@ export const animationPresets = {
         duration: 2,
         repeat: Infinity,
         ease: "easeInOut"
-
-
+      }
+    }
   },
 
   float: {
@@ -135,8 +135,8 @@ export const animationPresets = {
         duration: 3,
         repeat: Infinity,
         ease: "easeInOut"
-
-
+      }
+    }
   },
 
   shimmer: {
@@ -146,9 +146,9 @@ export const animationPresets = {
         duration: 2,
         repeat: Infinity,
         ease: "linear"
-
-
-
+      }
+    }
+  }
 };
 
 // =========================================
@@ -175,7 +175,7 @@ export const AnimatedElement: React.FC<AnimatedElementProps> = ({
   triggerOnView = false,
   viewThreshold = 0.1,
   repeatOnView = false
-}: any) => {
+}: AnimatedElementProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { 
     threshold: viewThreshold,
@@ -191,8 +191,8 @@ export const AnimatedElement: React.FC<AnimatedElementProps> = ({
         controls.start("animate");
       } else if (repeatOnView) {
         controls.start("initial");
-
-
+      }
+    }
   }, [isInView, triggerOnView, repeatOnView, controls]);
 
   const animationProps = triggerOnView 
@@ -203,13 +203,14 @@ export const AnimatedElement: React.FC<AnimatedElementProps> = ({
         variants: {
           initial: preset.initial,
           animate: preset.animate
-
-
+        }
+      }
     : preset;
 
   return (
     <motion.div
       className={className}
+      {...animationProps}
       transition={{
         ...preset.transition,
         delay,
@@ -237,14 +238,14 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
   staggerDelay = 0.1,
   animation = 'slideUp',
   className = ''
-}: any) => {
+}: StaggeredListProps) => {
   const containerVariants: Variants = {
     initial: {},
     animate: {
       transition: {
         staggerChildren: staggerDelay
-
-
+      }
+    }
   };
 
   const preset = animationPresets[animation];
@@ -281,7 +282,7 @@ export const CountUp: React.FC<CountUpProps> = ({
   prefix = '',
   suffix = '',
   className = ''
-}: any) => {
+}: CountUpProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, threshold: 0.3 });
   const [count, setCount] = React.useState(start);
@@ -307,7 +308,7 @@ export const CountUp: React.FC<CountUpProps> = ({
 
       if (progress < 1) {
         requestAnimationFrame(updateCount);
-
+      }
     };
 
     requestAnimationFrame(updateCount);
@@ -335,8 +336,8 @@ export const Typewriter: React.FC<TypewriterProps> = ({
   delay = 0,
   className = '',
   cursor = true,
-//   onComplete
-}: any) => {
+  onComplete
+}: TypewriterProps) => {
   const [displayText, setDisplayText] = React.useState('');
   const [showCursor, setShowCursor] = React.useState(true);
   const [isComplete, setIsComplete] = React.useState(false);
@@ -352,7 +353,7 @@ export const Typewriter: React.FC<TypewriterProps> = ({
           clearInterval(interval);
           setIsComplete(true);
           onComplete?.();
-    }
+        }
   }, speed);
 
       return () => clearInterval(interval);
@@ -366,8 +367,7 @@ export const Typewriter: React.FC<TypewriterProps> = ({
 
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
-    }
-  }, 500);
+    }, 500);
 
     return () => clearInterval(cursorInterval);
   }, [cursor, isComplete]);
@@ -396,7 +396,7 @@ export const Parallax: React.FC<ParallaxProps> = ({
   children,
   offset = 50,
   className = ''
-}: any) => {
+}: ParallaxProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = React.useState(0);
 
@@ -406,7 +406,7 @@ export const Parallax: React.FC<ParallaxProps> = ({
         const rect = ref.current.getBoundingClientRect();
         const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
         setScrollY(scrollPercent * offset);
-    }
+      }
   };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -436,13 +436,13 @@ export const MorphingShape: React.FC<MorphingShapeProps> = ({
   shapes,
   duration = 2,
   className = ''
-}: any) => {
+}: MorphingShapeProps) => {
   const [currentShape, setCurrentShape] = React.useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentShape(prev => (prev + 1) % shapes.length);
-    , duration * 1000);
+    }, duration * 1000);
 
     return () => {
       clearInterval(interval);
@@ -491,7 +491,7 @@ export const GlowEffect: React.FC<GlowEffectProps> = ({
   color = 'rgba(79, 70, 229, 0.6)',
   intensity = 20,
   className = ''
-}: any) => {
+}: GlowEffectProps) => {
   return (
     <motion.div
       className={className}
@@ -515,7 +515,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
   children,
   color = 'rgba(255, 255, 255, 0.3)',
   className = ''
-}: any) => {
+}: RippleEffectProps) => {
   const [ripples, setRipples] = React.useState<Array<{ x: number; y: number; id: number }>>([]);
 
   const createRipple = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -527,7 +527,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
     setRipples(prev => [...prev, { x, y, id }]);
 
     setTimeout(() => {
-      setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
+      setRipples(prev => prev.filter(ripple => ripple.id !== id));
     }, 600);
   };
 
@@ -537,7 +537,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
       onMouseDown={createRipple}
     >
       {children}
-      {ripples.map((ripple: any) => (
+      {ripples.map((ripple) => (
         <motion.span
           key={ripple.id}
           className="absolute rounded-full pointer-events-none sm:px-4 md:px-6 lg:px-8"
@@ -569,7 +569,7 @@ interface ShimmerEffectProps {
 export const ShimmerEffect: React.FC<ShimmerEffectProps> = ({
   children,
   className = ''
-}: any) => {
+}: ShimmerEffectProps) => {
   return (
     <div
       className={`relative overflow-hidden ${className}`}
@@ -622,14 +622,14 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
   gap = 16,
   staggerDelay = 0.1,
   className = ''
-}: any) => {
+}: AnimatedGridProps) => {
   const containerVariants: Variants = {
     initial: {},
     animate: {
       transition: {
         staggerChildren: staggerDelay
-
-
+      }
+    }
   };
 
   const itemVariants: Variants = {
@@ -641,8 +641,8 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
       transition: {
         duration: 0.5,
         ease: [0.25, 0.46, 0.45, 0.94]
-
-
+      }
+    }
   };
 
   return (
@@ -673,10 +673,10 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
 export const PulseLoader: React.FC<{ size?: number; color?: string }> = ({
   size = 40,
   color = '#4f46e5'
-}: any) => {
+}: { size?: number; color?: string }) => {
   return (
     <div className="flex justify-center items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-      {[0, 1, 2].map((index: any) => (
+      {[0, 1, 2].map((index: number) => (
         <motion.div
           key={index}
           style={{
@@ -704,7 +704,7 @@ export const SpinLoader: React.FC<{ size?: number; color?: string; thickness?: n
   size = 40,
   color = '#4f46e5',
   thickness = 3
-}: any) => {
+}: { size?: number; color?: string; thickness?: number }) => {
   return (
     <motion.div
       style={{
@@ -727,10 +727,10 @@ export const SpinLoader: React.FC<{ size?: number; color?: string; thickness?: n
 export const WaveLoader: React.FC<{ size?: number; color?: string }> = ({
   size = 40,
   color = '#4f46e5'
-}: any) => {
+}: { size?: number; color?: string }) => {
   return (
     <div className="flex justify-center items-end space-x-1 sm:px-4 md:px-6 lg:px-8" style={{ height: size }}>
-      {[0, 1, 2, 3, 4].map((index: any) => (
+      {[0, 1, 2, 3, 4].map((index: number) => (
         <motion.div
           key={index}
           style={{
@@ -758,7 +758,7 @@ export {
   AnimatePresence,
   motion,
   useAnimation,
-//   useInView
+  useInView
 };
 
 export default {
@@ -775,5 +775,5 @@ export default {
   PulseLoader,
   SpinLoader,
   WaveLoader,
-//   animationPresets
+  animationPresets
 };

@@ -16,25 +16,26 @@ interface TouchFeedbackOptions {
   visual?: boolean;
   audio?: boolean;
   intensity?: 'light' | 'medium' | 'heavy';
-
+}
 
 interface SwipeHandlers {
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
-  onSwipeDown?: () => void;}
+  onSwipeDown?: () => void;
+}
 
 interface GestureConfig {
   threshold?: number;
   velocity?: number;
   preventDefaultTouches?: boolean;
   enablePinch?: boolean;
-  enableRotate?: boolean;}
+  enableRotate?: boolean;
+}
 
 // =========================================
 // HAPTIC FEEDBACK SYSTEM
 // =========================================
-}
 
 export class HapticManager {
   private static instance: HapticManager;
@@ -43,21 +44,23 @@ export class HapticManager {
 
   constructor() {
     this.isSupported = 'vibrate' in navigator;
+  }
 
   static getInstance(): HapticManager {
     if (!HapticManager.instance) {
       HapticManager.instance = new HapticManager();
-
+    }
     return HapticManager.instance;
+  }
 
   setEnabled(enabled: boolean): void {
     this.isEnabled = enabled;
+  }
 
   trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error'): void {
     if (!this.isSupported || !this.isEnabled) return;
 
     const patterns = {
-  const [isLoading, setIsLoading] = React.useState(false);
       light: [10],
       medium: [50],
       heavy: [100],
@@ -67,12 +70,13 @@ export class HapticManager {
     };
 
     navigator.vibrate(patterns[type]);
+  }
 
   async triggerPattern(pattern: number[]): Promise<void> {
     if (!this.isSupported || !this.isEnabled) return;
     navigator.vibrate(pattern);
-
-
+  }
+}
 export const haptic = HapticManager.getInstance();
 
 // =========================================
@@ -117,6 +121,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
     if (feedback.haptic) {
       haptic.trigger(feedback.intensity || 'medium');
+    }
 
     if (feedback.visual) {
       const touch = e.touches[0];
@@ -129,6 +134,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       setTimeout(() => {
         setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
       }, 600);
+    }
 
     if (onLongPress) {
       pressTimer.current = setTimeout(() => {
@@ -136,7 +142,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
         haptic.trigger('heavy');
         onLongPress();
       }, longPressDuration);
-
+    }
   };
 
   const handleTouchEnd = () => {
@@ -146,10 +152,11 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
     if (pressTimer.current) {
       clearTimeout(pressTimer.current);
+    }
 
     if (onPress && !longPressTriggered.current) {
       onPress();
-
+    }
   };
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -168,13 +175,14 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       setTimeout(() => {
         setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
       }, 600);
+    }
 
     if (onLongPress) {
       pressTimer.current = setTimeout(() => {
         longPressTriggered.current = true;
         onLongPress();
       }, longPressDuration);
-
+    }
   };
 
   const handleMouseUp = () => {
@@ -184,17 +192,18 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
     if (pressTimer.current) {
       clearTimeout(pressTimer.current);
+    }
 
     if (onPress && !longPressTriggered.current) {
       onPress();
-
+    }
   };
 
   useEffect(() => {
     return () => {
       if (pressTimer.current) {
         clearTimeout(pressTimer.current);
-
+      }
     };
   }, []);
 
@@ -280,7 +289,8 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
       } else if (offset.x < 0 && handlers.onSwipeLeft) {
         haptic.trigger('light');
         handlers.onSwipeLeft();
-
+      }
+    }
 
     if (Math.abs(offset.y) > threshold && Math.abs(vel.y) > velocity) {
       if (offset.y > 0 && handlers.onSwipeDown) {
@@ -289,8 +299,8 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
       } else if (offset.y < 0 && handlers.onSwipeUp) {
         haptic.trigger('light');
         handlers.onSwipeUp();
-
-
+      }
+    }
   };
 
   return (
@@ -337,7 +347,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.y > 0 && window.scrollY === 0) {
       setPullDistance(info.offset.y);
-
+    }
   };
 
   const handleDragEnd = async (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -346,10 +356,18 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       haptic.trigger('success');
       
       try {
-
         await onRefresh();
-      
-    `relative ${className}`}>
+      } catch (error) {
+        console.error('Refresh failed:', error);
+      } finally {
+        setIsRefreshing(false);
+        setPullDistance(0);
+      }
+    }
+  };
+
+  return (
+    <div className={`relative ${className}`}>
       {showValue && (
         <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 sm:px-4 md:px-6 lg:px-8">
           <motion.div
@@ -434,7 +452,7 @@ export const TouchCardStack: React.FC<TouchCardStackProps> = ({
               handleSwipe('right', card.id);
             } else if (info.offset.x < -threshold) {
               handleSwipe('left', card.id);
-
+            }
           }}
           style={{
             zIndex: cards.length - index
@@ -470,11 +488,13 @@ export const useMobileScroll = () => {
         setScrollDirection('down');
       } else if (currentScrollY < lastScrollY.current) {
         setScrollDirection('up');
+      }
 
       lastScrollY.current = currentScrollY;
 
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
+      }
 
       scrollTimer.current = setTimeout(() => {
         setIsScrolling(false);
@@ -487,7 +507,7 @@ export const useMobileScroll = () => {
       window.removeEventListener('scroll', handleScroll);
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
-
+      }
     };
   }, []);
 
@@ -560,4 +580,106 @@ export default {
   haptic,
   useMobileScroll,
 //   useSafeArea
+};
+
+// TouchSlider interface
+interface TouchSliderProps {
+  value: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  onChange: (value: number) => void;
+  disabled?: boolean;
+  showValue?: boolean;
+  className?: string;
+  trackClassName?: string;
+  thumbClassName?: string;
+}
+
+export const TouchSlider: React.FC<TouchSliderProps> = ({
+  value,
+  min = 0,
+  max = 100,
+  step = 1,
+  onChange,
+  disabled = false,
+  showValue = false,
+  className = '',
+  trackClassName = '',
+  thumbClassName = ''
+}: any) => {
+  const [isDragging, setIsDragging] = React.useState(false);
+  const constraintsRef = React.useRef<HTMLDivElement>(null);
+  
+  const percentage = ((value - min) / (max - min)) * 100;
+  
+  const handleDrag = (event: any, info: any) => {
+    if (disabled) return;
+    
+    const bounds = constraintsRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    
+    const newPercentage = Math.max(0, Math.min(100, (info.point.x - bounds.left) / bounds.width * 100));
+    const newValue = Math.round(((newPercentage / 100) * (max - min) + min) / step) * step;
+    
+    if (newValue !== value) {
+      onChange(newValue);
+    }
+  };
+  
+  const handleDragStart = () => {
+    if (disabled) return;
+    setIsDragging(true);
+  };
+  
+  const handleDragEnd = () => {
+    if (disabled) return;
+    setIsDragging(false);
+  };
+  
+  return (
+    <div className={`relative ${className}`}>
+      {showValue && (
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 sm:px-4 md:px-6 lg:px-8">
+          <motion.div
+            className="bg-dark-800 text-white px-2 py-1 rounded text-xs font-medium sm:px-4 md:px-6 lg:px-8"
+            animate={{ scale: isDragging ? 1.1 : 1 }}
+          >
+            {value}
+          </motion.div>
+        </div>
+      )}
+      
+      <div
+        ref={constraintsRef}
+        className={`relative h-6 bg-glass-light rounded-full ${trackClassName}`}
+      >
+        {/* Progress Track */}
+        <motion.div
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full sm:px-4 md:px-6 lg:px-8"
+          style={{ width: `${percentage}%` }}
+        />
+        
+        {/* Thumb */}
+        <motion.div
+          className={`
+            absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2
+            w-6 h-6 bg-white rounded-full shadow-lg cursor-pointer
+            ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+            ${thumbClassName}
+          `}
+          style={{ left: `${percentage}%` }}
+          drag="x"
+          dragConstraints={constraintsRef}
+          dragElastic={0}
+          dragMomentum={false}
+          onDrag={handleDrag}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          whileDrag={{ scale: 1.2 }}
+          animate={{ scale: isDragging ? 1.2 : 1 }}
+        />
+      </div>
+    </div>
+  );
 };

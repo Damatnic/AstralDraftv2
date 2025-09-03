@@ -120,6 +120,8 @@ class SoundService {
       .filter(([_, audio]) => audio !== null)
       .map(([path, _]) => path);
   }
+}
+
 
 // Export singleton instance
 export const soundService = new SoundService();

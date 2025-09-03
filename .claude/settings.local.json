@@ -79,7 +79,11 @@
       "Bash(rg:*)",
       "Bash(git checkout:*)",
       "Bash(start http://localhost:8765)",
-      "Bash(start http://localhost:8766)"
+      "Bash(start http://localhost:8766)",
+      "Read(C:\\c\\Users\\damat\\_REPOS\\AD/**)",
+      "Read(C:\\c\\Users\\damat\\_REPOS\\AD/**)",
+      "Read(\\/**)",
+      "Bash(tasklist)"
     ],
     "deny": [],
     "ask": [],

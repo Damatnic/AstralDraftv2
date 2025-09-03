@@ -28,7 +28,7 @@ import {
     Clock,
     Zap,
     AlertCircle,
-//     CheckCircle
+    CheckCircle
 } from 'lucide-react';
 
 import UserStatsWidget, { UserStats } from './UserStatsWidget';
@@ -48,7 +48,8 @@ interface Props {
 interface MobileTouchState {
     startX: number;
     startY: number;
-    startTime: number;}
+    startTime: number;
+}
 
 const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1, 
     className = '' 
@@ -84,9 +85,9 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
         rank: 0
     });
 
-    // Notification system (only keeping used function)
+    // Notification system
     const {
-//         notifyAccuracyUpdate
+        notifyAccuracyUpdate
     } = useOracleNotifications();
 
     // Initialize mobile features
@@ -98,7 +99,8 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
             viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
             if (!document.querySelector('meta[name=viewport]')) {
                 document.head.appendChild(viewport);
-    }
+            }
+        }
   }, [isMobile]);
 
     // Mobile touch handlers
@@ -150,11 +152,13 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                 setActiveView('analytics');
             } else if (direction === 'right' && activeView === 'analytics') {
                 setActiveView('predictions');
+            }
 
             oracleMobileService.vibrate([25]); // Light haptic feedback
             
             // Clear swipe direction after animation
             setTimeout(() => setSwipeDirection(null), 300);
+        }
 
         setTouchState(null);
     }, [touchState, isMobile, activeView]);
@@ -175,7 +179,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                     ticking = false;
                 });
                 ticking = true;
-
+            }
         };
         
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -209,8 +213,9 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                 if (user?.id) {
                     setUserStats(prev => ({ ...prev, accuracy: message.data.accuracy }));
                     notifyAccuracyUpdate(message.data.accuracy, message.data.previousAccuracy || 0);
-
+                }
                 break;
+        }
 
     }, [user?.id, notifyAccuracyUpdate, updatePrediction, addRealtimeUpdate]);
 
@@ -257,9 +262,12 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
             
             // Note: userStats would need to be fetched separately or the API response structure needs to be updated
             // For now, we'll skip setting userStats from this response since it's not part of WeeklyPredictionsResponse
-  } finally {
+        } catch (error) {
+            console.error('Error loading predictions:', error);
+            setError(error instanceof Error ? error.message : 'Failed to load predictions');
+        } finally {
             setLoading(false);
-
+        }
     };
 
     // Mobile navigation component
@@ -272,21 +280,30 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
         >
             <div className="flex items-center justify-around py-2 px-4 sm:px-4 md:px-6 lg:px-8">
                 <button
-                    onClick={() => setActiveView('predictions')}`}
+                    onClick={() => setActiveView('predictions')}
+                    className={`flex flex-col items-center justify-center py-2 px-4 rounded-lg transition-colors ${
+                        activeView === 'predictions' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
+                    }`}
                 >
                     <Target className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Predictions</span>
                 </button>
                 
                 <button
-                    onClick={() => setActiveView('stats')}`}
+                    onClick={() => setActiveView('stats')}
+                    className={`flex flex-col items-center justify-center py-2 px-4 rounded-lg transition-colors ${
+                        activeView === 'stats' ? 'bg-green-600 text-white' : 'text-gray-400 hover:text-white'
+                    }`}
                 >
                     <TrendingUp className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Stats</span>
                 </button>
                 
                 <button
-                    onClick={() => setActiveView('analytics')}`}
+                    onClick={() => setActiveView('analytics')}
+                    className={`flex flex-col items-center justify-center py-2 px-4 rounded-lg transition-colors ${
+                        activeView === 'analytics' ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-white'
+                    }`}
                 >
                     <BarChart3 className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Analytics</span>
@@ -294,6 +311,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                 
                 <button
                     onClick={() => setShowNotificationSettings(true)}
+                    className="flex flex-col items-center justify-center py-2 px-4 rounded-lg transition-colors text-gray-400 hover:text-white"
                 >
                     <Settings className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Settings</span>
@@ -312,6 +330,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     onClick={() => setIsMobileMenuOpen(true)}
+                    className="fixed bottom-24 right-4 w-14 h-14 bg-blue-600 hover:bg-blue-700 rounded-full shadow-lg flex items-center justify-center z-40 transition-colors"
                 >
                     <Zap className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
                 </motion.button>
@@ -329,6 +348,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 bg-black/50 z-50 flex items-end sm:px-4 md:px-6 lg:px-8"
                     onClick={() => setIsMobileMenuOpen(false)}
+                >
                     <motion.div
                         initial={{ y: "100%" }}
                         animate={{ y: 0 }}
@@ -336,6 +356,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="w-full bg-gray-800 rounded-t-3xl p-6 safe-area-pb sm:px-4 md:px-6 lg:px-8"
                         onClick={(e: any) => e.stopPropagation()}
+                    >
                         <div className="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6 sm:px-4 md:px-6 lg:px-8"></div>
                         
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
@@ -392,8 +413,9 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                         
                         <button
                             onClick={() => setIsMobileMenuOpen(false)}
+                            className="w-full mt-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-colors"
                         >
-//                             Close
+                            Close
                         </button>
                     </motion.div>
                 </motion.div>
@@ -451,6 +473,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                 </div>
             </div>
         );
+    }
 
     return (
         <OracleErrorBoundary>
@@ -512,7 +535,9 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                             <p className="text-red-300/70 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{error}</p>
                                             <button
                                                 onClick={loadPredictions}
-                                             aria-label="Action button">
+                                                className="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition-colors"
+                                                aria-label="Try again to load predictions"
+                                            >
                                                 Try Again
                                             </button>
                                         </div>
@@ -560,8 +585,10 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                         <p className="text-gray-500 mb-6 sm:px-4 md:px-6 lg:px-8">Check back later for new Oracle predictions</p>
                                         <button
                                             onClick={loadPredictions}
-                                         aria-label="Action button">
-//                                             Refresh
+                                            className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors"
+                                            aria-label="Refresh predictions"
+                                        >
+                                            Refresh
                                         </button>
                                     </div>
                                 )}
@@ -598,6 +625,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8"
                             onClick={() => setSelectedPrediction(null)}
+                        >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -606,6 +634,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                     isMobile ? 'w-full max-w-sm' : 'w-full max-w-2xl'
                                 }`}
                                 onClick={(e: any) => e.stopPropagation()}
+                            >
                                 <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                         <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Oracle Prediction</h3>
@@ -630,15 +659,45 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
                                                 // Mobile success feedback
                                                 if (isMobile) {
                                                     oracleMobileService.vibrate([50, 50, 50]);
-                                                }`bg-gray-800 rounded-xl max-h-[90vh] overflow-y-auto ${
+                                                }
+                                            } catch (error) {
+                                                console.error('Error submitting prediction:', error);
+                                                setError(error instanceof Error ? error.message : 'Failed to submit prediction');
+                                            }
+                                        }}
+                                        className="p-6"
+                                    />
+                                )}
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Notification Settings Modal */}
+                <AnimatePresence>
+                    {showNotificationSettings && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8"
+                            onClick={() => setShowNotificationSettings(false)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                className={`bg-gray-800 rounded-xl max-h-[90vh] overflow-y-auto ${
                                     isMobile ? 'w-full max-w-sm' : 'w-full max-w-lg'
                                 }`}
                                 onClick={(e: any) => e.stopPropagation()}
+                            >
                                 <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                         <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Notification Settings</h3>
                                         <button
                                             onClick={() => setShowNotificationSettings(false)}
+                                            className="p-2 hover:bg-gray-700 rounded-lg transition-colors text-gray-400 hover:text-white"
                                         >
                                             <X className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                         </button>

@@ -33,15 +33,19 @@ export const SecureInputDemo: React.FC = () => {
     
     if (loginPassword.length < 8) {
       newErrors.loginPassword = 'Password must be at least 8 characters';
+    }
 
     if (registerPassword !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
+    }
 
     if (userPin.length !== 4) {
       newErrors.userPin = 'PIN must be exactly 4 digits';
+    }
 
     if (adminPin.length !== 6) {
       newErrors.adminPin = 'Admin PIN must be 6 digits';
+    }
 
     setErrors(newErrors);
     

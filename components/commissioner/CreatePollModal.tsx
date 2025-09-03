@@ -69,7 +69,6 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: 
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"
             >
-            >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <ClipboardListIcon /> Create New Poll

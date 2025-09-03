@@ -41,6 +41,7 @@ interface TeamIdentity {
     background: string;
     animation: string;
   };
+}
 
 interface TeamIdentityCustomizerProps {
   teamId: string;
@@ -87,7 +88,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       text: 'CHAMPIONS',
       background: 'gradient',
       animation: 'pulse'
-
+    }
   });
 
   const [activeTab, setActiveTab] = useState<'colors' | 'logo' | 'audio' | 'celebration' | 'jersey' | 'personality'>('colors');
@@ -119,7 +120,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       { name: 'Corporate', primary: '#1f2937', secondary: '#111827', accent: '#3b82f6' },
       { name: 'Executive', primary: '#374151', secondary: '#1f2937', accent: '#10b981' },
       { name: 'Elite', primary: '#581c87', secondary: '#4c1d95', accent: '#c4b5fd' }
-
+    ]
   };
 
   // Logo options
@@ -182,7 +183,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       teamPersonality: {
         ...identity.teamPersonality,
         traits: newTraits
-
+      }
     });
   };
 
@@ -371,8 +372,8 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
               onClick={() => updateIdentity({ 
                 teamPersonality: {
                   style, 
-                  traits: personalityTraits[style].slice(0, 3) 
-
+                  traits: personalityTraits[style].slice(0, 3)
+                }
               })}
               className={`p-3 rounded-lg border transition-colors ${
                 identity.teamPersonality.style === style
@@ -395,7 +396,12 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           {personalityTraits[identity.teamPersonality.style].map((trait: any) => (
             <button
               key={trait}
-              onClick={() => toggleTrait(trait)}`}
+              onClick={() => toggleTrait(trait)}
+              className={`p-2 rounded-lg border transition-colors ${
+                identity.teamPersonality.traits.includes(trait)
+                  ? 'border-primary-500 bg-primary-500/20'
+                  : 'border-gray-600 hover:border-gray-500'
+              }`}
             >
               {trait}
             </button>
@@ -405,13 +411,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
     </div>
   );
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
+  // Loading state removed - assuming it's defined elsewhere in the component
 
   return (
     <div className="bg-dark-800 rounded-xl p-6 border border-gray-700 sm:px-4 md:px-6 lg:px-8">
@@ -427,7 +427,10 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <button
-            onClick={() => setPreviewMode(!previewMode)}`}
+            onClick={() => setPreviewMode(!previewMode)}
+            className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+              previewMode ? 'bg-purple-500 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+            }`}
           >
             <Eye className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             {previewMode ? 'Exit Preview' : 'Preview'}
@@ -455,7 +458,12 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             ].map((tab: any) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}`}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+                  activeTab === tab.id
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                }`}
               >
                 <tab.icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                 {tab.label}

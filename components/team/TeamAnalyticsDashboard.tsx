@@ -18,14 +18,15 @@ interface TeamAnalyticsDashboardProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
-
+}
 
 interface WeeklyPerformance {
     week: number;
     points: number;
     projectedPoints: number;
     opponent: string;
-    result: 'W' | 'L' | 'T';}
+    result: 'W' | 'L' | 'T';
+}
 
 interface PositionAnalysis {
     position: string;
@@ -46,6 +47,7 @@ interface MatchupPreview {
         theirPlayer: Player;
         advantage: 'favor' | 'against' | 'neutral';
     }[];
+}
 
 const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, league, dispatch }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'overview' | 'trends' | 'projections' | 'matchup'>('overview');
@@ -90,7 +92,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
             trend: 'up',
             topPlayer: { id: 4, name: 'Travis Kelce', position: 'TE', team: 'KC' } as Player,
             depth: 2
-
+        }
     ];
 
     const nextMatchup: MatchupPreview = {
@@ -113,7 +115,8 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                 myPlayer: { id: 2, name: 'Christian McCaffrey', position: 'RB' } as Player,
                 theirPlayer: { id: 7, name: 'Derrick Henry', position: 'RB' } as Player,
                 advantage: 'favor'
-
+            }
+        ]
     };
 
     const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
@@ -124,7 +127,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                 return <TrendingDownIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
-
+        }
     };
 
     const getAdvantageColor = (advantage: 'favor' | 'against' | 'neutral') => {
@@ -135,7 +138,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                 return 'text-red-400';
             default:
                 return 'text-gray-400';
-
+        }
     };
 
     return (
@@ -150,7 +153,12 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
                 ].map((tab: any) => (
                     <button
                         key={tab.id}
-                        onClick={() => setSelectedTab(tab.id as any)}`}
+                        onClick={() => setSelectedTab(tab.id as any)}
+                        className={`px-4 py-2 border-b-2 transition-colors ${
+                            selectedTab === tab.id
+                                ? 'border-blue-400 text-blue-400'
+                                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                        }`}
                     >
                         {tab.label}
                     </button>

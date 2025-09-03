@@ -26,7 +26,7 @@ import {
     UploadIcon,
     TypeIcon,
     LayoutIcon,
-//     PaletteIcon
+    PaletteIcon
 } from 'lucide-react';
 
 export interface TeamStory {
@@ -50,6 +50,7 @@ export interface TeamStory {
     featuredPlayers: Player[];
     relatedWeek?: number;
     season: number;
+}
 
 export type StoryCategory = 
     | 'draft_recap' 
@@ -63,12 +64,11 @@ export type StoryCategory =
     | 'comeback' 
     | 'analysis';
 
-
 export interface StoryContent {
     sections: StorySection[];
     theme: StoryTheme;
     layout: 'article' | 'timeline' | 'gallery' | 'mixed';
-
+}
 
 export interface StorySection {
     id: string;
@@ -76,7 +76,7 @@ export interface StorySection {
     content: any;
     order: number;
     styling?: SectionStyling;
-
+}
 
 export interface SectionStyling {
     backgroundColor?: string;
@@ -85,7 +85,7 @@ export interface SectionStyling {
     alignment?: 'left' | 'center' | 'right';
     padding?: 'none' | 'small' | 'medium' | 'large';
     animation?: 'none' | 'fade-in' | 'slide-up' | 'bounce';
-
+}
 
 export interface StoryTheme {
     name: string;
@@ -94,7 +94,7 @@ export interface StoryTheme {
     backgroundColor: string;
     fontFamily: string;
     headerStyle: 'bold' | 'elegant' | 'playful' | 'modern';
-
+}
 
 export interface StoryComment {
     id: string;
@@ -155,7 +155,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             isPublic: false,
             featuredPlayers: [],
             season: new Date().getFullYear()
-
+        }
     );
 
     const [selectedTemplate, setSelectedTemplate] = React.useState<StoryTemplate | null>(null);
@@ -196,11 +196,12 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             backgroundColor: '#fef2f2',
             fontFamily: 'Comic Sans MS',
             headerStyle: 'playful'
-
+        }
     ];
 
     function getDefaultTheme(): StoryTheme {
         return predefinedThemes[0];
+    }
 
     const addSection = (type: StorySection['type']) => {
         const newSection: StorySection = {
@@ -536,7 +537,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                     <input
                         type="text"
                         value={currentStory.title || ''}
-                        onChange={(e: any) => setCurrentStory(prev => ({ ...prev, title: e.target.value }}
+                        onChange={(e: any) => setCurrentStory(prev => ({ ...prev, title: e.target.value }))}
                         placeholder="Story title..."
                         className="w-full p-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-xl font-bold text-[var(--text-primary)] placeholder-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8"
                     />
@@ -544,7 +545,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                     <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                         <select
                             value={currentStory.category || 'weekly_recap'}
-                            onChange={(e: any) => setCurrentStory(prev => ({ ...prev, category: e.target.value as StoryCategory }}
+                            onChange={(e: any) => setCurrentStory(prev => ({ ...prev, category: e.target.value as StoryCategory }))}
                             className="px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                         >
                             <option value="draft_recap">Draft Recap</option>
@@ -563,7 +564,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                             <input
                                 type="checkbox"
                                 checked={currentStory.isPublic || false}
-                                onChange={(e: any) => setCurrentStory(prev => ({ ...prev, isPublic: e.target.checked }}
+                                onChange={(e: any) => setCurrentStory(prev => ({ ...prev, isPublic: e.target.checked }))}
                                 className="rounded sm:px-4 md:px-6 lg:px-8"
                             />
                             Public story
@@ -582,7 +583,12 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                     ].map((mode: any) => (
                         <button
                             key={mode.id}
-                            onClick={() => setEditorMode(mode.id as any)}`}
+                            onClick={() => setEditorMode(mode.id as any)}
+                            className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-all ${
+                                editorMode === mode.id
+                                    ? 'border-blue-400 text-blue-400'
+                                    : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                            }`}
                         >
                             {mode.icon}
                             {mode.label}

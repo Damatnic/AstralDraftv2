@@ -42,7 +42,6 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
             >
-            >
                 <header className="p-4 border-b border-[var(--panel-border)] flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display sm:px-4 md:px-6 lg:px-8">Add Player to {team.name}</h2>
                     <button onClick={onClose} className="mobile-touch-target p-3 rounded-full hover:bg-white/10 sm:px-4 md:px-6 lg:px-8" aria-label="Close modal"><CloseIcon /></button>

@@ -15,6 +15,7 @@ interface AIAnalysisExample {
     output: string;
     explanation: string;
     processingSteps: string[];
+}
 
 
 interface NLPCapability {
@@ -23,7 +24,8 @@ interface NLPCapability {
     description: string;
     examples: string[];
     applications: string[];
-    icon: string;}
+    icon: string;
+}
 
 interface PromptEngineering {
     id: string;
@@ -65,7 +67,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Consider player-specific traits (mobility, arm strength)',
                 'Synthesize contextual factors into readable assessment',
                 'Generate actionable fantasy insights'
-
+            ]
         },
         {
             id: 'game-prediction',
@@ -80,7 +82,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Consider team defensive improvements',
                 'Predict possession flow and time of possession',
                 'Generate total and game flow prediction'
-
+            ]
         },
         {
             id: 'trend-analysis',
@@ -95,7 +97,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Analyze defensive rankings and vulnerabilities',
                 'Project current season alignment with trends',
                 'Generate specific player recommendations'
-
+            ]
         },
         {
             id: 'reasoning',
@@ -110,7 +112,8 @@ const OracleGeminiAISection: React.FC = () => {
                 'Factor game script and spread implications',
                 'Calculate confidence based on convergent factors',
                 'Explain decision logic in accessible language'
-
+            ]
+        }
     ];
 
     const nlpCapabilities: NLPCapability[] = [
@@ -209,7 +212,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Educational content creation'
             ],
             icon: '📝'
-
+        }
     ];
 
     const promptTemplates: PromptEngineering[] = [
@@ -244,22 +247,21 @@ const OracleGeminiAISection: React.FC = () => {
             variables: ['PREDICTION_ID', 'PREDICTED_OUTCOME', 'CONFIDENCE', 'ACTUAL_OUTCOME'],
             purpose: 'Analyze prediction outcomes to improve future accuracy and calibration',
             example: 'Validate prediction accuracy for player-performance-week8. Predicted: Josh Allen highest scorer (78% confidence). Actual: Josh Allen scored 31.2 points (2nd highest). Analyze: accuracy assessment, confidence calibration, key factors that influenced outcome, lessons learned. Identify prediction strengths and improvement areas.'
-
+        }
     ];
 
     // Animation for processing demo
     useEffect(() => {
-    const interval = setInterval(() => {
+        const interval = setInterval(() => {
             setProcessingDemo(prev => (prev + 1) % 6);
-    , 2000);
+        }, 2000);
         return () => clearInterval(interval);
-    }
-  }, []);
+    }, []);
 
     const selectedExampleData = aiAnalysisExamples.find((ex: any) => ex.id === selectedExample);
     const selectedCapabilityData = nlpCapabilities.find((cap: any) => cap.id === activeCapability);
     const selectedPrompts = promptTemplates.filter((prompt: any) 
-} prompt.category === selectedPromptCategory);
+=> prompt.category === selectedPromptCategory);
 
     return (
         <div className="oracle-gemini-ai-section sm:px-4 md:px-6 lg:px-8">
@@ -313,7 +315,7 @@ const OracleGeminiAISection: React.FC = () => {
                         </p>
                         <div className="processing-stats sm:px-4 md:px-6 lg:px-8">
                             <div className="stat sm:px-4 md:px-6 lg:px-8">
-                                <span className="stat-value sm:px-4 md:px-6 lg:px-8"><2min</span>
+                                <span className="stat-value sm:px-4 md:px-6 lg:px-8">&lt;2min</span>
                                 <span className="stat-label sm:px-4 md:px-6 lg:px-8">Average Response</span>
                             </div>
                             <div className="stat sm:px-4 md:px-6 lg:px-8">

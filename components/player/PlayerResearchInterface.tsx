@@ -15,7 +15,7 @@ import {
     ClockIcon,
     TargetIcon,
     BookOpenIcon,
-//     ActivityIcon
+    ActivityIcon
 } from 'lucide-react';
 import { Widget } from '../ui/Widget';
 import { useAuth } from '../../contexts/AuthContext';
@@ -32,13 +32,12 @@ import {
 
 interface Props {
     className?: string;
+}
 
 type ResearchTab = 'search' | 'projections' | 'news' | 'trends' | 'compare' | 'insights';
 type PlayerDetailTab = 'overview' | 'stats' | 'projections' | 'news' | 'trends' | 'compare';
-}
 
-const PlayerResearchInterface: React.FC<Props> = ({ className = '' 
- }: any) => {
+const PlayerResearchInterface: React.FC<Props> = ({ className = '' }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<ResearchTab>('search');
@@ -69,8 +68,8 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
     useEffect(() => {
         if (isAuthenticated) {
             handleSearch();
-    }
-  }, [isAuthenticated, searchFilter]);
+        }
+    }, [isAuthenticated, searchFilter]);
 
     const handleSearch = async () => {
         setLoading(true);
@@ -88,14 +87,13 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
                     player.team.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     player.position.toLowerCase().includes(searchQuery.toLowerCase())
                 );
-
+            }
             setSearchResults(filteredResults);
-    
-    } catch (error) {
+        } catch (error) {
             setError('Failed to search players');
         } finally {
             setLoading(false);
-
+        }
     };
 
     const handlePlayerSelect = useCallback(async (player: PlayerBaseInfo) => {
@@ -118,12 +116,11 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
             setPlayerNews(news);
             setPlayerTrends(trends);
             setPlayerInsights(insights);
-        
-    } catch (error) {
+        } catch (error) {
             setError('Failed to load player data');
         } finally {
             setLoading(false);
-
+        }
     }, []);
 
     const handleCompareSelect = (player: PlayerBaseInfo, slot: 1 | 2) => {
@@ -131,6 +128,7 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
             setComparePlayer1(player);
         } else {
             setComparePlayer2(player);
+        }
 
         // Auto-compare when both players selected
         if ((slot === 1 && comparePlayer2) || (slot === 2 && comparePlayer1)) {
@@ -138,8 +136,8 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
             const p2 = slot === 2 ? player : comparePlayer2;
             if (p1 && p2) {
                 executeComparison(p1, p2);
-
-
+            }
+        }
     };
 
     const executeComparison = async (player1: PlayerBaseInfo, player2: PlayerBaseInfo) => {

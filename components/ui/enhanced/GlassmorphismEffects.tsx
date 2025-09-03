@@ -3,7 +3,7 @@
  * Advanced glass morphism, neon effects, particle systems, and modern visual enhancements
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React, { useCallback, useRef, useEffect, useState, ReactNode, useMemo } from 'react';
 import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 
@@ -20,7 +20,7 @@ interface GlassEffectProps {
   className?: string;
   interactive?: boolean;
   glowOnHover?: boolean;
-
+}
 
 interface NeonEffectProps {
   children: ReactNode;
@@ -29,6 +29,7 @@ interface NeonEffectProps {
   flicker?: boolean;
   animate?: boolean;
   className?: string;
+}
 
 interface ParticleSystemProps {
   particleCount?: number;
@@ -43,11 +44,12 @@ interface HolographicEffectProps {
   children: ReactNode;
   speed?: number;
   intensity?: number;
-  className?: string;}
+  className?: string;
+}
 
 // =========================================
 // PREMIUM GLASS MORPHISM COMPONENT
-// =========================================}
+// =========================================
 
 export const GlassEffect: React.FC<GlassEffectProps> = ({ children,
   intensity = 'medium',
@@ -81,10 +83,10 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({ children,
       backdrop: 'backdrop-blur-xl',
       opacity: '0.16',
       borderOpacity: '0.25'
-
+    }
   };
 
-  const settings = intensitySettings[intensity];
+  const settings = intensitySettings[intensity as keyof typeof intensitySettings];
 
   const backgroundStyle = {
     background: `linear-gradient(135deg, 
@@ -125,13 +127,13 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({ children,
           y: -2,
           transition: { duration: 0.2 }
         } : {}
-
+      }
       whileTap={
         interactive ? {
           scale: 0.98,
           transition: { duration: 0.1 }
         } : {}
-
+      }
     >
       {/* Enhanced Glass Effect Overlay */}
       <div
@@ -204,7 +206,7 @@ export const NeonEffect: React.FC<NeonEffectProps> = ({
     ultra: { blur: 30, spread: 8, opacity: 1 }
   };
 
-  const settings = intensitySettings[intensity];
+  const settings = intensitySettings[intensity as keyof typeof intensitySettings];
 
   const neonShadow = `
     0 0 ${settings.blur}px ${color}${Math.round(settings.opacity * 255).toString(16)},
@@ -232,16 +234,16 @@ export const NeonEffect: React.FC<NeonEffectProps> = ({
             `drop-shadow(${neonShadow})`,
             `drop-shadow(0 0 ${settings.blur * 1.5}px ${color})`,
             `drop-shadow(${neonShadow})`
-
+          ]
         } : {}
-
+      }
       transition={
         animate ? {
           duration: 2,
           repeat: Infinity,
           ease: "easeInOut"
         } : {}
-
+      }
     >
       {flicker && (
         <style>
@@ -250,10 +252,10 @@ export const NeonEffect: React.FC<NeonEffectProps> = ({
               0%, 100% { opacity: 1; }
               50% { opacity: 0.7; }
               25%, 75% { opacity: 0.9; }
-
+            }
             .neon-flicker {
               animation: neon-flicker 2s infinite;
-
+            }
           `}
         </style>
       )}
@@ -292,7 +294,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   const mouseRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number>();
 
-  const initializeParticles = (width: number, height: number) => {
+  const initializeParticles = useCallback((width: number, height: number) => {
     particlesRef.current = Array.from({ length: particleCount }, (_, i) => ({
       id: i,
       x: Math.random() * width,
@@ -303,7 +305,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
       maxLife: 100 + Math.random() * 100,
       size: particleSize * (0.5 + Math.random() * 0.5)
     }));
-  };
+  }, [particleCount, animationSpeed, particleSize]);
 
   const updateParticles = (width: number, height: number) => {
     particlesRef.current.forEach((particle: any) => {
@@ -320,7 +322,8 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
         if (distance < 100) {
           particle.vx += dx * 0.0001;
           particle.vy += dy * 0.0001;
-
+        }
+      }
 
       // Bounce off walls
       if (particle.x < 0 || particle.x > width) particle.vx *= -1;
@@ -336,7 +339,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
         particle.life = 0;
         particle.x = Math.random() * width;
         particle.y = Math.random() * height;
-
+      }
     });
   };
 
@@ -371,7 +374,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
           ctx.moveTo(particle.x, particle.y);
           ctx.lineTo(otherParticle.x, otherParticle.y);
           ctx.stroke();
-
+        }
       });
     });
   };
@@ -413,6 +416,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
     
     if (interactive) {
       canvas.addEventListener('mousemove', handleMouseMove);
+    }
 
     animationRef.current = requestAnimationFrame(animate);
 
@@ -420,10 +424,10 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
       window.removeEventListener('resize', handleResize);
       if (interactive) {
         canvas.removeEventListener('mousemove', handleMouseMove);
-
+      }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
-
+      }
     };
   }, [particleCount, particleColor, particleSize, animationSpeed, interactive]);
 
@@ -662,5 +666,5 @@ export default {
   LiquidBackground,
   AuroraBackground,
   GradientText,
-//   FloatingElements
+  FloatingElements
 };

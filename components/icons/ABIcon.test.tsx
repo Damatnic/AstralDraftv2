@@ -1,11 +1,4 @@
 
-interface IconProps {
-  size?: number | string;
-
-  className?: string;
-  color?: string;
-  'aria-label'?: string;
-
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ABIcon from './ABIcon';

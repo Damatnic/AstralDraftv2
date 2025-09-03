@@ -116,33 +116,34 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
         }
         
         if (code && state) {
-        // Extract provider from current path
-        const pathParts = window.location.pathname.split('/');
-        const callbackIndex = pathParts.indexOf('callback');
-        const provider = callbackIndex !== -1 ? pathParts[callbackIndex + 1] : null;
+          // Extract provider from current path
+          const pathParts = window.location.pathname.split('/');
+          const callbackIndex = pathParts.indexOf('callback');
+          const provider = callbackIndex !== -1 ? pathParts[callbackIndex + 1] : null;
 
-        if (provider) {
-          setLoadingProvider(provider);
-          try {
-            const result = await oauthService.handleCallback(provider, code, state);
-            
-            if (result.success) {
-              onSuccess?.(result.user);
+          if (provider) {
+            setLoadingProvider(provider);
+            try {
+              const result = await oauthService.handleCallback(provider, code, state);
               
-              // Redirect to the page user was on before auth
-              const redirectPath = sessionStorage.getItem('oauth_redirect_after_auth') || '/dashboard';
-              sessionStorage.removeItem('oauth_redirect_after_auth');
-              window.history.replaceState({}, '', redirectPath);
-            } else {
-              setError(result.error || 'OAuth authentication failed');
-              onError?.(result.error || 'OAuth authentication failed');
+              if (result.success) {
+                onSuccess?.(result.user);
+                
+                // Redirect to the page user was on before auth
+                const redirectPath = sessionStorage.getItem('oauth_redirect_after_auth') || '/dashboard';
+                sessionStorage.removeItem('oauth_redirect_after_auth');
+                window.history.replaceState({}, '', redirectPath);
+              } else {
+                setError(result.error || 'OAuth authentication failed');
+                onError?.(result.error || 'OAuth authentication failed');
+              }
+            } catch (error) {
+              const errorMessage = 'OAuth authentication failed';
+              setError(errorMessage);
+              onError?.(errorMessage);
+            } finally {
+              setLoadingProvider(null);
             }
-          } catch (error) {
-            const errorMessage = 'OAuth authentication failed';
-            setError(errorMessage);
-            onError?.(errorMessage);
-          } finally {
-            setLoadingProvider(null);
           }
         }
       } catch (error) {

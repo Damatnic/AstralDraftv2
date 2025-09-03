@@ -679,37 +679,102 @@
     <div class="stars stars3"></div>
     <div class="dynamic-bg"></div>
     <div id="root">
-        <!-- Loading screen - should be replaced by React -->
-        <div id="loading-fallback" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-            <div style="text-align: center; color: white;">
+        <!-- Direct Login Interface - No Loading Screen -->
+        <div id="login-interface" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="text-align: center; color: white; max-width: 800px; padding: 20px;">
                 <div style="font-size: 72px; margin-bottom: 20px;">🏈</div>
-                <h1 style="font-size: 36px; font-weight: bold; margin: 0 0 16px 0;">Astral Draft</h1>
-                <p style="font-size: 18px; opacity: 0.9; margin: 0 0 16px 0;">Fantasy Football Platform</p>
-                <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-                    <div style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite;"></div>
-                    <div style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; animation-delay: 0.3s;"></div>
-                    <div style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; animation-delay: 0.6s;"></div>
+                <h1 style="font-size: 42px; font-weight: bold; margin: 0 0 16px 0; background: linear-gradient(45deg, #ffffff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Astral Draft</h1>
+                <p style="font-size: 20px; opacity: 0.9; margin: 0 0 32px 0;">Fantasy Football Platform</p>
+                
+                <!-- Player Login Grid -->
+                <div style="background: rgba(0,0,0,0.4); padding: 32px; border-radius: 16px; margin: 32px 0; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                    <h2 style="font-size: 24px; margin-bottom: 24px; color: #a5b4fc;">Select Your Player</h2>
+                    <div id="player-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; max-width: 600px; margin: 0 auto;">
+                        
+                        <button onclick="loginAsPlayer(1)" style="padding: 20px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(37, 99, 235, 0.9)); border: 2px solid rgba(59, 130, 246, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 1</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Commissioner</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(2)" style="padding: 20px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.9)); border: 2px solid rgba(16, 185, 129, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(16, 185, 129, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(16, 185, 129, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 2</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(3)" style="padding: 20px; background: linear-gradient(135deg, rgba(245, 101, 101, 0.8), rgba(220, 38, 38, 0.9)); border: 2px solid rgba(245, 101, 101, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(245, 101, 101, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(245, 101, 101, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 3</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(4)" style="padding: 20px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.8), rgba(147, 51, 234, 0.9)); border: 2px solid rgba(168, 85, 247, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(168, 85, 247, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(168, 85, 247, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 4</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(5)" style="padding: 20px; background: linear-gradient(135deg, rgba(251, 146, 60, 0.8), rgba(234, 88, 12, 0.9)); border: 2px solid rgba(251, 146, 60, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(251, 146, 60, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(251, 146, 60, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(251, 146, 60, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 5</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(6)" style="padding: 20px; background: linear-gradient(135deg, rgba(34, 197, 94, 0.8), rgba(22, 163, 74, 0.9)); border: 2px solid rgba(34, 197, 94, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(34, 197, 94, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(34, 197, 94, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 6</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(7)" style="padding: 20px; background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(185, 28, 28, 0.9)); border: 2px solid rgba(239, 68, 68, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(239, 68, 68, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(239, 68, 68, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 7</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(8)" style="padding: 20px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.8), rgba(2, 132, 199, 0.9)); border: 2px solid rgba(14, 165, 233, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(14, 165, 233, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(14, 165, 233, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 8</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(9)" style="padding: 20px; background: linear-gradient(135deg, rgba(139, 69, 19, 0.8), rgba(120, 53, 15, 0.9)); border: 2px solid rgba(139, 69, 19, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(139, 69, 19, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(139, 69, 19, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 9</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                        
+                        <button onclick="loginAsPlayer(10)" style="padding: 20px; background: linear-gradient(135deg, rgba(107, 114, 128, 0.8), rgba(75, 85, 99, 0.9)); border: 2px solid rgba(107, 114, 128, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4);" onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(107, 114, 128, 0.6)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(107, 114, 128, 0.4)';">
+                            <div style="font-size: 36px; margin-bottom: 8px;">👤</div>
+                            <div style="font-size: 14px;">Player 10</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Active</div>
+                        </button>
+                    </div>
                 </div>
-                <div id="debug-info" style="font-size: 12px; opacity: 0.7; max-width: 400px; text-align: left; margin: 16px auto; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
-                    <div>🔍 Initializing app...</div>
-                    <div id="debug-timer">⏱️ Loading: 0s</div>
+                
+                <!-- Status & Options -->
+                <div style="margin-top: 32px; padding: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px;">
+                    <div style="margin-bottom: 12px;">
+                        <span style="color: #10b981;">●</span> <strong>System Status:</strong> Online & Ready
+                    </div>
+                    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="showAdvanced()" style="padding: 6px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            ⚙️ Advanced
+                        </button>
+                        <button onclick="window.location.reload()" style="padding: 6px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            🔄 Refresh
+                        </button>
+                    </div>
                 </div>
-                <button onclick="window.location.reload()" style="margin-top: 16px; padding: 8px 16px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 6px; cursor: pointer;">
-                    🔄 Refresh Page
-                </button>
+                
                 <noscript>
-                    <p style="margin-top: 32px; padding: 16px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                    <div style="margin-top: 32px; padding: 16px; background: rgba(255,0,0,0.2); border: 1px solid rgba(255,0,0,0.4); border-radius: 8px;">
                         JavaScript is required to run this application. Please enable JavaScript in your browser settings.
-                    </p>
+                    </div>
                 </noscript>
             </div>
         </div>
-        <style>
-            @keyframes pulse {
-                0%, 100% { opacity: 0.3; transform: scale(0.8); }
-                50% { opacity: 1; transform: scale(1); }
-            }
-        </style>
     </div>
     <canvas id="confetti-canvas"></canvas>
     <!-- Performance monitoring and optimization -->
@@ -829,11 +894,79 @@
         }
       }, 15000);
       
-      // Let React App component handle loading screen removal
-      // Just monitor for debug info
-      addDebugInfo('⏳ Waiting for React App to remove loading screen...');
+      // Login functionality
+      window.loginAsPlayer = function(playerId) {
+        console.log('🎯 LOGIN: Player', playerId, 'selected');
+        
+        // Show selection feedback
+        const button = event.target.closest('button');
+        if (button) {
+          button.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 1))';
+          button.innerHTML = `
+            <div style="font-size: 36px; margin-bottom: 8px;">✅</div>
+            <div style="font-size: 14px;">Logging in...</div>
+            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Please wait</div>
+          `;
+        }
+        
+        // Store player selection
+        localStorage.setItem('selectedPlayer', playerId);
+        sessionStorage.setItem('fastLogin', 'true');
+        
+        // Try to pass to React app if it exists
+        if (window.ReactApp && window.ReactApp.login) {
+          window.ReactApp.login(playerId);
+        } else {
+          // If React isn't ready, wait for it or transition to React
+          setTimeout(() => {
+            // Hide login interface and let React take over
+            const loginEl = document.getElementById('login-interface');
+            if (loginEl) {
+              loginEl.style.opacity = '0';
+              loginEl.style.transition = 'opacity 0.5s ease-out';
+              setTimeout(() => {
+                if (loginEl.parentNode) {
+                  loginEl.parentNode.removeChild(loginEl);
+                }
+              }, 500);
+            }
+            
+            // Force React to render
+            if (window.initReactApp) {
+              window.initReactApp();
+            }
+          }, 1000);
+        }
+      };
       
-      addDebugInfo('🔍 Monitoring for React...');
+      window.showAdvanced = function() {
+        alert('Advanced options:\n• Clear cache: localStorage.clear()\n• Debug mode: Add ?debug=1 to URL\n• Force refresh: Ctrl+F5');
+      };
+      
+      // Monitor for React and transition when ready
+      const checkForReact = setInterval(() => {
+        if (document.querySelector('[data-reactroot]') || 
+            document.querySelector('.App') ||
+            document.querySelector('nav') ||
+            document.querySelector('main')) {
+          
+          console.log('✅ React detected, transitioning from HTML login');
+          
+          // Hide HTML login interface
+          const loginEl = document.getElementById('login-interface');
+          if (loginEl) {
+            loginEl.style.opacity = '0';
+            loginEl.style.transition = 'opacity 0.3s ease-out';
+            setTimeout(() => {
+              if (loginEl.parentNode) {
+                loginEl.parentNode.removeChild(loginEl);
+              }
+            }, 300);
+          }
+          
+          clearInterval(checkForReact);
+        }
+      }, 500);
     </script>
     
     <script type="module" src="/index.tsx"></script>

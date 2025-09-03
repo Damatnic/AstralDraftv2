@@ -275,7 +275,8 @@ class WebSocketManager {
     
     connection.listeners.get(event)!.add(callback);
 
-    // Return cleanup function return() => {
+    // Return cleanup function
+    return () => {
       this.off(id, event, callback);
     };
   }
@@ -575,7 +576,7 @@ class WebSocketManager {
       closing,
       closed,
       totalListeners,
-//       totalQueuedMessages
+      totalQueuedMessages
     };
   }
 
@@ -602,6 +603,7 @@ class WebSocketManager {
       default: return 'unknown';
     }
   }
+}
 
 // Create singleton instance
 export const wsManager = new WebSocketManager();

@@ -16,11 +16,12 @@ interface BottomSheetProps {
   className?: string;
   snapPoints?: number[];
   initialSnap?: number;
+}
 
 /**
  * Bottom Sheet Modal for Mobile
  * Provides native mobile app-like modal experience
- */}
+ */
 
 export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   onClose,
@@ -57,8 +58,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
     return () => document.removeEventListener('keydown', handleKeydown);
   }, [isOpen, onClose]);
 
-  const handleTouchStart = (e: React.TouchEvent) 
-} {
+  const handleTouchStart = (e: React.TouchEvent) => {
     if (!isMobile) return;
     setIsDragging(true);
     setStartY(e.touches[0].clientY);
@@ -82,10 +82,11 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
         onClose();
       } else {
         setCurrentSnap(Math.max(0, currentSnap - 1));
-
+      }
     } else if (deltaY < -threshold) {
       // Dragged up - go to higher snap point
       setCurrentSnap(Math.min(snapPoints.length - 1, currentSnap + 1));
+    }
 
     setIsDragging(false);
     setStartY(0);
@@ -167,11 +168,12 @@ interface SwipeGestureProps {
   threshold?: number;
   children: React.ReactNode;
   className?: string;
+}
 
 /**
  * Swipe Gesture Handler
  * Provides swipe gesture detection for mobile interactions
- */}
+ */
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   onSwipeLeft,
