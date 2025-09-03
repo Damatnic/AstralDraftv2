@@ -46,9 +46,18 @@ const PlaceholderView: React.FC<{ viewName: string }> = ({ viewName }) => (
 
 // Main app content component
 const AppContent: React.FC = () => {
+  console.log('🎯 APP: AppContent component mounting');
+  
   const { state, dispatch } = useAppState();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [emergencyFallback, setEmergencyFallback] = React.useState(false);
+  
+  console.log('📊 APP: Current app state:', JSON.stringify({
+    hasUser: !!state.user,
+    isLoading: state.isLoading,
+    currentView: state.currentView,
+    emergencyFallback
+  }, null, 2));
 
   // Initialize production optimizations - safely
   try {
@@ -59,35 +68,35 @@ const AppContent: React.FC = () => {
 
   // Initialize app
   useEffect(() => {
-    console.log('App initialization started...');
+    console.log('🚀 App initialization started...');
+    console.log('📊 Current state:', JSON.stringify(state, null, 2));
     
-    // Basic initialization
-    if (!state.user) {
-      dispatch({ type: 'SET_LOADING', payload: false });
-      console.log('Loading set to false');
-    }
+    // FORCE APP TO SHOW - bypass all loading logic
+    console.log('⚡ FORCE BYPASSING ALL LOADING LOGIC');
+    dispatch({ type: 'SET_LOADING', payload: false });
+    console.log('✅ Loading forcibly set to false');
     
     // Initialize mobile optimizations only in browser environment
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       try {
         initializeMobileOptimizations();
-        console.log('Mobile optimizations initialized');
+        console.log('✅ Mobile optimizations initialized');
       } catch (error) {
-        console.error('Mobile optimization error:', error);
+        console.error('❌ Mobile optimization error:', error);
       }
+    } else {
+      console.warn('⚠️ Not in browser environment');
     }
     
-    // Failsafe timeout - if app is still in loading state after 10 seconds, enable emergency fallback
+    // Very short emergency failsafe - 2 seconds
     const failsafeTimeout = setTimeout(() => {
-      console.warn('App initialization timeout - enabling emergency fallback');
+      console.warn('🚨 EMERGENCY FAILSAFE - showing app now');
       setEmergencyFallback(true);
-      if (!state.user) {
-        dispatch({ type: 'SET_LOADING', payload: false });
-      }
-    }, 10000);
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }, 2000);
     
     return () => clearTimeout(failsafeTimeout);
-  }, [dispatch, state.user]);
+  }, []);
 
   // If user is not authenticated, show login (with emergency fallback)
   if (!state.user) {

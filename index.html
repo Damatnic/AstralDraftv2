@@ -679,17 +679,24 @@
     <div class="stars stars3"></div>
     <div class="dynamic-bg"></div>
     <div id="root">
-        <!-- Emergency fallback content - will be replaced when React loads -->
-        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <!-- Loading screen - should be replaced by React -->
+        <div id="loading-fallback" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
             <div style="text-align: center; color: white;">
                 <div style="font-size: 72px; margin-bottom: 20px;">🏈</div>
                 <h1 style="font-size: 36px; font-weight: bold; margin: 0 0 16px 0;">Astral Draft</h1>
-                <p style="font-size: 18px; opacity: 0.9; margin: 0 0 32px 0;">Fantasy Football Platform</p>
-                <div style="display: inline-flex; align-items: center; gap: 8px;">
+                <p style="font-size: 18px; opacity: 0.9; margin: 0 0 16px 0;">Fantasy Football Platform</p>
+                <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                     <div style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite;"></div>
                     <div style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; animation-delay: 0.3s;"></div>
                     <div style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; animation-delay: 0.6s;"></div>
                 </div>
+                <div id="debug-info" style="font-size: 12px; opacity: 0.7; max-width: 400px; text-align: left; margin: 16px auto; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
+                    <div>🔍 Initializing app...</div>
+                    <div id="debug-timer">⏱️ Loading: 0s</div>
+                </div>
+                <button onclick="window.location.reload()" style="margin-top: 16px; padding: 8px 16px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 6px; cursor: pointer;">
+                    🔄 Refresh Page
+                </button>
                 <noscript>
                     <p style="margin-top: 32px; padding: 16px; background: rgba(255,255,255,0.1); border-radius: 8px;">
                         JavaScript is required to run this application. Please enable JavaScript in your browser settings.
@@ -726,6 +733,128 @@
           });
         });
       });
+    </script>
+    
+    <!-- Emergency loading screen debugging and failsafe -->
+    <script>
+      // Debug timer and failsafe for loading screen
+      let startTime = Date.now();
+      let debugTimer;
+      let emergencyTimer;
+      
+      function updateDebugTimer() {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const timerEl = document.getElementById('debug-timer');
+        if (timerEl) {
+          timerEl.textContent = `⏱️ Loading: ${elapsed}s`;
+        }
+      }
+      
+      function addDebugInfo(message) {
+        const debugEl = document.getElementById('debug-info');
+        if (debugEl) {
+          const div = document.createElement('div');
+          div.textContent = message;
+          debugEl.appendChild(div);
+        }
+      }
+      
+      // Start debug timer
+      debugTimer = setInterval(updateDebugTimer, 1000);
+      
+      // Emergency failsafe - if React doesn't load in 8 seconds, show emergency UI
+      emergencyTimer = setTimeout(() => {
+        addDebugInfo('🚨 EMERGENCY: React not loading, showing fallback');
+        const loadingEl = document.getElementById('loading-fallback');
+        if (loadingEl) {
+          loadingEl.innerHTML = `
+            <div style="text-align: center; color: white; max-width: 600px; padding: 20px;">
+              <div style="font-size: 72px; margin-bottom: 20px;">🏈</div>
+              <h1 style="font-size: 36px; font-weight: bold; margin: 0 0 16px 0;">Astral Draft</h1>
+              <p style="font-size: 18px; opacity: 0.9; margin: 0 0 32px 0;">Fantasy Football Platform</p>
+              
+              <!-- Emergency Player Login Icons -->
+              <div style="background: rgba(0,0,0,0.5); padding: 32px; border-radius: 16px; margin: 32px 0;">
+                <h2 style="font-size: 24px; margin-bottom: 24px;">🚨 Emergency Mode - Select Your Player</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 16px; max-width: 500px; margin: 0 auto;">
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(59, 130, 246, 0.8); border: 2px solid rgba(59, 130, 246, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 1</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(16, 185, 129, 0.8); border: 2px solid rgba(16, 185, 129, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 2</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(245, 101, 101, 0.8); border: 2px solid rgba(245, 101, 101, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 3</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(168, 85, 247, 0.8); border: 2px solid rgba(168, 85, 247, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 4</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(251, 146, 60, 0.8); border: 2px solid rgba(251, 146, 60, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 5</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(34, 197, 94, 0.8); border: 2px solid rgba(34, 197, 94, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 6</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(239, 68, 68, 0.8); border: 2px solid rgba(239, 68, 68, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 7</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(14, 165, 233, 0.8); border: 2px solid rgba(14, 165, 233, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 8</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(139, 69, 19, 0.8); border: 2px solid rgba(139, 69, 19, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 9</div>
+                  </button>
+                  <button onclick="alert('Emergency mode - full app would load here')" style="padding: 16px; background: rgba(107, 114, 128, 0.8); border: 2px solid rgba(107, 114, 128, 1); border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                    <div style="font-size: 32px;">👤</div>
+                    <div style="font-size: 12px; margin-top: 8px;">Player 10</div>
+                  </button>
+                </div>
+              </div>
+              
+              <div style="margin-top: 32px; padding: 16px; background: rgba(255,0,0,0.2); border: 1px solid rgba(255,0,0,0.4); border-radius: 8px; font-size: 14px;">
+                ⚠️ React app failed to load. This emergency interface allows basic functionality.
+                <br><button onclick="window.location.reload()" style="margin-top: 12px; padding: 8px 16px; background: rgba(59, 130, 246, 0.8); border: none; color: white; border-radius: 6px; cursor: pointer;">🔄 Try Reload</button>
+              </div>
+            </div>
+          `;
+        }
+      }, 8000);
+      
+      // Monitor for React mounting
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            const hasReactContent = document.querySelector('[data-reactroot]') || 
+                                   document.querySelector('.App') ||
+                                   document.querySelector('[class*="react"]') ||
+                                   document.querySelector('div[class^="css-"]') ||
+                                   (document.getElementById('root').children.length > 1);
+            
+            if (hasReactContent) {
+              addDebugInfo('✅ React detected, cleaning up...');
+              clearInterval(debugTimer);
+              clearTimeout(emergencyTimer);
+              observer.disconnect();
+            }
+          }
+        });
+      });
+      
+      observer.observe(document.getElementById('root'), {
+        childList: true,
+        subtree: true
+      });
+      
+      addDebugInfo('🔍 Monitoring for React...');
     </script>
     
     <script type="module" src="/index.tsx"></script>
