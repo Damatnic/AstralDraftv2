@@ -16,11 +16,13 @@ const KeeperSelectionView: React.FC = () => {
 
     if (!league || !myTeam) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
+    }
 
     const keeperCount = league.settings.keeperCount || 0;
 
     if (keeperCount === 0) {
         return <ErrorDisplay title="Not a Keeper League" message="This league is not set up for keepers." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
+    }
 
     const handleTogglePlayer = (playerId: number) => {
         setSelectedIds(prev => {
@@ -30,9 +32,11 @@ const KeeperSelectionView: React.FC = () => {
             } else {
                 if (newSet.size < keeperCount) {
                     newSet.add(playerId);
-
-
+                }
+            }
             return newSet;
+        });
+    };
         });
     };
 
@@ -59,7 +63,7 @@ const KeeperSelectionView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
                     className="glass-button"
                 >
                     Back to Team Hub

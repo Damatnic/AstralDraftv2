@@ -45,7 +45,6 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
             >
-            >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><UserPlusIcon /> Invite Members</h2>
                 </header>
@@ -69,7 +68,11 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
                             {league.invitations.map((inv: any) => (
                                 <div key={inv.id} className="p-2 bg-black/10 rounded-md flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">{inv.email}</span>
-                                    <button onClick={() => handleCopy(inv.link)}
+                                    <button 
+                                        onClick={() => handleCopy(inv.link)}
+                                        className="px-2 py-1 text-xs bg-blue-500 text-white rounded"
+                                    >
+                                        Copy Link
                                     </button>
                                 </div>
                             ))}
