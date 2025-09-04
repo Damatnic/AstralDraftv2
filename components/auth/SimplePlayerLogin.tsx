@@ -8,6 +8,7 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SimpleAuthService from '../../services/simpleAuthService';
 import { useAppState } from '../../contexts/AppContext';
+import { useAuth } from '../../contexts/SimpleAuthContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import { Button } from '../ui/Button';
 import SecureInput from '../ui/SecureInput';
@@ -17,6 +18,7 @@ interface SimplePlayerLoginProps {
 
 const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) => {
   const { dispatch } = useAppState();
+  const { login: authLogin } = useAuth();
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
@@ -137,8 +139,12 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
           avatar: session.user.customization.emoji
         };
         
-        // Dispatch login action
+        console.log('🎯 LOGIN: Player', authId, 'selected');
+        console.log('✅ LOGIN: Player data stored, triggering app load');
+        
+        // Update both contexts
         dispatch({ type: 'LOGIN', payload: userPayload });
+        authLogin(session.user);
 
         // Call onLogin callback if provided
         if (onLogin) {
@@ -163,7 +169,12 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         localStorage.setItem('currentUser', JSON.stringify(demoUser));
         localStorage.setItem('authToken', `demo-token-${selectedPlayer}`);
         
+        console.log('🎯 LOGIN: Demo Player', selectedPlayer, 'selected');
+        console.log('✅ LOGIN: Demo Player data stored, triggering app load');
+        
+        // Update both contexts for demo user
         dispatch({ type: 'LOGIN', payload: demoUser });
+        authLogin(demoUser as any);
         
         if (onLogin) {
           onLogin(demoUser as any);
@@ -182,7 +193,12 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         avatar: playerData.find((p: any) => p.id === selectedPlayer)?.emoji || '🔓'
       };
       
+      console.log('🚨 LOGIN: Emergency fallback for', selectedPlayer);
+      console.log('✅ LOGIN: Emergency user created, triggering app load');
+      
+      // Update both contexts for emergency user
       dispatch({ type: 'LOGIN', payload: forceUser });
+      authLogin(forceUser as any);
       
       if (onLogin) {
         onLogin(forceUser as any);

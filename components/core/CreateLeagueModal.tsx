@@ -36,9 +36,15 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
         if (branding) {
             setUserTeamName(branding.teamName);
             setUserTeamAvatar(branding.avatar);
+        }
         
-    `Generating AI managers... this may take a moment.`, type: 'SYSTEM' 
-    }});
+        dispatch({ 
+            type: 'ADD_NOTIFICATION', 
+            payload: { 
+                message: 'Generating AI managers... this may take a moment.', 
+                type: 'SYSTEM' 
+            } 
+        });
 
         try {
             const aiProfilePromises = Array.from({ length: teamCount - 1 }).map(() => generateAiTeamProfile(name));
@@ -87,10 +93,10 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="create-league-title"
-                onClick={(e: any) => e.stopPropagation()},
-                    animate: { opacity: 1, y: 0, scale: 1 },
-                    exit: { opacity: 0, y: 20, scale: 0.95 },
-                }}
+                onClick={(e: any) => e.stopPropagation()}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
             >
                 <header className="p-6 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 id="create-league-title" className="text-2xl font-bold font-display text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">

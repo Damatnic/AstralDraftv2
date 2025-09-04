@@ -9,17 +9,22 @@ import { ThemeToggle } from './components/ui/ThemeToggle';
 import SimpleAuthService from './services/simpleAuthService';
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 
-// Elite features  
-import { CommandPalette } from './components/ui/CommandPalette';
-import { NotificationCenter } from './components/ui/NotificationCenter';
-import { AdvancedSettings } from './components/ui/AdvancedSettings';
-import { AIInsightsDashboard } from './components/elite/AIInsightsDashboard';
-import { RealTimeTicker } from './components/elite/RealTimeTicker';
+// Elite features - now lazy loaded below
 
-// Use SimpleDashboard as fallback for all routes
+// Development mode performance dashboard
+const PerformanceDashboard = lazy(() => import('./components/ui/PerformanceDashboard'));
+
+// Lazy load components for better code splitting
 const Dashboard = lazy(() => Promise.resolve({ default: SimpleDashboard }));
 const TeamHub = lazy(() => Promise.resolve({ default: SimpleDashboard }));
 const DraftRoom = lazy(() => Promise.resolve({ default: SimpleDashboard }));
+
+// Lazy load heavy features only when needed
+const AIInsightsDashboard = lazy(() => import('./components/elite/AIInsightsDashboard').then(m => ({ default: m.AIInsightsDashboard })));
+const RealTimeTicker = lazy(() => import('./components/elite/RealTimeTicker').then(m => ({ default: m.RealTimeTicker })));
+const CommandPalette = lazy(() => import('./components/ui/CommandPalette').then(m => ({ default: m.CommandPalette })));
+const NotificationCenter = lazy(() => import('./components/ui/NotificationCenter').then(m => ({ default: m.NotificationCenter })));
+const AdvancedSettings = lazy(() => import('./components/ui/AdvancedSettings').then(m => ({ default: m.AdvancedSettings })));
 
 // Elite dashboard with advanced features
 const SimpleDashboard: React.FC = () => {
@@ -57,7 +62,9 @@ const SimpleDashboard: React.FC = () => {
             {/* User Menu */}
             <div className="flex items-center space-x-3">
               <ThemeToggle />
-              <NotificationCenter />
+              <Suspense fallback={<div className="w-8 h-8 bg-white/10 rounded animate-pulse" />}>
+                <NotificationCenter />
+              </Suspense>
               
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -102,7 +109,9 @@ const SimpleDashboard: React.FC = () => {
           className="space-y-8"
         >
           {/* Real-time Ticker */}
-          <RealTimeTicker />
+          <Suspense fallback={<div className="h-12 bg-white/5 rounded-lg animate-pulse" />}>
+            <RealTimeTicker />
+          </Suspense>
 
           {/* Welcome Section */}
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
@@ -127,7 +136,9 @@ const SimpleDashboard: React.FC = () => {
           {/* Two Column Layout for AI Insights and Quick Stats */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* AI Insights */}
-            <AIInsightsDashboard />
+            <Suspense fallback={<div className="h-64 bg-white/5 rounded-lg animate-pulse flex items-center justify-center"><div className="text-white/50">Loading AI Insights...</div></div>}>
+              <AIInsightsDashboard />
+            </Suspense>
 
             {/* Quick Stats */}
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
@@ -229,12 +240,16 @@ const SimpleDashboard: React.FC = () => {
       {/* Advanced Settings Modal */}
       <AnimatePresence>
         {showSettings && (
-          <AdvancedSettings onClose={() => setShowSettings(false)} />
+          <Suspense fallback={<div className="fixed inset-0 bg-black/50 flex items-center justify-center"><div className="text-white">Loading Settings...</div></div>}>
+            <AdvancedSettings onClose={() => setShowSettings(false)} />
+          </Suspense>
         )}
       </AnimatePresence>
       
       {/* Command Palette */}
-      <CommandPalette />
+      <Suspense fallback={null}>
+        <CommandPalette />
+      </Suspense>
     </div>
   );
 };
@@ -415,6 +430,13 @@ const App: React.FC = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AnimatePresence>
+
+      {/* Performance Dashboard - Development Mode Only */}
+      {process.env.NODE_ENV === 'development' && (
+        <Suspense fallback={null}>
+          <PerformanceDashboard />
+        </Suspense>
+      )}
     </div>
   );
 };

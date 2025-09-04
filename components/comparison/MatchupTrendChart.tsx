@@ -19,7 +19,7 @@ import {
   Cell,
   ComposedChart,
   Area,
-//   Line
+  Line
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
@@ -33,13 +33,13 @@ import {
   Droplets,
   Target,
   Shield,
-//   BarChart3
+  BarChart3
 } from 'lucide-react';
 import { 
   MatchupTrend, 
   DefensiveHeatMap, 
   WeatherTrendAnalysis,
-//   enhancedMatchupAnalyticsService 
+  enhancedMatchupAnalyticsService 
 } from '../../services/enhancedMatchupAnalyticsService';
 
 interface MatchupTrendChartProps {
@@ -52,6 +52,7 @@ interface ChartDataPoint extends MatchupTrend {
   formattedWeek: string;
   difficultyColor: string;
   weatherIcon: string;
+}
 
 // Move tooltip component outside to avoid lint issues
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -69,7 +70,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         {data.weather && <p className="text-sm sm:px-4 md:px-6 lg:px-8">Weather: {data.weatherIcon}</p>}
       </div>
     );
-
+  }
   return null;
 };
 
@@ -109,12 +110,13 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
         const position = 'WR'; // Mock position
         const heatMapData = await enhancedMatchupAnalyticsService.generateDefensiveHeatMap(recentOpponent, position);
         setDefensiveHeatMap(heatMapData);
+      }
 
     } catch (error) {
       setError('Failed to load matchup analysis data');
     } finally {
       setLoading(false);
-
+    }
   };
 
   const prepareChartData = (): ChartDataPoint[] => {
@@ -140,7 +142,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
       case 'wind': return '💨';
       case 'fog': return '🌫️';
       default: return '☀️';
-
+    }
   };
 
   const getTrendDirection = (data: ChartDataPoint[]): 'up' | 'down' | 'stable' => {
@@ -161,7 +163,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
       case 'up': return 'default';
       case 'down': return 'destructive';
       default: return 'secondary';
-
+    }
   };
 
   const getDefensiveBadgeVariant = (rank: number) => {
@@ -189,6 +191,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
         </CardContent>
       </Card>
     );
+  }
 
   if (error) {
     return (
@@ -201,6 +204,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
         </CardContent>
       </Card>
     );
+  }
 
   return (
     <div className={`enhanced-matchup-trends ${className}`}>
@@ -281,15 +285,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                           const count = trends.filter((t: any) => t.gameScript === script).length;
                           const percentage = trends.length > 0 ? (count / trends.length * 100).toFixed(0) : '0';
                           
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
-
-  return (
+                          return (
                             <div key={script} className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                               <span className="capitalize sm:px-4 md:px-6 lg:px-8">{script}:</span>
                               <span className="font-medium sm:px-4 md:px-6 lg:px-8">{count} ({percentage}%)</span>
@@ -370,7 +366,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                             color = '#dc2626'; // red
                           } else if (entry.fantasyPointsAllowed > 15) {
                             color = '#f59e0b'; // yellow
-
+                          }
                           return <Cell key={`cell-${entry.week}-${index}`} fill={color} />;
                         })}
                       </Bar>
@@ -648,7 +644,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         </div>
                         <div>
                           <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
-                            <span>Low Volume (<10 touches):</span>
+                            <span>Low Volume (&lt;10 touches):</span>
                             <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                               {trends.filter((t: any) => t.touches < 10).length} games
                             </span>

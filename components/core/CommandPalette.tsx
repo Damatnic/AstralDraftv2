@@ -61,15 +61,18 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
         dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: id });
         dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' });
         dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
+    };
 
     const handleSelectPlayer = (player: Player) => {
         dispatch({ type: 'SET_PLAYER_DETAIL', payload: { player } });
         dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
+    };
 
     const handleSelectView = (view: View, name: string) => {
         dispatch({ type: 'SET_VIEW', payload: view });
         dispatch({ type: 'LOG_COMMAND', payload: { name, view }});
         dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
+    };
 
     const commandActions = state.activeLeagueId ? [
         { name: 'Go to My Team', view: 'TEAM_HUB' as View },
@@ -121,7 +124,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
                     <>
                         <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8">Players</h4>
                         {filteredPlayers.map((player: any) => (
-                            <button key={player.id} onClick={() => handleSelectPlayer(player)} <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">({player.position} - {player.team})</span>
+                            <button key={player.id} onClick={() => handleSelectPlayer(player)} className="block w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm">
+                                {player.name} <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">({player.position} - {player.team})</span>
                             </button>
                         ))}
                     </>
@@ -130,7 +134,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
                      <>
                         <h4 className="px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8">Navigation</h4>
                         {filteredActions.map((action: any) => (
-                            <button key={action.view} onClick={() => handleSelectView(action.view, action.name)}
+                            <button key={action.view} onClick={() => handleSelectView(action.view, action.name)} className="block w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm">
+                                {action.name}
                             </button>
                         ))}
                     </>
@@ -157,7 +162,9 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
                     <motion.div
                         ref={containerRef as React.RefObject<HTMLDivElement>}
                         className="glass-pane w-full max-w-lg rounded-xl shadow-2xl overflow-hidden border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
-                        onClick={(e: any) => e.stopPropagation()},
+                        onClick={(e: any) => e.stopPropagation()}
+                        {...{
+                            initial: { opacity: 0, y: -20, scale: 0.95 },
                             animate: { opacity: 1, y: 0, scale: 1 },
                             exit: { opacity: 0, y: -20, scale: 0.95 },
                         }}
@@ -166,9 +173,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
                             type="text"
                             placeholder="Search players or navigate..."
                             className="w-full p-4 bg-transparent text-lg focus:outline-none text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
-//                             autoFocus
+                            autoFocus
                             value={query}
                             onChange={(e: any) => setQuery(e.target.value)}
+                        />
                         <div className="border-t border-[var(--panel-border)] p-2 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                            {renderResults()}
                         </div>

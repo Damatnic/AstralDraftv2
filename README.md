@@ -31,6 +31,13 @@ AstralDraft v2 is a cutting-edge fantasy football platform that combines advance
 - **✨ Code Quality**: Professional standards with automated quality checks
 - **🤖 Services**: Error tracking, performance monitoring, and security services
 
+### 🔐 **Security Features**
+- **API Key Management**: All secrets stored in GitHub Secrets, never in code
+- **Environment Isolation**: Separate development and production configurations
+- **Console Log Removal**: Automatic removal of debug statements in production
+- **Dependency Security**: Regular security audits and updates
+- **HTTPS Enforcement**: Secure communication in all production environments
+
 ### 📁 **New Infrastructure**
 - `src/types/` - Comprehensive type definitions for all entities
 - `src/services/` - Error tracking, performance, and security services
@@ -280,6 +287,41 @@ All UI components and new features MUST follow these design rules to maintain co
 - Use responsive classes: `sm:`, `md:`, `lg:`, `xl:`
 - Touch targets minimum 44x44px
 - Ensure glassmorphism effects work on mobile
+
+## 🚀 Deployment
+
+### Production Setup
+
+1. **Configure API Keys** (Required for live data):
+   ```bash
+   # Copy the example file
+   cp .env.production.example .env.production
+   
+   # Edit with your actual API keys
+   VITE_SPORTS_DATA_API_KEY=your_actual_api_key
+   VITE_GEMINI_API_KEY=your_actual_gemini_key
+   ```
+
+2. **GitHub Secrets** (For automated deployment):
+   - Go to your repo → Settings → Secrets and variables → Actions
+   - Add the following secrets:
+     - `VITE_SPORTS_DATA_API_KEY`
+     - `VITE_GEMINI_API_KEY`
+
+3. **Build & Deploy**:
+   ```bash
+   # Production build
+   npm run build
+   
+   # Deploy (automatic on push to master)
+   git push origin master
+   ```
+
+### Security Notes
+- ✅ Demo keys removed from repository
+- ✅ All secrets stored in GitHub Secrets
+- ✅ Console statements removed in production builds
+- ✅ Environment variables properly isolated
 
 ## 🧪 Testing
 

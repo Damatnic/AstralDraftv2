@@ -1,4 +1,5 @@
 
+import React from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -10,33 +11,40 @@ interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error?: Error; retry: () => void }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
   children: React.ReactNode;
+}
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { 
       hasError: true,
-//       error 
+      error 
     };
+  }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({
       error,
-//       errorInfo
+      errorInfo
     });
 
     // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
+    }
 
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
+      console.error('Error caught by ErrorBoundary:', error, errorInfo);
+    }
 
     // In production, you might want to send this to an error reporting service
     // Example: Sentry.captureException(error, { extra: errorInfo });
+  }
 
   handleRetry = () => {
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
@@ -48,6 +56,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       if (this.props.fallback) {
         const FallbackComponent = this.props.fallback;
         return <FallbackComponent error={this.state.error} retry={this.handleRetry} />;
+      }
 
       // Default fallback UI
       return (
@@ -91,9 +100,11 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
           </div>
         </div>
       );
+    }
 
-    return this.props.children; 
-
+    return this.props.children;
+  }
+}
 
 // Feature-specific error boundaries
 const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) => (
@@ -140,6 +151,7 @@ export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ ch
 export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
   <ErrorBoundary
     onError={(error, errorInfo) => {
+      // Could send to analytics
     }}
     fallback={OracleErrorFallback}
   >

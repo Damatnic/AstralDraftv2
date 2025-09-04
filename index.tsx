@@ -4,11 +4,18 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { SimpleAuthProvider } from './contexts/SimpleAuthContext';
+import { AppProvider } from './contexts/AppContext';
 import './styles/design-system.css';
 import { LoadingCoordinatorProvider } from './hooks/useLoadingCoordinator';
+import performanceService from './services/performanceService';
 
 // Performance monitoring
 const startTime = performance.now();
+
+// Initialize performance monitoring
+if (process.env.NODE_ENV === 'production') {
+  performanceService.initialize();
+}
 
 // Initialize React application
 const container = document.getElementById('root');
@@ -76,11 +83,13 @@ root.render(
     <ErrorBoundary>
       <BrowserRouter>
         <ThemeProvider>
-          <SimpleAuthProvider>
-            <LoadingCoordinatorProvider>
-              <App />
-            </LoadingCoordinatorProvider>
-          </SimpleAuthProvider>
+          <AppProvider>
+            <SimpleAuthProvider>
+              <LoadingCoordinatorProvider>
+                <App />
+              </LoadingCoordinatorProvider>
+            </SimpleAuthProvider>
+          </AppProvider>
         </ThemeProvider>
       </BrowserRouter>
     </ErrorBoundary>

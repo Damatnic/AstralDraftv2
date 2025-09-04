@@ -11,7 +11,7 @@ import { Tabs } from '../ui/Tabs';
 import { Loader2, TrendingUp, TrendingDown, Activity, Target, Shield, AlertTriangle } from 'lucide-react';
 import { 
   playerComparisonService, 
-//   PlayerComparison
+  PlayerComparison
 } from '../../services/playerComparisonService';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -26,7 +26,8 @@ interface PlayerSearchResult {
   id: string;
   name: string;
   team: string;
-  position: string;}
+  position: string;
+}
 
 export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   className = '',
@@ -47,18 +48,11 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   // Mock search for players - would integrate with real search
   useEffect(() => {
     const searchPlayers = async () => {
-    try {
-
-      if (searchQuery.length < 2) {
-        setSearchResults([]);
-        return;
-      
-    } catch (error) {
-      console.error('Error in searchPlayers:', error);
-
-    } catch (error) {
-        console.error(error);
-    }try {
+      try {
+        if (searchQuery.length < 2) {
+          setSearchResults([]);
+          return;
+        }
 
         // Mock search results - would use real API
         const mockResults = [
@@ -72,10 +66,10 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
         );
         
         setSearchResults(mockResults);
-
-    } catch (error) {
+      } catch (error) {
+        console.error('Error in searchPlayers:', error);
         setSearchResults([]);
-
+      }
     };
 
     const debounceTimer = setTimeout(searchPlayers, 300);
@@ -88,7 +82,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       loadComparison();
     } else {
       setComparison(null);
-
+    }
   }, [selectedPlayers, currentWeek]);
 
   const loadComparison = async () => {
@@ -98,19 +92,17 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
     setError(null);
 
     try {
-
       const comparisonResult = await playerComparisonService.comparePlayersFull(
         selectedPlayers,
         currentWeek,
-//         season
+        season
       );
       setComparison(comparisonResult);
-    
     } catch (error) {
       setError('Failed to load player comparison. Please try again.');
     } finally {
       setLoading(false);
-
+    }
   };
 
   // Player selection handlers
@@ -119,7 +111,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       setSelectedPlayers([...selectedPlayers, playerId]);
       setSearchQuery('');
       setSearchResults([]);
-
+    }
   };
 
   const removePlayer = (playerId: string) => {
@@ -148,7 +140,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       case 'medium': return 'bg-yellow-100 text-yellow-800';
       case 'hard': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
-
+    }
   };
 
   const getTrendIcon = (trend: string) => {
@@ -156,7 +148,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       case 'improving': return <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
       case 'declining': return <TrendingDown className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />;
-
+    }
   };
 
   const getRecommendationIcon = (type: string) => {
@@ -165,7 +157,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       case 'sit': return <Shield className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
       case 'flex': return <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />;
       default: return <AlertTriangle className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
-
+    }
   };
 
   const tabItems = [
@@ -209,7 +201,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                     <div
                       key={player.id}
                       className="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3 sm:px-4 md:px-6 lg:px-8"
-                      onClick={() = role="button" tabIndex={0}> addPlayer(player.id)}
+                      onClick={() => addPlayer(player.id)}
                     >
                       <div>
                         <div className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</div>
@@ -581,7 +573,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                               {player.fantasyRelevance.snapPercentage ? 
                                 `${Math.round(player.fantasyRelevance.snapPercentage * 100)}%` : 
                                 '-'
-
+                              }
                             </td>
                           </tr>
                         ))}

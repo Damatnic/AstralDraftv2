@@ -58,20 +58,39 @@ export default defineConfig(({ mode }: { mode: string }) => {
         rollupOptions: {
           output: {
             manualChunks(id) {
-              // Core vendor chunks
-              if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-                return 'vendor-react';
+              // Separate React into smaller chunks
+              if (id.includes('node_modules/react/') && !id.includes('react-dom')) {
+                return 'vendor-react-core';
               }
-              if (id.includes('node_modules/framer-motion') || id.includes('node_modules/lucide-react')) {
-                return 'vendor-ui';
+              if (id.includes('node_modules/react-dom')) {
+                return 'vendor-react-dom';
               }
+              if (id.includes('node_modules/react-router')) {
+                return 'vendor-router';
+              }
+              
+              // Split UI libraries more granularly 
+              if (id.includes('node_modules/framer-motion')) {
+                return 'vendor-animation';
+              }
+              if (id.includes('node_modules/lucide-react')) {
+                return 'vendor-icons';
+              }
+              if (id.includes('node_modules/tailwindcss')) {
+                return 'vendor-styles';
+              }
+              
+              // Utilities and smaller libs
               if (id.includes('node_modules/lodash') || id.includes('node_modules/axios') || id.includes('node_modules/crypto-browserify')) {
                 return 'vendor-utils';
               }
               
-              // AI and analytics vendors (heavy dependencies)
-              if (id.includes('node_modules/@google/generative-ai') || id.includes('openai') || id.includes('recharts')) {
-                return 'vendor-ai-analytics';
+              // Heavy AI and analytics (load on demand)
+              if (id.includes('node_modules/@google/generative-ai') || id.includes('openai')) {
+                return 'vendor-ai';
+              }
+              if (id.includes('node_modules/recharts') || id.includes('node_modules/chart')) {
+                return 'vendor-charts';
               }
               
               // Feature-based chunks for code splitting
@@ -117,7 +136,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
           } : undefined
         },
         emptyOutDir: true,
-        chunkSizeWarningLimit: 100, // Warn at 100KB instead of 500KB to encourage smaller chunks
+        chunkSizeWarningLimit: 50, // Warn at 50KB to encourage aggressive splitting
         cssCodeSplit: true, // Enable CSS code splitting
         // Advanced performance settings
         reportCompressedSize: isProduction,

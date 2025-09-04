@@ -260,7 +260,7 @@ const TrashTalkBoard: React.FC = () => {
       case 'callout': return '🎯';
       case 'meme': return '😂';
       default: return '💬';
-
+    }
   };
 
   const getPostTypeColor = (type: string) => {
