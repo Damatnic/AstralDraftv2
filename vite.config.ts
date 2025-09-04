@@ -9,8 +9,8 @@ export default defineConfig(({ mode }: { mode: string }) => {
       base: '/',
       plugins: [
         react({
-          // Use classic JSX runtime to avoid jsxDEV issues
-          jsxRuntime: 'classic',
+          // Use modern JSX transform for better performance
+          jsxRuntime: 'automatic',
           jsxImportSource: undefined,
           babel: {
             plugins: [],
