@@ -142,14 +142,24 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         console.log('🎯 LOGIN: Player', authId, 'selected');
         console.log('✅ LOGIN: Player data stored, triggering app load');
         
-        // Update both contexts
+        // Update both contexts and force navigation
+        console.log('🔄 Updating authentication contexts...');
         dispatch({ type: 'LOGIN', payload: userPayload });
         authLogin(session.user);
+        
+        // Store user in localStorage for persistence
+        localStorage.setItem('astral_draft_user', JSON.stringify(session.user));
+        localStorage.setItem('astral_draft_session', JSON.stringify(session));
 
         // Call onLogin callback if provided
         if (onLogin) {
           onLogin(session.user);
         }
+        
+        // Force navigation after a brief delay to allow context update
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 100);
 
         // Force clear any residual errors
         setError('');
@@ -167,6 +177,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         
         // Store demo user in localStorage for persistence
         localStorage.setItem('currentUser', JSON.stringify(demoUser));
+        localStorage.setItem('astral_draft_user', JSON.stringify(demoUser));
         localStorage.setItem('authToken', `demo-token-${selectedPlayer}`);
         
         console.log('🎯 LOGIN: Demo Player', selectedPlayer, 'selected');
@@ -179,6 +190,11 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         if (onLogin) {
           onLogin(demoUser as any);
         }
+
+        // Force navigation for demo user too
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 100);
 
         setError('');
       }
@@ -200,9 +216,17 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
       dispatch({ type: 'LOGIN', payload: forceUser });
       authLogin(forceUser as any);
       
+      // Store emergency user
+      localStorage.setItem('astral_draft_user', JSON.stringify(forceUser));
+      
       if (onLogin) {
         onLogin(forceUser as any);
       }
+
+      // Force navigation for emergency user
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 100);
 
       console.log('✅ EMERGENCY LOGIN SUCCESSFUL');
     } finally {

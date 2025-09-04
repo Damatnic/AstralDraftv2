@@ -36,10 +36,24 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
         const initializeAuth = () => {
             try {
                 SimpleAuthService.initialize();
-                const session = SimpleAuthService.getCurrentSession();
                 
-                if (session) {
-                    setUser(session.user);
+                // Check for stored user first
+                const storedUser = localStorage.getItem('astral_draft_user');
+                if (storedUser) {
+                    try {
+                        const parsedUser = JSON.parse(storedUser);
+                        console.log('🔄 Found stored user, restoring session:', parsedUser.displayName);
+                        setUser(parsedUser);
+                    } catch (parseError) {
+                        console.warn('Failed to parse stored user, clearing storage');
+                        localStorage.removeItem('astral_draft_user');
+                    }
+                } else {
+                    // Fallback to SimpleAuthService session check
+                    const session = SimpleAuthService.getCurrentSession();
+                    if (session) {
+                        setUser(session.user);
+                    }
                 }
             } catch (error: any) {
                 setError('Failed to initialize authentication');
@@ -58,6 +72,10 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
 
     const logout = useCallback(() => {
         SimpleAuthService.logout();
+        localStorage.removeItem('astral_draft_user');
+        localStorage.removeItem('astral_draft_session');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('authToken');
         setUser(null);
         setError(null);
     }, []);
