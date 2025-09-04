@@ -1,210 +1,132 @@
-// Application entry point
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import './index.css';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { SimpleAuthProvider } from './contexts/SimpleAuthContext';
+import './styles/design-system.css';
 
-// Global error handling
-window.addEventListener('error', (event) => {
-  console.error('Global error:', {
-    message: event.message,
-    filename: event.filename,
-    lineno: event.lineno,
-    colno: event.colno,
-    error: event.error
-  });
+// Performance monitoring
+const startTime = performance.now();
+
+// Initialize React application
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error('Root container not found - ensure index.html contains <div id="root"></div>');
+}
+
+const root = createRoot(container);
+
+// Log startup performance
+window.addEventListener('load', () => {
+  const loadTime = performance.now() - startTime;
+  console.log(`🚀 Astral Draft loaded in ${loadTime.toFixed(2)}ms`);
 });
 
-window.addEventListener('unhandledrejection', (event) => {
-  console.error('Unhandled promise rejection:', event.reason);
-  event.preventDefault(); // Prevent default browser handling
-});
-
-// Initialize the application with comprehensive debugging
-const initializeApp = (): void => {
-  console.log('🚀 INIT: Starting React application initialization');
-  console.log('📊 INIT: Environment:', {
-    mode: import.meta.env.MODE,
-    prod: import.meta.env.PROD,
-    dev: import.meta.env.DEV,
-    ssr: import.meta.env.SSR
-  });
-
-  const container = document.getElementById('root');
-  
-  if (!container) {
-    console.error('❌ INIT: Failed to find root element');
-    throw new Error('Failed to find the root element');
+// Enhanced error boundary for production
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error?: Error }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
   }
 
-  console.log('✅ INIT: Root container found');
-  
-  // Clear loading screen immediately when React starts
-  const loadingEl = document.getElementById('loading-fallback');
-  if (loadingEl) {
-    console.log('🧹 INIT: Found loading screen, will remove after render');
-    // Add a marker to indicate React is starting
-    loadingEl.setAttribute('data-react-starting', 'true');
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Astral Draft Error:', error, errorInfo);
     
-    // Add React status to debug info
-    const debugEl = document.getElementById('debug-info');
-    if (debugEl) {
-      const statusDiv = document.createElement('div');
-      statusDiv.textContent = '⚛️ React initializing...';
-      statusDiv.style.color = '#10b981';
-      debugEl.appendChild(statusDiv);
+    // In production, you might want to report this to an error tracking service
+    if (process.env.NODE_ENV === 'production') {
+      // Example: reportError(error, errorInfo);
     }
   }
 
-  try {
-    console.log('⚛️ INIT: Creating React root');
-    const root = createRoot(container);
-    
-    console.log('🎯 INIT: Rendering App component');
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
-    
-    console.log('✅ INIT: React render completed successfully');
-    
-    // Mark successful initialization - DON'T remove loading screen here
-    setTimeout(() => {
-      console.log('🎉 INIT: React render call completed');
-      
-      // Just mark performance, let the App component handle loading screen removal
-      window.performance?.mark?.('react-render-called');
-      
-      // Update debug info
-      const debugEl = document.getElementById('debug-info');
-      if (debugEl) {
-        const finalDiv = document.createElement('div');
-        finalDiv.textContent = '⚛️ React render() called successfully';
-        finalDiv.style.color = '#10b981';
-        debugEl.appendChild(finalDiv);
-      }
-    }, 50);
-    
-  } catch (error) {
-    console.error('❌ INIT: Failed to render application:', error);
-    
-    // Advanced fallback error display with debugging
-    container.innerHTML = `
-      <div style="
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-        color: white;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      ">
-        <div style="text-align: center; padding: 2rem; max-width: 600px;">
-          <h1 style="font-size: 2rem; margin-bottom: 1rem;">🚨 Critical React Error</h1>
-          <p style="margin-bottom: 1rem; opacity: 0.9; font-size: 1.1rem;">
-            The React application failed to mount. This is a critical initialization error.
-          </p>
-          
-          <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left; font-family: monospace; font-size: 0.9rem;">
-            <strong>Error Details:</strong><br>
-            ${error instanceof Error ? error.message : String(error)}<br><br>
-            <strong>Troubleshooting:</strong><br>
-            • Check browser console for detailed errors<br>
-            • Ensure all dependencies are loaded<br>
-            • Verify network connection<br>
-            • Try clearing browser cache
-          </div>
-          
-          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <button 
-              onclick="window.location.reload()" 
-              style="
-                padding: 0.75rem 1.5rem;
-                background: rgba(16, 185, 129, 0.8);
-                color: white;
-                border: none;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                font-size: 1rem;
-                font-weight: bold;
-                transition: all 0.2s;
-              "
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-md text-center">
+            <h1 className="text-2xl font-bold text-white mb-4">⚠️ Something went wrong</h1>
+            <p className="text-gray-300 mb-6">
+              The application encountered an unexpected error. Please refresh the page or contact support.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
             >
-              🔄 Hard Refresh
+              Refresh Page
             </button>
-            <button 
-              onclick="localStorage.clear(); sessionStorage.clear(); window.location.reload();" 
-              style="
-                padding: 0.75rem 1.5rem;
-                background: rgba(239, 68, 68, 0.8);
-                color: white;
-                border: none;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                font-size: 1rem;
-                font-weight: bold;
-                transition: all 0.2s;
-              "
-            >
-              🧹 Clear Cache & Reload
-            </button>
-            <button 
-              onclick="window.open('https://github.com/Damatnic/AstralDraftv2/issues', '_blank')" 
-              style="
-                padding: 0.75rem 1.5rem;
-                background: rgba(107, 114, 128, 0.8);
-                color: white;
-                border: none;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                font-size: 1rem;
-                font-weight: bold;
-                transition: all 0.2s;
-              "
-            >
-              🐛 Report Issue
-            </button>
-          </div>
-          
-          <div style="margin-top: 2rem; padding: 1rem; background: rgba(251, 146, 60, 0.2); border: 1px solid rgba(251, 146, 60, 0.4); border-radius: 8px; font-size: 0.9rem;">
-            <strong>Need immediate access?</strong><br>
-            This error prevents the full app from loading. Please try the troubleshooting steps above.
           </div>
         </div>
-      </div>
-    `;
-  }
-};
+      );
+    }
 
-// Service Worker registration for PWA
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then(() => {
-        // Service Worker registered successfully
-      })
-      .catch((error) => {
-        console.warn('Service Worker registration failed:', error);
-      });
-  });
+    return this.props.children;
+  }
 }
 
-// Performance monitoring for production
-if (import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    if (perfData) {
-      // Store performance mark for potential monitoring
-      window.performance.mark('app-loaded');
+root.render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <ThemeProvider>
+          <SimpleAuthProvider>
+            <App />
+          </SimpleAuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
+  </React.StrictMode>
+);
+
+// Service Worker registration for PWA features
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js');
+      console.log('🔧 Service Worker registered:', registration);
+      
+      // Handle updates
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+        if (newWorker) {
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              console.log('🆕 New version available - refresh to update');
+              // You could show a toast notification here
+            }
+          });
+        }
+      });
+    } catch (error) {
+      console.warn('Service Worker registration failed:', error);
     }
   });
 }
 
-// Start the application
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-  initializeApp();
+// Development helpers
+if (process.env.NODE_ENV === 'development') {
+  // Log component tree in development
+  console.log('🏗️ Astral Draft Development Mode');
+  console.log('📱 Available routes will be logged by Router');
+  
+  // Performance monitoring in dev
+  if ('performance' in window && 'measure' in performance) {
+    performance.mark('astral-draft-start');
+    
+    window.addEventListener('load', () => {
+      performance.mark('astral-draft-loaded');
+      performance.measure('astral-draft-startup', 'astral-draft-start', 'astral-draft-loaded');
+      
+      const measures = performance.getEntriesByType('measure');
+      measures.forEach(measure => {
+        console.log(`📊 ${measure.name}: ${measure.duration.toFixed(2)}ms`);
+      });
+    });
+  }
 }
