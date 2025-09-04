@@ -20,9 +20,9 @@ export default defineConfig(({ mode }: { mode: string }) => {
         // Add PWA plugin for enhanced caching
         ...(isProduction ? [{
           name: 'performance-hints',
-          generateBundle(options: any, bundle: any) {
+          generateBundle(_options: unknown, bundle: Record<string, any>) {
             // Analyze bundle and provide performance hints
-            Object.keys(bundle).forEach((fileName: any) => {
+            Object.keys(bundle).forEach((fileName: string) => {
               const chunk = bundle[fileName];
               if (chunk.type === 'chunk' && chunk.code) {
                 const size = new TextEncoder().encode(chunk.code).length;
