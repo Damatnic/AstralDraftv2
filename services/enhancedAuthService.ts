@@ -1,539 +1,615 @@
 /**
  * Enhanced Authentication Service
- * Secure authentication with session management, refresh tokens, and security monitoring
+ * ESPN/Yahoo-beating authentication with modern features
  */
 
-import { SimpleUser } from './simpleAuthService';
-import { logger } from './loggingService';
-// Mock imports until backend is properly set up
-const databaseService = {
-    createUser: async (data: Record<string, unknown>) => ({ success: true, user: data }),
-    getUser: async (_id: string) => null,
-    updateUser: async (_id: string, _data: Record<string, unknown>) => ({ success: true }),
-    authenticateUser: async (playerNumber: number, pin: string) => {
-        // Mock authentication
-        if (playerNumber === 1 && pin === '1234') {
-            return {
-                id: 1,
-                username: 'player1',
-                displayName: 'Player 1',
-                email: 'player1@example.com',
-                isAdmin: false,
-                colorTheme: '#3B82F6',
-                emoji: '👤',
-                lastLoginAt: new Date().toISOString()
-            };
-        }
-        return null;
-    },
-    updateLastLogin: async (_userId: number) => ({ success: true }),
-    createSession: async (sessionData: Record<string, unknown>) => ({ success: true, sessionId: sessionData.sessionId }),
-    getSessionByRefreshToken: async (token: string) => {
-        // Mock session
-        return {
-            sessionId: 'mock-session-id',
-            userId: 1,
-            accessToken: 'mock-access-token',
-            refreshToken: token,
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-            refreshExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        };
-    },
-    getUserById: async (userId: number) => {
-        // Mock user
-        return {
-            id: userId,
-            username: 'player1',
-            displayName: 'Player 1',
-            email: 'player1@example.com',
-            isAdmin: false,
-            colorTheme: '#3B82F6',
-            emoji: '👤',
-            lastLoginAt: new Date().toISOString()
-        };
-    },
-    updateSessionToken: async (_sessionId: string, _accessToken: string, _expiresAt: string) => ({ success: true }),
-    deleteSessionByToken: async (_token: string) => ({ success: true }),
-    deleteAllUserSessions: async (_userId: number) => ({ success: true }),
-    getSessionByAccessToken: async (_token: string) => {
-        // Mock session
-        return {
-            sessionId: 'mock-session-id',
-            userId: 1,
-            accessToken: _token,
-            refreshToken: 'mock-refresh-token',
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-            refreshExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        };
-    },
-    validateUserPin: async (_userId: number, _pin: string) => {
-        // Mock validation
-        return true;
-    },
-    updateUserPin: async (_userId: number, _newPin: string) => ({ success: true }),
-    deleteExpiredSessions: async () => ({ deleted: 0 }),
-    getActiveSessionCount: async () => 0,
-    getFailedAttemptsToday: async () => 0
-};
+import { EventEmitter } from 'events';
 
-const getRow = async (_query: string, _params?: unknown[]) => null;
-
-const recordSecurityAttempt = async (_req: Record<string, unknown>, _type: string, _success: boolean, _userId?: number) => {};
-const isAccountLocked = (_userId: number): boolean => false;
-const lockAccount = async (_userId: number, _reason?: string) => {};
-const unlockAccount = async (_userId: number) => {};
-const validatePinSecurity = (pin: string): { valid: boolean; errors: string[] } => {
-    const errors: string[] = [];
-    
-    if (!pin || pin.length < 4) {
-        errors.push('PIN must be at least 4 characters');
-    }
-    
-    if (pin.length > 20) {
-        errors.push('PIN must be no more than 20 characters');
-    }
-    
-    // Check for common weak PINs
-    const weakPins = ['0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999', '1234', '4321'];
-    if (weakPins.includes(pin)) {
-        errors.push('PIN is too common and easily guessed');
-    }
-    
-    return {
-        valid: errors.length === 0,
-//         errors
-    };
-};
-
-const crypto = typeof window !== 'undefined' && window.crypto ? window.crypto : null;
-
-// Types for enhanced auth
-export interface SecureSession {
-    sessionId: string;
-    accessToken: string;
-    refreshToken: string;
-    user: Record<string, unknown>;
-    expiresAt: number;
-    refreshExpiresAt: number;
-
-export interface LoginAttempt {
-    playerNumber: number;
+// Types
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  teamId?: string;
+  leagueId?: string;
+  preferences: UserPreferences;
+  stats: UserStats;
+  achievements: Achievement[];
+  customization: {
+    theme: 'light' | 'dark' | 'auto';
+    emoji: string;
+    color: string;
+    badge: string;
+  };
+  security: {
     pin: string;
-    rememberMe?: boolean;
-    userAgent?: string;
-    ipAddress?: string;}
+    biometricEnabled: boolean;
+    twoFactorEnabled: boolean;
+    lastLogin: Date;
+    loginHistory: LoginRecord[];
+  };
+}
 
-export interface AuthResponse {
-    success: boolean;
-    session?: SecureSession;
-    error?: string;
-    code?: string;
-    lockedUntil?: number;}
+export interface UserPreferences {
+  notifications: {
+    trades: boolean;
+    injuries: boolean;
+    scoring: boolean;
+    news: boolean;
+    push: boolean;
+    email: boolean;
+    sms: boolean;
+  };
+  display: {
+    compactMode: boolean;
+    showProjections: boolean;
+    autoRefresh: boolean;
+    refreshInterval: number;
+  };
+  privacy: {
+    profileVisibility: 'public' | 'league' | 'private';
+    showOnlineStatus: boolean;
+    allowDirectMessages: boolean;
+  };
+}
 
-class EnhancedAuthService {
-    private static readonly SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
-    private static readonly REFRESH_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
-    private static readonly REMEMBER_ME_DURATION = 90 * 24 * 60 * 60 * 1000; // 90 days
+export interface UserStats {
+  wins: number;
+  losses: number;
+  ties: number;
+  championships: number;
+  playoffAppearances: number;
+  totalPoints: number;
+  avgPointsPerWeek: number;
+  bestWeekScore: number;
+  currentStreak: number;
+  tradesMade: number;
+  waiverPickups: number;
+}
 
-    /**
-     * Secure login with enhanced security checks
-     */
-    static async secureLogin(attempt: LoginAttempt): Promise<AuthResponse> {
-        try {
-            // Check for account lockout
-            if (isAccountLocked(attempt.playerNumber)) {
-                await recordSecurityAttempt(
-                    { ip: attempt.ipAddress, get: () => attempt.userAgent } as Record<string, unknown>,
-                    'login',
-                    false,
-                    attempt.playerNumber
-                );
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  unlockedAt: Date;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+}
 
-                return {
-                    success: false,
-                    error: 'Account temporarily locked due to too many failed attempts',
-                    code: 'ACCOUNT_LOCKED'
-                };
-            }
+export interface LoginRecord {
+  timestamp: Date;
+  ip: string;
+  device: string;
+  location: string;
+  success: boolean;
+}
 
-            // Validate PIN security requirements
-            const pinValidation = validatePinSecurity(attempt.pin);
-            if (!pinValidation.valid) {
-                return {
-                    success: false,
-                    error: pinValidation.errors.join(', '),
-                    code: 'WEAK_PIN'
-                };
-            }
+export interface AuthSession {
+  token: string;
+  refreshToken: string;
+  user: AuthUser;
+  expiresAt: Date;
+  rememberMe: boolean;
+}
 
-            // Authenticate with database
-            const user = await databaseService.authenticateUser(attempt.playerNumber, attempt.pin);
-            
-            if (!user) {
-                // Record failed attempt
-                await recordSecurityAttempt(
-                    { ip: attempt.ipAddress, get: () => attempt.userAgent } as Record<string, unknown>,
-                    'login',
-                    false,
-                    attempt.playerNumber
-                );
+interface BiometricCredential {
+  userId: string;
+  credentialId: string;
+  publicKey: string;
+  createdAt: Date;
+}
 
-                // Check if we should lock the account
-                const failedAttempts = await this.getRecentFailedAttempts(attempt.playerNumber);
-                if (failedAttempts >= 4) { // Lock after 5 failed attempts
-                    await lockAccount(attempt.playerNumber);
-                }
+class EnhancedAuthService extends EventEmitter {
+  private static instance: EnhancedAuthService;
+  private currentSession: AuthSession | null = null;
+  private sessionTimeout: NodeJS.Timeout | null = null;
+  private readonly SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
+  private readonly REMEMBER_ME_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
+  private biometricCredentials = new Map<string, BiometricCredential>();
+  
+  // Mock user database - In production, this would be from a backend
+  private users = new Map<string, AuthUser>();
 
-                return {
-                    success: false,
-                    error: 'Invalid player number or PIN',
-                    code: 'INVALID_CREDENTIALS'
-                };
-            }
+  private constructor() {
+    super();
+    this.initializeUsers();
+    this.initializeFromStorage();
+  }
 
-            // Create secure session
-            const session = await this.createSecureSession(user, attempt.rememberMe);
-
-            // Record successful login
-            await recordSecurityAttempt(
-                { ip: attempt.ipAddress, get: () => attempt.userAgent } as Record<string, unknown>,
-                'login',
-                true,
-                attempt.playerNumber
-            );
-
-            // Unlock account if it was locked
-            await unlockAccount(attempt.playerNumber);
-
-            // Update last login time
-            await databaseService.updateLastLogin(user.id);
-
-            return {
-                success: true,
-//                 session
-            };
-
-        } catch (error) {
-            logger.error('Secure login error:', error);
-            return {
-                success: false,
-                error: 'Authentication service error',
-                code: 'SERVICE_ERROR'
-            };
+  private initializeUsers(): void {
+    // Initialize user data
+    const player1: AuthUser = {
+      id: 'player1',
+      name: 'Nick Damato',
+      email: 'nick@astraldraft.com',
+      avatar: '👑',
+      teamId: 'team1',
+      leagueId: 'league1',
+      preferences: this.getDefaultPreferences(),
+      stats: {
+        wins: 127,
+        losses: 65,
+        ties: 2,
+        championships: 3,
+        playoffAppearances: 8,
+        totalPoints: 18432.5,
+        avgPointsPerWeek: 112.8,
+        bestWeekScore: 187.3,
+        currentStreak: 4,
+        tradesMade: 47,
+        waiverPickups: 234
+      },
+      achievements: [
+        {
+          id: 'champ3x',
+          name: 'Three-peat Champion',
+          description: 'Won 3 championships',
+          icon: '🏆',
+          unlockedAt: new Date('2023-12-28'),
+          rarity: 'legendary' as const
+        },
+        {
+          id: 'tradeMaster',
+          name: 'Trade Master',
+          description: 'Completed 40+ trades',
+          icon: '💱',
+          unlockedAt: new Date('2023-10-15'),
+          rarity: 'epic' as const
         }
-    }
+      ],
+      customization: {
+        theme: 'dark' as const,
+        emoji: '👑',
+        color: 'from-blue-500 to-purple-600',
+        badge: 'Commissioner'
+      },
+      security: {
+        pin: '0000',
+        biometricEnabled: false,
+        twoFactorEnabled: false,
+        lastLogin: new Date(),
+        loginHistory: []
+      }
+    };
 
-    /**
-     * Create a secure session with access and refresh tokens
-     */
-    private static async createSecureSession(
-        user: Record<string, unknown>, 
-        rememberMe: boolean = false
-    ): Promise<SecureSession> {
-        const sessionId = this.generateSecureId();
-        const accessToken = this.generateSecureId();
-        const refreshToken = this.generateSecureId();
+    const admin: AuthUser = {
+      id: 'admin',
+      name: 'Nick Damato (Admin)',
+      email: 'admin@astraldraft.com',
+      avatar: '🛡️',
+      teamId: 'team1',
+      leagueId: 'league1',
+      preferences: this.getDefaultPreferences(),
+      stats: {
+        wins: 127,
+        losses: 65,
+        ties: 2,
+        championships: 3,
+        playoffAppearances: 8,
+        totalPoints: 18432.5,
+        avgPointsPerWeek: 112.8,
+        bestWeekScore: 187.3,
+        currentStreak: 4,
+        tradesMade: 47,
+        waiverPickups: 234
+      },
+      achievements: [],
+      customization: {
+        theme: 'dark' as const,
+        emoji: '🛡️',
+        color: 'from-yellow-500 to-orange-600',
+        badge: 'Administrator'
+      },
+      security: {
+        pin: '7347',
+        biometricEnabled: true,
+        twoFactorEnabled: true,
+        lastLogin: new Date(),
+        loginHistory: []
+      }
+    };
+
+    // Add users to the Map
+    this.users.set('player1', player1);
+    this.users.set('admin', admin);
+
+    // Add remaining players
+    const otherPlayers = [
+      { id: 'player2', name: 'Player 2', emoji: '🎮', color: 'from-green-500 to-teal-600' },
+      { id: 'player3', name: 'Player 3', emoji: '🚀', color: 'from-red-500 to-pink-600' },
+      { id: 'player4', name: 'Player 4', emoji: '⚡', color: 'from-purple-500 to-indigo-600' },
+      { id: 'player5', name: 'Player 5', emoji: '🏈', color: 'from-orange-500 to-yellow-600' },
+      { id: 'player6', name: 'Player 6', emoji: '🎯', color: 'from-teal-500 to-cyan-600' },
+      { id: 'player7', name: 'Player 7', emoji: '🔥', color: 'from-pink-500 to-rose-600' },
+      { id: 'player8', name: 'Player 8', emoji: '💎', color: 'from-indigo-500 to-blue-600' },
+      { id: 'player9', name: 'Player 9', emoji: '🌟', color: 'from-amber-500 to-orange-600' },
+      { id: 'player10', name: 'Player 10', emoji: '🏆', color: 'from-lime-500 to-green-600' }
+    ];
+
+    otherPlayers.forEach(player => {
+      const user: AuthUser = {
+        id: player.id,
+        name: player.name,
+        email: `${player.id}@astraldraft.com`,
+        avatar: player.emoji,
+        teamId: `team_${player.id}`,
+        leagueId: 'league1',
+        preferences: this.getDefaultPreferences(),
+        stats: {
+          wins: Math.floor(Math.random() * 100),
+          losses: Math.floor(Math.random() * 100),
+          ties: Math.floor(Math.random() * 5),
+          championships: Math.floor(Math.random() * 3),
+          playoffAppearances: Math.floor(Math.random() * 10),
+          totalPoints: Math.random() * 20000,
+          avgPointsPerWeek: 90 + Math.random() * 40,
+          bestWeekScore: 150 + Math.random() * 50,
+          currentStreak: Math.floor(Math.random() * 10) - 5,
+          tradesMade: Math.floor(Math.random() * 50),
+          waiverPickups: Math.floor(Math.random() * 200)
+        },
+        achievements: [],
+        customization: {
+          theme: 'dark' as const,
+          emoji: player.emoji,
+          color: player.color,
+          badge: 'League Member'
+        },
+        security: {
+          pin: '0000',
+          biometricEnabled: false,
+          twoFactorEnabled: false,
+          lastLogin: new Date(),
+          loginHistory: []
+        }
+      };
+      this.users.set(player.id, user);
+    });
+  }
+
+  static getInstance(): EnhancedAuthService {
+    if (!EnhancedAuthService.instance) {
+      EnhancedAuthService.instance = new EnhancedAuthService();
+    }
+    return EnhancedAuthService.instance;
+  }
+
+  private getDefaultPreferences(): UserPreferences {
+    return {
+      notifications: {
+        trades: true,
+        injuries: true,
+        scoring: true,
+        news: true,
+        push: true,
+        email: false,
+        sms: false
+      },
+      display: {
+        compactMode: false,
+        showProjections: true,
+        autoRefresh: true,
+        refreshInterval: 30000
+      },
+      privacy: {
+        profileVisibility: 'league',
+        showOnlineStatus: true,
+        allowDirectMessages: true
+      }
+    };
+  }
+
+  private initializeFromStorage(): void {
+    // Check for remembered session
+    const rememberedSession = localStorage.getItem('astral_session');
+    if (rememberedSession) {
+      try {
+        const session = JSON.parse(rememberedSession);
+        const expiresAt = new Date(session.expiresAt);
         
-        const now = Date.now();
-        const sessionDuration = rememberMe ? this.REMEMBER_ME_DURATION : this.SESSION_DURATION;
-        const refreshDuration = rememberMe ? this.REMEMBER_ME_DURATION : this.REFRESH_DURATION;
-        
-        const expiresAt = now + sessionDuration;
-        const refreshExpiresAt = now + refreshDuration;
-
-        // Store session in database
-        await databaseService.createSession({
-            sessionId,
-            userId: user.id,
-            accessToken,
-            refreshToken,
-            expiresAt: new Date(expiresAt).toISOString(),
-            refreshExpiresAt: new Date(refreshExpiresAt).toISOString(),
-            userAgent: '', // Will be filled by caller
-            ipAddress: '' // Will be filled by caller
-        });
-
-        return {
-            sessionId,
-            accessToken,
-            refreshToken,
-            user,
-            expiresAt,
-//             refreshExpiresAt
-        };
-    }
-
-    /**
-     * Refresh access token using refresh token
-     */
-    static async refreshSession(refreshToken: string): Promise<AuthResponse> {
-        try {
-            const session = await databaseService.getSessionByRefreshToken(refreshToken);
-            
-            if (!session || new Date(session.refreshExpiresAt) < new Date()) {
-                return {
-                    success: false,
-                    error: 'Invalid or expired refresh token',
-                    code: 'REFRESH_EXPIRED'
-                };
-            }
-
-            const user = await databaseService.getUserById(session.userId);
-            if (!user) {
-                return {
-                    success: false,
-                    error: 'User not found',
-                    code: 'USER_NOT_FOUND'
-                };
-            }
-
-            // Generate new access token
-            const newAccessToken = this.generateSecureId();
-            const newExpiresAt = Date.now() + this.SESSION_DURATION;
-
-            // Update session in database
-            await databaseService.updateSessionToken(session.sessionId, newAccessToken, new Date(newExpiresAt).toISOString());
-
-            // Map database user to SimpleUser format
-            const simpleUser: SimpleUser = {
-                id: user.id.toString(),
-                username: user.username,
-                displayName: user.displayName || user.username,
-                pin: '', // PIN is not exposed for security
-                email: user.email,
-                isAdmin: user.isAdmin,
-                customization: {
-                    backgroundColor: user.colorTheme || '#3B82F6',
-                    textColor: '#FFFFFF',
-                    emoji: user.emoji || '👤'
-                },
-                createdAt: user.lastLoginAt || new Date().toISOString(),
-                lastLogin: user.lastLoginAt
-            };
-
-            return {
-                success: true,
-                session: {
-                    sessionId: session.sessionId,
-                    accessToken: newAccessToken,
-                    refreshToken: session.refreshToken,
-                    user: simpleUser as unknown as Record<string, unknown>,
-                    expiresAt: newExpiresAt,
-                    refreshExpiresAt: new Date(session.refreshExpiresAt).getTime()
-                }
-            };
-
-        } catch (error) {
-            logger.error('Refresh session error:', error);
-            return {
-                success: false,
-                error: 'Session refresh failed',
-                code: 'REFRESH_ERROR'
-            };
-        }
-    }
-
-    /**
-     * Secure logout with session cleanup
-     */
-    static async secureLogout(accessToken: string): Promise<{ success: boolean }> {
-        try {
-            await databaseService.deleteSessionByToken(accessToken);
-            return { success: true };
-        } catch (error) {
-            logger.error('Logout error:', error);
-            return { success: false };
-        }
-    }
-
-    /**
-     * Logout from all devices
-     */
-    static async logoutAllDevices(userId: number): Promise<{ success: boolean }> {
-        try {
-            await databaseService.deleteAllUserSessions(userId);
-            return { success: true };
-        } catch (error) {
-            logger.error('Logout all devices error:', error);
-            return { success: false };
-        }
-    }
-
-    /**
-     * Validate access token and get user
-     */
-    static async validateToken(accessToken: string): Promise<{ valid: boolean; user?: Record<string, unknown> }> {
-        try {
-            const session = await databaseService.getSessionByAccessToken(accessToken);
-            
-            if (!session || new Date(session.expiresAt) < new Date()) {
-                return { valid: false };
-            }
-
-            const user = await databaseService.getUserById(session.userId);
-            return { 
-                valid: !!user, 
-//                 user 
-            };
-
-        } catch (error) {
-            logger.error('Token validation error:', error);
-            return { valid: false };
-        }
-    }
-
-    /**
-     * Change PIN with security validation
-     */
-    static async changePin(
-        userId: number, 
-        currentPin: string, 
-        newPin: string,
-        userAgent?: string,
-        ipAddress?: string
-    ): Promise<AuthResponse> {
-        try {
-            // Validate current PIN
-            const user = await databaseService.getUserById(userId);
-            if (!user) {
-                return {
-                    success: false,
-                    error: 'User not found',
-                    code: 'USER_NOT_FOUND'
-                };
-            }
-
-            const isCurrentPinValid = await databaseService.validateUserPin(userId, currentPin);
-            if (!isCurrentPinValid) {
-                recordSecurityAttempt(
-                    { ip: ipAddress, get: () => userAgent } as Record<string, unknown>,
-                    'pin_change',
-                    false,
-//                     userId
-                );
-
-                return {
-                    success: false,
-                    error: 'Current PIN is incorrect',
-                    code: 'INVALID_CURRENT_PIN'
-                };
-            }
-
-            // Validate new PIN security
-            const pinValidation = validatePinSecurity(newPin);
-            if (!pinValidation.valid) {
-                return {
-                    success: false,
-                    error: pinValidation.errors.join(', '),
-                    code: 'WEAK_NEW_PIN'
-                };
-            }
-
-            // Update PIN in database
-            const success = await databaseService.updateUserPin(userId, newPin);
-            
-            if (success) {
-                await recordSecurityAttempt(
-                    { ip: ipAddress, get: () => userAgent } as Record<string, unknown>,
-                    'pin_change',
-                    true,
-//                     userId
-                );
-
-                // Invalidate all existing sessions for security
-                await this.logoutAllDevices(userId);
-
-                return {
-                    success: true
-                };
-            } else {
-                return {
-                    success: false,
-                    error: 'Failed to update PIN',
-                    code: 'UPDATE_FAILED'
-                };
-            }
-
-        } catch (error) {
-            logger.error('Change PIN error:', error);
-            return {
-                success: false,
-                error: 'PIN change failed',
-                code: 'CHANGE_ERROR'
-            };
-        }
-    }
-
-    /**
-     * Get recent failed login attempts for an account
-     */
-    private static async getRecentFailedAttempts(playerNumber: number): Promise<number> {
-        try {
-            const result = await getRow(`
-                SELECT COUNT(*) as failed_count
-                FROM security_audit_log
-                WHERE user_identifier = ?
-                AND event_type = 'failed_login'
-                AND created_at >= datetime('now', '-1 hour')
-            `, [playerNumber.toString()]);
-            
-            return result ? Number((result as Record<string, unknown>).failed_count) : 0;
-        } catch (error) {
-            logger.error('Error getting failed login attempts:', error);
-            return 0;
-        }
-    }
-
-    /**
-     * Generate cryptographically secure ID
-     */
-    private static generateSecureId(): string {
-        if (crypto && 'getRandomValues' in crypto) {
-            const array = new Uint8Array(32);
-            crypto.getRandomValues(array);
-            return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        if (expiresAt > new Date()) {
+          this.currentSession = session;
+          this.emit('sessionRestored', session);
+          this.setupSessionTimeout(expiresAt.getTime() - Date.now());
         } else {
-            // Fallback for non-browser environments
-            return Math.random().toString(36).substring(2) + Date.now().toString(36);
+          localStorage.removeItem('astral_session');
         }
+      } catch (error) {
+        console.error('Failed to restore session:', error);
+        localStorage.removeItem('astral_session');
+      }
     }
 
-    /**
-     * Cleanup expired sessions
-     */
-    static async cleanupExpiredSessions(): Promise<void> {
-        try {
-            await databaseService.deleteExpiredSessions();
-        } catch (error) {
-            logger.error('Session cleanup error:', error);
-        }
+    // Load biometric credentials
+    const biometrics = localStorage.getItem('astral_biometrics');
+    if (biometrics) {
+      try {
+        const creds = JSON.parse(biometrics);
+        creds.forEach((cred: BiometricCredential) => {
+          this.biometricCredentials.set(cred.userId, cred);
+        });
+      } catch (error) {
+        console.error('Failed to load biometric credentials:', error);
+      }
+    }
+  }
+
+  /**
+   * Authenticate with PIN
+   */
+  async authenticateWithPin(
+    userId: string, 
+    pin: string, 
+    rememberMe: boolean = false
+  ): Promise<AuthSession> {
+    const user = this.users.get(userId);
+    
+    if (!user || user.security.pin !== pin) {
+      this.logLoginAttempt(userId, false);
+      throw new Error('Invalid credentials');
     }
 
-    /**
-     * Get security statistics for monitoring
-     */
-    static async getSecurityStats(): Promise<{
-        activeSessions: number;
-        failedAttemptsToday: number;
-        lockedAccounts: number;
-    }> {
-        try {
-            const activeSessions = await databaseService.getActiveSessionCount();
-            const failedAttemptsToday = await databaseService.getFailedAttemptsToday();
-            
-            return {
-                activeSessions,
-                failedAttemptsToday,
-                lockedAccounts: 0 // Would come from accountLocks map in enhanced security middleware
-            };
-        } catch (error) {
-            logger.error('Security stats error:', error);
-            return {
-                activeSessions: 0,
-                failedAttemptsToday: 0,
-                lockedAccounts: 0
-            };
-        }
+    return this.createSession(user, rememberMe);
+  }
+
+  /**
+   * Authenticate with Biometrics (WebAuthn)
+   */
+  async authenticateWithBiometrics(userId: string): Promise<AuthSession> {
+    const user = this.users.get(userId);
+    
+    if (!user || !user.security.biometricEnabled) {
+      throw new Error('Biometric authentication not enabled');
     }
 
-export default EnhancedAuthService;
+    // In production, this would use WebAuthn API
+    const credential = this.biometricCredentials.get(userId);
+    if (!credential) {
+      throw new Error('No biometric credential found');
+    }
+
+    // Simulate biometric verification
+    const verified = await this.verifyBiometric(credential);
+    if (!verified) {
+      this.logLoginAttempt(userId, false);
+      throw new Error('Biometric verification failed');
+    }
+
+    return this.createSession(user, true);
+  }
+
+  /**
+   * Enable biometric authentication for a user
+   */
+  async enableBiometrics(userId: string, pin: string): Promise<void> {
+    const user = this.users.get(userId);
+    
+    if (!user || user.security.pin !== pin) {
+      throw new Error('Invalid credentials');
+    }
+
+    // In production, this would use WebAuthn to register credential
+    const credential: BiometricCredential = {
+      userId,
+      credentialId: this.generateId(),
+      publicKey: this.generateId(), // Mock public key
+      createdAt: new Date()
+    };
+
+    this.biometricCredentials.set(userId, credential);
+    user.security.biometricEnabled = true;
+    
+    // Save to storage
+    const creds = Array.from(this.biometricCredentials.values());
+    localStorage.setItem('astral_biometrics', JSON.stringify(creds));
+    
+    this.emit('biometricsEnabled', userId);
+  }
+
+  /**
+   * Create a new session
+   */
+  private async createSession(user: AuthUser, rememberMe: boolean): Promise<AuthSession> {
+    const duration = rememberMe ? this.REMEMBER_ME_DURATION : this.SESSION_DURATION;
+    const expiresAt = new Date(Date.now() + duration);
+    
+    const session: AuthSession = {
+      token: this.generateToken(),
+      refreshToken: this.generateToken(),
+      user,
+      expiresAt,
+      rememberMe
+    };
+
+    this.currentSession = session;
+    
+    // Update user's last login
+    user.security.lastLogin = new Date();
+    this.logLoginAttempt(user.id, true);
+    
+    // Save session if remember me is enabled
+    if (rememberMe) {
+      localStorage.setItem('astral_session', JSON.stringify(session));
+    } else {
+      sessionStorage.setItem('astral_session', JSON.stringify(session));
+    }
+    
+    // Setup session timeout
+    this.setupSessionTimeout(duration);
+    
+    this.emit('login', session);
+    return session;
+  }
+
+  /**
+   * Setup session timeout
+   */
+  private setupSessionTimeout(duration: number): void {
+    if (this.sessionTimeout) {
+      clearTimeout(this.sessionTimeout);
+    }
+
+    this.sessionTimeout = setTimeout(() => {
+      this.emit('sessionExpired');
+      this.logout();
+    }, duration);
+  }
+
+  /**
+   * Refresh current session
+   */
+  async refreshSession(): Promise<AuthSession> {
+    if (!this.currentSession) {
+      throw new Error('No active session');
+    }
+
+    const newDuration = this.currentSession.rememberMe 
+      ? this.REMEMBER_ME_DURATION 
+      : this.SESSION_DURATION;
+    
+    const newExpiresAt = new Date(Date.now() + newDuration);
+    
+    this.currentSession = {
+      ...this.currentSession,
+      token: this.generateToken(),
+      expiresAt: newExpiresAt
+    };
+
+    if (this.currentSession.rememberMe) {
+      localStorage.setItem('astral_session', JSON.stringify(this.currentSession));
+    } else {
+      sessionStorage.setItem('astral_session', JSON.stringify(this.currentSession));
+    }
+
+    this.setupSessionTimeout(newDuration);
+    this.emit('sessionRefreshed', this.currentSession);
+    
+    return this.currentSession;
+  }
+
+  /**
+   * Logout
+   */
+  logout(): void {
+    if (this.sessionTimeout) {
+      clearTimeout(this.sessionTimeout);
+      this.sessionTimeout = null;
+    }
+
+    this.currentSession = null;
+    localStorage.removeItem('astral_session');
+    sessionStorage.removeItem('astral_session');
+    
+    this.emit('logout');
+  }
+
+  /**
+   * Get current session
+   */
+  getCurrentSession(): AuthSession | null {
+    return this.currentSession;
+  }
+
+  /**
+   * Check if user is authenticated
+   */
+  isAuthenticated(): boolean {
+    return !!this.currentSession && this.currentSession.expiresAt > new Date();
+  }
+
+  /**
+   * Request PIN reset
+   */
+  async requestPinReset(email: string): Promise<void> {
+    // Find user by email
+    const user = Array.from(this.users.values()).find(u => u.email === email);
+    
+    if (!user) {
+      // Don't reveal if email exists
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return;
+    }
+
+    // In production, send reset email
+    console.log(`PIN reset requested for ${email}`);
+    this.emit('pinResetRequested', email);
+  }
+
+  /**
+   * Reset PIN with verification code
+   */
+  async resetPin(email: string, code: string, newPin: string): Promise<void> {
+    // In production, verify the code from email
+    const user = Array.from(this.users.values()).find(u => u.email === email);
+    
+    if (!user || code !== '123456') { // Mock verification
+      throw new Error('Invalid reset code');
+    }
+
+    user.security.pin = newPin;
+    this.emit('pinReset', user.id);
+  }
+
+  /**
+   * Update user preferences
+   */
+  async updatePreferences(preferences: Partial<UserPreferences>): Promise<void> {
+    if (!this.currentSession) {
+      throw new Error('Not authenticated');
+    }
+
+    this.currentSession.user.preferences = {
+      ...this.currentSession.user.preferences,
+      ...preferences
+    };
+
+    // Save to storage
+    if (this.currentSession.rememberMe) {
+      localStorage.setItem('astral_session', JSON.stringify(this.currentSession));
+    } else {
+      sessionStorage.setItem('astral_session', JSON.stringify(this.currentSession));
+    }
+
+    this.emit('preferencesUpdated', this.currentSession.user.preferences);
+  }
+
+  /**
+   * Helper methods
+   */
+  private generateToken(): string {
+    return Array.from({ length: 32 }, () => 
+      Math.random().toString(36).charAt(2)
+    ).join('');
+  }
+
+  private generateId(): string {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private async verifyBiometric(_credential: BiometricCredential): Promise<boolean> {
+    // Mock biometric verification
+    // In production, would verify the credential
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return true;
+  }
+
+  private logLoginAttempt(userId: string, success: boolean): void {
+    const record: LoginRecord = {
+      timestamp: new Date(),
+      ip: '127.0.0.1', // In production, get real IP
+      device: navigator.userAgent,
+      location: 'Unknown', // In production, use geolocation
+      success
+    };
+
+    const user = this.users.get(userId);
+    if (user) {
+      user.security.loginHistory.unshift(record);
+      // Keep only last 10 records
+      user.security.loginHistory = user.security.loginHistory.slice(0, 10);
+    }
+  }
+}
+
+export default EnhancedAuthService.getInstance();

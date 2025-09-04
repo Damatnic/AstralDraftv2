@@ -1,17 +1,21 @@
 /**
- * Main App Component - BULLETPROOF SIMPLE VERSION
- * No complex logic, no race conditions, just works
+ * Main App Component - PREMIUM FANTASY FOOTBALL EXPERIENCE
+ * Modern authentication, glassmorphism UI, ESPN/Yahoo-beating features
  */
 
 import React from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
 import { SimpleAuthProvider } from './contexts/SimpleAuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { ThemeToggle } from './components/ui/ThemeToggle';
 import { LEAGUE_MEMBERS } from './data/leagueData';
 import './styles/globals.css';
 
-// Core authentication component
+// Core authentication components
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
+import ModernLoginScreen from './components/auth/ModernLoginScreen';
+import enhancedAuthService from './services/enhancedAuthService';
 
 // Main dashboard
 import LeagueDashboard from './views/LeagueDashboard';
@@ -38,14 +42,31 @@ const PlaceholderView: React.FC<{ viewName: string }> = ({ viewName }) => (
 // Main App Component
 const App: React.FC = () => {
   const { state, dispatch } = useAppState();
+  const [useModernLogin, setUseModernLogin] = React.useState(true);
 
-  // Auto-login from HTML interface - SIMPLE and RELIABLE
+  // Check for existing session or auto-login
   React.useEffect(() => {
-    const fastLogin = sessionStorage.getItem('fastLogin');
+    // Check for existing enhanced auth session
+    const currentSession = enhancedAuthService.getCurrentSession();
+    if (currentSession && !state.user) {
+      const leagueMember = LEAGUE_MEMBERS.find((member: any) => member.id === currentSession.user.id);
+      if (leagueMember) {
+        dispatch({ type: 'LOGIN', payload: leagueMember });
+        return;
+      }
+    }
+
+    // Legacy HTML interface auto-login
     const selectedPlayer = localStorage.getItem('selectedPlayer');
     
-    if (fastLogin && selectedPlayer && !state.user) {
+    console.log('🔍 AUTH DEBUG: selectedPlayer =', selectedPlayer);
+    console.log('🔍 AUTH DEBUG: state.user =', state.user);
+    console.log('🔍 AUTH DEBUG: Condition (selectedPlayer && !state.user) =', !!(selectedPlayer && !state.user));
+    
+    if (selectedPlayer && !state.user) {
+      // Clean up authentication flags
       sessionStorage.removeItem('fastLogin');
+      localStorage.removeItem('selectedPlayer');
       
       const leagueMember = LEAGUE_MEMBERS.find((member: any) => member.id === selectedPlayer);
       if (leagueMember) {
@@ -70,7 +91,12 @@ const App: React.FC = () => {
 
   // If no user, show login
   if (!state.user) {
-    return <SimplePlayerLogin />;
+    // Toggle between modern and simple login
+    return useModernLogin ? (
+      <ModernLoginScreen onToggleSimple={() => setUseModernLogin(false)} />
+    ) : (
+      <SimplePlayerLogin />
+    );
   }
 
   // View renderer with error boundaries for each view
@@ -229,8 +255,12 @@ const App: React.FC = () => {
 
               {/* User menu */}
               <div className="flex items-center space-x-4">
+                <ThemeToggle size="sm" />
                 <button
-                  onClick={() => dispatch({ type: 'LOGOUT' })}
+                  onClick={() => {
+                    enhancedAuthService.logout();
+                    dispatch({ type: 'LOGOUT' });
+                  }}
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Logout
@@ -250,19 +280,20 @@ const App: React.FC = () => {
     </div>
   );
 };
-
 // App with Context Provider and Top-Level Error Boundary
 const AppWithProvider: React.FC = () => (
   <ErrorBoundary>
-    <SimpleAuthProvider>
-      <ErrorBoundary>
-        <AppProvider>
-          <ErrorBoundary>
-            <App />
-          </ErrorBoundary>
-        </AppProvider>
-      </ErrorBoundary>
-    </SimpleAuthProvider>
+    <ThemeProvider>
+      <SimpleAuthProvider>
+        <ErrorBoundary>
+          <AppProvider>
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
+          </AppProvider>
+        </ErrorBoundary>
+      </SimpleAuthProvider>
+    </ThemeProvider>
   </ErrorBoundary>
 );
 
