@@ -24,6 +24,7 @@ export interface OracleLeague {
     status: 'ACTIVE' | 'ENDED' | 'PENDING';
     tags: string[];
     joinCode?: string;
+}
 
 export interface LeagueMember {
     userId: string;
@@ -34,6 +35,7 @@ export interface LeagueMember {
     stats: LeagueMemberStats;
     isActive: boolean;
     lastActivity: string;
+}
 
 export interface LeagueMemberStats {
     totalPoints: number;
@@ -46,7 +48,8 @@ export interface LeagueMemberStats {
     rank: number;
     weeklyRank: number;
     achievements: number;
-    badges: number;}
+    badges: number;
+}
 
 export interface LeagueSettings {
     challengeFrequency: 'DAILY' | 'WEEKLY' | 'BI_WEEKLY';
@@ -57,7 +60,8 @@ export interface LeagueSettings {
     minimumParticipants: number;
     enableTrashtalk: boolean;
     moderationLevel: 'OPEN' | 'MODERATED' | 'STRICT';
-    customRules: string[];}
+    customRules: string[];
+}
 
 export interface GroupPrediction {
     id: string;
@@ -81,6 +85,7 @@ export interface GroupPrediction {
         winnerPoints: number;
         participationPoints: number;
     };
+}
 
 export interface GroupPredictionParticipant {
     userId: string;
@@ -90,7 +95,8 @@ export interface GroupPredictionParticipant {
     confidence: number;
     reasoning?: string;
     submittedAt: string;
-    weight?: number; // For weighted average calculations}
+    weight?: number; // For weighted average calculations
+}
 
 export interface Debate {
     id: string;
@@ -113,6 +119,7 @@ export interface Debate {
         resolvedAt: string;
         reasoning: string;
     };
+}
 
 export interface DebateParticipant {
     userId: string;
@@ -122,6 +129,7 @@ export interface DebateParticipant {
     joinedAt: string;
     reputation: number;
     badges: string[];
+}
 
 export interface DebatePost {
     id: string;
@@ -137,6 +145,7 @@ export interface DebatePost {
     replies: DebateReply[];
     isModerated: boolean;
     isPinned: boolean;
+}
 
 export interface DebateReply {
     id: string;
@@ -147,17 +156,20 @@ export interface DebateReply {
     content: string;
     postedAt: string;
     reactions: PostReaction[];
+}
 
 export interface PostReaction {
     userId: string;
     type: '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂';
     timestamp: string;
+}
 
 export interface DebateVote {
     userId: string;
     side: 'SIDE_A' | 'SIDE_B';
     timestamp: string;
     reasoning?: string;
+}
 
 export interface ModeratorAction {
     id: string;
@@ -168,6 +180,7 @@ export interface ModeratorAction {
     targetType: 'POST' | 'REPLY' | 'USER';
     reason: string;
     timestamp: string;
+}
 
 export interface SocialNotification {
     id: string;
@@ -178,7 +191,8 @@ export interface SocialNotification {
     data: any;
     isRead: boolean;
     createdAt: string;
-    expiresAt?: string;}
+    expiresAt?: string;
+}
 
 export interface LeagueInvitation {
     id: string;
@@ -191,7 +205,8 @@ export interface LeagueInvitation {
     message?: string;
     status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'EXPIRED';
     createdAt: string;
-    expiresAt: string;}
+    expiresAt: string;
+}
 
 export interface SocialChallenge {
     id: string;
@@ -219,6 +234,7 @@ export interface SocialChallenge {
             rank: number;
         }>;
     };
+}
 
 class OracleSocialService {
     private readonly LEAGUES_KEY = 'oracleLeagues';
@@ -583,7 +599,7 @@ class OracleSocialService {
             userId: 'current-user',
             side,
             timestamp: new Date().toISOString(),
-//             reasoning
+            reasoning
         });
 
         this.storeDebates(debates);
@@ -713,7 +729,7 @@ class OracleSocialService {
             winner,
             resolvedBy: 'current-user',
             resolvedAt: new Date().toISOString(),
-//             reasoning
+            reasoning
         };
 
         this.storeDebates(debates);
@@ -885,7 +901,9 @@ class OracleSocialService {
             console.error('Failed to store invitations:', error);
         }
     }
+}
 
 // Export singleton instance
-export const oracleSocialService = new OracleSocialService();
+const oracleSocialService = new OracleSocialService();
+export { oracleSocialService };
 export default oracleSocialService;

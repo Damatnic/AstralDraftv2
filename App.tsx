@@ -5,6 +5,8 @@
 
 import React from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
+import { SimpleAuthProvider } from './contexts/SimpleAuthContext';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { LEAGUE_MEMBERS } from './data/leagueData';
 import './styles/globals.css';
 
@@ -71,141 +73,197 @@ const App: React.FC = () => {
     return <SimplePlayerLogin />;
   }
 
-  // View renderer
+  // View renderer with error boundaries for each view
   const renderView = () => {
     switch (state.currentView) {
       case 'DASHBOARD':
-        return <LeagueDashboard />;
+        return (
+          <ErrorBoundary>
+            <LeagueDashboard />
+          </ErrorBoundary>
+        );
       
       case 'LEAGUE_HUB':
-        return <PlaceholderView viewName="League Hub" />;
+        return (
+          <ErrorBoundary>
+            <PlaceholderView viewName="League Hub" />
+          </ErrorBoundary>
+        );
       
       case 'TEAM_HUB':
-        return <TeamHubView />;
+        return (
+          <ErrorBoundary>
+            <TeamHubView />
+          </ErrorBoundary>
+        );
       
       case 'PLAYERS':
-        return <PlayersView />;
+        return (
+          <ErrorBoundary>
+            <PlayersView />
+          </ErrorBoundary>
+        );
       
       case 'DRAFT_PREP_CENTER':
-        return <PlaceholderView viewName="Draft Prep Center" />;
+        return (
+          <ErrorBoundary>
+            <PlaceholderView viewName="Draft Prep Center" />
+          </ErrorBoundary>
+        );
       
       case 'MESSAGES':
-        return <MessagesView />;
+        return (
+          <ErrorBoundary>
+            <MessagesView />
+          </ErrorBoundary>
+        );
       
       case 'TRADES':
-        return <TradesView />;
+        return (
+          <ErrorBoundary>
+            <TradesView />
+          </ErrorBoundary>
+        );
       
       case 'LEAGUE_STANDINGS':
-        return <LeagueStandingsView />;
+        return (
+          <ErrorBoundary>
+            <LeagueStandingsView />
+          </ErrorBoundary>
+        );
       
       case 'MATCHUP':
-        return <MatchupView />;
+        return (
+          <ErrorBoundary>
+            <MatchupView />
+          </ErrorBoundary>
+        );
       
       case 'PROFILE':
-        return <ProfileView />;
+        return (
+          <ErrorBoundary>
+            <ProfileView />
+          </ErrorBoundary>
+        );
       
       default:
-        return <LeagueDashboard />;
+        return (
+          <ErrorBoundary>
+            <LeagueDashboard />
+          </ErrorBoundary>
+        );
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
-      {/* Navigation */}
-      <nav className="bg-gray-800 border-b border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-white text-xl font-bold">Astral Draft</h1>
-              <span className="ml-4 text-gray-400">Welcome, {state.user.name}!</span>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
+      {/* Navigation with Error Boundary */}
+      <ErrorBoundary>
+        <nav className="bg-gray-800 border-b border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center">
+                <h1 className="text-white text-xl font-bold">Astral Draft</h1>
+                <span className="ml-4 text-gray-400">Welcome, {state.user?.name || 'User'}!</span>
+              </div>
+              
+              {/* Desktop Navigation */}
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  <button
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      state.currentView === 'DASHBOARD'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    }`}
+                  >
+                    Dashboard
+                  </button>
+                  
+                  <button
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      state.currentView === 'TEAM_HUB'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    }`}
+                  >
+                    Team
+                  </button>
+                  
+                  <button
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYERS' })}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      state.currentView === 'PLAYERS'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    }`}
+                  >
+                    Players
+                  </button>
+                  
+                  <button
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      state.currentView === 'TRADES'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    }`}
+                  >
+                    Trades
+                  </button>
+                  
+                  <button
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      state.currentView === 'LEAGUE_STANDINGS'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    }`}
+                  >
+                    Standings
+                  </button>
+                </div>
+              </div>
+
+              {/* User menu */}
+              <div className="flex items-center space-x-4">
                 <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    state.currentView === 'DASHBOARD'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
+                  onClick={() => dispatch({ type: 'LOGOUT' })}
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Dashboard
-                </button>
-                
-                <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    state.currentView === 'TEAM_HUB'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
-                >
-                  Team
-                </button>
-                
-                <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYERS' })}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    state.currentView === 'PLAYERS'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
-                >
-                  Players
-                </button>
-                
-                <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    state.currentView === 'TRADES'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
-                >
-                  Trades
-                </button>
-                
-                <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    state.currentView === 'LEAGUE_STANDINGS'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
-                >
-                  Standings
+                  Logout
                 </button>
               </div>
             </div>
-
-            {/* User menu */}
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => dispatch({ type: 'LOGOUT' })}
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </ErrorBoundary>
 
-      {/* Main Content */}
-      <main>
-        {renderView()}
-      </main>
+      {/* Main Content with Error Boundary */}
+      <ErrorBoundary>
+        <main>
+          {renderView()}
+        </main>
+      </ErrorBoundary>
     </div>
   );
 };
 
-// App with Context Provider
+// App with Context Provider and Top-Level Error Boundary
 const AppWithProvider: React.FC = () => (
-  <AppProvider>
-    <App />
-  </AppProvider>
+  <ErrorBoundary>
+    <SimpleAuthProvider>
+      <ErrorBoundary>
+        <AppProvider>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </AppProvider>
+      </ErrorBoundary>
+    </SimpleAuthProvider>
+  </ErrorBoundary>
 );
 
 export default AppWithProvider;

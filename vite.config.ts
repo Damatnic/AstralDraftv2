@@ -87,8 +87,16 @@ export default defineConfig(({ mode }: { mode: string }) => {
               if (id.includes('components/analytics/') || id.includes('Analytics') || id.includes('metrics')) {
                 return 'analytics-features';
               }
+              
+              // Split player features into smaller chunks
+              if (id.includes('components/player/tabs/')) {
+                return 'player-tabs';
+              }
+              if (id.includes('components/player/') && (id.includes('Detail') || id.includes('Modal'))) {
+                return 'player-details';
+              }
               if (id.includes('components/player/') || id.includes('Player') || id.includes('views/') && id.includes('Players')) {
-                return 'player-features';
+                return 'player-core';
               }
               
               // UI component chunks
