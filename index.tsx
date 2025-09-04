@@ -110,6 +110,19 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       console.warn('Service Worker registration failed:', error);
     }
   });
+} else if ('serviceWorker' in navigator && process.env.NODE_ENV === 'development') {
+  // Unregister any existing service workers in development
+  window.addEventListener('load', async () => {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        await registration.unregister();
+        console.log('🧹 Unregistered service worker for development');
+      }
+    } catch (error) {
+      console.warn('Failed to unregister service workers:', error);
+    }
+  });
 }
 
 // Development helpers
