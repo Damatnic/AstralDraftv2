@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/SimpleAuthContext';
-import { LoadingCoordinatorProvider } from './hooks/useLoadingCoordinator';
+// LoadingCoordinatorProvider is provided at the root in index.tsx
 import { ModernLoginScreen } from './components/auth/ModernLoginScreen';
 import { UnifiedLoading } from './components/ui/UnifiedLoading';
 import { ThemeToggle } from './components/ui/ThemeToggle';
@@ -201,7 +201,6 @@ const App: React.FC = () => {
   }
 
   return (
-    <LoadingCoordinatorProvider>
       <div className={`app ${theme}`} data-theme={theme}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
@@ -304,7 +303,6 @@ const App: React.FC = () => {
           </Routes>
         </AnimatePresence>
       </div>
-    </LoadingCoordinatorProvider>
   );
 };
 

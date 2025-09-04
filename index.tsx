@@ -5,6 +5,7 @@ import App from './App';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { SimpleAuthProvider } from './contexts/SimpleAuthContext';
 import './styles/design-system.css';
+import { LoadingCoordinatorProvider } from './hooks/useLoadingCoordinator';
 
 // Performance monitoring
 const startTime = performance.now();
@@ -76,7 +77,9 @@ root.render(
       <BrowserRouter>
         <ThemeProvider>
           <SimpleAuthProvider>
-            <App />
+            <LoadingCoordinatorProvider>
+              <App />
+            </LoadingCoordinatorProvider>
           </SimpleAuthProvider>
         </ThemeProvider>
       </BrowserRouter>
