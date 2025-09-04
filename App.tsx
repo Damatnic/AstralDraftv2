@@ -211,12 +211,12 @@ const App: React.FC = () => {
               currentUser ? (
                 <Navigate to="/dashboard" replace />
               ) : useSimpleLogin ? (
-                <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-                  <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-md w-full">
-                    <h1 className="text-2xl font-bold text-white text-center mb-6">Simple Login</h1>
+                <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+                  <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 sm:p-8 max-w-md w-full mx-4">
+                    <h1 className="text-xl sm:text-2xl font-bold text-white text-center mb-6">Simple Login</h1>
                     <button
                       onClick={() => handleLogin('player1', '0000')}
-                      className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                      className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all text-sm sm:text-base"
                     >
                       Quick Login
                     </button>

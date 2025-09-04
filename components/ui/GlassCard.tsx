@@ -51,7 +51,7 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
       
       {/* Content */}
-      <div className="relative z-10 p-8">
+      <div className="relative z-10 p-4 sm:p-6 lg:p-8">
         {children}
       </div>
 

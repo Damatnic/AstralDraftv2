@@ -136,7 +136,7 @@ export const PinInput: React.FC<PinInputProps> = ({
   };
 
   return (
-    <div className="flex justify-center space-x-3">
+    <div className="flex justify-center space-x-2 sm:space-x-3">
       {Array.from({ length }, (_, index) => {
         const hasValue = Boolean(value[index]);
         const isFocused = focusedIndex === index;
@@ -155,7 +155,7 @@ export const PinInput: React.FC<PinInputProps> = ({
               }}
               transition={{ duration: 0.2 }}
               className={`
-                relative h-16 w-16 rounded-xl border-2 
+                relative h-12 w-12 sm:h-16 sm:w-16 rounded-xl border-2 
                 ${error ? 'border-red-500 bg-red-500/10' : 'border-gray-600 bg-white/10'}
                 backdrop-blur-md transition-all duration-200
                 ${isFocused && !error ? 'border-purple-600 shadow-lg shadow-purple-500/20' : ''}
@@ -178,9 +178,9 @@ export const PinInput: React.FC<PinInputProps> = ({
                 onPaste={handlePaste}
                 disabled={disabled}
                 className={`
-                  absolute inset-0 h-full w-full bg-transparent text-center text-2xl font-bold
+                  absolute inset-0 h-full w-full bg-transparent text-center text-lg sm:text-2xl font-bold
                   text-white outline-none
-                  ${masked && hasValue ? 'text-3xl' : ''}
+                  ${masked && hasValue ? 'text-xl sm:text-3xl' : ''}
                   ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-text'}
                 `}
                 style={{
@@ -199,9 +199,9 @@ export const PinInput: React.FC<PinInputProps> = ({
                   className="pointer-events-none absolute inset-0 flex items-center justify-center"
                 >
                   {masked ? (
-                    <div className="h-3 w-3 rounded-full bg-white" />
+                    <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-white" />
                   ) : (
-                    <span className="text-2xl font-bold text-white">{value[index]}</span>
+                    <span className="text-lg sm:text-2xl font-bold text-white">{value[index]}</span>
                   )}
                 </motion.div>
               )}

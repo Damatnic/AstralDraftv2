@@ -302,17 +302,17 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
         animate="visible"
         exit="exit"
       >
-        <motion.div animate={controls}>
-          <GlassCard className="w-full max-w-4xl">
+        <motion.div animate={controls} className="w-full max-w-lg sm:max-w-2xl lg:max-w-4xl">
+          <GlassCard className="w-full">
             {/* Header */}
             <motion.div 
-              className="mb-8 text-center"
+              className="mb-6 sm:mb-8 text-center"
               variants={itemVariants}
             >
-              <h1 className="mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-5xl font-bold text-transparent">
+              <h1 className="mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent">
                 Astral Draft
               </h1>
-              <p className="text-lg text-gray-300">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-300">
                 Premium Fantasy Football Experience
               </p>
             </motion.div>
@@ -327,12 +327,12 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                   animate="visible"
                   exit="exit"
                 >
-                  <h2 className="mb-6 text-center text-2xl font-semibold text-white">
+                  <h2 className="mb-4 sm:mb-6 text-center text-xl sm:text-2xl font-semibold text-white">
                     Select Your Profile
                   </h2>
                   
                   <motion.div 
-                    className="grid grid-cols-2 gap-4 md:grid-cols-5"
+                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4"
                     variants={containerVariants}
                   >
                     {PLAYER_PROFILES.map((player) => (
@@ -344,13 +344,13 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                         whileTap="tap"
                         animate={selectedPlayer === player.id ? "selected" : "initial"}
                         onClick={() => handlePlayerSelect(player.id)}
-                        className={`group relative overflow-hidden rounded-xl bg-gradient-to-br ${player.gradient} p-6 shadow-xl backdrop-blur-md transition-all duration-300`}
+                        className={`group relative overflow-hidden rounded-xl bg-gradient-to-br ${player.gradient} p-3 sm:p-4 lg:p-6 shadow-xl backdrop-blur-md transition-all duration-300`}
                         disabled={isLoading}
                       >
                         <HapticFeedback>
                           <div className="relative z-10">
-                            <div className="mb-2 text-4xl">{player.emoji}</div>
-                            <div className="text-sm font-medium text-white opacity-90">
+                            <div className="mb-1 sm:mb-2 text-2xl sm:text-3xl lg:text-4xl">{player.emoji}</div>
+                            <div className="text-xs sm:text-sm font-medium text-white opacity-90 leading-tight">
                               {player.name}
                             </div>
                           </div>
@@ -366,7 +366,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
 
                   {/* Demo Mode Button and Classic Login Option */}
                   <motion.div
-                    className="mt-8 text-center space-y-3"
+                    className="mt-6 sm:mt-8 text-center space-y-3"
                     variants={itemVariants}
                   >
                     <button
@@ -375,7 +375,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                         setPin('0000');
                         handlePinSubmit();
                       }}
-                      className="rounded-full bg-white/10 px-6 py-2 text-sm text-white backdrop-blur-md transition-all hover:bg-white/20"
+                      className="rounded-full bg-white/10 px-4 sm:px-6 py-2 text-sm text-white backdrop-blur-md transition-all hover:bg-white/20 w-full sm:w-auto"
                       disabled={isLoading}
                     >
                       Quick Demo Access
@@ -385,7 +385,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                       <div>
                         <button
                           onClick={onToggleSimple}
-                          className="text-xs text-white/60 hover:text-white/80 transition-colors"
+                          className="text-xs text-white/60 hover:text-white/80 transition-colors block mx-auto"
                         >
                           Use Classic Login
                         </button>
@@ -418,14 +418,14 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
 
                   {/* Selected Player Display */}
                   <div className="flex justify-center">
-                    <div className={`rounded-xl bg-gradient-to-br ${PLAYER_PROFILES.find(p => p.id === selectedPlayer)?.gradient} p-4`}>
-                      <div className="text-5xl">
+                    <div className={`rounded-xl bg-gradient-to-br ${PLAYER_PROFILES.find(p => p.id === selectedPlayer)?.gradient} p-3 sm:p-4`}>
+                      <div className="text-3xl sm:text-4xl lg:text-5xl">
                         {PLAYER_PROFILES.find(p => p.id === selectedPlayer)?.emoji}
                       </div>
                     </div>
                   </div>
 
-                  <h2 className="text-center text-2xl font-semibold text-white">
+                  <h2 className="text-center text-xl sm:text-2xl font-semibold text-white">
                     Enter Your PIN
                   </h2>
 
