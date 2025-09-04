@@ -1,9 +1,9 @@
 /**
- * Main App Component - Fantasy Football League Application
- * Clean rewrite focusing on core functionality
+ * Main App Component - BULLETPROOF SIMPLE VERSION
+ * No complex logic, no race conditions, just works
  */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
 import { LEAGUE_MEMBERS } from './data/leagueData';
 import './styles/globals.css';
@@ -19,82 +19,40 @@ import TeamHubView from './views/TeamHubView';
 import PlayersView from './views/PlayersView';
 import TradesView from './views/TradesView';
 import MessagesView from './views/MessagesView';
-import ProfileView from './views/ProfileView';
 import LeagueStandingsView from './views/LeagueStandingsView';
 import MatchupView from './views/MatchupView';
+import ProfileView from './views/ProfileView';
 
-// Mobile optimizations
-import { initializeMobileOptimizations } from './utils/mobileOptimizations';
-
-// Production optimizations
-import useProductionOptimizations from './hooks/useProductionOptimizations';
-
-// PWA Install Prompt
-import PWAInstallPrompt from './components/pwa/PWAInstallPrompt';
-
-// Placeholder component for views that are broken
+// Placeholder component for unfinished views
 const PlaceholderView: React.FC<{ viewName: string }> = ({ viewName }) => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center">
-    <div className="text-center space-y-4 p-8 bg-gray-800 rounded-lg shadow-xl max-w-md">
-      <div className="text-6xl">🚧</div>
-      <h1 className="text-2xl font-bold text-white">{viewName} Under Construction</h1>
-      <p className="text-gray-300">
-        This view is being rebuilt. Please check back soon.
-      </p>
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white p-8">
+    <div className="max-w-4xl mx-auto text-center">
+      <h1 className="text-4xl font-bold mb-4">{viewName}</h1>
+      <p className="text-xl text-gray-400">Coming Soon</p>
     </div>
   </div>
 );
 
-// Main app content component
-const AppContent: React.FC = () => {
-  console.log('🎯 APP: AppContent component mounting');
-  
+// Main App Component
+const App: React.FC = () => {
   const { state, dispatch } = useAppState();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const [emergencyFallback, setEmergencyFallback] = React.useState(false);
-  
-  console.log('📊 APP: Current app state:', JSON.stringify({
-    hasUser: !!state.user,
-    isLoading: state.isLoading,
-    currentView: state.currentView,
-    emergencyFallback
-  }, null, 2));
 
-  // Initialize production optimizations - safely
-  try {
-    useProductionOptimizations();
-  } catch (error) {
-    console.error('Production optimizations error:', error);
-  }
-
-  // Initialize app
-  useEffect(() => {
-    console.log('🚀 App initialization started...');
-    console.log('📊 Current state:', JSON.stringify(state, null, 2));
-    
-    // Check for fast login from HTML interface
+  // Auto-login from HTML interface - SIMPLE and RELIABLE
+  React.useEffect(() => {
     const fastLogin = sessionStorage.getItem('fastLogin');
     const selectedPlayer = localStorage.getItem('selectedPlayer');
     
-    if (fastLogin && selectedPlayer) {
-      console.log('🚀 FAST LOGIN: User', selectedPlayer, 'selected via HTML interface');
-      
-      // Clear the fast login flag
+    if (fastLogin && selectedPlayer && !state.user) {
       sessionStorage.removeItem('fastLogin');
       
-      // Find the user in league data
       const leagueMember = LEAGUE_MEMBERS.find((member: any) => member.id === selectedPlayer);
-      
       if (leagueMember) {
-        console.log('✅ FAST LOGIN: Found league member:', leagueMember.name);
         dispatch({ type: 'LOGIN', payload: leagueMember });
-        console.log('✅ FAST LOGIN: User logged in automatically as', leagueMember.name);
         
-        // Hide HTML login interface now that we have a user
+        // Hide HTML login interface
         setTimeout(() => {
           const loginInterface = document.getElementById('login-interface');
-          if (loginInterface) {
-            console.log('🎯 Hiding HTML login interface - user logged in:', leagueMember.name);
+          if (loginInterface && loginInterface.parentNode) {
             loginInterface.style.transition = 'opacity 0.5s ease-out';
             loginInterface.style.opacity = '0';
             setTimeout(() => {
@@ -104,113 +62,12 @@ const AppContent: React.FC = () => {
             }, 500);
           }
         }, 100);
-      } else {
-        console.error('❌ FAST LOGIN: User not found in league:', selectedPlayer);
       }
     }
-    
-    // FORCE APP TO SHOW - bypass all loading logic
-    console.log('⚡ FORCE BYPASSING ALL LOADING LOGIC');
-    dispatch({ type: 'SET_LOADING', payload: false });
-    console.log('✅ Loading forcibly set to false');
-    
-    // Initialize mobile optimizations only in browser environment
-    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-      try {
-        initializeMobileOptimizations();
-        console.log('✅ Mobile optimizations initialized');
-      } catch (error) {
-        console.error('❌ Mobile optimization error:', error);
-      }
-    } else {
-      console.warn('⚠️ Not in browser environment');
-    }
-    
-    // Very short emergency failsafe - 2 seconds
-    const failsafeTimeout = setTimeout(() => {
-      console.warn('🚨 EMERGENCY FAILSAFE - showing app now');
-      setEmergencyFallback(true);
-      dispatch({ type: 'SET_LOADING', payload: false });
-    }, 2000);
-    
-    return () => clearTimeout(failsafeTimeout);
-  }, []);
-  
-  // Remove loading screen after UI is fully rendered
-  useEffect(() => {
-    // Wait for the actual UI to render before removing loading screen
-    const removeLoadingScreen = () => {
-      console.log('🎨 APP: Checking if UI is ready for loading screen removal');
-      
-      // Check if actual UI components are rendered
-      const hasUI = document.querySelector('nav') || 
-                   document.querySelector('main') ||
-                   document.querySelector('[class*="bg-"]') ||
-                   document.querySelector('button') ||
-                   document.querySelector('.card') ||
-                   state.user === null; // If no user, show login screen
-      
-      if (hasUI) {
-        console.log('✅ APP: UI detected, removing loading screen');
-        
-        const loadingEl = document.getElementById('loading-fallback');
-        if (loadingEl) {
-          console.log('🧹 APP: Removing loading screen with fade out');
-          loadingEl.style.opacity = '0';
-          loadingEl.style.transition = 'opacity 0.5s ease-out';
-          
-          setTimeout(() => {
-            if (loadingEl.parentNode) {
-              loadingEl.parentNode.removeChild(loadingEl);
-              console.log('✅ APP: Loading screen successfully removed');
-            }
-          }, 500);
-          
-          // Final debug update
-          const debugEl = document.getElementById('debug-info');
-          if (debugEl) {
-            const finalDiv = document.createElement('div');
-            finalDiv.textContent = '🎉 UI fully loaded!';
-            finalDiv.style.color = '#10b981';
-            finalDiv.style.fontWeight = 'bold';
-            debugEl.appendChild(finalDiv);
-          }
-        }
-      } else {
-        console.log('⏳ APP: UI not ready yet, checking again...');
-        // Try again in 100ms
-        setTimeout(removeLoadingScreen, 100);
-      }
-    };
-    
-    // Start checking after a brief delay to let render complete
-    setTimeout(removeLoadingScreen, 200);
-  }, [state.user]);
+  }, []); // ONLY RUN ONCE
 
-  // If user is not authenticated, show login (with emergency fallback)
+  // If no user, show login
   if (!state.user) {
-    if (emergencyFallback) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center">
-          <div className="text-center space-y-4 p-8 bg-gray-800 rounded-lg shadow-xl max-w-md">
-            <div className="text-6xl">⚡</div>
-            <h1 className="text-2xl font-bold text-white">Emergency Fallback Mode</h1>
-            <p className="text-gray-300">
-              The normal login process failed to load. This could be due to network issues or server problems.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
-            >
-              Retry
-            </button>
-            <p className="text-xs text-gray-500">
-              If this problem persists, please check your internet connection or try again later.
-            </p>
-          </div>
-        </div>
-      );
-    }
     return <SimplePlayerLogin />;
   }
 
@@ -254,12 +111,13 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
-      {/* Mobile-responsive navigation */}
+      {/* Navigation */}
       <nav className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-white text-xl font-bold">Fantasy League</h1>
+              <h1 className="text-white text-xl font-bold">Astral Draft</h1>
+              <span className="ml-4 text-gray-400">Welcome, {state.user.name}!</span>
             </div>
             
             {/* Desktop Navigation */}
@@ -284,7 +142,7 @@ const AppContent: React.FC = () => {
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                   }`}
                 >
-                  My Team
+                  Team
                 </button>
                 
                 <button
@@ -321,264 +179,33 @@ const AppContent: React.FC = () => {
                 </button>
               </div>
             </div>
-            
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                {/* Hamburger icon */}
-                <svg
-                  className={`${isMobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-                {/* Close icon */}
-                <svg
-                  className={`${isMobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            
-            {/* Desktop user info and logout */}
-            <div className="hidden md:flex items-center">
-              <span className="text-gray-300 mr-4 text-sm">Welcome, {state.user.name}</span>
+
+            {/* User menu */}
+            <div className="flex items-center space-x-4">
               <button
                 onClick={() => dispatch({ type: 'LOGOUT' })}
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
               >
                 Logout
               </button>
             </div>
           </div>
         </div>
-
-        {/* Mobile Navigation Menu */}
-        <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-800 border-t border-gray-700">
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'DASHBOARD'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              📊 Dashboard
-            </button>
-            
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'TEAM_HUB'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              👥 My Team
-            </button>
-            
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'PLAYERS' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'PLAYERS'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              🏈 Players
-            </button>
-            
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'TRADES' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'TRADES'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              🔄 Trades
-            </button>
-            
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'LEAGUE_STANDINGS'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              🏆 Standings
-            </button>
-            
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'MESSAGES' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'MESSAGES'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              💬 Messages
-            </button>
-            
-            <button
-              onClick={() => {
-                dispatch({ type: 'SET_VIEW', payload: 'PROFILE' });
-                setIsMobileMenuOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                state.currentView === 'PROFILE'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              👤 Profile
-            </button>
-            
-            {/* Mobile user info and logout */}
-            <div className="border-t border-gray-700 pt-4 pb-3">
-              <div className="flex items-center px-3">
-                <div className="flex-shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-gray-600 flex items-center justify-center">
-                    <span className="text-sm font-medium text-white">
-                      {state.user.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-white">{state.user.name}</div>
-                  <div className="text-sm font-medium text-gray-400">Team Manager</div>
-                </div>
-              </div>
-              <div className="mt-3 px-2 space-y-1">
-                <button
-                  onClick={() => dispatch({ type: 'LOGOUT' })}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-red-600 transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </nav>
 
-      {/* Main content */}
-      <main className="flex-1">
+      {/* Main Content */}
+      <main>
         {renderView()}
       </main>
-      
-      {/* PWA Install Prompt */}
-      <PWAInstallPrompt />
     </div>
   );
 };
 
-// Simple error boundary
-interface ErrorBoundaryState {
-  hasError: boolean;
-  error?: Error;
-}
+// App with Context Provider
+const AppWithProvider: React.FC = () => (
+  <AppProvider>
+    <App />
+  </AppProvider>
+);
 
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  ErrorBoundaryState
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('App Error:', error, errorInfo);
-    
-    // Send error details to console for debugging in production
-    console.error('Error Stack:', error.stack);
-    console.error('Component Stack:', errorInfo.componentStack);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center">
-          <div className="text-center space-y-4 p-8 bg-gray-800 rounded-lg shadow-xl max-w-md">
-            <div className="text-6xl">⚠️</div>
-            <h1 className="text-2xl font-bold text-white">Something went wrong</h1>
-            <p className="text-gray-300">
-              The application encountered an error. Please refresh the page.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
-            >
-              Refresh Page
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
-// Main App component
-const App: React.FC = () => {
-  return (
-    <ErrorBoundary>
-      <AppProvider>
-        <AppContent />
-      </AppProvider>
-    </ErrorBoundary>
-  );
-};
-
-export default App;
+export default AppWithProvider;

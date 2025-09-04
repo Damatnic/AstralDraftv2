@@ -894,29 +894,25 @@
         }
       }, 10000);
       
-      // Login functionality
+      // BULLETPROOF Login functionality - SIMPLE and RELIABLE
       window.loginAsPlayer = function(playerId) {
         console.log('🎯 LOGIN: Player', playerId, 'selected');
         
-        // Show selection feedback
+        // Show immediate feedback
         const button = event.target.closest('button');
         if (button) {
           button.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 1))';
           button.innerHTML = `
             <div style="font-size: 36px; margin-bottom: 8px;">✅</div>
-            <div style="font-size: 14px;">Loading App...</div>
-            <div style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Initializing React</div>
+            <div style="font-size: 14px;">Loading...</div>
           `;
         }
         
-        // Store player selection for React app
+        // Store player selection - React will automatically detect this
         localStorage.setItem('selectedPlayer', playerId);
         sessionStorage.setItem('fastLogin', 'true');
         
-        console.log('✅ LOGIN: Stored player data, React will handle login automatically');
-        
-        // React app should detect the login automatically via useEffect
-        // No need for complex bridging - just let the sessionStorage trigger it
+        console.log('✅ LOGIN: Player data stored, triggering app load');
       };
       
       window.showAdvanced = function() {
