@@ -13,7 +13,7 @@ import {
     CalendarIcon,
     BarChart3Icon,
     PlusIcon,
-//     CrownIcon
+    CrownIcon
 } from 'lucide-react';
 import { Widget } from '../ui/Widget';
 import { useAuth } from '../../contexts/AuthContext';
@@ -27,12 +27,11 @@ import {
 
 interface Props {
     leagueId?: string;
-    className?: string;}
+    className?: string;
+}
 
-// Helper function to get status badge styles}
-
+// Helper function to get status badge styles
 const getStatusBadgeStyles = (status: string): string => {
-  const [isLoading, setIsLoading] = React.useState(false);
     switch (status) {
         case 'active':
             return 'bg-green-500/20 text-green-400';
@@ -42,7 +41,7 @@ const getStatusBadgeStyles = (status: string): string => {
             return 'bg-purple-500/20 text-purple-400';
         default:
             return 'bg-gray-500/20 text-gray-400';
-
+    }
 };
 
 type Tab = 'overview' | 'members' | 'settings' | 'history' | 'commissioner';
@@ -60,6 +59,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
     const [invitations, setInvitations] = useState<LeagueInvitation[]>([]);
     const [editingSettings, setEditingSettings] = useState(false);
     const [pendingAction, setPendingAction] = useState<CommissionerAction | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Load league data
     useEffect(() => {
@@ -68,7 +68,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
         const loadData = async () => {
             setLoading(true);
             try {
-
                 // Load user's leagues
                 const leagues = await leagueManagementService.getUserLeagues(user.id.toString());
                 setUserLeagues(leagues);
@@ -83,12 +82,12 @@ const LeagueManagementInterface: React.FC<Props> = ({
                     setLeague(leagueData);
                 } else if (leagues.length > 0) {
                     setLeague(leagues[0]);
-
-    } catch (error) {
+                }
+            } catch (error) {
                 setError('Failed to load league information');
             } finally {
                 setLoading(false);
-
+            }
         };
 
         loadData();
@@ -107,7 +106,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!user) return;
         
         try {
-
             // For now, use placeholder values - in a real app, these would come from a form
             await leagueManagementService.acceptInvitation(
                 invitationId, 
@@ -119,24 +117,23 @@ const LeagueManagementInterface: React.FC<Props> = ({
             if (user.email) {
                 const userInvites = await leagueManagementService.getUserInvitations(user.email);
                 setInvitations(userInvites);
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError('Failed to accept invitation');
-
+        }
     };
 
     const handleDeclineInvitation = async (invitationId: string) => {
         try {
-
             await leagueManagementService.declineInvitation(invitationId);
             // Refresh invitations
             if (user?.email) {
                 const userInvites = await leagueManagementService.getUserInvitations(user.email);
                 setInvitations(userInvites);
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError('Failed to decline invitation');
-
+        }
     };
 
     // Handle setting updates
@@ -144,18 +141,16 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
-
             const updatedLeague = await leagueManagementService.updateLeagueSettings(
                 league.id,
                 user.id.toString(),
-//                 updates
+                updates
             );
             setLeague(updatedLeague);
             setEditingSettings(false);
-
-    } catch (error) {
+        } catch (error) {
             setError('Failed to update league settings');
-
+        }
     };
 
     // Handle member invitation
@@ -163,15 +158,13 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
-
             await leagueManagementService.inviteMember(league.id, user.id.toString(), email, message);
             // Refresh league data
             const updatedLeague = await leagueManagementService.getLeague(league.id);
             if (updatedLeague) setLeague(updatedLeague);
-
-    } catch (error) {
+        } catch (error) {
             setError('Failed to send invitation');
-
+        }
     };
 
     // Handle member removal
@@ -179,18 +172,16 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
-
             const updatedLeague = await leagueManagementService.removeMember(
                 league.id,
                 user.id.toString(),
                 memberId,
-//                 reason
+                reason
             );
             setLeague(updatedLeague);
-
-    } catch (error) {
+        } catch (error) {
             setError('Failed to remove member');
-
+        }
     };
 
     // Handle commissioner action
@@ -198,16 +189,20 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
-
             const updatedLeague = await leagueManagementService.executeCommissionerAction(
                 league.id,
                 user.id.toString(),
-//                 action
+                action
             );
             setLeague(updatedLeague);
             setPendingAction(null);
-        
-    `league-management-interface ${className}`}>
+        } catch (error) {
+            setError('Failed to execute commissioner action');
+        }
+    };
+
+    return (
+        <div className={`league-management-interface ${className}`}>
             {/* League Selector */}
             <Widget title="League Management" className="bg-gray-900/50 mb-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex flex-wrap items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -283,7 +278,12 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         ].map((tab: any) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as Tab)}`}
+                                onClick={() => setActiveTab(tab.id as Tab)}
+                                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-md transition-all ${
+                                    activeTab === tab.id
+                                        ? 'bg-blue-600 text-white'
+                                        : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                                }`}
                             >
                                 <tab.icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 <span>{tab.label}</span>
@@ -444,14 +444,14 @@ const InvitationCard: React.FC<{
                 <button
                     onClick={onAccept}
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8"
-                 aria-label="Action button">
-//                     Accept
+                    aria-label="Action button">
+                    Accept
                 </button>
                 <button
                     onClick={onDecline}
                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8"
-                 aria-label="Action button">
-//                     Decline
+                    aria-label="Action button">
+                    Decline
                 </button>
             </div>
         </div>

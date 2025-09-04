@@ -86,7 +86,7 @@ const MinimalApp: React.FC = () => {
           🚧 Platform Update in Progress
         </div>
         <div style={{ marginBottom: '20px', fontSize: '14px', opacity: 0.7 }}>
-          We're deploying exciting new features to enhance your fantasy experience
+          We&apos;re deploying exciting new features to enhance your fantasy experience
         </div>
         <button 
           onClick={() => setCount(count + 1)}

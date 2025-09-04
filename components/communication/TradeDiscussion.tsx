@@ -24,7 +24,7 @@ interface TradeComment {
   reactions: {
     [emoji: string]: string[]; // emoji: array of user IDs
   };
-
+}
 interface TradeDiscussionProps {
   tradeId: string;
   isVisible: boolean;
@@ -34,7 +34,7 @@ interface TradeDiscussionProps {
 const TradeDiscussion: React.FC<TradeDiscussionProps> = ({ 
   tradeId, 
   isVisible, 
-//   onClose 
+  onClose 
 }: any) => {
   const { state, dispatch } = useAppState();
   const [newMessage, setNewMessage] = useState('');
@@ -56,7 +56,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         reactions: {
           '👍': ['user-2'],
           '🤔': ['user-3']
-
+        }
       },
       {
         id: 'comment-2',
@@ -69,7 +69,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         reactions: {
           '💭': ['user-1'],
           '👀': ['user-1', 'user-4']
-
+        }
       },
       {
         id: 'comment-3',
@@ -87,12 +87,12 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
           ],
           playersRequested: [
             { id: 'p3', name: 'Cooper Kupp', position: 'WR' }
-
+          ]
         },
         reactions: {
           '🔥': ['user-2'],
           '👍': ['user-2', 'user-5']
-
+        }
       },
       {
         id: 'comment-4',
@@ -105,8 +105,8 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         reactions: {
           '⏰': ['user-1'],
           '🤝': ['user-1']
-
-
+        }
+      }
     ];
   }, [tradeId]);
 
@@ -131,7 +131,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
       payload: {
         message: 'Comment posted successfully!',
         type: 'SUCCESS'
-
+      }
     });
 
     setNewMessage('');
@@ -147,7 +147,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
       payload: {
         message: 'Reaction added!',
         type: 'INFO'
-
+      }
     });
   };
 
@@ -257,7 +257,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                     {Object.entries(comment.reactions).map(([emoji, userIds]) => (
                       <button
                         key={emoji}
-                        onClick={() => handleReaction(comment.id, emoji)}`}
+                        onClick={() => handleReaction(comment.id, emoji)}
                       >
                         {emoji} {userIds.length}
                       </button>
@@ -299,7 +299,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSendMessage();
-
+                  }
                 }}
               />
               <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -344,7 +344,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
               <button
                 onClick={() => setShowCounterOffer(false)}
               >
-//                 Cancel
+                Cancel
               </button>
             </div>
           </motion.div>

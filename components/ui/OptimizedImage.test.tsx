@@ -4,17 +4,17 @@ import OptimizedImage from './OptimizedImage';
 
 describe('OptimizedImage', () => {
   it('renders without crashing', () => {
-    render(<OptimizedImage />);
+    render(<OptimizedImage src="/test.jpg" alt="Test image" />);
     expect(screen.getByTestId('optimizedimage')).toBeInTheDocument();
   });
 
   it('has proper accessibility attributes', () => {
-    render(<OptimizedImage />);
+    render(<OptimizedImage src="/test.jpg" alt="Test image" />);
     // Add specific accessibility tests here
   });
 
   it('handles loading states correctly', () => {
-    render(<OptimizedImage />);
+    render(<OptimizedImage src="/test.jpg" alt="Test image" />);
     // Add loading state tests here
   });
 

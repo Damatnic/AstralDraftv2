@@ -3,18 +3,27 @@ import '@testing-library/jest-dom';
 import LeagueCard from './LeagueCard';
 
 describe('LeagueCard', () => {
+  const mockLeague = {
+    name: 'Test League',
+    status: 'PRE_DRAFT',
+    settings: {
+      teamCount: 12,
+      draftFormat: 'Snake'
+    }
+  };
+
   it('renders without crashing', () => {
-    render(<LeagueCard />);
+    render(<LeagueCard league={mockLeague} onJoin={() => {}} />);
     expect(screen.getByTestId('leaguecard')).toBeInTheDocument();
   });
 
   it('has proper accessibility attributes', () => {
-    render(<LeagueCard />);
+    render(<LeagueCard league={mockLeague} onJoin={() => {}} />);
     // Add specific accessibility tests here
   });
 
   it('handles loading states correctly', () => {
-    render(<LeagueCard />);
+    render(<LeagueCard league={mockLeague} onJoin={() => {}} />);
     // Add loading state tests here
   });
 

@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 interface SidebarProps {
   children?: React.ReactNode;
   isOpen?: boolean;
@@ -7,6 +9,7 @@ interface SidebarProps {
   position?: 'left' | 'right';
   overlay?: boolean;
   className?: string;
+}
 
 /**
  * Basic Sidebar component for application layout

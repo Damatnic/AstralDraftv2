@@ -153,7 +153,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       }, 100);
       
       // Log in dev mode for debugging
-      if (import.meta.env.DEV) {
+      if (process.env.NODE_ENV === 'development') {
         console.log('📝 Error boundary: Auto-recovering from suppressible error:', errorMessage);
       }
       return;
@@ -177,7 +177,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     };
 
     // Log to console in development
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.group('🚨 React Error Boundary (Non-Extension Error)');
       console.error('Error caught by ErrorBoundary:', error);
       console.error('Component Stack:', errorInfo.componentStack);
@@ -195,7 +195,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     }
 
     // Log to production monitoring service (only for non-extension errors)
-    if (import.meta.env.PROD) {
+    if (process.env.NODE_ENV === 'production') {
       try {
         if ((window as any).loggingService) {
           (window as any).loggingService.error('React Error Boundary', errorDetails, 'react-error');

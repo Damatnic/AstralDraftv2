@@ -27,23 +27,24 @@ const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }
         if (window.confirm("Are you sure you want to force this trade to be accepted?")) {
             dispatch({ type: 'UPDATE_TRADE_STATUS', payload: { leagueId: league.id, tradeId: offer.id, status: 'FORCED' } });
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Trade has been forced by commissioner.', type: 'SYSTEM' } });
-
+        }
     };
     
     const handleVeto = (offer: TradeOffer) => {
         if (window.confirm("Are you sure you want to veto this trade?")) {
             dispatch({ type: 'UPDATE_TRADE_STATUS', payload: { leagueId: league.id, tradeId: offer.id, status: 'VETOED' } });
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Trade has been vetoed by commissioner.', type: 'SYSTEM' } });
-
+        }
     };
 
     return (
         <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-xl max-h-[80vh] flex flex-col sm:px-4 md:px-6 lg:px-8"
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -84,7 +85,7 @@ const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }
                 </main>
                 <footer className="p-4 border-t border-[var(--panel-border)] text-center sm:px-4 md:px-6 lg:px-8">
                     <button onClick={onClose} className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md sm:px-4 md:px-6 lg:px-8">
-//                         Done
+                        Done
                     </button>
                 </footer>
             </motion.div>

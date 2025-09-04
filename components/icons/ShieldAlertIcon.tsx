@@ -6,7 +6,7 @@ interface IconProps {
   'aria-label'?: string;
 }
 
-export const ShieldAlertIcon: React.FC<{ className?: string }> = ({ className }: any) => (
+export const ShieldAlertIcon: React.FC<{ className?: string }> = ({ className }: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "w-5 h-5"} role="img" aria-label="shield alert icon">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         <line x1="12" y1="8" x2="12" y2="12" />

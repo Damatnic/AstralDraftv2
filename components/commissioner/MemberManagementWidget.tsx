@@ -16,13 +16,13 @@ const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league,
     const handleKick = (user: User) => {
         if (window.confirm(`Are you sure you want to remove ${user.name} from the league? This action is permanent.`)) {
             dispatch({ type: 'KICK_MEMBER', payload: { leagueId: league.id, userId: user.id } });
+        }
     };
     
-    const handleTransfer = (user: User) 
-} {
+    const handleTransfer = (user: User) => {
         if (window.confirm(`Are you sure you want to transfer commissionership to ${user.name}? You will lose commissioner powers.`)) {
             dispatch({ type: 'TRANSFER_COMMISSIONER', payload: { leagueId: league.id, newCommissionerId: user.id } });
-
+        }
     };
 
     return (

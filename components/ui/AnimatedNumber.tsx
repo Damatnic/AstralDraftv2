@@ -6,7 +6,9 @@ interface AnimatedNumberProps {
     value: number;
 }
 
-const AnimatedNumber = ({ value }: any) => {
+import React from 'react';
+
+const AnimatedNumber = ({ value }: AnimatedNumberProps) => {
     const ref = React.useRef<HTMLSpanElement>(null);
 
     React.useEffect(() => {
@@ -28,7 +30,7 @@ const AnimatedNumber = ({ value }: any) => {
     return <span ref={ref}>{value}</span>;
 };
 
-const AnimatedNumberWithErrorBoundary: React.FC = (props: any) => (
+const AnimatedNumberWithErrorBoundary: React.FC<AnimatedNumberProps> = (props: AnimatedNumberProps) => (
   <ErrorBoundary>
     <AnimatedNumber {...props} />
   </ErrorBoundary>

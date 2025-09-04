@@ -85,6 +85,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                     payload: { leagueId: league.id } 
                 });
                 break;
+        }
 
         setShowConfirmAction(null);
     };
@@ -100,7 +101,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                 teamId: scoreAdjustment.teamId,
                 adjustment: scoreAdjustment.adjustment,
                 reason: scoreAdjustment.reason
-
+            }
         });
 
         dispatch({
@@ -109,7 +110,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                 action: 'Manual Score Adjustment',
                 details: `${scoreAdjustment.adjustment} points to team ${scoreAdjustment.teamId}: ${scoreAdjustment.reason}`,
                 commissioner: 'Current User'
-
+            }
         });
 
         setScoreAdjustment({ teamId: '', adjustment: 0, reason: '' });
@@ -179,7 +180,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                     
                     <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                         <button
-                            onClick={() => handleSeasonAction({ type: 'ADVANCE_WEEK' }}
+                            onClick={() => handleSeasonAction({ type: 'ADVANCE_WEEK' })}
                             className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                             disabled={seasonInfo.currentWeek >= seasonInfo.totalWeeks}
                         >
@@ -188,7 +189,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'RESET_WEEK' }}
+                            onClick={() => handleSeasonAction({ type: 'RESET_WEEK' })}
                             className="flex items-center gap-2 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
                             <RefreshIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -196,7 +197,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'FORCE_SYNC' }}
+                            onClick={() => handleSeasonAction({ type: 'FORCE_SYNC' })}
                             className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
                             <RefreshIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -210,7 +211,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'END_SEASON' }}
+                            onClick={() => handleSeasonAction({ type: 'END_SEASON' })}
                             className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
                             <StopIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -289,7 +290,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                         </label>
                                         <select
                                             value={scoreAdjustment.teamId}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, teamId: e.target.value }}
+                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, teamId: e.target.value }))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                         >
                                             <option value="">Choose team...</option>
@@ -308,7 +309,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                             type="number"
                                             step="0.1"
                                             value={scoreAdjustment.adjustment}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, adjustment: parseFloat(e.target.value) || 0 }}
+                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, adjustment: parseFloat(e.target.value) || 0 }))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                             placeholder="Enter adjustment (+ or -)"
                                         />
@@ -316,11 +317,11 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     
                                     <div>
                                         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
-//                                             Reason
+                                            Reason
                                         </label>
                                         <textarea
                                             value={scoreAdjustment.reason}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, reason: e.target.value }}
+                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, reason: e.target.value }))}
                                             rows={3}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                             placeholder="Explain the reason for this adjustment..."
@@ -332,7 +333,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     <button
                                         onClick={() => setManualScoreMode(false)}
                                     >
-//                                         Cancel
+                                        Cancel
                                     </button>
                                     <button
                                         onClick={handleScoreAdjustment}
@@ -376,7 +377,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     <button
                                         onClick={() => setShowConfirmAction(null)}
                                     >
-//                                         Cancel
+                                        Cancel
                                     </button>
                                     <button
                                         onClick={confirmSeasonAction}
@@ -386,7 +387,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                                 : 'bg-blue-600 hover:bg-blue-700'
                                         }`}
                                      aria-label="Action button">
-//                                         Confirm
+                                        Confirm
                                     </button>
                                 </div>
                             </motion.div>

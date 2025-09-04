@@ -6,7 +6,7 @@ interface IconProps {
   'aria-label'?: string;
 }
 
-export const BotMessageSquareIcon: React.FC<{ className?: string }> = ({ className }: any) => (
+export const BotMessageSquareIcon: React.FC<{ className?: string }> = ({ className }: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "w-5 h-5"} role="img" aria-label="bot message square icon">
         <path d="M12 6V2H8" />
         <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />

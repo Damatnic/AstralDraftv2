@@ -1,3 +1,4 @@
+import React from 'react';
 import { LazyImage } from './LazyImage';
 
 interface OptimizedImageProps {
@@ -32,7 +33,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
 
   return (
-    <picture>
+    <picture data-testid="optimizedimage">
       <source
         srcSet={generateSrcSet(src)}
         sizes={sizes}
@@ -50,3 +51,5 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     </picture>
   );
 };
+
+export default OptimizedImage;

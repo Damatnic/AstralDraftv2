@@ -51,7 +51,7 @@ export const SecureInputDemo: React.FC = () => {
     
     if (Object.keys(newErrors).length === 0) {
       alert('All inputs are valid! 🎉');
-
+    }
   };
   
   const clearDemo = () => {

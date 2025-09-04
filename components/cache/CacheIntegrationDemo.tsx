@@ -49,6 +49,28 @@ const mockAPIFunctions = {
     }
 };
 
+// Helper functions for cache status
+const getStatusColor = (cache: any) => {
+    if (cache.isFetching) return 'text-blue-400';
+    if (cache.error) return 'text-red-400';
+    if (cache.data) return 'text-green-400';
+    return 'text-gray-400';
+};
+
+const getStatusIcon = (cache: any) => {
+    if (cache.isFetching) return '🔄';
+    if (cache.error) return '❌';
+    if (cache.data) return '✅';
+    return '⏳';
+};
+
+const getCacheStatusText = (cache: any) => {
+    if (cache.isFetching) return 'Fetching...';
+    if (cache.error) return 'Error';
+    if (cache.data) return 'Cached';
+    return 'Idle';
+};
+
 const CacheIntegrationDemo: React.FC = () => {
     const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
     const { preloadData } = useCacheOperations();
@@ -142,14 +164,14 @@ const CacheIntegrationDemo: React.FC = () => {
                         <motion.div
                             key={demo.id}
                             className={`p-4 rounded-lg border-2 transition-colors cursor-pointer ${
-isActive 
-                                                ? `border-${demo.color}-500 bg-${demo.color}-900/20` 
-                                                : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
-                                        }`}
-                                        onClick={() => setSelectedDemo(demo.id)}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
+                                isActive 
+                                    ? `border-${demo.color}-500 bg-${demo.color}-900/20` 
+                                    : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
+                            }`}
+                            onClick={() => setSelectedDemo(demo.id)}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
                                         <div className="flex items-center space-x-3 mb-3 sm:px-4 md:px-6 lg:px-8">
                                             <demo.icon className={`w-6 h-6 text-${demo.color}-400`} />
                                             <span className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{demo.name}</span>
@@ -163,29 +185,29 @@ isActive
                                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
                                                 <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Status:</span>
-                                                <span className={`flex items-center space-x-1 ${getStatusColor(cache)}`}>
-                                                    <span>{getStatusIcon(cache)}</span>
-                                                    <span>{getCacheStatusText(cache)}</span>
+                                                <span className={`flex items-center space-x-1 ${getStatusColor(demo.cache)}`}>
+                                                    <span>{getStatusIcon(demo.cache)}</span>
+                                                    <span>{getCacheStatusText(demo.cache)}</span>
                                                 </span>
                                             </div>
                                             
-                                            {Boolean(cache.lastUpdated) && (
+                                            {Boolean(demo.cache.lastUpdated) && (
                                                 <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
                                                     <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Last Updated:</span>
                                                     <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">
-                                                        {cache.lastUpdated ? new Date(cache.lastUpdated).toLocaleTimeString() : 'Never'}
+                                                        {demo.cache.lastUpdated ? new Date(demo.cache.lastUpdated).toLocaleTimeString() : 'Never'}
                                                     </span>
                                                 </div>
                                             )}
 
-                                            {demo.id === 'draft' && 'isOnline' in cache && (
+                                            {demo.id === 'draft' && 'isOnline' in demo.cache && (
                                                 <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
                                                     <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Network:</span>
                                                     <span className={`flex items-center space-x-1 ${
-                                                        cache.isOnline ? 'text-green-400' : 'text-red-400'
+                                                        demo.cache.isOnline ? 'text-green-400' : 'text-red-400'
                                                     }`}>
-                                                        <span>{cache.isOnline ? '🟢' : '🔴'}</span>
-                                                        <span>{cache.isOnline ? 'Online' : 'Offline'}</span>
+                                                        <span>{demo.cache.isOnline ? '🟢' : '🔴'}</span>
+                                                        <span>{demo.cache.isOnline ? 'Online' : 'Offline'}</span>
                                                     </span>
                                                 </div>
                                             )}
@@ -196,32 +218,31 @@ isActive
                                             <button
                                                 onClick={(e: any) => {
                                                     e.stopPropagation();
-                                                    cache.refetch();
+                                                    demo.cache.refetch();
                                                 }}
-                                                disabled={cache.isFetching}
+                                                disabled={demo.cache.isFetching}
                                                 className="w-full px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white text-xs rounded transition-colors sm:px-4 md:px-6 lg:px-8"
                                             >
-                                                {cache.isFetching ? 'Refreshing...' : 'Refresh'}
+                                                {demo.cache.isFetching ? 'Refreshing...' : 'Refresh'}
                                             </button>
                                             
                                             <button
                                                 onClick={(e: any) => {
                                                     e.stopPropagation();
-                                                    cache.invalidate();
+                                                    demo.cache.invalidate();
                                                 }}
                                                 className="w-full px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded transition-colors sm:px-4 md:px-6 lg:px-8"
                                             >
-//                                                 Invalidate
+                                                Invalidate
                                             </button>
                                         </div>
                                     </motion.div>
-                                );
-                            })}
-                        </div>
-                    </div>
+                    );
+                })}
+            </div>
 
-                    {/* Data Preview */}
-                    {selectedDemo && (
+            {/* Data Preview */}
+            {selectedDemo && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -240,8 +261,8 @@ isActive
                         </motion.div>
                     )}
 
-                    {/* Cache Operations */}
-                    <div className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            {/* Cache Operations */}
+            <div className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                             Advanced Cache Operations
                         </h3>
@@ -269,10 +290,10 @@ isActive
                                 <span>Refresh All</span>
                             </button>
                         </div>
-                    </div>
+            </div>
 
-                    {/* Benefits Summary */}
-                    <div className="bg-green-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            {/* Benefits Summary */}
+            <div className="bg-green-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                             ✅ Intelligent Caching Benefits
                         </h3>
@@ -289,8 +310,6 @@ isActive
                             <div>• Background data synchronization</div>
                         </div>
                     </div>
-                </div>
-            </Widget>
         </div>
     );
 };

@@ -159,7 +159,7 @@ const PlayersView: React.FC = () => {
 
   // Filtered and sorted players
   const filteredPlayers = useMemo(() => {
-    let filtered = allPlayers.filter((player: Player) => {
+    const filtered = allPlayers.filter((player: Player) => {
       // Search query filter
       if (searchQuery && !player.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;

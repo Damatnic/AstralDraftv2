@@ -13,8 +13,8 @@ interface TabsProps {
 export const Tabs: React.FC<TabsProps> = ({
   items,
   activeTab,
-//   onTabChange
-}: any) => {
+  onTabChange
+}: TabsProps) => {
 
   const handleTabChange = (tabId: string) => {
     onTabChange(tabId);
@@ -24,7 +24,7 @@ export const Tabs: React.FC<TabsProps> = ({
     <div className="w-full">
       <div className="border-b border-white/20">
         <nav className="flex space-x-8" role="tablist">
-          {items.map((tab: any) => (
+          {items.map((tab: Tab) => (
             <button
               key={tab.id}
               role="tab"

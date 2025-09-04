@@ -24,6 +24,7 @@ interface DirectMessage {
     type: 'trade' | 'player' | 'image';
     data: any;
   }[];
+}
 
 interface Conversation {
   id: string;
@@ -36,6 +37,7 @@ interface Conversation {
   lastMessage: DirectMessage;
   unreadCount: number;
   isActive: boolean;
+}
 
 const DirectMessaging: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -116,7 +118,7 @@ const DirectMessaging: React.FC = () => {
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
         isRead: true,
         messageType: 'text'
-
+      }
     ];
   }, [currentUser]);
 
@@ -135,6 +137,7 @@ const DirectMessaging: React.FC = () => {
         if (team) {
           otherParticipant.teamName = team.name;
           otherParticipant.avatar = team.avatar;
+        }
 
         convMap.set(message.conversationId, {
           id: message.conversationId,
@@ -145,20 +148,22 @@ const DirectMessaging: React.FC = () => {
               avatar: currentUser?.avatar || '👑',
               teamName: league?.teams?.find((t: any) => t.owner.id === currentUser?.id)?.name || 'Your Team'
             },
-//             otherParticipant
+            otherParticipant
           ],
           lastMessage: message,
           unreadCount: 0,
           isActive: false
         });
+      }
 
       const conv = convMap.get(message.conversationId)!;
       if (message.timestamp > conv.lastMessage.timestamp) {
         conv.lastMessage = message;
+      }
 
       if (!message.isRead && message.recipientId === currentUser?.id) {
         conv.unreadCount++;
-
+      }
     });
 
     return Array.from(convMap.values()).sort((a, b) => 
@@ -202,7 +207,7 @@ const DirectMessaging: React.FC = () => {
       payload: {
         message: 'Message sent!',
         type: 'SUCCESS'
-
+      }
     });
 
     setNewMessage('');
@@ -225,7 +230,7 @@ const DirectMessaging: React.FC = () => {
       payload: {
         message: `Started conversation with ${recipient.owner.name}`,
         type: 'SUCCESS'
-
+      }
     });
   };
 
@@ -287,7 +292,7 @@ const DirectMessaging: React.FC = () => {
                 return (
                   <button
                     key={conversation.id}
-                    onClick={() => setSelectedConversation(conversation.id)}`}
+                    onClick={() => setSelectedConversation(conversation.id)}
                   >
                     <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                       <div className="relative sm:px-4 md:px-6 lg:px-8">
@@ -374,7 +379,7 @@ const DirectMessaging: React.FC = () => {
                   onKeyPress={(e: any) => {
                     if (e.key === 'Enter') {
                       handleSendMessage();
-
+                    }
                   }}
                 />
                 <button
@@ -382,7 +387,7 @@ const DirectMessaging: React.FC = () => {
                   disabled={!newMessage.trim()}
                   className="btn btn-primary sm:px-4 md:px-6 lg:px-8"
                  aria-label="Action button">
-//                   Send
+                  Send
                 </button>
               </div>
               

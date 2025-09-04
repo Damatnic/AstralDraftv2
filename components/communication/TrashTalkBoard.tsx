@@ -25,6 +25,7 @@ interface TrashTalkPost {
   replies: TrashTalkReply[];
   isSticky?: boolean;
   moderatorNote?: string;
+}
 
 interface TrashTalkReply {
   id: string;
@@ -36,6 +37,7 @@ interface TrashTalkReply {
   reactions: {
     [emoji: string]: string[];
   };
+}
 
 const TrashTalkBoard: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -77,8 +79,8 @@ const TrashTalkBoard: React.FC = () => {
             reactions: {
               '😂': ['user-3', 'user-7'],
               '👀': ['user-1']
-
-
+            }
+          }
         ],
         isSticky: true
       },
@@ -125,7 +127,7 @@ const TrashTalkBoard: React.FC = () => {
             reactions: {
               '💀': ['user-2', 'user-3', 'user-6'],
               '🔥': ['user-9']
-
+            }
           },
           {
             id: 'reply-3',
@@ -137,7 +139,9 @@ const TrashTalkBoard: React.FC = () => {
             reactions: {
               '💯': ['user-8'],
               '🤔': ['user-1', 'user-2']
-
+            }
+          }
+        ]
       },
       {
         id: 'post-4',
@@ -172,7 +176,7 @@ const TrashTalkBoard: React.FC = () => {
           '🤫': ['user-7', 'user-8']
         },
         replies: []
-
+      }
     ];
   }, []);
 
@@ -204,7 +208,7 @@ const TrashTalkBoard: React.FC = () => {
       payload: {
         message: 'Trash talk posted! 🔥',
         type: 'SUCCESS'
-
+      }
     });
 
     setNewPost('');
@@ -230,7 +234,7 @@ const TrashTalkBoard: React.FC = () => {
       payload: {
         message: 'Reply posted! 💬',
         type: 'SUCCESS'
-
+      }
     });
 
     setReplyText('');
@@ -245,7 +249,7 @@ const TrashTalkBoard: React.FC = () => {
       payload: {
         message: 'Reaction added! 😊',
         type: 'INFO'
-
+      }
     });
   };
 
@@ -266,7 +270,7 @@ const TrashTalkBoard: React.FC = () => {
       case 'callout': return 'border-red-500 bg-red-900/20';
       case 'meme': return 'border-green-500 bg-green-900/20';
       default: return 'border-slate-600 bg-slate-700/50';
-
+    }
   };
 
   const formatTimestamp = (timestamp: Date) => {
@@ -313,7 +317,7 @@ const TrashTalkBoard: React.FC = () => {
             ].map((type: any) => (
               <button
                 key={type.id}
-                onClick={() => setPostType(type.id as any)}`}
+                onClick={() => setPostType(type.id as any)}
               >
                 {type.icon} {type.label}
               </button>
@@ -370,7 +374,7 @@ const TrashTalkBoard: React.FC = () => {
         ].map((filter: any) => (
           <button
             key={filter.id}
-            onClick={() => setFilterType(filter.id as any)}`}
+            onClick={() => setFilterType(filter.id as any)}
           >
             {filter.icon} {filter.label}
           </button>
@@ -426,7 +430,7 @@ const TrashTalkBoard: React.FC = () => {
                   {Object.entries(post.reactions).map(([emoji, userIds]) => (
                     <button
                       key={emoji}
-                      onClick={() => handleReaction(post.id, emoji)}`}
+                      onClick={() => handleReaction(post.id, emoji)}
                     >
                       {emoji} {userIds.length}
                     </button>
@@ -472,7 +476,7 @@ const TrashTalkBoard: React.FC = () => {
                         {Object.entries(reply.reactions).map(([emoji, userIds]) => (
                           <button
                             key={emoji}
-                            onClick={() => handleReaction(post.id, emoji, true, reply.id)}`}
+                            onClick={() => handleReaction(post.id, emoji, true, reply.id)}
                           >
                             {emoji} {userIds.length}
                           </button>
@@ -508,13 +512,13 @@ const TrashTalkBoard: React.FC = () => {
                           <button
                             onClick={() => setShowReplyInput(null)}
                           >
-//                             Cancel
+                            Cancel
                           </button>
                           <button
                             onClick={() => handleReply(post.id)}
                             className="btn btn-primary btn-sm sm:px-4 md:px-6 lg:px-8"
                           >
-//                             Reply
+                            Reply
                           </button>
                         </div>
                       </div>

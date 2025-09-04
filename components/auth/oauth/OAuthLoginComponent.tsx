@@ -294,6 +294,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
         </div>
       </div>
     );
+  }
 
   return (
     <div className={`linked-accounts-manager ${className}`}>

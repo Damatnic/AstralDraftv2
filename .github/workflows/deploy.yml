@@ -34,8 +34,12 @@ jobs:
       run: npm run build
       env:
         NODE_ENV: production
+        VITE_NODE_ENV: production
+        VITE_SPORTS_DATA_API_KEY: ${{ secrets.VITE_SPORTS_DATA_API_KEY }}
+        VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
         VITE_ENABLE_PWA: true
         VITE_ENABLE_ANALYTICS: true
+        VITE_ENABLE_ORACLE: true
 
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/master'

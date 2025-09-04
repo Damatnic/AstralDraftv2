@@ -214,8 +214,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         type="submit"
                                         disabled={isLoading || !displayName.trim() || displayName === user.displayName}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
-                                     aria-label="Update">
-Update
+                                        aria-label="Update">
+                                        Update
                                     </button>
                                 </div>
                             </form>
@@ -237,8 +237,8 @@ Update
                                         type="submit"
                                         disabled={isLoading || !email.trim() || email === user.email}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
-                                     aria-label="Update">
-Update
+                                        aria-label="Update">
+                                        Update
                                     </button>
                                 </div>
                                 <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
@@ -292,7 +292,7 @@ Update
                                     type="submit"
                                     disabled={isLoading || newPin.length !== 4 || confirmPin.length !== 4}
                                     className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
-                                 aria-label="Update">
+                                    aria-label="Update">
                                     {isLoading ? 'Updating...' : 'Update PIN'}
                                 </button>
                                 
@@ -341,7 +341,7 @@ Update
                                     {colorOptions.map((color: any) => (
                                         <button
                                             key={color}
-                                            onClick={() => setCustomization({ ...customization, backgroundColor: color }}
+                                            onClick={() => setCustomization({ ...customization, backgroundColor: color })}
                                             className={`w-10 h-10 rounded-lg border-2 transition-all ${
                                                 customization.backgroundColor === color
                                                     ? 'border-white scale-110'
@@ -356,13 +356,13 @@ Update
                             {/* Emoji Selection */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">
-//                                     Emoji
+                                    Emoji
                                 </label>
                                 <div className="grid grid-cols-6 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {emojiOptions.map((emoji: any) => (
                                         <button
                                             key={emoji}
-                                            onClick={() => setCustomization({ ...customization, emoji }}
+                                            onClick={() => setCustomization({ ...customization, emoji })}
                                             className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-xl transition-all ${
                                                 customization.emoji === emoji
                                                     ? 'border-blue-500 bg-blue-900/50 scale-110'
@@ -379,7 +379,7 @@ Update
                                 onClick={handleCustomizationUpdate}
                                 disabled={isLoading}
                                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
-                             aria-label="Update">
+                                aria-label="Update">
                                 {isLoading ? 'Updating...' : 'Save Appearance'}
                             </button>
                         </motion.div>

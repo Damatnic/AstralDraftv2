@@ -22,6 +22,7 @@ const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId,
         if (!title.trim() || !content.trim()) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Title and content must be filled out.", type: 'SYSTEM' } });
             return;
+        }
 
         dispatch({
             type: 'POST_ANNOUNCEMENT',
@@ -35,9 +36,8 @@ const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId,
         <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                animate={{ opacity: 1, scale: 1 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">

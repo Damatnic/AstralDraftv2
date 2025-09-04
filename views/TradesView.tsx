@@ -106,7 +106,7 @@ const TradesView: React.FC = () => {
                 <li>• Look for win-win scenarios</li>
                 <li>• Consider playoff schedules</li>
                 <li>• Trade from strength to address weaknesses</li>
-                <li>• Don't trade just to trade</li>
+                <li>• Don&apos;t trade just to trade</li>
                 <li>• Include a personal message explaining your reasoning</li>
               </ul>
             </div>

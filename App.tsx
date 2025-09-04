@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/SimpleAuthContext';
 // LoadingCoordinatorProvider is provided at the root in index.tsx
-import { ModernLoginScreen } from './components/auth/ModernLoginScreen';
 import { UnifiedLoading } from './components/ui/UnifiedLoading';
 import { ThemeToggle } from './components/ui/ThemeToggle';
 import SimpleAuthService from './services/simpleAuthService';

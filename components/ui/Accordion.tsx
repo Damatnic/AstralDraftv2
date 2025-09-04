@@ -16,14 +16,14 @@ export const Accordion: React.FC<AccordionProps> = ({
   items,
   allowMultiple = false,
   defaultOpen = []
-}: any) => {
+}: AccordionProps) => {
   const [openItems, setOpenItems] = useState<string[]>(defaultOpen);
 
   const toggleItem = (itemId: string) => {
     if (allowMultiple) {
       setOpenItems(prev =>
         prev.includes(itemId)
-          ? prev.filter((id: any) => id !== itemId)
+          ? prev.filter((id: string) => id !== itemId)
           : [...prev, itemId]
       );
     } else {
@@ -35,7 +35,7 @@ export const Accordion: React.FC<AccordionProps> = ({
 
   return (
     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
-      {items.map((item: any) => {
+      {items.map((item: AccordionItem) => {
         const isOpen = openItems.includes(item.id);
         
         return (

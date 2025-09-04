@@ -25,7 +25,8 @@ interface EnhancedMemberManagementProps {
 interface MemberAction {
     type: 'PROMOTE_TO_COMMISSIONER' | 'REMOVE_MEMBER' | 'EDIT_TEAM_NAME' | 'CHANGE_AVATAR' | 'TOGGLE_ADMIN';
     memberId: string;
-    data?: any;}
+    data?: any;
+}
 
 const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }: any) => {
     const [selectedMember, setSelectedMember] = React.useState<string | null>(null);
@@ -75,6 +76,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                     payload: { leagueId: league.id, memberId: showConfirmAction.memberId } 
                 });
                 break;
+        }
 
         setShowConfirmAction(null);
     };
@@ -94,7 +96,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                 memberId: editMode.memberId, 
                 field: editMode.field,
                 value: editValue 
-
+            }
         });
         setEditMode(null);
         setEditValue('');
@@ -131,20 +133,20 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                 {/* Quick Actions */}
                 <div className="flex flex-wrap gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'INVITE_MEMBERS' }}
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'INVITE_MEMBERS' })}
                         className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                     >
                         <UserPlusIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         Invite Members
                     </button>
                     <button 
-                        onClick={() => dispatch({ type: 'EXPORT_MEMBER_LIST', payload: league.id }}
+                        onClick={() => dispatch({ type: 'EXPORT_MEMBER_LIST', payload: league.id })}
                         className="flex items-center gap-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                     >
                         📋 Export List
                     </button>
                     <button 
-                        onClick={() => dispatch({ type: 'BULK_MESSAGE_MEMBERS', payload: league.id }}
+                        onClick={() => dispatch({ type: 'BULK_MESSAGE_MEMBERS', payload: league.id })}
                         className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                     >
                         📢 Send Message
@@ -189,7 +191,8 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                         type="text"
                                                         value={editValue}
                                                         onChange={(e: any) => setEditValue(e.target.value)}
-//                                                         autoFocus
+                                                        className="bg-gray-700 text-white rounded px-2 py-1"
+                                                        autoFocus
                                                     />
                                                     <button onClick={saveEdit} className="text-green-500 hover:text-green-400 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                         <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -225,6 +228,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                     <div className="relative sm:px-4 md:px-6 lg:px-8">
                                         <button 
                                             onClick={() => setSelectedMember(selectedMember === member.id ? null : member.id)}
+                                            className="p-2 hover:bg-white/10 rounded"
                                         >
                                             ⋮
                                         </button>
@@ -263,13 +267,13 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                             </>
                                                         )}
                                                         <button 
-                                                            onClick={() => dispatch({ type: 'VIEW_MEMBER_PROFILE', payload: member.id }}
+                                                            onClick={() => dispatch({ type: 'VIEW_MEMBER_PROFILE', payload: member.id })}
                                                             className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 sm:px-4 md:px-6 lg:px-8"
                                                         >
                                                             👤 View Profile
                                                         </button>
                                                         <button 
-                                                            onClick={() => dispatch({ type: 'MESSAGE_MEMBER', payload: member.id }}
+                                                            onClick={() => dispatch({ type: 'MESSAGE_MEMBER', payload: member.id })}
                                                             className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 sm:px-4 md:px-6 lg:px-8"
                                                         >
                                                             💬 Send Message
@@ -339,14 +343,15 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                 <div className="flex gap-3 justify-end sm:px-4 md:px-6 lg:px-8">
                                     <button
                                         onClick={() => setShowConfirmAction(null)}
+                                        className="px-4 py-2 text-gray-400 hover:text-white rounded-lg"
                                     >
-//                                         Cancel
+                                        Cancel
                                     </button>
                                     <button
                                         onClick={confirmAction}
                                         className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg sm:px-4 md:px-6 lg:px-8"
-                                     aria-label="Action button">
-//                                         Confirm
+                                        aria-label="Action button">
+                                        Confirm
                                     </button>
                                 </div>
                             </motion.div>

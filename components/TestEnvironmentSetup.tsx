@@ -26,6 +26,7 @@ export const TestEnvironmentSetup: React.FC = () => {
       // Login with player1@astral.com to player10@astral.com, password: test1234
     } else {
       setIsInitialized(true);
+    }
 
   }, [dispatch]);
 

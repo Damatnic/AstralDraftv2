@@ -1,10 +1,13 @@
 
+import React from 'react';
+
 interface SwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
   disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';}
+  size?: 'sm' | 'md' | 'lg';
+}
 
 export const Switch: React.FC<SwitchProps> = ({
   checked,
@@ -12,7 +15,7 @@ export const Switch: React.FC<SwitchProps> = ({
   label,
   disabled = false,
   size = 'md'
-}: any) => {
+}: SwitchProps) => {
   const sizeClasses = {
     sm: { track: 'w-8 h-4', thumb: 'w-3 h-3' },
     md: { track: 'w-10 h-5', thumb: 'w-4 h-4' },
@@ -22,7 +25,7 @@ export const Switch: React.FC<SwitchProps> = ({
   const { track, thumb } = sizeClasses[size];
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3" data-testid="switch">
       <button
         type="button"
         role="switch"
@@ -53,3 +56,5 @@ export const Switch: React.FC<SwitchProps> = ({
     </div>
   );
 };
+
+export default Switch;

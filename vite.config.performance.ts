@@ -167,8 +167,6 @@ export default defineConfig(({ mode }: { mode: string }) => {
             // Optimize chunk names
             entryFileNames: isProduction ? '[name].[hash:8].js' : '[name].js',
             chunkFileNames: (chunkInfo: any) => {
-              const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId : '';
-              
               // Critical chunks get shorter hashes
               if (chunkInfo.name === 'react-core' || chunkInfo.name === 'react-dom') {
                 return isProduction ? '[name].[hash:6].js' : '[name].js';

@@ -195,7 +195,7 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
             </div>
         </div>
     );
-});
+};
 
 const OracleOnlyApp: React.FC = () => {
     return (
