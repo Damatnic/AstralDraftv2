@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/SimpleAuthContext';
+import { LoadingCoordinatorProvider } from './hooks/useLoadingCoordinator';
 import { ModernLoginScreen } from './components/auth/ModernLoginScreen';
 import { UnifiedLoading } from './components/ui/UnifiedLoading';
 import { ThemeToggle } from './components/ui/ThemeToggle';
@@ -200,9 +201,10 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`app ${theme}`} data-theme={theme}>
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
+    <LoadingCoordinatorProvider>
+      <div className={`app ${theme}`} data-theme={theme}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
           {/* Login Route */}
           <Route 
             path="/login" 
@@ -299,9 +301,10 @@ const App: React.FC = () => {
                 <Navigate to="/login" replace />
             } 
           />
-        </Routes>
-      </AnimatePresence>
-    </div>
+          </Routes>
+        </AnimatePresence>
+      </div>
+    </LoadingCoordinatorProvider>
   );
 };
 
