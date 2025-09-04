@@ -14,8 +14,6 @@ import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { NotificationCenter } from './components/ui/NotificationCenter';
 import { AdvancedSettings } from './components/ui/AdvancedSettings';
-import { AIInsightsDashboard } from './components/elite/AIInsightsDashboard';
-import { RealTimeTicker } from './components/elite/RealTimeTicker';
 
 // Use SimpleDashboard as fallback for all routes
 const Dashboard = lazy(() => Promise.resolve({ default: SimpleDashboard }));
@@ -102,9 +100,6 @@ const SimpleDashboard: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
-          {/* Real-time Ticker */}
-          <RealTimeTicker />
-
           {/* Welcome Section */}
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
             <motion.h1
@@ -123,30 +118,6 @@ const SimpleDashboard: React.FC = () => {
             >
               Your elite fantasy football command center awaits.
             </motion.p>
-          </div>
-
-          {/* Two Column Layout for AI Insights and Quick Stats */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* AI Insights */}
-            <AIInsightsDashboard />
-
-            {/* Quick Stats */}
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-              <h2 className="text-xl font-semibold text-white mb-4">⚡ Quick Stats</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: 'Win Rate', value: '73%', color: 'text-green-400' },
-                  { label: 'League Rank', value: '#2', color: 'text-blue-400' },
-                  { label: 'Points For', value: '1,247', color: 'text-purple-400' },
-                  { label: 'Trades Made', value: '8', color: 'text-orange-400' },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                    <div className="text-xs text-gray-400">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Feature Grid */}
@@ -267,11 +238,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        // Check if user is already authenticated
-        const savedUser = localStorage.getItem('astral_draft_user');
-        if (savedUser) {
-          // User already logged in, no need to validate token
-        }
+        await SimpleAuthService.validateToken();
       } catch (error) {
         console.error('Auth initialization error:', error);
       }
@@ -283,14 +250,9 @@ const App: React.FC = () => {
   // Simple login handler for quick access
   const handleLogin = async (playerId: string, pin: string) => {
     try {
-      // Use existing SimpleAuthService authenticate method
-      const session = await SimpleAuthService.authenticateUser(playerId, pin);
-      if (session) {
-        navigate('/dashboard');
-        return session.user;
-      } else {
-        throw new Error('Authentication failed');
-      }
+      const user = await SimpleAuthService.loginWithPin(playerId, pin);
+      navigate('/dashboard');
+      return user;
     } catch (error) {
       console.error('Login error:', error);
       throw error;

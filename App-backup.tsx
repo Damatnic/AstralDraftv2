@@ -14,8 +14,6 @@ import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { NotificationCenter } from './components/ui/NotificationCenter';
 import { AdvancedSettings } from './components/ui/AdvancedSettings';
-import { AIInsightsDashboard } from './components/elite/AIInsightsDashboard';
-import { RealTimeTicker } from './components/elite/RealTimeTicker';
 
 // Use SimpleDashboard as fallback for all routes
 const Dashboard = lazy(() => Promise.resolve({ default: SimpleDashboard }));
@@ -102,9 +100,6 @@ const SimpleDashboard: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
-          {/* Real-time Ticker */}
-          <RealTimeTicker />
-
           {/* Welcome Section */}
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
             <motion.h1
@@ -123,30 +118,6 @@ const SimpleDashboard: React.FC = () => {
             >
               Your elite fantasy football command center awaits.
             </motion.p>
-          </div>
-
-          {/* Two Column Layout for AI Insights and Quick Stats */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* AI Insights */}
-            <AIInsightsDashboard />
-
-            {/* Quick Stats */}
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-              <h2 className="text-xl font-semibold text-white mb-4">⚡ Quick Stats</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: 'Win Rate', value: '73%', color: 'text-green-400' },
-                  { label: 'League Rank', value: '#2', color: 'text-blue-400' },
-                  { label: 'Points For', value: '1,247', color: 'text-purple-400' },
-                  { label: 'Trades Made', value: '8', color: 'text-orange-400' },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                    <div className="text-xs text-gray-400">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Feature Grid */}
@@ -192,38 +163,6 @@ const SimpleDashboard: React.FC = () => {
               ))}
             </div>
           </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 cursor-pointer"
-              onClick={() => navigate('/draft')}
-            >
-              <div className="text-2xl mb-2">🎯</div>
-              <div className="text-white font-medium">Start Draft</div>
-              <div className="text-blue-100">Begin your championship run</div>
-            </motion.div>
-            
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-gradient-to-r from-green-600 to-teal-600 rounded-xl p-6 cursor-pointer"
-              onClick={() => navigate('/analytics')}
-            >
-              <div className="text-2xl mb-2">📈</div>
-              <div className="text-white font-medium">View Analytics</div>
-              <div className="text-green-100">Deep dive into data</div>
-            </motion.div>
-            
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl p-6 cursor-pointer"
-            >
-              <div className="text-2xl mb-2">⚡</div>
-              <div className="text-white font-medium">Real-time Updates</div>
-              <div className="text-orange-100">Live scoring & notifications</div>
-            </motion.div>
-          </div>
         </motion.div>
       </main>
 
@@ -236,6 +175,87 @@ const SimpleDashboard: React.FC = () => {
       
       {/* Command Palette */}
       <CommandPalette />
+    </div>
+  );
+};
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Quick Stats Card */}
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+            <h3 className="text-xl font-semibold text-white mb-4">📊 Quick Stats</h3>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-gray-300">League Rank:</span>
+                <span className="text-white font-medium">#1</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-300">Points This Week:</span>
+                <span className="text-green-400 font-medium">127.8</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-300">Record:</span>
+                <span className="text-white font-medium">8-2</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions Card */}
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+            <h3 className="text-xl font-semibold text-white mb-4">⚡ Quick Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg transition-colors">
+                Set Lineup
+              </button>
+              <button className="w-full py-2 bg-green-500/20 hover:bg-green-500/30 text-green-300 rounded-lg transition-colors">
+                View Matchup
+              </button>
+              <button className="w-full py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-lg transition-colors">
+                Check Waivers
+              </button>
+            </div>
+          </div>
+
+          {/* Recent Activity Card */}
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+            <h3 className="text-xl font-semibold text-white mb-4">📈 Recent Activity</h3>
+            <div className="space-y-2 text-sm">
+              <div className="text-gray-300">
+                <span className="text-green-400">+</span> Added Travis Kelce
+              </div>
+              <div className="text-gray-300">
+                <span className="text-red-400">-</span> Dropped Mike Williams
+              </div>
+              <div className="text-gray-300">
+                <span className="text-blue-400">↔</span> Trade completed
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature Preview Notice */}
+        <div className="mt-8 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-md rounded-xl p-6 border border-blue-400/30">
+          <h3 className="text-xl font-semibold text-white mb-2">🚀 Premium Features Loaded</h3>
+          <p className="text-gray-300 mb-4">
+            Your modern login system and design components are now active! This dashboard demonstrates the integration.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="text-center">
+              <div className="text-2xl mb-2">🎨</div>
+              <div className="text-white font-medium">Modern UI</div>
+              <div className="text-gray-400">Glass morphism design system</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-2">🔐</div>
+              <div className="text-white font-medium">Enhanced Auth</div>
+              <div className="text-gray-400">Biometric + PIN security</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-2">⚡</div>
+              <div className="text-white font-medium">Real-time Updates</div>
+              <div className="text-gray-400">Live scoring & notifications</div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
@@ -257,48 +277,52 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
 // Main App Component
 const App: React.FC = () => {
-  const { user: currentUser, isLoading: authLoading } = useAuth();
-  const location = useLocation();
-  const { theme } = useTheme();
   const navigate = useNavigate();
-  const [useSimpleLogin] = useState(false);
+  const location = useLocation();
+  const { user: currentUser, login: setCurrentUser } = useAuth();
+  const { theme } = useTheme();
+  const [isLoading, setIsLoading] = useState(true);
+  const [useSimpleLogin, setUseSimpleLogin] = useState(false);
 
-  // Initialize auth on mount
+  // Initialize auth state
+  // Initialize auth state
   useEffect(() => {
-    const initAuth = async () => {
+    const initializeAuth = async () => {
       try {
-        // Check if user is already authenticated
-        const savedUser = localStorage.getItem('astral_draft_user');
-        if (savedUser) {
-          // User already logged in, no need to validate token
+        SimpleAuthService.initialize();
+        const session = SimpleAuthService.getCurrentSession();
+        if (session) {
+          setCurrentUser(session.user);
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    
-    initAuth();
-  }, []);
 
-  // Simple login handler for quick access
-  const handleLogin = async (playerId: string, pin: string) => {
+    initializeAuth();
+  }, [setCurrentUser]);
+
+  // Handle successful login from ModernLoginScreen
+  const handleLogin = async (userId: string, pin: string) => {
     try {
-      // Use existing SimpleAuthService authenticate method
-      const session = await SimpleAuthService.authenticateUser(playerId, pin);
+      const session = await SimpleAuthService.authenticateUser(userId, pin);
       if (session) {
+        setCurrentUser(session.user);
         navigate('/dashboard');
-        return session.user;
-      } else {
-        throw new Error('Authentication failed');
       }
     } catch (error) {
       console.error('Login error:', error);
-      throw error;
     }
   };
+  // Handle simple login toggle
+  const handleToggleSimple = () => {
+    setUseSimpleLogin(!useSimpleLogin);
+  };
 
-  // Show loading during auth check
-  if (authLoading) {
+  // Loading screen
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <UnifiedLoading fallbackText="Loading Astral Draft..." />
@@ -322,14 +346,23 @@ const App: React.FC = () => {
                     <h1 className="text-xl sm:text-2xl font-bold text-white text-center mb-6">Simple Login</h1>
                     <button
                       onClick={() => handleLogin('player1', '0000')}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                      className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all text-sm sm:text-base"
                     >
-                      Login as Player 1
+                      Quick Login
+                    </button>
+                    <button
+                      onClick={handleToggleSimple}
+                      className="w-full mt-4 text-sm text-white/60 hover:text-white/80 transition-colors"
+                    >
+                      Use Modern Login
                     </button>
                   </div>
                 </div>
               ) : (
-                <SimplePlayerLogin />
+                <ModernLoginScreen
+                  onLogin={(user) => handleLogin(user.id, user.security.pin)}
+                  onToggleSimple={handleToggleSimple}
+                />
               )
             } 
           />
@@ -339,7 +372,7 @@ const App: React.FC = () => {
             path="/dashboard" 
             element={
               <ProtectedRoute>
-                <Suspense fallback={<UnifiedLoading />}>
+                <Suspense fallback={<UnifiedLoading fallbackText="Loading Dashboard..." />}>
                   <Dashboard />
                 </Suspense>
               </ProtectedRoute>
@@ -350,7 +383,7 @@ const App: React.FC = () => {
             path="/team" 
             element={
               <ProtectedRoute>
-                <Suspense fallback={<UnifiedLoading />}>
+                <Suspense fallback={<UnifiedLoading fallbackText="Loading Team Hub..." />}>
                   <TeamHub />
                 </Suspense>
               </ProtectedRoute>
@@ -361,62 +394,45 @@ const App: React.FC = () => {
             path="/draft" 
             element={
               <ProtectedRoute>
-                <Suspense fallback={<UnifiedLoading />}>
+                <Suspense fallback={<UnifiedLoading fallbackText="Loading Draft Room..." />}>
                   <DraftRoom />
                 </Suspense>
               </ProtectedRoute>
             } 
           />
 
+          {/* Fallback Dashboard Route */}
           <Route 
-            path="/analytics" 
+            path="/simple-dashboard" 
             element={
               <ProtectedRoute>
-                <Suspense fallback={<UnifiedLoading />}>
-                  <SimpleDashboard />
-                </Suspense>
+                <SimpleDashboard />
               </ProtectedRoute>
             } 
           />
 
-          <Route 
-            path="/insights" 
-            element={
-              <ProtectedRoute>
-                <Suspense fallback={<UnifiedLoading />}>
-                  <SimpleDashboard />
-                </Suspense>
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/league" 
-            element={
-              <ProtectedRoute>
-                <Suspense fallback={<UnifiedLoading />}>
-                  <SimpleDashboard />
-                </Suspense>
-              </ProtectedRoute>
-            } 
-          />
-
-          {/* Default Routes */}
+          {/* Default redirects */}
           <Route 
             path="/" 
             element={
-              currentUser ? (
-                <Navigate to="/dashboard" replace />
-              ) : (
+              currentUser ? 
+                <Navigate to="/dashboard" replace /> : 
                 <Navigate to="/login" replace />
-              )
             } 
           />
           
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AnimatePresence>
-    </div>
+          {/* Catch all - redirect to dashboard or login */}
+          <Route 
+            path="*" 
+            element={
+              currentUser ? 
+                <Navigate to="/dashboard" replace /> : 
+                <Navigate to="/login" replace />
+            } 
+          />
+          </Routes>
+        </AnimatePresence>
+      </div>
   );
 };
 

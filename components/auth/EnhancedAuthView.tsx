@@ -99,7 +99,7 @@ const EnhancedAuthView: React.FC = () => {
       if (!formData.displayName.trim()) {
         errors.displayName = 'Display name is required';
       }
-
+    }
 
     if (mode === 'register') {
       if (!formData.password) {
@@ -113,7 +113,6 @@ const EnhancedAuthView: React.FC = () => {
       if (formData.password !== formData.confirmPassword) {
         errors.confirmPassword = 'Passwords do not match';
       }
-
     } else if (mode === 'login') {
       if (!formData.username.trim()) {
         errors.username = 'Username or email is required';
@@ -122,7 +121,7 @@ const EnhancedAuthView: React.FC = () => {
       if (!formData.password) {
         errors.password = 'Password is required';
       }
-
+    }
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
