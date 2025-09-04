@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Test - Astral Draft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mobile-test {
+            background: linear-gradient(135deg, rgb(15 23 42), rgb(88 28 135), rgb(15 23 42));
+        }
+    </style>
+</head>
+<body class="mobile-test min-h-screen flex items-center justify-center p-4">
+    
+    <div class="w-full max-w-lg sm:max-w-2xl lg:max-w-4xl">
+        <div class="relative overflow-hidden rounded-2xl border bg-white/10 border-white/20 backdrop-blur-md shadow-2xl">
+            <!-- Content -->
+            <div class="relative z-10 p-4 sm:p-6 lg:p-8">
+                
+                <!-- Header -->
+                <div class="mb-6 sm:mb-8 text-center">
+                    <h1 class="mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent">
+                        Astral Draft
+                    </h1>
+                    <p class="text-sm sm:text-base lg:text-lg text-gray-300">
+                        Mobile Responsive Test
+                    </p>
+                </div>
+
+                <!-- Player Grid -->
+                <h2 class="mb-4 sm:mb-6 text-center text-xl sm:text-2xl font-semibold text-white">
+                    Responsive Grid Test
+                </h2>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
+                    <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-3 sm:p-4 lg:p-6 shadow-xl">
+                        <div class="relative z-10">
+                            <div class="mb-1 sm:mb-2 text-2xl sm:text-3xl lg:text-4xl">👑</div>
+                            <div class="text-xs sm:text-sm font-medium text-white opacity-90 leading-tight">
+                                Player 1
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500 to-teal-600 p-3 sm:p-4 lg:p-6 shadow-xl">
+                        <div class="relative z-10">
+                            <div class="mb-1 sm:mb-2 text-2xl sm:text-3xl lg:text-4xl">🎮</div>
+                            <div class="text-xs sm:text-sm font-medium text-white opacity-90 leading-tight">
+                                Player 2
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-red-500 to-pink-600 p-3 sm:p-4 lg:p-6 shadow-xl">
+                        <div class="relative z-10">
+                            <div class="mb-1 sm:mb-2 text-2xl sm:text-3xl lg:text-4xl">🚀</div>
+                            <div class="text-xs sm:text-sm font-medium text-white opacity-90 leading-tight">
+                                Player 3
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 p-3 sm:p-4 lg:p-6 shadow-xl">
+                        <div class="relative z-10">
+                            <div class="mb-1 sm:mb-2 text-2xl sm:text-3xl lg:text-4xl">⚡</div>
+                            <div class="text-xs sm:text-sm font-medium text-white opacity-90 leading-tight">
+                                Player 4
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 to-yellow-600 p-3 sm:p-4 lg:p-6 shadow-xl">
+                        <div class="relative z-10">
+                            <div class="mb-1 sm:mb-2 text-2xl sm:text-3xl lg:text-4xl">🏈</div>
+                            <div class="text-xs sm:text-sm font-medium text-white opacity-90 leading-tight">
+                                Player 5
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PIN Input Test -->
+                <h3 class="mb-4 text-center text-lg sm:text-xl font-semibold text-white">
+                    PIN Input Test
+                </h3>
+                
+                <div class="flex justify-center space-x-2 sm:space-x-3 mb-6">
+                    <div class="relative h-12 w-12 sm:h-16 sm:w-16 rounded-xl border-2 border-gray-600 bg-white/10 backdrop-blur-md">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-white"></div>
+                        </div>
+                    </div>
+                    <div class="relative h-12 w-12 sm:h-16 sm:w-16 rounded-xl border-2 border-gray-600 bg-white/10 backdrop-blur-md">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-white"></div>
+                        </div>
+                    </div>
+                    <div class="relative h-12 w-12 sm:h-16 sm:w-16 rounded-xl border-2 border-gray-600 bg-white/10 backdrop-blur-md">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-white"></div>
+                        </div>
+                    </div>
+                    <div class="relative h-12 w-12 sm:h-16 sm:w-16 rounded-xl border-2 border-purple-600 bg-white/20 backdrop-blur-md shadow-lg shadow-purple-500/20">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <input type="text" class="bg-transparent text-center text-lg sm:text-2xl font-bold text-white outline-none w-full h-full" placeholder="•">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button Test -->
+                <button class="rounded-full bg-white/10 px-4 sm:px-6 py-2 text-sm text-white backdrop-blur-md transition-all hover:bg-white/20 w-full sm:w-auto mx-auto block">
+                    Demo Button
+                </button>
+
+                <!-- Viewport Info -->
+                <div class="mt-6 text-center">
+                    <div class="text-xs text-white/60">
+                        <div>Screen Width: <span id="width"></span>px</div>
+                        <div>Current Breakpoint: <span id="breakpoint"></span></div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateViewportInfo() {
+            const width = window.innerWidth;
+            document.getElementById('width').textContent = width;
+            
+            let breakpoint = '';
+            if (width < 640) breakpoint = 'Mobile (< 640px)';
+            else if (width < 1024) breakpoint = 'Tablet (640px - 1024px)';
+            else breakpoint = 'Desktop (> 1024px)';
+            
+            document.getElementById('breakpoint').textContent = breakpoint;
+        }
+        
+        updateViewportInfo();
+        window.addEventListener('resize', updateViewportInfo);
+    </script>
+</body>
+</html>

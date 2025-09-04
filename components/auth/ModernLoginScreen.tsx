@@ -290,7 +290,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Animated Background */}
       <AnimatedBackground />
 
@@ -303,7 +303,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
         exit="exit"
       >
         <motion.div animate={controls} className="w-full max-w-lg sm:max-w-2xl lg:max-w-4xl">
-          <GlassCard className="w-full">
+          <GlassCard className="w-full" intensity="medium" blur="md">
             {/* Header */}
             <motion.div 
               className="mb-6 sm:mb-8 text-center"
@@ -344,7 +344,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                         whileTap="tap"
                         animate={selectedPlayer === player.id ? "selected" : "initial"}
                         onClick={() => handlePlayerSelect(player.id)}
-                        className={`group relative overflow-hidden rounded-xl bg-gradient-to-br ${player.gradient} p-3 sm:p-4 lg:p-6 shadow-xl backdrop-blur-md transition-all duration-300`}
+                        className={`group relative overflow-hidden rounded-xl bg-gradient-to-br ${player.gradient} p-3 sm:p-4 lg:p-6 shadow-xl transition-all duration-300`}
                         disabled={isLoading}
                       >
                         <HapticFeedback>
@@ -356,10 +356,15 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                           </div>
                         </HapticFeedback>
                         
-                        {/* Glow effect */}
-                        <div className={`absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100`}>
-                          <div className={`h-full w-full bg-gradient-radial from-${player.glow}-400/20 to-transparent`} />
-                        </div>
+                        {/* Selection indicator */}
+                        {selectedPlayer === player.id && (
+                          <motion.div
+                            className="absolute top-2 right-2 h-4 w-4 rounded-full bg-white shadow-lg"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring', damping: 15 }}
+                          />
+                        )}
                       </motion.button>
                     ))}
                   </motion.div>
@@ -375,7 +380,7 @@ export const ModernLoginScreen: React.FC<ModernLoginScreenProps> = ({ onLogin, o
                         setPin('0000');
                         handlePinSubmit();
                       }}
-                      className="rounded-full bg-white/10 px-4 sm:px-6 py-2 text-sm text-white backdrop-blur-md transition-all hover:bg-white/20 w-full sm:w-auto"
+                      className="rounded-full bg-white/10 px-4 sm:px-6 py-2 text-sm text-white backdrop-blur-md transition-all hover:bg-white/20 w-full sm:w-auto mx-auto block"
                       disabled={isLoading}
                     >
                       Quick Demo Access

@@ -47,27 +47,10 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       transition={{ duration: 0.5 }}
       {...motionProps}
     >
-      {/* Gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
-      
       {/* Content */}
       <div className="relative z-10 p-4 sm:p-6 lg:p-8">
         {children}
       </div>
-
-      {/* Animated shimmer effect */}
-      <motion.div
-        className="absolute -inset-full top-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 pointer-events-none"
-        animate={{
-          x: ['0%', '200%']
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          repeatDelay: 5,
-          ease: 'linear'
-        }}
-      />
     </motion.div>
   );
 };
