@@ -1,0 +1,138 @@
+{
+  "name": "Astral Draft - Fantasy Football",
+  "short_name": "Astral Draft",
+  "description": "AI-Powered Fantasy Football Commissioner - Complete league management platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#4ecdc4",
+  "orientation": "portrait-primary",
+  "categories": ["sports", "games", "entertainment"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Draft Room - Mobile View"
+    },
+    {
+      "src": "/screenshot-mobile-2.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Season Management - Mobile View"
+    },
+    {
+      "src": "/screenshot-desktop-1.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard - Desktop View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My Team",
+      "short_name": "Team",
+      "description": "View and manage your fantasy team",
+      "url": "/?view=team",
+      "icons": [
+        {
+          "src": "/shortcut-team.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Live Scoring",
+      "short_name": "Scores",
+      "description": "Check live fantasy scores",
+      "url": "/?view=scoring",
+      "icons": [
+        {
+          "src": "/shortcut-scoring.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Waiver Wire",
+      "short_name": "Waivers",
+      "description": "Browse available players",
+      "url": "/?view=waivers",
+      "icons": [
+        {
+          "src": "/shortcut-waivers.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Trade Center",
+      "short_name": "Trades",
+      "description": "Propose and manage trades",
+      "url": "/?view=trades",
+      "icons": [
+        {
+          "src": "/shortcut-trades.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "protocol_handlers": [
+    {
+      "protocol": "web+fantasyfootball",
+      "url": "/?action=%s"
+    }
+  ]
+}

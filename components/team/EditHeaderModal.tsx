@@ -1,0 +1,69 @@
+
+
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { Modal } from '../ui/Modal';
+import { ImageIcon } from '../icons/ImageIcon';
+
+interface EditHeaderModalProps {
+    leagueId: string;
+    teamId: number;
+    currentHeader?: string;
+    dispatch: React.Dispatch<any>;
+    onClose: () => void;
+}
+
+const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, currentHeader, dispatch, onClose }: any) => {
+    const [imageUrl, setImageUrl] = React.useState(currentHeader || '');
+
+    const handleSave = () => {
+        dispatch({ type: 'UPDATE_TEAM_HEADER', payload: { leagueId, teamId, imageUrl } });
+        dispatch({ type: 'ADD_NOTIFICATION', payload: 'Team header updated!' });
+        onClose();
+    };
+
+    return (
+        <Modal isOpen={true} onClose={onClose}>
+            <motion.div
+                className="glass-pane rounded-xl shadow-2xl w-full max-w-md sm:px-4 md:px-6 lg:px-8"
+                {...{
+                    initial: { opacity: 0, scale: 0.95 },
+                    animate: { opacity: 1, scale: 1 },
+                }}
+            >
+                <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <ImageIcon />
+                        Edit Team Header
+                    </h2>
+                </header>
+                <main className="p-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
+                    <label htmlFor="header-url" className="text-sm font-semibold text-gray-300 sm:px-4 md:px-6 lg:px-8">Image URL</label>
+                    <input
+                        id="header-url"
+                        type="text"
+                        value={imageUrl}
+                        onChange={(e: any) => setImageUrl(e.target.value)}
+                        className="w-full bg-black/20 p-2 rounded-md border border-white/10 focus:ring-2 focus:ring-cyan-400 focus:outline-none sm:px-4 md:px-6 lg:px-8"
+                    />
+                     <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                        Paste a direct link to an image. For best results, use a wide, banner-style image.
+                    </p>
+                </main>
+                <footer className="p-4 flex justify-end gap-2 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                    <button onClick={onClose} className="px-4 py-2 text-sm font-bold bg-transparent border border-transparent hover:border-[var(--panel-border)] rounded-md sm:px-4 md:px-6 lg:px-8" aria-label="Action button">Cancel</button>
+                    <button onClick={handleSave} className="px-4 py-2 text-sm font-bold bg-cyan-500 text-black rounded-md sm:px-4 md:px-6 lg:px-8" aria-label="Action button">Save Header</button>
+                </footer>
+            </motion.div>
+        </Modal>
+    );
+};
+
+const EditHeaderModalWithErrorBoundary: React.FC = (props: any) => (
+  <ErrorBoundary>
+    <EditHeaderModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EditHeaderModalWithErrorBoundary);

@@ -1,0 +1,28 @@
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import LeagueMemorySystem from './LeagueMemorySystem';
+
+describe('LeagueMemorySystem', () => {
+  it('renders without crashing', () => {
+    render(<LeagueMemorySystem />);
+    expect(screen.getByTestId('leaguememorysystem')).toBeInTheDocument();
+  });
+
+  it('has proper accessibility attributes', () => {
+    render(<LeagueMemorySystem />);
+    // Add specific accessibility tests here
+  });
+
+  it('handles loading states correctly', () => {
+    render(<LeagueMemorySystem />);
+    // Add loading state tests here
+  });
+
+  it('works on mobile devices', () => {
+    // Add mobile-specific tests here
+  });
+
+  it('handles error states gracefully', () => {
+    // Add error handling tests here
+  });
+});

@@ -1,0 +1,331 @@
+/* Live Scoreboard Styles */
+
+.liveScoreboard {
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(20px);
+  min-height: 400px;
+}
+
+.liveScoreboardCompact {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(20px);
+}
+
+.scoreboardHeader {
+  margin-bottom: var(--spacing-xl);
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.scoreboardTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.lastUpdated {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.connectionStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-full);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border-subtle);
+}
+
+.statusIndicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-success-400);
+}
+
+.connectionStatus.connected .statusIndicator {
+  animation: pulse 2s infinite;
+}
+
+.connectionStatus.disconnected .statusIndicator {
+  background: var(--color-error-400);
+  animation: blink 1s infinite;
+}
+
+.statusText {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-success-400);
+}
+
+.connectionStatus.disconnected .statusText {
+  color: var(--color-error-400);
+}
+
+.scoresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.gameCard {
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border-subtle);
+  transition: all var(--transition-medium);
+  cursor: pointer;
+}
+
+.gameCard:hover {
+  background: var(--glass-bg-medium);
+  border-color: var(--glass-border-light);
+  box-shadow: var(--shadow-lg);
+}
+
+.gameHeader {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.gameStatus {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-full);
+  background: var(--glass-bg-subtle);
+  border: 1px solid currentColor;
+  text-align: center;
+}
+
+.matchup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.teamInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.teamName {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.teamRecord {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.teamScore {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-primary);
+}
+
+.vsDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--glass-bg-subtle);
+  border: 2px solid var(--glass-border-light);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+}
+
+.gameProgress {
+  margin-top: var(--spacing-md);
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background: var(--glass-bg-subtle);
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-400), var(--color-success-400));
+  border-radius: var(--border-radius-full);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4xl) var(--spacing-xl);
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.emptySubtext {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Compact styles */
+.headerTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleText {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.connectionIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.indicatorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-success-400);
+  animation: pulse 2s infinite;
+}
+
+.connectionIndicator.disconnected .indicatorDot {
+  background: var(--color-error-400);
+}
+
+.indicatorText {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-success-400);
+}
+
+.connectionIndicator.disconnected .indicatorText {
+  color: var(--color-error-400);
+}
+
+.scoresContainerCompact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.gameScoreCompact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.gameScoreCompact:hover {
+  background: var(--glass-bg-medium);
+  border-color: var(--glass-border-light);
+  transform: translateY(-1px);
+}
+
+.teamsCompact {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.teamCompact {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.vsSeparator {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.gameStatusCompact {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background: var(--glass-bg-subtle);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+  .scoreboardTitle {
+    font-size: var(--font-size-xl);
+  }
+
+  .scoresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+}

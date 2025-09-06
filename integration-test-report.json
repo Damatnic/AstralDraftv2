@@ -1,0 +1,91 @@
+{
+  "timestamp": "2025-09-01T00:23:01.527Z",
+  "duration": "11.19s",
+  "summary": {
+    "totalTests": 7,
+    "passed": 6,
+    "warnings": 1,
+    "failed": 0
+  },
+  "results": {
+    "build": {
+      "status": "passed",
+      "errors": [],
+      "warnings": []
+    },
+    "typescript": {
+      "status": "warning",
+      "errorCount": 5055,
+      "targetErrorCount": 3686
+    },
+    "accessibility": {
+      "status": "passed",
+      "score": 87,
+      "targetScore": 85
+    },
+    "performance": {
+      "status": "passed",
+      "metrics": {
+        "totalBundleSize": 1629,
+        "largeChunks": 1,
+        "avgChunkSize": 71
+      },
+      "targets": {
+        "maxBundleSize": 3000,
+        "maxLargeChunks": 2
+      }
+    },
+    "memory": {
+      "status": "passed",
+      "leaks": [],
+      "usage": {
+        "cleanupToolsFound": 3,
+        "cleanupToolsExpected": 3
+      }
+    },
+    "security": {
+      "status": "passed",
+      "vulnerabilities": []
+    },
+    "features": {
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Draft Room",
+          "status": "passed",
+          "file": "components/draft/LiveDraftRoom.tsx"
+        },
+        {
+          "name": "Player Pool",
+          "status": "passed",
+          "file": "components/player/PlayerPool.tsx"
+        },
+        {
+          "name": "Roster Manager",
+          "status": "passed",
+          "file": "components/team/EnhancedRosterManager.tsx"
+        },
+        {
+          "name": "Trade Center",
+          "status": "passed",
+          "file": "components/team/TradeCenterWidget.tsx"
+        },
+        {
+          "name": "AI Assistant",
+          "status": "passed",
+          "file": "components/ai/AIFantasyAssistant.tsx"
+        },
+        {
+          "name": "Analytics Dashboard",
+          "status": "passed",
+          "file": "components/analytics/AdvancedAnalyticsDashboard.tsx"
+        },
+        {
+          "name": "Mobile Interface",
+          "status": "passed",
+          "file": "components/mobile/MobileLayout.tsx"
+        }
+      ]
+    }
+  }
+}

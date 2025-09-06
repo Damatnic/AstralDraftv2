@@ -1,0 +1,183 @@
+{
+  "timestamp": "2025-09-01T01:09:24.488Z",
+  "total": 30,
+  "passed": 26,
+  "failed": 4,
+  "passRate": 86.7,
+  "suites": [
+    {
+      "name": "Authentication Flow",
+      "tests": [
+        {
+          "name": "should have login components",
+          "status": "passed"
+        },
+        {
+          "name": "should have secure password handling",
+          "status": "passed"
+        },
+        {
+          "name": "should implement auth context",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Draft Room Integration",
+      "tests": [
+        {
+          "name": "should have all draft components",
+          "status": "passed"
+        },
+        {
+          "name": "should implement real-time updates",
+          "status": "passed"
+        },
+        {
+          "name": "should have AI draft assistance",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Player Management System",
+      "tests": [
+        {
+          "name": "should have player pool component",
+          "status": "failed",
+          "error": "Expected \nimport { ErrorBoundary } from '../ui/ErrorBoundary';\nimport React, { useCallback } from 'react';\nimport type { Player } from '../../types';\nimport PlayerCard from './PlayerCard';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { SearchIcon } from '../icons/SearchIcon';\nimport { StarFilledIcon } from '../icons/StarFilledIcon';\nimport { useAppState } from '../../contexts/AppContext';\n\ninterface PlayerPoolProps {\n  players: Player[];\n  onPlayerSelect: (player: Player) => void;\n  onAddToQueue: (player: Player) => void;\n  onDraftPlayer: (player: Player) => void;\n  onNominatePlayer: (player: Player) => void;\n  onAddNote: (player: Player) => void;\n  isMyTurn: boolean;\n  playersToCompare: Player[];\n  onToggleCompare: (player: Player) => void;\n  queuedPlayerIds: number[];\n  draftFormat: 'SNAKE' | 'AUCTION';\n  isNominationTurn: boolean;}\n\nconst INITIAL_LOAD_COUNT = 50;\nconst LOAD_MORE_COUNT = 50;\n\n}\n\nconst PlayerPool: React.FC<PlayerPoolProps> = ({ players, onPlayerSelect, onAddToQueue, onDraftPlayer, onNominatePlayer,\n    onAddNote, isMyTurn, playersToCompare, onToggleCompare, queuedPlayerIds,\n    draftFormat, isNominationTurn \n }) => {\n  const [isLoading, setIsLoading] = React.useState(false);\n  const { state } = useAppState();\n  const [search, setSearch] = React.useState('');\n  const [positionFilter, setPositionFilter] = React.useState<string>('ALL');\n  const [showWatchlistOnly, setShowWatchlistOnly] = React.useState(false);\n  const [sortBy, setSortBy] = React.useState<'default' | 'custom'>('default');\n  const [visibleCount, setVisibleCount] = React.useState(INITIAL_LOAD_COUNT);\n\n  const filteredPlayers = React.useMemo(() => {\n    const initialPool = showWatchlistOnly ? players.filter((p: any) => state.watchlist.includes(p.id)) : players;\n\n    const sortedPool = [...initialPool];\n    if (sortBy === 'custom' && state.activeLeagueId && state.customRankings[state.activeLeagueId]) {\n      const customRanks = state.customRankings[state.activeLeagueId];\n      sortedPool.sort((a, b) => {\n        const rankA = customRanks[a.id] ?? Infinity;\n        const rankB = customRanks[b.id] ?? Infinity;\n        if(rankA !== rankB) return rankA - rankB;\n        return a.rank - b.rank; // fallback to default rank\n      });\n\n    return sortedPool.filter((p: any) => {\n        const searchLower = search.toLowerCase();\n        const matchesSearch = p.name.toLowerCase().includes(searchLower) || p.team.toLowerCase().includes(searchLower);\n        const matchesPosition = positionFilter === 'ALL' || p.position === positionFilter;\n        return matchesSearch && matchesPosition;\n    });\n  }, [players, search, positionFilter, showWatchlistOnly, state.watchlist, sortBy, state.customRankings, state.activeLeagueId]);\n\n  const playersToShow = filteredPlayers.slice(0, visibleCount);\n  const hasMore = visibleCount < filteredPlayers.length;\n\n  const handleLoadMore = () => {\n    setVisibleCount(current => current + LOAD_MORE_COUNT);\n  };\n  \n  React.useEffect(() => {\n    setVisibleCount(INITIAL_LOAD_COUNT);\n  }, [search, positionFilter, showWatchlistOnly, sortBy]);\n\n  const positions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'];\n\n  return (\n    <div className=\"glass-pane flex flex-col bg-[var(--panel-bg)] border-[var(--panel-border)] rounded-2xl h-full shadow-2xl shadow-black/50 sm:px-4 md:px-6 lg:px-8\">\n      <div className=\"flex-shrink-0 p-2 sm:p-3 border-b border-[var(--panel-border)]\">\n        <h2 className=\"font-display text-lg sm:text-xl font-bold text-[var(--text-primary)] tracking-wider text-center\">AVAILABLE PLAYERS</h2>\n        <p className=\"text-center text-xs sm:text-sm text-cyan-200/70\">{players.length} Remaining</p>\n      </div>\n      <div className=\"flex-shrink-0 p-1.5 sm:p-2 space-y-2\">\n         <div className=\"relative sm:px-4 md:px-6 lg:px-8\">\n            <input\n                type=\"text\"\n                placeholder=\"Search player or team...\"\n                value={search}\n                onChange={e => setSearch(e.target.value)}\n            />\n            <SearchIcon className=\"absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-[var(--text-secondary)]\" />\n         </div>\n        <div className=\"flex gap-1 justify-between items-center flex-wrap sm:px-4 md:px-6 lg:px-8\">\n            <div className=\"flex gap-1 flex-wrap sm:px-4 md:px-6 lg:px-8\">\n                {positions.map((pos: any) => (\n                    <button \n                        key={pos} \n                        onClick={() => setPositionFilter(pos)}\n                        `}\n                    >\n                        {pos}\n                    </button>\n                ))}\n            </div>\n            <div className=\"flex gap-1 sm:px-4 md:px-6 lg:px-8\">\n                <button\n                    onClick={() => setShowWatchlistOnly(s => !s)}\n                    `}\n                >\n                    <StarFilledIcon className=\"h-3 w-3 sm:px-4 md:px-6 lg:px-8\" />\n                    <span className=\"hidden sm:inline\">Watchlist</span>\n                    <span className=\"sm:hidden\">★</span>\n                </button>\n                <select \n                    value={sortBy} \n                    onChange={e => setSortBy(e.target.value as any)}\n                  >\n                      <option value=\"default\">Default</option>\n                      <option value=\"custom\">Custom</option>\n                </select>\n            </div>\n        </div>\n      </div>\n      <div className=\"flex-grow overflow-y-auto p-1 sm:p-2 space-y-1\">\n        <AnimatePresence>\n            {playersToShow.map((player: any) => (\n                <PlayerCard \n                    key={player.id} \n                    player={player} \n                    onSelect={() => onPlayerSelect(player)}\n                    onAddToQueue={() => onAddToQueue(player)}\n                    onDraft={() => onDraftPlayer(player)}\n                    onNominate={() => onNominatePlayer(player)}\n                    onAddNote={() => onAddNote(player)}\n                    isMyTurn={isMyTurn}\n                    onToggleCompare={() => onToggleCompare(player)}\n                    isSelectedForCompare={playersToCompare.some((p: any) => p.id === player.id)}\n                    isInQueue={queuedPlayerIds.includes(player.id)}\n                    isNominationTurn={isNominationTurn}\n                />\n            ))}\n        </AnimatePresence>\n        {hasMore && (\n            <div className=\"pt-2 text-center sm:px-4 md:px-6 lg:px-8\">\n                <button onClick={handleLoadMore} className=\"w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs font-bold text-cyan-300 bg-cyan-500/10 rounded-md hover:bg-cyan-500/20 mobile-touch-target\" aria-label=\"Action button\">\n                    Load More ({filteredPlayers.length - visibleCount} remaining)\n                </button>\n            </div>\n        )}\n      </div>\n    </div>\n  );\n};\n\nconst PlayerPoolWithErrorBoundary: React.FC = (props) => (\n  <ErrorBoundary>\n    <PlayerPool {...props} />\n  </ErrorBoundary>\n);\n\nexport default React.memo(PlayerPoolWithErrorBoundary);\n to contain searchTerm"
+        },
+        {
+          "name": "should have player research interface",
+          "status": "passed"
+        },
+        {
+          "name": "should implement player comparison",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Roster Management",
+      "tests": [
+        {
+          "name": "should have roster manager component",
+          "status": "passed"
+        },
+        {
+          "name": "should support transactions",
+          "status": "passed"
+        },
+        {
+          "name": "should have trade center",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Live Scoring System",
+      "tests": [
+        {
+          "name": "should have WebSocket service",
+          "status": "passed"
+        },
+        {
+          "name": "should have notification system",
+          "status": "passed"
+        },
+        {
+          "name": "should implement real-time analytics",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Mobile Experience",
+      "tests": [
+        {
+          "name": "should have mobile-specific components",
+          "status": "passed"
+        },
+        {
+          "name": "should implement pull-to-refresh",
+          "status": "passed"
+        },
+        {
+          "name": "should have offline support",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Analytics & Machine Learning",
+      "tests": [
+        {
+          "name": "should have ML analytics dashboard",
+          "status": "passed"
+        },
+        {
+          "name": "should implement Oracle predictions",
+          "status": "passed"
+        },
+        {
+          "name": "should have team optimization",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Performance Optimizations",
+      "tests": [
+        {
+          "name": "should implement lazy loading in App.tsx",
+          "status": "passed"
+        },
+        {
+          "name": "should have memory cleanup utilities",
+          "status": "passed"
+        },
+        {
+          "name": "should use performance optimization config",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Security Features",
+      "tests": [
+        {
+          "name": "should have secure contexts",
+          "status": "failed",
+          "error": "Expected /* eslint-disable react-refresh/only-export-components */\n/**\n * Simple Authentication Context for Astral Draft\n * Works with SimpleAuthService for 10-player + admin system\n */\nimport React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';\nimport SimpleAuthService, { SimpleUser } from '../services/simpleAuthService';\n\ninterface SimpleAuthContextType {\n    user: SimpleUser | null;\n    isAuthenticated: boolean;\n    isLoading: boolean;\n    error: string | null;\n    login: (user: SimpleUser) => void;\n    logout: () => void;\n    updateUserPin: (newPin: string) => Promise<boolean>;\n    updateUserEmail: (email: string) => Promise<boolean>;\n    updateUserCustomization: (customization: Partial<SimpleUser['customization']>) => Promise<boolean>;\n    updateUserDisplayName: (displayName: string) => Promise<boolean>;\n    clearError: () => void;}\n\nconst SimpleAuthContext = createContext<SimpleAuthContextType | undefined>(undefined);\n\n}\n\ninterface Props {\n    children: ReactNode;\n\nexport const SimpleAuthProvider: React.FC<Props> = ({ children }) => {\n    const [user, setUser] = useState<SimpleUser | null>(null);\n    const [isLoading, setIsLoading] = useState(true);\n    const [error, setError] = useState<string | null>(null);\n\n    // Initialize and check for existing session\n    useEffect(() => {\n        const initializeAuth = () => {\n            try {\n\n                SimpleAuthService.initialize();\n                const session = SimpleAuthService.getCurrentSession();\n                \n                if (session) {\n                    setUser(session.user);\n\n    } catch (error) {\n                setError('Failed to initialize authentication');\n            } finally {\n                setIsLoading(false);\n\n        };\n\n        initializeAuth();\n    }, []);\n\n    const login = useCallback((loggedInUser: SimpleUser) => {\n        setUser(loggedInUser);\n        setError(null);\n    }, []);\n\n    const logout = useCallback(() => {\n        SimpleAuthService.logout();\n        setUser(null);\n        setError(null);\n    }, []);\n\n    const updateUserPin = useCallback(async (newPin: string): Promise<boolean> => {\n        if (!user) return false;\n\n        try {\n            const success = SimpleAuthService.updateUserPin(user.id, newPin);\n            if (success) {\n                setUser({ ...user, pin: newPin });\n\n            return success;\n        \n    } catch (err) {\n            setError('Failed to update PIN');\n            return false;\n\n    }, [user]);\n\n    const updateUserEmail = useCallback(async (email: string): Promise<boolean> => {\n        if (!user) return false;\n\n        try {\n            const success = SimpleAuthService.updateUserEmail(user.id, email);\n            if (success) {\n                setUser({ ...user, email });\n\n            return success;\n        \n    } catch (err) {\n            setError('Failed to update email');\n            return false;\n\n    }, [user]);\n\n    const updateUserCustomization = useCallback(async (customization: Partial<SimpleUser['customization']>): Promise<boolean> => {\n        if (!user) return false;\n\n        try {\n            const success = SimpleAuthService.updateUserCustomization(user.id, customization);\n            if (success) {\n                setUser({\n                    ...user,\n                    customization: { ...user.customization, ...customization }\n                });\n\n            return success;\n        \n    } catch (err) {\n            setError('Failed to update customization');\n            return false;\n\n    }, [user]);\n\n    const updateUserDisplayName = useCallback(async (displayName: string): Promise<boolean> => {\n        if (!user) return false;\n\n        try {\n            const success = SimpleAuthService.updateUserDisplayName(user.id, displayName);\n            if (success) {\n                setUser({ ...user, displayName });\n\n            return success;\n        \n    } catch (err) {\n            setError('Failed to update display name');\n            return false;\n\n    }, [user]);\n\n    const clearError = useCallback(() => {\n        setError(null);\n    }, []);\n\n    const value: SimpleAuthContextType = useMemo(() => ({\n        user,\n        isAuthenticated: !!user,\n        isLoading,\n        error,\n        login,\n        logout,\n        updateUserPin,\n        updateUserEmail,\n        updateUserCustomization,\n        updateUserDisplayName,\n        clearError\n    }), [user, isLoading, error, login, logout, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName, clearError]);\n\n    return (\n        <SimpleAuthContext.Provider value={value}>\n            {children}\n        </SimpleAuthContext.Provider>\n    );\n};\n\nexport const useAuth = (): SimpleAuthContextType => {\n    const context = useContext(SimpleAuthContext);\n    if (context === undefined) {\n        throw new Error('useAuth must be used within a SimpleAuthProvider');\n\n    return context;\n};\n\nexport default SimpleAuthProvider;\n to contain localStorage"
+        },
+        {
+          "name": "should implement CSP in HTML",
+          "status": "passed"
+        },
+        {
+          "name": "should have security middleware",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "Accessibility Features",
+      "tests": [
+        {
+          "name": "should have accessible modal component",
+          "status": "failed",
+          "error": "Expected /**\n * Accessible Modal Component\n * Enhanced with focus management, keyboard navigation, and mobile accessibility\n */\n\nimport { ErrorBoundary } from './ErrorBoundary';\nimport React from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { \n  useFocusTrap, \n  useAnnouncer, \n  getModalA11yProps,\n  srOnlyClasses\n} from '../../utils/accessibility';\nimport { CloseIcon } from '../icons/CloseIcon';\n\ninterface AccessibleModalProps {\n  isOpen: boolean;\n  onClose: () => void;\n  title: string;\n  description?: string;\n  children: React.ReactNode;\n  className?: string;\n  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';\n  closeOnEscape?: boolean;\n  closeOnOverlayClick?: boolean;\n  showCloseButton?: boolean;\n  initialFocus?: string; // selector for element to focus initially\n\n}\n\nconst sizeClasses = {\n  const [isLoading, setIsLoading] = React.useState(false);\n  sm: 'max-w-sm',\n  md: 'max-w-md', \n  lg: 'max-w-lg',\n  xl: 'max-w-xl',\n  full: 'max-w-full'\n};\n\nexport const AccessibleModal: React.FC<AccessibleModalProps> = ({\n  isOpen,\n  onClose,\n  title,\n  description,\n  children,\n  className = '',\n  size = 'md',\n  closeOnEscape = true,\n  closeOnOverlayClick = true,\n  showCloseButton = true,\n  initialFocus\n}) => {\n  const { containerRef } = useFocusTrap(isOpen);\n  const { announce } = useAnnouncer();\n  const titleId = React.useId();\n  const descriptionId = React.useId();\n\n  // Handle escape key and focus trap escape\n  React.useEffect(() => {\n    if (!isOpen) return;\n\n    const handleCustomEscape = (e: CustomEvent) => {\n      if (closeOnEscape) {\n        onClose();\n        announce('Modal closed', 'polite');\n    }\n  };\n\n    if (containerRef.current) {\n      containerRef.current.addEventListener('focustrap:escape', handleCustomEscape as EventListener);\n\n    return () => {\n      if (containerRef.current) {\n        containerRef.current.removeEventListener('focustrap:escape', handleCustomEscape as EventListener);\n\n    };\n  }, [isOpen, closeOnEscape, onClose, announce, containerRef]);\n\n  // Announce modal opening\n  React.useEffect(() => {\n    if (isOpen) {\n      announce(`${title} dialog opened`, 'assertive');\n\n  }, [isOpen, title, announce]);\n\n  // Handle initial focus\n  React.useEffect(() => {\n    if (isOpen && initialFocus && containerRef.current) {\n      const element = containerRef.current.querySelector(initialFocus);\n      if (element && element instanceof HTMLElement) {\n        setTimeout(() => element.focus(), 100);\n    }\n  }, [isOpen, initialFocus, containerRef]);\n\n  // Prevent body scroll when modal is open\n  React.useEffect(() => {\n    if (isOpen) {\n      const originalStyle = window.getComputedStyle(document.body).overflow;\n      document.body.style.overflow = 'hidden';\n      \n      return () => {\n        document.body.style.overflow = originalStyle;\n      };\n\n  }, [isOpen]);\n\n  const handleOverlayClick = (e: React.MouseEvent) => {\n    if (closeOnOverlayClick && e.target === e.currentTarget) {\n      onClose();\n      announce('Modal closed', 'polite');\n    }\n  };\n\n  const handleCloseClick = () => {\n    onClose();\n    announce('Modal closed', 'polite');\n  };\n\n  return (\n    <AnimatePresence>\n      {isOpen && (\n        <motion.div\n          className=\"fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8\"\n          initial={{ opacity: 0 }}\n          animate={{ opacity: 1 }}\n          exit={{ opacity: 0 }}\n          transition={{ duration: 0.15 }}\n        >\n          {/* Backdrop */}\n          <motion.div\n            className=\"absolute inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8\"\n            initial={{ opacity: 0 }}\n            animate={{ opacity: 1 }}\n            exit={{ opacity: 0 }}\n            onClick={handleOverlayClick}\n            aria-hidden=\"true\"\n          />\n          \n          {/* Modal Content */}\n          <motion.div\n            ref={containerRef as React.RefObject<HTMLDivElement>}\n            className={`\n              relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden\n              bg-white dark:bg-gray-800 rounded-xl shadow-2xl\n              border border-gray-200 dark:border-gray-700\n              ${className}\n            `}\n            initial={{ scale: 0.95, opacity: 0 }}\n            animate={{ scale: 1, opacity: 1 }}\n            exit={{ scale: 0.95, opacity: 0 }}\n            transition={{ duration: 0.15 }}\n            {...getModalA11yProps(isOpen, titleId, description ? descriptionId : undefined)}\n          >\n            {/* Screen reader only close instruction */}\n            <div className={srOnlyClasses}>\n              Press Escape to close this dialog\n            </div>\n\n            {/* Header */}\n            <div className=\"flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8\">\n              <h2 \n                id={titleId}\n                className=\"text-xl font-semibold text-gray-900 dark:text-white font-display sm:px-4 md:px-6 lg:px-8\"\n              >\n                {title}\n              </h2>\n              \n              {showCloseButton && (\n                <button\n                  onClick={handleCloseClick}\n                  className=\"\n                    mobile-touch-target p-2 -mr-2 text-gray-400 hover:text-gray-600 \n                    dark:text-gray-500 dark:hover:text-gray-300\n                    rounded-full hover:bg-gray-100 dark:hover:bg-gray-700\n                    transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500\n                   sm:px-4 md:px-6 lg:px-8\"\n                  aria-label=\"Close dialog\"\n                >\n                  <CloseIcon className=\"w-5 h-5 sm:px-4 md:px-6 lg:px-8\" />\n                </button>\n              )}\n            </div>\n\n            {/* Description (if provided) */}\n            {description && (\n              <div \n                id={descriptionId}\n                className=\"px-6 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8\"\n              >\n                {description}\n              </div>\n            )}\n\n            {/* Content */}\n            <div className=\"overflow-y-auto max-h-[calc(90vh-200px)] sm:px-4 md:px-6 lg:px-8\">\n              {children}\n            </div>\n          </motion.div>\n        </motion.div>\n      )}\n    </AnimatePresence>\n  );\n};\n\n/**\n * Modal Hook for easier usage\n */\nexport const useModal = (initialOpen: boolean = false) => {\n  const [isOpen, setIsOpen] = React.useState(initialOpen);\n\n  const openModal = React.useCallback(() => setIsOpen(true), []);\n  const closeModal = React.useCallback(() => setIsOpen(false), []);\n  const toggleModal = React.useCallback(() => setIsOpen(prev => !prev), []);\n\n  return {\n    isOpen,\n    openModal,\n    closeModal,\n    toggleModal\n  };\n};\n\nconst AccessibleModalWithErrorBoundary: React.FC = (props) => (\n  <ErrorBoundary>\n    <AccessibleModal {...props} />\n  </ErrorBoundary>\n);\n\nexport default React.memo(AccessibleModalWithErrorBoundary);\n to contain role="
+        },
+        {
+          "name": "should implement keyboard navigation",
+          "status": "failed",
+          "error": "Expected \n\nimport { ErrorBoundary } from '../ui/ErrorBoundary';\nimport React, { useCallback, useMemo } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { useAppState } from '../../contexts/AppContext';\nimport { players } from '../../data/players';\nimport type { Player, View } from '../../types';\nimport { HistoryIcon } from '../icons/HistoryIcon';\nimport { useFocusTrap } from '../../utils/accessibility';\n\ninterface CommandPaletteProps {\n\n}\n\nconst CommandPalette: React.FC<CommandPaletteProps> = () => {\n  const [isLoading, setIsLoading] = React.useState(false);\n    const { state, dispatch } = useAppState();\n    const [query, setQuery] = React.useState('');\n    const { containerRef } = useFocusTrap(state.isCommandPaletteOpen);\n\n    const leagues = state.leagues.filter((l: any) => !l.isMock);\n\n    React.useEffect(() => {\n        const handleKeyDown = (e: KeyboardEvent) => {\n            // Enhanced keyboard navigation\n            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {\n                e.preventDefault();\n                dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: !state.isCommandPaletteOpen });\n\n            if (e.key === 'Escape') {\n                dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });\n                setQuery(''); // Clear query on close\n\n            // Quick navigation shortcuts when palette is open\n            if (state.isCommandPaletteOpen) {\n                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {\n                    e.preventDefault();\n                    // Handle arrow navigation (implementation would depend on results structure)\n\n                if (e.key === 'Enter') {\n                    e.preventDefault();\n                    // Handle selection (implementation would depend on selected item)\n\n\n        };\n        window.addEventListener('keydown', handleKeyDown);\n        return () => window.removeEventListener('keydown', handleKeyDown);\n    }, [state.isCommandPaletteOpen, dispatch]);\n    \n    React.useEffect(() => {\n        if (!state.isCommandPaletteOpen) {\n            setQuery('');\n    }\n  }, [state.isCommandPaletteOpen]);\n\n    const handleSelectLeague = (id: string) => {\n        dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: id });\n        dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' });\n        dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });\n\n    const handleSelectPlayer = (player: Player) => {\n        dispatch({ type: 'SET_PLAYER_DETAIL', payload: { player } });\n        dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });\n\n    const handleSelectView = (view: View, name: string) => {\n        dispatch({ type: 'SET_VIEW', payload: view });\n        dispatch({ type: 'LOG_COMMAND', payload: { name, view }});\n        dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });\n\n    const commandActions = state.activeLeagueId ? [\n        { name: 'Go to My Team', view: 'TEAM_HUB' as View },\n        { name: 'View Standings', view: 'LEAGUE_STANDINGS' as View },\n        { name: 'Waiver Wire', view: 'WAIVER_WIRE' as View },\n        { name: 'Power Rankings', view: 'POWER_RANKINGS' as View },\n        { name: 'Analytics Hub', view: 'ANALYTICS_HUB' as View },\n        { name: 'Historical Analytics', view: 'HISTORICAL_ANALYTICS' as View },\n        { name: 'Go to Dashboard', view: 'DASHBOARD' as View },\n    ] : [{ name: 'Go to Dashboard', view: 'DASHBOARD' as View }];\n\n    const queryLower = query.toLowerCase();\n\n    const filteredPlayers = query.length > 2\n        ? players.filter((p: any) => p.name.toLowerCase().includes(queryLower)).slice(0, 5)\n        : [];\n    \n    const filteredActions = query.length > 1\n        ? commandActions.filter((a: any) => a.name.toLowerCase().includes(queryLower))\n        : [];\n\n    const renderResults = () => {\n        if (query.length === 0) {\n            return (\n                <>\n                    {state.recentCommands.length > 0 && (\n                         <>\n                            <h4 className=\"px-3 py-1 text-xs text-gray-500 font-semibold uppercase flex items-center gap-2 sm:px-4 md:px-6 lg:px-8\"><HistoryIcon className=\"h-4 w-4 sm:px-4 md:px-6 lg:px-8\" /> Recent</h4>\n                            {state.recentCommands.map((cmd, i) => (\n                                <button key={i} onClick={() => handleSelectView(cmd.view, cmd.name)}\n                                </button>\n                            ))}\n                        </>\n                    )}\n                    <h4 className=\"px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8\">My Leagues</h4>\n                    {leagues.map((league: any) => (\n                        <button key={league.id} onClick={() => handleSelectLeague(league.id)}\n                        </button>\n                    ))}\n                </>\n            )\n\n        return (\n            <>\n                {filteredPlayers.length > 0 && (\n                    <>\n                        <h4 className=\"px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8\">Players</h4>\n                        {filteredPlayers.map((player: any) => (\n                            <button key={player.id} onClick={() => handleSelectPlayer(player)} <span className=\"text-gray-500 sm:px-4 md:px-6 lg:px-8\">({player.position} - {player.team})</span>\n                            </button>\n                        ))}\n                    </>\n                )}\n                {filteredActions.length > 0 && (\n                     <>\n                        <h4 className=\"px-3 py-1 text-xs text-gray-500 font-semibold uppercase sm:px-4 md:px-6 lg:px-8\">Navigation</h4>\n                        {filteredActions.map((action: any) => (\n                            <button key={action.view} onClick={() => handleSelectView(action.view, action.name)}\n                            </button>\n                        ))}\n                    </>\n                )}\n                 {filteredPlayers.length === 0 && filteredActions.length === 0 && (\n                    <p className=\"p-4 text-center text-gray-500 sm:px-4 md:px-6 lg:px-8\">No results found.</p>\n                 )}\n            </>\n        )\n    };\n\n    return (\n        <AnimatePresence>\n            {state.isCommandPaletteOpen && (\n                 <motion.div\n                    className=\"fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-[20vh] sm:px-4 md:px-6 lg:px-8\"\n                    onClick={() => dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false })}\n                    {...{\n                        initial: { opacity: 0 },\n                        animate: { opacity: 1 },\n                        exit: { opacity: 0 },\n                    }}\n                >\n                    <motion.div\n                        ref={containerRef as React.RefObject<HTMLDivElement>}\n                        className=\"glass-pane w-full max-w-lg rounded-xl shadow-2xl overflow-hidden border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8\"\n                        onClick={(e: any) => e.stopPropagation()},\n                            animate: { opacity: 1, y: 0, scale: 1 },\n                            exit: { opacity: 0, y: -20, scale: 0.95 },\n                        }}\n                    >\n                        <input\n                            type=\"text\"\n                            placeholder=\"Search players or navigate...\"\n                            className=\"w-full p-4 bg-transparent text-lg focus:outline-none text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8\"\n                            autoFocus\n                            value={query}\n                            onChange={(e: any) => setQuery(e.target.value)}\n                        <div className=\"border-t border-[var(--panel-border)] p-2 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8\">\n                           {renderResults()}\n                        </div>\n                    </motion.div>\n                </motion.div>\n            )}\n        </AnimatePresence>\n    );\n};\n\nconst CommandPaletteWithErrorBoundary: React.FC = (props) => (\n  <ErrorBoundary>\n    <CommandPalette {...props} />\n  </ErrorBoundary>\n);\n\nexport default React.memo(CommandPaletteWithErrorBoundary); to contain onKeyDown"
+        },
+        {
+          "name": "should have accessibility system",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,633 @@
+/* Astral Draft - Elite Draft Room Styles */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  /* Background Colors */
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-tertiary: #0f172a;
+  
+  /* Glass System */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-hover: rgba(255, 255, 255, 0.15);
+  
+  /* Primary Colors */
+  --color-primary: #4ecdc4;
+  --color-secondary: #45b7d1;
+  --color-accent: #ff6b6b;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b8c5d6;
+  --text-muted: #7f8c8d;
+  
+  /* Position Colors */
+  --color-qb: #ff6b6b;
+  --color-rb: #4ecdc4;
+  --color-wr: #45b7d1;
+  --color-te: #f9ca24;
+  --color-k: #f0932b;
+  --color-def: #6c5ce7;
+  
+  /* Status Colors */
+  --color-success: #2ecc71;
+  --color-warning: #f39c12;
+  --color-error: #e74c3c;
+  --color-info: #3498db;
+}
+
+html.light {
+  --background-start-rgb: 241, 245, 249;
+  --background-end-rgb: 226, 232, 240;
+  --glow-color-1: rgba(16, 185, 129, 0.3);
+  --glow-color-2: rgba(37, 99, 235, 0.3);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --panel-bg: rgba(255, 255, 255, 0.5);
+  --panel-border: rgba(203, 213, 225, 1);
+}
+
+[data-theme="rivalry"] {
+  --glow-color-1: rgba(239, 68, 68, 0.5);
+  --panel-border: rgba(248, 113, 113, 0.3);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.font-display {
+  font-family: 'Exo 2', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Loading screen styles */
+.loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: rgb(var(--background-start-rgb));
+  color: var(--text-primary);
+}
+
+/* Glassmorphism Design System */
+.gradient-background {
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+}
+
+.glass-pane {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-button-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  padding: 12px 24px;
+  min-height: 44px;
+  box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.glass-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
+}
+
+.glass-button {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 12px 24px;
+  min-height: 44px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.glass-button:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-input {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 16px;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.glass-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+}
+
+/* Mobile Optimizations */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Enhanced Mobile Touch Scrolling */
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Touch Feedback System */
+.touch-active {
+  transform: scale(0.98);
+  opacity: 0.8;
+  transition: all 0.1s ease-out;
+}
+
+.touch-long-press {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  transition: all 0.2s ease-out;
+}
+
+.touch-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple 0.3s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes ripple {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* Advanced Touch Targets */
+.mobile-touch-target-enhanced {
+  min-height: 48px !important;
+  min-width: 48px !important;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* Better focus indicators for touch devices */
+.mobile-focus-ring:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth scroll for mobile */
+.smooth-scroll-mobile {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Modal Body Scroll Prevention */
+body.modal-open {
+  overflow: hidden !important;
+  padding-right: 15px;
+}
+
+/* Advanced Mobile-First Responsive System */
+@media (max-width: 320px) {
+  :root {
+    --text-xs: 0.65rem;
+    --text-sm: 0.75rem;
+    --text-base: 0.85rem;
+    --spacing-unit: 0.75rem;
+  }
+  
+  .glass-pane {
+    padding: 0.75rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-xs: 0.7rem;
+    --text-sm: 0.8rem;
+    --text-base: 0.9rem;
+    --spacing-unit: 1rem;
+  }
+  
+  .glass-pane {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  /* Ultra-responsive text scaling */
+  .responsive-text {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+  
+  .responsive-heading {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  #root {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding-bottom: 80px;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  .mobile-container {
+    padding: 1rem;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  /* Ensure all scrollable elements use touch scrolling */
+  .overflow-y-auto,
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  /* Prevent zoom on mobile form inputs */
+  input, select, textarea {
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+  
+  /* Enhanced Mobile button improvements */
+  button, [role="button"] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+  
+  /* Advanced Mobile Grid System */
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .mobile-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Safe Area Handling */
+  .mobile-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .mobile-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .mobile-safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .mobile-safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Performance optimizations for mobile */
+  .reduce-animations * {
+    animation-duration: 0.1s !important;
+    transition-duration: 0.1s !important;
+  }
+  
+  .reduced-render-frequency {
+    will-change: auto;
+  }
+  
+  .reduced-render-frequency * {
+    will-change: auto;
+  }
+}
+
+/* Form Security & UX Enhancements */
+input[type="text"]:not([data-form-type="password"]),
+input[type="search"],
+input[type="email"],
+textarea,
+select {
+  -webkit-text-security: none;
+}
+
+/* Ensure all buttons have proper touch targets */
+button:not(.custom-size) {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Enhanced Draft Room Styles */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Draft Room Animations */
+@keyframes draftPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes timerGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+  }
+}
+
+@keyframes pickGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(78, 205, 196, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(78, 205, 196, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(78, 205, 196, 0);
+  }
+}
+
+.draft-pulse {
+  animation: draftPulse 2s ease-in-out infinite;
+}
+
+.timer-glow {
+  animation: timerGlow 1s ease-in-out infinite;
+}
+
+.pick-glow {
+  animation: pickGlow 1s ease-out;
+}
+
+/* Enhanced Glass Effects for Draft Room */
+.glass-card-enhanced {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-card-premium {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Position-Specific Colors */
+.position-qb {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), transparent);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.position-rb {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), transparent);
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.position-wr {
+  background: linear-gradient(135deg, rgba(69, 183, 209, 0.2), transparent);
+  border-color: rgba(69, 183, 209, 0.3);
+}
+
+.position-te {
+  background: linear-gradient(135deg, rgba(249, 202, 36, 0.2), transparent);
+  border-color: rgba(249, 202, 36, 0.3);
+}
+
+.position-k {
+  background: linear-gradient(135deg, rgba(240, 147, 43, 0.2), transparent);
+  border-color: rgba(240, 147, 43, 0.3);
+}
+
+.position-def {
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), transparent);
+  border-color: rgba(108, 92, 231, 0.3);
+}
+
+/* AI Recommendations Styling */
+.ai-recommendation {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-recommendation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(78, 205, 196, 0.1), 
+    transparent);
+  animation: aiScan 3s ease-in-out infinite;
+}
+
+@keyframes aiScan {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: -100%; }
+}
+
+/* Draft Timer Styling */
+.draft-timer {
+  position: relative;
+  display: inline-block;
+}
+
+.draft-timer::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(from 0deg, #ff6b6b, #4ecdc4, #45b7d1, #ff6b6b);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(3px);
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Player Card Hover Effects */
+.player-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.player-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.player-card:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Draft Board Team Indicators */
+.team-on-clock {
+  position: relative;
+  overflow: hidden;
+}
+
+.team-on-clock::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(255, 193, 7, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 193, 7, 0.1) 100%);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Responsive Draft Room */
+@media (max-width: 1280px) {
+  .draft-room-grid {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .draft-room-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .draft-panel {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .draft-timer {
+    font-size: 1.5rem;
+  }
+  
+  .player-card {
+    padding: 0.75rem;
+  }
+  
+  .ai-recommendation {
+    padding: 0.5rem;
+  }
+}
